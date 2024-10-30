@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'slave_client.dart';
 import 'master_discovery.dart';
 
-/// SlaveScreen - Main UI for slave devices, listens for master commands.
 class SlaveScreen extends StatefulWidget {
   @override
   _SlaveScreenState createState() => _SlaveScreenState();
@@ -10,16 +9,20 @@ class SlaveScreen extends StatefulWidget {
 
 class _SlaveScreenState extends State<SlaveScreen> {
   SlaveClient? _client;
+  bool isConnected = false; // Track if already connected
 
   @override
   void initState() {
     super.initState();
 
-    // Start listening for master IP using MasterDiscovery
+    // Start listening for master's broadcast and connect only once
     MasterDiscovery(onMasterDiscovered: (masterIp) {
-      print("Connecting to master at IP: $masterIp");
-      _client = SlaveClient('ws://$masterIp:4040');
-      _client?.connect();
+      if (!isConnected) { // Check if not connected
+        print("Connecting to master at IP: $masterIp");
+        _client = SlaveClient('ws://$masterIp:4040');
+        _client?.connect();
+        isConnected = true; // Update connection status
+      }
     }).startListening();
   }
 

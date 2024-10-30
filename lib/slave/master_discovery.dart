@@ -1,6 +1,6 @@
 import 'dart:io';
 
-/// MasterDiscovery - Listens for master’s broadcast message to discover its IP.
+/// MasterDiscovery - Listens for master's broadcast message to discover its IP.
 /// Calls onMasterDiscovered with the master's IP once discovered.
 class MasterDiscovery {
   static const int broadcastPort = 4041;
@@ -18,6 +18,7 @@ class MasterDiscovery {
         final datagram = socket.receive();
         if (datagram != null) {
           final message = String.fromCharCodes(datagram.data);
+          print("Received broadcast message: $message from ${datagram.address.address}");
           if (message == "MASTER_DISCOVERY") {
             final masterIp = datagram.address.address;
             print("Master discovered at IP: $masterIp");
