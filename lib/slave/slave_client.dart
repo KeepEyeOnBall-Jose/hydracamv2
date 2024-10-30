@@ -5,11 +5,12 @@ import '../services/camera_service.dart';
 class SlaveClient {
   final String serverAddress;
   IOWebSocketChannel? _channel;
-  final CameraService _cameraService = CameraService();
+  final CameraService _cameraService;
   bool _isConnected = false;
   Timer? _reconnectTimer;
 
-  SlaveClient(this.serverAddress);
+  SlaveClient(this.serverAddress, {Function(String)? onPhotoTaken})
+      : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
 
   void connect() {
     print("Attempting to connect to master WebSocket at $serverAddress");

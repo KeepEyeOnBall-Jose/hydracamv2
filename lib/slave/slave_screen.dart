@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'slave_client.dart';
 import 'master_discovery.dart';
@@ -19,11 +20,35 @@ class _SlaveScreenState extends State<SlaveScreen> {
     MasterDiscovery(onMasterDiscovered: (masterIp) {
       if (!isConnected) {
         print("Connecting to master at IP: $masterIp");
-        // Log para confirmar la URL exacta de conexión antes de instanciar `SlaveClient`
-        print("Full WebSocket URL being used: ws://$masterIp:4040");
+        _client = SlaveClient(
+          'ws://$masterIp:4040/ws',
+          onPhotoTaken: (path) {
+            setState(() {
+              statusMessage = "Photo taken!";
+            });
 
-        // Confirmar que `_client` esté usando el path correcto
-        _client = SlaveClient('ws://$masterIp:4040/ws');
+            // Show the taken photo in a modal
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text("Photo Taken"),
+                content: Image.file(File(path)),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("Close"),
+                  ),
+                ],
+              ),
+            );
+            // Automatically close after 5 seconds
+            Future.delayed(Duration(seconds: 5), () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            });
+          },
+        );
         _client?.connect();
         setState(() {
           isConnected = true;
