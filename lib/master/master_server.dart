@@ -17,8 +17,12 @@ class MasterServer {
         _clients.add(socket);
         print("New client connected");
 
+        // Listen for confirmations or messages from the slave
         socket.listen((data) {
           print("Message received from client: $data");
+          if (data == "Photo taken") {
+            _showSnackBar("Photo taken by slave");
+          }
         }, onDone: () {
           _clients.remove(socket);
           print("Client disconnected");
@@ -46,5 +50,10 @@ class MasterServer {
     _server?.close();
     _clients.clear();
     print("WebSocket Server stopped");
+  }
+
+  /// Helper function to show a Snackbar when a message is received from a slave.
+  void _showSnackBar(String message) {
+    // Implement Snackbar or other UI feedback to show message on the master
   }
 }
