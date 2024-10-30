@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'master/master_screen.dart';
-import 'slave/slave_screen.dart';
+import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 
 void main() {
   runApp(SportCamSyncApp());
@@ -15,7 +14,7 @@ class SportCamSyncApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MasterScreen(), // Set to MasterScreen for now; switch as needed
+      home: RoleSelectionScreen(), // Set initial screen to role selection
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'master_server.dart';
+import 'master_announcer.dart';
 
 /// MasterScreen - Main UI for the master device to control slave cameras.
 class MasterScreen extends StatefulWidget {
@@ -9,16 +10,19 @@ class MasterScreen extends StatefulWidget {
 
 class _MasterScreenState extends State<MasterScreen> {
   final MasterServer _server = MasterServer();
+  final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
 
   @override
   void initState() {
     super.initState();
     _server.startServer();
+    _announcer.startBroadcasting(); // Start broadcasting master IP
   }
 
   @override
   void dispose() {
     _server.stopServer();
+    _announcer.stopBroadcasting(); // Stop broadcasting
     super.dispose();
   }
 
