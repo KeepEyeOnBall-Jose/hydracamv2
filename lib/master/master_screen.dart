@@ -11,29 +11,49 @@ class MasterScreen extends StatefulWidget {
 class _MasterScreenState extends State<MasterScreen> {
   final MasterServer _server = MasterServer();
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
+  int connectedClients = 0; // To display connected clients count
 
   @override
   void initState() {
     super.initState();
+    _server.onClientCountChange = (count) {
+      setState(() {
+        connectedClients = count;
+      });
+    };
     _server.startServer();
-    _announcer.startBroadcasting(); // Start broadcasting master IP
+    _announcer.startBroadcasting();
   }
 
   @override
   void dispose() {
     _server.stopServer();
-    _announcer.stopBroadcasting(); // Stop broadcasting
+    _announcer.stopBroadcasting();
     super.dispose();
   }
 
   /// Sends the start camera command to all connected slave devices.
   void _startCamera() {
     _server.sendCommand('startCamera');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Start camera command sent to slaves")),
+    );
   }
 
-  /// Sends the stop camera command to all connected slave devices.
-  void _stopCamera() {
-    _server.sendCommand('stopCamera');
+  /// Sends the simulated take photo command to all connected slave devices.
+  void _simulateTakePhoto() {
+    _server.sendCommand('simulateTakePhoto');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Simulate photo command sent")),
+    );
+  }
+
+  /// Sends the real take photo command to all connected slave devices.
+  void _takeRealPhoto() {
+    _server.sendCommand('takePhoto');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Real photo command sent")),
+    );
   }
 
   @override
@@ -46,14 +66,21 @@ class _MasterScreenState extends State<MasterScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("Connected clients: $connectedClients"),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _startCamera,
               child: Text("Start Camera on Slaves"),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _stopCamera,
-              child: Text("Stop Camera on Slaves"),
+              onPressed: _simulateTakePhoto,
+              child: Text("Simulate Take Photo on Slaves"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _takeRealPhoto,
+              child: Text("Take Real Photo on Slaves"),
             ),
           ],
         ),

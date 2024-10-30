@@ -1,39 +1,43 @@
 import 'dart:io';
 
-/// MasterServer - WebSocket server that runs on the master device.
-/// Handles connections with slave devices and sends camera control commands.
 class MasterServer {
   HttpServer? _server;
   final List<WebSocket> _clients = [];
+  Function(int)? onClientCountChange;
 
-  /// Starts the WebSocket server on the master device.
   Future<void> startServer() async {
-    _server = await HttpServer.bind('0.0.0.0', 4040);
-    print("WebSocket Server started on port 4040");
+    try {
+      _server = await HttpServer.bind('0.0.0.0', 4040);
+      print("WebSocket Server successfully started on port 4040");
 
-    await for (HttpRequest request in _server!) {
-      if (request.uri.path == '/ws') {
-        var socket = await WebSocketTransformer.upgrade(request);
-        _clients.add(socket);
-        print("New client connected");
+      await for (HttpRequest request in _server!) {
+        print("Received an HTTP request at path: ${request.uri.path}");
+        if (request.uri.path == '/ws') {
+          print("Attempting to upgrade HTTP request to WebSocket...");
+          var socket = await WebSocketTransformer.upgrade(request);
+          _clients.add(socket);
+          _notifyClientCount();
+          print("New WebSocket client connected. Total connected clients: ${_clients.length}");
 
-        // Listen for confirmations or messages from the slave
-        socket.listen((data) {
-          print("Message received from client: $data");
-          if (data == "Photo taken") {
-            _showSnackBar("Photo taken by slave");
-          }
-        }, onDone: () {
-          _clients.remove(socket);
-          print("Client disconnected");
-        });
+          socket.listen((data) {
+            print("Message received from client: $data");
+          }, onDone: () {
+            _clients.remove(socket);
+            _notifyClientCount();
+            print("Client disconnected. Total connected clients: ${_clients.length}");
+          });
+        } else {
+          print("Received a non-WebSocket HTTP request, rejecting...");
+          request.response
+            ..statusCode = HttpStatus.forbidden
+            ..close();
+        }
       }
+    } catch (e) {
+      print("Failed to start WebSocket Server: $e");
     }
   }
 
-  /// Sends a command to all connected clients (slave devices).
-  /// If no clients are connected, logs a message indicating no slaves are connected.
-  /// [command] - The command to send (e.g., 'startCamera', 'stopCamera').
   void sendCommand(String command) {
     if (_clients.isEmpty) {
       print("No slave devices connected. Command '$command' not sent.");
@@ -45,15 +49,16 @@ class MasterServer {
     }
   }
 
-  /// Stops the WebSocket server and clears connected clients.
   void stopServer() {
     _server?.close();
     _clients.clear();
     print("WebSocket Server stopped");
+    _notifyClientCount();
   }
 
-  /// Helper function to show a Snackbar when a message is received from a slave.
-  void _showSnackBar(String message) {
-    // Implement Snackbar or other UI feedback to show message on the master
+  void _notifyClientCount() {
+    if (onClientCountChange != null) {
+      onClientCountChange!(_clients.length);
+    }
   }
 }

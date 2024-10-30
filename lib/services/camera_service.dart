@@ -18,6 +18,18 @@ class CameraService {
     }
   }
 
+  /// Takes a real photo and returns the file path.
+  Future<String> takePhoto() async {
+    try {
+      final XFile photo = await _controller!.takePicture();
+      print("Photo taken at path: ${photo.path}");
+      return photo.path;
+    } catch (e) {
+      print("Error taking photo: $e");
+      return "Error taking photo";
+    }
+  }
+
   /// Stops the camera recording and releases resources.
   Future<void> stopCamera() async {
     try {
