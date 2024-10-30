@@ -28,10 +28,16 @@ class MasterServer {
   }
 
   /// Sends a command to all connected clients (slave devices).
+  /// If no clients are connected, logs a message indicating no slaves are connected.
   /// [command] - The command to send (e.g., 'startCamera', 'stopCamera').
   void sendCommand(String command) {
-    for (var client in _clients) {
-      client.add(command);
+    if (_clients.isEmpty) {
+      print("No slave devices connected. Command '$command' not sent.");
+    } else {
+      for (var client in _clients) {
+        client.add(command);
+      }
+      print("Command '$command' sent to all connected slaves.");
     }
   }
 
