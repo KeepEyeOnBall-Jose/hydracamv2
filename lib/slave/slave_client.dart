@@ -9,7 +9,7 @@ class SlaveClient {
   bool _isConnected = false;
   Timer? _reconnectTimer;
 
-  SlaveClient(String masterIp) : serverAddress = 'ws://$masterIp:4040/ws';
+  SlaveClient(this.serverAddress);
 
   void connect() {
     print("Attempting to connect to master WebSocket at $serverAddress");

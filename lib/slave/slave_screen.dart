@@ -19,7 +19,11 @@ class _SlaveScreenState extends State<SlaveScreen> {
     MasterDiscovery(onMasterDiscovered: (masterIp) {
       if (!isConnected) {
         print("Connecting to master at IP: $masterIp");
-        _client = SlaveClient('ws://$masterIp:4040');
+        // Log para confirmar la URL exacta de conexión antes de instanciar `SlaveClient`
+        print("Full WebSocket URL being used: ws://$masterIp:4040");
+
+        // Confirmar que `_client` esté usando el path correcto
+        _client = SlaveClient('ws://$masterIp:4040/ws');
         _client?.connect();
         setState(() {
           isConnected = true;
@@ -31,8 +35,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
   @override
   void dispose() {
-    // Disconnect the client when disposing the screen
-    _client?.disconnect();  // Ensure _client is instantiated before calling disconnect()
+    _client?.disconnect();
     super.dispose();
   }
 
@@ -50,7 +53,6 @@ class _SlaveScreenState extends State<SlaveScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Test button to simulate photo taken
                 setState(() {
                   statusMessage = "Photo taken";
                 });
