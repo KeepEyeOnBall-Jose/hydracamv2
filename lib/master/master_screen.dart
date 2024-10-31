@@ -112,7 +112,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 itemBuilder: (context, index) {
                   final photo = photos[index];
                   return ListTile(
-                    leading: Image.memory(photo.photoData, width: 50, height: 50),
+                    leading: Image.file(File(photo.photoPath), width: 50, height: 50),
                     title: Text("Photo from Slave: ${photo.slaveDeviceId}"),
                     subtitle: Text(
                       "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
