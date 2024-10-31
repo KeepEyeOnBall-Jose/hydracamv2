@@ -28,37 +28,47 @@ class MasterServer {
           print("New WebSocket client connected. Total connected clients: ${_clients.length}");
 
           socket.listen((data) async {
-            if (data is List<int>) {
-              final Uint8List binaryData = Uint8List.fromList(data);
+            if (data is Map<String, dynamic>) { // Expecting a map with keys
+              final Uint8List binaryData = Uint8List.fromList(data['data']);
               final String filePath = await _saveMediaLocally(binaryData);
+              final DateTime receivedDate = DateTime.now();
 
-              // Determine if it's a photo or video based on the file extension
               if (filePath.endsWith('.jpg')) {
+                // Extract captureDate from data or use receivedDate
+                final DateTime captureDate = data['captureDate'] is DateTime
+                    ? data['captureDate'] as DateTime
+                    : receivedDate;
+
                 final receivedPhoto = CapturedPhoto(
                   photoData: null,
                   photoPath: filePath,
-                  captureDate: DateTime.now(), //TODO
-                  receivedDate: DateTime.now(),
+                  captureDate: captureDate,
+                  receivedDate: receivedDate,
                   slaveDeviceId: socket.hashCode.toString(),
                 );
                 currentSession?.addPhoto(receivedPhoto);
-                if (onMediaReceived != null) {
-                  onMediaReceived!(receivedPhoto);
-                }
+                onMediaReceived?.call(receivedPhoto);
                 print("Photo from slave device received and stored at: $filePath");
+
               } else if (filePath.endsWith('.mp4')) {
+                // Extract startRecordingDate and endRecordingDate from data or use receivedDate
+                final DateTime startRecordingDate = data['startRecordingDate'] is DateTime
+                    ? data['startRecordingDate'] as DateTime
+                    : receivedDate;
+                final DateTime endRecordingDate = data['endRecordingDate'] is DateTime
+                    ? data['endRecordingDate'] as DateTime
+                    : receivedDate;
+
                 final receivedVideo = CapturedVideo(
                   videoData: null,
                   videoPath: filePath,
                   slaveDeviceId: socket.hashCode.toString(),
-                  startRecordingDate: DateTime.now(), // Placeholder date TODO
-                  endRecordingDate: DateTime.now(), // Placeholder date
-                  receivedDate: DateTime.now(),
+                  startRecordingDate: startRecordingDate,
+                  endRecordingDate: endRecordingDate,
+                  receivedDate: receivedDate,
                 );
                 currentSession?.addVideo(receivedVideo);
-                if (onMediaReceived != null) {
-                  onMediaReceived!(receivedVideo);
-                }
+                onMediaReceived?.call(receivedVideo);
                 print("Video from slave device received and stored at: $filePath");
               }
             } else {
@@ -84,7 +94,7 @@ class MasterServer {
     final directory = await getApplicationDocumentsDirectory();
     final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
     await Directory(sessionDirectoryPath).create(recursive: true);
-    final String fileExtension = binaryData.length > 0 && binaryData[0] == 0xFF ? 'jpg' : 'mp4';
+    final String fileExtension = binaryData[0] == 0xFF ? 'jpg' : 'mp4';
     final String filePath = '$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
     final file = File(filePath);
     await file.writeAsBytes(binaryData);

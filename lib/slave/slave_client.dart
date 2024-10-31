@@ -12,6 +12,11 @@ class SlaveClient {
   bool isRecordingVideo = false; // Flag to track video recording state
   Timer? _reconnectTimer;
 
+  // To store timestamps
+  DateTime? photoCaptureDate;
+  DateTime? videoStartRecordingDate;
+  DateTime? videoEndRecordingDate;
+
   SlaveClient(this.serverAddress, {Function(String)? onPhotoTaken})
       : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
 
@@ -33,22 +38,38 @@ class SlaveClient {
             _channel?.sink.add("Simulated photo taken");
             print("Simulated photo confirmation sent to master.");
           } else if (message == 'takePhoto') {
+            photoCaptureDate = DateTime.now(); // Record the capture timestamp
             _cameraService.takePhoto().then((photoPath) async {
               final file = File(photoPath);
               final Uint8List photoData = await file.readAsBytes();
-              _channel?.sink.add(photoData);
-              print("Real photo data sent to master.");
+
+              // Prepare the data to send, including the timestamp
+              final data = {
+                'data': photoData,
+                'captureDate': photoCaptureDate!.toIso8601String(),
+              };
+              _channel?.sink.add(data);
+              print("Real photo data with timestamp sent to master.");
             });
           } else if (message == 'startRecordingVideo') {
+            videoStartRecordingDate = DateTime.now(); // Record the start timestamp
             _cameraService.startRecordingVideo();
             isRecordingVideo = true;
-            print("Video recording started");
+            print("Video recording started at: $videoStartRecordingDate");
           } else if (message == 'stopRecordingVideo') {
+            videoEndRecordingDate = DateTime.now(); // Record the end timestamp
             _cameraService.stopRecordingVideo().then((videoPath) async {
               final file = File(videoPath);
               final Uint8List videoData = await file.readAsBytes();
-              _channel?.sink.add(videoData);
-              print("Video data sent to master.");
+
+              // Prepare the data to send, including both timestamps
+              final data = {
+                'data': videoData,
+                'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
+                'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
+              };
+              _channel?.sink.add(data);
+              print("Video data with timestamps sent to master.");
             });
             isRecordingVideo = false;
           } else if (message == 'stopCamera') {
