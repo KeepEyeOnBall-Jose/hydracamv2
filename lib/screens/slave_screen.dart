@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'slave_client.dart';
-import 'master_discovery.dart';
+import '../slave/slave_client.dart';
+import '../slave/master_discovery.dart';
 
 class SlaveScreen extends StatefulWidget {
   @override

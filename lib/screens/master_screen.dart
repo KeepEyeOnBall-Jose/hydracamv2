@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
-import 'master_server.dart';
-import 'master_announcer.dart';
+import '../master/master_server.dart';
+import '../master/master_announcer.dart';
 import 'dart:io';
 
 /// MasterScreen - Main UI for the master device to control slave cameras.

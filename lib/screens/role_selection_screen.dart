@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../master/master_screen.dart';
-import '../slave/slave_screen.dart';
+import 'master_screen.dart';
+import 'slave_screen.dart';
 
 /// RoleSelectionScreen - Initial screen to select the role of the device (Master or Slave).
 class RoleSelectionScreen extends StatelessWidget {
