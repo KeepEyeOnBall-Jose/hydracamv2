@@ -1,7 +1,7 @@
-# SportCamSync
+# HydraCam
 
 ## Overview
-SportCamSync is a mobile application designed for multi-device camera synchronization, intended for sports events like squash or padel matches. It allows a master device to control multiple slave devices’ cameras connected via a hotspot. The master device can start or stop camera recording or capture photos on the slave devices, which is useful for capturing different angles during a sports match.
+HydraCam is a mobile application designed for multi-device camera synchronization, intended for sports events like squash or padel matches. It allows a master device to control multiple slave devices' cameras connected via a hotspot. The master device can send commands to start or stop camera recording or capture photos on the slave devices, making it useful for capturing different angles during a sports match.
 
 ## Architecture and Components
 
@@ -10,7 +10,7 @@ The application follows a client-server model where:
 - The **master device** acts as a server and hotspot, sending commands to connected slave devices.
 - **Slave devices** act as WebSocket clients connected to the master, receiving commands and controlling their cameras based on these instructions.
 
-Communication between devices is handled in real-time using WebSockets, making it possible for the master device to broadcast camera commands simultaneously to all connected slave devices.
+Communication between devices is handled in real-time using WebSockets, enabling the master device to broadcast camera commands simultaneously to all connected slave devices.
 
 ### Main Components
 
@@ -18,33 +18,44 @@ Communication between devices is handled in real-time using WebSockets, making i
 
 - **MasterServer**: A WebSocket server running on the master device to manage client connections and send camera control commands.
 - **SlaveClient**: A WebSocket client on each slave device to receive commands from the master and trigger camera actions accordingly.
-- **CameraService**: Handles camera functionalities on the slave device, such as starting/stopping video recording and taking photos.
+- **CameraService**: Manages camera functionalities on the slave device, such as starting/stopping video recording and taking photos. Includes a callback mechanism to notify when a photo is taken.
+- **MasterDiscovery**: A service used by slave devices to discover the master device by listening for broadcast messages.
+- **MasterAnnouncer**: Broadcasts the master device's presence periodically to facilitate easy connection from slave devices.
 - **PermissionService**: Manages camera and internet permissions on both the master and slave devices, ensuring all required permissions are obtained at runtime.
 
 #### 2. Screens
 
+- **RoleSelectionScreen** (`screens/role_selection_screen.dart`): The initial screen where the user selects the device role, either "Master" or "Slave."
 - **MasterScreen** (`master/master_screen.dart`): The control interface on the master device where the user can send camera commands to the slaves.
-- **SlaveScreen** (`slave/slave_screen.dart`): The main screen on the slave devices that listens for incoming commands and shows camera status.
-
-#### 3. Widgets
-
-- **ControlButtons** (`widgets/control_buttons.dart`): A reusable widget on the master screen, providing buttons to send camera start/stop commands to the slave devices.
+- **SlaveScreen** (`slave/slave_screen.dart`): The main screen on the slave devices that listens for incoming commands, shows camera status, and displays taken photos in a pop-up dialog.
 
 ## Project Structure
+
 lib/
 ├── main.dart                       # Main entry point of the application.
 ├── master/
 │   ├── master_screen.dart          # Master device's control screen.
 │   ├── master_server.dart          # WebSocket server for the master device.
+│   ├── master_announcer.dart       # Service to broadcast master presence.
 ├── slave/
 │   ├── slave_screen.dart           # Slave device's screen to respond to master commands.
 │   ├── slave_client.dart           # WebSocket client for slave devices.
+│   ├── master_discovery.dart       # Service for discovering the master device.
 ├── services/
 │   ├── camera_service.dart         # Service to manage camera functionalities.
 │   ├── permission_service.dart     # Service to handle permissions.
 └── widgets/
     ├── control_buttons.dart        # Reusable widget with control buttons.
 
+
+## Next Steps
+1. **Video Recording**: Implement video recording functionality for capturing full sports matches.
+2. **AI Content Processing**: Develop AI algorithms to process captured content for highlights, player tracking, or other analytical purposes.
+3. **Cloud Upload**: Create a service to upload captured videos and photos to a cloud endpoint, along with metadata such as device information and timestamps.
+4. **Capture Session(Match) and Clips Abstraction**: Introduce a structure to represent matches and clips, allowing users to start matches and view or manage captured clips.
+5. **Testing**: Populate the `test` folder with widget tests and integration tests to ensure the application functions correctly and efficiently.
+
+---
 
 ## Getting Started
 
