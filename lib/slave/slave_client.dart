@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
+import 'dart:io';
 
 class SlaveClient {
   final String serverAddress;
@@ -30,9 +32,14 @@ class SlaveClient {
             _channel?.sink.add("Simulated photo taken");
             print("Simulated photo confirmation sent to master.");
           } else if (message == 'takePhoto') {
-            _cameraService.takePhoto().then((photoPath) {
-              _channel?.sink.add("Real photo taken at path: $photoPath");
-              print("Real photo taken and confirmation sent to master.");
+            _cameraService.takePhoto().then((photoPath) async {
+              // Lee el archivo de la foto como datos binarios
+              final file = File(photoPath);
+              final Uint8List photoData = await file.readAsBytes();
+
+              // Envía los datos binarios a través del WebSocket
+              _channel?.sink.add(photoData);
+              print("Real photo data sent to master.");
             });
           } else if (message == 'stopCamera') {
             _cameraService.stopCamera();

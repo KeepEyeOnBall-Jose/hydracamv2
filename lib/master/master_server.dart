@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 
@@ -7,7 +8,7 @@ class MasterServer {
   final List<WebSocket> _clients = [];
   CaptureSession? currentSession; // Current Capture Session
   Function(int)? onClientCountChange;
-  Function(CapturedPhoto)? onPhotoReceived; // Callback para notificar la recepción de una foto
+  Function(CapturedPhoto)? onPhotoReceived; // Callback to notify we received a photo
 
 
   Future<void> startServer() async {
@@ -23,11 +24,11 @@ class MasterServer {
           print("New WebSocket client connected. Total connected clients: ${_clients.length}");
 
           socket.listen((data) {
-            print("Message received from client: $data");
-            if (data.startsWith("Real photo taken at path: ")) {
-              final photoPath = data.replaceFirst("Real photo taken at path: ", "");
+            if (data is List<int>) {
+              // Si los datos recibidos son binarios
+              final Uint8List binaryData = Uint8List.fromList(data);
               final receivedPhoto = CapturedPhoto(
-                photoPath: photoPath,
+                photoData: binaryData,
                 captureDate: DateTime.now(),
                 receivedDate: DateTime.now(),
                 slaveDeviceId: socket.hashCode.toString(),
@@ -38,7 +39,9 @@ class MasterServer {
               if (onPhotoReceived != null) {
                 onPhotoReceived!(receivedPhoto);
               }
-              print("Photo from slave device stored: $photoPath");
+              print("Photo from slave device received and stored.");
+            } else {
+              print("Non-binary message received: $data");
             }
           }, onDone: () {
             _clients.remove(socket);

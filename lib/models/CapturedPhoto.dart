@@ -1,23 +1,31 @@
-/// Represents a photo captured by a slave device, along with its metadata.
-class CapturedPhoto {
-  /// The file path where the photo is saved on the slave device.
-  final String photoPath;
+import 'dart:typed_data';
 
-  /// The date and time when the photo was taken.
+/// CapturedPhoto - Represents a photo captured by a slave device.
+/// This class holds the binary data of the photo, the device ID that took the photo,
+/// and the timestamps for when it was captured and when it was received by the master.
+class CapturedPhoto {
+  /// The binary data of the captured photo.
+  final Uint8List photoData;
+
+  /// The unique identifier for the slave device that took the photo.
+  final String slaveDeviceId;
+
+  /// The date and time when the photo was captured.
   final DateTime captureDate;
 
   /// The date and time when the photo was received by the master device.
   final DateTime receivedDate;
 
-  /// An identifier for the slave device that captured the photo.
-  final String slaveDeviceId;
-
-  /// Constructor to initialize a CapturedPhoto with its path, capture date,
-  /// received date, and the ID of the slave device.
+  /// Constructor for creating a new CapturedPhoto.
+  /// 
+  /// - `photoData`: The binary data of the photo.
+  /// - `slaveDeviceId`: The ID of the slave device that captured the photo.
+  /// - `captureDate`: The timestamp when the photo was captured.
+  /// - `receivedDate`: The timestamp when the photo was received by the master.
   CapturedPhoto({
-    required this.photoPath,
+    required this.photoData,
+    required this.slaveDeviceId,
     required this.captureDate,
     required this.receivedDate,
-    required this.slaveDeviceId,
   });
 }
