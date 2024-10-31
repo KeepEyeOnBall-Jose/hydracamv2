@@ -1,9 +1,9 @@
+import 'dart:convert'; // Import for jsonDecode
 import 'dart:io';
 import 'dart:typed_data';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../models/CapturedVideo.dart';
 
 class MasterServer {
@@ -13,7 +13,6 @@ class MasterServer {
   List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
-
 
   Future<void> startServer() async {
     try {
@@ -28,51 +27,54 @@ class MasterServer {
           print("New WebSocket client connected. Total connected clients: ${_clients.length}");
 
           socket.listen((data) async {
-            if (data is Map<String, dynamic>) { // Expecting a map with keys
-              final Uint8List binaryData = Uint8List.fromList(data['data']);
-              final String filePath = await _saveMediaLocally(binaryData);
-              final DateTime receivedDate = DateTime.now();
+            try {
+              // Attempt to decode the data as JSON
+              final decodedData = jsonDecode(data as String);
+              print("Data received from slave: $decodedData");
 
-              if (filePath.endsWith('.jpg')) {
-                // Extract captureDate from data or use receivedDate
-                final DateTime captureDate = data['captureDate'] is DateTime
-                    ? data['captureDate'] as DateTime
-                    : receivedDate;
+              if (decodedData is Map<String, dynamic>) {
+                // Convert List<dynamic> to List<int>
+                final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
+                final String filePath = await _saveMediaLocally(binaryData);
+                final DateTime receivedDate = DateTime.now();
 
-                final receivedPhoto = CapturedPhoto(
-                  photoData: null,
-                  photoPath: filePath,
-                  captureDate: captureDate,
-                  receivedDate: receivedDate,
-                  slaveDeviceId: socket.hashCode.toString(),
-                );
-                currentSession?.addPhoto(receivedPhoto);
-                onMediaReceived?.call(receivedPhoto);
-                print("Photo from slave device received and stored at: $filePath");
+                if (filePath.endsWith('.jpg')) {
+                  // Parse captureDate from string
+                  final DateTime captureDate = DateTime.parse(decodedData['captureDate']);
 
-              } else if (filePath.endsWith('.mp4')) {
-                // Extract startRecordingDate and endRecordingDate from data or use receivedDate
-                final DateTime startRecordingDate = data['startRecordingDate'] is DateTime
-                    ? data['startRecordingDate'] as DateTime
-                    : receivedDate;
-                final DateTime endRecordingDate = data['endRecordingDate'] is DateTime
-                    ? data['endRecordingDate'] as DateTime
-                    : receivedDate;
+                  final receivedPhoto = CapturedPhoto(
+                    photoData: null,
+                    photoPath: filePath,
+                    captureDate: captureDate,
+                    receivedDate: receivedDate,
+                    slaveDeviceId: socket.hashCode.toString(),
+                  );
+                  currentSession?.addPhoto(receivedPhoto);
+                  onMediaReceived?.call(receivedPhoto);
+                  print("Photo from slave device received and stored at: $filePath");
 
-                final receivedVideo = CapturedVideo(
-                  videoData: null,
-                  videoPath: filePath,
-                  slaveDeviceId: socket.hashCode.toString(),
-                  startRecordingDate: startRecordingDate,
-                  endRecordingDate: endRecordingDate,
-                  receivedDate: receivedDate,
-                );
-                currentSession?.addVideo(receivedVideo);
-                onMediaReceived?.call(receivedVideo);
-                print("Video from slave device received and stored at: $filePath");
+                } else if (filePath.endsWith('.mp4')) {
+                  // Parse startRecordingDate and endRecordingDate from strings
+                  final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
+                  final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
+
+                  final receivedVideo = CapturedVideo(
+                    videoData: null,
+                    videoPath: filePath,
+                    slaveDeviceId: socket.hashCode.toString(),
+                    startRecordingDate: startRecordingDate,
+                    endRecordingDate: endRecordingDate,
+                    receivedDate: receivedDate,
+                  );
+                  currentSession?.addVideo(receivedVideo);
+                  onMediaReceived?.call(receivedVideo);
+                  print("Video from slave device received and stored at: $filePath");
+                }
+              } else {
+                print("Unexpected data format received: $data");
               }
-            } else {
-              print("Non-binary message received: $data");
+            } catch (e) {
+              print("Error decoding data or handling media: $e");
             }
           }, onDone: () {
             _clients.remove(socket);

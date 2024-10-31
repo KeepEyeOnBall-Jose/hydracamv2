@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert'; // Import for jsonEncode
 import 'dart:typed_data';
 import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
@@ -48,7 +49,8 @@ class SlaveClient {
                 'data': photoData,
                 'captureDate': photoCaptureDate!.toIso8601String(),
               };
-              _channel?.sink.add(data);
+              // Serialize data using jsonEncode
+              _channel?.sink.add(jsonEncode(data));
               print("Real photo data with timestamp sent to master.");
             });
           } else if (message == 'startRecordingVideo') {
@@ -68,7 +70,8 @@ class SlaveClient {
                 'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
                 'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
               };
-              _channel?.sink.add(data);
+              // Serialize data using jsonEncode
+              _channel?.sink.add(jsonEncode(data));
               print("Video data with timestamps sent to master.");
             });
             isRecordingVideo = false;

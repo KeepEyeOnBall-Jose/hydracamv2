@@ -86,8 +86,8 @@ class _MasterScreenState extends State<MasterScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.file(File(photo.photoPath)),
-              Text("Captured: ${photo.captureDate}"),
-              Text("Received: ${photo.receivedDate}"),
+              //Text("Captured: ${photo.captureDate}"),
+              //Text("Received: ${photo.receivedDate}"),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text("Close"),
