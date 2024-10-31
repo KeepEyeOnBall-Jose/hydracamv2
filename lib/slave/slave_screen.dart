@@ -68,7 +68,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SportCamSync - Slave Device"),
+        title: Text("HydraCam - Slave Device"),
       ),
       body: Center(
         child: Column(

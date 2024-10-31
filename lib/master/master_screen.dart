@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../models/CapturedPhoto.dart';
 import 'master_server.dart';
 import 'master_announcer.dart';
+import 'dart:io';
 
 /// MasterScreen - Main UI for the master device to control slave cameras.
 class MasterScreen extends StatefulWidget {
@@ -12,6 +14,7 @@ class _MasterScreenState extends State<MasterScreen> {
   final MasterServer _server = MasterServer();
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   int connectedClients = 0; // To display connected clients count
+  List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
 
   @override
   void initState() {
@@ -20,6 +23,9 @@ class _MasterScreenState extends State<MasterScreen> {
       setState(() {
         connectedClients = count;
       });
+    };
+    _server.onPhotoReceived = (photo) {
+      setState(() {}); // Update screen when photo is received
     };
     _server.startServer();
     _announcer.startBroadcasting();
@@ -60,7 +66,7 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SportCamSync - Master Control"),
+        title: Text("HydraCam - Master Control"),
       ),
       body: Center(
         child: Column(
@@ -68,6 +74,24 @@ class _MasterScreenState extends State<MasterScreen> {
           children: [
             Text("Connected clients: $connectedClients"),
             SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _server.startNewSession();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("New capture session started")),
+                );
+              },
+              child: Text("Start New Session"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _server.endCurrentSession();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Capture session ended")),
+                );
+              },
+              child: Text("End Current Session"),
+            ),
             ElevatedButton(
               onPressed: _startCamera,
               child: Text("Start Camera on Slaves"),
@@ -81,6 +105,21 @@ class _MasterScreenState extends State<MasterScreen> {
             ElevatedButton(
               onPressed: _takeRealPhoto,
               child: Text("Take Real Photo on Slaves"),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: photos.length,
+                itemBuilder: (context, index) {
+                  final photo = photos[index];
+                  return ListTile(
+                    leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                    title: Text("Photo from Slave: ${photo.slaveDeviceId}"),
+                    subtitle: Text(
+                      "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
