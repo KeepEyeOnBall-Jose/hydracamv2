@@ -2,11 +2,13 @@ import 'dart:io';
 import 'dart:typed_data';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MasterServer {
   HttpServer? _server;
   final List<WebSocket> _clients = [];
   CaptureSession? currentSession; // Current Capture Session
+  List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
   Function(CapturedPhoto)? onPhotoReceived; // Callback to notify we received a photo
 
@@ -23,23 +25,27 @@ class MasterServer {
           _notifyClientCount();
           print("New WebSocket client connected. Total connected clients: ${_clients.length}");
 
-          socket.listen((data) {
+          socket.listen((data) async {
             if (data is List<int>) {
-              // Si los datos recibidos son binarios
+              // Received binary data
               final Uint8List binaryData = Uint8List.fromList(data);
+              final String filePath = await _savePhotoLocally(binaryData);
+
+              // Create CapturedPhoto with binary data set to null after saving
               final receivedPhoto = CapturedPhoto(
-                photoData: binaryData,
+                photoData: null, // Clear binary data to free memory
+                photoPath: filePath,
                 captureDate: DateTime.now(),
                 receivedDate: DateTime.now(),
                 slaveDeviceId: socket.hashCode.toString(),
               );
 
-              // If there is an active capture session we add the photo to it
+              // If there is an active capture session, add the photo to it
               currentSession?.addPhoto(receivedPhoto);
               if (onPhotoReceived != null) {
                 onPhotoReceived!(receivedPhoto);
               }
-              print("Photo from slave device received and stored.");
+              print("Photo from slave device received and stored at: $filePath");
             } else {
               print("Non-binary message received: $data");
             }
@@ -59,17 +65,35 @@ class MasterServer {
     }
   }
 
+  Future<String> _savePhotoLocally(Uint8List binaryData) async {
+    // Get the application documents directory
+    final directory = await getApplicationDocumentsDirectory();
+    final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
+    await Directory(sessionDirectoryPath).create(recursive: true);
+
+    // Create a unique file path for the photo
+    final String filePath = '$sessionDirectoryPath/photo_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final file = File(filePath);
+    await file.writeAsBytes(binaryData);
+    return filePath;
+  }
+
   void startNewSession() {
+    var currentDate = DateTime.now();
     currentSession = CaptureSession(
-      sessionId: DateTime.now().toIso8601String(),
-      startTime: DateTime.now(),
+      sessionId: currentDate.toIso8601String(),
+      startTime: currentDate,
     );
     print("New capture session started with ID: ${currentSession?.sessionId}");
   }
 
   void endCurrentSession() {
-    currentSession?.endSession();
-    print("Capture session ended at: ${currentSession?.endTime}");
+    if (currentSession != null) {
+      sessionHistory.add(currentSession!);
+      currentSession?.endSession();
+      currentSession = null;
+      print("Capture session ended and stored in history.");
+    }
   }
 
   void sendCommand(String command) {

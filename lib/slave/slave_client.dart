@@ -33,13 +33,16 @@ class SlaveClient {
             print("Simulated photo confirmation sent to master.");
           } else if (message == 'takePhoto') {
             _cameraService.takePhoto().then((photoPath) async {
-              // Lee el archivo de la foto como datos binarios
+              // Read the photo file as binary data
               final file = File(photoPath);
               final Uint8List photoData = await file.readAsBytes();
 
-              // Envía los datos binarios a través del WebSocket
+              // Send the binary data over the WebSocket
               _channel?.sink.add(photoData);
               print("Real photo data sent to master.");
+
+              // Optionally, delete the photo from the device storage
+              // file.delete(); // Uncomment if we want to free storage space
             });
           } else if (message == 'stopCamera') {
             _cameraService.stopCamera();

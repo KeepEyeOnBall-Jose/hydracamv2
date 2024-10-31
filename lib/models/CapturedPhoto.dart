@@ -1,11 +1,16 @@
 import 'dart:typed_data';
 
 /// CapturedPhoto - Represents a photo captured by a slave device.
-/// This class holds the binary data of the photo, the device ID that took the photo,
-/// and the timestamps for when it was captured and when it was received by the master.
+/// This class holds the binary data of the photo (temporarily), the file path where it's stored,
+/// the device ID that took the photo, and the timestamps for when it was captured
+/// and when it was received by the master.
 class CapturedPhoto {
-  /// The binary data of the captured photo.
-  final Uint8List photoData;
+  /// The binary data of the captured photo. This is nullable and can be
+  /// set to `null` once the photo is saved to disk to free up memory.
+  Uint8List? photoData;
+
+  /// The file path where the photo is stored on the master device.
+  final String photoPath;
 
   /// The unique identifier for the slave device that took the photo.
   final String slaveDeviceId;
@@ -17,13 +22,15 @@ class CapturedPhoto {
   final DateTime receivedDate;
 
   /// Constructor for creating a new CapturedPhoto.
-  /// 
-  /// - `photoData`: The binary data of the photo.
+  ///
+  /// - `photoData`: The binary data of the photo (can be null once saved).
+  /// - `photoPath`: The file path where the photo is stored.
   /// - `slaveDeviceId`: The ID of the slave device that captured the photo.
   /// - `captureDate`: The timestamp when the photo was captured.
   /// - `receivedDate`: The timestamp when the photo was received by the master.
   CapturedPhoto({
-    required this.photoData,
+    this.photoData, // Now nullable
+    required this.photoPath,
     required this.slaveDeviceId,
     required this.captureDate,
     required this.receivedDate,

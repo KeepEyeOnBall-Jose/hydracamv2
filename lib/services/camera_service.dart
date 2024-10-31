@@ -2,9 +2,9 @@ import 'package:camera/camera.dart';
 
 class CameraService {
   CameraController? _controller;
-  Function(String)? onPhotoTaken; // Callback para notificar al SlaveScreen
+  Function(String)? onPhotoTaken; // Callback to notify SlaveScreen
 
-  // Constructor opcional para incluir el callback
+  // Constructor to include the callback
   CameraService({this.onPhotoTaken});
 
   Future<void> startCamera() async {
