@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
 import 'master_server.dart';
 import 'master_announcer.dart';
 import 'dart:io';
@@ -14,7 +15,12 @@ class _MasterScreenState extends State<MasterScreen> {
   final MasterServer _server = MasterServer();
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   int connectedClients = 0; // To display connected clients count
+  bool isRecording = false;
+
+  // Get photos and videos from the current session
   List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
+  List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
+
 
   @override
   void initState() {
@@ -24,8 +30,8 @@ class _MasterScreenState extends State<MasterScreen> {
         connectedClients = count;
       });
     };
-    _server.onPhotoReceived = (photo) {
-      setState(() {}); // Update screen when photo is received
+    _server.onMediaReceived = (media) {
+      setState(() {});
     };
     _server.startServer();
     _announcer.startBroadcasting();
@@ -36,6 +42,20 @@ class _MasterScreenState extends State<MasterScreen> {
     _server.stopServer();
     _announcer.stopBroadcasting();
     super.dispose();
+  }
+
+  void _toggleRecording() {
+    if (isRecording) {
+      _server.sendCommand('stopRecordingVideo');
+      setState(() {
+        isRecording = false;
+      });
+    } else {
+      _server.sendCommand('startRecordingVideo');
+      setState(() {
+        isRecording = true;
+      });
+    }
   }
 
   /// Sends the start camera command to all connected slave devices.
@@ -106,18 +126,42 @@ class _MasterScreenState extends State<MasterScreen> {
               onPressed: _takeRealPhoto,
               child: Text("Take Real Photo on Slaves"),
             ),
+            ElevatedButton(
+              onPressed: _toggleRecording,
+              style: ElevatedButton.styleFrom(
+                primary: isRecording ? Colors.red : Colors.green,
+              ),
+              child: Text(isRecording ? "Stop Recording Video" : "Start Recording Video"),
+            ),
             Expanded(
               child: ListView.builder(
-                itemCount: photos.length,
+                itemCount: photos.length + videos.length,
                 itemBuilder: (context, index) {
-                  final photo = photos[index];
-                  return ListTile(
-                    leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                    title: Text("Photo from Slave: ${photo.slaveDeviceId}"),
-                    subtitle: Text(
-                      "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
-                    ),
-                  );
+                  if (index < photos.length) {
+                    // Display photo
+                    final photo = photos[index];
+                    return ListTile(
+                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                      title: Text("Photo from Slave: ${photo.slaveDeviceId}"),
+                      subtitle: Text(
+                        "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
+                      ),
+                    );
+                  } else {
+                    // Display video
+                    final video = videos[index - photos.length];
+                    return ListTile(
+                      leading: Icon(Icons.videocam, size: 50), // Icon for video
+                      title: Text("Video from Slave: ${video.slaveDeviceId}"),
+                      subtitle: Text(
+                        "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}\nReceived: ${video.receivedDate}",
+                      ),
+                      onTap: () {
+                        // Play the video (this requires a video player plugin)
+                        // Navigator.push to a video player screen, for example
+                      },
+                    );
+                  }
                 },
               ),
             ),

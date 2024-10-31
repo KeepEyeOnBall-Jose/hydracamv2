@@ -4,13 +4,15 @@ import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/CapturedVideo.dart';
+
 class MasterServer {
   HttpServer? _server;
   final List<WebSocket> _clients = [];
   CaptureSession? currentSession; // Current Capture Session
   List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
-  Function(CapturedPhoto)? onPhotoReceived; // Callback to notify we received a photo
+  Function(dynamic)? onMediaReceived; // Callback for media reception
 
 
   Future<void> startServer() async {
@@ -27,25 +29,38 @@ class MasterServer {
 
           socket.listen((data) async {
             if (data is List<int>) {
-              // Received binary data
               final Uint8List binaryData = Uint8List.fromList(data);
-              final String filePath = await _savePhotoLocally(binaryData);
+              final String filePath = await _saveMediaLocally(binaryData);
 
-              // Create CapturedPhoto with binary data set to null after saving
-              final receivedPhoto = CapturedPhoto(
-                photoData: null, // Clear binary data to free memory
-                photoPath: filePath,
-                captureDate: DateTime.now(),
-                receivedDate: DateTime.now(),
-                slaveDeviceId: socket.hashCode.toString(),
-              );
-
-              // If there is an active capture session, add the photo to it
-              currentSession?.addPhoto(receivedPhoto);
-              if (onPhotoReceived != null) {
-                onPhotoReceived!(receivedPhoto);
+              // Determine if it's a photo or video based on the file extension
+              if (filePath.endsWith('.jpg')) {
+                final receivedPhoto = CapturedPhoto(
+                  photoData: null,
+                  photoPath: filePath,
+                  captureDate: DateTime.now(), //TODO
+                  receivedDate: DateTime.now(),
+                  slaveDeviceId: socket.hashCode.toString(),
+                );
+                currentSession?.addPhoto(receivedPhoto);
+                if (onMediaReceived != null) {
+                  onMediaReceived!(receivedPhoto);
+                }
+                print("Photo from slave device received and stored at: $filePath");
+              } else if (filePath.endsWith('.mp4')) {
+                final receivedVideo = CapturedVideo(
+                  videoData: null,
+                  videoPath: filePath,
+                  slaveDeviceId: socket.hashCode.toString(),
+                  startRecordingDate: DateTime.now(), // Placeholder date TODO
+                  endRecordingDate: DateTime.now(), // Placeholder date
+                  receivedDate: DateTime.now(),
+                );
+                currentSession?.addVideo(receivedVideo);
+                if (onMediaReceived != null) {
+                  onMediaReceived!(receivedVideo);
+                }
+                print("Video from slave device received and stored at: $filePath");
               }
-              print("Photo from slave device received and stored at: $filePath");
             } else {
               print("Non-binary message received: $data");
             }
@@ -65,14 +80,12 @@ class MasterServer {
     }
   }
 
-  Future<String> _savePhotoLocally(Uint8List binaryData) async {
-    // Get the application documents directory
+  Future<String> _saveMediaLocally(Uint8List binaryData) async {
     final directory = await getApplicationDocumentsDirectory();
     final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
     await Directory(sessionDirectoryPath).create(recursive: true);
-
-    // Create a unique file path for the photo
-    final String filePath = '$sessionDirectoryPath/photo_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final String fileExtension = binaryData.length > 0 && binaryData[0] == 0xFF ? 'jpg' : 'mp4';
+    final String filePath = '$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
     final file = File(filePath);
     await file.writeAsBytes(binaryData);
     return filePath;

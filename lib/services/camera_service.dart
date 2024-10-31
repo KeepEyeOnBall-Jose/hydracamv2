@@ -2,10 +2,11 @@ import 'package:camera/camera.dart';
 
 class CameraService {
   CameraController? _controller;
-  Function(String)? onPhotoTaken; // Callback to notify SlaveScreen
+  Function(String)? onPhotoTaken; // Callback to notify SlaveScreen about photos
+  Function(String)? onVideoRecorded; // Callback to notify SlaveScreen about videos
 
-  // Constructor to include the callback
-  CameraService({this.onPhotoTaken});
+  // Constructor to include the callbacks
+  CameraService({this.onPhotoTaken, this.onVideoRecorded});
 
   Future<void> startCamera() async {
     final cameras = await availableCameras();
@@ -13,10 +14,9 @@ class CameraService {
 
     try {
       await _controller?.initialize();
-      await _controller?.startVideoRecording();
-      print("Camera started recording");
+      print("Camera initialized");
     } catch (e) {
-      print("Error starting camera: $e");
+      print("Error initializing camera: $e");
     }
   }
 
@@ -36,11 +36,35 @@ class CameraService {
     }
   }
 
+  Future<void> startRecordingVideo() async {
+    try {
+      await _controller?.startVideoRecording();
+      print("Video recording started");
+    } catch (e) {
+      print("Error starting video recording: $e");
+    }
+  }
+
+  Future<String> stopRecordingVideo() async {
+    try {
+      final XFile video = await _controller!.stopVideoRecording();
+      print("Video recorded at path: ${video.path}");
+
+      if (onVideoRecorded != null) {
+        onVideoRecorded!(video.path);
+      }
+
+      return video.path;
+    } catch (e) {
+      print("Error stopping video recording: $e");
+      return "Error stopping video recording";
+    }
+  }
+
   Future<void> stopCamera() async {
     try {
-      await _controller?.stopVideoRecording();
       await _controller?.dispose();
-      print("Camera stopped recording");
+      print("Camera stopped");
     } catch (e) {
       print("Error stopping camera: $e");
     }

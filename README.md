@@ -66,8 +66,8 @@ Captured photos are managed efficiently to balance memory usage and persistent s
 2. **AI Content Processing**: Develop AI algorithms to process captured content for highlights, player tracking, or other analytical purposes.
 3. **Cloud Upload**: Create a service to upload captured videos and photos to a cloud endpoint, along with metadata such as device information and timestamps.
 4. **Capture Session(Match) and Clips Abstraction**: Introduce a structure to represent matches and clips, allowing users to start matches and view or manage captured clips.
-5. **Testing**: Populate the `test` folder with widget tests and integration tests to ensure the application functions correctly and efficiently.
-
+5. **Specific Slave**: Optionally include id of specific slave in websocket messages to give an order to ONE slave instead of all.
+6. **Testing**: Populate the `test` folder with widget tests and integration tests to ensure the application functions correctly and efficiently.
 ---
 
 ## Getting Started

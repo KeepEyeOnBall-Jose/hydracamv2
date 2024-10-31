@@ -9,6 +9,7 @@ class SlaveClient {
   IOWebSocketChannel? _channel;
   final CameraService _cameraService;
   bool _isConnected = false;
+  bool isRecordingVideo = false; // Flag to track video recording state
   Timer? _reconnectTimer;
 
   SlaveClient(this.serverAddress, {Function(String)? onPhotoTaken})
@@ -33,17 +34,23 @@ class SlaveClient {
             print("Simulated photo confirmation sent to master.");
           } else if (message == 'takePhoto') {
             _cameraService.takePhoto().then((photoPath) async {
-              // Read the photo file as binary data
               final file = File(photoPath);
               final Uint8List photoData = await file.readAsBytes();
-
-              // Send the binary data over the WebSocket
               _channel?.sink.add(photoData);
               print("Real photo data sent to master.");
-
-              // Optionally, delete the photo from the device storage
-              // file.delete(); // Uncomment if we want to free storage space
             });
+          } else if (message == 'startRecordingVideo') {
+            _cameraService.startRecordingVideo();
+            isRecordingVideo = true;
+            print("Video recording started");
+          } else if (message == 'stopRecordingVideo') {
+            _cameraService.stopRecordingVideo().then((videoPath) async {
+              final file = File(videoPath);
+              final Uint8List videoData = await file.readAsBytes();
+              _channel?.sink.add(videoData);
+              print("Video data sent to master.");
+            });
+            isRecordingVideo = false;
           } else if (message == 'stopCamera') {
             _cameraService.stopCamera();
           }
