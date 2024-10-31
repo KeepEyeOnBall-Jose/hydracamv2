@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
+import '../master/master_announcer.dart';
+import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
-import '../master/master_server.dart';
-import '../master/master_announcer.dart';
 import 'dart:io';
 
-/// MasterScreen - Main UI for the master device to control slave cameras.
 class MasterScreen extends StatefulWidget {
   @override
   _MasterScreenState createState() => _MasterScreenState();
@@ -17,10 +17,8 @@ class _MasterScreenState extends State<MasterScreen> {
   int connectedClients = 0; // To display connected clients count
   bool isRecording = false;
 
-  // Get photos and videos from the current session
   List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
   List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
-
 
   @override
   void initState() {
@@ -58,7 +56,6 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-  /// Sends the start camera command to all connected slave devices.
   void _startCamera() {
     _server.sendCommand('startCamera');
     ScaffoldMessenger.of(context).showSnackBar(
@@ -66,7 +63,6 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  /// Sends the simulated take photo command to all connected slave devices.
   void _simulateTakePhoto() {
     _server.sendCommand('simulateTakePhoto');
     ScaffoldMessenger.of(context).showSnackBar(
@@ -74,11 +70,43 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  /// Sends the real take photo command to all connected slave devices.
   void _takeRealPhoto() {
     _server.sendCommand('takePhoto');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Real photo command sent")),
+    );
+  }
+
+  void _showPhotoDialog(CapturedPhoto photo) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.file(File(photo.photoPath)),
+              Text("Captured: ${photo.captureDate}"),
+              Text("Received: ${photo.receivedDate}"),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Close"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showVideoDialog(CapturedVideo video) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: VideoPlayerScreen(videoPath: video.videoPath),
+        );
+      },
     );
   }
 
@@ -129,7 +157,7 @@ class _MasterScreenState extends State<MasterScreen> {
             ElevatedButton(
               onPressed: _toggleRecording,
               style: ElevatedButton.styleFrom(
-                primary: isRecording ? Colors.red : Colors.green,
+                backgroundColor: isRecording ? Colors.red : Colors.green,
               ),
               child: Text(isRecording ? "Stop Recording Video" : "Start Recording Video"),
             ),
@@ -138,7 +166,6 @@ class _MasterScreenState extends State<MasterScreen> {
                 itemCount: photos.length + videos.length,
                 itemBuilder: (context, index) {
                   if (index < photos.length) {
-                    // Display photo
                     final photo = photos[index];
                     return ListTile(
                       leading: Image.file(File(photo.photoPath), width: 50, height: 50),
@@ -146,20 +173,17 @@ class _MasterScreenState extends State<MasterScreen> {
                       subtitle: Text(
                         "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
                       ),
+                      onTap: () => _showPhotoDialog(photo),
                     );
                   } else {
-                    // Display video
                     final video = videos[index - photos.length];
                     return ListTile(
-                      leading: Icon(Icons.videocam, size: 50), // Icon for video
+                      leading: Icon(Icons.videocam, size: 50),
                       title: Text("Video from Slave: ${video.slaveDeviceId}"),
                       subtitle: Text(
                         "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}\nReceived: ${video.receivedDate}",
                       ),
-                      onTap: () {
-                        // Play the video (this requires a video player plugin)
-                        // Navigator.push to a video player screen, for example
-                      },
+                      onTap: () => _showVideoDialog(video),
                     );
                   }
                 },
@@ -168,6 +192,56 @@ class _MasterScreenState extends State<MasterScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// VideoPlayerScreen - A widget to play video using the video_player plugin.
+class VideoPlayerScreen extends StatefulWidget {
+  final String videoPath;
+
+  VideoPlayerScreen({required this.videoPath});
+
+  @override
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(File(widget.videoPath))
+      ..initialize().then((_) {
+        setState(() {}); // Refresh to show the video
+        _controller.play();
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (_controller.value.isInitialized)
+          AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: VideoPlayer(_controller),
+          )
+        else
+          CircularProgressIndicator(),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text("Close"),
+        ),
+      ],
     );
   }
 }
