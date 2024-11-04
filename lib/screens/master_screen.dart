@@ -5,6 +5,7 @@ import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
+import '../services/hydracam_api_service.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -14,8 +15,12 @@ class MasterScreen extends StatefulWidget {
 class _MasterScreenState extends State<MasterScreen> {
   final MasterServer _server = MasterServer();
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
+  final HydraCamApiService _apiService = HydraCamApiService(); // API service instance
+
   int connectedClients = 0; // To display connected clients count
   bool isRecording = false;
+  String? sessionGuid; // Store the session GUID from the API
+  bool sessionActive = false;
 
   List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
   List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
@@ -40,6 +45,17 @@ class _MasterScreenState extends State<MasterScreen> {
     _server.stopServer();
     _announcer.stopBroadcasting();
     super.dispose();
+  }
+
+  // Método para iniciar una nueva sesión
+  void _startOrEndSession() async {
+    if (sessionActive) {
+      // Termina la sesión
+      _endCurrentSession();
+    } else {
+      // Inicia la sesión
+      await _createSession();
+    }
   }
 
   void _toggleRecording() {
@@ -110,6 +126,76 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
+
+  Future<void> _createSession() async {
+    var sessionId = DateTime.now().toIso8601String();
+    var response = await _apiService.createSession(sessionId);
+
+    if (response != null) {
+      sessionGuid = response['guid'];
+      _server.startNewSession(); // Inicia la sesión en los dispositivos esclavos
+      setState(() {
+        sessionActive = true; // Cambia el estado a activo
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Session created successfully: $sessionGuid")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to create session")),
+      );
+    }
+  }
+
+  void _endCurrentSession() {
+    _server.endCurrentSession(); // Termina la sesión en los dispositivos esclavos
+    setState(() {
+      sessionGuid = null;
+      sessionActive = false; // Cambia el estado a inactivo
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Capture session ended")),
+    );
+  }
+
+
+  void _uploadAllMedia() async {
+    if (sessionGuid == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No session GUID available. Create a session first.")),
+      );
+      return;
+    }
+
+    print("Now upload photos");
+    for (var photo in photos) {
+      var file = File(photo.photoPath);
+      bool success = await _apiService.uploadMedia(sessionGuid!, file, true);
+      if (!success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to upload photo: ${photo.photoPath}")),
+        );
+        return;
+      }
+    }
+
+    print("Now upload videos");
+    for (var video in videos) {
+      var file = File(video.videoPath);
+      bool success = await _apiService.uploadMedia(sessionGuid!, file, false);
+      if (!success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to upload video: ${video.videoPath}")),
+        );
+        return;
+      }
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("All media uploaded successfully")),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,9 +206,14 @@ class _MasterScreenState extends State<MasterScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
+            SizedBox(height: 10),
             Text("Connected clients: $connectedClients"),
+            //Text("Session ID: ${sessionId ?? 'Not started'}"),
+            Text("Session GUID: ${sessionGuid ?? 'Not available'}"), //TODO: This in the class!!!
+
             SizedBox(height: 20),
-            ElevatedButton(
+            /*ElevatedButton(
               onPressed: () {
                 _server.startNewSession();
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -130,8 +221,16 @@ class _MasterScreenState extends State<MasterScreen> {
                 );
               },
               child: Text("Start New Session"),
-            ),
+            ),*/
+            // Botón único para iniciar/terminar sesión
             ElevatedButton(
+              onPressed: _startOrEndSession,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: sessionActive ? Colors.red : Colors.green,
+              ),
+              child: Text(sessionActive ? "End Current Session" : "Start New Session"),
+            ),
+            /*ElevatedButton(
               onPressed: () {
                 _server.endCurrentSession();
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -139,17 +238,17 @@ class _MasterScreenState extends State<MasterScreen> {
                 );
               },
               child: Text("End Current Session"),
-            ),
+            ),*/
             ElevatedButton(
               onPressed: _startCamera,
               child: Text("Start Camera on Slaves"),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            /*ElevatedButton(
               onPressed: _simulateTakePhoto,
               child: Text("Simulate Take Photo on Slaves"),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20),*/
             ElevatedButton(
               onPressed: _takeRealPhoto,
               child: Text("Take Real Photo on Slaves"),
@@ -161,6 +260,12 @@ class _MasterScreenState extends State<MasterScreen> {
               ),
               child: Text(isRecording ? "Stop Recording Video" : "Start Recording Video"),
             ),
+
+            ElevatedButton(
+              onPressed: _uploadAllMedia,
+              child: Text("Upload All Media"),
+            ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: photos.length + videos.length,
