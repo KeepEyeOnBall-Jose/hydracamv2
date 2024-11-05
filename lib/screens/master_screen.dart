@@ -47,13 +47,13 @@ class _MasterScreenState extends State<MasterScreen> {
     super.dispose();
   }
 
-  // Método para iniciar una nueva sesión
+  // Method to init a new session
   void _startOrEndSession() async {
     if (sessionActive) {
-      // Termina la sesión
+      // End current session
       _endCurrentSession();
     } else {
-      // Inicia la sesión
+      // Init the session
       await _createSession();
     }
   }
