@@ -272,7 +272,21 @@ class _MasterScreenState extends State<MasterScreen> {
     print("Now upload photos");
     for (var photo in photos) {
       var file = File(photo.photoPath);
-      bool success = await _apiService.uploadMedia(sessionGuid!, file, true);
+
+      // Extract specific metadata for this photo
+      String slaveDeviceId = photo.slaveDeviceId;
+      DateTime captureDate = photo.captureDate;
+      DateTime receivedDate = photo.receivedDate;
+
+      bool success = await _apiService.uploadMedia(
+        sessionGuid!,    // session GUID
+        file,            // actual file
+        true,            // is photo? true for photo
+        slaveDeviceId,   // ID from slave device id that took photo
+        captureDate,     // capture date
+        receivedDate,    // master reception date
+      );
+
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to upload photo: ${photo.photoPath}")),
@@ -281,10 +295,25 @@ class _MasterScreenState extends State<MasterScreen> {
       }
     }
 
+
     print("Now upload videos");
     for (var video in videos) {
       var file = File(video.videoPath);
-      bool success = await _apiService.uploadMedia(sessionGuid!, file, false);
+
+      // Extract specific metadata for this video
+      String slaveDeviceId = video.slaveDeviceId;
+      DateTime captureDate = video.startRecordingDate;
+      DateTime receivedDate = video.receivedDate;
+
+      bool success = await _apiService.uploadMedia(
+        sessionGuid!,    // session GUID
+        file,            // actual file
+        false,           // is photo? false for video
+        slaveDeviceId,   // ID from slave device id that took photo
+        captureDate,     // capture date
+        receivedDate,    // master reception date
+      );
+
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to upload video: ${video.videoPath}")),

@@ -69,14 +69,28 @@ class HydraCamApiService {
   }
 
   /// Upload a media file to the server
-  Future<bool> uploadMedia(String sessionGuid, File file, bool isPhoto) async {
+  Future<bool> uploadMedia(
+      String sessionGuid,
+      File file,
+      bool isPhoto,
+      String slaveDeviceId,
+      DateTime captureDate,
+      DateTime receivedDate,
+      ) async {
     try {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('$_baseUrl/UploadMedia?sessionGuid=$sessionGuid&isPhoto=$isPhoto'),
       );
 
+      // Add the file
       request.files.add(await http.MultipartFile.fromPath('files', file.path));
+
+      // Add metadata as fields
+      request.fields['slaveDeviceId'] = slaveDeviceId;
+      request.fields['captureDate'] = captureDate.toIso8601String();
+      request.fields['receivedDate'] = receivedDate.toIso8601String();
+
       var response = await request.send();
 
       if (response.statusCode == 200) {
