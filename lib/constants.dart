@@ -1,5 +1,5 @@
 // constants.dart
-const Map<String, String> courts = {
+final Map<String, String> courts = {
   "Court 2 - Airport Squash & Fitness Berlin": "3e61b917-7d7b-4d74-be07-ea6972a164f8",
   "Court 4 - Airport Squash & Fitness Berlin": "c36f8207-ca83-46e6-bdc9-f8aecdd7ce80	",
   "Pista 1 - Polideportivo La Luz": "a65cf467-ad7d-449b-b2b3-085960f65423",

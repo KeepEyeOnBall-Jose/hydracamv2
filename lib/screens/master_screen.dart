@@ -22,7 +22,8 @@ class _MasterScreenState extends State<MasterScreen> {
   bool isRecording = false;
   String? sessionGuid; // Store the session GUID from the API
   bool sessionActive = false;
-  String? selectedCourtGuid; // GUID of the selected Court (TODO: To be improved)
+  String? selectedCourtName;  // Name of the selected Court
+  String? selectedCourtGuid;  // GUID of the selected Court (TODO: To be improved)
 
   List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
   List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
@@ -165,10 +166,63 @@ class _MasterScreenState extends State<MasterScreen> {
 
   void _selectCourt(String? courtName) {
     setState(() {
+      selectedCourtName = courtName;
       selectedCourtGuid = courtName != null ? courts[courtName] : null;
     });
   }
 
+
+  void _showCustomCourtDialog() {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController guidController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Enter Custom Court"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: "Court Name"),
+              ),
+              TextField(
+                controller: guidController,
+                decoration: InputDecoration(labelText: "Court GUID"),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Add Court"),
+              onPressed: () {
+                String courtName = nameController.text;
+                String courtGuid = guidController.text;
+
+                if (courtName.isNotEmpty && courtGuid.isNotEmpty) {
+                  setState(() {
+                    courts[courtName] = courtGuid;
+                    selectedCourtName = courtName;
+                    selectedCourtGuid = courtGuid;
+                  });
+                }
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _uploadAllMedia() async {
     if (sessionGuid == null) {
@@ -212,35 +266,42 @@ class _MasterScreenState extends State<MasterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("HydraCam - Master Control"),
-        actions: [
-          // Dropdown para seleccionar la court
-          DropdownButton<String>(
-            value: selectedCourtGuid != null
-                ? courts.entries
-                .firstWhere((entry) => entry.value == selectedCourtGuid)
-                .key
-                : null,
-            hint: Text("Select Court"),
-            items: courts.keys.map((courtName) {
-              return DropdownMenuItem<String>(
-                value: courtName,
-                child: Text(courtName),
-              );
-            }).toList(),
-            onChanged: (courtName) {
-              _selectCourt(courtName);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Court selected: $courtName")),
-              );
-            },
-          ),
-        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
+            SizedBox(height: 10),
+            DropdownButton<String>(
+              value: selectedCourtName,
+              hint: Text("Choose or add a Court"),
+              isExpanded: false,
+              items: [
+                ...courts.keys.map((courtName) {
+                  return DropdownMenuItem<String>(
+                    value: courtName,
+                    child: Text(courtName),
+                  );
+                }).toList(),
+                DropdownMenuItem<String>(
+                  value: "Custom",
+                  child: Text("Custom..."),
+                ),
+              ],
+              onChanged: (value) {
+                if (value == "Custom") {
+                  _showCustomCourtDialog();
+                } else {
+                  _selectCourt(value); // Llama a _selectCourt con el nuevo valor
+                }
+              },
+            ),
+            if (selectedCourtName != null)
+              Text(
+                "Selected Court: $selectedCourtName",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
             SizedBox(height: 10),
             Text("Connected clients: $connectedClients"),
             //Text("Session ID: ${sessionId ?? 'Not started'}"),
