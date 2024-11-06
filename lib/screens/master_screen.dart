@@ -153,16 +153,53 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-  void _endCurrentSession() {
-    _server.endCurrentSession(); // Termina la sesión en los dispositivos esclavos
-    setState(() {
-      sessionGuid = null;
-      sessionActive = false; // Cambia el estado a inactivo
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Capture session ended")),
+  void _endCurrentSession() async {
+    bool confirmEnd = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("End Current Session"),
+          content: Text("Are you sure you want to end the current session?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(false); // Dont end
+              },
+            ),
+            TextButton(
+              child: Text("End Session"),
+              onPressed: () {
+                Navigator.of(context).pop(true); // Confirm end
+              },
+            ),
+          ],
+        );
+      },
     );
+
+    if (confirmEnd == true) {
+      // Call API method endSession
+      if (sessionGuid != null) {
+        bool success = await _apiService.endSession(sessionGuid!);
+        if (success) {
+          _server.endCurrentSession(); // End locally
+          setState(() {
+            sessionGuid = null;
+            sessionActive = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Capture session ended")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to end session on the server")),
+          );
+        }
+      }
+    }
   }
+
 
   void _selectCourt(String? courtName) {
     setState(() {

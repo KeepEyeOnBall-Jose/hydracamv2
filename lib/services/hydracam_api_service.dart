@@ -45,6 +45,29 @@ class HydraCamApiService {
     }
   }
 
+  /// End current session TODO: Maybe should be automatic, just giving max time in the create func?
+  Future<bool> endSession(String sessionGuid) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/EndSession?sessionGuid=$sessionGuid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Session ended successfully');
+        return true;
+      } else {
+        print('Failed to end session: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error ending session: $e');
+      return false;
+    }
+  }
+
   /// Upload a media file to the server
   Future<bool> uploadMedia(String sessionGuid, File file, bool isPhoto) async {
     try {
