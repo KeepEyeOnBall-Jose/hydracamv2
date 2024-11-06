@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
+import '../constants.dart';
 import '../master/master_announcer.dart';
 import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
@@ -21,6 +22,7 @@ class _MasterScreenState extends State<MasterScreen> {
   bool isRecording = false;
   String? sessionGuid; // Store the session GUID from the API
   bool sessionActive = false;
+  String? selectedCourtGuid; // GUID of the selected Court (TODO: To be improved)
 
   List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
   List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
@@ -129,7 +131,10 @@ class _MasterScreenState extends State<MasterScreen> {
 
   Future<void> _createSession() async {
     var sessionId = DateTime.now().toIso8601String();
-    var response = await _apiService.createSession(sessionId);
+    var response = await _apiService.createSession(
+        sessionId,
+        courtGuid: selectedCourtGuid
+      );
 
     if (response != null) {
       sessionGuid = response['guid'];
@@ -156,6 +161,12 @@ class _MasterScreenState extends State<MasterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Capture session ended")),
     );
+  }
+
+  void _selectCourt(String? courtName) {
+    setState(() {
+      selectedCourtGuid = courtName != null ? courts[courtName] : null;
+    });
   }
 
 
@@ -201,6 +212,29 @@ class _MasterScreenState extends State<MasterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("HydraCam - Master Control"),
+        actions: [
+          // Dropdown para seleccionar la court
+          DropdownButton<String>(
+            value: selectedCourtGuid != null
+                ? courts.entries
+                .firstWhere((entry) => entry.value == selectedCourtGuid)
+                .key
+                : null,
+            hint: Text("Select Court"),
+            items: courts.keys.map((courtName) {
+              return DropdownMenuItem<String>(
+                value: courtName,
+                child: Text(courtName),
+              );
+            }).toList(),
+            onChanged: (courtName) {
+              _selectCourt(courtName);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Court selected: $courtName")),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(

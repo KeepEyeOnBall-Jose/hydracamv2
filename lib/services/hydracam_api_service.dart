@@ -14,10 +14,16 @@ class HydraCamApiService {
   final String _baseUrl = 'https://keobmotherboardweb.azurewebsites.net/api/hydracam';
 
   /// Create a new capture session
-  Future<Map<String, dynamic>?> createSession(String sessionId) async {
+  Future<Map<String, dynamic>?> createSession(String sessionId, {String? courtGuid}) async {
     try {
+      final uri = Uri.parse(
+          courtGuid == null
+              ? '$_baseUrl/CreateSession'
+              : '$_baseUrl/CreateSession?courtGuid=$courtGuid'
+      );
+
       final response = await http.post(
-        Uri.parse('$_baseUrl/CreateSession'),
+        uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
