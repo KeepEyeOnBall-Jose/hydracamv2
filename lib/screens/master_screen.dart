@@ -144,9 +144,9 @@ class _MasterScreenState extends State<MasterScreen> {
 
     if (response != null) {
       sessionGuid = response['guid'];
-      _server.startNewSession(); // Inicia la sesión en los dispositivos esclavos
+      _server.startNewSession(sessionGuid); // Init session in the slave devices
       setState(() {
-        sessionActive = true; // Cambia el estado a activo
+        sessionActive = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Session created successfully: $sessionGuid")),

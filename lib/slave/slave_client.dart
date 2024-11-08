@@ -6,6 +6,8 @@ import '../services/camera_service.dart';
 import '../services/device_service.dart'; // Import for device ID service
 import 'dart:io';
 
+import '../services/hydracam_api_service.dart';
+
 class SlaveClient {
   final String serverAddress;
   IOWebSocketChannel? _channel;
@@ -38,59 +40,97 @@ class SlaveClient {
         'deviceId': _deviceId,
       }));
 
+      // Also ask status of session
+      _channel?.sink.add(jsonEncode({
+        'type': 'getSessionStatus',
+        'deviceId': _deviceId,
+      }));
+
+
       print("Connected to WebSocket at $serverAddress");
 
       _channel?.stream.listen(
             (message) {
           print("Command received from master: $message");
-          if (message == 'startCamera') {
-            _cameraService.startCamera();
-          } else if (message == 'simulateTakePhoto') {
-            _channel?.sink.add("Simulated photo taken");
-            print("Simulated photo confirmation sent to master.");
-          } else if (message == 'takePhoto') {
-            photoCaptureDate = DateTime.now(); // Record the capture timestamp
-            _cameraService.takePhoto().then((photoPath) async {
-              final file = File(photoPath);
-              final Uint8List photoData = await file.readAsBytes();
 
-              // Prepare the data to send, including the timestamp and device ID
-              final data = {
-                'type': 'photo',
-                'deviceId': _deviceId,
-                'data': photoData,
-                'captureDate': photoCaptureDate!.toIso8601String(),
-              };
-              // Serialize data using jsonEncode
-              _channel?.sink.add(jsonEncode(data));
-              print("Real photo data with timestamp and device ID sent to master.");
-            });
-          } else if (message == 'startRecordingVideo') {
-            videoStartRecordingDate = DateTime.now(); // Record the start timestamp
-            _cameraService.startRecordingVideo();
-            isRecordingVideo = true;
-            print("Video recording started at: $videoStartRecordingDate");
-          } else if (message == 'stopRecordingVideo') {
-            videoEndRecordingDate = DateTime.now(); // Record the end timestamp
-            _cameraService.stopRecordingVideo().then((videoPath) async {
-              final file = File(videoPath);
-              final Uint8List videoData = await file.readAsBytes();
 
-              // Prepare the data to send, including the timestamps and device ID
-              final data = {
-                'type': 'video',
-                'deviceId': _deviceId,
-                'data': videoData,
-                'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
-                'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
-              };
-              // Serialize data using jsonEncode
-              _channel?.sink.add(jsonEncode(data));
-              print("Video data with timestamps and device ID sent to master.");
-            });
-            isRecordingVideo = false;
-          } else if (message == 'stopCamera') {
-            _cameraService.stopCamera();
+          // Intentar decodificar el mensaje como JSON
+          var decodedMessage = jsonDecode(message);
+          if (decodedMessage is Map<String, dynamic>) {
+            String? command = decodedMessage['command'];
+            if (command == 'sessionStarted') {
+              String sessionGuid = decodedMessage['sessionGuid'];
+              // Aquí, el slave sabe que el master ha iniciado una sesión
+              // Podemos llamar a notifyReadyToTransmit aquí
+              notifyReadyToTransmit(sessionGuid);
+            } else {
+              // Manejar otros comandos
+
+              if (command == 'sessionStatus') {
+                String sessionGuid = decodedMessage['sessionGuid'];
+                if (sessionGuid.isNotEmpty) {
+                  notifyReadyToTransmit(sessionGuid);
+                }
+              }
+// WIP
+            }
+          } else {
+            // Manage non-json messages (like the old ones)
+
+            if (message == 'startCamera') {
+              _cameraService.startCamera();
+            } else if (message == 'simulateTakePhoto') {
+              _channel?.sink.add("Simulated photo taken");
+              print("Simulated photo confirmation sent to master.");
+            } else if (message == 'takePhoto') {
+              photoCaptureDate = DateTime.now(); // Record the capture timestamp
+              _cameraService.takePhoto().then((photoPath) async {
+                final file = File(photoPath);
+                final Uint8List photoData = await file.readAsBytes();
+
+                // Prepare the data to send, including the timestamp and device ID
+                final data = {
+                  'type': 'photo',
+                  'deviceId': _deviceId,
+                  'data': photoData,
+                  'captureDate': photoCaptureDate!.toIso8601String(),
+                };
+                // Serialize data using jsonEncode
+                _channel?.sink.add(jsonEncode(data));
+                print(
+                    "Real photo data with timestamp and device ID sent to master.");
+              });
+            } else if (message == 'startRecordingVideo') {
+              videoStartRecordingDate =
+                  DateTime.now(); // Record the start timestamp
+              _cameraService.startRecordingVideo();
+              isRecordingVideo = true;
+              print("Video recording started at: $videoStartRecordingDate");
+            } else if (message == 'stopRecordingVideo') {
+              videoEndRecordingDate =
+                  DateTime.now(); // Record the end timestamp
+              _cameraService.stopRecordingVideo().then((videoPath) async {
+                final file = File(videoPath);
+                final Uint8List videoData = await file.readAsBytes();
+
+                // Prepare the data to send, including the timestamps and device ID
+                final data = {
+                  'type': 'video',
+                  'deviceId': _deviceId,
+                  'data': videoData,
+                  'startRecordingDate': videoStartRecordingDate!
+                      .toIso8601String(),
+                  'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
+                };
+                // Serialize data using jsonEncode
+                _channel?.sink.add(jsonEncode(data));
+                print(
+                    "Video data with timestamps and device ID sent to master.");
+              });
+              isRecordingVideo = false;
+            } else if (message == 'stopCamera') {
+              _cameraService.stopCamera();
+            }
           }
         },
         onError: (error) {
@@ -110,6 +150,21 @@ class SlaveClient {
       _attemptReconnect();
     }
   }
+
+  Future<void> notifyReadyToTransmit(String sessionGuid) async {
+    String deviceId = _deviceId ?? 'Unknown';
+
+    // Llama al servicio de API para notificar que el dispositivo está listo
+    var apiService = HydraCamApiService();
+    bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
+
+    if (success) {
+      print("Dispositivo notificó al servidor que está listo para transmitir.");
+    } else {
+      print("Fallo al notificar al servidor que está listo para transmitir.");
+    }
+  }
+
 
   void _attemptReconnect() {
     if (_reconnectTimer == null || !_reconnectTimer!.isActive) {

@@ -113,4 +113,33 @@ class HydraCamApiService {
   Future<void> checkUploadStatus() async {
     // Implement this if you have a way to query the status of media uploads
   }
+
+  /// Notify server that device is ready to transmit
+  Future<bool> notifyReadyToTransmit(String deviceId, String sessionGuid) async {
+    try {
+      final uri = Uri.parse('$_baseUrl/device/ReadyToTransmit');
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'DeviceId': deviceId,
+          'SessionGuid': sessionGuid,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Dispositivo notificó al servidor que está listo para transmitir');
+        return true;
+      } else {
+        print('Fallo al notificar al servidor: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error al notificar al servidor: $e');
+      return false;
+    }
+  }
+
 }

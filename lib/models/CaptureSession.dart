@@ -7,6 +7,9 @@ class CaptureSession {
   /// A unique identifier for the capture session, typically generated as a timestamp.
   final String sessionId;
 
+  /// A guid returned by API.
+  String? sessionGuid;
+
   /// The date and time when the capture session started.
   final DateTime startTime;
 

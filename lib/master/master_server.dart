@@ -35,6 +35,16 @@ class MasterServer {
                 String deviceId = decodedData['deviceId'] ?? 'Unknown';
 
                 // Manage each type of message
+                if (messageType == 'getSessionStatus') {
+                  String deviceId = decodedData['deviceId'] ?? 'Unknown';
+                  var sessionStatusResponse = jsonEncode({
+                    'command': 'sessionStatus',
+                    'sessionGuid': currentSession?.sessionGuid ?? '',
+                  });
+                  socket.add(sessionStatusResponse);
+                }
+
+
                 if (messageType == 'deviceId') {
                   // Register client with deviceId
                   _clients[deviceId] = socket;
@@ -114,14 +124,32 @@ class MasterServer {
     return filePath;
   }
 
-  void startNewSession() {
+  void startNewSession(String? sessionGuid) {
     var currentDate = DateTime.now();
     currentSession = CaptureSession(
       sessionId: currentDate.toIso8601String(),
       startTime: currentDate,
     );
     print("New capture session started with ID: ${currentSession?.sessionId}");
+
+    // Notify slaves that session has started
+    var sessionStartedCommand = jsonEncode({
+      'command': 'sessionStarted',
+      'sessionGuid': sessionGuid,
+    });
+    sendCommandToAll(sessionStartedCommand);
+
+    // update guid on current session
+    currentSession!.sessionGuid = sessionGuid;
   }
+
+  void sendCommandToAll(String message) {
+    for (var client in _clients.values) {
+      client.add(message);
+    }
+    print("Command sent to all connected slaves: $message");
+  }
+
 
   void endCurrentSession() {
     if (currentSession != null) {
