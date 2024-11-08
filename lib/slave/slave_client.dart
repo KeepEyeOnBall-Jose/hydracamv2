@@ -3,6 +3,7 @@ import 'dart:convert'; // Import for jsonEncode
 import 'dart:typed_data';
 import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
+import '../services/device_service.dart'; // Import for device ID service
 import 'dart:io';
 
 class SlaveClient {
@@ -12,6 +13,7 @@ class SlaveClient {
   bool _isConnected = false;
   bool isRecordingVideo = false; // Flag to track video recording state
   Timer? _reconnectTimer;
+  String? _deviceId; // Store the device ID
 
   // To store timestamps
   DateTime? photoCaptureDate;
@@ -21,13 +23,21 @@ class SlaveClient {
   SlaveClient(this.serverAddress, {Function(String)? onPhotoTaken})
       : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
 
-  void connect() {
-    print("Attempting to connect to master WebSocket at $serverAddress");
+  Future<void> connect() async {
+    _deviceId = await DeviceIdService.getOrCreateDeviceId(); // Retrieve or create device ID
+    print("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
+
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));
 
       _isConnected = true;
-      _channel?.sink.add("Slave connected");
+
+      // Send a JSON message containing the device ID after connecting
+      _channel?.sink.add(jsonEncode({
+        'type': 'deviceId',
+        'deviceId': _deviceId,
+      }));
+
       print("Connected to WebSocket at $serverAddress");
 
       _channel?.stream.listen(
@@ -44,14 +54,16 @@ class SlaveClient {
               final file = File(photoPath);
               final Uint8List photoData = await file.readAsBytes();
 
-              // Prepare the data to send, including the timestamp
+              // Prepare the data to send, including the timestamp and device ID
               final data = {
+                'type': 'photo',
+                'deviceId': _deviceId,
                 'data': photoData,
                 'captureDate': photoCaptureDate!.toIso8601String(),
               };
               // Serialize data using jsonEncode
               _channel?.sink.add(jsonEncode(data));
-              print("Real photo data with timestamp sent to master.");
+              print("Real photo data with timestamp and device ID sent to master.");
             });
           } else if (message == 'startRecordingVideo') {
             videoStartRecordingDate = DateTime.now(); // Record the start timestamp
@@ -64,15 +76,17 @@ class SlaveClient {
               final file = File(videoPath);
               final Uint8List videoData = await file.readAsBytes();
 
-              // Prepare the data to send, including both timestamps
+              // Prepare the data to send, including the timestamps and device ID
               final data = {
+                'type': 'video',
+                'deviceId': _deviceId,
                 'data': videoData,
                 'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
                 'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
               };
               // Serialize data using jsonEncode
               _channel?.sink.add(jsonEncode(data));
-              print("Video data with timestamps sent to master.");
+              print("Video data with timestamps and device ID sent to master.");
             });
             isRecordingVideo = false;
           } else if (message == 'stopCamera') {

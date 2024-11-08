@@ -29,6 +29,10 @@ class _MasterScreenState extends State<MasterScreen> {
   List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
   List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
 
+  List<String> getConnectedDevices() {
+    return _server.getConnectedDeviceIds();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -328,6 +332,32 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
+  // Method to show a modal with the connected device IDs
+  void _showConnectedDevicesModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        List<String> devices = getConnectedDevices();
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Connected Devices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              SizedBox(height: 10),
+              if (devices.isNotEmpty)
+                ...devices.map((deviceId) => ListTile(
+                  title: Text('Device ID: $deviceId'),
+                ))
+              else
+                Center(child: Text('No connected devices')),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -399,7 +429,13 @@ class _MasterScreenState extends State<MasterScreen> {
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             SizedBox(height: 10),
-            Text("Connected clients: $connectedClients"),
+            GestureDetector(
+              onTap: () => _showConnectedDevicesModal(context),
+              child: Text(
+                "Connected clients: $connectedClients",
+                style: TextStyle(fontSize: 16, color: Colors.blue),
+              ),
+            ),
             //Text("Session ID: ${sessionId ?? 'Not started'}"),
             Text("Session GUID: ${sessionGuid ?? 'Not available'}"), //TODO: This in the class!!!
 

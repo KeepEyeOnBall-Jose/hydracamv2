@@ -8,7 +8,7 @@ import '../models/CapturedVideo.dart';
 
 class MasterServer {
   HttpServer? _server;
-  final List<WebSocket> _clients = [];
+  final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
   CaptureSession? currentSession; // Current Capture Session
   List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
@@ -22,53 +22,59 @@ class MasterServer {
       await for (HttpRequest request in _server!) {
         if (request.uri.path == '/ws') {
           var socket = await WebSocketTransformer.upgrade(request);
-          _clients.add(socket);
-          _notifyClientCount();
-          print("New WebSocket client connected. Total connected clients: ${_clients.length}");
+          print("New WebSocket client connected.");
 
           socket.listen((data) async {
             try {
-              // Attempt to decode the data as JSON
+              // Try decode JSON
               final decodedData = jsonDecode(data as String);
               print("Data received from slave: $decodedData");
 
               if (decodedData is Map<String, dynamic>) {
-                // Convert List<dynamic> to List<int>
-                final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
-                final String filePath = await _saveMediaLocally(binaryData);
-                final DateTime receivedDate = DateTime.now();
+                String? messageType = decodedData['type'];
+                String deviceId = decodedData['deviceId'] ?? 'Unknown';
 
-                if (filePath.endsWith('.jpg')) {
-                  // Parse captureDate from string
-                  final DateTime captureDate = DateTime.parse(decodedData['captureDate']);
+                // Manage each type of message
+                if (messageType == 'deviceId') {
+                  // Register client with deviceId
+                  _clients[deviceId] = socket;
+                  _notifyClientCount();
+                  print("Registered new slave with deviceId: $deviceId");
+                } else if (messageType == 'photo' || messageType == 'video') {
+                  // Process media data
+                  final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
+                  final String filePath = await _saveMediaLocally(binaryData);
+                  final DateTime receivedDate = DateTime.now();
 
-                  final receivedPhoto = CapturedPhoto(
-                    photoData: null,
-                    photoPath: filePath,
-                    captureDate: captureDate,
-                    receivedDate: receivedDate,
-                    slaveDeviceId: socket.hashCode.toString(),
-                  );
-                  currentSession?.addPhoto(receivedPhoto);
-                  onMediaReceived?.call(receivedPhoto);
-                  print("Photo from slave device received and stored at: $filePath");
-
-                } else if (filePath.endsWith('.mp4')) {
-                  // Parse startRecordingDate and endRecordingDate from strings
-                  final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
-                  final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
-
-                  final receivedVideo = CapturedVideo(
-                    videoData: null,
-                    videoPath: filePath,
-                    slaveDeviceId: socket.hashCode.toString(),
-                    startRecordingDate: startRecordingDate,
-                    endRecordingDate: endRecordingDate,
-                    receivedDate: receivedDate,
-                  );
-                  currentSession?.addVideo(receivedVideo);
-                  onMediaReceived?.call(receivedVideo);
-                  print("Video from slave device received and stored at: $filePath");
+                  if (messageType == 'photo') {
+                    final DateTime captureDate = DateTime.parse(decodedData['captureDate']);
+                    final receivedPhoto = CapturedPhoto(
+                      photoData: null,
+                      photoPath: filePath,
+                      captureDate: captureDate,
+                      receivedDate: receivedDate,
+                      slaveDeviceId: deviceId,
+                    );
+                    currentSession?.addPhoto(receivedPhoto);
+                    onMediaReceived?.call(receivedPhoto);
+                    print("Photo from slave device ($deviceId) received and stored at: $filePath");
+                  } else if (messageType == 'video') {
+                    final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
+                    final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
+                    final receivedVideo = CapturedVideo(
+                      videoData: null,
+                      videoPath: filePath,
+                      slaveDeviceId: deviceId,
+                      startRecordingDate: startRecordingDate,
+                      endRecordingDate: endRecordingDate,
+                      receivedDate: receivedDate,
+                    );
+                    currentSession?.addVideo(receivedVideo);
+                    onMediaReceived?.call(receivedVideo);
+                    print("Video from slave device ($deviceId) received and stored at: $filePath");
+                  }
+                } else {
+                  print("Unexpected message type: $messageType");
                 }
               } else {
                 print("Unexpected data format received: $data");
@@ -77,7 +83,8 @@ class MasterServer {
               print("Error decoding data or handling media: $e");
             }
           }, onDone: () {
-            _clients.remove(socket);
+            // Delete client on disconnect
+            _clients.removeWhere((key, value) => value == socket);
             _notifyClientCount();
             print("Client disconnected. Total connected clients: ${_clients.length}");
           });
@@ -90,6 +97,10 @@ class MasterServer {
     } catch (e) {
       print("Failed to start WebSocket Server: $e");
     }
+  }
+
+  List<String> getConnectedDeviceIds() {
+    return _clients.keys.toList();
   }
 
   Future<String> _saveMediaLocally(Uint8List binaryData) async {
@@ -121,11 +132,14 @@ class MasterServer {
     }
   }
 
-  void sendCommand(String command) {
+  void sendCommand(String command, {String? deviceId}) {
     if (_clients.isEmpty) {
       print("No slave devices connected. Command '$command' not sent.");
+    } else if (deviceId != null && _clients.containsKey(deviceId)) {
+      _clients[deviceId]?.add(command);
+      print("Command '$command' sent to slave with deviceId: $deviceId.");
     } else {
-      for (var client in _clients) {
+      for (var client in _clients.values) {
         client.add(command);
       }
       print("Command '$command' sent to all connected slaves.");
