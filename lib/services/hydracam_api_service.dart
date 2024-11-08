@@ -91,13 +91,16 @@ class HydraCamApiService {
       request.fields['captureDate'] = captureDate.toIso8601String();
       request.fields['receivedDate'] = receivedDate.toIso8601String();
 
-      var response = await request.send();
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse); // Convert to http.Response
+
 
       if (response.statusCode == 200) {
         print('Media uploaded successfully');
         return true;
       } else {
         print('Failed to upload media: ${response.statusCode}');
+        print('Error details: ${response.body}');
         return false;
       }
     } catch (e) {
