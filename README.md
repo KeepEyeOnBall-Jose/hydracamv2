@@ -60,12 +60,15 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 
 lib/
 ├── main.dart                       # Main entry point of the application.
+├── core/
+│   ├── device.dart                // Base class for common device functions
+│   ├── network_service.dart       // Handles core network functionality
+│   ├── device_id_generator.dart   // Generates and manages unique device IDs
+│   ├── command_handler.dart       // Handles incoming and outgoing commands
 ├── master/
-│   ├── master_screen.dart          # UI for the master device.
 │   ├── master_server.dart          # WebSocket server to communicate with slaves.
 │   └── master_announcer.dart       # Broadcasts the master device's presence.
 ├── slave/
-│   ├── slave_screen.dart           # UI for slave devices to receive commands.
 │   ├── slave_client.dart           # WebSocket client for slave devices.
 │   └── master_discovery.dart       # Finds and connects to the master device.
 ├── services/

@@ -6,6 +6,7 @@ import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
+import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -332,6 +333,35 @@ class _MasterScreenState extends State<MasterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("HydraCam - Master Control"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () async {
+              Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Device Info"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: deviceInfo.entries.map((entry) {
+                        return Text('${entry.key}: ${entry.value}');
+                      }).toList(),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("Close"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(

@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
+import 'package:sport_cam_sync/services/device_id_provider.dart';
+import 'package:sport_cam_sync/services/device_service.dart';
 
-void main() {
-  runApp(HydraCamApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  String deviceId = await DeviceIdService.getOrCreateDeviceId();
+  print('Device ID: $deviceId'); // Debug
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => DeviceIdProvider(deviceId),
+      child: HydraCamApp(),
+    ),
+  );
 }
 
 /// Main entry point of the application.

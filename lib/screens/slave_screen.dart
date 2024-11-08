@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import '../services/device_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
 
@@ -69,6 +70,35 @@ class _SlaveScreenState extends State<SlaveScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("HydraCam - Slave Device"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () async {
+              Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Device Info"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: deviceInfo.entries.map((entry) {
+                        return Text('${entry.key}: ${entry.value}');
+                      }).toList(),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("Close"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
