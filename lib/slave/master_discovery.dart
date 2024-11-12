@@ -5,17 +5,21 @@ import 'dart:io';
 class MasterDiscovery {
   static const int broadcastPort = 4041;
   final Function(String) onMasterDiscovered;
+  RawDatagramSocket? _socket; // Store the socket as a member variable
 
   MasterDiscovery({required this.onMasterDiscovered});
 
-  /// Listens for the master broadcast message and retrieves the master's IP.
-  void startListening() async {
-    final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, broadcastPort);
+  /// Starts listening for the master broadcast message.
+  Future<void> startListening() async {
+    // Close any existing socket before creating a new one
+    await stopListening();
+
+    _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, broadcastPort);
     print("Listening for master broadcast on port $broadcastPort...");
 
-    socket.listen((RawSocketEvent event) {
+    _socket?.listen((RawSocketEvent event) {
       if (event == RawSocketEvent.read) {
-        final datagram = socket.receive();
+        final datagram = _socket?.receive();
         if (datagram != null) {
           final message = String.fromCharCodes(datagram.data);
           print("Received broadcast message: $message from ${datagram.address.address}");
@@ -27,5 +31,14 @@ class MasterDiscovery {
         }
       }
     });
+  }
+
+  /// Stops listening for the master broadcast message and closes the socket.
+  Future<void> stopListening() async {
+    if (_socket != null) {
+      _socket?.close();
+      _socket = null;
+      print("Stopped listening for master broadcast.");
+    }
   }
 }

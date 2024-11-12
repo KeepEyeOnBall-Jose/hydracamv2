@@ -46,107 +46,118 @@ class SlaveClient {
         'deviceId': _deviceId,
       }));
 
-
       print("Connected to WebSocket at $serverAddress");
 
       _channel?.stream.listen(
             (message) {
           print("Command received from master: $message");
 
+          // Check if the message appears to be JSON before attempting to decode it
+          if (message.trim().startsWith('{') || message.trim().startsWith('[')) {
+            try {
+              // Attempt to decode the message as JSON
+              var decodedMessage = jsonDecode(message);
 
-          // Intentar decodificar el mensaje como JSON
-          var decodedMessage = jsonDecode(message);
-          if (decodedMessage is Map<String, dynamic>) {
-            String? command = decodedMessage['command'];
-            if (command == 'sessionStarted') {
-              String sessionGuid = decodedMessage['sessionGuid'];
-              // Aquí, el slave sabe que el master ha iniciado una sesión
-              // Podemos llamar a notifyReadyToTransmit aquí
-              notifyReadyToTransmit(sessionGuid);
-            } else {
-              // Manejar otros comandos
+              if (decodedMessage is Map<String, dynamic>) {
+                // If the decoded message is a Map, process it as a command
+                String? command = decodedMessage['command'];
 
-              if (command == 'sessionStatus') {
-                String sessionGuid = decodedMessage['sessionGuid'];
-                if (sessionGuid.isNotEmpty) {
+                if (command == 'sessionStarted') {
+                  // Handle session start command and notify readiness
+                  String sessionGuid = decodedMessage['sessionGuid'];
                   notifyReadyToTransmit(sessionGuid);
+                } else if (command == 'sessionStatus') {
+                  // Handle session status command, checking if session GUID is valid
+                  String sessionGuid = decodedMessage['sessionGuid'];
+                  if (sessionGuid.isNotEmpty) {
+                    notifyReadyToTransmit(sessionGuid);
+                  }
                 }
+                // Additional JSON-based commands can be handled here
               }
-// WIP
+            } catch (e) {
+              // Log an error if JSON decoding fails
+              print("Error decoding JSON message: $e");
             }
           } else {
-            // Manage non-json messages (like the old ones)
-
+            // Process non-JSON (simple text) messages as specific commands
             if (message == 'startCamera') {
               _cameraService.startCamera();
             } else if (message == 'simulateTakePhoto') {
+              // Send a confirmation message to the master when simulating a photo
               _channel?.sink.add("Simulated photo taken");
               print("Simulated photo confirmation sent to master.");
             } else if (message == 'takePhoto') {
-              photoCaptureDate = DateTime.now(); // Record the capture timestamp
+              // Capture a photo, timestamp it, and send the data to the master
+              photoCaptureDate = DateTime.now();
               _cameraService.takePhoto().then((photoPath) async {
                 final file = File(photoPath);
                 final Uint8List photoData = await file.readAsBytes();
 
-                // Prepare the data to send, including the timestamp and device ID
+                // Prepare the data including type, device ID, photo data, and capture timestamp
                 final data = {
                   'type': 'photo',
                   'deviceId': _deviceId,
                   'data': photoData,
                   'captureDate': photoCaptureDate!.toIso8601String(),
                 };
-                // Serialize data using jsonEncode
+
+                // Send serialized photo data to the master
                 _channel?.sink.add(jsonEncode(data));
-                print(
-                    "Real photo data with timestamp and device ID sent to master.");
+                print("Real photo data with timestamp and device ID sent to master.");
               });
             } else if (message == 'startRecordingVideo') {
-              videoStartRecordingDate =
-                  DateTime.now(); // Record the start timestamp
+              // Start video recording and log the start timestamp
+              videoStartRecordingDate = DateTime.now();
               _cameraService.startRecordingVideo();
               isRecordingVideo = true;
               print("Video recording started at: $videoStartRecordingDate");
             } else if (message == 'stopRecordingVideo') {
-              videoEndRecordingDate =
-                  DateTime.now(); // Record the end timestamp
+              // Stop video recording, timestamp it, and send video data to the master
+              videoEndRecordingDate = DateTime.now();
               _cameraService.stopRecordingVideo().then((videoPath) async {
                 final file = File(videoPath);
                 final Uint8List videoData = await file.readAsBytes();
 
-                // Prepare the data to send, including the timestamps and device ID
+                // Prepare the data including type, device ID, video data, and timestamps
                 final data = {
                   'type': 'video',
                   'deviceId': _deviceId,
                   'data': videoData,
-                  'startRecordingDate': videoStartRecordingDate!
-                      .toIso8601String(),
+                  'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
                   'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
                 };
-                // Serialize data using jsonEncode
+
+                // Send serialized video data to the master
                 _channel?.sink.add(jsonEncode(data));
-                print(
-                    "Video data with timestamps and device ID sent to master.");
+                print("Video data with timestamps and device ID sent to master.");
               });
               isRecordingVideo = false;
             } else if (message == 'stopCamera') {
+              // Stop the camera service when receiving 'stopCamera' command
               _cameraService.stopCamera();
             }
           }
         },
         onError: (error) {
+          // Handle any errors in the WebSocket connection
           print("Connection error: $error");
           _isConnected = false;
           _attemptReconnect();
         },
         onDone: () {
+          // Handle the WebSocket connection closing
           print("Connection closed");
           _isConnected = false;
           _attemptReconnect();
         },
       );
+
     } catch (e) {
       print("Failed to connect to WebSocket at $serverAddress: $e");
       _isConnected = false;
+      // Add a delay before reconnecting to prevent immediate retries on failure
+      await Future.delayed(Duration(seconds: 2));  // <-- This line is added
       _attemptReconnect();
     }
   }
@@ -181,7 +192,9 @@ class SlaveClient {
 
   void disconnect() {
     _channel?.sink.close();
+    _channel = null;  // Nullify to ensure a new connection is created on reconnect
     _isConnected = false;
     _reconnectTimer?.cancel();
   }
+
 }
