@@ -42,57 +42,65 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ExpansionTile(
+      title: Text(
+        selectedCourtName != null
+            ? "Selected Court: $selectedCourtName"
+            : "No Court Selected",
+        style: TextStyle(fontSize: 16),
+      ),
       children: [
-        DropdownButton<String>(
-          hint: Text("Select a Sports Center"),
-          value: selectedSportsCenter,
-          isExpanded: true,
-          items: widget.groupedCourts.keys.map((scName) {
-            return DropdownMenuItem<String>(
-              value: scName,
-              child: Text(scName),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedSportsCenter = value;
-              selectedCourtName = null;
-              selectedCourtGuid = null;
-            });
-          },
+        Column(
+          children: [
+            DropdownButton<String>(
+              hint: Text("Select a Sports Center"),
+              value: selectedSportsCenter,
+              isExpanded: true,
+              items: widget.groupedCourts.keys.map((scName) {
+                return DropdownMenuItem<String>(
+                  value: scName,
+                  child: Text(scName),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedSportsCenter = value;
+                  selectedCourtName = null;
+                  selectedCourtGuid = null;
+                });
+              },
+            ),
+            if (selectedSportsCenter != null)
+              Column(
+                children: [
+                  TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      labelText: "Search Courts",
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                    onChanged: (value) {
+                      setState(() {}); // Refresh filtered list
+                    },
+                  ),
+                  DropdownButton<String>(
+                    hint: Text("Select a Court"),
+                    value: selectedCourtName,
+                    isExpanded: true,
+                    items: getFilteredCourts().map((court) {
+                      return DropdownMenuItem<String>(
+                        value: court['name'],
+                        child: Text(court['name']!),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      _selectCourt(value);
+                    },
+                  ),
+                ],
+              ),
+          ],
         ),
-        if (selectedSportsCenter != null)
-          Column(
-            children: [
-              TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: "Search Courts",
-                  prefixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) {
-                  setState(() {}); // Refresh filtered list
-                },
-              ),
-              DropdownButton<String>(
-                hint: Text("Select a Court"),
-                value: selectedCourtName,
-                isExpanded: true,
-                items: getFilteredCourts().map((court) {
-                  return DropdownMenuItem<String>(
-                    value: court['name'],
-                    child: Text(court['name']!),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  _selectCourt(value);
-                },
-              ),
-            ],
-          ),
-        if (selectedCourtName != null)
-          Text("Selected Court: $selectedCourtName (GUID: $selectedCourtGuid)"),
       ],
     );
   }

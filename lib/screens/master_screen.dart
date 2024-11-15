@@ -339,16 +339,16 @@ class _MasterScreenState extends State<MasterScreen> {
           children: [
 
             SizedBox(height: 10),
-          CourtSelectionWidget(
-            groupedCourts: groupedCourts,
-            onCourtSelected: (selectedName, selectedGuid) {
-              setState(() {
-                selectedCourtName = selectedName;
-                selectedCourtGuid = selectedGuid;
-              });
-              print("Court Selected: $selectedName, GUID: $selectedGuid");
-            },
-          ),
+            CourtSelectionWidget(
+              groupedCourts: groupedCourts,
+              onCourtSelected: (selectedName, selectedGuid) {
+                setState(() {
+                  selectedCourtName = selectedName;
+                  selectedCourtGuid = selectedGuid;
+                });
+                print("Court Selected: $selectedName, GUID: $selectedGuid");
+              },
+            ),
             SizedBox(height: 10),
             GestureDetector(
               onTap: () => _showConnectedDevicesModal(context),
