@@ -5,6 +5,7 @@ import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/CapturedVideo.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class MasterServer {
   HttpServer? _server;
@@ -53,7 +54,7 @@ class MasterServer {
                 } else if (messageType == 'photo' || messageType == 'video') {
                   // Process media data
                   final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
-                  final String filePath = await _saveMediaLocally(binaryData);
+                  final String filePath = await _saveMediaLocally(binaryData, messageType == 'photo');
                   final DateTime receivedDate = DateTime.now();
 
                   if (messageType == 'photo') {
@@ -113,7 +114,7 @@ class MasterServer {
     return _clients.keys.toList();
   }
 
-  Future<String> _saveMediaLocally(Uint8List binaryData) async {
+  Future<String> _saveMediaLocally(Uint8List binaryData, bool isPhoto) async {
     final directory = await getApplicationDocumentsDirectory();
     final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
     await Directory(sessionDirectoryPath).create(recursive: true);
@@ -121,6 +122,14 @@ class MasterServer {
     final String filePath = '$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
     final file = File(filePath);
     await file.writeAsBytes(binaryData);
+
+    // Save to gallery
+    if (isPhoto) {
+      await GallerySaver.saveImage(filePath, albumName: 'HydraCam/${currentSession?.sessionId}');
+    } else {
+      await GallerySaver.saveVideo(filePath, albumName: 'HydraCam/${currentSession?.sessionId}');
+    }
+
     return filePath;
   }
 

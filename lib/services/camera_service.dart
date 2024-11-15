@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class CameraService {
   CameraController? _controller;
@@ -25,6 +26,9 @@ class CameraService {
       final XFile photo = await _controller!.takePicture();
       print("Photo taken at path: ${photo.path}");
 
+      // Save to gallery
+      await GallerySaver.saveImage(photo.path, albumName: 'HydraCam');
+
       if (onPhotoTaken != null) {
         onPhotoTaken!(photo.path);
       }
@@ -49,6 +53,9 @@ class CameraService {
     try {
       final XFile video = await _controller!.stopVideoRecording();
       print("Video recorded at path: ${video.path}");
+
+      // Save to gallery
+      await GallerySaver.saveVideo(video.path, albumName: 'HydraCam');
 
       if (onVideoRecorded != null) {
         onVideoRecorded!(video.path);
