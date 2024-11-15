@@ -8,6 +8,7 @@ import '../models/CapturedVideo.dart';
 import 'dart:io';
 import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
+import '../widgets/Court_Selection_Widget.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -205,67 +206,6 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-
-  void _selectCourt(String? courtName) {
-    setState(() {
-      selectedCourtName = courtName;
-      selectedCourtGuid = courtName != null ? courts[courtName] : null;
-    });
-  }
-
-
-  void _showCustomCourtDialog() {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController guidController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Enter Custom Court"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: "Court Name"),
-              ),
-              TextField(
-                controller: guidController,
-                decoration: InputDecoration(labelText: "Court GUID"),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Add Court"),
-              onPressed: () {
-                String courtName = nameController.text;
-                String courtGuid = guidController.text;
-
-                if (courtName.isNotEmpty && courtGuid.isNotEmpty) {
-                  setState(() {
-                    courts[courtName] = courtGuid;
-                    selectedCourtName = courtName;
-                    selectedCourtGuid = courtGuid;
-                  });
-                }
-
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _uploadAllMedia() async {
     if (sessionGuid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -399,35 +339,16 @@ class _MasterScreenState extends State<MasterScreen> {
           children: [
 
             SizedBox(height: 10),
-            DropdownButton<String>(
-              value: selectedCourtName,
-              hint: Text("Choose or add a Court"),
-              isExpanded: false,
-              items: [
-                ...courts.keys.map((courtName) {
-                  return DropdownMenuItem<String>(
-                    value: courtName,
-                    child: Text(courtName),
-                  );
-                }).toList(),
-                DropdownMenuItem<String>(
-                  value: "Custom",
-                  child: Text("Custom..."),
-                ),
-              ],
-              onChanged: (value) {
-                if (value == "Custom") {
-                  _showCustomCourtDialog();
-                } else {
-                  _selectCourt(value); // Llama a _selectCourt con el nuevo valor
-                }
-              },
-            ),
-            if (selectedCourtName != null)
-              Text(
-                "Selected Court: $selectedCourtName",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
+          CourtSelectionWidget(
+            groupedCourts: groupedCourts,
+            onCourtSelected: (selectedName, selectedGuid) {
+              setState(() {
+                selectedCourtName = selectedName;
+                selectedCourtGuid = selectedGuid;
+              });
+              print("Court Selected: $selectedName, GUID: $selectedGuid");
+            },
+          ),
             SizedBox(height: 10),
             GestureDetector(
               onTap: () => _showConnectedDevicesModal(context),
