@@ -10,6 +10,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import '../services/camera_service.dart';
 
 class MasterServer {
   static const int inactivityThreshold = 5; // Inactivity time before disconnecting slave client in seconds
@@ -22,6 +23,10 @@ class MasterServer {
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
   Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
+
+  late final CameraService cameraService; // Camera service here so master can also take pics
+
+  MasterServer(this.cameraService);
 
   Future<void> startServer() async {
     try {

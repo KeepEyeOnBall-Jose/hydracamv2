@@ -87,12 +87,14 @@ lib/
 ├── screens/
 │   ├── master_screen.dart          # Master control interface.
 │   ├── role_selection_screen.dart  # Initial screen for selecting device role.
+│   ├── settings_screen.dart        # Screen accessible from appbar to access app preferences.
 │   └── slave_screen.dart           # Slave interface for receiving commands.
 ├── services/
 │   ├── camera_service.dart         # Manages camera operations on the devices.
 │   ├── device_id_provider.dart     # Provides device identification.
 │   ├── device_service.dart         # Retrieves or generates unique device IDs.
 │   ├── hydracam_api_service.dart   # Handles API requests to upload media.
+│   ├── settings_service.dart       # Manages read/write configurations over the app.
 │   └── permission_service.dart     # Ensures necessary permissions are granted.
 ├── slave/
 │   ├── master_discovery.dart       # Finds and connects to the master device.
@@ -145,6 +147,10 @@ Captured photos and videos are managed efficiently to balance memory usage and p
 1. Background Upload Service: Upload captured videos and photos to a cloud endpoint.
 2. Detailed Camera Status Feedback: Enable each slave device to provide real-time status back to the master.
 3. Multi-angle Capture Synchronization: Enhance timing and synchronization precision for capturing multi-angle views of sports events.
+
+## Available settings
+These are the preferences that one can adjust in the settings screen:
+1. Master should record: Controls whether the master should also take a picture or video too when telling slaves to do so.
 
 ## App Theme and Visual Style
 

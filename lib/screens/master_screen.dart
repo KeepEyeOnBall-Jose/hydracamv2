@@ -8,8 +8,10 @@ import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
+import '../services/camera_service.dart';
 import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
+import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
-  final MasterServer _server = MasterServer();
+  final MasterServer _server = MasterServer(CameraService());
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   final HydraCamApiService _apiService = HydraCamApiService(); // API service instance
 
@@ -100,10 +102,34 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-  void _takeRealPhoto() {
+  void _takeRealPhoto() async {
+    // Send command to slaves for taking pics
     _server.sendCommand('takePhoto');
+
+    // Verify if master should also take a pic
+    bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
+    if (shouldMasterRecord) {
+      final String photoPath = await _server.cameraService.takePhoto();
+
+      // Add photo to current session
+      final capturedPhoto = CapturedPhoto(
+        photoData: null,
+        photoPath: photoPath,
+        captureDate: DateTime.now(),
+        receivedDate: DateTime.now(),
+        slaveDeviceId: "Master",
+      );
+
+      setState(() {
+        _server.currentSession?.addPhoto(capturedPhoto);
+      });
+
+      // Show pop up for preview
+      _showPhotoDialog(capturedPhoto);
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Real photo command sent")),
+      SnackBar(content: Text("Photo command sent to slaves")),
     );
   }
 
