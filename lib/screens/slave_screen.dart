@@ -105,18 +105,9 @@ class _SlaveScreenState extends State<SlaveScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(statusMessage),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  statusMessage = "Photo taken";
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Photo taken")),
-                );
-              },
-              child: Text("Simulate Take Photo"),
-            ),
+            SizedBox(height: 20)
+            // Here camera preview or something
+            ,
           ],
         ),
       ),

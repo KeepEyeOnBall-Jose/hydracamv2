@@ -81,20 +81,6 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-  void _startCamera() {
-    _server.sendCommand('startCamera');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Start camera command sent to slaves")),
-    );
-  }
-
-  void _simulateTakePhoto() {
-    _server.sendCommand('simulateTakePhoto');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Simulate photo command sent")),
-    );
-  }
-
   void _takeRealPhoto() {
     _server.sendCommand('takePhoto');
     ScaffoldMessenger.of(context).showSnackBar(
@@ -387,16 +373,7 @@ class _MasterScreenState extends State<MasterScreen> {
               },
               child: Text("End Current Session"),
             ),*/
-            ElevatedButton(
-              onPressed: _startCamera,
-              child: Text("Start Camera on Slaves"),
-            ),
             SizedBox(height: 20),
-            /*ElevatedButton(
-              onPressed: _simulateTakePhoto,
-              child: Text("Simulate Take Photo on Slaves"),
-            ),
-            SizedBox(height: 20),*/
             ElevatedButton(
               onPressed: _takeRealPhoto,
               child: Text("Take Real Photo on Slaves"),

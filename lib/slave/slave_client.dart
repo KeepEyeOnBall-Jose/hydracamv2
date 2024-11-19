@@ -81,13 +81,8 @@ class SlaveClient {
             }
           } else {
             // Process non-JSON (simple text) messages as specific commands
-            if (message == 'startCamera') {
-              _cameraService.startCamera();
-            } else if (message == 'simulateTakePhoto') {
-              // Send a confirmation message to the master when simulating a photo
-              _channel?.sink.add("Simulated photo taken");
-              print("Simulated photo confirmation sent to master.");
-            } else if (message == 'takePhoto') {
+
+            if (message == 'takePhoto') {
               // Capture a photo, timestamp it, and send the data to the master
               photoCaptureDate = DateTime.now();
               _cameraService.takePhoto().then((photoPath) async {
