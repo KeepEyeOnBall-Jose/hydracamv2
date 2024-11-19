@@ -139,6 +139,14 @@ Captured photos and videos are managed efficiently to balance memory usage and p
 2. Detailed Camera Status Feedback: Enable each slave device to provide real-time status back to the master.
 3. Multi-angle Capture Synchronization: Enhance timing and synchronization precision for capturing multi-angle views of sports events.
 
+## App Theme and Visual Style
+
+HydraCam uses a centralized theme system defined in the file `app_theme.dart`. This file contains all the primary colors, typography, and widget styles used throughout the app. It also includes examples of how to apply specific styles to individual widgets.
+
+The theme is applied globally in `main.dart`, ensuring consistent visual styles across the entire app.
+
+### **Modifying Styles**
+To customize the app's appearance, you can update the properties in `app_theme.dart`. Changes to colors, fonts, or widget styles will automatically reflect throughout the app. For details, refer to the examples provided within `app_theme.dart`.
 
 
 

@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+
+class AppTheme {
+  // Define main colors
+  static const Color primaryColor = Color(0xFF81FFBF); // Light green
+  static const Color secondaryColor = Color(0xFFF5F5F5); // Light gray for backgrounds
+  static const Color accentColor = Color(0xFF00796B); // Teal for accents
+  static const Color buttonTextColor = Colors.black; // Black for button text
+
+  // Define text styles
+  static const TextStyle headline1 = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
+  static const TextStyle bodyText1 = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: Colors.black87,
+  );
+
+  // Define ThemeData
+  static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: primaryColor,
+    scaffoldBackgroundColor: secondaryColor,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: primaryColor,
+      titleTextStyle: TextStyle(
+        fontFamily: 'Roboto',
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.black, // AppBar icons color
+      ),
+    ),
+    textTheme: const TextTheme(
+      displayLarge: headline1,
+      bodyLarge: bodyText1,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor, // Button background color
+        foregroundColor: buttonTextColor, // Button text color (black by default)
+        textStyle: const TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+    ),
+    buttonTheme: const ButtonThemeData(
+      buttonColor: primaryColor, // Default button color
+      textTheme: ButtonTextTheme.primary, // Ensure button text respects text color
+    ),
+  );
+}
+
+
+
+// Use example
+
+/*
+
+Container(
+  color: AppTheme.secondaryColor, // Background color
+  child: Text(
+    'Hello World',
+    style: AppTheme.headline1, // Predefined text style
+  ),
+);
+
+*/

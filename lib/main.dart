@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:sport_cam_sync/services/device_id_provider.dart';
 import 'package:sport_cam_sync/services/device_service.dart';
+import 'package:sport_cam_sync/app_theme.dart'; // Import the theme
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   String deviceId = await DeviceIdService.getOrCreateDeviceId();
   print('Device ID: $deviceId'); // Debug
@@ -22,9 +23,7 @@ class HydraCamApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HydraCam',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: AppTheme.lightTheme, // Apply the custom theme
       home: RoleSelectionScreen(), // Set initial screen to role selection
     );
   }
