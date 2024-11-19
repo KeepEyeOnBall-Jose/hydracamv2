@@ -59,13 +59,20 @@ class _MasterScreenState extends State<MasterScreen> {
   // Method to init a new session
   void _startOrEndSession() async {
     if (sessionActive) {
-      // End current session
+      // End the session
       _endCurrentSession();
     } else {
-      // Init the session
-      await _createSession();
+      // Start a new session
+      if (selectedCourtGuid != null) {
+        await _createSession();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Please select a court before starting a session.")),
+        );
+      }
     }
   }
+
 
   void _toggleRecording() {
     if (isRecording) {
@@ -193,6 +200,14 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   void _uploadAllMedia() async {
+
+    if (photos.isEmpty && videos.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No media available to upload.")),
+      );
+      return;
+    }
+
     if (sessionGuid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("No session GUID available. Create a session first.")),
@@ -284,6 +299,64 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
+
+  Widget _buildInitialUI() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CourtSelectionWidget(
+          groupedCourts: groupedCourts,
+          onCourtSelected: (selectedName, selectedGuid) {
+            setState(() {
+              selectedCourtName = selectedName;
+              selectedCourtGuid = selectedGuid;
+            });
+          },
+        ),
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: selectedCourtGuid != null ? _startOrEndSession : null,
+          child: Text("Start Session"),
+        ),
+      ],
+    );
+  }
+  Widget _buildSessionUI() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Session Active: $sessionGuid"),
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: sessionGuid != null ? _takeRealPhoto : null,
+          child: Text("Take Photo"),
+        ),
+        ElevatedButton(
+          onPressed: sessionGuid != null
+              ? () {
+            _toggleRecording();
+          }
+              : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isRecording ? Colors.red : Colors.green,
+          ),
+          child: Text(isRecording ? "Stop Recording" : "Start Recording"),
+        ),
+        ElevatedButton(
+          onPressed: (photos.isNotEmpty || videos.isNotEmpty) && sessionGuid != null
+              ? _uploadAllMedia
+              : null,
+          child: Text("Upload All Media"),
+        ),
+        ElevatedButton(
+          onPressed: sessionGuid != null ? _startOrEndSession : null,
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+          child: Text("End Session"),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -320,107 +393,7 @@ class _MasterScreenState extends State<MasterScreen> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            SizedBox(height: 10),
-            CourtSelectionWidget(
-              groupedCourts: groupedCourts,
-              onCourtSelected: (selectedName, selectedGuid) {
-                setState(() {
-                  selectedCourtName = selectedName;
-                  selectedCourtGuid = selectedGuid;
-                });
-                print("Court Selected: $selectedName, GUID: $selectedGuid");
-              },
-            ),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: () => _showConnectedDevicesModal(context),
-              child: Text(
-                "Connected clients: $connectedClients",
-                style: TextStyle(fontSize: 16, color: Colors.blue),
-              ),
-            ),
-            //Text("Session ID: ${sessionId ?? 'Not started'}"),
-            Text("Session GUID: ${sessionGuid ?? 'Not available'}"), //TODO: This in the class!!!
-
-            SizedBox(height: 20),
-            /*ElevatedButton(
-              onPressed: () {
-                _server.startNewSession();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("New capture session started")),
-                );
-              },
-              child: Text("Start New Session"),
-            ),*/
-            // Botón único para iniciar/terminar sesión
-            ElevatedButton(
-              onPressed: _startOrEndSession,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: sessionActive ? Colors.red : Colors.green,
-              ),
-              child: Text(sessionActive ? "End Current Session" : "Start New Session"),
-            ),
-            /*ElevatedButton(
-              onPressed: () {
-                _server.endCurrentSession();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Capture session ended")),
-                );
-              },
-              child: Text("End Current Session"),
-            ),*/
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _takeRealPhoto,
-              child: Text("Take Real Photo on Slaves"),
-            ),
-            ElevatedButton(
-              onPressed: _toggleRecording,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isRecording ? Colors.red : Colors.green,
-              ),
-              child: Text(isRecording ? "Stop Recording Video" : "Start Recording Video"),
-            ),
-
-            ElevatedButton(
-              onPressed: _uploadAllMedia,
-              child: Text("Upload All Media"),
-            ),
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: photos.length + videos.length,
-                itemBuilder: (context, index) {
-                  if (index < photos.length) {
-                    final photo = photos[index];
-                    return ListTile(
-                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                      title: Text("Photo from Slave: ${photo.slaveDeviceId}"),
-                      subtitle: Text(
-                        "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
-                      ),
-                      onTap: () => _showPhotoDialog(photo),
-                    );
-                  } else {
-                    final video = videos[index - photos.length];
-                    return ListTile(
-                      leading: Icon(Icons.videocam, size: 50),
-                      title: Text("Video from Slave: ${video.slaveDeviceId}"),
-                      subtitle: Text(
-                        "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}\nReceived: ${video.receivedDate}",
-                      ),
-                      onTap: () => _showVideoDialog(video),
-                    );
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
+        child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
       ),
     );
   }

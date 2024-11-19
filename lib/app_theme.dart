@@ -6,6 +6,7 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFFF5F5F5); // Light gray for backgrounds
   static const Color accentColor = Color(0xFF00796B); // Teal for accents
   static const Color buttonTextColor = Colors.black; // Black for button text
+  static const Color disabledButtonColor = Color(0xFF949494); // Grey
 
   // Define text styles
   static const TextStyle headline1 = TextStyle(
@@ -59,6 +60,7 @@ class AppTheme {
     ),
     buttonTheme: const ButtonThemeData(
       buttonColor: primaryColor, // Default button color
+      disabledColor: disabledButtonColor, // Button color when disabled
       textTheme: ButtonTextTheme.primary, // Ensure button text respects text color
     ),
   );

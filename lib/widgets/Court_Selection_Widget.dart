@@ -30,7 +30,7 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
       selectedCourtGuid = courtName != null
           ? getFilteredCourts().firstWhere(
             (court) => court['name'] == courtName,
-        orElse: () => {"guid": ""}, // Cambiado null por cadena vacía
+        orElse: () => {"guid": ""},
       )['guid']
           : null;
     });
@@ -46,7 +46,7 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
       title: Text(
         selectedCourtName != null
             ? "Selected Court: $selectedCourtName"
-            : "No Court Selected",
+            : "Select a Court",
         style: TextStyle(fontSize: 16),
       ),
       children: [
