@@ -17,7 +17,8 @@ class CameraService {
 
     try {
       await _controller?.initialize();
-      print("Camera initialized");
+      await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off at startup
+      print("Camera initialized with flash off");
     } catch (e) {
       print("Error initializing camera: $e");
     }
@@ -36,8 +37,9 @@ class CameraService {
 
     try {
       await _controller?.initialize();
+      await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off during initialization
       _isCameraInitialized = true;
-      print("Camera successfully initialized.");
+      print("Camera successfully initialized with flash off.");
     } catch (e) {
       print("Error initializing camera: $e");
       _isCameraInitialized = false;
@@ -45,9 +47,13 @@ class CameraService {
     }
   }
 
-  Future<String> takePhoto() async {
+  Future<String> takePhoto({bool enableFlash = false}) async {
     try {
       await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
+
+      if (enableFlash) {
+        await _controller?.setFlashMode(FlashMode.torch); // Turn on flash before taking the photo
+      }
 
       final XFile photo = await _controller!.takePicture();
       print("Photo taken at path: ${photo.path}");
@@ -59,6 +65,10 @@ class CameraService {
         onPhotoTaken!(photo.path);
       }
 
+      if (enableFlash) {
+        await _controller?.setFlashMode(FlashMode.off); // Turn off flash after taking the photo
+      }
+
       return photo.path;
     } catch (e) {
       print("Error taking photo: $e");
@@ -66,12 +76,16 @@ class CameraService {
     }
   }
 
-  Future<void> startRecordingVideo() async {
+  Future<void> startRecordingVideo({bool enableFlash = false}) async {
     try {
-      await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
+      await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
+
+      if (enableFlash) {
+        await _controller?.setFlashMode(FlashMode.torch); // Turn on flash for video recording
+      }
 
       await _controller?.startVideoRecording();
-      print("Video recording started");
+      print("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
     } catch (e) {
       print("Error starting video recording: $e");
     }
@@ -89,6 +103,8 @@ class CameraService {
         onVideoRecorded!(video.path);
       }
 
+      await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off after recording
+
       return video.path;
     } catch (e) {
       print("Error stopping video recording: $e");
@@ -98,6 +114,7 @@ class CameraService {
 
   Future<void> stopCamera() async {
     try {
+      await _controller?.setFlashMode(FlashMode.off); // Turn off flash when stopping the camera
       await _controller?.dispose();
       print("Camera stopped");
     } catch (e) {

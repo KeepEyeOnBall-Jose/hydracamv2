@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/device_service.dart';
 import '../slave/slave_client.dart';
@@ -27,6 +28,9 @@ class _SlaveScreenState extends State<SlaveScreen> {
             setState(() {
               statusMessage = "Photo taken!";
             });
+            if (kDebugMode) {
+              print("Photo taken!!!");
+            }
 
             // Show the taken photo in a modal
             showDialog(
@@ -75,7 +79,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
             icon: Icon(Icons.info_outline),
             onPressed: () async {
               Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-              showDialog(
+              showDialog( //TODO rewrite to better use context
                 context: context,
                 builder: (context) {
                   return AlertDialog(

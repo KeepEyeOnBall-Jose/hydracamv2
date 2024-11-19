@@ -50,6 +50,13 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 - *On Master Devices*: The master device organizes received media into sessions and saves them locally. Once the session ends, the media is uploaded to the MoBo API.
 - **Media Storage**: Both photos and videos captured by slave devices are saved in the device gallery under a specific album named `HydraCam`. This ensures easy access to locally captured media for further use or review.
 
+### Flash Mode Control
+When capturing photos or videos, the `enableFlash` parameter can be used to dynamically toggle the flash. For example:
+- **Enable Flash**: Use `enableFlash: true` to turn on the flash for the duration of the photo or video capture.
+- **Disable Flash**: The flash is automatically turned off after the operation to save battery and avoid unintended usage.
+  This behavior is configurable in `CameraService` for both `takePhoto` and `startRecordingVideo`.
+
+
 ## Application Flow
 1. The **master device** starts by setting up a WebSocket server and broadcasts its presence.
 2. **Slave Device Connection and Synchronization**:
