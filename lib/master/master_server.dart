@@ -1,15 +1,16 @@
+import 'dart:async';
 import 'dart:convert'; // Import for jsonDecode
 import 'dart:io';
 import 'dart:typed_data';
 import '../models/CaptureSession.dart';
-import '../models/CapturedPhoto.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/CapturedVideo.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
 class MasterServer {
   HttpServer? _server;
   final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
+  final Map<String, DateTime> _lastHeartbeat = {}; // Track last heartbeat per client
+  Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
   CaptureSession? currentSession; // Current Capture Session
   List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
@@ -20,84 +21,62 @@ class MasterServer {
       _server = await HttpServer.bind('0.0.0.0', 4040);
       print("WebSocket Server successfully started on port 4040");
 
+      // Init check to verify inactive clients
+      _startHeartbeatCheck();
+
       await for (HttpRequest request in _server!) {
         if (request.uri.path == '/ws') {
           var socket = await WebSocketTransformer.upgrade(request);
           print("New WebSocket client connected.");
 
+          String? deviceId;
+
+          // Listen to client messages
           socket.listen((data) async {
             try {
-              // Try decode JSON
+              // Decode message
               final decodedData = jsonDecode(data as String);
               print("Data received from slave: $decodedData");
 
               if (decodedData is Map<String, dynamic>) {
                 String? messageType = decodedData['type'];
-                String deviceId = decodedData['deviceId'] ?? 'Unknown';
+                deviceId = decodedData['deviceId'] ?? 'Unknown';
 
-                // Manage each type of message
-                if (messageType == 'getSessionStatus') {
-                  String deviceId = decodedData['deviceId'] ?? 'Unknown';
-                  var sessionStatusResponse = jsonEncode({
-                    'command': 'sessionStatus',
-                    'sessionGuid': currentSession?.sessionGuid ?? '',
-                  });
-                  socket.add(sessionStatusResponse);
-                }
-
-
+                // Register client
                 if (messageType == 'deviceId') {
-                  // Register client with deviceId
-                  _clients[deviceId] = socket;
-                  _notifyClientCount();
-                  print("Registered new slave with deviceId: $deviceId");
-                } else if (messageType == 'photo' || messageType == 'video') {
-                  // Process media data
-                  final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
-                  final String filePath = await _saveMediaLocally(binaryData, messageType == 'photo');
-                  final DateTime receivedDate = DateTime.now();
-
-                  if (messageType == 'photo') {
-                    final DateTime captureDate = DateTime.parse(decodedData['captureDate']);
-                    final receivedPhoto = CapturedPhoto(
-                      photoData: null,
-                      photoPath: filePath,
-                      captureDate: captureDate,
-                      receivedDate: receivedDate,
-                      slaveDeviceId: deviceId,
-                    );
-                    currentSession?.addPhoto(receivedPhoto);
-                    onMediaReceived?.call(receivedPhoto);
-                    print("Photo from slave device ($deviceId) received and stored at: $filePath");
-                  } else if (messageType == 'video') {
-                    final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
-                    final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
-                    final receivedVideo = CapturedVideo(
-                      videoData: null,
-                      videoPath: filePath,
-                      slaveDeviceId: deviceId,
-                      startRecordingDate: startRecordingDate,
-                      endRecordingDate: endRecordingDate,
-                      receivedDate: receivedDate,
-                    );
-                    currentSession?.addVideo(receivedVideo);
-                    onMediaReceived?.call(receivedVideo);
-                    print("Video from slave device ($deviceId) received and stored at: $filePath");
+                  if (deviceId != null) {
+                    _clients[deviceId!] = socket;
+                    _notifyClientCount();
+                    print("Registered new slave with deviceId: $deviceId");
                   }
-                } else {
-                  print("Unexpected message type: $messageType");
+                } else if (messageType == 'heartbeat') {
+                  if (deviceId != null) {
+                    _lastHeartbeat[deviceId!] = DateTime.now(); // Update last heartbeat
+                    print("Received heartbeat from $deviceId");
+                  }
                 }
               } else {
                 print("Unexpected data format received: $data");
               }
             } catch (e) {
-              print("Error decoding data or handling media: $e");
+              print("Error decoding data: $e");
             }
           }, onDone: () {
-            // Delete client on disconnect
-            _clients.removeWhere((key, value) => value == socket);
-            _notifyClientCount();
-            print("Client disconnected. Total connected clients: ${_clients.length}");
+            // Manage client disconnection
+            if (deviceId != null) {
+              _clients.remove(deviceId);
+              _lastHeartbeat.remove(deviceId); // Clean heartbeat data
+              _notifyClientCount();
+              print("Client $deviceId disconnected. Total clients: ${_clients.length}");
+            }
+          }, onError: (error) {
+            // Manage error in connection
+            if (deviceId != null) {
+              _clients.remove(deviceId);
+              _lastHeartbeat.remove(deviceId); // Clean heartbeat data
+              _notifyClientCount();
+              print("Error with client $deviceId: $error. Removed from clients.");
+            }
           });
         } else {
           request.response
@@ -107,6 +86,36 @@ class MasterServer {
       }
     } catch (e) {
       print("Failed to start WebSocket Server: $e");
+    }
+  }
+  void _startHeartbeatCheck() {
+    _heartbeatCheckTimer = Timer.periodic(Duration(seconds: 10), (_) {
+      final now = DateTime.now();
+      final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
+        final lastSeen = _lastHeartbeat[deviceId];
+        return lastSeen == null || now.difference(lastSeen).inSeconds > 15; // 15s de inactividad
+      }).toList();
+
+      for (var deviceId in inactiveClients) {
+        _clients.remove(deviceId);
+        _lastHeartbeat.remove(deviceId);
+        print("Client $deviceId removed due to inactivity.");
+      }
+
+      _notifyClientCount();
+    });
+  }
+
+  void _stopHeartbeatCheck() {
+    _heartbeatCheckTimer?.cancel();
+    _heartbeatCheckTimer = null;
+  }
+
+
+
+  void _notifyClientCount() {
+    if (onClientCountChange != null) {
+      onClientCountChange!(_clients.length);
     }
   }
 
@@ -186,13 +195,11 @@ class MasterServer {
   void stopServer() {
     _server?.close();
     _clients.clear();
+    _lastHeartbeat.clear(); // Clean heartbeat registry
+    _stopHeartbeatCheck(); // Stop timer
     print("WebSocket Server stopped");
     _notifyClientCount();
   }
 
-  void _notifyClientCount() {
-    if (onClientCountChange != null) {
-      onClientCountChange!(_clients.length);
-    }
-  }
+
 }

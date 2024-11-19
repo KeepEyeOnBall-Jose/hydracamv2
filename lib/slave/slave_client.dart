@@ -15,6 +15,7 @@ class SlaveClient {
   bool _isConnected = false;
   bool isRecordingVideo = false; // Flag to track video recording state
   Timer? _reconnectTimer;
+  Timer? _heartbeatTimer; // Timer for sending heartbeat
   String? _deviceId; // Store the device ID
 
   // To store timestamps
@@ -47,6 +48,9 @@ class SlaveClient {
       }));
 
       print("Connected to WebSocket at $serverAddress");
+
+      // Start sending heartbeat messages
+      _startHeartbeat();
 
       _channel?.stream.listen(
             (message) {
@@ -138,12 +142,14 @@ class SlaveClient {
           // Handle any errors in the WebSocket connection
           print("Connection error: $error");
           _isConnected = false;
+          _stopHeartbeat();
           _attemptReconnect();
         },
         onDone: () {
           // Handle the WebSocket connection closing
           print("Connection closed");
           _isConnected = false;
+          _stopHeartbeat();
           _attemptReconnect();
         },
       );
@@ -171,6 +177,24 @@ class SlaveClient {
     }
   }
 
+  void _startHeartbeat() {
+    _stopHeartbeat(); // Ensure no duplicate timers
+    _heartbeatTimer = Timer.periodic(Duration(seconds: 5), (_) {
+      if (_isConnected) {
+        _channel?.sink.add(jsonEncode({
+          'type': 'heartbeat',
+          'deviceId': _deviceId,
+          'timestamp': DateTime.now().toIso8601String(),
+        }));
+        print("Sent heartbeat to master.");
+      }
+    });
+  }
+
+  void _stopHeartbeat() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+  }
 
   void _attemptReconnect() {
     if (_reconnectTimer == null || !_reconnectTimer!.isActive) {

@@ -128,6 +128,27 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
+  // Displays the number of connected devices and opens a modal for details
+  Widget _connectedDevicesWidget() {
+    return GestureDetector(
+      onTap: () => _showConnectedDevicesModal(context),
+      child: Column(
+        children: [
+          Text(
+            "Connected clients: $connectedClients",
+            style: TextStyle(fontSize: 16, color: Colors.blue),
+          ),
+          SizedBox(height: 10),
+          Text(
+            sessionActive ? "Session Active: $sessionGuid" : "No Active Session",
+            style: TextStyle(fontSize: 16, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 
   Future<void> _createSession() async {
     var sessionId = DateTime.now().toIso8601String();
@@ -304,6 +325,8 @@ class _MasterScreenState extends State<MasterScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        _connectedDevicesWidget(),
+        SizedBox(height: 20),
         CourtSelectionWidget(
           groupedCourts: groupedCourts,
           onCourtSelected: (selectedName, selectedGuid) {
@@ -321,11 +344,12 @@ class _MasterScreenState extends State<MasterScreen> {
       ],
     );
   }
+
   Widget _buildSessionUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Session Active: $sessionGuid"),
+        _connectedDevicesWidget(),
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: sessionGuid != null ? _takeRealPhoto : null,
@@ -356,6 +380,7 @@ class _MasterScreenState extends State<MasterScreen> {
       ],
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
