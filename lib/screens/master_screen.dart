@@ -351,69 +351,93 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   Widget _buildSessionUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _connectedDevicesWidget(),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: sessionGuid != null ? _takeRealPhoto : null,
-          child: Text("Take Photo"),
-        ),
-        ElevatedButton(
-          onPressed: sessionGuid != null
-              ? () {
-            _toggleRecording();
-          }
-              : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: isRecording ? Colors.red : Colors.green,
-          ),
-          child: Text(isRecording ? "Stop Recording" : "Start Recording"),
-        ),
-        ElevatedButton(
-          onPressed: (photos.isNotEmpty || videos.isNotEmpty) && sessionGuid != null
-              ? _uploadAllMedia
-              : null,
-          child: Text("Upload All Media"),
-        ),
-        ElevatedButton(
-          onPressed: sessionGuid != null ? _startOrEndSession : null,
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-          child: Text("End Session"),
-        ),
-        // List to display photos and videos
-        Expanded(
-          child: ListView.builder(
-            itemCount: photos.length + videos.length,
-            itemBuilder: (context, index) {
-              if (index < photos.length) {
-                final photo = photos[index];
-                return ListTile(
-                  leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                  title: Text("Photo from: ${photo.slaveDeviceId}"),
-                  subtitle: Text(
-                    "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
-                  ),
-                  onTap: () => _showPhotoDialog(photo),
-                );
-              } else {
-                final video = videos[index - photos.length];
-                return ListTile(
-                  leading: Icon(Icons.videocam, size: 50),
-                  title: Text("Video from: ${video.slaveDeviceId}"),
-                  subtitle: Text(
-                    "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}",
-                  ),
-                  onTap: () => _showVideoDialog(video),
-                );
-              }
-            },
-          ),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final buttonWidth = constraints.maxWidth * 0.8; // El 80% del ancho total
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _connectedDevicesWidget(),
+            SizedBox(height: 20),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: sessionGuid != null ? _takeRealPhoto : null,
+                child: Text("Take Photo"),
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: sessionGuid != null
+                    ? () {
+                  _toggleRecording();
+                }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isRecording ? Colors.red : Colors.green,
+                ),
+                child: Text(isRecording ? "Stop Recording" : "Start Recording"),
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: (photos.isNotEmpty || videos.isNotEmpty) && sessionGuid != null
+                    ? _uploadAllMedia
+                    : null,
+                child: Text("Upload All Media"),
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: sessionGuid != null ? _startOrEndSession : null,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: Text("End Session"),
+              ),
+            ),
+            SizedBox(height: 20),
+            // List to display photos and videos
+            Expanded(
+              child: ListView.builder(
+                itemCount: photos.length + videos.length,
+                itemBuilder: (context, index) {
+                  if (index < photos.length) {
+                    final photo = photos[index];
+                    return ListTile(
+                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                      title: Text("Photo from: ${photo.slaveDeviceId}"),
+                      subtitle: Text(
+                        "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
+                      ),
+                      onTap: () => _showPhotoDialog(photo),
+                    );
+                  } else {
+                    final video = videos[index - photos.length];
+                    return ListTile(
+                      leading: Icon(Icons.videocam, size: 50),
+                      title: Text("Video from: ${video.slaveDeviceId}"),
+                      subtitle: Text(
+                        "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}",
+                      ),
+                      onTap: () => _showVideoDialog(video),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
+
 
 
 
