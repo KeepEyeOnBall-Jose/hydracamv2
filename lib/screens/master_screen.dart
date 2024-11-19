@@ -45,6 +45,16 @@ class _MasterScreenState extends State<MasterScreen> {
     _server.onMediaReceived = (media) {
       setState(() {});
     };
+    // Configure callback to notify disconnection
+    _server.onClientRemoved = (deviceId, inactivityThreshold) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Client $deviceId disconnected after $inactivityThreshold seconds of inactivity.",
+          ),
+        ),
+      );
+    };
     _server.startServer();
     _announcer.startBroadcasting();
   }

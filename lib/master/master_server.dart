@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
 class MasterServer {
+  static const int inactivityThreshold = 5; // Inactivity time before disconnecting slave client in seconds
   HttpServer? _server;
   final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
   final Map<String, DateTime> _lastHeartbeat = {}; // Track last heartbeat per client
@@ -15,6 +16,7 @@ class MasterServer {
   List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
+  Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
 
   Future<void> startServer() async {
     try {
@@ -93,13 +95,18 @@ class MasterServer {
       final now = DateTime.now();
       final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
         final lastSeen = _lastHeartbeat[deviceId];
-        return lastSeen == null || now.difference(lastSeen).inSeconds > 15; // 15s de inactividad
+        return lastSeen == null || now.difference(lastSeen).inSeconds > inactivityThreshold;
       }).toList();
 
       for (var deviceId in inactiveClients) {
         _clients.remove(deviceId);
         _lastHeartbeat.remove(deviceId);
         print("Client $deviceId removed due to inactivity.");
+
+        // Notify disconnection to callback if defined
+        if (onClientRemoved != null) {
+          onClientRemoved!(deviceId, inactivityThreshold);
+        }
       }
 
       _notifyClientCount();
