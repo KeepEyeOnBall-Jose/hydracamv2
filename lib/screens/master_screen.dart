@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sport_cam_sync/screens/settings_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
+import '../app_theme.dart';
 import '../constants.dart';
 import '../master/master_announcer.dart';
 import '../master/master_server.dart';
@@ -438,6 +440,33 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
+  Future<void> _showDeviceInfo() async {
+    Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Device Info"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: deviceInfo.entries.map((entry) {
+              return Text('${entry.key}: ${entry.value}');
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.accentColor, // Text color from AppTheme
+              ),
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 
 
@@ -447,32 +476,40 @@ class _MasterScreenState extends State<MasterScreen> {
       appBar: AppBar(
         title: Text("HydraCam - Master Control"),
         actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () async {
-              Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Device Info"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: deviceInfo.entries.map((entry) {
-                        return Text('${entry.key}: ${entry.value}');
-                      }).toList(),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Close"),
-                      ),
-                    ],
-                  );
-                },
-              );
+          PopupMenuButton<String>(
+            icon: Icon(Icons.menu), // Icono para abrir el menú desplegable
+            onSelected: (value) {
+              if (value == 'Device Info') {
+                _showDeviceInfo();
+              } else if (value == 'Settings') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsScreen()),
+                );
+              }
             },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'Device Info',
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: AppTheme.accentColor),
+                    SizedBox(width: 8),
+                    Text('Device Info'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'Settings',
+                child: Row(
+                  children: [
+                    Icon(Icons.settings, color: AppTheme.accentColor),
+                    SizedBox(width: 8),
+                    Text('Settings'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

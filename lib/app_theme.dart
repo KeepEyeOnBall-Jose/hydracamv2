@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+
   // Define main colors
   static const Color primaryColor = Color(0xFF81FFBF); // Light green
   static const Color secondaryColor = Color(0xFFF5F5F5); // Light gray for backgrounds
@@ -62,6 +63,20 @@ class AppTheme {
       buttonColor: primaryColor, // Default button color
       disabledColor: disabledButtonColor, // Button color when disabled
       textTheme: ButtonTextTheme.primary, // Ensure button text respects text color
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return primaryColor; // Active state thumb color
+        }
+        return disabledButtonColor; // Inactive state thumb color
+      }),
+      trackColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return accentColor.withOpacity(0.5); // Active state track color
+        }
+        return secondaryColor; // Inactive state track color
+      }),
     ),
   );
 }
