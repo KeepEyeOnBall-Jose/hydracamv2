@@ -2,9 +2,14 @@ import 'dart:async';
 import 'dart:convert'; // Import for jsonDecode
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+
 import '../models/CaptureSession.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
 
 class MasterServer {
   static const int inactivityThreshold = 5; // Inactivity time before disconnecting slave client in seconds
@@ -51,7 +56,46 @@ class MasterServer {
                     _notifyClientCount();
                     print("Registered new slave with deviceId: $deviceId");
                   }
-                } else if (messageType == 'heartbeat') {
+
+                }
+                // Receive media
+                else if (messageType == 'photo' || messageType == 'video') {
+                  // Process media data
+                  final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
+                  final String filePath = await _saveMediaLocally(binaryData, messageType == 'photo');
+                  final DateTime receivedDate = DateTime.now();
+
+                  if (messageType == 'photo') {
+                    final DateTime captureDate = DateTime.parse(decodedData['captureDate']);
+                    final receivedPhoto = CapturedPhoto(
+                      photoData: null,
+                      photoPath: filePath,
+                      captureDate: captureDate,
+                      receivedDate: receivedDate,
+                      slaveDeviceId: deviceId!,
+                    );
+                    currentSession?.addPhoto(receivedPhoto);
+                    onMediaReceived?.call(receivedPhoto);
+                    print("Photo from slave device ($deviceId) received and stored at: $filePath");
+                  } else if (messageType == 'video') {
+                    final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
+                    final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
+                    final receivedVideo = CapturedVideo(
+                      videoData: null,
+                      videoPath: filePath,
+                      slaveDeviceId: deviceId!,
+                      startRecordingDate: startRecordingDate,
+                      endRecordingDate: endRecordingDate,
+                      receivedDate: receivedDate,
+                    );
+                    currentSession?.addVideo(receivedVideo);
+                    onMediaReceived?.call(receivedVideo);
+                    print("Video from slave device ($deviceId) received and stored at: $filePath");
+                  }
+                }
+
+                // Receive heartbeats from slaves
+                else if (messageType == 'heartbeat') {
                   if (deviceId != null) {
                     _lastHeartbeat[deviceId!] = DateTime.now(); // Update last heartbeat
                     print("Received heartbeat from $deviceId");
@@ -131,6 +175,11 @@ class MasterServer {
   }
 
   Future<String> _saveMediaLocally(Uint8List binaryData, bool isPhoto) async {
+
+    if (kDebugMode) {
+      print("Save media locally");
+    }
+
     final directory = await getApplicationDocumentsDirectory();
     final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
     await Directory(sessionDirectoryPath).create(recursive: true);

@@ -148,11 +148,6 @@ class _MasterScreenState extends State<MasterScreen> {
             "Connected clients: $connectedClients",
             style: TextStyle(fontSize: 16, color: Colors.blue),
           ),
-          SizedBox(height: 10),
-          Text(
-            sessionActive ? "Session Active: $sessionGuid" : "No Active Session",
-            style: TextStyle(fontSize: 16, color: Colors.black),
-          ),
         ],
       ),
     );
@@ -165,7 +160,7 @@ class _MasterScreenState extends State<MasterScreen> {
     var response = await _apiService.createSession(
         sessionId,
         courtGuid: selectedCourtGuid
-      );
+    );
 
     if (response != null) {
       sessionGuid = response['guid'];
@@ -357,7 +352,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   Widget _buildSessionUI() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         _connectedDevicesWidget(),
         SizedBox(height: 20),
@@ -387,9 +382,39 @@ class _MasterScreenState extends State<MasterScreen> {
           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           child: Text("End Session"),
         ),
+        // List to display photos and videos
+        Expanded(
+          child: ListView.builder(
+            itemCount: photos.length + videos.length,
+            itemBuilder: (context, index) {
+              if (index < photos.length) {
+                final photo = photos[index];
+                return ListTile(
+                  leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                  title: Text("Photo from: ${photo.slaveDeviceId}"),
+                  subtitle: Text(
+                    "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
+                  ),
+                  onTap: () => _showPhotoDialog(photo),
+                );
+              } else {
+                final video = videos[index - photos.length];
+                return ListTile(
+                  leading: Icon(Icons.videocam, size: 50),
+                  title: Text("Video from: ${video.slaveDeviceId}"),
+                  subtitle: Text(
+                    "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}",
+                  ),
+                  onTap: () => _showVideoDialog(video),
+                );
+              }
+            },
+          ),
+        ),
       ],
     );
   }
+
 
 
   @override
@@ -427,11 +452,30 @@ class _MasterScreenState extends State<MasterScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Display session active status at the top
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              sessionActive
+                  ? "Session Active: $sessionGuid"
+                  : "",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            ),
+          ),
+          // Centered UI for session management
+          Expanded(
+            child: Center(
+              child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
+            ),
+          ),
+        ],
       ),
     );
   }
+
 }
 
 /// VideoPlayerScreen - A widget to play video using the video_player plugin.
