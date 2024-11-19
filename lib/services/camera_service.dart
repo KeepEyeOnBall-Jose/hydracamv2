@@ -3,6 +3,8 @@ import 'package:gallery_saver/gallery_saver.dart';
 
 class CameraService {
   CameraController? _controller;
+  bool _isCameraInitialized = false; // Tracks camera initialization status
+
   Function(String)? onPhotoTaken; // Callback to notify SlaveScreen about photos
   Function(String)? onVideoRecorded; // Callback to notify SlaveScreen about videos
 
@@ -21,8 +23,32 @@ class CameraService {
     }
   }
 
+  /// Ensures the camera is ready before any operation
+  Future<void> ensureCameraIsReady() async {
+    if (_isCameraInitialized && _controller?.value.isInitialized == true) {
+      print("Camera is already initialized and ready.");
+      return; // Camera is already ready
+    }
+
+    print("Initializing camera...");
+    final cameras = await availableCameras();
+    _controller = CameraController(cameras[0], ResolutionPreset.high);
+
+    try {
+      await _controller?.initialize();
+      _isCameraInitialized = true;
+      print("Camera successfully initialized.");
+    } catch (e) {
+      print("Error initializing camera: $e");
+      _isCameraInitialized = false;
+      throw Exception("Failed to initialize camera: $e");
+    }
+  }
+
   Future<String> takePhoto() async {
     try {
+      await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
+
       final XFile photo = await _controller!.takePicture();
       print("Photo taken at path: ${photo.path}");
 
@@ -42,6 +68,8 @@ class CameraService {
 
   Future<void> startRecordingVideo() async {
     try {
+      await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
+
       await _controller?.startVideoRecording();
       print("Video recording started");
     } catch (e) {
