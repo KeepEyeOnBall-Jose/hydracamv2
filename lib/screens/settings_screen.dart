@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../app_theme.dart';
+import '../services/settings_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -17,18 +17,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
+    final shouldRecord = await SettingsService.getMasterShouldRecord();
     setState(() {
-      _masterShouldRecord = prefs.getBool('masterShouldRecord') ?? false;
+      _masterShouldRecord = shouldRecord;
     });
   }
 
   Future<void> _updateMasterRecording(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
+    await SettingsService.setMasterShouldRecord(value);
     setState(() {
       _masterShouldRecord = value;
     });
-    await prefs.setBool('masterShouldRecord', value);
   }
 
   @override
