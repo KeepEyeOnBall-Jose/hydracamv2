@@ -25,11 +25,14 @@ class _SlaveScreenState extends State<SlaveScreen> {
   String statusMessage = "Waiting for camera commands...";
   Timer? autoModeTimer; // Timer for auto mode logic
 
+  MasterDiscovery? _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
+
+
   @override
   void initState() {
     super.initState();
 
-    MasterDiscovery(onMasterDiscovered: (masterIp) {
+    _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
       if (!isConnected) {
         if (kDebugMode) {
           print("Connecting to master at IP: $masterIp");
@@ -87,7 +90,10 @@ class _SlaveScreenState extends State<SlaveScreen> {
           autoModeTimer?.cancel(); // Stop auto mode if master is found
         }
       }
-    }).startListening();
+    });
+
+    _masterDiscovery?.startListening();
+
 
     if (widget.isAutoMode) {
       // Automatically transition to MasterScreen if no master is found
@@ -104,23 +110,38 @@ class _SlaveScreenState extends State<SlaveScreen> {
   }
 
   void _transitionToMasterScreen() {
-    // Stop slave client
-    _client?.disconnect();
-    MasterDiscovery(onMasterDiscovered: (masterIp) {}).stopListening();
+    // Stop any activity related to Slave
+    _cleanUpSlaveMode();
 
-    // Change to MasterScreen
+    // Move to master screen
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MasterScreen()),
     );
   }
 
+  void _cleanUpSlaveMode() {
+    _client?.disconnect();
+    _client = null;
+    autoModeTimer?.cancel();
+    autoModeTimer = null;
+    _masterDiscovery?.stopListening();
+    _masterDiscovery = null;
+
+    if (kDebugMode) {
+      print("Cleaned up Slave mode.");
+    }
+  }
+
 
   @override
   void dispose() {
     _client?.disconnect();
+    _client = null;
     autoModeTimer?.cancel();
-    MasterDiscovery(onMasterDiscovered: (masterIp) {}).stopListening();
+    autoModeTimer = null;
+    _masterDiscovery?.stopListening();
+    _masterDiscovery = null;
     super.dispose();
   }
 
