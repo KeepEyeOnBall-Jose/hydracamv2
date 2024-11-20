@@ -96,20 +96,31 @@ class _SlaveScreenState extends State<SlaveScreen> {
           if (kDebugMode) {
             print("No master found, switching to Master mode.");
           }
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MasterScreen()),
-          );
+          _transitionToMasterScreen();
         }
       });
     }
 
   }
 
+  void _transitionToMasterScreen() {
+    // Stop slave client
+    _client?.disconnect();
+    MasterDiscovery(onMasterDiscovered: (masterIp) {}).stopListening();
+
+    // Change to MasterScreen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MasterScreen()),
+    );
+  }
+
+
   @override
   void dispose() {
     _client?.disconnect();
     autoModeTimer?.cancel();
+    MasterDiscovery(onMasterDiscovered: (masterIp) {}).stopListening();
     super.dispose();
   }
 

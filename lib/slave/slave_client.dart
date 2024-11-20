@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert'; // Import for jsonEncode
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
 import '../services/device_service.dart'; // Import for device ID service
@@ -27,8 +28,18 @@ class SlaveClient {
       : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
 
   Future<void> connect() async {
+
+    if (_isConnected) {
+      if (kDebugMode) {
+        print("Already connected to WebSocket. Skipping connection.");
+      }
+      return;
+    }
+
     _deviceId = await DeviceIdService.getOrCreateDeviceId(); // Retrieve or create device ID
-    print("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
+    if (kDebugMode) {
+      print("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
+    }
 
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));

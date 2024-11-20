@@ -253,11 +253,20 @@ class MasterServer {
   }
 
   void stopServer() {
+    // TODO: Here end active session before stopping server??
+
+    // Clean any client just in case
+    for (var client in _clients.values) {
+      client.close(WebSocketStatus.normalClosure, "Server shutting down");
+    }
+
     _server?.close();
     _clients.clear();
     _lastHeartbeat.clear(); // Clean heartbeat registry
     _stopHeartbeatCheck(); // Stop timer
-    print("WebSocket Server stopped");
+    if (kDebugMode) {
+      print("WebSocket Server stopped");
+    }
     _notifyClientCount();
   }
 

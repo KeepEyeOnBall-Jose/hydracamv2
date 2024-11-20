@@ -67,6 +67,7 @@ class _MasterScreenState extends State<MasterScreen> {
   void dispose() {
     _server.stopServer();
     _announcer.stopBroadcasting();
+    //TODO: end session here and in server? or keep it??
     super.dispose();
   }
 

@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 /// MasterAnnouncer - Periodically broadcasts the master device's presence.
 /// Sends a UDP message with a unique identifier to allow slave devices to discover its IP.
 class MasterAnnouncer {
@@ -22,6 +24,9 @@ class MasterAnnouncer {
   /// Stops broadcasting the master’s presence.
   void stopBroadcasting() {
     _timer?.cancel();
-    print("Stopped broadcasting master discovery message.");
+    _timer = null;
+    if (kDebugMode) {
+      print("Stopped broadcasting master discovery message.");
+    }
   }
 }
