@@ -58,7 +58,9 @@ class MasterServer {
                   if (deviceId != null) {
                     _clients[deviceId!] = socket;
                     _notifyClientCount();
-                    print("Registered new slave with deviceId: $deviceId");
+                    if (kDebugMode) {
+                      print("Registered new slave with deviceId: $deviceId");
+                    }
                   }
 
                 }

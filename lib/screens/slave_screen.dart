@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import '../globals.dart';
 import '../services/device_service.dart';
 import '../slave/slave_client.dart';
@@ -136,59 +137,87 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
   @override
   void dispose() {
-    _client?.disconnect();
-    _client = null;
-    autoModeTimer?.cancel();
-    autoModeTimer = null;
-    _masterDiscovery?.stopListening();
-    _masterDiscovery = null;
+    try{
+      _client?.disconnect();
+      _client = null;
+      autoModeTimer?.cancel();
+      autoModeTimer = null;
+      _masterDiscovery?.stopListening();
+      _masterDiscovery = null;
+    }
+    catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("HydraCam - Slave Device"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () async {
-              Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-              showDialog( //TODO rewrite to better use context
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Device Info"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: deviceInfo.entries.map((entry) {
-                        return Text('${entry.key}: ${entry.value}');
-                      }).toList(),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Close"),
-                      ),
-                    ],
-                  );
-                },
+    return WillPopScope(
+      onWillPop: () async {
+        // Handle the back button press
+        _cleanUpSlaveMode();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+        );
+        return false; // Prevent the default behavior
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("HydraCam - Slave Device"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              _cleanUpSlaveMode();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
               );
             },
           ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(statusMessage),
-            SizedBox(height: 20)
-            // Here camera preview or something
-            ,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: () async {
+                Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
+                showDialog( //TODO rewrite to better use context
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Device Info"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: deviceInfo.entries.map((entry) {
+                          return Text('${entry.key}: ${entry.value}');
+                        }).toList(),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("Close"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(statusMessage),
+              SizedBox(height: 20)
+              // Here camera preview or something
+              ,
+            ],
+          ),
         ),
       ),
     );

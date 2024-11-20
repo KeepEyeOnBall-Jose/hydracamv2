@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:sport_cam_sync/screens/settings_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
 import '../app_theme.dart';
@@ -42,9 +44,11 @@ class _MasterScreenState extends State<MasterScreen> {
   void initState() {
     super.initState();
     _server.onClientCountChange = (count) {
-      setState(() {
-        connectedClients = count;
-      });
+      if (mounted){
+        setState(() {
+          connectedClients = count;
+        });
+      }
     };
     _server.onMediaReceived = (media) {
       setState(() {});
@@ -65,11 +69,26 @@ class _MasterScreenState extends State<MasterScreen> {
 
   @override
   void dispose() {
-    _server.stopServer();
-    _announcer.stopBroadcasting();
-    //TODO: end session here and in server? or keep it??
+    try {
+      // Nullify callbacks to prevent setState() after dispose
+      _server.onClientCountChange = null;
+      _server.onMediaReceived = null;
+      _server.onClientRemoved = null;
+
+      // Stop server and announcer
+      _server.stopServer();
+      _announcer.stopBroadcasting();
+
+      // TODO: Handle session ending if necessary
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error during dispose: $e");
+      }
+    }
     super.dispose();
   }
+
+
 
   // Method to init a new session
   void _startOrEndSession() async {
@@ -499,68 +518,91 @@ class _MasterScreenState extends State<MasterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("HydraCam - Master Control"),
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(Icons.menu), // Icono para abrir el menú desplegable
-            onSelected: (value) {
-              if (value == 'Device Info') {
-                _showDeviceInfo();
-              } else if (value == 'Settings') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()),
-                );
-              }
+    return WillPopScope(
+      onWillPop: () async {
+        // Handle the back button press
+        _server.stopServer();
+        _announcer.stopBroadcasting();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+        );
+        return false; // Prevent the default behavior
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("HydraCam - Master Control"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              _server.stopServer();
+              _announcer.stopBroadcasting();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+              );
             },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'Device Info',
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline, color: AppTheme.accentColor),
-                    SizedBox(width: 8),
-                    Text('Device Info'),
-                  ],
+          ),
+          actions: [
+            PopupMenuButton<String>(
+              icon: Icon(Icons.menu), // Icono para abrir el menú desplegable
+              onSelected: (value) {
+                if (value == 'Device Info') {
+                  _showDeviceInfo();
+                } else if (value == 'Settings') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsScreen()),
+                  );
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'Device Info',
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, color: AppTheme.accentColor),
+                      SizedBox(width: 8),
+                      Text('Device Info'),
+                    ],
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'Settings',
-                child: Row(
-                  children: [
-                    Icon(Icons.settings, color: AppTheme.accentColor),
-                    SizedBox(width: 8),
-                    Text('Settings'),
-                  ],
+                PopupMenuItem(
+                  value: 'Settings',
+                  child: Row(
+                    children: [
+                      Icon(Icons.settings, color: AppTheme.accentColor),
+                      SizedBox(width: 8),
+                      Text('Settings'),
+                    ],
+                  ),
                 ),
+              ],
+            ),
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Display session active status at the top
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                sessionActive
+                    ? "Session Active: $sessionGuid"
+                    : "",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
               ),
-            ],
-          ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Display session active status at the top
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              sessionActive
-                  ? "Session Active: $sessionGuid"
-                  : "",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
-          ),
-          // Centered UI for session management
-          Expanded(
-            child: Center(
-              child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
+            // Centered UI for session management
+            Expanded(
+              child: Center(
+                child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 
