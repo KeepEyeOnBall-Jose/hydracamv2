@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert'; // Import for jsonDecode
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 
 import '../models/CaptureSession.dart';
@@ -24,7 +23,7 @@ class MasterServer {
   Function(dynamic)? onMediaReceived; // Callback for media reception
   Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
 
-  late final CameraService cameraService; // Camera service here so master can also take pics
+  final CameraService cameraService; // Camera service here so master can also take pics
 
   MasterServer(this.cameraService);
 
