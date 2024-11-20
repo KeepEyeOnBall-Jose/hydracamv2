@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import '../globals.dart';
-import '../services/device_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
+import '../widgets/hydra_cam_app_bar.dart';
 import 'master_screen.dart';
 
 class SlaveScreen extends StatefulWidget {
@@ -166,47 +166,15 @@ class _SlaveScreenState extends State<SlaveScreen> {
         return false; // Prevent the default behavior
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("HydraCam - Slave Device"),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              _cleanUpSlaveMode();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
-              );
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.info_outline),
-              onPressed: () async {
-                Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-                showDialog( //TODO rewrite to better use context
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text("Device Info"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: deviceInfo.entries.map((entry) {
-                          return Text('${entry.key}: ${entry.value}');
-                        }).toList(),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text("Close"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+        appBar: HydraCamAppBar(
+          title: "HydraCam - Slave Device",
+          onBack: () {
+            _cleanUpSlaveMode();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+            );
+          },
         ),
         body: Center(
           child: Column(

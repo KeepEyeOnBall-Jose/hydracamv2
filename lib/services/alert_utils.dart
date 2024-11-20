@@ -2,7 +2,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../app_theme.dart';
+import 'device_service.dart';
+import 'location_service.dart';
 
 class AlertUtils {
   /// Displays a loading dialog with a custom title and message.
@@ -27,16 +30,16 @@ class AlertUtils {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircularProgressIndicator(
+                  const CircularProgressIndicator(
                     color: AppTheme.accentColor, // Use accent color for loader
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     title,
                     style: AppTheme.headline1.copyWith(fontSize: 20), // Title style
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     message,
                     style: AppTheme.bodyText1.copyWith(color: AppTheme.accentColor), // Message style
@@ -55,6 +58,108 @@ class AlertUtils {
   static void dismissDialog(BuildContext context) {
     Navigator.of(context, rootNavigator: true).pop();
   }
+
+  /// ------------------
+  /// SPECIFIC DIALOGS
+  /// ------------------
+
+  /// Show dialog with info about device.
+  static void showDeviceInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return FutureBuilder<Map<String, dynamic>>(
+          future: DeviceIdService.getDeviceInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return AlertDialog(
+                title: Text("Información del Dispositivo"),
+                content: Center(
+                  child: CircularProgressIndicator(),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppTheme.accentColor,
+                    ),
+                    child: Text("Cerrar"),
+                  ),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return AlertDialog(
+                title: Text("Información del Dispositivo"),
+                content: Text("Error al obtener la información del dispositivo."),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppTheme.accentColor,
+                    ),
+                    child: Text("Cerrar"),
+                  ),
+                ],
+              );
+            } else {
+              Map<String, dynamic> deviceInfo = snapshot.data!;
+              return AlertDialog(
+                title: Text("Información del Dispositivo"),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: deviceInfo.entries.map((entry) {
+                      return Text('${entry.key}: ${entry.value}');
+                    }).toList(),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppTheme.accentColor,
+                    ),
+                    child: Text("Cerrar"),
+                  ),
+                ],
+              );
+            }
+          },
+        );
+      },
+    );
+  }
+
+  /// Show dialog with info about device location.
+  static void showLocationInfoDialog(BuildContext context) {
+    String locationInfo;
+    Position? position = LocationService().currentPosition;
+    if (position != null) {
+      locationInfo = "Latitud: ${position.latitude}\n"
+          "Longitud: ${position.longitude}\n"
+          "Precisión: ${position.accuracy} metros";
+    } else {
+      locationInfo = "Ubicación no disponible.";
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Ubicación del Dispositivo"),
+          content: Text(locationInfo),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.accentColor,
+              ),
+              child: Text("Cerrar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 // Use example
@@ -70,3 +175,5 @@ AlertUtils.showLoadingDialog(
 /*
 AlertUtils.dismissDialog(context);
 */
+
+

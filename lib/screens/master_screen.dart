@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
-import 'package:sport_cam_sync/screens/settings_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
-import '../app_theme.dart';
 import '../constants.dart';
 import '../master/master_announcer.dart';
 import '../master/master_server.dart';
@@ -11,10 +9,10 @@ import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
 import '../services/camera_service.dart';
-import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
 import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
+import '../widgets/hydra_cam_app_bar.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -486,35 +484,6 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  Future<void> _showDeviceInfo() async {
-    Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Device Info"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: deviceInfo.entries.map((entry) {
-              return Text('${entry.key}: ${entry.value}');
-            }).toList(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              style: TextButton.styleFrom(
-                foregroundColor: AppTheme.accentColor, // Text color from AppTheme
-              ),
-              child: Text("Close"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -530,56 +499,16 @@ class _MasterScreenState extends State<MasterScreen> {
         return false; // Prevent the default behavior
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("HydraCam - Master Control"),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              _server.stopServer();
-              _announcer.stopBroadcasting();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
-              );
-            },
-          ),
-          actions: [
-            PopupMenuButton<String>(
-              icon: Icon(Icons.menu), // Icono para abrir el menú desplegable
-              onSelected: (value) {
-                if (value == 'Device Info') {
-                  _showDeviceInfo();
-                } else if (value == 'Settings') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingsScreen()),
-                  );
-                }
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 'Device Info',
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: AppTheme.accentColor),
-                      SizedBox(width: 8),
-                      Text('Device Info'),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'Settings',
-                  child: Row(
-                    children: [
-                      Icon(Icons.settings, color: AppTheme.accentColor),
-                      SizedBox(width: 8),
-                      Text('Settings'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+        appBar: HydraCamAppBar(
+          title: "HydraCam - Master Control",
+          onBack: () {
+            _server.stopServer();
+            _announcer.stopBroadcasting();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+            );
+          },
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

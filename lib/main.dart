@@ -5,6 +5,7 @@ import 'package:sport_cam_sync/screens/slave_screen.dart';
 //import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:sport_cam_sync/services/device_id_provider.dart';
 import 'package:sport_cam_sync/services/device_service.dart';
+import 'package:sport_cam_sync/services/location_service.dart';
 import 'package:sport_cam_sync/services/permission_service.dart';
 import 'package:sport_cam_sync/app_theme.dart';
 
@@ -24,7 +25,10 @@ void main() async {
   String deviceId = await DeviceIdService.getOrCreateDeviceId();
   if (kDebugMode) {
     print('Device ID: $deviceId');
-  } // Debug
+  }
+
+  // Initialize LocationService and get the current location
+  await LocationService().initialize();
 
   runApp(
     ChangeNotifierProvider(
