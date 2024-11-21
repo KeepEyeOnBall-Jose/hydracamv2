@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
+
 /// A singleton service to manage application logs.
 class LogService {
   static final LogService _instance = LogService._internal();
@@ -25,7 +27,9 @@ class LogService {
       'file': file,
     };
     _logs.add(logEntry);
-    print('Log registered: $logEntry'); // Optional: for debugging
+    if (kDebugMode) {
+      LogService.instance.registerLog('Log registered: $logEntry');
+    }
   }
 
   /// Retrieves all logs in a read-only format.

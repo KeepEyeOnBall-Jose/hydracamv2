@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
@@ -10,9 +9,9 @@ import '../models/CapturedVideo.dart';
 import 'dart:io';
 import '../services/camera_service.dart';
 import '../services/hydracam_api_service.dart';
+import '../services/log_service.dart';
 import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
-import '../widgets/camera_preview_widget.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/master_video_recording_screen.dart';
 
@@ -81,9 +80,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
       // TODO: Handle session ending if necessary
     } catch (e) {
-      if (kDebugMode) {
-        print("Error during dispose: $e");
-      }
+      LogService.instance.registerLog("Error during dispose: $e");
     }
     super.dispose();
   }
@@ -109,7 +106,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
 
   void _toggleRecording() async {
-    print("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
+    LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
 
     if (isRecording) {
       // Stop recording
@@ -135,7 +132,7 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   Future<void> _startMasterRecordingVideo() async {
-    print("Will record from master and show preview");
+    LogService.instance.registerLog("Will record from master and show preview");
     await _server.cameraService.startRecordingVideo();
     // Show camera preview overlay
     _showMasterVideoPreview();
@@ -191,15 +188,6 @@ class _MasterScreenState extends State<MasterScreen> {
       });
     }
   }
-
-
-
-
-  void _hideMasterVideoPreview() {
-    Navigator.of(context).pop(); // Close the preview dialog
-  }
-
-
 
   void _takeRealPhoto() async {
     // Send command to slaves for taking pics
@@ -368,7 +356,7 @@ class _MasterScreenState extends State<MasterScreen> {
       return;
     }
 
-    print("Now upload photos");
+    LogService.instance.registerLog("Now upload photos");
     for (var photo in photos) {
       var file = File(photo.photoPath);
 
@@ -395,7 +383,7 @@ class _MasterScreenState extends State<MasterScreen> {
     }
 
 
-    print("Now upload videos");
+    LogService.instance.registerLog("Now upload videos");
     for (var video in videos) {
       var file = File(video.videoPath);
 

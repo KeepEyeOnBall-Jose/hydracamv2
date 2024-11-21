@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
+import 'log_service.dart';
+
 /// Singleton class to manage API communication for HydraCam
 class HydraCamApiService {
   // Singleton instance
@@ -36,11 +38,11 @@ class HydraCamApiService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        print('Failed to create session: ${response.body}');
+        LogService.instance.registerLog('Failed to create session: ${response.body}');
         return null;
       }
     } catch (e) {
-      print('Error creating session: $e');
+      LogService.instance.registerLog('Error creating session: $e');
       return null;
     }
   }
@@ -56,14 +58,14 @@ class HydraCamApiService {
       );
 
       if (response.statusCode == 200) {
-        print('Session ended successfully');
+        LogService.instance.registerLog('Session ended successfully');
         return true;
       } else {
-        print('Failed to end session: ${response.body}');
+        LogService.instance.registerLog('Failed to end session: ${response.body}');
         return false;
       }
     } catch (e) {
-      print('Error ending session: $e');
+      LogService.instance.registerLog('Error ending session: $e');
       return false;
     }
   }
@@ -96,15 +98,15 @@ class HydraCamApiService {
 
 
       if (response.statusCode == 200) {
-        print('Media uploaded successfully');
+        LogService.instance.registerLog('Media uploaded successfully');
         return true;
       } else {
-        print('Failed to upload media: ${response.statusCode}');
-        print('Error details: ${response.body}');
+        LogService.instance.registerLog('Failed to upload media: ${response.statusCode}');
+        LogService.instance.registerLog('Error details: ${response.body}');
         return false;
       }
     } catch (e) {
-      print('Error uploading media: $e');
+      LogService.instance.registerLog('Error uploading media: $e');
       return false;
     }
   }
@@ -130,14 +132,14 @@ class HydraCamApiService {
       );
 
       if (response.statusCode == 200) {
-        print('Dispositivo notificó al servidor que está listo para transmitir');
+        LogService.instance.registerLog('Dispositivo notificó al servidor que está listo para transmitir');
         return true;
       } else {
-        print('Fallo al notificar al servidor: ${response.body}');
+        LogService.instance.registerLog('Fallo al notificar al servidor: ${response.body}');
         return false;
       }
     } catch (e) {
-      print('Error al notificar al servidor: $e');
+      LogService.instance.registerLog('Error al notificar al servidor: $e');
       return false;
     }
   }

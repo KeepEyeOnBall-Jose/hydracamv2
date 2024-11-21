@@ -1,5 +1,6 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter/foundation.dart';
+
+import 'log_service.dart';
 
 /// LocationService - Handles obtaining the device's current location.
 /// Provides methods to get the current position and to access the last known location.
@@ -20,9 +21,7 @@ class LocationService {
     // Check if location services are enabled
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      if (kDebugMode) {
-        print("Location services are disabled.");
-      }
+      LogService.instance.registerLog("Location services are disabled.");
       return;
     }
 
@@ -32,17 +31,13 @@ class LocationService {
       // Request permission
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        if (kDebugMode) {
-          print("Location permissions are denied.");
-        }
+        LogService.instance.registerLog("Location permissions are denied.");
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      if (kDebugMode) {
-        print("Location permissions are permanently denied.");
-      }
+      LogService.instance.registerLog("Location permissions are permanently denied.");
       return;
     }
 
@@ -51,13 +46,9 @@ class LocationService {
       _currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
       );
-      if (kDebugMode) {
-        print("Current position: $_currentPosition");
-      }
+      LogService.instance.registerLog("Current position: $_currentPosition");
     } catch (e) {
-      if (kDebugMode) {
-        print("Error obtaining location: $e");
-      }
+      LogService.instance.registerLog("Error obtaining location: $e");
     }
   }
 

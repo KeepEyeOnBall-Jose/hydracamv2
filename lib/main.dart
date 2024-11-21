@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sport_cam_sync/screens/slave_screen.dart';
@@ -6,6 +5,7 @@ import 'package:sport_cam_sync/screens/slave_screen.dart';
 import 'package:sport_cam_sync/services/device_id_provider.dart';
 import 'package:sport_cam_sync/services/device_service.dart';
 import 'package:sport_cam_sync/services/location_service.dart';
+import 'package:sport_cam_sync/services/log_service.dart';
 import 'package:sport_cam_sync/services/permission_service.dart';
 import 'package:sport_cam_sync/app_theme.dart';
 
@@ -16,16 +16,12 @@ void main() async {
   bool permissionsGranted = await PermissionService.requestAllPermissions();
 
   if (!permissionsGranted) {
-    if (kDebugMode) {
-      print("Some permissions were not granted. The app may not work as expected.");
-    }
+    LogService.instance.registerLog("Some permissions were not granted. The app may not work as expected.");
   }
 
   // Initialize the Device ID
   String deviceId = await DeviceIdService.getOrCreateDeviceId();
-  if (kDebugMode) {
-    print('Device ID: $deviceId');
-  }
+  LogService.instance.registerLog('Device ID: $deviceId');
 
   // Initialize LocationService and get the current location
   await LocationService().initialize();

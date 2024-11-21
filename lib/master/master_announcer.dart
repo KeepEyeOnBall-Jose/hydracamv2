@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
+import '../services/log_service.dart';
 
 /// MasterAnnouncer - Periodically broadcasts the master device's presence.
 /// Sends a UDP message with a unique identifier to allow slave devices to discover its IP.
@@ -14,9 +13,7 @@ class MasterAnnouncer {
   /// Starts broadcasting the master’s IP periodically using UDP.
   void startBroadcasting() {
     if (_isBroadcasting) {
-      if (kDebugMode) {
-        print("MasterAnnouncer is already broadcasting.");
-      }
+      LogService.instance.registerLog("MasterAnnouncer is already broadcasting.");
       return;
     }
     _isBroadcasting = true;
@@ -25,15 +22,11 @@ class MasterAnnouncer {
         final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
         socket.broadcastEnabled = true;
         socket.send(message.codeUnits, InternetAddress("255.255.255.255"), broadcastPort);
-        if (kDebugMode) {
-          print("Broadcast message sent: $message");
-        }
+        LogService.instance.registerLog("Broadcast message sent: $message");
         socket.close();
       }
       catch(e){
-        if (kDebugMode) {
-          print("Error during broadcasting: $e");
-        }
+        LogService.instance.registerLog("Error during broadcasting: $e");
       }
     });
   }
@@ -41,16 +34,12 @@ class MasterAnnouncer {
   /// Stops broadcasting the master’s presence.
   void stopBroadcasting() {
     if (!_isBroadcasting) {
-      if (kDebugMode) {
-        print("MasterAnnouncer was not broadcasting.");
-      }
+      LogService.instance.registerLog("MasterAnnouncer was not broadcasting.");
       return;
     }
     _isBroadcasting = false;
     _timer?.cancel();
     _timer = null;
-    if (kDebugMode) {
-      print("Stopped broadcasting master discovery message.");
-    }
+    LogService.instance.registerLog("Stopped broadcasting master discovery message.");
   }
 }

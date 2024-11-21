@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import '../globals.dart';
+import '../services/log_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
 import '../widgets/hydra_cam_app_bar.dart';
@@ -37,9 +37,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
     _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
       if (!isConnected) {
-        if (kDebugMode) {
-          print("Connecting to master at IP: $masterIp");
-        }
+        LogService.instance.registerLog("Connecting to master at IP: $masterIp");
         _client = SlaveClient(
           'ws://$masterIp:4040/ws',
           onPhotoTaken: (path) {
@@ -47,9 +45,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
             setState(() {
               statusMessage = "Photo taken!";
             });
-            if (kDebugMode) {
-              print("Photo taken!!!");
-            }
+            LogService.instance.registerLog("Photo taken!!!");
 
             // Flag to track if the dialog is still open
             bool isDialogOpen = true;
@@ -105,9 +101,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
       // Automatically transition to MasterScreen if no master is found
       autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
         if (!isConnected) {
-          if (kDebugMode) {
-            print("No master found, switching to Master mode.");
-          }
+          LogService.instance.registerLog("No master found, switching to Master mode.");
           _transitionToMasterScreen();
         }
       });
@@ -150,9 +144,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
     _masterDiscovery?.stopListening();
     _masterDiscovery = null;
 
-    if (kDebugMode) {
-      print("Cleaned up Slave mode.");
-    }
+    LogService.instance.registerLog("Cleaned up Slave mode.");
   }
 
 
@@ -167,9 +159,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
       _masterDiscovery = null;
     }
     catch(e){
-      if (kDebugMode) {
-        print(e);
-      }
+      LogService.instance.registerLog("Exception: $e");
     }
     super.dispose();
   }

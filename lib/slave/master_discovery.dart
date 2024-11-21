@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
+import '../services/log_service.dart';
 
 /// MasterDiscovery - Listens for master's broadcast message to discover its IP.
 /// Calls onMasterDiscovered with the master's IP once discovered.
@@ -17,9 +16,7 @@ class MasterDiscovery {
     await stopListening();
 
     _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, broadcastPort);
-    if (kDebugMode) {
-      print("Listening for master broadcast on port $broadcastPort...");
-    }
+    LogService.instance.registerLog("Listening for master broadcast on port $broadcastPort...");
 
     // Get current IP to avoid connecting to myself
     final localIp = await _getLocalIp();
@@ -29,22 +26,19 @@ class MasterDiscovery {
         final datagram = _socket?.receive();
         if (datagram != null) {
           final message = String.fromCharCodes(datagram.data);
-          print("Received broadcast message: $message from ${datagram.address.address}");
+          LogService.instance.registerLog("Received broadcast message: $message from ${datagram.address.address}");
           if (message == "MASTER_DISCOVERY") {
 
             final masterIp = datagram.address.address;
 
             // Avoid connecting to myself
             if (masterIp == localIp) {
-              if (kDebugMode) {
-                print("WARNING!: Ignored self-broadcast from $masterIp");
-              }
+              LogService.instance.registerLog("WARNING!: Ignored self-broadcast from $masterIp");
+
               return; // Ignore if it is local IP
             }
 
-            if (kDebugMode) {
-              print("Master discovered at IP: $masterIp");
-            }
+            LogService.instance.registerLog("Master discovered at IP: $masterIp");
             onMasterDiscovered(masterIp);
           }
         }
@@ -63,9 +57,7 @@ class MasterDiscovery {
         }
       }
     } catch (e) {
-      if (kDebugMode) {
-        print("Error retrieving local IP: $e");
-      }
+      LogService.instance.registerLog("Error retrieving local IP: $e");
     }
     return InternetAddress.anyIPv4.address;
   }
@@ -76,9 +68,7 @@ class MasterDiscovery {
     if (_socket != null) {
       _socket?.close();
       _socket = null;
-      if (kDebugMode) {
-        print("Stopped listening for master broadcast.");
-      }
+      LogService.instance.registerLog("Stopped listening for master broadcast.");
     }
   }
 }

@@ -6,8 +6,8 @@ import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
 import '../services/device_service.dart'; // Import for device ID service
 import 'dart:io';
-
 import '../services/hydracam_api_service.dart';
+import '../services/log_service.dart';
 
 class SlaveClient {
   final String serverAddress;
@@ -41,16 +41,12 @@ class SlaveClient {
   Future<void> connect() async {
 
     if (_isConnected) {
-      if (kDebugMode) {
-        print("Already connected to WebSocket. Skipping connection.");
-      }
+      LogService.instance.registerLog("Already connected to WebSocket. Skipping connection.");
       return;
     }
 
     _deviceId = await DeviceIdService.getOrCreateDeviceId(); // Retrieve or create device ID
-    if (kDebugMode) {
-      print("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
-    }
+    LogService.instance.registerLog("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
 
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));
@@ -69,7 +65,7 @@ class SlaveClient {
         'deviceId': _deviceId,
       }));
 
-      print("Connected to WebSocket at $serverAddress");
+      LogService.instance.registerLog("Connected to WebSocket at $serverAddress");
 
       // Start sending heartbeat messages
       _startHeartbeat();
@@ -77,7 +73,7 @@ class SlaveClient {
       _channel?.stream.listen(
             (message) {
 
-          print("Command received from master: $message");
+              LogService.instance.registerLog("Command received from master: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
           if (message.trim().startsWith('{') || message.trim().startsWith('[')) {
@@ -104,7 +100,7 @@ class SlaveClient {
               }
             } catch (e) {
               // Log an error if JSON decoding fails
-              print("Error decoding JSON message: $e");
+              LogService.instance.registerLog("Error decoding JSON message: $e");
             }
           } else {
             // Process non-JSON (simple text) messages as specific commands
@@ -126,22 +122,18 @@ class SlaveClient {
 
                 // Send serialized photo data to the master
                 _channel?.sink.add(jsonEncode(data));
-                if (kDebugMode) {
-                  print("Real photo data with timestamp and device ID sent to master.");
-                }
+                LogService.instance.registerLog("Real photo data with timestamp and device ID sent to master.");
               });
             } else if (message == 'startRecordingVideo') {
-              print("Starting video recording");
+              LogService.instance.registerLog("Starting video recording");
               // Start video recording and log the start timestamp
               videoStartRecordingDate = DateTime.now(); // TODO: USE IN CAMERA SERVICE AND NOT HERE! LIKE WITH MASTER
               _cameraService.startRecordingVideo();
               isRecordingVideo = true;
               onRecordingStarted?.call(); // Notify the UI
-              if (kDebugMode) {
-                print("Video recording started at: $videoStartRecordingDate");
-              }
+              LogService.instance.registerLog("Video recording started at: $videoStartRecordingDate");
             } else if (message == 'stopRecordingVideo') {
-              print("Stopping video recording");
+              LogService.instance.registerLog("Stopping video recording");
               // Stop video recording, timestamp it, and send video data to the master
               videoEndRecordingDate = DateTime.now();
               _cameraService.stopRecordingVideo().then((videoPath) async {
@@ -157,13 +149,11 @@ class SlaveClient {
                   'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
                 };
 
-                print("Send video to master");
+                LogService.instance.registerLog("Send video to master");
 
                 // Send serialized video data to the master
                 _channel?.sink.add(jsonEncode(data));
-                if (kDebugMode) {
-                  print("Video data with timestamps and device ID sent to master.");
-                }
+                LogService.instance.registerLog("Video data with timestamps and device ID sent to master.");
               });
               isRecordingVideo = false;
               onRecordingStopped?.call(); // Notify the UI
@@ -175,14 +165,14 @@ class SlaveClient {
         },
         onError: (error) {
           // Handle any errors in the WebSocket connection
-          print("Connection error: $error");
+          LogService.instance.registerLog("Connection error: $error");
           _isConnected = false;
           _stopHeartbeat();
           _attemptReconnect();
         },
         onDone: () {
           // Handle the WebSocket connection closing
-          print("Connection closed");
+          LogService.instance.registerLog("Connection closed");
           _isConnected = false;
           _stopHeartbeat();
           _attemptReconnect();
@@ -190,7 +180,7 @@ class SlaveClient {
       );
 
     } catch (e) {
-      print("Failed to connect to WebSocket at $serverAddress: $e");
+      LogService.instance.registerLog("Failed to connect to WebSocket at $serverAddress: $e");
       _isConnected = false;
       // Add a delay before reconnecting to prevent immediate retries on failure
       await Future.delayed(Duration(seconds: 2));  // <-- This line is added
@@ -206,9 +196,9 @@ class SlaveClient {
     bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
 
     if (success) {
-      print("Dispositivo notificó al servidor que está listo para transmitir.");
+      LogService.instance.registerLog("Dispositivo notificó al servidor que está listo para transmitir.");
     } else {
-      print("Fallo al notificar al servidor que está listo para transmitir.");
+      LogService.instance.registerLog("Fallo al notificar al servidor que está listo para transmitir.");
     }
   }
 
@@ -221,7 +211,7 @@ class SlaveClient {
           'deviceId': _deviceId,
           'timestamp': DateTime.now().toIso8601String(),
         }));
-        print("Sent heartbeat to master.");
+        //LogService.instance.registerLog("Sent heartbeat to master.");
       }
     });
   }
@@ -235,7 +225,7 @@ class SlaveClient {
     if (_reconnectTimer == null || !_reconnectTimer!.isActive) {
       _reconnectTimer = Timer.periodic(Duration(seconds: 5), (timer) {
         if (!_isConnected) {
-          print("Attempting to reconnect to master WebSocket...");
+          LogService.instance.registerLog("Attempting to reconnect to master WebSocket...");
           connect();
         } else {
           timer.cancel();
