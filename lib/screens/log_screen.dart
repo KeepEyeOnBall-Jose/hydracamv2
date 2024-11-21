@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import '../services/log_service.dart';
 
 /// A screen to display application logs.
-class LogScreen extends StatelessWidget {
+class LogScreen extends StatefulWidget {
   const LogScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final logs = LogService.instance.logs;
+  _LogScreenState createState() => _LogScreenState();
+}
 
+class _LogScreenState extends State<LogScreen> {
+  // Fetch logs dynamically from the service
+  List<Map<String, dynamic>> get logs => LogService.instance.logs;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Application Logs'),
@@ -16,7 +22,9 @@ class LogScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              LogService.instance.clearLogs();
+              setState(() {
+                LogService.instance.clearLogs(); // Clear logs and trigger a rebuild
+              });
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Logs cleared')),
               );

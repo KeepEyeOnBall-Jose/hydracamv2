@@ -22,7 +22,7 @@ class MasterAnnouncer {
         final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
         socket.broadcastEnabled = true;
         socket.send(message.codeUnits, InternetAddress("255.255.255.255"), broadcastPort);
-        LogService.instance.registerLog("Broadcast message sent: $message");
+        if(message != "MASTER_DISCOVERY") LogService.instance.registerLog("Broadcast message sent: $message");
         socket.close();
       }
       catch(e){

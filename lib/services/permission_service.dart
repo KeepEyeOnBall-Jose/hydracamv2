@@ -1,42 +1,47 @@
-/// A SERVICE THAT MANAGES ALL REQUIRED PERMISSIONS
-
+import 'dart:io'; // For platform detection
 import 'package:permission_handler/permission_handler.dart';
+import 'log_service.dart'; // Import your log service to register logs
 
 class PermissionService {
   /// Requests all required permissions and returns `true` if all are granted.
   static Future<bool> requestAllPermissions() async {
     // Permissions required for the app
-    final Map<Permission, PermissionStatus> statuses = await [
+    final permissions = <Permission>[
       Permission.camera,
-      Permission.storage,
-      Permission.photos, // For iOS photo access
+      if (Platform.isAndroid) Permission.storage,
+      if (Platform.isIOS) Permission.photos, // For iOS photo access
       Permission.location,
       Permission.microphone, // If videos require audio
-    ].request();
+    ];
+
+    final Map<Permission, PermissionStatus> statuses = await permissions.request();
+
+    // Separate permissions into granted and denied categories
+    final grantedPermissions = statuses.entries
+        .where((entry) => entry.value.isGranted)
+        .map((entry) => entry.key.toString())
+        .toList();
+
+    final deniedPermissions = statuses.entries
+        .where((entry) => !entry.value.isGranted)
+        .map((entry) => entry.key.toString())
+        .toList();
+
+    // Construct the log message
+    final logMessage = 'Permission request completed.\n'
+        'Granted: $grantedPermissions\n'
+        'Denied: $deniedPermissions';
+
+    // Log the permissions status
+    LogService.instance.registerLog(
+      logMessage,
+      function: 'requestAllPermissions',
+      file: 'PermissionService',
+    );
 
     // Check if all permissions are granted
     bool allGranted = statuses.values.every((status) => status.isGranted);
 
     return allGranted;
-  }
-
-  /// Checks if all required permissions are granted.
-  static Future<bool> checkPermissions() async {
-    return await Permission.camera.isGranted &&
-        await Permission.storage.isGranted &&
-        await Permission.photos.isGranted &&
-        await Permission.location.isGranted &&
-        await Permission.microphone.isGranted;
-  }
-
-  /// Requests a specific permission and returns its status.
-  static Future<bool> requestPermission(Permission permission) async {
-    final status = await permission.request();
-    return status.isGranted;
-  }
-
-  /// Opens the app settings for the user to manually grant permissions.
-  static Future<void> openAppSettings() async {
-    await openAppSettings();
   }
 }

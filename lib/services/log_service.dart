@@ -28,7 +28,7 @@ class LogService {
     };
     _logs.add(logEntry);
     if (kDebugMode) {
-      LogService.instance.registerLog('Log registered: $logEntry');
+      print('Log registered: $logEntry');
     }
   }
 
