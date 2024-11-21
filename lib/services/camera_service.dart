@@ -1,9 +1,15 @@
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
 class CameraService {
   CameraController? _controller;
+  CameraController? get controller => _controller;
+
   bool _isCameraInitialized = false; // Tracks camera initialization status
+
+  DateTime? videoStartRecordingDate;
+  DateTime? videoEndRecordingDate;
 
   Function(String)? onPhotoTaken; // Callback to notify SlaveScreen about photos
   Function(String)? onVideoRecorded; // Callback to notify SlaveScreen about videos
@@ -84,17 +90,27 @@ class CameraService {
         await _controller?.setFlashMode(FlashMode.torch); // Turn on flash for video recording
       }
 
+
+      videoStartRecordingDate = DateTime.now();
       await _controller?.startVideoRecording();
-      print("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
+      if (kDebugMode) {
+        print("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
+      }
     } catch (e) {
-      print("Error starting video recording: $e");
+      if (kDebugMode) {
+        print("Error starting video recording: $e");
+      }
     }
   }
 
   Future<String> stopRecordingVideo() async {
     try {
       final XFile video = await _controller!.stopVideoRecording();
-      print("Video recorded at path: ${video.path}");
+      videoEndRecordingDate = DateTime.now();
+
+      if (kDebugMode) {
+        print("Video recorded at path: ${video.path}");
+      }
 
       // Save to gallery
       await GallerySaver.saveVideo(video.path, albumName: 'HydraCam');
@@ -107,7 +123,9 @@ class CameraService {
 
       return video.path;
     } catch (e) {
-      print("Error stopping video recording: $e");
+      if (kDebugMode) {
+        print("Error stopping video recording: $e");
+      }
       return "Error stopping video recording";
     }
   }

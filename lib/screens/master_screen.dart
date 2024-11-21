@@ -12,6 +12,7 @@ import '../services/camera_service.dart';
 import '../services/hydracam_api_service.dart';
 import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
+import '../widgets/camera_preview_widget.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -106,19 +107,93 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
 
-  void _toggleRecording() {
+  void _toggleRecording() async {
     if (isRecording) {
+      // Stop recording
       _server.sendCommand('stopRecordingVideo');
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _stopMasterRecordingVideo();
+      }
       setState(() {
         isRecording = false;
       });
     } else {
+      // Start recording
       _server.sendCommand('startRecordingVideo');
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _startMasterRecordingVideo();
+      }
       setState(() {
         isRecording = true;
       });
     }
   }
+
+  Future<void> _startMasterRecordingVideo() async {
+    await _server.cameraService.startRecordingVideo();
+    // Show camera preview overlay
+    _showMasterVideoPreview();
+  }
+
+  Future<void> _stopMasterRecordingVideo() async {
+    String videoPath = await _server.cameraService.stopRecordingVideo();
+    // Hide camera preview overlay
+    _hideMasterVideoPreview();
+
+    // Add video to current session
+    final receivedDate = DateTime.now();
+    final capturedVideo = CapturedVideo(
+      videoData: null,
+      videoPath: videoPath,
+      slaveDeviceId: "Master",
+      startRecordingDate: _server.cameraService.videoStartRecordingDate!,
+      endRecordingDate: _server.cameraService.videoEndRecordingDate!,
+      receivedDate: receivedDate,
+    );
+
+    setState(() {
+      _server.currentSession?.addVideo(capturedVideo);
+    });
+
+    // Optionally, show a dialog to preview the recorded video
+    _showVideoDialog(capturedVideo);
+  }
+
+  void _showMasterVideoPreview() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Stack(
+          children: [
+            Positioned(
+              right: 10,
+              top: 80,
+              child: Draggable(
+                feedback: const SizedBox(),
+                childWhenDragging: const SizedBox(),
+                child: GestureDetector(
+                  onLongPress: () => Navigator.of(context).pop(), // Optionally allow closing
+                  child: SizedBox(
+                    width: 150,
+                    height: 200,
+                    child: CameraPreviewWidget(controller: _server.cameraService.controller!),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  void _hideMasterVideoPreview() {
+    Navigator.of(context).pop(); // Close the preview dialog
+  }
+
+
 
   void _takeRealPhoto() async {
     // Send command to slaves for taking pics

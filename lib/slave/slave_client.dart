@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert'; // Import for jsonEncode
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
@@ -24,8 +23,18 @@ class SlaveClient {
   DateTime? videoStartRecordingDate;
   DateTime? videoEndRecordingDate;
 
-  SlaveClient(this.serverAddress, {Function(String)? onPhotoTaken})
-      : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
+
+  // Add callbacks
+  final VoidCallback? onRecordingStarted;
+  final VoidCallback? onRecordingStopped;
+
+  SlaveClient(
+      this.serverAddress, {
+        Function(String)? onPhotoTaken,
+        this.onRecordingStarted,
+        this.onRecordingStopped,
+      }) : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
+
 
   Future<void> connect() async {
 
@@ -114,14 +123,19 @@ class SlaveClient {
 
                 // Send serialized photo data to the master
                 _channel?.sink.add(jsonEncode(data));
-                print("Real photo data with timestamp and device ID sent to master.");
+                if (kDebugMode) {
+                  print("Real photo data with timestamp and device ID sent to master.");
+                }
               });
             } else if (message == 'startRecordingVideo') {
               // Start video recording and log the start timestamp
-              videoStartRecordingDate = DateTime.now();
+              videoStartRecordingDate = DateTime.now(); // TODO: USE IN CAMERA SERVICE AND NOT HERE! LIKE WITH MASTER
               _cameraService.startRecordingVideo();
               isRecordingVideo = true;
-              print("Video recording started at: $videoStartRecordingDate");
+              onRecordingStarted?.call(); // Notify the UI
+              if (kDebugMode) {
+                print("Video recording started at: $videoStartRecordingDate");
+              }
             } else if (message == 'stopRecordingVideo') {
               // Stop video recording, timestamp it, and send video data to the master
               videoEndRecordingDate = DateTime.now();
@@ -140,9 +154,12 @@ class SlaveClient {
 
                 // Send serialized video data to the master
                 _channel?.sink.add(jsonEncode(data));
-                print("Video data with timestamps and device ID sent to master.");
+                if (kDebugMode) {
+                  print("Video data with timestamps and device ID sent to master.");
+                }
               });
               isRecordingVideo = false;
+              onRecordingStopped?.call(); // Notify the UI
             } else if (message == 'stopCamera') {
               // Stop the camera service when receiving 'stopCamera' command
               _cameraService.stopCamera();
