@@ -1,20 +1,24 @@
-import 'dart:io'; // For platform detection
+import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
-import 'log_service.dart'; // Import your log service to register logs
+import 'log_service.dart';
 
 class PermissionService {
   /// Requests all required permissions and returns `true` if all are granted.
   static Future<bool> requestAllPermissions() async {
-    // Permissions required for the app
+    // Add permissions based on the platform
     final permissions = <Permission>[
       Permission.camera,
-      if (Platform.isAndroid) Permission.storage,
-      if (Platform.isIOS) Permission.photos, // For iOS photo access
+      Permission.microphone,
+      if (Platform.isAndroid && Platform.version.startsWith('11'))
+        Permission.manageExternalStorage,
+      if (Platform.isAndroid && !Platform.version.startsWith('11'))
+        Permission.storage,
+      if (Platform.isIOS) Permission.photos,
       Permission.location,
-      Permission.microphone, // If videos require audio
     ];
 
-    final Map<Permission, PermissionStatus> statuses = await permissions.request();
+    // Request permissions
+    final statuses = await permissions.request();
 
     // Separate permissions into granted and denied categories
     final grantedPermissions = statuses.entries
@@ -40,8 +44,6 @@ class PermissionService {
     );
 
     // Check if all permissions are granted
-    bool allGranted = statuses.values.every((status) => status.isGranted);
-
-    return allGranted;
+    return statuses.values.every((status) => status.isGranted);
   }
 }
