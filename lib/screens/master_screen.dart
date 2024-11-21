@@ -14,6 +14,7 @@ import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/camera_preview_widget.dart';
 import '../widgets/hydra_cam_app_bar.dart';
+import '../widgets/master_video_recording_screen.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -113,19 +114,21 @@ class _MasterScreenState extends State<MasterScreen> {
       _server.sendCommand('stopRecordingVideo');
       if (await SettingsService.getMasterShouldRecord()) {
         await _stopMasterRecordingVideo();
+      } else {
+        setState(() {
+          isRecording = false;
+        });
       }
-      setState(() {
-        isRecording = false;
-      });
     } else {
       // Start recording
       _server.sendCommand('startRecordingVideo');
       if (await SettingsService.getMasterShouldRecord()) {
         await _startMasterRecordingVideo();
+      } else {
+        setState(() {
+          isRecording = true;
+        });
       }
-      setState(() {
-        isRecording = true;
-      });
     }
   }
 
@@ -135,10 +138,8 @@ class _MasterScreenState extends State<MasterScreen> {
     _showMasterVideoPreview();
   }
 
-  Future<void> _stopMasterRecordingVideo() async {
+  Future<CapturedVideo> _stopMasterRecordingVideo() async {
     String videoPath = await _server.cameraService.stopRecordingVideo();
-    // Hide camera preview overlay
-    _hideMasterVideoPreview();
 
     // Add video to current session
     final receivedDate = DateTime.now();
@@ -153,40 +154,38 @@ class _MasterScreenState extends State<MasterScreen> {
 
     setState(() {
       _server.currentSession?.addVideo(capturedVideo);
+      isRecording = false; // Update recording state
     });
 
-    // Optionally, show a dialog to preview the recorded video
-    _showVideoDialog(capturedVideo);
+    // Do not show the dialog here
+    // Return the captured video
+    return capturedVideo;
   }
 
-  void _showMasterVideoPreview() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return Stack(
-          children: [
-            Positioned(
-              right: 10,
-              top: 80,
-              child: Draggable(
-                feedback: const SizedBox(),
-                childWhenDragging: const SizedBox(),
-                child: GestureDetector(
-                  onLongPress: () => Navigator.of(context).pop(), // Optionally allow closing
-                  child: SizedBox(
-                    width: 150,
-                    height: 200,
-                    child: CameraPreviewWidget(controller: _server.cameraService.controller!),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+
+
+  void _showMasterVideoPreview() async {
+    final capturedVideo = await Navigator.push<CapturedVideo>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MasterVideoRecordingScreen(
+          cameraService: _server.cameraService,
+          onStopRecording: _stopMasterRecordingVideo,
+        ),
+      ),
     );
+
+    if (capturedVideo != null) {
+      // Delay showing the dialog to prevent any touch event conflicts
+      Future.delayed(Duration(milliseconds: 100), () {
+        if (mounted) {
+          _showVideoDialog(capturedVideo);
+        }
+      });
+    }
   }
+
+
 
 
   void _hideMasterVideoPreview() {
@@ -324,7 +323,7 @@ class _MasterScreenState extends State<MasterScreen> {
       },
     );
 
-    if (confirmEnd == true) {
+    if (confirmEnd != null && confirmEnd == true) {
       // Call API method endSession
       if (sessionGuid != null) {
         bool success = await _apiService.endSession(sessionGuid!);
@@ -493,15 +492,15 @@ class _MasterScreenState extends State<MasterScreen> {
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
-                onPressed: sessionGuid != null
+                onPressed: sessionGuid != null && !isRecording
                     ? () {
                   _toggleRecording();
                 }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isRecording ? Colors.red : Colors.green,
+                  backgroundColor: isRecording ? Colors.grey : Colors.green,
                 ),
-                child: Text(isRecording ? "Stop Recording" : "Start Recording"),
+                child: Text(isRecording ? "Recording..." : "Start Recording"),
               ),
             ),
             SizedBox(height: 10),
@@ -564,6 +563,9 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+
+        if (isRecording) return false;
+
         // Handle the back button press
         _server.stopServer();
         _announcer.stopBroadcasting();
