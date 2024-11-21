@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert'; // Import for jsonEncode
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 import '../services/camera_service.dart';
@@ -23,6 +24,7 @@ class SlaveClient {
   DateTime? videoStartRecordingDate;
   DateTime? videoEndRecordingDate;
 
+  CameraController? get cameraController => _cameraService.controller;
 
   // Add callbacks
   final VoidCallback? onRecordingStarted;
@@ -74,6 +76,7 @@ class SlaveClient {
 
       _channel?.stream.listen(
             (message) {
+
           print("Command received from master: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
@@ -128,6 +131,7 @@ class SlaveClient {
                 }
               });
             } else if (message == 'startRecordingVideo') {
+              print("Starting video recording");
               // Start video recording and log the start timestamp
               videoStartRecordingDate = DateTime.now(); // TODO: USE IN CAMERA SERVICE AND NOT HERE! LIKE WITH MASTER
               _cameraService.startRecordingVideo();
@@ -137,6 +141,7 @@ class SlaveClient {
                 print("Video recording started at: $videoStartRecordingDate");
               }
             } else if (message == 'stopRecordingVideo') {
+              print("Stopping video recording");
               // Stop video recording, timestamp it, and send video data to the master
               videoEndRecordingDate = DateTime.now();
               _cameraService.stopRecordingVideo().then((videoPath) async {
@@ -151,6 +156,8 @@ class SlaveClient {
                   'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
                   'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
                 };
+
+                print("Send video to master");
 
                 // Send serialized video data to the master
                 _channel?.sink.add(jsonEncode(data));

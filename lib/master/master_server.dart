@@ -241,6 +241,9 @@ class MasterServer {
   }
 
   void sendCommand(String command, {String? deviceId}) {
+
+    print("Sending command $command");
+
     if (_clients.isEmpty) {
       print("No slave devices connected. Command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {

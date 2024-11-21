@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
@@ -25,6 +26,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   bool isConnected = false;
   String statusMessage = "Waiting for camera commands...";
   Timer? autoModeTimer; // Timer for auto mode logic
+  bool isRecording = false;
 
   MasterDiscovery? _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
 
@@ -80,6 +82,8 @@ class _SlaveScreenState extends State<SlaveScreen> {
               }
             });
           },
+          onRecordingStarted: _handleRecordingStarted,
+          onRecordingStopped: _handleRecordingStopped,
         );
         _client?.connect();
         setState(() {
@@ -108,6 +112,22 @@ class _SlaveScreenState extends State<SlaveScreen> {
       });
     }
 
+  }
+
+  void _handleRecordingStarted() {
+    if(mounted){
+      setState(() {
+        isRecording = true;
+      });
+    }
+  }
+
+  void _handleRecordingStopped() {
+    if(mounted){
+      setState(() {
+        isRecording = false;
+      });
+    }
   }
 
   void _transitionToMasterScreen() {
@@ -176,16 +196,36 @@ class _SlaveScreenState extends State<SlaveScreen> {
             );
           },
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(statusMessage),
-              SizedBox(height: 20)
-              // Here camera preview or something
-              ,
-            ],
-          ),
+        body: Stack(
+          children: [
+            if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
+              Positioned.fill(
+                child: CameraPreview(_client!.cameraController!),
+              )
+            else
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(statusMessage),
+                    SizedBox(height: 20),
+                    // Any additional content
+                  ],
+                ),
+              ),
+            if (isRecording)
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    'Recording...',
+                    style: TextStyle(color: Colors.red, fontSize: 24),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

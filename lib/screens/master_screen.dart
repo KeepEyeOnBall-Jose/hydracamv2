@@ -109,12 +109,14 @@ class _MasterScreenState extends State<MasterScreen> {
 
 
   void _toggleRecording() async {
+    print("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
+
     if (isRecording) {
       // Stop recording
-      _server.sendCommand('stopRecordingVideo');
       if (await SettingsService.getMasterShouldRecord()) {
-        await _stopMasterRecordingVideo();
+        await _stopMasterRecordingVideo(); // Command is already sent from here
       } else {
+        _server.sendCommand('stopRecordingVideo'); // Command sent explicitly
         setState(() {
           isRecording = false;
         });
@@ -133,12 +135,17 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   Future<void> _startMasterRecordingVideo() async {
+    print("Will record from master and show preview");
     await _server.cameraService.startRecordingVideo();
     // Show camera preview overlay
     _showMasterVideoPreview();
   }
 
   Future<CapturedVideo> _stopMasterRecordingVideo() async {
+
+    // Send command to slaves before stoppin from master
+    _server.sendCommand('stopRecordingVideo');
+
     String videoPath = await _server.cameraService.stopRecordingVideo();
 
     // Add video to current session
@@ -492,15 +499,15 @@ class _MasterScreenState extends State<MasterScreen> {
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
-                onPressed: sessionGuid != null && !isRecording
+                onPressed: sessionGuid != null
                     ? () {
                   _toggleRecording();
                 }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isRecording ? Colors.grey : Colors.green,
+                  backgroundColor: isRecording ? Colors.red : Colors.green,
                 ),
-                child: Text(isRecording ? "Recording..." : "Start Recording"),
+                child: Text(isRecording ? "Stop Recording" : "Start Recording"),
               ),
             ),
             SizedBox(height: 10),
