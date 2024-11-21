@@ -38,6 +38,7 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 - **API Endpoint**: The application communicates with an API hosted on MoBo (keobmotherboardweb) to manage capture sessions.
 - **Session Creation**: When a new session starts, the master device sends a request to create a session on the API, receiving a GUID that identifies this session.
 - **Media Upload**: The master device uses the session GUID to upload media files (photos and videos) to the API.
+- **API Notification**: Although this is still WIP in API, Slave devices use `HydraCamApiService` to notify the external API when they are ready to transmit media. This notification includes the `deviceId` and the `sessionGuid`, ensuring proper association of media files with the active session.
 
 #### 6. Screens
 - **RoleSelectionScreen** (`screens/role_selection_screen.dart`): The initial screen where the user selects the device role, either "Master" or "Slave."
@@ -47,12 +48,28 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 ## Photo and Video Management
 - *On Slave Devices*: Photos and videos are captured and temporarily stored in local storage. The binary data is sent to the master, and then cleared from memory to save resources.
 - *On Master Devices*: The master device organizes received media into sessions and saves them locally. Once the session ends, the media is uploaded to the MoBo API.
+- **Media Storage**: Both photos and videos captured by slave devices are saved in the device gallery under a specific album named `HydraCam`. This ensures easy access to locally captured media for further use or review.
+
+### Flash Mode Control
+When capturing photos or videos, the `enableFlash` parameter can be used to dynamically toggle the flash. For example:
+- **Enable Flash**: Use `enableFlash: true` to turn on the flash for the duration of the photo or video capture.
+- **Disable Flash**: The flash is automatically turned off after the operation to save battery and avoid unintended usage.
+  This behavior is configurable in `CameraService` for both `takePhoto` and `startRecordingVideo`.
+
 
 ## Application Flow
 1. The **master device** starts by setting up a WebSocket server and broadcasts its presence.
-2. **Slave devices** discover the master using the broadcast and establish a WebSocket connection.
+2. **Slave Device Connection and Synchronization**:
+   - Slave devices discover the master using the broadcast and establish a WebSocket connection.
+   - After connecting to the master device, each slave sends its `deviceId` and requests the current session status by sending the command `getSessionStatus`.
+   - The master responds with session details, allowing slaves to synchronize their actions with the active session.
+
 3. Once connected, the master device sends commands for camera actions (e.g., taking a photo or recording a video) during a capture session.
-4. Captured media is transferred from slave devices to the master, organized into a session, and saved to local storage.
+4. **Captured Media Management**:
+   - Captured media is transferred from slave devices to the master, organized into a session, and saved to local storage.
+   - Photos and videos received by the master device are saved in session-specific directories.
+   - Additionally, photos are saved in the `HydraCam` album for easy local access.
+   - The media is then organized and uploaded to the external API at the end of the session.
 5. At the end of the session, the master device uploads the media files to an external API.
 
 
@@ -60,21 +77,9 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 
 lib/
 ├── main.dart                       # Main entry point of the application.
-├── core/
-│   ├── device.dart                // Base class for common device functions
-│   ├── network_service.dart       // Handles core network functionality
-│   ├── device_id_generator.dart   // Generates and manages unique device IDs
-│   ├── command_handler.dart       // Handles incoming and outgoing commands
 ├── master/
-│   ├── master_server.dart          # WebSocket server to communicate with slaves.
-│   └── master_announcer.dart       # Broadcasts the master device's presence.
-├── slave/
-│   ├── slave_client.dart           # WebSocket client for slave devices.
-│   └── master_discovery.dart       # Finds and connects to the master device.
-├── services/
-│   ├── camera_service.dart         # Manages camera operations on the slave devices.
-│   ├── hydracam_api_service.dart   # Handles API requests to upload media.
-│   └── permission_service.dart     # Ensures necessary permissions are granted.
+│   ├── master_announcer.dart       # Broadcasts the master device's presence.
+│   └── master_server.dart          # WebSocket server to communicate with slaves.
 ├── models/
 │   ├── CapturedPhoto.dart          # Represents a captured photo.
 │   ├── CapturedVideo.dart          # Represents a recorded video.
@@ -82,9 +87,20 @@ lib/
 ├── screens/
 │   ├── master_screen.dart          # Master control interface.
 │   ├── role_selection_screen.dart  # Initial screen for selecting device role.
+│   ├── settings_screen.dart        # Screen accessible from appbar to access app preferences.
 │   └── slave_screen.dart           # Slave interface for receiving commands.
+├── services/
+│   ├── camera_service.dart         # Manages camera operations on the devices.
+│   ├── device_id_provider.dart     # Provides device identification.
+│   ├── device_service.dart         # Retrieves or generates unique device IDs.
+│   ├── hydracam_api_service.dart   # Handles API requests to upload media.
+│   ├── settings_service.dart       # Manages read/write configurations over the app.
+│   └── permission_service.dart     # Ensures necessary permissions are granted.
+├── slave/
+│   ├── master_discovery.dart       # Finds and connects to the master device.
+│   └── slave_client.dart           # WebSocket client for slave devices.
 └── widgets/
-└── control_buttons.dart        # Reusable widget for control buttons.
+    └── Court_Selection_Widget.dart # Widget for court selection.
 
 
 ## Media Management and Memory Optimization
@@ -132,6 +148,18 @@ Captured photos and videos are managed efficiently to balance memory usage and p
 2. Detailed Camera Status Feedback: Enable each slave device to provide real-time status back to the master.
 3. Multi-angle Capture Synchronization: Enhance timing and synchronization precision for capturing multi-angle views of sports events.
 
+## Available settings
+These are the preferences that one can adjust in the settings screen:
+1. Master should record: Controls whether the master should also take a picture or video too when telling slaves to do so.
+
+## App Theme and Visual Style
+
+HydraCam uses a centralized theme system defined in the file `app_theme.dart`. This file contains all the primary colors, typography, and widget styles used throughout the app. It also includes examples of how to apply specific styles to individual widgets.
+
+The theme is applied globally in `main.dart`, ensuring consistent visual styles across the entire app.
+
+### **Modifying Styles**
+To customize the app's appearance, you can update the properties in `app_theme.dart`. Changes to colors, fonts, or widget styles will automatically reflect throughout the app. For details, refer to the examples provided within `app_theme.dart`.
 
 
 

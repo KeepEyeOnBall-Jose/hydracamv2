@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
 import '../constants.dart';
 import '../master/master_announcer.dart';
@@ -6,9 +7,13 @@ import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
-import '../services/device_service.dart';
+import '../services/camera_service.dart';
 import '../services/hydracam_api_service.dart';
+import '../services/log_service.dart';
+import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
+import '../widgets/hydra_cam_app_bar.dart';
+import '../widgets/master_video_recording_screen.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -16,7 +21,7 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
-  final MasterServer _server = MasterServer();
+  final MasterServer _server = MasterServer(CameraService());
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   final HydraCamApiService _apiService = HydraCamApiService(); // API service instance
 
@@ -38,12 +43,24 @@ class _MasterScreenState extends State<MasterScreen> {
   void initState() {
     super.initState();
     _server.onClientCountChange = (count) {
-      setState(() {
-        connectedClients = count;
-      });
+      if (mounted){
+        setState(() {
+          connectedClients = count;
+        });
+      }
     };
     _server.onMediaReceived = (media) {
       setState(() {});
+    };
+    // Configure callback to notify disconnection
+    _server.onClientRemoved = (deviceId, inactivityThreshold) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Client $deviceId disconnected after $inactivityThreshold seconds of inactivity.",
+          ),
+        ),
+      );
     };
     _server.startServer();
     _announcer.startBroadcasting();
@@ -51,54 +68,155 @@ class _MasterScreenState extends State<MasterScreen> {
 
   @override
   void dispose() {
-    _server.stopServer();
-    _announcer.stopBroadcasting();
+    try {
+      // Nullify callbacks to prevent setState() after dispose
+      _server.onClientCountChange = null;
+      _server.onMediaReceived = null;
+      _server.onClientRemoved = null;
+
+      // Stop server and announcer
+      _server.stopServer();
+      _announcer.stopBroadcasting();
+
+      // TODO: Handle session ending if necessary
+    } catch (e) {
+      LogService.instance.registerLog("Error during dispose: $e");
+    }
     super.dispose();
   }
+
+
 
   // Method to init a new session
   void _startOrEndSession() async {
     if (sessionActive) {
-      // End current session
+      // End the session
       _endCurrentSession();
     } else {
-      // Init the session
-      await _createSession();
+      // Start a new session
+      if (selectedCourtGuid != null) {
+        await _createSession();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Please select a court before starting a session.")),
+        );
+      }
     }
   }
 
-  void _toggleRecording() {
+
+  void _toggleRecording() async {
+    LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
+
     if (isRecording) {
-      _server.sendCommand('stopRecordingVideo');
-      setState(() {
-        isRecording = false;
-      });
+      // Stop recording
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _stopMasterRecordingVideo(); // Command is already sent from here
+      } else {
+        _server.sendCommand('stopRecordingVideo'); // Command sent explicitly
+        setState(() {
+          isRecording = false;
+        });
+      }
     } else {
+      // Start recording
       _server.sendCommand('startRecordingVideo');
-      setState(() {
-        isRecording = true;
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _startMasterRecordingVideo();
+      } else {
+        setState(() {
+          isRecording = true;
+        });
+      }
+    }
+  }
+
+  Future<void> _startMasterRecordingVideo() async {
+    LogService.instance.registerLog("Will record from master and show preview");
+    await _server.cameraService.startRecordingVideo();
+    // Show camera preview overlay
+    _showMasterVideoPreview();
+  }
+
+  Future<CapturedVideo> _stopMasterRecordingVideo() async {
+
+    // Send command to slaves before stoppin from master
+    _server.sendCommand('stopRecordingVideo');
+
+    String videoPath = await _server.cameraService.stopRecordingVideo();
+
+    // Add video to current session
+    final receivedDate = DateTime.now();
+    final capturedVideo = CapturedVideo(
+      videoData: null,
+      videoPath: videoPath,
+      slaveDeviceId: "Master",
+      startRecordingDate: _server.cameraService.videoStartRecordingDate!,
+      endRecordingDate: _server.cameraService.videoEndRecordingDate!,
+      receivedDate: receivedDate,
+    );
+
+    setState(() {
+      _server.currentSession?.addVideo(capturedVideo);
+      isRecording = false; // Update recording state
+    });
+
+    // Do not show the dialog here
+    // Return the captured video
+    return capturedVideo;
+  }
+
+
+
+  void _showMasterVideoPreview() async {
+    final capturedVideo = await Navigator.push<CapturedVideo>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MasterVideoRecordingScreen(
+          cameraService: _server.cameraService,
+          onStopRecording: _stopMasterRecordingVideo,
+        ),
+      ),
+    );
+
+    if (capturedVideo != null) {
+      // Delay showing the dialog to prevent any touch event conflicts
+      Future.delayed(Duration(milliseconds: 100), () {
+        if (mounted) {
+          _showVideoDialog(capturedVideo);
+        }
       });
     }
   }
 
-  void _startCamera() {
-    _server.sendCommand('startCamera');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Start camera command sent to slaves")),
-    );
-  }
-
-  void _simulateTakePhoto() {
-    _server.sendCommand('simulateTakePhoto');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Simulate photo command sent")),
-    );
-  }
-
-  void _takeRealPhoto() {
+  void _takeRealPhoto() async {
+    // Send command to slaves for taking pics
     _server.sendCommand('takePhoto');
+
+    // Verify if master should also take a pic
+    bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
+    if (shouldMasterRecord) {
+      final String photoPath = await _server.cameraService.takePhoto();
+
+      // Add photo to current session
+      final capturedPhoto = CapturedPhoto(
+        photoData: null,
+        photoPath: photoPath,
+        captureDate: DateTime.now(),
+        receivedDate: DateTime.now(),
+        slaveDeviceId: "Master",
+      );
+
+      setState(() {
+        _server.currentSession?.addPhoto(capturedPhoto);
+      });
+
+      // Show pop up for preview
+      _showPhotoDialog(capturedPhoto);
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Real photo command sent")),
+      SnackBar(content: Text("Photo command sent to slaves")),
     );
   }
 
@@ -115,7 +233,7 @@ class _MasterScreenState extends State<MasterScreen> {
               //Text("Received: ${photo.receivedDate}"),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Close"),
+                child: const Text("Close"),
               ),
             ],
           ),
@@ -135,13 +253,29 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
+  // Displays the number of connected devices and opens a modal for details
+  Widget _connectedDevicesWidget() {
+    return GestureDetector(
+      onTap: () => _showConnectedDevicesModal(context),
+      child: Column(
+        children: [
+          Text(
+            "Connected clients: $connectedClients",
+            style: const TextStyle(fontSize: 16, color: Colors.blue),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 
   Future<void> _createSession() async {
     var sessionId = DateTime.now().toIso8601String();
     var response = await _apiService.createSession(
         sessionId,
         courtGuid: selectedCourtGuid
-      );
+    );
 
     if (response != null) {
       sessionGuid = response['guid'];
@@ -184,7 +318,7 @@ class _MasterScreenState extends State<MasterScreen> {
       },
     );
 
-    if (confirmEnd == true) {
+    if (confirmEnd != null && confirmEnd == true) {
       // Call API method endSession
       if (sessionGuid != null) {
         bool success = await _apiService.endSession(sessionGuid!);
@@ -207,6 +341,14 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   void _uploadAllMedia() async {
+
+    if (photos.isEmpty && videos.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No media available to upload.")),
+      );
+      return;
+    }
+
     if (sessionGuid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("No session GUID available. Create a session first.")),
@@ -214,7 +356,7 @@ class _MasterScreenState extends State<MasterScreen> {
       return;
     }
 
-    print("Now upload photos");
+    LogService.instance.registerLog("Now upload photos");
     for (var photo in photos) {
       var file = File(photo.photoPath);
 
@@ -241,7 +383,7 @@ class _MasterScreenState extends State<MasterScreen> {
     }
 
 
-    print("Now upload videos");
+    LogService.instance.registerLog("Now upload videos");
     for (var video in videos) {
       var file = File(video.videoPath);
 
@@ -298,122 +440,85 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("HydraCam - Master Control"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () async {
-              Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Device Info"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: deviceInfo.entries.map((entry) {
-                        return Text('${entry.key}: ${entry.value}');
-                      }).toList(),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Close"),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+
+  Widget _buildInitialUI() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _connectedDevicesWidget(),
+        SizedBox(height: 20),
+        CourtSelectionWidget(
+          groupedCourts: groupedCourts,
+          onCourtSelected: (selectedName, selectedGuid) {
+            setState(() {
+              selectedCourtName = selectedName;
+              selectedCourtGuid = selectedGuid;
+            });
+          },
+        ),
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: selectedCourtGuid != null ? _startOrEndSession : null,
+          child: Text("Start Session"),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSessionUI() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final buttonWidth = constraints.maxWidth * 0.8; // El 80% del ancho total
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
-            SizedBox(height: 10),
-            CourtSelectionWidget(
-              groupedCourts: groupedCourts,
-              onCourtSelected: (selectedName, selectedGuid) {
-                setState(() {
-                  selectedCourtName = selectedName;
-                  selectedCourtGuid = selectedGuid;
-                });
-                print("Court Selected: $selectedName, GUID: $selectedGuid");
-              },
+            _connectedDevicesWidget(),
+            SizedBox(height: 20),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: sessionGuid != null ? _takeRealPhoto : null,
+                child: Text("Take Photo"),
+              ),
             ),
             SizedBox(height: 10),
-            GestureDetector(
-              onTap: () => _showConnectedDevicesModal(context),
-              child: Text(
-                "Connected clients: $connectedClients",
-                style: TextStyle(fontSize: 16, color: Colors.blue),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: sessionGuid != null
+                    ? () {
+                  _toggleRecording();
+                }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isRecording ? Colors.red : Colors.green,
+                ),
+                child: Text(isRecording ? "Stop Recording" : "Start Recording"),
               ),
             ),
-            //Text("Session ID: ${sessionId ?? 'Not started'}"),
-            Text("Session GUID: ${sessionGuid ?? 'Not available'}"), //TODO: This in the class!!!
-
-            SizedBox(height: 20),
-            /*ElevatedButton(
-              onPressed: () {
-                _server.startNewSession();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("New capture session started")),
-                );
-              },
-              child: Text("Start New Session"),
-            ),*/
-            // Botón único para iniciar/terminar sesión
-            ElevatedButton(
-              onPressed: _startOrEndSession,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: sessionActive ? Colors.red : Colors.green,
+            SizedBox(height: 10),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: (photos.isNotEmpty || videos.isNotEmpty) && sessionGuid != null
+                    ? _uploadAllMedia
+                    : null,
+                child: Text("Upload All Media"),
               ),
-              child: Text(sessionActive ? "End Current Session" : "Start New Session"),
             ),
-            /*ElevatedButton(
-              onPressed: () {
-                _server.endCurrentSession();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Capture session ended")),
-                );
-              },
-              child: Text("End Current Session"),
-            ),*/
-            ElevatedButton(
-              onPressed: _startCamera,
-              child: Text("Start Camera on Slaves"),
+            SizedBox(height: 10),
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: sessionGuid != null ? _startOrEndSession : null,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: Text("End Session"),
+              ),
             ),
             SizedBox(height: 20),
-            /*ElevatedButton(
-              onPressed: _simulateTakePhoto,
-              child: Text("Simulate Take Photo on Slaves"),
-            ),
-            SizedBox(height: 20),*/
-            ElevatedButton(
-              onPressed: _takeRealPhoto,
-              child: Text("Take Real Photo on Slaves"),
-            ),
-            ElevatedButton(
-              onPressed: _toggleRecording,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isRecording ? Colors.red : Colors.green,
-              ),
-              child: Text(isRecording ? "Stop Recording Video" : "Start Recording Video"),
-            ),
-
-            ElevatedButton(
-              onPressed: _uploadAllMedia,
-              child: Text("Upload All Media"),
-            ),
-
+            // List to display photos and videos
             Expanded(
               child: ListView.builder(
                 itemCount: photos.length + videos.length,
@@ -422,7 +527,7 @@ class _MasterScreenState extends State<MasterScreen> {
                     final photo = photos[index];
                     return ListTile(
                       leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                      title: Text("Photo from Slave: ${photo.slaveDeviceId}"),
+                      title: Text("Photo from: ${photo.slaveDeviceId}"),
                       subtitle: Text(
                         "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
                       ),
@@ -432,9 +537,9 @@ class _MasterScreenState extends State<MasterScreen> {
                     final video = videos[index - photos.length];
                     return ListTile(
                       leading: Icon(Icons.videocam, size: 50),
-                      title: Text("Video from Slave: ${video.slaveDeviceId}"),
+                      title: Text("Video from: ${video.slaveDeviceId}"),
                       subtitle: Text(
-                        "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}\nReceived: ${video.receivedDate}",
+                        "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}",
                       ),
                       onTap: () => _showVideoDialog(video),
                     );
@@ -443,10 +548,65 @@ class _MasterScreenState extends State<MasterScreen> {
               ),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+
+        if (isRecording) return false;
+
+        // Handle the back button press
+        _server.stopServer();
+        _announcer.stopBroadcasting();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+        );
+        return false; // Prevent the default behavior
+      },
+      child: Scaffold(
+        appBar: HydraCamAppBar(
+          title: "HydraCam - Master Control",
+          onBack: () {
+            _server.stopServer();
+            _announcer.stopBroadcasting();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+            );
+          },
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Display session active status at the top
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                sessionActive
+                    ? "Session Active: $sessionGuid"
+                    : "",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
+            ),
+            // Centered UI for session management
+            Expanded(
+              child: Center(
+                child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
+              ),
+            ),
+          ],
+        ),
+      )
+    );
+  }
+
 }
 
 /// VideoPlayerScreen - A widget to play video using the video_player plugin.

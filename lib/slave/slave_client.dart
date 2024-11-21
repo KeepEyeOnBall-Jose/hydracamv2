@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert'; // Import for jsonEncode
-import 'dart:typed_data';
+import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
 import '../services/device_service.dart'; // Import for device ID service
-import 'dart:io';
-
 import '../services/hydracam_api_service.dart';
+import '../services/log_service.dart';
 
 class SlaveClient {
   final String serverAddress;
@@ -15,24 +17,56 @@ class SlaveClient {
   bool _isConnected = false;
   bool isRecordingVideo = false; // Flag to track video recording state
   Timer? _reconnectTimer;
+  Timer? _heartbeatTimer; // Timer for sending heartbeat
   String? _deviceId; // Store the device ID
+
+  // Lists to store photos and videos locally //TODO REFACTOR SO WE DONT DUPLICATE THIS WITH MASTER
+  final List<CapturedPhoto> _photos = [];
+  final List<CapturedVideo> _videos = [];
+
+  List<CapturedPhoto> get photos => _photos;
+  List<CapturedVideo> get videos => _videos;
+
+  // StreamController to broadcast status messages
+  final StreamController<String> _statusStreamController = StreamController.broadcast();
+  Stream<String> get statusStream => _statusStreamController.stream;
 
   // To store timestamps
   DateTime? photoCaptureDate;
   DateTime? videoStartRecordingDate;
   DateTime? videoEndRecordingDate;
 
-  SlaveClient(this.serverAddress, {Function(String)? onPhotoTaken})
-      : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
+  CameraController? get cameraController => _cameraService.controller;
+
+  // Add callbacks
+  final VoidCallback? onRecordingStarted;
+  final VoidCallback? onRecordingStopped;
+
+  SlaveClient(
+      this.serverAddress, {
+        Function(String)? onPhotoTaken,
+        this.onRecordingStarted,
+        this.onRecordingStopped,
+      }) : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
+
 
   Future<void> connect() async {
+
+    if (_isConnected) {
+      LogService.instance.registerLog("Already connected to WebSocket. Skipping connection.");
+      _statusStreamController.add("Already connected to WebSocket. Skipping connection.");
+      return;
+    }
+
     _deviceId = await DeviceIdService.getOrCreateDeviceId(); // Retrieve or create device ID
-    print("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
+    _statusStreamController.add("Attempting to connect to master at $serverAddress...");
+    LogService.instance.registerLog("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
 
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));
 
       _isConnected = true;
+      _statusStreamController.add("Connected to master at $serverAddress.");
 
       // Send a JSON message containing the device ID after connecting
       _channel?.sink.add(jsonEncode({
@@ -46,11 +80,16 @@ class SlaveClient {
         'deviceId': _deviceId,
       }));
 
-      print("Connected to WebSocket at $serverAddress");
+      LogService.instance.registerLog("Connected to WebSocket at $serverAddress");
+
+      // Start sending heartbeat messages
+      _startHeartbeat();
 
       _channel?.stream.listen(
             (message) {
-          print("Command received from master: $message");
+
+              LogService.instance.registerLog("Command received from master: $message");
+              _statusStreamController.add("Received command: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
           if (message.trim().startsWith('{') || message.trim().startsWith('[')) {
@@ -77,88 +116,106 @@ class SlaveClient {
               }
             } catch (e) {
               // Log an error if JSON decoding fails
-              print("Error decoding JSON message: $e");
+              LogService.instance.registerLog("Error decoding JSON message: $e");
             }
           } else {
             // Process non-JSON (simple text) messages as specific commands
-            if (message == 'startCamera') {
-              _cameraService.startCamera();
-            } else if (message == 'simulateTakePhoto') {
-              // Send a confirmation message to the master when simulating a photo
-              _channel?.sink.add("Simulated photo taken");
-              print("Simulated photo confirmation sent to master.");
-            } else if (message == 'takePhoto') {
-              // Capture a photo, timestamp it, and send the data to the master
-              photoCaptureDate = DateTime.now();
-              _cameraService.takePhoto().then((photoPath) async {
-                final file = File(photoPath);
-                final Uint8List photoData = await file.readAsBytes();
-
-                // Prepare the data including type, device ID, photo data, and capture timestamp
-                final data = {
-                  'type': 'photo',
-                  'deviceId': _deviceId,
-                  'data': photoData,
-                  'captureDate': photoCaptureDate!.toIso8601String(),
-                };
-
-                // Send serialized photo data to the master
-                _channel?.sink.add(jsonEncode(data));
-                print("Real photo data with timestamp and device ID sent to master.");
-              });
-            } else if (message == 'startRecordingVideo') {
-              // Start video recording and log the start timestamp
-              videoStartRecordingDate = DateTime.now();
-              _cameraService.startRecordingVideo();
-              isRecordingVideo = true;
-              print("Video recording started at: $videoStartRecordingDate");
-            } else if (message == 'stopRecordingVideo') {
-              // Stop video recording, timestamp it, and send video data to the master
-              videoEndRecordingDate = DateTime.now();
-              _cameraService.stopRecordingVideo().then((videoPath) async {
-                final file = File(videoPath);
-                final Uint8List videoData = await file.readAsBytes();
-
-                // Prepare the data including type, device ID, video data, and timestamps
-                final data = {
-                  'type': 'video',
-                  'deviceId': _deviceId,
-                  'data': videoData,
-                  'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
-                  'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
-                };
-
-                // Send serialized video data to the master
-                _channel?.sink.add(jsonEncode(data));
-                print("Video data with timestamps and device ID sent to master.");
-              });
-              isRecordingVideo = false;
-            } else if (message == 'stopCamera') {
-              // Stop the camera service when receiving 'stopCamera' command
-              _cameraService.stopCamera();
-            }
+            _processCommand(message);
           }
         },
         onError: (error) {
           // Handle any errors in the WebSocket connection
-          print("Connection error: $error");
+          LogService.instance.registerLog("Connection error: $error");
+          _statusStreamController.add("Connection error: $error");
           _isConnected = false;
+          _stopHeartbeat();
           _attemptReconnect();
         },
         onDone: () {
           // Handle the WebSocket connection closing
-          print("Connection closed");
+          LogService.instance.registerLog("Connection closed");
+          _statusStreamController.add("Connection closed.");
           _isConnected = false;
+          _stopHeartbeat();
           _attemptReconnect();
         },
       );
 
     } catch (e) {
-      print("Failed to connect to WebSocket at $serverAddress: $e");
+      _statusStreamController.add("Failed to connect: $e");
+      LogService.instance.registerLog("Failed to connect to WebSocket at $serverAddress: $e");
       _isConnected = false;
       // Add a delay before reconnecting to prevent immediate retries on failure
       await Future.delayed(Duration(seconds: 2));  // <-- This line is added
       _attemptReconnect();
+    }
+  }
+
+  void _processCommand(String message) {
+    if (message == 'takePhoto') {
+      photoCaptureDate = DateTime.now();
+      _cameraService.takePhoto().then((photoPath) async {
+        final receivedDate = DateTime.now();
+
+        // Save the photo locally
+        final capturedPhoto = CapturedPhoto(
+          photoData: null,
+          photoPath: photoPath,
+          captureDate: photoCaptureDate!,
+          receivedDate: receivedDate,
+          slaveDeviceId: "Slave",
+        );
+        _photos.add(capturedPhoto);
+
+        // Update the UI
+        _statusStreamController.add("Photo taken and saved locally.");
+
+        // Commented out: Sending to master
+        // final file = File(photoPath);
+        // final Uint8List photoData = await file.readAsBytes();
+        // _channel?.sink.add(jsonEncode({...}));
+      });
+    }
+    else if (message == 'startRecordingVideo') {
+      LogService.instance.registerLog("Starting video recording");
+      videoStartRecordingDate = DateTime.now();
+      _cameraService.startRecordingVideo();
+      isRecordingVideo = true;
+      onRecordingStarted?.call();
+      _statusStreamController.add("Recording video...");
+    }
+    else if (message == 'stopRecordingVideo') {
+      LogService.instance.registerLog("Stopping video recording");
+      videoEndRecordingDate = DateTime.now();
+      _cameraService.stopRecordingVideo().then((videoPath) async {
+        final receivedDate = DateTime.now();
+
+        // Save the video locally
+        final capturedVideo = CapturedVideo(
+          videoData: null,
+          videoPath: videoPath,
+          slaveDeviceId: "Slave",
+          startRecordingDate: videoStartRecordingDate!,
+          endRecordingDate: videoEndRecordingDate!,
+          receivedDate: receivedDate,
+        );
+        _videos.add(capturedVideo);
+
+        // Update the UI
+        _statusStreamController.add("Video recording stopped and saved locally.");
+
+        isRecordingVideo = false;
+        onRecordingStopped?.call();
+
+        // Commented out: Sending to master
+        // final file = File(videoPath);
+        // final Uint8List videoData = await file.readAsBytes();
+        // _channel?.sink.add(jsonEncode({...}));
+      });
+    }
+    else if (message == 'stopCamera') {
+      // Stop the camera service when receiving 'stopCamera' command
+      _cameraService.stopCamera();
     }
   }
 
@@ -170,18 +227,36 @@ class SlaveClient {
     bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
 
     if (success) {
-      print("Dispositivo notificó al servidor que está listo para transmitir.");
+      LogService.instance.registerLog("Dispositivo notificó al servidor que está listo para transmitir.");
     } else {
-      print("Fallo al notificar al servidor que está listo para transmitir.");
+      LogService.instance.registerLog("Fallo al notificar al servidor que está listo para transmitir.");
     }
   }
 
+  void _startHeartbeat() {
+    _stopHeartbeat(); // Ensure no duplicate timers
+    _heartbeatTimer = Timer.periodic(Duration(seconds: 5), (_) {
+      if (_isConnected) {
+        _channel?.sink.add(jsonEncode({
+          'type': 'heartbeat',
+          'deviceId': _deviceId,
+          'timestamp': DateTime.now().toIso8601String(),
+        }));
+        //LogService.instance.registerLog("Sent heartbeat to master.");
+      }
+    });
+  }
+
+  void _stopHeartbeat() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+  }
 
   void _attemptReconnect() {
     if (_reconnectTimer == null || !_reconnectTimer!.isActive) {
       _reconnectTimer = Timer.periodic(Duration(seconds: 5), (timer) {
         if (!_isConnected) {
-          print("Attempting to reconnect to master WebSocket...");
+          LogService.instance.registerLog("Attempting to reconnect to master WebSocket...");
           connect();
         } else {
           timer.cancel();

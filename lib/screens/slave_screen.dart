@@ -1,125 +1,318 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import '../services/device_service.dart';
+import 'package:sport_cam_sync/screens/role_selection_screen.dart';
+import '../globals.dart';
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
+import '../services/log_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
+import '../widgets/hydra_cam_app_bar.dart';
+import 'master_screen.dart';
 
 class SlaveScreen extends StatefulWidget {
+
+  // Mode that controls if we entered here manually or on app init.
+  // If is auto mode, after some time without finding master will move automatically to master screen
+  final bool isAutoMode;
+  const SlaveScreen({super.key, this.isAutoMode = false}); // Default is manual mode
+
   @override
   _SlaveScreenState createState() => _SlaveScreenState();
 }
 
 class _SlaveScreenState extends State<SlaveScreen> {
   SlaveClient? _client;
+  StreamSubscription<String>? _statusSubscription; // Subscription to listen to status updates
   bool isConnected = false;
   String statusMessage = "Waiting for camera commands...";
+  Timer? autoModeTimer; // Timer for auto mode logic
+  bool isRecording = false;
+
+  MasterDiscovery? _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
+
+
+  // Add lists for photos and videos //TODO EXTRACT TO AVOID REPEAT CODE WITH MASTER
+  List<CapturedPhoto> photos = [];
+  List<CapturedVideo> videos = [];
+
 
   @override
   void initState() {
     super.initState();
 
-    MasterDiscovery(onMasterDiscovered: (masterIp) {
+    _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
       if (!isConnected) {
-        print("Connecting to master at IP: $masterIp");
+        LogService.instance.registerLog("Connecting to master at IP: $masterIp");
         _client = SlaveClient(
           'ws://$masterIp:4040/ws',
           onPhotoTaken: (path) {
+            if (!mounted) return; //TODO: CHeck if this should always be mounted and therefor be a problem here or is ok
             setState(() {
               statusMessage = "Photo taken!";
+              photos = _client!.photos; // Update photos
             });
+            LogService.instance.registerLog("Photo taken!!!");
+
+            // Flag to track if the dialog is still open
+            bool isDialogOpen = true;
 
             // Show the taken photo in a modal
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text("Photo Taken"),
+                title: const Text("Photo Taken"),
                 content: Image.file(File(path)),
                 actions: [
                   TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text("Close"),
+                    onPressed: () {
+                      // Mark the dialog as closed and manually close it
+                      isDialogOpen = false;
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Close"),
                   ),
                 ],
               ),
-            );
-            // Automatically close after 5 seconds
-            Future.delayed(Duration(seconds: 5), () {
-              if (Navigator.canPop(context)) {
+            ).then((_) {
+              // When the dialog is closed (manually or automatically), mark it as closed
+              isDialogOpen = false;
+            });
+
+            // Automatically close after N seconds
+            Future.delayed(Duration(seconds: secondsToClosePhoto), () {
+              if (isDialogOpen && Navigator.canPop(context)) {
                 Navigator.pop(context);
               }
             });
           },
+          onRecordingStarted: _handleRecordingStarted,
+          onRecordingStopped: _handleRecordingStopped,
         );
         _client?.connect();
+
+
+        // Listen to the client's status stream
+        _statusSubscription = _client?.statusStream.listen((message) {
+          if (mounted) {
+            setState(() {
+              statusMessage = message;
+              photos = _client!.photos;
+              videos = _client!.videos;
+            });
+          }
+        });
+
+
         setState(() {
           isConnected = true;
           statusMessage = "Connected to master at $masterIp";
         });
+
+        if (widget.isAutoMode) {
+          autoModeTimer?.cancel(); // Stop auto mode if master is found
+        }
       }
-    }).startListening();
+    });
+
+    _masterDiscovery?.startListening();
+
+
+    if (widget.isAutoMode) {
+      // Automatically transition to MasterScreen if no master is found
+      autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
+        if (!isConnected) {
+          LogService.instance.registerLog("No master found, switching to Master mode.");
+          _transitionToMasterScreen();
+        }
+      });
+    }
+
   }
+
+  void _handleRecordingStarted() {
+    if(mounted){
+      setState(() {
+        isRecording = true;
+      });
+    }
+  }
+
+  void _handleRecordingStopped() {
+    if(mounted){
+      setState(() {
+        isRecording = false;
+        videos = _client!.videos; // Update videos
+      });
+    }
+  }
+
+  void _transitionToMasterScreen() {
+    // Stop any activity related to Slave
+    _cleanUpSlaveMode();
+
+    // Move to master screen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MasterScreen()),
+    );
+  }
+
+  void _cleanUpSlaveMode() {
+    _statusSubscription?.cancel(); // Cancel the stream subscription
+    _client?.disconnect();
+    _client = null;
+    autoModeTimer?.cancel();
+    autoModeTimer = null;
+    _masterDiscovery?.stopListening();
+    _masterDiscovery = null;
+
+    LogService.instance.registerLog("Cleaned up Slave mode.");
+  }
+
 
   @override
   void dispose() {
-    _client?.disconnect();
+    try{
+      _statusSubscription?.cancel(); // Cancel the subscription to avoid memory leaks
+      _client?.disconnect();
+      _client = null;
+      autoModeTimer?.cancel();
+      autoModeTimer = null;
+      _masterDiscovery?.stopListening();
+      _masterDiscovery = null;
+    }
+    catch(e){
+      LogService.instance.registerLog("Exception: $e");
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("HydraCam - Slave Device"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () async {
-              Map<String, dynamic> deviceInfo = await DeviceIdService.getDeviceInfo();
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Device Info"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: deviceInfo.entries.map((entry) {
-                        return Text('${entry.key}: ${entry.value}');
-                      }).toList(),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Close"),
+    return WillPopScope(
+      onWillPop: () async {
+        _cleanUpSlaveMode();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+        );
+        return false;
+      },
+      child: Scaffold(
+        appBar: HydraCamAppBar(
+          title: "HydraCam - Slave Device",
+          onBack: () {
+            _cleanUpSlaveMode();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+            );
+          },
+        ),
+        body: Column(
+          children:[
+            Expanded(
+              child: Stack(
+                children: [
+                  if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
+                    Positioned.fill(
+                      child: CameraPreview(_client!.cameraController!),
+                    )
+                  else
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            statusMessage,
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
+                          if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+                            const Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: CircularProgressIndicator(),
+                            ),
+                        ],
                       ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(statusMessage),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  statusMessage = "Photo taken";
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Photo taken")),
-                );
-              },
-              child: Text("Simulate Take Photo"),
+                    ),
+                  if (isRecording)
+                    const Positioned(
+                      bottom: 20,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Text(
+                          'Recording...',
+                          style: TextStyle(color: Colors.red, fontSize: 24),
+                        ),
+                      ),
+                    ),
+                ],
+              )
             ),
-          ],
+            // Photo and video list
+            Expanded(
+              child: ListView.builder(
+                itemCount: photos.length + videos.length,
+                itemBuilder: (context, index) {
+                  if (index < photos.length) {
+                    final photo = photos[index];
+                    return ListTile(
+                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                      title: Text("Photo"),
+                      subtitle: Text("Captured: ${photo.captureDate}"),
+                      onTap: () => _showPhotoDialog(photo),
+                    );
+                  } else {
+                    final video = videos[index - photos.length];
+                    return ListTile(
+                      leading: Icon(Icons.videocam, size: 50),
+                      title: Text("Video"),
+                      subtitle: Text("Started: ${video.startRecordingDate}"),
+                      onTap: () => _showVideoDialog(video),
+                    );
+                  }
+                },
+              ),
+            ),
+          ]
         ),
       ),
+    );
+  }
+// TODO: EXTRACT TO WIDGET TO AVOID REPEAT CODE WITH MASTER
+  void _showPhotoDialog(CapturedPhoto photo) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.file(File(photo.photoPath)),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Close"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showVideoDialog(CapturedVideo video) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: VideoPlayerScreen(videoPath: video.videoPath),
+        );
+      },
     );
   }
 }

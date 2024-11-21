@@ -1,57 +1,69 @@
+import 'dart:async';
 import 'dart:convert'; // Import for jsonDecode
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import '../globals.dart';
 import '../models/CaptureSession.dart';
-import '../models/CapturedPhoto.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/CapturedVideo.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
+import '../services/camera_service.dart';
+import '../services/log_service.dart';
 
 class MasterServer {
   HttpServer? _server;
   final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
+  final Map<String, DateTime> _lastHeartbeat = {}; // Track last heartbeat per client
+  Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
   CaptureSession? currentSession; // Current Capture Session
   List<CaptureSession> sessionHistory = []; // List to store past sessions
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
+  Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
+
+  final CameraService cameraService; // Camera service here so master can also take pics
+
+  MasterServer(this.cameraService);
 
   Future<void> startServer() async {
     try {
       _server = await HttpServer.bind('0.0.0.0', 4040);
-      print("WebSocket Server successfully started on port 4040");
+      LogService.instance.registerLog("WebSocket Server successfully started on port 4040");
+
+      // Init check to verify inactive clients
+      _startHeartbeatCheck();
 
       await for (HttpRequest request in _server!) {
         if (request.uri.path == '/ws') {
           var socket = await WebSocketTransformer.upgrade(request);
-          print("New WebSocket client connected.");
+          LogService.instance.registerLog("New WebSocket client connected.");
 
+          String? deviceId;
+
+          // Listen to client messages
           socket.listen((data) async {
             try {
-              // Try decode JSON
+              // Decode message
               final decodedData = jsonDecode(data as String);
-              print("Data received from slave: $decodedData");
+              LogService.instance.registerLog("Data received from slave: $decodedData");
 
               if (decodedData is Map<String, dynamic>) {
                 String? messageType = decodedData['type'];
-                String deviceId = decodedData['deviceId'] ?? 'Unknown';
+                deviceId = decodedData['deviceId'] ?? 'Unknown';
 
-                // Manage each type of message
-                if (messageType == 'getSessionStatus') {
-                  String deviceId = decodedData['deviceId'] ?? 'Unknown';
-                  var sessionStatusResponse = jsonEncode({
-                    'command': 'sessionStatus',
-                    'sessionGuid': currentSession?.sessionGuid ?? '',
-                  });
-                  socket.add(sessionStatusResponse);
-                }
-
-
+                // Register client
                 if (messageType == 'deviceId') {
-                  // Register client with deviceId
-                  _clients[deviceId] = socket;
-                  _notifyClientCount();
-                  print("Registered new slave with deviceId: $deviceId");
-                } else if (messageType == 'photo' || messageType == 'video') {
+                  if (deviceId != null) {
+                    _clients[deviceId!] = socket;
+                    _notifyClientCount();
+                    LogService.instance.registerLog("Registered new slave with deviceId: $deviceId");
+
+                  }
+
+                }
+                // Receive media
+                else if (messageType == 'photo' || messageType == 'video') {
                   // Process media data
                   final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
                   final String filePath = await _saveMediaLocally(binaryData, messageType == 'photo');
@@ -64,40 +76,57 @@ class MasterServer {
                       photoPath: filePath,
                       captureDate: captureDate,
                       receivedDate: receivedDate,
-                      slaveDeviceId: deviceId,
+                      slaveDeviceId: deviceId!,
                     );
                     currentSession?.addPhoto(receivedPhoto);
                     onMediaReceived?.call(receivedPhoto);
-                    print("Photo from slave device ($deviceId) received and stored at: $filePath");
+                    LogService.instance.registerLog("Photo from slave device ($deviceId) received and stored at: $filePath");
                   } else if (messageType == 'video') {
                     final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
                     final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
                     final receivedVideo = CapturedVideo(
                       videoData: null,
                       videoPath: filePath,
-                      slaveDeviceId: deviceId,
+                      slaveDeviceId: deviceId!,
                       startRecordingDate: startRecordingDate,
                       endRecordingDate: endRecordingDate,
                       receivedDate: receivedDate,
                     );
                     currentSession?.addVideo(receivedVideo);
                     onMediaReceived?.call(receivedVideo);
-                    print("Video from slave device ($deviceId) received and stored at: $filePath");
+                    LogService.instance.registerLog("Video from slave device ($deviceId) received and stored at: $filePath");
                   }
-                } else {
-                  print("Unexpected message type: $messageType");
+                }
+
+                // Receive heartbeats from slaves
+                else if (messageType == 'heartbeat') {
+                  if (deviceId != null) {
+                    _lastHeartbeat[deviceId!] = DateTime.now(); // Update last heartbeat
+                    LogService.instance.registerLog("Received heartbeat from $deviceId");
+                  }
                 }
               } else {
-                print("Unexpected data format received: $data");
+                LogService.instance.registerLog("Unexpected data format received: $data");
               }
             } catch (e) {
-              print("Error decoding data or handling media: $e");
+              LogService.instance.registerLog("Error decoding data: $e");
             }
           }, onDone: () {
-            // Delete client on disconnect
-            _clients.removeWhere((key, value) => value == socket);
-            _notifyClientCount();
-            print("Client disconnected. Total connected clients: ${_clients.length}");
+            // Manage client disconnection
+            if (deviceId != null) {
+              _clients.remove(deviceId);
+              _lastHeartbeat.remove(deviceId); // Clean heartbeat data
+              _notifyClientCount();
+              LogService.instance.registerLog("Client $deviceId disconnected. Total clients: ${_clients.length}");
+            }
+          }, onError: (error) {
+            // Manage error in connection
+            if (deviceId != null) {
+              _clients.remove(deviceId);
+              _lastHeartbeat.remove(deviceId); // Clean heartbeat data
+              _notifyClientCount();
+              LogService.instance.registerLog("Error with client $deviceId: $error. Removed from clients.");
+            }
           });
         } else {
           request.response
@@ -106,7 +135,42 @@ class MasterServer {
         }
       }
     } catch (e) {
-      print("Failed to start WebSocket Server: $e");
+      LogService.instance.registerLog("Failed to start WebSocket Server: $e");
+    }
+  }
+  void _startHeartbeatCheck() {
+    _heartbeatCheckTimer = Timer.periodic(Duration(seconds: 10), (_) {
+      final now = DateTime.now();
+      final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
+        final lastSeen = _lastHeartbeat[deviceId];
+        return lastSeen == null || now.difference(lastSeen).inSeconds > inactivityThreshold;
+      }).toList();
+
+      for (var deviceId in inactiveClients) {
+        _clients.remove(deviceId);
+        _lastHeartbeat.remove(deviceId);
+        LogService.instance.registerLog("Client $deviceId removed due to inactivity.");
+
+        // Notify disconnection to callback if defined
+        if (onClientRemoved != null) {
+          onClientRemoved!(deviceId, inactivityThreshold);
+        }
+      }
+
+      _notifyClientCount();
+    });
+  }
+
+  void _stopHeartbeatCheck() {
+    _heartbeatCheckTimer?.cancel();
+    _heartbeatCheckTimer = null;
+  }
+
+
+
+  void _notifyClientCount() {
+    if (onClientCountChange != null) {
+      onClientCountChange!(_clients.length);
     }
   }
 
@@ -115,6 +179,9 @@ class MasterServer {
   }
 
   Future<String> _saveMediaLocally(Uint8List binaryData, bool isPhoto) async {
+
+    LogService.instance.registerLog("Save media locally");
+
     final directory = await getApplicationDocumentsDirectory();
     final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
     await Directory(sessionDirectoryPath).create(recursive: true);
@@ -139,7 +206,7 @@ class MasterServer {
       sessionId: currentDate.toIso8601String(),
       startTime: currentDate,
     );
-    print("New capture session started with ID: ${currentSession?.sessionId}");
+    LogService.instance.registerLog("New capture session started with ID: ${currentSession?.sessionId}");
 
     // Notify slaves that session has started
     var sessionStartedCommand = jsonEncode({
@@ -156,7 +223,7 @@ class MasterServer {
     for (var client in _clients.values) {
       client.add(message);
     }
-    print("Command sent to all connected slaves: $message");
+    LogService.instance.registerLog("Command sent to all connected slaves: $message");
   }
 
 
@@ -165,34 +232,42 @@ class MasterServer {
       sessionHistory.add(currentSession!);
       currentSession?.endSession();
       currentSession = null;
-      print("Capture session ended and stored in history.");
+      LogService.instance.registerLog("Capture session ended and stored in history.");
     }
   }
 
   void sendCommand(String command, {String? deviceId}) {
+
+    LogService.instance.registerLog("Sending command $command");
+
     if (_clients.isEmpty) {
-      print("No slave devices connected. Command '$command' not sent.");
+      LogService.instance.registerLog("No slave devices connected. Command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
       _clients[deviceId]?.add(command);
-      print("Command '$command' sent to slave with deviceId: $deviceId.");
+      LogService.instance.registerLog("Command '$command' sent to slave with deviceId: $deviceId.");
     } else {
       for (var client in _clients.values) {
         client.add(command);
       }
-      print("Command '$command' sent to all connected slaves.");
+      LogService.instance.registerLog("Command '$command' sent to all connected slaves.");
     }
   }
 
   void stopServer() {
+    // TODO: Here end active session before stopping server??
+
+    // Clean any client just in case
+    for (var client in _clients.values) {
+      client.close(WebSocketStatus.normalClosure, "Server shutting down");
+    }
+
     _server?.close();
     _clients.clear();
-    print("WebSocket Server stopped");
+    _lastHeartbeat.clear(); // Clean heartbeat registry
+    _stopHeartbeatCheck(); // Stop timer
+    LogService.instance.registerLog("WebSocket Server stopped");
     _notifyClientCount();
   }
 
-  void _notifyClientCount() {
-    if (onClientCountChange != null) {
-      onClientCountChange!(_clients.length);
-    }
-  }
+
 }

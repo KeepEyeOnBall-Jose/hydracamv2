@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'log_service.dart';
 
 class DeviceIdService {
   static const String _deviceIdKey = 'device_id';
@@ -16,9 +16,9 @@ class DeviceIdService {
     if (deviceId == null) {
       deviceId = Uuid().v4(); // Generate a new unique ID (UUID v4).
       await prefs.setString(_deviceIdKey, deviceId);
-      print('Generated new Device ID: $deviceId');
+      LogService.instance.registerLog('Generated new Device ID: $deviceId');
     } else {
-      print('Retrieved existing Device ID: $deviceId');
+      LogService.instance.registerLog('Retrieved existing Device ID: $deviceId');
     }
 
     return deviceId;
