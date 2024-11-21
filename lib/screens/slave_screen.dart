@@ -4,6 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import '../globals.dart';
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
 import '../services/log_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
@@ -32,6 +34,11 @@ class _SlaveScreenState extends State<SlaveScreen> {
   MasterDiscovery? _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
 
 
+  // Add lists for photos and videos //TODO EXTRACT TO AVOID REPEAT CODE WITH MASTER
+  List<CapturedPhoto> photos = [];
+  List<CapturedVideo> videos = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +52,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
             if (!mounted) return; //TODO: CHeck if this should always be mounted and therefor be a problem here or is ok
             setState(() {
               statusMessage = "Photo taken!";
+              photos = _client!.photos; // Update photos
             });
             LogService.instance.registerLog("Photo taken!!!");
 
@@ -91,6 +99,8 @@ class _SlaveScreenState extends State<SlaveScreen> {
           if (mounted) {
             setState(() {
               statusMessage = message;
+              photos = _client!.photos;
+              videos = _client!.videos;
             });
           }
         });
@@ -134,6 +144,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
     if(mounted){
       setState(() {
         isRecording = false;
+        videos = _client!.videos; // Update videos
       });
     }
   }
@@ -201,45 +212,107 @@ class _SlaveScreenState extends State<SlaveScreen> {
             );
           },
         ),
-        body: Stack(
-          children: [
-            if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
-              Positioned.fill(
-                child: CameraPreview(_client!.cameraController!),
-              )
-            else
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      statusMessage,
-                      style: TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
-                      const Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: CircularProgressIndicator(),
+        body: Column(
+          children:[
+            Expanded(
+              child: Stack(
+                children: [
+                  if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
+                    Positioned.fill(
+                      child: CameraPreview(_client!.cameraController!),
+                    )
+                  else
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            statusMessage,
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
+                          if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+                            const Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: CircularProgressIndicator(),
+                            ),
+                        ],
                       ),
-                  ],
-                ),
+                    ),
+                  if (isRecording)
+                    const Positioned(
+                      bottom: 20,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Text(
+                          'Recording...',
+                          style: TextStyle(color: Colors.red, fontSize: 24),
+                        ),
+                      ),
+                    ),
+                ],
+              )
+            ),
+            // Photo and video list
+            Expanded(
+              child: ListView.builder(
+                itemCount: photos.length + videos.length,
+                itemBuilder: (context, index) {
+                  if (index < photos.length) {
+                    final photo = photos[index];
+                    return ListTile(
+                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                      title: Text("Photo"),
+                      subtitle: Text("Captured: ${photo.captureDate}"),
+                      onTap: () => _showPhotoDialog(photo),
+                    );
+                  } else {
+                    final video = videos[index - photos.length];
+                    return ListTile(
+                      leading: Icon(Icons.videocam, size: 50),
+                      title: Text("Video"),
+                      subtitle: Text("Started: ${video.startRecordingDate}"),
+                      onTap: () => _showVideoDialog(video),
+                    );
+                  }
+                },
               ),
-            if (isRecording)
-              const Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Text(
-                    'Recording...',
-                    style: TextStyle(color: Colors.red, fontSize: 24),
-                  ),
-                ),
-              ),
-          ],
+            ),
+          ]
         ),
       ),
+    );
+  }
+// TODO: EXTRACT TO WIDGET TO AVOID REPEAT CODE WITH MASTER
+  void _showPhotoDialog(CapturedPhoto photo) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.file(File(photo.photoPath)),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Close"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showVideoDialog(CapturedVideo video) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: VideoPlayerScreen(videoPath: video.videoPath),
+        );
+      },
     );
   }
 }

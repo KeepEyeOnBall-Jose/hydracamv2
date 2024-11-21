@@ -233,7 +233,7 @@ class _MasterScreenState extends State<MasterScreen> {
               //Text("Received: ${photo.receivedDate}"),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Close"),
+                child: const Text("Close"),
               ),
             ],
           ),
@@ -261,7 +261,7 @@ class _MasterScreenState extends State<MasterScreen> {
         children: [
           Text(
             "Connected clients: $connectedClients",
-            style: TextStyle(fontSize: 16, color: Colors.blue),
+            style: const TextStyle(fontSize: 16, color: Colors.blue),
           ),
         ],
       ),

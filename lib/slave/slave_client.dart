@@ -3,9 +3,10 @@ import 'dart:convert'; // Import for jsonEncode
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
 import '../services/device_service.dart'; // Import for device ID service
-import 'dart:io';
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 
@@ -18,6 +19,13 @@ class SlaveClient {
   Timer? _reconnectTimer;
   Timer? _heartbeatTimer; // Timer for sending heartbeat
   String? _deviceId; // Store the device ID
+
+  // Lists to store photos and videos locally //TODO REFACTOR SO WE DONT DUPLICATE THIS WITH MASTER
+  final List<CapturedPhoto> _photos = [];
+  final List<CapturedVideo> _videos = [];
+
+  List<CapturedPhoto> get photos => _photos;
+  List<CapturedVideo> get videos => _videos;
 
   // StreamController to broadcast status messages
   final StreamController<String> _statusStreamController = StreamController.broadcast();
@@ -145,59 +153,65 @@ class SlaveClient {
 
   void _processCommand(String message) {
     if (message == 'takePhoto') {
-      // Capture a photo, timestamp it, and send the data to the master
       photoCaptureDate = DateTime.now();
       _cameraService.takePhoto().then((photoPath) async {
-        final file = File(photoPath);
-        final Uint8List photoData = await file.readAsBytes();
+        final receivedDate = DateTime.now();
 
-        // Prepare the data including type, device ID, photo data, and capture timestamp
-        final data = {
-          'type': 'photo',
-          'deviceId': _deviceId,
-          'data': photoData,
-          'captureDate': photoCaptureDate!.toIso8601String(),
-        };
+        // Save the photo locally
+        final capturedPhoto = CapturedPhoto(
+          photoData: null,
+          photoPath: photoPath,
+          captureDate: photoCaptureDate!,
+          receivedDate: receivedDate,
+          slaveDeviceId: "Slave",
+        );
+        _photos.add(capturedPhoto);
 
-        // Send serialized photo data to the master
-        _channel?.sink.add(jsonEncode(data));
-        LogService.instance.registerLog("Real photo data with timestamp and device ID sent to master.");
+        // Update the UI
+        _statusStreamController.add("Photo taken and saved locally.");
+
+        // Commented out: Sending to master
+        // final file = File(photoPath);
+        // final Uint8List photoData = await file.readAsBytes();
+        // _channel?.sink.add(jsonEncode({...}));
       });
     }
     else if (message == 'startRecordingVideo') {
       LogService.instance.registerLog("Starting video recording");
-      // Start video recording and log the start timestamp
-      videoStartRecordingDate = DateTime.now(); // TODO: USE IN CAMERA SERVICE AND NOT HERE! LIKE WITH MASTER
+      videoStartRecordingDate = DateTime.now();
       _cameraService.startRecordingVideo();
       isRecordingVideo = true;
-      onRecordingStarted?.call(); // Notify the UI
-      LogService.instance.registerLog("Video recording started at: $videoStartRecordingDate");
+      onRecordingStarted?.call();
+      _statusStreamController.add("Recording video...");
     }
     else if (message == 'stopRecordingVideo') {
       LogService.instance.registerLog("Stopping video recording");
-      // Stop video recording, timestamp it, and send video data to the master
       videoEndRecordingDate = DateTime.now();
       _cameraService.stopRecordingVideo().then((videoPath) async {
-        final file = File(videoPath);
-        final Uint8List videoData = await file.readAsBytes();
+        final receivedDate = DateTime.now();
 
-        // Prepare the data including type, device ID, video data, and timestamps
-        final data = {
-          'type': 'video',
-          'deviceId': _deviceId,
-          'data': videoData,
-          'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
-          'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
-        };
+        // Save the video locally
+        final capturedVideo = CapturedVideo(
+          videoData: null,
+          videoPath: videoPath,
+          slaveDeviceId: "Slave",
+          startRecordingDate: videoStartRecordingDate!,
+          endRecordingDate: videoEndRecordingDate!,
+          receivedDate: receivedDate,
+        );
+        _videos.add(capturedVideo);
 
-        LogService.instance.registerLog("Send video to master");
+        // Update the UI
+        _statusStreamController.add("Video recording stopped and saved locally.");
 
-        // Send serialized video data to the master
-        _channel?.sink.add(jsonEncode(data));
-        LogService.instance.registerLog("Video data with timestamps and device ID sent to master.");
+        isRecordingVideo = false;
+        onRecordingStopped?.call();
+
+        // Commented out: Sending to master
+        // final file = File(videoPath);
+        // final Uint8List videoData = await file.readAsBytes();
+        // _channel?.sink.add(jsonEncode({...}));
       });
-      isRecordingVideo = false;
-      onRecordingStopped?.call(); // Notify the UI
     }
     else if (message == 'stopCamera') {
       // Stop the camera service when receiving 'stopCamera' command
