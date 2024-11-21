@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
 import '../screens/settings_screen.dart';
+import '../screens/log_screen.dart';
 import '../services/alert_utils.dart';
+
 class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onBack;
@@ -39,6 +41,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
             } else if (value == 'Location Info') {
               // Show info about location
               AlertUtils.showLocationInfoDialog(context);
+            } else if (value == 'Logs') {
+              // Navigate to logs
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LogScreen()),
+              );
             }
           },
           itemBuilder: (context) => [
@@ -72,13 +80,22 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
             ),
+            PopupMenuItem(
+              value: 'Logs',
+              child: Row(
+                children: const [
+                  Icon(Icons.list_alt, color: AppTheme.accentColor),
+                  SizedBox(width: 8),
+                  Text('Logs'),
+                ],
+              ),
+            ),
           ],
         ),
       ],
     );
   }
 
-  // To say how high the appbar should be
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
