@@ -23,6 +23,7 @@ class SlaveScreen extends StatefulWidget {
 
 class _SlaveScreenState extends State<SlaveScreen> {
   SlaveClient? _client;
+  StreamSubscription<String>? _statusSubscription; // Subscription to listen to status updates
   bool isConnected = false;
   String statusMessage = "Waiting for camera commands...";
   Timer? autoModeTimer; // Timer for auto mode logic
@@ -83,6 +84,18 @@ class _SlaveScreenState extends State<SlaveScreen> {
           onRecordingStopped: _handleRecordingStopped,
         );
         _client?.connect();
+
+
+        // Listen to the client's status stream
+        _statusSubscription = _client?.statusStream.listen((message) {
+          if (mounted) {
+            setState(() {
+              statusMessage = message;
+            });
+          }
+        });
+
+
         setState(() {
           isConnected = true;
           statusMessage = "Connected to master at $masterIp";
@@ -137,6 +150,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   }
 
   void _cleanUpSlaveMode() {
+    _statusSubscription?.cancel(); // Cancel the stream subscription
     _client?.disconnect();
     _client = null;
     autoModeTimer?.cancel();
@@ -151,6 +165,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   @override
   void dispose() {
     try{
+      _statusSubscription?.cancel(); // Cancel the subscription to avoid memory leaks
       _client?.disconnect();
       _client = null;
       autoModeTimer?.cancel();
@@ -168,13 +183,12 @@ class _SlaveScreenState extends State<SlaveScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Handle the back button press
         _cleanUpSlaveMode();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
         );
-        return false; // Prevent the default behavior
+        return false;
       },
       child: Scaffold(
         appBar: HydraCamAppBar(
@@ -198,14 +212,21 @@ class _SlaveScreenState extends State<SlaveScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(statusMessage),
-                    SizedBox(height: 20),
-                    // Any additional content
+                    Text(
+                      statusMessage,
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: CircularProgressIndicator(),
+                      ),
                   ],
                 ),
               ),
             if (isRecording)
-              Positioned(
+              const Positioned(
                 bottom: 20,
                 left: 0,
                 right: 0,

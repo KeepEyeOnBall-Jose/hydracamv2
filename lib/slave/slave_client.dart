@@ -19,6 +19,10 @@ class SlaveClient {
   Timer? _heartbeatTimer; // Timer for sending heartbeat
   String? _deviceId; // Store the device ID
 
+  // StreamController to broadcast status messages
+  final StreamController<String> _statusStreamController = StreamController.broadcast();
+  Stream<String> get statusStream => _statusStreamController.stream;
+
   // To store timestamps
   DateTime? photoCaptureDate;
   DateTime? videoStartRecordingDate;
@@ -42,16 +46,19 @@ class SlaveClient {
 
     if (_isConnected) {
       LogService.instance.registerLog("Already connected to WebSocket. Skipping connection.");
+      _statusStreamController.add("Already connected to WebSocket. Skipping connection.");
       return;
     }
 
     _deviceId = await DeviceIdService.getOrCreateDeviceId(); // Retrieve or create device ID
+    _statusStreamController.add("Attempting to connect to master at $serverAddress...");
     LogService.instance.registerLog("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
 
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));
 
       _isConnected = true;
+      _statusStreamController.add("Connected to master at $serverAddress.");
 
       // Send a JSON message containing the device ID after connecting
       _channel?.sink.add(jsonEncode({
@@ -74,6 +81,7 @@ class SlaveClient {
             (message) {
 
               LogService.instance.registerLog("Command received from master: $message");
+              _statusStreamController.add("Received command: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
           if (message.trim().startsWith('{') || message.trim().startsWith('[')) {
@@ -104,68 +112,13 @@ class SlaveClient {
             }
           } else {
             // Process non-JSON (simple text) messages as specific commands
-
-            if (message == 'takePhoto') {
-              // Capture a photo, timestamp it, and send the data to the master
-              photoCaptureDate = DateTime.now();
-              _cameraService.takePhoto().then((photoPath) async {
-                final file = File(photoPath);
-                final Uint8List photoData = await file.readAsBytes();
-
-                // Prepare the data including type, device ID, photo data, and capture timestamp
-                final data = {
-                  'type': 'photo',
-                  'deviceId': _deviceId,
-                  'data': photoData,
-                  'captureDate': photoCaptureDate!.toIso8601String(),
-                };
-
-                // Send serialized photo data to the master
-                _channel?.sink.add(jsonEncode(data));
-                LogService.instance.registerLog("Real photo data with timestamp and device ID sent to master.");
-              });
-            } else if (message == 'startRecordingVideo') {
-              LogService.instance.registerLog("Starting video recording");
-              // Start video recording and log the start timestamp
-              videoStartRecordingDate = DateTime.now(); // TODO: USE IN CAMERA SERVICE AND NOT HERE! LIKE WITH MASTER
-              _cameraService.startRecordingVideo();
-              isRecordingVideo = true;
-              onRecordingStarted?.call(); // Notify the UI
-              LogService.instance.registerLog("Video recording started at: $videoStartRecordingDate");
-            } else if (message == 'stopRecordingVideo') {
-              LogService.instance.registerLog("Stopping video recording");
-              // Stop video recording, timestamp it, and send video data to the master
-              videoEndRecordingDate = DateTime.now();
-              _cameraService.stopRecordingVideo().then((videoPath) async {
-                final file = File(videoPath);
-                final Uint8List videoData = await file.readAsBytes();
-
-                // Prepare the data including type, device ID, video data, and timestamps
-                final data = {
-                  'type': 'video',
-                  'deviceId': _deviceId,
-                  'data': videoData,
-                  'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
-                  'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
-                };
-
-                LogService.instance.registerLog("Send video to master");
-
-                // Send serialized video data to the master
-                _channel?.sink.add(jsonEncode(data));
-                LogService.instance.registerLog("Video data with timestamps and device ID sent to master.");
-              });
-              isRecordingVideo = false;
-              onRecordingStopped?.call(); // Notify the UI
-            } else if (message == 'stopCamera') {
-              // Stop the camera service when receiving 'stopCamera' command
-              _cameraService.stopCamera();
-            }
+            _processCommand(message);
           }
         },
         onError: (error) {
           // Handle any errors in the WebSocket connection
           LogService.instance.registerLog("Connection error: $error");
+          _statusStreamController.add("Connection error: $error");
           _isConnected = false;
           _stopHeartbeat();
           _attemptReconnect();
@@ -173,6 +126,7 @@ class SlaveClient {
         onDone: () {
           // Handle the WebSocket connection closing
           LogService.instance.registerLog("Connection closed");
+          _statusStreamController.add("Connection closed.");
           _isConnected = false;
           _stopHeartbeat();
           _attemptReconnect();
@@ -180,11 +134,74 @@ class SlaveClient {
       );
 
     } catch (e) {
+      _statusStreamController.add("Failed to connect: $e");
       LogService.instance.registerLog("Failed to connect to WebSocket at $serverAddress: $e");
       _isConnected = false;
       // Add a delay before reconnecting to prevent immediate retries on failure
       await Future.delayed(Duration(seconds: 2));  // <-- This line is added
       _attemptReconnect();
+    }
+  }
+
+  void _processCommand(String message) {
+    if (message == 'takePhoto') {
+      // Capture a photo, timestamp it, and send the data to the master
+      photoCaptureDate = DateTime.now();
+      _cameraService.takePhoto().then((photoPath) async {
+        final file = File(photoPath);
+        final Uint8List photoData = await file.readAsBytes();
+
+        // Prepare the data including type, device ID, photo data, and capture timestamp
+        final data = {
+          'type': 'photo',
+          'deviceId': _deviceId,
+          'data': photoData,
+          'captureDate': photoCaptureDate!.toIso8601String(),
+        };
+
+        // Send serialized photo data to the master
+        _channel?.sink.add(jsonEncode(data));
+        LogService.instance.registerLog("Real photo data with timestamp and device ID sent to master.");
+      });
+    }
+    else if (message == 'startRecordingVideo') {
+      LogService.instance.registerLog("Starting video recording");
+      // Start video recording and log the start timestamp
+      videoStartRecordingDate = DateTime.now(); // TODO: USE IN CAMERA SERVICE AND NOT HERE! LIKE WITH MASTER
+      _cameraService.startRecordingVideo();
+      isRecordingVideo = true;
+      onRecordingStarted?.call(); // Notify the UI
+      LogService.instance.registerLog("Video recording started at: $videoStartRecordingDate");
+    }
+    else if (message == 'stopRecordingVideo') {
+      LogService.instance.registerLog("Stopping video recording");
+      // Stop video recording, timestamp it, and send video data to the master
+      videoEndRecordingDate = DateTime.now();
+      _cameraService.stopRecordingVideo().then((videoPath) async {
+        final file = File(videoPath);
+        final Uint8List videoData = await file.readAsBytes();
+
+        // Prepare the data including type, device ID, video data, and timestamps
+        final data = {
+          'type': 'video',
+          'deviceId': _deviceId,
+          'data': videoData,
+          'startRecordingDate': videoStartRecordingDate!.toIso8601String(),
+          'endRecordingDate': videoEndRecordingDate!.toIso8601String(),
+        };
+
+        LogService.instance.registerLog("Send video to master");
+
+        // Send serialized video data to the master
+        _channel?.sink.add(jsonEncode(data));
+        LogService.instance.registerLog("Video data with timestamps and device ID sent to master.");
+      });
+      isRecordingVideo = false;
+      onRecordingStopped?.call(); // Notify the UI
+    }
+    else if (message == 'stopCamera') {
+      // Stop the camera service when receiving 'stopCamera' command
+      _cameraService.stopCamera();
     }
   }
 
