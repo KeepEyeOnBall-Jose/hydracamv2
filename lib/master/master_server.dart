@@ -12,7 +12,7 @@ import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
 
 class MasterServer {
-  static const int inactivityThreshold = 5; // Inactivity time before disconnecting slave client in seconds
+  static const int inactivityThreshold = 15; // Inactivity time before disconnecting slave client in seconds
   HttpServer? _server;
   final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
   final Map<String, DateTime> _lastHeartbeat = {}; // Track last heartbeat per client

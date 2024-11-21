@@ -43,6 +43,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
         _client = SlaveClient(
           'ws://$masterIp:4040/ws',
           onPhotoTaken: (path) {
+            if (!mounted) return; //TODO: CHeck if this should always be mounted and therefor be a problem here or is ok
             setState(() {
               statusMessage = "Photo taken!";
             });
