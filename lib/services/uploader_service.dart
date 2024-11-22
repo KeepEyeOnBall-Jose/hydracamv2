@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import 'hydracam_api_service.dart';
 import 'session_manager.dart';
 import 'log_service.dart';
 
@@ -14,6 +16,9 @@ class UploaderService {
 
   final Queue<dynamic> _uploadQueue = Queue();
   bool _isUploading = false;
+
+  // Reference to the API service
+  final HydraCamApiService _apiService = HydraCamApiService();
 
   void addMediaToQueue(dynamic media) {
     if (media is CapturedPhoto || media is CapturedVideo) {
@@ -42,14 +47,63 @@ class UploaderService {
     // Set upload start time
     media.uploadStartTime = DateTime.now();
 
-    // Simulate upload delay
-    await Future.delayed(const Duration(seconds: 2)); // Simulated upload duration
+    bool success = false;
 
-    // Update media upload status
-    media.isUploaded = true;
-    media.uploadDuration = DateTime.now().difference(media.uploadStartTime!);
+    // Get session GUID
+    String? sessionGuid = SessionManager.instance.sessionGuid;
 
-    LogService.instance.registerLog("Media uploaded: ${media.mediaPath}");
+    if (sessionGuid == null) {
+      LogService.instance.registerLog("No session GUID available. Cannot upload media.");
+      // Set media as not uploaded
+      media.isUploaded = false;
+      _isUploading = false;
+      return;
+    }
+
+    // Prepare file
+    File file = File(media.mediaPath);
+
+    // Prepare metadata
+    String slaveDeviceId;
+    DateTime captureDate;
+    DateTime receivedDate;
+
+    if (media is CapturedPhoto) {
+      slaveDeviceId = media.slaveDeviceId;
+      captureDate = media.captureDate;
+      receivedDate = media.receivedDate;
+
+      success = await _apiService.uploadMedia(
+        sessionGuid,
+        file,
+        true, // isPhoto
+        slaveDeviceId,
+        captureDate,
+        receivedDate,
+      );
+
+    } else if (media is CapturedVideo) {
+      slaveDeviceId = media.slaveDeviceId;
+      captureDate = media.startRecordingDate;
+      receivedDate = media.receivedDate;
+      success = await _apiService.uploadMedia(
+        sessionGuid,
+        file,
+        false, // isPhoto
+        slaveDeviceId,
+        captureDate,
+        receivedDate,
+      );
+    }
+
+    if (success) {
+      media.isUploaded = true;
+      media.uploadDuration = DateTime.now().difference(media.uploadStartTime!);
+      LogService.instance.registerLog("Media uploaded: ${media.mediaPath}");
+    } else {
+      media.isUploaded = false;
+      LogService.instance.registerLog("Failed to upload media: ${media.mediaPath}");
+    }
 
     // Notify listeners to update UI
     SessionManager.instance.notifyListeners();

@@ -513,8 +513,9 @@ class _MasterScreenState extends State<MasterScreen> {
                 ),
                 child: Text(isRecording ? "Stop Recording" : "Start Recording"),
               ),
-            ),
+            ),/*
             const SizedBox(height: 10),
+            //TODO DELETE ME
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
@@ -523,14 +524,14 @@ class _MasterScreenState extends State<MasterScreen> {
                     : null,
                 child: Text("Upload All Media"),
               ),
-            ),
+            ),*/
             const SizedBox(height: 10),
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
                 onPressed: sessionGuid != null ? _startOrEndSession : null,
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: Text("End Session"),
+                child: const Text("End Session"),
               ),
             ),
             const SizedBox(height: 20),
