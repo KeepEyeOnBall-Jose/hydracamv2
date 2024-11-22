@@ -10,6 +10,7 @@ import 'dart:io';
 import '../services/camera_service.dart';
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
+import '../services/session_manager.dart';
 import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/hydra_cam_app_bar.dart';
@@ -27,13 +28,14 @@ class _MasterScreenState extends State<MasterScreen> {
 
   int connectedClients = 0; // To display connected clients count
   bool isRecording = false;
-  String? sessionGuid; // Store the session GUID from the API
-  bool sessionActive = false;
+  // String? sessionGuid; // Store the session GUID from the API (Now from Session Manager)
+  bool get sessionActive => SessionManager.instance.isSessionActive; // TODO: Extract to session manager??
   String? selectedCourtName;  // Name of the selected Court
   String? selectedCourtGuid;  // GUID of the selected Court (TODO: To be improved)
 
-  List<CapturedPhoto> get photos => _server.currentSession?.capturedPhotos ?? [];
-  List<CapturedVideo> get videos => _server.currentSession?.capturedVideos ?? [];
+  // Getters for SessionManager photos and videos
+  List<CapturedPhoto> get photos => SessionManager.instance.currentSession?.capturedPhotos ?? [];
+  List<CapturedVideo> get videos => SessionManager.instance.currentSession?.capturedVideos ?? [];
 
   List<String> getConnectedDevices() {
     return _server.getConnectedDeviceIds();
@@ -158,8 +160,9 @@ class _MasterScreenState extends State<MasterScreen> {
       receivedDate: receivedDate,
     );
 
+    SessionManager.instance.addVideo(capturedVideo);
+
     setState(() {
-      _server.currentSession?.addVideo(capturedVideo);
       isRecording = false; // Update recording state
     });
 
@@ -209,8 +212,9 @@ class _MasterScreenState extends State<MasterScreen> {
         slaveDeviceId: "Master",
       );
 
+      SessionManager.instance.addPhoto(capturedPhoto);
+
       setState(() {
-        _server.currentSession?.addPhoto(capturedPhoto);
       });
 
       // Show pop up for preview
@@ -275,16 +279,20 @@ class _MasterScreenState extends State<MasterScreen> {
   Future<void> _createSession() async {
     var sessionId = DateTime.now().toIso8601String();
     var response = await _apiService.createSession(
-        sessionId,
-        courtGuid: selectedCourtGuid
+      sessionId,
+      courtGuid: selectedCourtGuid,
     );
 
+    LogService.instance.registerLog("Response to create session: $response");
+
     if (response != null) {
-      sessionGuid = response['guid'];
-      _server.startNewSession(sessionGuid); // Init session in the slave devices
-      setState(() {
-        sessionActive = true;
-      });
+      String sessionGuid = response['guid'];
+      SessionManager.instance.startSession(sessionGuid, deviceType: "Master");
+      _server.startNewSession(sessionGuid); // Notify slaves
+
+      LogService.instance.registerLog("Session created with GUID: $sessionGuid");
+
+      setState(() {});
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Session created successfully: $sessionGuid")),
       );
@@ -294,6 +302,7 @@ class _MasterScreenState extends State<MasterScreen> {
       );
     }
   }
+
 
   void _endCurrentSession() async {
     bool confirmEnd = await showDialog(
@@ -322,14 +331,11 @@ class _MasterScreenState extends State<MasterScreen> {
 
     if (confirmEnd) {
       // Call API method endSession
-      if (sessionGuid != null) {
-        bool success = await _apiService.endSession(sessionGuid!);
+      if (SessionManager.instance.currentSession != null) {
+        bool success = await _apiService.endSession(SessionManager.instance.sessionGuid!);
         if (success) {
           _server.endCurrentSession(); // End locally
-          setState(() {
-            sessionGuid = null;
-            sessionActive = false;
-          });
+          setState((){});
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Capture session ended")),
           );
@@ -351,6 +357,9 @@ class _MasterScreenState extends State<MasterScreen> {
       return;
     }
 
+
+    String? sessionGuid = SessionManager.instance.sessionGuid;
+
     if (sessionGuid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("No session GUID available. Create a session first.")),
@@ -368,7 +377,7 @@ class _MasterScreenState extends State<MasterScreen> {
       DateTime receivedDate = photo.receivedDate;
 
       bool success = await _apiService.uploadMedia(
-        sessionGuid!,    // session GUID
+        sessionGuid,    // session GUID
         file,            // actual file
         true,            // is photo? true for photo
         slaveDeviceId,   // ID from slave device id that took photo
@@ -395,7 +404,7 @@ class _MasterScreenState extends State<MasterScreen> {
       DateTime receivedDate = video.receivedDate;
 
       bool success = await _apiService.uploadMedia(
-        sessionGuid!,    // session GUID
+        sessionGuid,    // session GUID
         file,            // actual file
         false,           // is photo? false for video
         slaveDeviceId,   // ID from slave device id that took photo
@@ -468,6 +477,10 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   Widget _buildSessionUI() {
+
+
+    String? sessionGuid = SessionManager.instance.sessionGuid;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final buttonWidth = constraints.maxWidth * 0.8; // El 80% del ancho total
@@ -558,6 +571,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? sessionGuid = SessionManager.instance.sessionGuid;
     return WillPopScope(
       onWillPop: () async {
 

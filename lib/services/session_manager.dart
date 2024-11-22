@@ -1,0 +1,63 @@
+import 'package:flutter/foundation.dart';
+import '../models/CaptureSession.dart';
+import '../models/CapturedPhoto.dart';
+import '../models/CapturedVideo.dart';
+
+/// A global manager to handle session-related information across Master and Slave.
+/// Provides a centralized place to access the current session and its GUID.
+class SessionManager extends ChangeNotifier {
+  /// Singleton instance
+  static final SessionManager _instance = SessionManager._internal();
+
+  /// Private constructor for singleton
+  SessionManager._internal();
+
+  /// Accessor for singleton instance
+  static SessionManager get instance => _instance;
+
+  /// The unique identifier for the current session (GUID).
+  String? _sessionGuid;
+
+  /// The `CaptureSession` object for tracking media in the current session.
+  CaptureSession? _currentSession;
+
+  /// The type of device (Master or Slave) for this instance.
+  String _deviceType = "Unknown";
+
+  /// Getters for session data
+  String? get sessionGuid => _sessionGuid;
+  CaptureSession? get currentSession => _currentSession;
+  String get deviceType => _deviceType;
+  bool get isSessionActive => _currentSession != null;
+
+  /// Set the session GUID and initialize a new `CaptureSession`.
+  void startSession(String sessionGuid, {required String deviceType}) {
+    _sessionGuid = sessionGuid;
+    _deviceType = deviceType;
+    _currentSession = CaptureSession(
+      sessionId: sessionGuid,
+      startTime: DateTime.now(),
+    );
+    notifyListeners();
+  }
+
+  /// Ends the current session, clearing data.
+  void endSession() {
+    _currentSession?.endSession();
+    _currentSession = null;
+    _sessionGuid = null;
+    notifyListeners();
+  }
+
+  /// Add a captured photo to the current session.
+  void addPhoto(CapturedPhoto photo) {
+    _currentSession?.addPhoto(photo);
+    notifyListeners();
+  }
+
+  /// Add a captured video to the current session.
+  void addVideo(CapturedVideo video) {
+    _currentSession?.addVideo(video);
+    notifyListeners();
+  }
+}

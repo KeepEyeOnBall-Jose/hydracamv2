@@ -10,14 +10,15 @@ import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
 import '../services/log_service.dart';
+import '../services/session_manager.dart';
 
 class MasterServer {
   HttpServer? _server;
   final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
   final Map<String, DateTime> _lastHeartbeat = {}; // Track last heartbeat per client
   Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
-  CaptureSession? currentSession; // Current Capture Session
-  List<CaptureSession> sessionHistory = []; // List to store past sessions
+  // CaptureSession? currentSession; // Current Capture Session is now used in Session Manager Singleton
+  List<CaptureSession> sessionHistory = []; // List to store past sessions TODO: EXTRACT TO MANAGER TOO
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
   Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
@@ -78,7 +79,10 @@ class MasterServer {
                       receivedDate: receivedDate,
                       slaveDeviceId: deviceId!,
                     );
-                    currentSession?.addPhoto(receivedPhoto);
+                    //currentSession?.addPhoto(receivedPhoto);
+                    // Add photo via SessionManager
+                    SessionManager.instance.addPhoto(receivedPhoto);
+
                     onMediaReceived?.call(receivedPhoto);
                     LogService.instance.registerLog("Photo from slave device ($deviceId) received and stored at: $filePath");
                   } else if (messageType == 'video') {
@@ -92,7 +96,9 @@ class MasterServer {
                       endRecordingDate: endRecordingDate,
                       receivedDate: receivedDate,
                     );
-                    currentSession?.addVideo(receivedVideo);
+                    //currentSession?.addVideo(receivedVideo);
+                    // Add photo via SessionManager
+                    SessionManager.instance.addVideo(receivedVideo);
                     onMediaReceived?.call(receivedVideo);
                     LogService.instance.registerLog("Video from slave device ($deviceId) received and stored at: $filePath");
                   }
@@ -183,7 +189,9 @@ class MasterServer {
     LogService.instance.registerLog("Save media locally");
 
     final directory = await getApplicationDocumentsDirectory();
-    final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}';
+    //final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}'; // TODO: Extract storage manager???
+    final String sessionDirectoryPath =
+        '${directory.path}/session_${SessionManager.instance.sessionGuid}';
     await Directory(sessionDirectoryPath).create(recursive: true);
     final String fileExtension = binaryData[0] == 0xFF ? 'jpg' : 'mp4';
     final String filePath = '$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
@@ -192,32 +200,29 @@ class MasterServer {
 
     // Save to gallery
     if (isPhoto) {
-      await GallerySaver.saveImage(filePath, albumName: 'HydraCam/${currentSession?.sessionId}');
-    } else {
-      await GallerySaver.saveVideo(filePath, albumName: 'HydraCam/${currentSession?.sessionId}');
+      await GallerySaver.saveImage(filePath, albumName: 'HydraCam/${SessionManager.instance.sessionGuid}');
+    } else { // Video
+      await GallerySaver.saveVideo(filePath, albumName: 'HydraCam/${SessionManager.instance.sessionGuid}');
     }
 
     return filePath;
   }
 
-  void startNewSession(String? sessionGuid) {
-    var currentDate = DateTime.now();
-    currentSession = CaptureSession(
-      sessionId: currentDate.toIso8601String(),
-      startTime: currentDate,
-    );
-    LogService.instance.registerLog("New capture session started with ID: ${currentSession?.sessionId}");
+  void startNewSession(String sessionGuid) {
+    // Init new session through SessionManager
+    SessionManager.instance.startSession(sessionGuid, deviceType: "Master");
 
-    // Notify slaves that session has started
+    // Register logs
+    LogService.instance.registerLog("New capture session started with GUID: $sessionGuid");
+
+    // Notify slaves that session started
     var sessionStartedCommand = jsonEncode({
       'command': 'sessionStarted',
       'sessionGuid': sessionGuid,
     });
     sendCommandToAll(sessionStartedCommand);
-
-    // update guid on current session
-    currentSession!.sessionGuid = sessionGuid;
   }
+
 
   void sendCommandToAll(String message) {
     for (var client in _clients.values) {
@@ -228,13 +233,21 @@ class MasterServer {
 
 
   void endCurrentSession() {
-    if (currentSession != null) {
-      sessionHistory.add(currentSession!);
-      currentSession?.endSession();
-      currentSession = null;
-      LogService.instance.registerLog("Capture session ended and stored in history.");
+    if (SessionManager.instance.currentSession != null) {
+
+      // Register logs
+      LogService.instance.registerLog(
+          "Capture session with GUID: ${SessionManager.instance.sessionGuid} ended and stored in history."
+      );
+
+      // End session through SessionManager
+      SessionManager.instance.endSession();
+
+    } else {
+      LogService.instance.registerLog("No active session to end.");
     }
   }
+
 
   void sendCommand(String command, {String? deviceId}) {
 
