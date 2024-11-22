@@ -96,7 +96,9 @@ class SlaveClient {
                 String? command = decodedMessage['command'];
 
                 if (command == 'sessionStarted' || command == 'sessionStatus') {
+                  LogService.instance.registerLog("Command: $message");
                   String sessionGuid = decodedMessage['sessionGuid'];
+                  LogService.instance.registerLog("Session guid: $sessionGuid");
                   if (sessionGuid.isNotEmpty) {
                     SessionManager.instance.startSession(sessionGuid, deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);

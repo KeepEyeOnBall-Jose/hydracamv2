@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import '../services/session_manager.dart';
+import '../services/uploader_service.dart';
 import '../widgets/media_list_widget.dart';
 
 /// Screen available from appbar menu that shows current session related media and their upload status
@@ -38,7 +39,12 @@ class UploaderInfoScreen extends StatelessWidget {
             child: MediaListWidget(
               photos: photos,
               videos: videos,
-              // Optionally customize onTap callbacks
+              onRetryPhotoUpload: (photo) {
+                UploaderService().addMediaToQueue(photo);
+              },
+              onRetryVideoUpload: (video) {
+                UploaderService().addMediaToQueue(video);
+              },
             ),
           ),
         ],

@@ -23,6 +23,7 @@ class UploaderService {
   void addMediaToQueue(dynamic media) {
     if (media is CapturedPhoto || media is CapturedVideo) {
       _uploadQueue.add(media);
+      LogService.instance.registerLog("Media added to upload queue: ${media.mediaPath}");
       _startUploading();
     } else {
       LogService.instance.registerLog("Invalid media type added to upload queue");
@@ -30,14 +31,18 @@ class UploaderService {
   }
 
   void _startUploading() {
+    LogService.instance.registerLog("UploaderService: _startUploading called. _isUploading=$_isUploading, queue length=${_uploadQueue.length}");
     if (!_isUploading && _uploadQueue.isNotEmpty) {
       _processNextItem();
     }
   }
 
   void _processNextItem() async {
+    LogService.instance.registerLog("UploaderService: _processNextItem called. Queue length=${_uploadQueue.length}");
+
     if (_uploadQueue.isEmpty) {
       _isUploading = false;
+      LogService.instance.registerLog("UploaderService: Queue is empty. Uploading stopped.");
       return;
     }
 
@@ -51,6 +56,7 @@ class UploaderService {
 
     // Get session GUID
     String? sessionGuid = SessionManager.instance.sessionGuid;
+    LogService.instance.registerLog("UploaderService: sessionGuid=$sessionGuid");
 
     if (sessionGuid == null) {
       LogService.instance.registerLog("No session GUID available. Cannot upload media.");
@@ -62,6 +68,15 @@ class UploaderService {
 
     // Prepare file
     File file = File(media.mediaPath);
+
+    // Check if file exists
+    if (!file.existsSync()) {
+      LogService.instance.registerLog("UploaderService: File does not exist: ${file.path}");
+      media.isUploaded = false;
+      _isUploading = false;
+      _processNextItem();
+      return;
+    }
 
     // Prepare metadata
     String slaveDeviceId;

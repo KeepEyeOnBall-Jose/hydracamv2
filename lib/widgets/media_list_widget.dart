@@ -10,12 +10,18 @@ class MediaListWidget extends StatelessWidget {
   final Function(CapturedPhoto)? onPhotoTap;
   final Function(CapturedVideo)? onVideoTap;
 
+  final Function(CapturedPhoto)? onRetryPhotoUpload;
+  final Function(CapturedVideo)? onRetryVideoUpload;
+
+  /// Constructor
   const MediaListWidget({
     Key? key,
     required this.photos,
     required this.videos,
     this.onPhotoTap,
     this.onVideoTap,
+    this.onRetryPhotoUpload,
+    this.onRetryVideoUpload,
   }) : super(key: key);
 
   @override
@@ -31,9 +37,21 @@ class MediaListWidget extends StatelessWidget {
             leading: Image.file(File(photo.photoPath), width: 50, height: 50),
             title: Text("Photo from: ${photo.slaveDeviceId}"),
             subtitle: Text("Captured: ${photo.captureDate}"),
-            trailing: Icon(
-              Icons.cloud_upload,
-              color: photo.isUploaded ? Colors.blue : Colors.black,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: photo.isUploaded ? Colors.blue : Colors.black,
+                ),
+                if (!photo.isUploaded && onRetryPhotoUpload != null)
+                  IconButton(
+                    icon: const Icon(Icons.refresh, color: Colors.green),
+                    onPressed: () {
+                      onRetryPhotoUpload!(photo);
+                    },
+                  ),
+              ],
             ),
             onTap: () {
               if (onPhotoTap != null) {
@@ -47,9 +65,21 @@ class MediaListWidget extends StatelessWidget {
             leading: const Icon(Icons.videocam, size: 50),
             title: Text("Video from: ${video.slaveDeviceId}"),
             subtitle: Text("Started: ${video.startRecordingDate}"),
-            trailing: Icon(
-              Icons.cloud_upload,
-              color: video.isUploaded ? Colors.blue : Colors.black,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: video.isUploaded ? Colors.blue : Colors.black,
+                ),
+                if (!video.isUploaded && onRetryVideoUpload != null)
+                  IconButton(
+                    icon: const Icon(Icons.refresh, color: Colors.green),
+                    onPressed: () {
+                      onRetryVideoUpload!(video);
+                    },
+                  ),
+              ],
             ),
             onTap: () {
               if (onVideoTap != null) {

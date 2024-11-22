@@ -127,6 +127,14 @@ class _SlaveScreenState extends State<SlaveScreen> {
       });
     }
 
+
+    // Add listener
+    SessionManager.instance.addListener(_onSessionChanged);
+
+  }
+
+  void _onSessionChanged() {
+    setState(() {});
   }
 
   void _handleRecordingStarted() {
@@ -184,6 +192,10 @@ class _SlaveScreenState extends State<SlaveScreen> {
     catch(e){
       LogService.instance.registerLog("Exception: $e");
     }
+
+    // Remove listener
+    SessionManager.instance.removeListener(_onSessionChanged);
+
     super.dispose();
   }
 

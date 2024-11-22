@@ -3,6 +3,7 @@ import 'package:sport_cam_sync/services/uploader_service.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import 'log_service.dart';
 
 /// A global manager to handle session-related information across Master and Slave.
 /// Provides a centralized place to access the current session and its GUID.
@@ -39,6 +40,7 @@ class SessionManager extends ChangeNotifier {
       sessionId: sessionGuid,
       startTime: DateTime.now(),
     );
+    LogService.instance.registerLog("Session started with GUID: $_sessionGuid on device type: $_deviceType");
     notifyListeners();
   }
 
@@ -59,6 +61,8 @@ class SessionManager extends ChangeNotifier {
 
     // Add photo to uploader queue
     UploaderService().addMediaToQueue(photo);
+
+    LogService.instance.registerLog("Photo added to upload queue: ${photo.photoPath}");
   }
 
   /// Add a captured video to the current session.
@@ -70,5 +74,7 @@ class SessionManager extends ChangeNotifier {
 
     // Add video to uploader queue
     UploaderService().addMediaToQueue(video);
+
+    LogService.instance.registerLog("Video added to upload queue: ${video.videoPath}");
   }
 }
