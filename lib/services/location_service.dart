@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import '../globals.dart';
 import 'log_service.dart';
 
 class LocationService {
@@ -17,10 +18,12 @@ class LocationService {
   /// Initializes the location service and attempts to get the location.
   Future<void> initialize() async {
     try {
+      LogService.instance.registerLog("Checking and requesting permissions", file:"location_service.dart", function: "initialize");
       await _checkAndRequestPermissions();
+      LogService.instance.registerLog("Attempt to Get Location", file:"location_service.dart", function: "initialize");
       await _attemptToGetLocation();
     } catch (e) {
-      LogService.instance.registerLog("Error initializing location service: $e");
+      LogService.instance.registerLog("Error initializing location service: $e", file:"location_service.dart", function: "initialize");
     }
 
   }
@@ -53,9 +56,13 @@ class LocationService {
   /// Tries to get the current location and updates the current position.
   Future<void> _attemptToGetLocation() async {
     try {
+      LogService.instance.registerLog("Try get location: $_currentPosition");
       _currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-      );
+      ).timeout(Duration(seconds: locationTimeout), onTimeout: () {
+        LogService.instance.registerLog("Timeout obtaining location");
+        throw TimeoutException("Timeout obtaining location");
+      });
       LogService.instance.registerLog("Location obtained: $_currentPosition");
     } catch (e) {
       LogService.instance.registerLog("Error obtaining location: $e");

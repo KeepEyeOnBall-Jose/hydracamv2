@@ -4,3 +4,5 @@ int secondsToClosePhoto = 3; // Seconds after photo taken pop up automatically c
 int timeToStopSearching = 3; // Seconds after slave automatically stops trying to find master and becomes master
 
 int inactivityThreshold = 10; // Inactivity time before disconnecting slave client in seconds
+
+int locationTimeout = 5; // Maximum number of seconds for location service to try get location before timeout
