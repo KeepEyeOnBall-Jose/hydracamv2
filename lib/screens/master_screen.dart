@@ -15,6 +15,7 @@ import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/master_video_recording_screen.dart';
+import '../widgets/media_list_widget.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -535,31 +536,11 @@ class _MasterScreenState extends State<MasterScreen> {
             const SizedBox(height: 20),
             // List to display photos and videos
             Expanded(
-              child: ListView.builder(
-                itemCount: photos.length + videos.length,
-                itemBuilder: (context, index) {
-                  if (index < photos.length) {
-                    final photo = photos[index];
-                    return ListTile(
-                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                      title: Text("Photo from: ${photo.slaveDeviceId}"),
-                      subtitle: Text(
-                        "Captured: ${photo.captureDate}\nReceived: ${photo.receivedDate}",
-                      ),
-                      onTap: () => _showPhotoDialog(photo),
-                    );
-                  } else {
-                    final video = videos[index - photos.length];
-                    return ListTile(
-                      leading: Icon(Icons.videocam, size: 50),
-                      title: Text("Video from: ${video.slaveDeviceId}"),
-                      subtitle: Text(
-                        "Started: ${video.startRecordingDate}\nEnded: ${video.endRecordingDate}",
-                      ),
-                      onTap: () => _showVideoDialog(video),
-                    );
-                  }
-                },
+              child: MediaListWidget(
+                photos: photos,
+                videos: videos,
+                onPhotoTap: _showPhotoDialog,
+                onVideoTap: _showVideoDialog,
               ),
             ),
           ],

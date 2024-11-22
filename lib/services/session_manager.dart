@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:sport_cam_sync/services/uploader_service.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
@@ -51,13 +52,23 @@ class SessionManager extends ChangeNotifier {
 
   /// Add a captured photo to the current session.
   void addPhoto(CapturedPhoto photo) {
+
+    // Add photo to session and notify listeners
     _currentSession?.addPhoto(photo);
     notifyListeners();
+
+    // Add photo to uploader queue
+    UploaderService().addMediaToQueue(photo);
   }
 
   /// Add a captured video to the current session.
   void addVideo(CapturedVideo video) {
+
+    // Add video to session and notify listeners
     _currentSession?.addVideo(video);
     notifyListeners();
+
+    // Add video to uploader queue
+    UploaderService().addMediaToQueue(video);
   }
 }

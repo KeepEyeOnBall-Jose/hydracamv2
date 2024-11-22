@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../app_theme.dart';
 import '../screens/settings_screen.dart';
 import '../screens/log_screen.dart';
+import '../screens/uploader_info_screen.dart';
 import '../services/alert_utils.dart';
 
 class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -47,6 +48,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const LogScreen()),
               );
+            } else if (value == 'Uploader Info') {
+              // Navigate to uploader info screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UploaderInfoScreen()),
+              );
             }
           },
           itemBuilder: (context) => [
@@ -87,6 +94,16 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Icon(Icons.list_alt, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Logs'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'Uploader Info',
+              child: Row(
+                children: const [
+                  Icon(Icons.cloud_upload, color: AppTheme.accentColor),
+                  SizedBox(width: 8),
+                  Text('Uploader Info'),
                 ],
               ),
             ),

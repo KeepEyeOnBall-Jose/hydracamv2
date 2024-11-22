@@ -11,6 +11,7 @@ import '../services/session_manager.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
 import '../widgets/hydra_cam_app_bar.dart';
+import '../widgets/media_list_widget.dart';
 import 'master_screen.dart';
 
 class SlaveScreen extends StatefulWidget {
@@ -262,27 +263,11 @@ class _SlaveScreenState extends State<SlaveScreen> {
             ),
             // Photo and video list
             Expanded(
-              child: ListView.builder(
-                itemCount: photos.length + videos.length,
-                itemBuilder: (context, index) {
-                  if (index < photos.length) {
-                    final photo = photos[index];
-                    return ListTile(
-                      leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                      title: const Text("Photo"),
-                      subtitle: Text("Captured: ${photo.captureDate}"),
-                      onTap: () => _showPhotoDialog(photo),
-                    );
-                  } else {
-                    final video = videos[index - photos.length];
-                    return ListTile(
-                      leading: const Icon(Icons.videocam, size: 50),
-                      title: const Text("Video"),
-                      subtitle: Text("Started: ${video.startRecordingDate}"),
-                      onTap: () => _showVideoDialog(video),
-                    );
-                  }
-                },
+              child: MediaListWidget(
+                photos: photos,
+                videos: videos,
+                onPhotoTap: _showPhotoDialog,
+                onVideoTap: _showVideoDialog,
               ),
             ),
           ]

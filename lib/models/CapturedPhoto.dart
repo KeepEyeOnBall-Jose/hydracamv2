@@ -21,6 +21,13 @@ class CapturedPhoto {
   /// The date and time when the photo was received by the master device.
   final DateTime receivedDate;
 
+  /// Flag to track upload status
+  bool isUploaded;
+  /// Metadata about upload elapsed time
+  Duration? uploadDuration; // to track upload time
+  DateTime? uploadStartTime; // to track upload start time
+
+
   /// Constructor for creating a new CapturedPhoto.
   ///
   /// - `photoData`: The binary data of the photo (can be null once saved).
@@ -34,5 +41,11 @@ class CapturedPhoto {
     required this.slaveDeviceId,
     required this.captureDate,
     required this.receivedDate,
+    this.isUploaded = false,
+    this.uploadDuration,
+    this.uploadStartTime,
   });
+
+  /// Getter for media path (used by UploaderService)
+  String get mediaPath => photoPath;
 }
