@@ -47,13 +47,13 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
         selectedCourtName != null
             ? "Selected Court: $selectedCourtName"
             : "Select a Court",
-        style: TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 16),
       ),
       children: [
         Column(
           children: [
             DropdownButton<String>(
-              hint: Text("Select a Sports Center"),
+              hint: const Text("Select a Sports Center"),
               value: selectedSportsCenter,
               isExpanded: true,
               items: widget.groupedCourts.keys.map((scName) {
@@ -75,7 +75,7 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
                 children: [
                   TextField(
                     controller: searchController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: "Search Courts",
                       prefixIcon: Icon(Icons.search),
                     ),
@@ -84,7 +84,7 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
                     },
                   ),
                   DropdownButton<String>(
-                    hint: Text("Select a Court"),
+                    hint: const Text("Select a Court"),
                     value: selectedCourtName,
                     isExpanded: true,
                     items: getFilteredCourts().map((court) {

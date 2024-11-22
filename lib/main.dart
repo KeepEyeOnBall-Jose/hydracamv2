@@ -8,6 +8,7 @@ import 'package:sport_cam_sync/services/location_service.dart';
 import 'package:sport_cam_sync/services/log_service.dart';
 import 'package:sport_cam_sync/services/permission_service.dart';
 import 'package:sport_cam_sync/app_theme.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +24,14 @@ void main() async {
   String deviceId = await DeviceIdService.getOrCreateDeviceId();
   LogService.instance.registerLog('Device ID: $deviceId');
 
-  // Initialize LocationService and get the current location
-  await LocationService().initialize();
+  LogService.instance.registerLog("Initialize LocationService and try to get the location");
+  // Initialize LocationService and try to get the location
+  final locationService = LocationService();
+  await locationService.initialize();
+
+  LogService.instance.registerLog("Prevent screen from turning off");
+  // Prevent screen from turning off
+  WakelockPlus.enable();
 
   runApp(
     ChangeNotifierProvider(

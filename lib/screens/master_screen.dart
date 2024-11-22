@@ -94,13 +94,15 @@ class _MasterScreenState extends State<MasterScreen> {
       _endCurrentSession();
     } else {
       // Start a new session
-      if (selectedCourtGuid != null) {
-        await _createSession();
-      } else {
+      if (selectedCourtGuid == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please select a court before starting a session.")),
+          const SnackBar(
+            content: Text("No court selected. Proceeding without a court."),
+            duration: Duration(seconds: 3),
+          ),
         );
       }
+      await _createSession();
     }
   }
 
@@ -288,7 +290,7 @@ class _MasterScreenState extends State<MasterScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to create session")),
+        const SnackBar(content: Text("Failed to create session")),
       );
     }
   }
@@ -298,17 +300,17 @@ class _MasterScreenState extends State<MasterScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("End Current Session"),
-          content: Text("Are you sure you want to end the current session?"),
+          title: const Text("End Current Session"),
+          content: const Text("Are you sure you want to end the current session?"),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop(false); // Dont end
               },
             ),
             TextButton(
-              child: Text("End Session"),
+              child: const Text("End Session"),
               onPressed: () {
                 Navigator.of(context).pop(true); // Confirm end
               },
@@ -318,7 +320,7 @@ class _MasterScreenState extends State<MasterScreen> {
       },
     );
 
-    if (confirmEnd != null && confirmEnd == true) {
+    if (confirmEnd) {
       // Call API method endSession
       if (sessionGuid != null) {
         bool success = await _apiService.endSession(sessionGuid!);
@@ -329,11 +331,11 @@ class _MasterScreenState extends State<MasterScreen> {
             sessionActive = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Capture session ended")),
+            const SnackBar(content: Text("Capture session ended")),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Failed to end session on the server")),
+            const SnackBar(content: Text("Failed to end session on the server")),
           );
         }
       }
@@ -344,14 +346,14 @@ class _MasterScreenState extends State<MasterScreen> {
 
     if (photos.isEmpty && videos.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("No media available to upload.")),
+        const SnackBar(content: Text("No media available to upload.")),
       );
       return;
     }
 
     if (sessionGuid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("No session GUID available. Create a session first.")),
+        const SnackBar(content: Text("No session GUID available. Create a session first.")),
       );
       return;
     }
@@ -425,14 +427,14 @@ class _MasterScreenState extends State<MasterScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Connected Devices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
+              const Text('Connected Devices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
               if (devices.isNotEmpty)
                 ...devices.map((deviceId) => ListTile(
                   title: Text('Device ID: $deviceId'),
                 ))
               else
-                Center(child: Text('No connected devices')),
+                const Center(child: Text('No connected devices')),
             ],
           ),
         );
@@ -446,7 +448,7 @@ class _MasterScreenState extends State<MasterScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _connectedDevicesWidget(),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         CourtSelectionWidget(
           groupedCourts: groupedCourts,
           onCourtSelected: (selectedName, selectedGuid) {
@@ -456,10 +458,10 @@ class _MasterScreenState extends State<MasterScreen> {
             });
           },
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ElevatedButton(
-          onPressed: selectedCourtGuid != null ? _startOrEndSession : null,
-          child: Text("Start Session"),
+          onPressed: _startOrEndSession, // Always clickable
+          child: const Text("Start Session"),
         ),
       ],
     );
@@ -475,7 +477,7 @@ class _MasterScreenState extends State<MasterScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _connectedDevicesWidget(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
@@ -483,7 +485,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 child: Text("Take Photo"),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
@@ -498,7 +500,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 child: Text(isRecording ? "Stop Recording" : "Start Recording"),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
@@ -508,7 +510,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 child: Text("Upload All Media"),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
@@ -517,7 +519,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 child: Text("End Session"),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // List to display photos and videos
             Expanded(
               child: ListView.builder(
@@ -649,10 +651,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             child: VideoPlayer(_controller),
           )
         else
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
         ElevatedButton(
           onPressed: () => Navigator.pop(context),
-          child: Text("Close"),
+          child: const Text("Close"),
         ),
       ],
     );

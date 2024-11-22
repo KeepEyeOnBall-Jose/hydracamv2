@@ -130,22 +130,25 @@ class AlertUtils {
   }
 
   /// Show dialog with info about device location.
-  static void showLocationInfoDialog(BuildContext context) {
+  static Future<void> showLocationInfoDialog(BuildContext context) async {
+    final locationService = LocationService(); // Access the singleton instance
+
+    // Fetch the latest location or fallback to "not available"
     String locationInfo;
-    Position? position = LocationService().currentPosition;
+    Position? position = locationService.currentPosition;
     if (position != null) {
-      locationInfo = "Latitud: ${position.latitude}\n"
-          "Longitud: ${position.longitude}\n"
-          "Precisión: ${position.accuracy} metros";
+      locationInfo = "Latitude: ${position.latitude}\n"
+          "Longitude: ${position.longitude}\n"
+          "Precision: ${position.accuracy} metres";
     } else {
-      locationInfo = "Ubicación no disponible.";
+      locationInfo = "Location unavailable.";
     }
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Ubicación del Dispositivo"),
+          title: const Text("Ubicación del Dispositivo"),
           content: Text(locationInfo),
           actions: [
             TextButton(
@@ -153,7 +156,7 @@ class AlertUtils {
               style: TextButton.styleFrom(
                 foregroundColor: AppTheme.accentColor,
               ),
-              child: Text("Cerrar"),
+              child: const Text("Cerrar"),
             ),
           ],
         );
