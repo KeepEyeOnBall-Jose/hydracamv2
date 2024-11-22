@@ -59,10 +59,11 @@ class SessionManager extends ChangeNotifier {
     _currentSession?.addPhoto(photo);
     notifyListeners();
 
+    LogService.instance.registerLog("Adding photo to upload queue: ${photo.photoPath}");
+
     // Add photo to uploader queue
     UploaderService().addMediaToQueue(photo);
 
-    LogService.instance.registerLog("Photo added to upload queue: ${photo.photoPath}");
   }
 
   /// Add a captured video to the current session.
@@ -72,9 +73,10 @@ class SessionManager extends ChangeNotifier {
     _currentSession?.addVideo(video);
     notifyListeners();
 
+    LogService.instance.registerLog("Adding video to upload queue: ${video.videoPath}");
+
     // Add video to uploader queue
     UploaderService().addMediaToQueue(video);
 
-    LogService.instance.registerLog("Video added to upload queue: ${video.videoPath}");
   }
 }

@@ -80,6 +80,8 @@ class HydraCamApiService {
       DateTime receivedDate,
       ) async {
     try {
+      LogService.instance.registerLog("Uploading from hydracam api service for session $sessionGuid. isPhoto = $isPhoto");
+
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('$_baseUrl/UploadMedia?sessionGuid=$sessionGuid&isPhoto=$isPhoto'),
@@ -95,7 +97,6 @@ class HydraCamApiService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse); // Convert to http.Response
-
 
       if (response.statusCode == 200) {
         LogService.instance.registerLog('Media uploaded successfully');
