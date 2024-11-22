@@ -16,17 +16,29 @@ class LocationService {
 
   /// Initializes the location service and attempts to get the location.
   Future<void> initialize() async {
-    await _checkAndRequestPermissions();
-    await _attemptToGetLocation();
+    try {
+      await _checkAndRequestPermissions();
+      await _attemptToGetLocation();
+    } catch (e) {
+      LogService.instance.registerLog("Error initializing location service: $e");
+    }
+
   }
 
   /// Checks permissions and prompts the user to enable location services if needed.
   Future<void> _checkAndRequestPermissions() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      LogService.instance.registerLog("Location services are disabled.");
-      await Geolocator.openLocationSettings();
+    bool serviceEnabled;
+    try {
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        LogService.instance.registerLog("Location services are disabled.");
+        await Geolocator.openLocationSettings();
+      }
+    } catch (e) {
+      LogService.instance.registerLog("Error checking or opening location settings: $e");
+      serviceEnabled = false; // Assume disabled to proceed safely
     }
+
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -47,6 +59,7 @@ class LocationService {
       LogService.instance.registerLog("Location obtained: $_currentPosition");
     } catch (e) {
       LogService.instance.registerLog("Error obtaining location: $e");
+      _currentPosition = null; // Set as null to indicate failure
     }
   }
 

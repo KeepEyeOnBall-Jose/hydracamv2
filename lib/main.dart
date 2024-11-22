@@ -26,8 +26,13 @@ void main() async {
 
   LogService.instance.registerLog("Initialize LocationService and try to get the location");
   // Initialize LocationService and try to get the location
-  final locationService = LocationService();
-  await locationService.initialize();
+  try {
+    final locationService = LocationService();
+    await locationService.initialize();
+  } catch (e) {
+    LogService.instance.registerLog("Failed to initialize location service: $e", function: "main()", file: "main.dart");
+  }
+
 
   LogService.instance.registerLog("Prevent screen from turning off");
   // Prevent screen from turning off
