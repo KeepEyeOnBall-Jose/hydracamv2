@@ -7,6 +7,7 @@ import '../globals.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import '../services/log_service.dart';
+import '../services/session_manager.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
 import '../widgets/hydra_cam_app_bar.dart';
@@ -31,13 +32,11 @@ class _SlaveScreenState extends State<SlaveScreen> {
   Timer? autoModeTimer; // Timer for auto mode logic
   bool isRecording = false;
 
+  // Getters for SessionManager photos and videos
+  List<CapturedPhoto> get photos => SessionManager.instance.currentSession?.capturedPhotos ?? [];
+  List<CapturedVideo> get videos => SessionManager.instance.currentSession?.capturedVideos ?? [];
+
   MasterDiscovery? _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
-
-
-  // Add lists for photos and videos //TODO EXTRACT TO AVOID REPEAT CODE WITH MASTER
-  List<CapturedPhoto> photos = [];
-  List<CapturedVideo> videos = [];
-
 
   @override
   void initState() {
@@ -49,10 +48,9 @@ class _SlaveScreenState extends State<SlaveScreen> {
         _client = SlaveClient(
           'ws://$masterIp:4040/ws',
           onPhotoTaken: (path) {
-            if (!mounted) return; //TODO: CHeck if this should always be mounted and therefor be a problem here or is ok
+            if (!mounted) return;
             setState(() {
               statusMessage = "Photo taken!";
-              photos = _client!.photos; // Update photos
             });
             LogService.instance.registerLog("Photo taken!!!");
 
@@ -99,8 +97,6 @@ class _SlaveScreenState extends State<SlaveScreen> {
           if (mounted) {
             setState(() {
               statusMessage = message;
-              photos = _client!.photos;
-              videos = _client!.videos;
             });
           }
         });
@@ -141,13 +137,13 @@ class _SlaveScreenState extends State<SlaveScreen> {
   }
 
   void _handleRecordingStopped() {
-    if(mounted){
+    if (mounted) {
       setState(() {
         isRecording = false;
-        videos = _client!.videos; // Update videos
       });
     }
   }
+
 
   void _transitionToMasterScreen() {
     // Stop any activity related to Slave
@@ -193,7 +189,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   @override
   Widget build(BuildContext context) {
 
-    String sessionDisplay = _client?.currentSessionGuid ?? "No active session"; // Get current session
+    String sessionDisplay = SessionManager.instance.sessionGuid ?? "No active session";    // Get current session
 
     return WillPopScope(
       onWillPop: () async {

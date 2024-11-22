@@ -9,6 +9,7 @@ import '../services/camera_service.dart';
 import '../services/device_service.dart'; // Import for device ID service
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
+import '../services/session_manager.dart';
 
 class SlaveClient {
   final String serverAddress;
@@ -19,15 +20,6 @@ class SlaveClient {
   Timer? _reconnectTimer;
   Timer? _heartbeatTimer; // Timer for sending heartbeat
   String? _deviceId; // Store the device ID
-
-  String? currentSessionGuid; // Store the session GUID // TODO: Also refactor this? master also has it
-
-  // Lists to store photos and videos locally //TODO REFACTOR SO WE DONT DUPLICATE THIS WITH MASTER
-  final List<CapturedPhoto> _photos = [];
-  final List<CapturedVideo> _videos = [];
-
-  List<CapturedPhoto> get photos => _photos;
-  List<CapturedVideo> get videos => _videos;
 
   // StreamController to broadcast status messages
   final StreamController<String> _statusStreamController = StreamController.broadcast();
@@ -106,7 +98,7 @@ class SlaveClient {
                 if (command == 'sessionStarted' || command == 'sessionStatus') {
                   String sessionGuid = decodedMessage['sessionGuid'];
                   if (sessionGuid.isNotEmpty) {
-                    currentSessionGuid = sessionGuid; // Store the session
+                    SessionManager.instance.startSession(sessionGuid, deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
                 }
@@ -163,7 +155,7 @@ class SlaveClient {
           receivedDate: receivedDate,
           slaveDeviceId: "Slave",
         );
-        _photos.add(capturedPhoto);
+        SessionManager.instance.addPhoto(capturedPhoto);
 
         // Update the UI
         _statusStreamController.add("Photo taken and saved locally.");
@@ -197,7 +189,7 @@ class SlaveClient {
           endRecordingDate: videoEndRecordingDate!,
           receivedDate: receivedDate,
         );
-        _videos.add(capturedVideo);
+        SessionManager.instance.addVideo(capturedVideo);
 
         // Update the UI
         _statusStreamController.add("Video recording stopped and saved locally.");
