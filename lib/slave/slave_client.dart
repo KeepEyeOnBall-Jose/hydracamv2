@@ -20,6 +20,8 @@ class SlaveClient {
   Timer? _heartbeatTimer; // Timer for sending heartbeat
   String? _deviceId; // Store the device ID
 
+  String? currentSessionGuid; // Store the session GUID // TODO: Also refactor this? master also has it
+
   // Lists to store photos and videos locally //TODO REFACTOR SO WE DONT DUPLICATE THIS WITH MASTER
   final List<CapturedPhoto> _photos = [];
   final List<CapturedVideo> _videos = [];
@@ -101,14 +103,10 @@ class SlaveClient {
                 // If the decoded message is a Map, process it as a command
                 String? command = decodedMessage['command'];
 
-                if (command == 'sessionStarted') {
-                  // Handle session start command and notify readiness
-                  String sessionGuid = decodedMessage['sessionGuid'];
-                  notifyReadyToTransmit(sessionGuid);
-                } else if (command == 'sessionStatus') {
-                  // Handle session status command, checking if session GUID is valid
+                if (command == 'sessionStarted' || command == 'sessionStatus') {
                   String sessionGuid = decodedMessage['sessionGuid'];
                   if (sessionGuid.isNotEmpty) {
+                    currentSessionGuid = sessionGuid; // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
                 }

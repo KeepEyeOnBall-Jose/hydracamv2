@@ -192,6 +192,9 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    String sessionDisplay = _client?.currentSessionGuid ?? "No active session"; // Get current session
+
     return WillPopScope(
       onWillPop: () async {
         _cleanUpSlaveMode();
@@ -214,6 +217,13 @@ class _SlaveScreenState extends State<SlaveScreen> {
         ),
         body: Column(
           children:[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Session: $sessionDisplay",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
+            ),
             Expanded(
               child: Stack(
                 children: [
@@ -228,7 +238,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                         children: [
                           Text(
                             statusMessage,
-                            style: TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 18),
                             textAlign: TextAlign.center,
                           ),
                           if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
@@ -263,15 +273,15 @@ class _SlaveScreenState extends State<SlaveScreen> {
                     final photo = photos[index];
                     return ListTile(
                       leading: Image.file(File(photo.photoPath), width: 50, height: 50),
-                      title: Text("Photo"),
+                      title: const Text("Photo"),
                       subtitle: Text("Captured: ${photo.captureDate}"),
                       onTap: () => _showPhotoDialog(photo),
                     );
                   } else {
                     final video = videos[index - photos.length];
                     return ListTile(
-                      leading: Icon(Icons.videocam, size: 50),
-                      title: Text("Video"),
+                      leading: const Icon(Icons.videocam, size: 50),
+                      title: const Text("Video"),
                       subtitle: Text("Started: ${video.startRecordingDate}"),
                       onTap: () => _showVideoDialog(video),
                     );
@@ -296,7 +306,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
               Image.file(File(photo.photoPath)),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Close"),
+                child: const Text("Close"),
               ),
             ],
           ),
