@@ -12,6 +12,17 @@ import '../services/camera_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 
+/// MasterServer - Handles the master device's WebSocket server.
+/// This class manages communication with slave devices, tracks active connections,
+/// receives captured media, and manages sessions via the `SessionManager`.
+///
+/// ### Responsibilities:
+/// - Starts and stops a WebSocket server for handling slave connections.
+/// - Manages client registrations and disconnections.
+/// - Receives media (photos and videos) from slave devices and adds them to the active session.
+/// - Sends commands to all connected slaves or specific devices.
+/// - Tracks the heartbeat of connected clients to identify inactive ones.
+
 class MasterServer {
   HttpServer? _server;
   final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
@@ -23,10 +34,17 @@ class MasterServer {
   Function(dynamic)? onMediaReceived; // Callback for media reception
   Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
 
-  final CameraService cameraService; // Camera service here so master can also take pics
+  /// Camera service is used for capturing media directly on the master device
+  final CameraService cameraService;
 
+  /// Constructor for MasterServer.
+  ///
+  /// - `cameraService`: The service to handle camera-related operations.
   MasterServer(this.cameraService);
 
+
+  /// Starts the WebSocket server on the master device and initializes the heartbeat check mechanism.
+  /// This method binds to a specific port and listens for incoming connections.
   Future<void> startServer() async {
     try {
       _server = await HttpServer.bind('0.0.0.0', 4040);
@@ -144,6 +162,10 @@ class MasterServer {
       LogService.instance.registerLog("Failed to start WebSocket Server: $e");
     }
   }
+
+  //TODO: Split startserver into "handleincomingmessage" method to extract the part where we process the message
+
+  /// Starts a periodic check for inactive clients based on heartbeat timestamps.
   void _startHeartbeatCheck() {
     _heartbeatCheckTimer = Timer.periodic(Duration(seconds: 10), (_) {
       final now = DateTime.now();
@@ -184,6 +206,11 @@ class MasterServer {
     return _clients.keys.toList();
   }
 
+  /// Saves media data locally, either as a photo or video.
+  ///
+  /// - `binaryData`: The raw binary data of the media file.
+  /// - `isPhoto`: Whether the media is a photo (`true`) or a video (`false`).
+  /// Returns the file path where the media is saved.
   Future<String> _saveMediaLocally(Uint8List binaryData, bool isPhoto) async {
 
     LogService.instance.registerLog("Save media locally");
@@ -224,6 +251,7 @@ class MasterServer {
   }
 
 
+  /// Sends a command to all connected slave devices.
   void sendCommandToAll(String message) {
     for (var client in _clients.values) {
       client.add(message);
@@ -249,6 +277,7 @@ class MasterServer {
   }
 
 
+  /// Sends a command to specific slave device or to all. (TODO: Merge with the sendcommandtoall)
   void sendCommand(String command, {String? deviceId}) {
 
     LogService.instance.registerLog("Sending command $command");
@@ -266,6 +295,7 @@ class MasterServer {
     }
   }
 
+  /// Stops the WebSocket server and cleans up all connections.
   void stopServer() {
     // TODO: Here end active session before stopping server??
 

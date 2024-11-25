@@ -1,22 +1,46 @@
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import '../constants.dart';
 import 'log_service.dart';
 
+/// CameraService - Manages camera operations such as taking photos and recording videos.
+/// This service uses the `camera` plugin to control the device's camera, ensuring
+/// consistent behavior across Android and iOS platforms.
+///
+/// ### Responsibilities:
+/// - Initializes and configures the camera.
+/// - Handles photo capture and video recording with optional flash control.
+/// - Saves captured media to the device's gallery.
+/// - Provides callback support for notifying external components when media is captured.
+///
+/// ### Features:
+/// - Ensures the camera is ready before any operation.
+/// - Provides an API to control flash settings during photo and video capture.
+/// - Logs all operations for debugging and monitoring purposes.
+/// - Supports quality settings for camera resolution.
+/// - List and select available cameras for the device (TBI).
 class CameraService {
-  CameraController? _controller;
-  CameraController? get controller => _controller;
+  CameraController? _controller; // The camera controller instance
+  CameraController? get controller => _controller; // Getter for accessing the controller
 
   bool _isCameraInitialized = false; // Tracks camera initialization status
 
-  DateTime? videoStartRecordingDate;
-  DateTime? videoEndRecordingDate;
+  DateTime? videoStartRecordingDate; // Timestamp for when video recording starts
+  DateTime? videoEndRecordingDate; // Timestamp for when video recording ends
 
-  Function(String)? onPhotoTaken; // Callback to notify SlaveScreen about photos
-  Function(String)? onVideoRecorded; // Callback to notify SlaveScreen about videos
+  Function(String)? onPhotoTaken; // Callback to notify screen about taken photos
+  Function(String)? onVideoRecorded; // Callback to notify screen about videos
 
-  // Constructor to include the callbacks
+  // Current camera quality setting (default: high)
+  CameraQuality _currentQuality = CameraQuality.high;
+
+  /// Constructor that allows optional callbacks for photo and video capture.
   CameraService({this.onPhotoTaken, this.onVideoRecorded});
 
+  /// Starts the camera and initializes it with default settings.
+  ///
+  /// - Uses the first available camera (usually the back camera).
+  /// - Ensures the flash is turned off during initialization.
   Future<void> startCamera() async {
     final cameras = await availableCameras();
     _controller = CameraController(cameras[0], ResolutionPreset.high);
@@ -30,7 +54,11 @@ class CameraService {
     }
   }
 
-  /// Ensures the camera is ready before any operation
+  /// Ensures the camera is ready before performing any operation.
+  ///
+  /// - Initializes the camera if it has not been initialized already.
+  /// - Configures the flash to be off by default.
+  /// - Throws an exception if initialization fails.
   Future<void> ensureCameraIsReady() async {
     if (_isCameraInitialized && _controller?.value.isInitialized == true) {
       LogService.instance.registerLog("Camera is already initialized and ready.");
@@ -53,6 +81,10 @@ class CameraService {
     }
   }
 
+  /// Captures a photo and saves it to the gallery.
+  ///
+  /// - `enableFlash`: Whether to enable the flash during capture (default: `false`).
+  /// - Returns the file path of the captured photo.
   Future<String> takePhoto({bool enableFlash = false}) async {
     try {
       await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
@@ -82,6 +114,9 @@ class CameraService {
     }
   }
 
+  /// Starts recording a video.
+  ///
+  /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
   Future<void> startRecordingVideo({bool enableFlash = false}) async {
     try {
       await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
@@ -102,6 +137,9 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
     }
   }
 
+  /// Stops recording a video and saves it to the gallery.
+  ///
+  /// - Returns the file path of the recorded video.
   Future<String> stopRecordingVideo() async {
     try {
       final XFile video = await _controller!.stopVideoRecording();
@@ -126,6 +164,7 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
     }
   }
 
+  /// Stops the camera and disposes of its resources.
   Future<void> stopCamera() async {
     try {
       await _controller?.setFlashMode(FlashMode.off); // Turn off flash when stopping the camera
@@ -135,4 +174,41 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
       LogService.instance.registerLog("Error stopping camera: $e");
     }
   }
+
+  /// Sets the camera quality.
+  Future<void> setCameraQuality(CameraQuality quality) async {
+    _currentQuality = quality;
+    ResolutionPreset preset;
+
+    switch (quality) {
+      case CameraQuality.high:
+        preset = ResolutionPreset.high;
+        break;
+      case CameraQuality.medium:
+        preset = ResolutionPreset.medium;
+        break;
+      case CameraQuality.low:
+        preset = ResolutionPreset.low;
+        break;
+    }
+
+    if (_controller != null && _controller!.value.isInitialized) {
+      await _controller?.dispose();
+    }
+
+    final cameras = await availableCameras();
+    _controller = CameraController(cameras[0], preset);
+
+    try {
+      await _controller?.initialize();
+      await _controller?.setFlashMode(FlashMode.off);
+      _isCameraInitialized = true;
+      LogService.instance.registerLog("Camera quality set to $_currentQuality and reinitialized.");
+    } catch (e) {
+      LogService.instance.registerLog("Error setting camera quality: $e");
+    }
+  }
+
+  /// Returns the current camera quality.
+  CameraQuality get currentQuality => _currentQuality;
 }

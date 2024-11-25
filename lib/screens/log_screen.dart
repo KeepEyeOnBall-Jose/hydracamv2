@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/log_service.dart';
 
-/// A screen to display application logs.
+/// A screen to display application logs, stored from any part of the app.
 class LogScreen extends StatefulWidget {
   const LogScreen({Key? key}) : super(key: key);
 

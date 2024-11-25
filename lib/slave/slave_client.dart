@@ -11,31 +11,67 @@ import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 
-class SlaveClient {
-  final String serverAddress;
-  IOWebSocketChannel? _channel;
-  final CameraService _cameraService;
-  bool _isConnected = false;
-  bool isRecordingVideo = false; // Flag to track video recording state
-  Timer? _reconnectTimer;
-  Timer? _heartbeatTimer; // Timer for sending heartbeat
-  String? _deviceId; // Store the device ID
+/// SlaveClient - Handles the WebSocket client for slave devices.
+/// This class manages communication with the master device, sending captured media
+/// and receiving commands such as "take photo" or "start recording video".
+///
+/// ### Responsibilities:
+/// - Connects to the WebSocket server hosted by the master device.
+/// - Sends device-specific data such as its ID and status updates.
+/// - Receives and processes commands from the master device.
+/// - Captures photos and videos using the `CameraService` and associates them with the active session.
+/// - Sends periodic heartbeats to maintain an active connection.
+/// - Automatically reconnects in case of a disconnection.
 
-  // StreamController to broadcast status messages
+class SlaveClient {
+  /// The address of the WebSocket server (master device).
+  final String serverAddress;
+
+  /// WebSocket channel for communication with the master.
+  IOWebSocketChannel? _channel;
+
+  /// CameraService instance for handling camera operations.
+  final CameraService _cameraService;
+
+  /// Flag to indicate whether the client is currently connected.
+  bool _isConnected = false;
+
+  /// Flag to track the video recording state.
+  bool isRecordingVideo = false;
+
+  /// Timer for automatic reconnection attempts.
+  Timer? _reconnectTimer;
+
+  /// Timer for sending periodic heartbeats.
+  Timer? _heartbeatTimer;
+
+  /// Device ID for identifying the slave to the master.
+  String? _deviceId;
+
+  /// StreamController for broadcasting status updates to the UI.
   final StreamController<String> _statusStreamController = StreamController.broadcast();
+
+  /// Stream of status messages for the UI to listen to.
   Stream<String> get statusStream => _statusStreamController.stream;
 
-  // To store timestamps
+  /// Timestamps for photo and video operations.
   DateTime? photoCaptureDate;
   DateTime? videoStartRecordingDate;
   DateTime? videoEndRecordingDate;
 
+  /// CameraController getter for direct access to the camera.
   CameraController? get cameraController => _cameraService.controller;
 
-  // Add callbacks
+  /// Callbacks for recording events.
   final VoidCallback? onRecordingStarted;
   final VoidCallback? onRecordingStopped;
 
+  /// Constructor for `SlaveClient`.
+  ///
+  /// - `serverAddress`: The WebSocket server address of the master device.
+  /// - `onPhotoTaken`: Callback for when a photo is captured.
+  /// - `onRecordingStarted`: Callback for when video recording starts.
+  /// - `onRecordingStopped`: Callback for when video recording stops.
   SlaveClient(
       this.serverAddress, {
         Function(String)? onPhotoTaken,
@@ -44,6 +80,7 @@ class SlaveClient {
       }) : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
 
 
+  /// Connects the client to the WebSocket server and initializes communication.
   Future<void> connect() async {
 
     if (_isConnected) {
@@ -143,6 +180,9 @@ class SlaveClient {
     }
   }
 
+
+  /// Processes specific commands received from the master.
+  /// Gets commands like taking pictures or videos.
   void _processCommand(String message) {
     if (message == 'takePhoto') {
       photoCaptureDate = DateTime.now();
@@ -211,6 +251,7 @@ class SlaveClient {
     }
   }
 
+  /// Sends a notification to the server that the slave is ready to transmit media.
   Future<void> notifyReadyToTransmit(String sessionGuid) async {
     String deviceId = _deviceId ?? 'Unknown';
 
@@ -225,6 +266,7 @@ class SlaveClient {
     }
   }
 
+  /// Starts the periodic heartbeat to maintain the WebSocket connection.
   void _startHeartbeat() {
     _stopHeartbeat(); // Ensure no duplicate timers
     _heartbeatTimer = Timer.periodic(Duration(seconds: 5), (_) {
@@ -239,11 +281,13 @@ class SlaveClient {
     });
   }
 
+  /// Stops the periodic heartbeat.
   void _stopHeartbeat() {
     _heartbeatTimer?.cancel();
     _heartbeatTimer = null;
   }
 
+  /// Attempts to reconnect to the WebSocket server.
   void _attemptReconnect() {
     if (_reconnectTimer == null || !_reconnectTimer!.isActive) {
       _reconnectTimer = Timer.periodic(Duration(seconds: 5), (timer) {

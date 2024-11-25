@@ -66,17 +66,16 @@ When capturing photos or videos, the `enableFlash` parameter can be used to dyna
 
 3. Once connected, the master device sends commands for camera actions (e.g., taking a photo or recording a video) during a capture session.
 4. **Captured Media Management**:
-   - Captured media is transferred from slave devices to the master, organized into a session, and saved to local storage.
-   - Photos and videos received by the master device are saved in session-specific directories.
+   - Captured media is stored locally on each device (slave or master), into a session, and automatically uploaded.
+   - Photos and videos are saved in session-specific directories.
    - Additionally, photos are saved in the `HydraCam` album for easy local access.
-   - The media is then organized and uploaded to the external API at the end of the session.
-5. At the end of the session, the master device uploads the media files to an external API.
+   - The media can also be manually uploaded from the uploader menu.
+5. At the end of the session, the master notifies server and slaves that session has ended.
 
 
 ## Project Structure
 
 lib/
-├── main.dart                       # Main entry point of the application.
 ├── master/
 │   ├── master_announcer.dart       # Broadcasts the master device's presence.
 │   └── master_server.dart          # WebSocket server to communicate with slaves.
@@ -85,29 +84,86 @@ lib/
 │   ├── CapturedVideo.dart          # Represents a recorded video.
 │   └── CaptureSession.dart         # Manages a capture session's media and metadata.
 ├── screens/
+│   ├── log_screen.dart             # Displays logs for debugging purposes.
 │   ├── master_screen.dart          # Master control interface.
 │   ├── role_selection_screen.dart  # Initial screen for selecting device role.
 │   ├── settings_screen.dart        # Screen accessible from appbar to access app preferences.
-│   └── slave_screen.dart           # Slave interface for receiving commands.
+│   ├── slave_screen.dart           # Slave interface for receiving commands.
+│   └── uploader_info_screen.dart   # Shows upload status for photos and videos.
 ├── services/
+│   ├── alert_utils.dart            # Utility for showing alerts and pop-ups.
 │   ├── camera_service.dart         # Manages camera operations on the devices.
 │   ├── device_id_provider.dart     # Provides device identification.
 │   ├── device_service.dart         # Retrieves or generates unique device IDs.
 │   ├── hydracam_api_service.dart   # Handles API requests to upload media.
+│   ├── location_service.dart       # Handles location tracking with geolocator.
+│   ├── log_service.dart            # Centralized service for logging events.
+│   ├── permission_service.dart     # Ensures necessary permissions are granted.
+│   ├── session_manager.dart        # Handles session logic, shared by master and slaves.
 │   ├── settings_service.dart       # Manages read/write configurations over the app.
-│   └── permission_service.dart     # Ensures necessary permissions are granted.
+│   └── uploader_service.dart       # Manages upload queue and retries for media files.
 ├── slave/
 │   ├── master_discovery.dart       # Finds and connects to the master device.
 │   └── slave_client.dart           # WebSocket client for slave devices.
-└── widgets/
-    └── Court_Selection_Widget.dart # Widget for court selection.
+├── widgets/
+│   ├── camera_preview_widget.dart  # Displays the camera's live preview (slave only).
+│   ├── Court_Selection_Widget.dart # Widget for court selection.
+│   ├── hydra_cam_app_bar.dart      # Custom app bar with menu options.
+│   ├── master_video_recording_screen.dart
+│   │                               # Displays camera preview for the master during video recording.
+│   └── media_list_widget.dart      # Displays a list of media captured in the current session.
+│
+├── app_theme.dart                  # Centralized theme system for colors, fonts, and styles.
+├── constants.dart                  # Application-wide constants.
+├── globals.dart                    # Global variables accessible across the app.
+└── main.dart                       # Main entry point of the application.
 
 
 ## Media Management and Memory Optimization
-Captured photos and videos are managed efficiently to balance memory usage and persistent storage:
-- **On the Slave Device**: Photos are saved to the device's local storage when captured. The binary data is read and sent to the master device, and then the binary data is cleared from memory, retaining only the storage path.
-- **On the Master Device**: The received photo binary data is saved to the device's local storage under a session-specific directory. The binary data is then cleared from memory to prevent excessive RAM usage. Photos are accessible via their file paths for display or further processing.
-- **Sessions**: Photos are associated with a `CaptureSession`, which keeps the session organized and ready for potential uploading or review. Once a session ends, it is stored in a session history for future reference.
+HydraCam handles photos and videos efficiently by leveraging the **SessionManager** and **UploaderService**. Each device (master or slave) independently manages its captured media and uploads directly to the server without transferring large files between devices. This approach minimizes network usage and ensures smooth operation during capture sessions:
+
+- **On All Devices**:
+   - Both master and slave devices capture and save media locally using the **CameraService**.
+   - Each media item (photo or video) is added to the current session via the **SessionManager**, associating it with metadata such as timestamps, device IDs, and session GUIDs.
+   - Captured media is visible only on the device where it was taken, reducing unnecessary network traffic.
+
+- **Session Management**:
+   - Media is organized under a `CaptureSession` managed by the **SessionManager**. This ensures all captured items are properly grouped and tracked within the session.
+   - Sessions can be ended manually or automatically, with metadata retained for upload and review.
+
+- **UploaderService**:
+   - Each device independently queues its media for upload to the server using the **UploaderService**. This avoids delays caused by transferring files between devices.
+   - The **UploaderService** handles retries and provides real-time upload status updates to the UI.
+   - Media uploads include metadata for proper association on the server, such as the session GUID, device ID, and capture timestamps.
+
+
+
+## Additional Explanations
+
+### SessionManager
+
+`SessionManager` is a singleton service that centralizes session management logic for both master and slave devices. It tracks the current session's metadata and provides an API for adding media to the session. Its primary responsibilities include:
+
+- Managing the session GUID and metadata.
+- Adding photos and videos to the current session.
+- Automatically queuing media for upload via `UploaderService`.
+- Notifying listeners (e.g., UI components) whenever the session state changes.
+
+**Usage Example:** Both master and slave devices use `SessionManager` to handle media addition, ensuring consistency across device roles.
+
+---
+
+### UploaderService
+
+`UploaderService` is a singleton responsible for handling the upload of captured media to the API. It uses a queue-based system to ensure reliable uploads, with support for retries and UI notifications. Its key features are:
+
+- Adding media to an upload queue.
+- Automatically processing the queue in the background.
+- Notifying the UI of upload progress or failures.
+- Storing metadata like upload duration and success status.
+
+> **Important:** This service works in tandem with `SessionManager`, fetching the session GUID and media metadata to facilitate accurate uploads.
+
 
 ## Next Steps
 1. **Enhanced Session Management**: Abstract sessions into matches, sports, or specific venues (like a court or field).
@@ -130,23 +186,20 @@ Captured photos and videos are managed efficiently to balance memory usage and p
 ...
 
 ## Usage
-0. Connect to same Network:
+1. Connect to same Network:
    - All devices must be in the same network.
    - This typically means the master (or one slave) is acting as a hotspot and the others are connected to its WiFi.
-1. Master Device Control:
+2. Master Device Control:
    - Open MasterScreen to access the control buttons.
    - Tap “Create Session”
-   - Tap “Start Camera” to send a command to all connected slave devices to activate their cameras.
-   - Tap “Take Picture” “Start/Stop Video” to send a command to all connected slave devices to stop their cameras.
+   - Tap “Take Picture” or “Start/Stop Video” to send a command to all connected slave devices to stop their cameras.
 
-2. Slave Device Response:
+3. Slave Device Response:
    - Each slave device will respond to the master’s commands and start or stop its camera as instructed.
-   - The current state of the camera is displayed on the SlaveScreen.
+   - The recorded materials are available in the lower part of the screen for each device along with the uploading state.
 
 ## Future Enhancements
-1. Background Upload Service: Upload captured videos and photos to a cloud endpoint.
-2. Detailed Camera Status Feedback: Enable each slave device to provide real-time status back to the master.
-3. Multi-angle Capture Synchronization: Enhance timing and synchronization precision for capturing multi-angle views of sports events.
+...
 
 ## Available settings
 These are the preferences that one can adjust in the settings screen:

@@ -66,3 +66,5 @@ final Map<String, List<Map<String, String>>> groupedCourts = {
   ],
 };
 
+/// Enum to represent available quality settings.
+enum CameraQuality { high, medium, low }

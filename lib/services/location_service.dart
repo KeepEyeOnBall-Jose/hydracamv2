@@ -3,19 +3,38 @@ import 'package:geolocator/geolocator.dart';
 import '../globals.dart';
 import 'log_service.dart';
 
+/// LocationService - Manages location-related functionality in the app.
+/// This service handles location permissions, retrieves the current location,
+/// and provides utility methods to access and format the location data.
+///
+/// ### Responsibilities:
+/// - Checks and requests location permissions from the user.
+/// - Retrieves the current GPS location with the best available accuracy.
+/// - Logs location-related operations for debugging and monitoring purposes.
+/// - Provides a formatted string representation of the current location.
+///
+/// This service is implemented as a singleton to ensure consistent location data across the app.
 class LocationService {
+
+  /// The current GPS position.
   Position? _currentPosition;
 
-  /// Singleton pattern
+  /// Singleton instance of the `LocationService`.
   static final LocationService _instance = LocationService._internal();
 
+  /// Factory constructor to access the singleton instance.
   factory LocationService() {
     return _instance;
   }
 
+  /// Private constructor for the singleton pattern.
   LocationService._internal();
 
-  /// Initializes the location service and attempts to get the location.
+  /// Initializes the location service by checking permissions and attempting to get the location.
+  ///
+  /// - Logs each step of the initialization process.
+  /// - Requests location permissions if necessary.
+  /// - Tries to obtain the current GPS location.
   Future<void> initialize() async {
     try {
       LogService.instance.registerLog("Checking and requesting permissions", file:"location_service.dart", function: "initialize");
@@ -28,7 +47,11 @@ class LocationService {
 
   }
 
-  /// Checks permissions and prompts the user to enable location services if needed.
+  /// Checks and requests location permissions.
+  ///
+  /// - Prompts the user to enable location services if they are disabled.
+  /// - Requests location permissions if they are not already granted.
+  /// - Logs the status of permissions and location services.
   Future<void> _checkAndRequestPermissions() async {
     bool serviceEnabled;
     try {
@@ -53,7 +76,12 @@ class LocationService {
     }
   }
 
-  /// Tries to get the current location and updates the current position.
+  /// Attempts to get the current GPS location.
+  ///
+  /// - Uses `Geolocator.getCurrentPosition` to fetch the location with the best available accuracy.
+  /// - Sets a timeout to prevent indefinite waiting in case of issues.
+  /// - Updates the `_currentPosition` property with the retrieved location.
+  /// - Logs the result or any errors encountered during the process.
   Future<void> _attemptToGetLocation() async {
     try {
       LogService.instance.registerLog("Try get location: $_currentPosition");
@@ -77,10 +105,13 @@ class LocationService {
     await _attemptToGetLocation();
   }
 
-  /// Returns the current position.
+  /// Gets the current position. Returns the last known position, or `null` if no location is available.
   Position? get currentPosition => _currentPosition;
 
-  /// Returns a formatted string of the current position.
+  /// Provides a formatted string representation of the current GPS position.
+  ///
+  /// - Returns a human-readable string of latitude and longitude if the location is available.
+  /// - Returns "Location not available" if the location is not set.
   String get formattedPosition {
     if (_currentPosition == null) {
       return "Location not available";
