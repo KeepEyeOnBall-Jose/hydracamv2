@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:sport_cam_sync/services/settings_service.dart';
 import '../constants.dart';
 import 'log_service.dart';
 
@@ -40,9 +41,12 @@ class CameraService {
   /// Starts the camera and initializes it with default settings.
   ///
   /// - Uses the first available camera (usually the back camera).
+  /// - Loads previous camera setting if exists.
   /// - Ensures the flash is turned off during initialization.
   Future<void> startCamera() async {
     final cameras = await availableCameras();
+    final quality = await _loadCameraQuality();
+
     _controller = CameraController(cameras[0], ResolutionPreset.high);
 
     try {
@@ -51,6 +55,26 @@ class CameraService {
       LogService.instance.registerLog("Camera initialized with flash off");
     } catch (e) {
       LogService.instance.registerLog("Error initializing camera: $e");
+    }
+  }
+
+  /// Loads stored camera setting if exists and applies it to camera.
+  ///
+  /// - Gets camera quality from settings service.
+  /// - Configures found setting or high if none.
+  Future<ResolutionPreset> _loadCameraQuality() async {
+    final quality = await SettingsService.getCameraQuality();
+    switch (quality) {
+      case 'medium':
+        _currentQuality = CameraQuality.medium;
+        return ResolutionPreset.medium;
+      case 'low':
+        _currentQuality = CameraQuality.low;
+        return ResolutionPreset.low;
+      case 'high':
+      default:
+        _currentQuality = CameraQuality.high;
+        return ResolutionPreset.high;
     }
   }
 
