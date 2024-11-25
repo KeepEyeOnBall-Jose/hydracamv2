@@ -47,11 +47,12 @@ class CameraService {
     final cameras = await availableCameras();
     final quality = await _loadCameraQuality();
 
-    _controller = CameraController(cameras[0], ResolutionPreset.high);
+    _controller = CameraController(cameras[0], quality);
 
     try {
       await _controller?.initialize();
       await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off at startup
+      _isCameraInitialized = true;
       LogService.instance.registerLog("Camera initialized with flash off");
     } catch (e) {
       LogService.instance.registerLog("Error initializing camera: $e");
@@ -199,9 +200,11 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
     }
   }
 
-  /// Sets the camera quality.
+  /// Sets the camera quality and reinitializes the controller.
   Future<void> setCameraQuality(CameraQuality quality) async {
+    LogService.instance.registerLog("Changing camera quality to $quality (current: $_currentQuality)");
     _currentQuality = quality;
+
     ResolutionPreset preset;
 
     switch (quality) {
@@ -216,6 +219,7 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
         break;
     }
 
+    // Dispose of the current controller if initialized
     if (_controller != null && _controller!.value.isInitialized) {
       await _controller?.dispose();
     }

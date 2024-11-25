@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
+import '../constants.dart';
+import '../services/camera_service.dart';
 import '../services/settings_service.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -36,11 +38,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _updateCameraQuality(String quality) async {
+    // Store setting and update UI
     await SettingsService.setCameraQuality(quality);
     setState(() {
       _cameraQuality = quality;
     });
+
+    // Apply setting to camera
+    final CameraQuality newQuality = _mapQualityStringToEnum(quality);
+    await CameraService().setCameraQuality(newQuality);
   }
+
+  CameraQuality _mapQualityStringToEnum(String quality) {
+    switch (quality) {
+      case 'high':
+        return CameraQuality.high;
+      case 'medium':
+        return CameraQuality.medium;
+      case 'low':
+        return CameraQuality.low;
+      default:
+        throw Exception('Invalid quality string: $quality');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
