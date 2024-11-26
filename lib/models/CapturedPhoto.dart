@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 /// CapturedPhoto - Represents a photo captured by a slave device.
@@ -23,9 +24,13 @@ class CapturedPhoto {
 
   /// Flag to track upload status
   bool isUploaded;
+
   /// Metadata about upload elapsed time
   Duration? uploadDuration; // to track upload time
   DateTime? uploadStartTime; // to track upload start time
+
+  /// File size metadata
+  final int fileSizeInBytes;
 
 
   /// Constructor for creating a new CapturedPhoto.
@@ -44,7 +49,7 @@ class CapturedPhoto {
     this.isUploaded = false,
     this.uploadDuration,
     this.uploadStartTime,
-  });
+  }) : fileSizeInBytes = File(photoPath).lengthSync().toInt();
 
   /// Getter for media path (used by UploaderService)
   String get mediaPath => photoPath;

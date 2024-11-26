@@ -129,4 +129,37 @@ class UploaderService {
   bool get isUploading => _isUploading;
 
   int get queueLength => _uploadQueue.length;
+
+  /// Estimates the time remaining to upload all files in the queue based on past uploads.
+  Duration estimateTotalTimeRemaining() {
+    if (_uploadQueue.isEmpty) return Duration.zero;
+
+    // Filter media that have been uploaded
+    final uploadedMedia = _uploadQueue.where((media) => media.isUploaded && media.uploadDuration != null);
+
+    if (uploadedMedia.isEmpty) return Duration.zero;
+
+    // Calculate the average upload speed in bytes per second
+    final totalBytesUploaded = uploadedMedia.fold<num>(
+      0,
+          (sum, media) => sum + media.fileSizeInBytes,
+    ).toInt();
+
+    final totalDuration = uploadedMedia.fold<Duration>(
+      Duration.zero,
+          (sum, media) => sum + media.uploadDuration!,
+    );
+
+    final averageSpeedBytesPerSecond = totalBytesUploaded / totalDuration.inSeconds;
+
+    // Estimate remaining time
+    final remainingBytes = _uploadQueue.fold<num>(
+      0,
+          (sum, media) => sum + media.fileSizeInBytes,
+    ).toInt();
+
+    final estimatedSeconds = remainingBytes / averageSpeedBytesPerSecond;
+    return Duration(seconds: estimatedSeconds.round());
+  }
+
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 /// CapturedVideo - Represents a video captured by a slave device.
@@ -25,9 +26,13 @@ class CapturedVideo {
 
   /// Flag to track upload status
   bool isUploaded;
+
   /// Metadata about upload elapsed time
   Duration? uploadDuration; // to track upload time
   DateTime? uploadStartTime; // to track upload start time
+
+  /// File size metadata
+  final int fileSizeInBytes;
 
   /// Constructor for creating a new CapturedVideo.
   ///
@@ -47,7 +52,7 @@ class CapturedVideo {
     this.isUploaded = false,
     this.uploadDuration,
     this.uploadStartTime,
-  });
+  }) : fileSizeInBytes = File(videoPath).lengthSync().toInt();
 
   /// Getter for media path (used by UploaderService)
   String get mediaPath => videoPath;

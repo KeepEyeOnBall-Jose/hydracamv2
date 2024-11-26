@@ -20,6 +20,10 @@ class UploaderInfoScreen extends StatelessWidget {
     int uploadedVideos = videos.where((v) => v.isUploaded).length;
     int totalVideos = videos.length;
 
+    // Get estimated time
+    Duration estimatedTime = UploaderService().estimateTotalTimeRemaining();
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Uploader Info'),
@@ -27,13 +31,27 @@ class UploaderInfoScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Photos uploaded: $uploadedPhotos / $totalPhotos', style: TextStyle(fontSize: 16)),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Videos uploaded: $uploadedVideos / $totalVideos', style: TextStyle(fontSize: 16)),
+          Row(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Photos uploaded: $uploadedPhotos / $totalPhotos', style: const TextStyle(fontSize: 16)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Videos uploaded: $uploadedVideos / $totalVideos', style: const TextStyle(fontSize: 16)),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Estimated time: ${_formatDuration(estimatedTime)}', style: const TextStyle(fontSize: 16)),
+              )
+
+            ],
           ),
           Expanded(
             child: MediaListWidget(
@@ -50,5 +68,9 @@ class UploaderInfoScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatDuration(Duration duration) {
+    return "${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 }
