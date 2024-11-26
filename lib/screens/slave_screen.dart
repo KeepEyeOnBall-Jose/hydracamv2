@@ -10,6 +10,7 @@ import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
+import '../widgets/add_gallery_media_button.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/media_list_widget.dart';
 import 'master_screen.dart';
@@ -233,6 +234,9 @@ class _SlaveScreenState extends State<SlaveScreen> {
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
               ),
             ),
+
+            const AddGalleryMediaButton(),
+            const SizedBox(height: 10),
             Expanded(
               child: Stack(
                 children: [

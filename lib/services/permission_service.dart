@@ -46,4 +46,9 @@ class PermissionService {
     // Check if all permissions are granted
     return statuses.values.every((status) => status.isGranted);
   }
+
+  /// Opens the app settings page.
+  static Future<void> openAppSettings() async {
+    await openAppSettings();
+  }
 }

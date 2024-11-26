@@ -13,6 +13,7 @@ import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../services/settings_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
+import '../widgets/add_gallery_media_button.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/master_video_recording_screen.dart';
 import '../widgets/media_list_widget.dart';
@@ -533,6 +534,11 @@ class _MasterScreenState extends State<MasterScreen> {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: const Text("End Session"),
               ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: buttonWidth,
+              child: const AddGalleryMediaButton(),
             ),
             const SizedBox(height: 20),
             // List to display photos and videos
