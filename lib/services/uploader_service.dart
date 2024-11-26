@@ -1,5 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'hydracam_api_service.dart';
@@ -15,6 +17,9 @@ class UploaderService {
 
   final Queue<dynamic> _uploadQueue = Queue();
   bool _isUploading = false;
+
+  final ValueNotifier<Duration> estimatedTimeNotifier = ValueNotifier(Duration.zero);
+  final ValueNotifier<dynamic> currentlyUploadingNotifier = ValueNotifier(null);
 
   // Reference to the API service
   final HydraCamApiService _apiService = HydraCamApiService();
@@ -41,12 +46,15 @@ class UploaderService {
 
     if (_uploadQueue.isEmpty) {
       _isUploading = false;
+      currentlyUploadingNotifier.value = null;
+      estimatedTimeNotifier.value = Duration.zero;
       LogService.instance.registerLog("UploaderService: Queue is empty. Uploading stopped.");
       return;
     }
 
     _isUploading = true;
     final media = _uploadQueue.removeFirst();
+    currentlyUploadingNotifier.value = media;
 
     // Set upload start time
     media.uploadStartTime = DateTime.now();
@@ -62,6 +70,7 @@ class UploaderService {
       // Set media as not uploaded
       media.isUploaded = false;
       _isUploading = false;
+      currentlyUploadingNotifier.value = null;
       return;
     }
 
@@ -73,6 +82,7 @@ class UploaderService {
       LogService.instance.registerLog("UploaderService: File does not exist: ${file.path}");
       media.isUploaded = false;
       _isUploading = false;
+      currentlyUploadingNotifier.value = null;
       _processNextItem();
       return;
     }
@@ -121,6 +131,10 @@ class UploaderService {
 
     // Notify listeners to update UI
     SessionManager.instance.notifyListeners();
+    currentlyUploadingNotifier.value = null;
+
+    // Recalculate estimated time
+    estimatedTimeNotifier.value = estimateTotalTimeRemaining();
 
     // Process next item
     _processNextItem();
@@ -134,12 +148,9 @@ class UploaderService {
   Duration estimateTotalTimeRemaining() {
     if (_uploadQueue.isEmpty) return Duration.zero;
 
-    // Filter media that have been uploaded
     final uploadedMedia = _uploadQueue.where((media) => media.isUploaded && media.uploadDuration != null);
-
     if (uploadedMedia.isEmpty) return Duration.zero;
 
-    // Calculate the average upload speed in bytes per second
     final totalBytesUploaded = uploadedMedia.fold<num>(
       0,
           (sum, media) => sum + media.fileSizeInBytes,
@@ -151,8 +162,6 @@ class UploaderService {
     );
 
     final averageSpeedBytesPerSecond = totalBytesUploaded / totalDuration.inSeconds;
-
-    // Estimate remaining time
     final remainingBytes = _uploadQueue.fold<num>(
       0,
           (sum, media) => sum + media.fileSizeInBytes,

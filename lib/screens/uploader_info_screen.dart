@@ -31,27 +31,33 @@ class UploaderInfoScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Column(
+          ValueListenableBuilder<Duration>(
+            valueListenable: UploaderService().estimatedTimeNotifier,
+            builder: (context, estimatedTime, _){
+              return Row(
                 children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Photos uploaded: $uploadedPhotos / $totalPhotos', style: const TextStyle(fontSize: 16)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Videos uploaded: $uploadedVideos / $totalVideos', style: const TextStyle(fontSize: 16)),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Photos uploaded: $uploadedPhotos / $totalPhotos', style: const TextStyle(fontSize: 16)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Videos uploaded: $uploadedVideos / $totalVideos', style: const TextStyle(fontSize: 16)),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Estimated time: ${_formatDuration(estimatedTime)}', style: const TextStyle(fontSize: 16)),
-              )
+                    child: Text('Estimated time: ${_formatDuration(estimatedTime)}',
+                        style: const TextStyle(fontSize: 16)),
+                  )
 
-            ],
+                ],
+              );
+            }
           ),
           Expanded(
             child: MediaListWidget(
