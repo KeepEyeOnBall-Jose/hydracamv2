@@ -189,13 +189,16 @@ class SlaveClient {
       _cameraService.takePhoto().then((photoPath) async {
         final receivedDate = DateTime.now();
 
+        // Get the device ID
+        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
         // Save the photo locally
         final capturedPhoto = CapturedPhoto(
           photoData: null,
           photoPath: photoPath,
           captureDate: photoCaptureDate!,
           receivedDate: receivedDate,
-          slaveDeviceId: "Slave",
+          slaveDeviceId: deviceId,
         );
         SessionManager.instance.addPhoto(capturedPhoto);
 
@@ -222,11 +225,14 @@ class SlaveClient {
       _cameraService.stopRecordingVideo().then((videoPath) async {
         final receivedDate = DateTime.now();
 
+        // Get the device ID
+        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
         // Save the video locally
         final capturedVideo = CapturedVideo(
           videoData: null,
           videoPath: videoPath,
-          slaveDeviceId: "Slave",
+          slaveDeviceId: deviceId,
           startRecordingDate: videoStartRecordingDate!,
           endRecordingDate: videoEndRecordingDate!,
           receivedDate: receivedDate,

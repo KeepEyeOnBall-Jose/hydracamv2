@@ -8,6 +8,7 @@ import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
 import '../services/camera_service.dart';
+import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
@@ -151,12 +152,15 @@ class _MasterScreenState extends State<MasterScreen> {
 
     String videoPath = await _server.cameraService.stopRecordingVideo();
 
+    // Get the device ID
+    final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
     // Add video to current session
     final receivedDate = DateTime.now();
     final capturedVideo = CapturedVideo(
       videoData: null,
       videoPath: videoPath,
-      slaveDeviceId: "Master",
+      slaveDeviceId: deviceId,
       startRecordingDate: _server.cameraService.videoStartRecordingDate!,
       endRecordingDate: _server.cameraService.videoEndRecordingDate!,
       receivedDate: receivedDate,
@@ -205,13 +209,16 @@ class _MasterScreenState extends State<MasterScreen> {
     if (shouldMasterRecord) {
       final String photoPath = await _server.cameraService.takePhoto();
 
+      // Get the device ID
+      final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
       // Add photo to current session
       final capturedPhoto = CapturedPhoto(
         photoData: null,
         photoPath: photoPath,
         captureDate: DateTime.now(),
         receivedDate: DateTime.now(),
-        slaveDeviceId: "Master",
+        slaveDeviceId: deviceId,
       );
 
       SessionManager.instance.addPhoto(capturedPhoto);

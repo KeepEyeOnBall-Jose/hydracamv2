@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import '../services/device_service.dart';
 import '../services/session_manager.dart';
 import '../services/log_service.dart';
 import '../services/permission_service.dart';
@@ -166,9 +167,9 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       );
     }
 
-    // Fetch albums
+    // Fetch all albums
     List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
-      onlyAll: true,
+      type: filters.isPhoto ? RequestType.image : RequestType.video,
       filterOption: filterOptionGroup,
     );
 
@@ -176,23 +177,28 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       return [];
     }
 
-    // Fetch media from the default album
-    AssetPathEntity album = albums.first;
-    List<AssetEntity> mediaList = await album.getAssetListPaged(
-      page: 0,
-      size: 1000,
-    );
-
-    // Explicit filtering for the selected media type (in case the library returns mixed types)
-    if (filters.isPhoto) {
-      return mediaList.where((asset) => asset.type == AssetType.image).toList();
-    } else {
-      return mediaList.where((asset) => asset.type == AssetType.video).toList();
+    for (var album in albums) {
+      LogService.instance.registerLog('Album: ${album.name}');
     }
+
+
+    // Collect all media from each album
+    List<AssetEntity> allMedia = [];
+    for (var album in albums) {
+      List<AssetEntity> mediaInAlbum = await album.getAssetListPaged(page: 0, size: 1000);
+      allMedia.addAll(mediaInAlbum);
+    }
+
+    // Return the combined list of all media
+    return allMedia;
   }
 
 
   Future<void> _addMediaToSession(List<AssetEntity> selectedMedia) async {
+
+    // Get the device ID
+    final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
     for (var asset in selectedMedia) {
       File? file = await asset.file;
       if (file == null) continue;
@@ -206,7 +212,7 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
           photoPath: file.path,
           captureDate: createDate,
           receivedDate: now,
-          slaveDeviceId: 'Gallery',
+          slaveDeviceId: deviceId,
         );
 
         SessionManager.instance.addPhoto(photo);
@@ -214,7 +220,7 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
         CapturedVideo video = CapturedVideo(
           videoData: null,
           videoPath: file.path,
-          slaveDeviceId: 'Gallery',
+          slaveDeviceId: deviceId,
           startRecordingDate: createDate,
           endRecordingDate: createDate.add(asset.videoDuration ?? Duration.zero),
           receivedDate: now,
