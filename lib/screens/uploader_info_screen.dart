@@ -20,10 +20,6 @@ class UploaderInfoScreen extends StatelessWidget {
     int uploadedVideos = videos.where((v) => v.isUploaded).length;
     int totalVideos = videos.length;
 
-    // Get estimated time
-    Duration estimatedTime = UploaderService().estimateTotalTimeRemaining();
-
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Uploader Info'),
@@ -49,11 +45,11 @@ class UploaderInfoScreen extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  Padding(
+                  /*Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('Estimated time: ${_formatDuration(estimatedTime)}',
                         style: const TextStyle(fontSize: 16)),
-                  )
+                  )*/
 
                 ],
               );

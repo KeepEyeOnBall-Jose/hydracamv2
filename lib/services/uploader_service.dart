@@ -146,29 +146,68 @@ class UploaderService {
 
   /// Estimates the time remaining to upload all files in the queue based on past uploads.
   Duration estimateTotalTimeRemaining() {
-    if (_uploadQueue.isEmpty) return Duration.zero;
+    //TODO WIP
+    // Si la cola está vacía, no hay tiempo estimado
+    if (_uploadQueue.isEmpty) {
+      print("[UploaderService] Queue is empty. Returning zero duration.");
+      return Duration.zero;
+    }
 
+    // Filtrar los medios ya subidos
     final uploadedMedia = _uploadQueue.where((media) => media.isUploaded && media.uploadDuration != null);
-    if (uploadedMedia.isEmpty) return Duration.zero;
 
+    // Si no hay medios subidos, no podemos calcular el promedio
+    if (uploadedMedia.isEmpty) {
+      print("[UploaderService] No uploaded media with valid durations. Returning zero duration.");
+      return Duration.zero;
+    }
+
+    // Calcular los bytes totales subidos
     final totalBytesUploaded = uploadedMedia.fold<num>(
       0,
           (sum, media) => sum + media.fileSizeInBytes,
     ).toInt();
 
+    print("[UploaderService] Total bytes uploaded: $totalBytesUploaded");
+
+    // Calcular la duración total
     final totalDuration = uploadedMedia.fold<Duration>(
       Duration.zero,
           (sum, media) => sum + media.uploadDuration!,
     );
 
+    print("[UploaderService] Total upload duration: ${totalDuration.inSeconds} seconds");
+
+    // Evitar dividir por cero
+    if (totalDuration.inSeconds == 0) {
+      print("[UploaderService] Total upload duration is zero. Returning zero duration.");
+      return Duration.zero;
+    }
+
+    // Velocidad promedio en bytes por segundo
     final averageSpeedBytesPerSecond = totalBytesUploaded / totalDuration.inSeconds;
+    print("[UploaderService] Average speed: $averageSpeedBytesPerSecond bytes/second");
+
+    // Calcular los bytes restantes
     final remainingBytes = _uploadQueue.fold<num>(
       0,
           (sum, media) => sum + media.fileSizeInBytes,
     ).toInt();
 
+    print("[UploaderService] Remaining bytes to upload: $remainingBytes");
+
+    // Evitar dividir por cero si no hay velocidad promedio
+    if (averageSpeedBytesPerSecond <= 0) {
+      print("[UploaderService] Average speed is zero or negative. Returning zero duration.");
+      return Duration.zero;
+    }
+
+    // Calcular tiempo estimado
     final estimatedSeconds = remainingBytes / averageSpeedBytesPerSecond;
+    print("[UploaderService] Estimated time: $estimatedSeconds seconds");
+
     return Duration(seconds: estimatedSeconds.round());
   }
+
 
 }
