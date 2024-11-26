@@ -9,9 +9,9 @@ class PermissionService {
     final permissions = <Permission>[
       Permission.camera,
       Permission.microphone,
-      if (Platform.isAndroid && Platform.version.startsWith('11'))
+      if (Platform.isAndroid)// && Platform.version.startsWith('11'))
         Permission.manageExternalStorage,
-      if (Platform.isAndroid && !Platform.version.startsWith('11'))
+      if (Platform.isAndroid)// && !Platform.version.startsWith('11'))
         Permission.storage,
       if (Platform.isIOS) Permission.photos,
       Permission.location,
