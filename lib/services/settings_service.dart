@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'log_service.dart';
+
 class SettingsService {
   static const String _masterShouldRecordKey = 'masterShouldRecord';
   static const String _cameraQualityKey = 'cameraQuality';
@@ -15,6 +17,8 @@ class SettingsService {
   static Future<void> setMasterShouldRecord(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_masterShouldRecordKey, value);
+
+    LogService.instance.registerLog("Update massterShouldRecord value to $value");
   }
 
   // Retrieve the current camera quality setting
@@ -27,6 +31,8 @@ class SettingsService {
   static Future<void> setCameraQuality(String quality) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_cameraQualityKey, quality);
+
+    LogService.instance.registerLog("Update Camera Quality value to $quality");
   }
 
   // Retrieve the current value for "deleteLocalAfterUpload"
@@ -39,5 +45,7 @@ class SettingsService {
   static Future<void> setDeleteLocalAfterUpload(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_deleteLocalAfterUploadKey, value);
+
+    LogService.instance.registerLog("Update delete local file after upload value to $value");
   }
 }

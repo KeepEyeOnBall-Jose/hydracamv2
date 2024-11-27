@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:sport_cam_sync/services/settings_service.dart';
 import 'package:sport_cam_sync/services/uploader_service.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'log_service.dart';
+import 'dart:io';
 
 /// A global manager to handle session-related information across Master and Slave.
 /// Provides a centralized place to access the current session and its GUID.
@@ -78,5 +80,23 @@ class SessionManager extends ChangeNotifier {
     // Add video to uploader queue
     UploaderService().addMediaToQueue(video);
 
+  }
+
+  /// Deletes a file if the setting to delete local files is enabled.
+  Future<void> deleteFileIfAllowed(String filePath) async {
+    final shouldDelete = await SettingsService.getDeleteLocalAfterUpload();
+    if (shouldDelete) {
+      final file = File(filePath);
+      if (await file.exists()) {
+        try {
+          await file.delete();
+          LogService.instance.registerLog("Deleted local file: $filePath");
+        } catch (e) {
+          LogService.instance.registerLog("Failed to delete file: $filePath, error: $e");
+        }
+      } else {
+        LogService.instance.registerLog("File not found for deletion: $filePath");
+      }
+    }
   }
 }

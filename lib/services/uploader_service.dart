@@ -41,9 +41,11 @@ class UploaderService {
     }
   }
 
+  /// Processes next item of the queue. Uploads it, notifies possible error, and triggers local file deletion.
   void _processNextItem() async {
     LogService.instance.registerLog("UploaderService: _processNextItem called. Queue length=${_uploadQueue.length}");
 
+    // Check if there is anything in the queue
     if (_uploadQueue.isEmpty) {
       _isUploading = false;
       currentlyUploadingNotifier.value = null;
@@ -121,9 +123,13 @@ class UploaderService {
     }
 
     if (success) {
+      // Update metadata and register log
       media.isUploaded = true;
       media.uploadDuration = DateTime.now().difference(media.uploadStartTime!);
       LogService.instance.registerLog("Media uploaded: ${media.mediaPath}");
+      // Trigger deletion of the local file
+      await SessionManager.instance.deleteFileIfAllowed(media.mediaPath);
+
     } else {
       media.isUploaded = false;
       LogService.instance.registerLog("Failed to upload media: ${media.mediaPath}");
@@ -147,64 +153,64 @@ class UploaderService {
   /// Estimates the time remaining to upload all files in the queue based on past uploads.
   Duration estimateTotalTimeRemaining() {
     //TODO WIP
-    // Si la cola está vacía, no hay tiempo estimado
+    // If queue empty there is no estimated time
     if (_uploadQueue.isEmpty) {
-      print("[UploaderService] Queue is empty. Returning zero duration.");
-      return Duration.zero;
+      LogService.instance.registerLog("[UploaderService] Queue is empty. Returning zero duration.");
+      return Duration.zero; // PROBLEM HERE???????
     }
 
-    // Filtrar los medios ya subidos
+    // Filter already uploaded media
     final uploadedMedia = _uploadQueue.where((media) => media.isUploaded && media.uploadDuration != null);
 
-    // Si no hay medios subidos, no podemos calcular el promedio
+    // If no uploaded media we can't calculate
     if (uploadedMedia.isEmpty) {
-      print("[UploaderService] No uploaded media with valid durations. Returning zero duration.");
+      LogService.instance.registerLog("[UploaderService] No uploaded media with valid durations. Returning zero duration.");
       return Duration.zero;
     }
 
-    // Calcular los bytes totales subidos
+    // Calculate total uploaded bytes
     final totalBytesUploaded = uploadedMedia.fold<num>(
       0,
           (sum, media) => sum + media.fileSizeInBytes,
     ).toInt();
 
-    print("[UploaderService] Total bytes uploaded: $totalBytesUploaded");
+    LogService.instance.registerLog("[UploaderService] Total bytes uploaded: $totalBytesUploaded");
 
-    // Calcular la duración total
+    // Calculate total duration
     final totalDuration = uploadedMedia.fold<Duration>(
       Duration.zero,
           (sum, media) => sum + media.uploadDuration!,
     );
 
-    print("[UploaderService] Total upload duration: ${totalDuration.inSeconds} seconds");
+    LogService.instance.registerLog("[UploaderService] Total upload duration: ${totalDuration.inSeconds} seconds");
 
-    // Evitar dividir por cero
+    // Avoid division by 0
     if (totalDuration.inSeconds == 0) {
-      print("[UploaderService] Total upload duration is zero. Returning zero duration.");
+      LogService.instance.registerLog("[UploaderService] Total upload duration is zero. Returning zero duration.");
       return Duration.zero;
     }
 
-    // Velocidad promedio en bytes por segundo
+    // Average speed in bytes per second
     final averageSpeedBytesPerSecond = totalBytesUploaded / totalDuration.inSeconds;
-    print("[UploaderService] Average speed: $averageSpeedBytesPerSecond bytes/second");
+    LogService.instance.registerLog("[UploaderService] Average speed: $averageSpeedBytesPerSecond bytes/second");
 
-    // Calcular los bytes restantes
+    // Calculate remaining bytes
     final remainingBytes = _uploadQueue.fold<num>(
       0,
           (sum, media) => sum + media.fileSizeInBytes,
     ).toInt();
 
-    print("[UploaderService] Remaining bytes to upload: $remainingBytes");
+    LogService.instance.registerLog("[UploaderService] Remaining bytes to upload: $remainingBytes");
 
-    // Evitar dividir por cero si no hay velocidad promedio
+    // Avoid division by 0 if no average speed
     if (averageSpeedBytesPerSecond <= 0) {
-      print("[UploaderService] Average speed is zero or negative. Returning zero duration.");
+      LogService.instance.registerLog("[UploaderService] Average speed is zero or negative. Returning zero duration.");
       return Duration.zero;
     }
 
-    // Calcular tiempo estimado
+    // Calculate estimated time
     final estimatedSeconds = remainingBytes / averageSpeedBytesPerSecond;
-    print("[UploaderService] Estimated time: $estimatedSeconds seconds");
+    LogService.instance.registerLog("[UploaderService] Estimated time: $estimatedSeconds seconds");
 
     return Duration(seconds: estimatedSeconds.round());
   }
