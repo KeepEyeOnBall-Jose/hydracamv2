@@ -101,10 +101,13 @@ class MediaListWidget extends StatelessWidget {
   Widget _buildUploadIcon(dynamic media, dynamic currentlyUploading) {
     if (media == currentlyUploading) {
       // Currently uploading
-      return const AnimatedOpacity(
-        opacity: 0.5,
-        duration: Duration(milliseconds: 500),
-        child: Icon(Icons.cloud_upload, color: Colors.black),
+      return const SizedBox(
+        width: 24, // Adjust size as needed
+        height: 24,
+        child: CircularProgressIndicator(
+          strokeWidth: 2, // Adjust stroke width for a thinner loader
+          color: Colors.blue,
+        ),
       );
     } else if (media.isUploaded) {
       // Already uploaded
