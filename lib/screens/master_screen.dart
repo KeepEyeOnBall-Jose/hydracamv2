@@ -14,6 +14,7 @@ import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../services/settings_service.dart';
+import '../services/user_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/add_gallery_media_button.dart';
 import '../widgets/hydra_cam_app_bar.dart';
@@ -288,9 +289,14 @@ class _MasterScreenState extends State<MasterScreen> {
 
   Future<void> _createSession() async {
     var sessionId = DateTime.now().toIso8601String();
+
+    // Get the user GUID if logged in
+    String? userGuid = UserService().guid;
+
     var response = await _apiService.createSession(
       sessionId,
       courtGuid: selectedCourtGuid,
+      userGuid: userGuid, // Pass the user GUID if available
     );
 
     LogService.instance.registerLog("Response to create session: $response");

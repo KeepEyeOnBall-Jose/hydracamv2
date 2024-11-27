@@ -29,7 +29,7 @@ class HydraCamApiService {
         'StartTime': DateTime.now().toIso8601String(),
       };
 
-      if (userGuid != null) {
+      if (userGuid != null && userGuid != "") {
         body['UserGuid'] = userGuid;
       }
 
