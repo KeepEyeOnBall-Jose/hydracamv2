@@ -14,6 +14,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _masterShouldRecord = false;
   String _cameraQuality = 'high'; // Default quality
+  bool _deleteLocalAfterUpload = false;
 
   @override
   void initState() {
@@ -24,9 +25,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadSettings() async {
     final shouldRecord = await SettingsService.getMasterShouldRecord();
     final cameraQuality = await SettingsService.getCameraQuality();
+    final deleteLocalAfterUpload = await SettingsService.getDeleteLocalAfterUpload();
     setState(() {
       _masterShouldRecord = shouldRecord;
       _cameraQuality = cameraQuality;
+      _deleteLocalAfterUpload = deleteLocalAfterUpload;
     });
   }
 
@@ -48,6 +51,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final CameraQuality newQuality = _mapQualityStringToEnum(quality);
     await CameraService().setCameraQuality(newQuality);
   }
+
+  Future<void> _updateDeleteLocalAfterUpload(bool value) async {
+    await SettingsService.setDeleteLocalAfterUpload(value);
+    setState(() {
+      _deleteLocalAfterUpload = value;
+    });
+  }
+
 
   CameraQuality _mapQualityStringToEnum(String quality) {
     switch (quality) {
@@ -116,6 +127,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _updateCameraQuality(value);
                     }
                   },
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Delete local after upload",
+                  style: AppTheme.bodyText1,
+                ),
+                Switch(
+                  value: _deleteLocalAfterUpload,
+                  onChanged: _updateDeleteLocalAfterUpload,
+                  activeColor: AppTheme.primaryColor,
+                  activeTrackColor: AppTheme.accentColor.withOpacity(0.5),
+                  inactiveThumbColor: AppTheme.disabledButtonColor,
+                  inactiveTrackColor: AppTheme.secondaryColor,
                 ),
               ],
             ),
