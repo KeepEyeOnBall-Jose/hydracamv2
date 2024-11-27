@@ -45,7 +45,9 @@ class SessionsScreen extends StatelessWidget {
                     icon: const Icon(Icons.download),
                     onPressed: () {
                       _loadSession(context, session);
-                      Navigator.pop(context); // Return to the previous screen
+                      Navigator.pop(context); // Return to Courts
+                      Navigator.pop(context); // Return to Sports Centers
+                      Navigator.pop(context); // Return to Master Screen
                     },
                   ),
                 ),
