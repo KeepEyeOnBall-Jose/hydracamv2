@@ -16,7 +16,7 @@ class HydraCamApiService {
   final String _baseUrl = 'https://keobmotherboardweb.azurewebsites.net/api/hydracam';
 
   /// Create a new capture session
-  Future<Map<String, dynamic>?> createSession(String sessionId, {String? courtGuid}) async {
+  Future<Map<String, dynamic>?> createSession(String sessionId, {String? courtGuid, String? userGuid}) async {
     try {
       final uri = Uri.parse(
           courtGuid == null
@@ -24,15 +24,21 @@ class HydraCamApiService {
               : '$_baseUrl/CreateSession?courtGuid=$courtGuid'
       );
 
+      final body = <String, String>{
+        'SessionId': sessionId,
+        'StartTime': DateTime.now().toIso8601String(),
+      };
+
+      if (userGuid != null) {
+        body['UserGuid'] = userGuid;
+      }
+
       final response = await http.post(
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(<String, String>{
-          'SessionId': sessionId,
-          'StartTime': DateTime.now().toIso8601String(),
-        }),
+        body: jsonEncode(body),
       );
 
       if (response.statusCode == 200) {
@@ -246,5 +252,28 @@ class HydraCamApiService {
       return null;
     }
   }
+
+  /// Fetch the GUID of a user by their email
+  Future<String?> getUserGuidByEmail(String email) async {
+    try {
+      final uri = Uri.parse('$_baseUrl/users/GetUserByEmail?email=$email');
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['guid'] as String?;
+      } else if (response.statusCode == 404) {
+        LogService.instance.registerLog('User not found for email: $email');
+        return null;
+      } else {
+        LogService.instance.registerLog('Failed to fetch user GUID: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      LogService.instance.registerLog('Error fetching user GUID: $e');
+      return null;
+    }
+  }
+
 
 }

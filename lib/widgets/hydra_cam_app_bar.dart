@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
+import '../screens/login_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/log_screen.dart';
 import '../screens/uploader_info_screen.dart';
@@ -37,7 +38,7 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Navigate to settings
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SettingsScreen()),
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );
             } else if (value == 'Location Info') {
               // Show info about location
@@ -52,7 +53,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Navigate to uploader info screen
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UploaderInfoScreen()),
+                MaterialPageRoute(builder: (context) => const UploaderInfoScreen()),
+              );
+            } else if (value == 'Login') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             }
           },
@@ -104,6 +110,16 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Icon(Icons.cloud_upload, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Uploader Info'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'Login',
+              child: Row(
+                children: const [
+                  Icon(Icons.person, color: Colors.blue),
+                  SizedBox(width: 8),
+                  Text('Login'),
                 ],
               ),
             ),
