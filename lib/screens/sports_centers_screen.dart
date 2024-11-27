@@ -25,14 +25,14 @@ class SportsCentersScreen extends StatelessWidget {
               final sportsCenter = sportsCenters[index];
               return Card(
                 child: ListTile(
-                  title: Text(sportsCenter['Name']),
-                  subtitle: Text(sportsCenter['City'] ?? 'Unknown location'),
-                  trailing: Text("Courts: ${sportsCenter['NumberOfCourts']}"),
+                  title: Text(sportsCenter['name']),
+                  subtitle: Text(sportsCenter['city'] ?? 'Unknown location'),
+                  trailing: Text("Courts: ${sportsCenter['numberOfCourts']}"),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CourtsScreen(sportsCenterGuid: sportsCenter['Guid']),
+                          CourtsScreen(sportsCenterGuid: sportsCenter['guid']),
                     ),
                   ),
                 ),

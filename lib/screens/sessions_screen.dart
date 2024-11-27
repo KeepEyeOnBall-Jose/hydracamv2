@@ -11,9 +11,9 @@ class SessionsScreen extends StatelessWidget {
 
   void _loadSession(BuildContext context, Map<String, dynamic> session) {
     // Start a session with SessionManager
-    SessionManager.instance.startSession(session['Guid'], deviceType: "Master");
+    SessionManager.instance.startSession(session['guid'], deviceType: "Master");
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Session loaded: ${session['SessionId']}")),
+      SnackBar(content: Text("Session loaded: ${session['sessionId']}")),
     );
   }
 
@@ -37,9 +37,9 @@ class SessionsScreen extends StatelessWidget {
               final session = sessions[index];
               return Card(
                 child: ListTile(
-                  title: Text(session['SessionId']),
+                  title: Text(session['sessionId']),
                   subtitle: Text(
-                    "Start: ${session['StartTime']}\nEnd: ${session['EndTime']}",
+                    "Start: ${session['startTime']}\nEnd: ${session['endTime']}",
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.download),

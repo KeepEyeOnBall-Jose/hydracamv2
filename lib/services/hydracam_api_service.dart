@@ -150,8 +150,27 @@ class HydraCamApiService {
     try {
       final response = await http.get(Uri.parse('$_baseUrl/sportscenters'));
 
+      // Log the raw response for debugging
+      LogService.instance.registerLog('Raw response: ${response.body}');
+
       if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+        final decoded = jsonDecode(response.body);
+
+        // Log the decoded response to understand its structure
+        LogService.instance.registerLog('Decoded response: $decoded');
+
+        // Check if the response contains the expected structure
+        if (decoded is Map && decoded.containsKey(r'$values')) {
+          final parsedList = List<Map<String, dynamic>>.from(decoded[r'$values']);
+
+          // Log the parsed list for debugging
+          LogService.instance.registerLog('Parsed list: $parsedList');
+
+          return parsedList;
+        } else {
+          LogService.instance.registerLog('Unexpected structure: $decoded');
+          return null;
+        }
       } else {
         LogService.instance.registerLog('Failed to fetch sports centers: ${response.body}');
         return null;
@@ -166,12 +185,27 @@ class HydraCamApiService {
   Future<List<Map<String, dynamic>>?> fetchCourts({String? sportsCenterGuid}) async {
     try {
       final uri = Uri.parse(
-          sportsCenterGuid == null ? '$_baseUrl/courts' : '$_baseUrl/courts?sportsCenterGuid=$sportsCenterGuid');
+        sportsCenterGuid == null ? '$_baseUrl/courts' : '$_baseUrl/courts?sportsCenterGuid=$sportsCenterGuid',
+      );
 
       final response = await http.get(uri);
 
+      //LogService.instance.registerLog('Raw response (courts): ${response.body}');
+
       if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+        final decoded = jsonDecode(response.body);
+
+        // Log and parse the response
+        LogService.instance.registerLog('Decoded response (courts): $decoded');
+
+        if (decoded is Map && decoded.containsKey(r'$values')) {
+          final parsedList = List<Map<String, dynamic>>.from(decoded[r'$values']);
+          LogService.instance.registerLog('Parsed list (courts): $parsedList');
+          return parsedList;
+        } else {
+          LogService.instance.registerLog('Unexpected structure (courts): $decoded');
+          return null;
+        }
       } else {
         LogService.instance.registerLog('Failed to fetch courts: ${response.body}');
         return null;
@@ -187,8 +221,22 @@ class HydraCamApiService {
     try {
       final response = await http.get(Uri.parse('$_baseUrl/sessions?courtGuid=$courtGuid'));
 
+      LogService.instance.registerLog('Raw response (sessions): ${response.body}');
+
       if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+        final decoded = jsonDecode(response.body);
+
+        // Log and parse the response
+        LogService.instance.registerLog('Decoded response (sessions): $decoded');
+
+        if (decoded is Map && decoded.containsKey(r'$values')) {
+          final parsedList = List<Map<String, dynamic>>.from(decoded[r'$values']);
+          LogService.instance.registerLog('Parsed list (sessions): $parsedList');
+          return parsedList;
+        } else {
+          LogService.instance.registerLog('Unexpected structure (sessions): $decoded');
+          return null;
+        }
       } else {
         LogService.instance.registerLog('Failed to fetch sessions: ${response.body}');
         return null;
@@ -198,4 +246,5 @@ class HydraCamApiService {
       return null;
     }
   }
+
 }

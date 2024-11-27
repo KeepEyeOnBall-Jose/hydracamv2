@@ -29,13 +29,13 @@ class CourtsScreen extends StatelessWidget {
               final court = courts[index];
               return Card(
                 child: ListTile(
-                  title: Text(court['Name']),
-                  subtitle: Text(court['Location'] ?? 'No location'),
+                  title: Text(court['name']),
+                  subtitle: Text(court['location'] ?? 'No location'),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          SessionsScreen(courtGuid: court['Guid']),
+                          SessionsScreen(courtGuid: court['guid']),
                     ),
                   ),
                 ),
