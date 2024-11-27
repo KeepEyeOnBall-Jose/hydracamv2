@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
+import 'package:sport_cam_sync/screens/sports_centers_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
 import '../constants.dart';
 import '../master/master_announcer.dart';
@@ -481,6 +482,15 @@ class _MasterScreenState extends State<MasterScreen> {
           onPressed: _startOrEndSession, // Always clickable
           child: const Text("Start Session"),
         ),
+        const SizedBox(height: 5),
+        ElevatedButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SportsCentersScreen()),
+          ),
+          child: const Text("Or... Load a Previous One"),
+        ),
+
       ],
     );
   }

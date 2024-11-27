@@ -145,4 +145,57 @@ class HydraCamApiService {
     }
   }
 
+  /// Fetch a list of sports centers
+  Future<List<Map<String, dynamic>>?> fetchSportsCenters() async {
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/sportscenters'));
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        LogService.instance.registerLog('Failed to fetch sports centers: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      LogService.instance.registerLog('Error fetching sports centers: $e');
+      return null;
+    }
+  }
+
+  /// Fetch a list of courts, optionally filtered by Sports Center GUID
+  Future<List<Map<String, dynamic>>?> fetchCourts({String? sportsCenterGuid}) async {
+    try {
+      final uri = Uri.parse(
+          sportsCenterGuid == null ? '$_baseUrl/courts' : '$_baseUrl/courts?sportsCenterGuid=$sportsCenterGuid');
+
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        LogService.instance.registerLog('Failed to fetch courts: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      LogService.instance.registerLog('Error fetching courts: $e');
+      return null;
+    }
+  }
+
+  /// Fetch a list of sessions for a specific court
+  Future<List<Map<String, dynamic>>?> fetchSessions(String courtGuid) async {
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/sessions?courtGuid=$courtGuid'));
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        LogService.instance.registerLog('Failed to fetch sessions: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      LogService.instance.registerLog('Error fetching sessions: $e');
+      return null;
+    }
+  }
 }
