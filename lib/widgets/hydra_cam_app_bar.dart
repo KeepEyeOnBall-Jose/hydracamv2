@@ -5,6 +5,7 @@ import '../screens/settings_screen.dart';
 import '../screens/log_screen.dart';
 import '../screens/uploader_info_screen.dart';
 import '../services/alert_utils.dart';
+import '../services/user_service.dart';
 
 class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -116,10 +117,10 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
             PopupMenuItem(
               value: 'Login',
               child: Row(
-                children: const [
-                  Icon(Icons.person, color: Colors.blue),
-                  SizedBox(width: 8),
-                  Text('Login'),
+                children: [
+                  Icon(UserService().isLoggedIn ? Icons.account_circle : Icons.login, color: Colors.blue),
+                  const SizedBox(width: 8),
+                  const Text('Login'),
                 ],
               ),
             ),
