@@ -42,15 +42,20 @@ class AuthService {
   String? _parseEmailFromIdToken(String? idToken) {
     if (idToken == null) return null;
 
-    // Decode and parse JWT (for simplicity using string split)
+    // Split the token into its components
     final parts = idToken.split('.');
     if (parts.length != 3) return null;
 
-    final payload = Uri.decodeComponent(
-      String.fromCharCodes(base64Url.decode(parts[1])),
-    );
+    // Fix the padding issue for Base64
+    String normalizedPayload = parts[1];
+    normalizedPayload += List.filled((4 - normalizedPayload.length % 4) % 4, '=').join();
 
+    // Decode the payload
+    final payload = utf8.decode(base64Url.decode(normalizedPayload));
+
+    // Parse the JSON payload
     final payloadMap = json.decode(payload) as Map<String, dynamic>;
+
     return payloadMap['email'] as String?;
   }
 }

@@ -256,11 +256,18 @@ class HydraCamApiService {
   /// Fetch the GUID of a user by their email
   Future<String?> getUserGuidByEmail(String email) async {
     try {
-      final uri = Uri.parse('$_baseUrl/users/GetUserByEmail?email=$email');
+      final uri = Uri.parse('$_baseUrl/GetUserByEmail?email=$email');
       final response = await http.get(uri);
+
+      // Log the raw response
+      LogService.instance.registerLog('Raw response: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+
+        // Log the parsed data
+        LogService.instance.registerLog('Parsed response: $data');
+
         return data['guid'] as String?;
       } else if (response.statusCode == 404) {
         LogService.instance.registerLog('User not found for email: $email');
