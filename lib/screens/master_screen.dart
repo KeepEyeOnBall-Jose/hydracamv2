@@ -14,7 +14,6 @@ import '../services/camera_service.dart';
 import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
-import '../services/network_info_service.dart';
 import '../services/session_manager.dart';
 import '../services/settings_service.dart';
 import '../services/user_service.dart';
@@ -23,6 +22,7 @@ import '../widgets/add_gallery_media_button.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/master_video_recording_screen.dart';
 import '../widgets/media_list_widget.dart';
+import '../widgets/session_info_widget.dart';
 
 class MasterScreen extends StatefulWidget {
   @override
@@ -673,47 +673,8 @@ class _MasterScreenState extends State<MasterScreen> {
             // Display session active status at the top
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    sessionActive ? "Session Active: $sessionGuid" : "",
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
-                  ),
-                  FutureBuilder<Map<String, String?>>(
-                    future: NetworkInfoService.getNetworkInfo(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Text(
-                          "Loading network info...",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Text(
-                          "Error fetching network info",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.red,
-                          ),
-                        );
-                      } else {
-                        final data = snapshot.data!;
-                        final networkType = data['networkType'] ?? "Unknown Network";
-                        final ip = data['ip'] ?? "Unknown IP";
-                        return Text(
-                          "Network: $networkType | IP: $ip",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
+              child:  SessionInfoWidget(
+                sessionDisplay: sessionActive ? "Session Active: $sessionGuid" : "No active session",
               ),
             ),
             // Expanded widget to allow content to scroll if necessary

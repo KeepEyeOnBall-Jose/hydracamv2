@@ -13,6 +13,7 @@ import '../slave/master_discovery.dart';
 import '../widgets/add_gallery_media_button.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/media_list_widget.dart';
+import '../widgets/session_info_widget.dart';
 import 'master_screen.dart';
 
 class SlaveScreen extends StatefulWidget {
@@ -202,9 +203,6 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    String sessionDisplay = SessionManager.instance.sessionGuid ?? "No active session";    // Get current session
-
     return WillPopScope(
       onWillPop: () async {
         _cleanUpSlaveMode();
@@ -229,9 +227,8 @@ class _SlaveScreenState extends State<SlaveScreen> {
           children:[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Session: $sessionDisplay",
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              child: SessionInfoWidget(
+                sessionDisplay: SessionManager.instance.sessionGuid ?? "No active session",
               ),
             ),
 
