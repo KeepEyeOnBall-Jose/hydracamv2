@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
-import '../services/uploader_service.dart'; // Importar el servicio
+import '../services/uploader_service.dart';
 import 'dart:io';
 
 /// Reusable widget to show list of recorded photos and videos for a device (both slave or master)
@@ -10,7 +10,6 @@ class MediaListWidget extends StatelessWidget {
   final List<CapturedVideo> videos;
   final Function(CapturedPhoto)? onPhotoTap;
   final Function(CapturedVideo)? onVideoTap;
-
   final Function(CapturedPhoto)? onRetryPhotoUpload;
   final Function(CapturedVideo)? onRetryVideoUpload;
 

@@ -61,9 +61,11 @@ class UploaderInfoScreen extends StatelessWidget {
               videos: videos,
               onRetryPhotoUpload: (photo) {
                 UploaderService().addMediaToQueue(photo);
+                UploaderService().startUploadingManually(); // Force manual upload
               },
               onRetryVideoUpload: (video) {
                 UploaderService().addMediaToQueue(video);
+                UploaderService().startUploadingManually(); // Force manual upload
               },
             ),
           ),

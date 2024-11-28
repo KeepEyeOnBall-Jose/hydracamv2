@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-
+import 'package:sport_cam_sync/services/settings_service.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'hydracam_api_service.dart';
@@ -24,22 +24,53 @@ class UploaderService {
   // Reference to the API service
   final HydraCamApiService _apiService = HydraCamApiService();
 
-  void addMediaToQueue(dynamic media) {
+  /// Processes a media file (photo or video) and adds it to the queue
+  void addMediaToQueue(dynamic media) async {
     if (media is CapturedPhoto || media is CapturedVideo) {
+
+      // Avoid duplicates
+      if (_uploadQueue.any((item) => item.mediaPath == media.mediaPath)) {
+        LogService.instance.registerLog("Media already in queue: ${media.mediaPath}");
+        return; // Don't add if already in the queue
+      }
+
+      // Add media to queue
       _uploadQueue.add(media);
       LogService.instance.registerLog("Media added to upload queue: ${media.mediaPath}");
-      _startUploading();
+
+      // Check if auto-upload setting is active
+      final autoUploadEnabled = await SettingsService.getAutoUploadMaterials(); // Check the setting
+
+      if (autoUploadEnabled) {
+        LogService.instance.registerLog("Auto-upload is enabled. Starting upload process.");
+        _startUploading();
+      } else {
+        LogService.instance.registerLog("Auto-upload is disabled. Media added to queue but not uploaded.");
+      }
+
     } else {
       LogService.instance.registerLog("Invalid media type added to upload queue");
     }
   }
 
+  /// Iterates whole queue until all media is uploaded
   void _startUploading() {
     LogService.instance.registerLog("UploaderService: _startUploading called. _isUploading=$_isUploading, queue length=${_uploadQueue.length}");
     if (!_isUploading && _uploadQueue.isNotEmpty) {
       _processNextItem();
     }
   }
+
+  /// Forces _startUploading manually
+  void startUploadingManually() {
+    if (!_isUploading && _uploadQueue.isNotEmpty) {
+      LogService.instance.registerLog("Manual upload initiated.");
+      _startUploading();
+    } else if (_uploadQueue.isEmpty) {
+      LogService.instance.registerLog("No items in queue to upload.");
+    }
+  }
+
 
   /// Processes next item of the queue. Uploads it, notifies possible error, and triggers local file deletion.
   void _processNextItem() async {

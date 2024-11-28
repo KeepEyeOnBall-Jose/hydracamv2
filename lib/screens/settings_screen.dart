@@ -15,6 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _masterShouldRecord = false;
   String _cameraQuality = 'high'; // Default quality
   bool _deleteLocalAfterUpload = false;
+  bool _autoUploadMaterials = true;
 
   @override
   void initState() {
@@ -26,10 +27,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final shouldRecord = await SettingsService.getMasterShouldRecord();
     final cameraQuality = await SettingsService.getCameraQuality();
     final deleteLocalAfterUpload = await SettingsService.getDeleteLocalAfterUpload();
+    final autoUploadMaterials = await SettingsService.getAutoUploadMaterials(); // New
+
     setState(() {
       _masterShouldRecord = shouldRecord;
       _cameraQuality = cameraQuality;
       _deleteLocalAfterUpload = deleteLocalAfterUpload;
+      _autoUploadMaterials = autoUploadMaterials;
     });
   }
 
@@ -56,6 +60,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await SettingsService.setDeleteLocalAfterUpload(value);
     setState(() {
       _deleteLocalAfterUpload = value;
+    });
+  }
+
+  // Update the auto-upload setting
+  Future<void> _updateAutoUploadMaterials(bool value) async {
+    await SettingsService.setAutoUploadMaterials(value);
+    setState(() {
+      _autoUploadMaterials = value;
     });
   }
 
@@ -141,6 +153,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Switch(
                   value: _deleteLocalAfterUpload,
                   onChanged: _updateDeleteLocalAfterUpload,
+                  activeColor: AppTheme.primaryColor,
+                  activeTrackColor: AppTheme.accentColor.withOpacity(0.5),
+                  inactiveThumbColor: AppTheme.disabledButtonColor,
+                  inactiveTrackColor: AppTheme.secondaryColor,
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // New: Auto-upload materials setting
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Auto-upload materials",
+                  style: AppTheme.bodyText1,
+                ),
+                Switch(
+                  value: _autoUploadMaterials,
+                  onChanged: _updateAutoUploadMaterials,
                   activeColor: AppTheme.primaryColor,
                   activeTrackColor: AppTheme.accentColor.withOpacity(0.5),
                   inactiveThumbColor: AppTheme.disabledButtonColor,

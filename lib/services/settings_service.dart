@@ -3,17 +3,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'log_service.dart';
 
 class SettingsService {
-  static const String _masterShouldRecordKey = 'masterShouldRecord';
-  static const String _cameraQualityKey = 'cameraQuality';
-  static const String _deleteLocalAfterUploadKey = 'deleteLocalAfterUpload';
 
-  // Retrieve the current value for "masterShouldRecord"
+  static const String _masterShouldRecordKey = 'masterShouldRecord';          // Whether or not master should also take pics/videos
+  static const String _cameraQualityKey = 'cameraQuality';                    // Use max, mid or minimum quality available for the camera
+  static const String _deleteLocalAfterUploadKey = 'deleteLocalAfterUpload';  // Choose if delete or not the media after uploading
+  static const String _autoUploadMaterialsKey = 'autoUploadMaterials';        // Choose if automatically upload materials or not
+
+  /// Retrieve the current value for "masterShouldRecord"
   static Future<bool> getMasterShouldRecord() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_masterShouldRecordKey) ?? false; // Default to false
   }
 
-  // Update the value for "masterShouldRecord"
+  /// Update the value for "masterShouldRecord"
   static Future<void> setMasterShouldRecord(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_masterShouldRecordKey, value);
@@ -21,13 +23,13 @@ class SettingsService {
     LogService.instance.registerLog("Update massterShouldRecord value to $value");
   }
 
-  // Retrieve the current camera quality setting
+  /// Retrieve the current camera quality setting
   static Future<String> getCameraQuality() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_cameraQualityKey) ?? 'high'; // Default to 'high'
   }
 
-  // Update the camera quality setting
+  /// Update the camera quality setting
   static Future<void> setCameraQuality(String quality) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_cameraQualityKey, quality);
@@ -35,17 +37,30 @@ class SettingsService {
     LogService.instance.registerLog("Update Camera Quality value to $quality");
   }
 
-  // Retrieve the current value for "deleteLocalAfterUpload"
+  /// Retrieve the current value for "deleteLocalAfterUpload"
   static Future<bool> getDeleteLocalAfterUpload() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_deleteLocalAfterUploadKey) ?? false; // Default to false
   }
 
-  // Update the value for "deleteLocalAfterUpload"
+  /// Update the value for "deleteLocalAfterUpload"
   static Future<void> setDeleteLocalAfterUpload(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_deleteLocalAfterUploadKey, value);
 
     LogService.instance.registerLog("Update delete local file after upload value to $value");
+  }
+
+  /// Retrieve the current value for "autoUploadMaterials"
+  static Future<bool> getAutoUploadMaterials() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_autoUploadMaterialsKey) ?? true; // Default to true
+  }
+
+  /// Update the value for "autoUploadMaterials"
+  static Future<void> setAutoUploadMaterials(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_autoUploadMaterialsKey, value);
+    LogService.instance.registerLog("Update autoUploadMaterials value to $value");
   }
 }
