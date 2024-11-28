@@ -18,7 +18,16 @@ class MasterVideoRecordingScreen extends StatefulWidget {
 }
 
 class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen> {
+
+  bool _isStopping = false; // State variable to avoid button spam
+
   void _handleStopRecording() {
+
+    if (_isStopping) return; // Prevent multiple presses
+    setState(() {
+      _isStopping = true;
+    });
+
     final navigator = Navigator.of(context);
 
     widget.onStopRecording().then((capturedVideo) {
@@ -30,6 +39,11 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error stopping recording: $error')),
         );
+
+        setState(() {
+          _isStopping = false;
+        });
+
       }
     });
   }
@@ -39,34 +53,54 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
     return WillPopScope(
       onWillPop: () async => false, // Prevent back navigation
       child: Scaffold(
-        backgroundColor: Colors.black, // Ensure the background is opaque
+        backgroundColor: Colors.black,
         appBar: null,
         body: GestureDetector(
-          behavior: HitTestBehavior.opaque, // Capture all touch events
-          onTap: () {}, // Empty handler to absorb taps
+          behavior: HitTestBehavior.opaque,
+          onTap: () {}, // Absorb taps
           child: Stack(
             children: [
               // Full-screen camera preview
               Positioned.fill(
                 child: CameraPreviewWidget(controller: widget.cameraService.controller!),
               ),
-              // Stop Recording button at the bottom center
+              // Stop Recording button
               Positioned(
                 bottom: 30,
                 left: 0,
                 right: 0,
                 child: Center(
                   child: ElevatedButton(
-                    onPressed: _handleStopRecording,
+                    onPressed: _isStopping ? null : _handleStopRecording, // Disable if stopping
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      textStyle: TextStyle(fontSize: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      textStyle: const TextStyle(fontSize: 18),
                     ),
-                    child: Text('Stop Recording'),
+                    child: const Text('Stop Recording'),
                   ),
                 ),
               ),
+              // Loading indicator
+              if (_isStopping)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.5), // Semi-transparent overlay
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 16),
+                          Text(
+                            'Processing video, please wait...',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

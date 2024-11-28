@@ -170,8 +170,8 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
       final XFile video = await _controller!.stopVideoRecording();
       videoEndRecordingDate = DateTime.now();
 
-
-        LogService.instance.registerLog("Video recorded at path: ${video.path}");
+      // TODO: ISOLATE FROM MAIN THREAD
+      LogService.instance.registerLog("Video recorded at path: ${video.path}");
 
       // Save to gallery
       await GallerySaver.saveVideo(video.path, albumName: 'HydraCam');
