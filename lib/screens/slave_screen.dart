@@ -291,6 +291,8 @@ class _SlaveScreenState extends State<SlaveScreen> {
       ),
     );
   }
+
+
 // TODO: EXTRACT TO WIDGET TO AVOID REPEAT CODE WITH MASTER
   void _showPhotoDialog(CapturedPhoto photo) {
     showDialog(

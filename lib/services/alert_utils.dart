@@ -73,8 +73,8 @@ class AlertUtils {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return AlertDialog(
-                title: Text("Información del Dispositivo"),
-                content: Center(
+                title: const Text("Device Information"),
+                content: const Center(
                   child: CircularProgressIndicator(),
                 ),
                 actions: [
@@ -83,28 +83,28 @@ class AlertUtils {
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.accentColor,
                     ),
-                    child: Text("Cerrar"),
+                    child: const Text("Close"),
                   ),
                 ],
               );
             } else if (snapshot.hasError) {
               return AlertDialog(
-                title: Text("Información del Dispositivo"),
-                content: Text("Error al obtener la información del dispositivo."),
+                title: const Text("Device Information"),
+                content: const Text("Error when obtaining the device information."),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.accentColor,
                     ),
-                    child: Text("Cerrar"),
+                    child: const Text("Close"),
                   ),
                 ],
               );
             } else {
               Map<String, dynamic> deviceInfo = snapshot.data!;
               return AlertDialog(
-                title: Text("Información del Dispositivo"),
+                title: const Text("Device Information"),
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: deviceInfo.entries.map((entry) {
@@ -118,7 +118,7 @@ class AlertUtils {
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.accentColor,
                     ),
-                    child: Text("Cerrar"),
+                    child: const Text("Close"),
                   ),
                 ],
               );
@@ -148,7 +148,7 @@ class AlertUtils {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Ubicación del Dispositivo"),
+          title: const Text("Device Location"),
           content: Text(locationInfo),
           actions: [
             TextButton(
@@ -156,13 +156,34 @@ class AlertUtils {
               style: TextButton.styleFrom(
                 foregroundColor: AppTheme.accentColor,
               ),
-              child: const Text("Cerrar"),
+              child: const Text("Close"),
             ),
           ],
         );
       },
     );
   }
+
+
+  /// Show dialog when trying to open a deleted media file.
+  static void showFileMissingDialog(String fileType, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("$fileType Not Found"),
+          content: Text("The selected $fileType file is no longer available on this device."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
 
 // Use example

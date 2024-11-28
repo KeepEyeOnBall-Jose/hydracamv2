@@ -3,11 +3,13 @@ import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:sport_cam_sync/screens/sports_centers_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
 import '../constants.dart';
+import '../globals.dart';
 import '../master/master_announcer.dart';
 import '../master/master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
+import '../services/alert_utils.dart';
 import '../services/camera_service.dart';
 import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
@@ -194,9 +196,9 @@ class _MasterScreenState extends State<MasterScreen> {
 
     if (capturedVideo != null) {
       // Delay showing the dialog to prevent any touch event conflicts
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(const Duration(milliseconds: 100), () {
         if (mounted) {
-          _showVideoDialog(capturedVideo);
+          _showVideoDialog(capturedVideo, autoClose: true);
         }
       });
     }
@@ -229,7 +231,7 @@ class _MasterScreenState extends State<MasterScreen> {
       });
 
       // Show pop up for preview
-      _showPhotoDialog(capturedPhoto);
+      _showPhotoDialog(capturedPhoto, autoClose: true);
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -237,38 +239,119 @@ class _MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  void _showPhotoDialog(CapturedPhoto photo) {
+  void _showPhotoDialog(CapturedPhoto photo, {bool autoClose = false}) {
+
+    final file = File(photo.photoPath);
+
+    // Check if the file exists
+    if (!file.existsSync()) {
+      // Show error message if the file doesn't exist
+      AlertUtils.showFileMissingDialog("Photo", context);
+      return;
+    }
+
+    // Proceed with showing the photo if the file exists
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.file(File(photo.photoPath)),
-              //Text("Captured: ${photo.captureDate}"),
-              //Text("Received: ${photo.receivedDate}"),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Close"),
-              ),
-            ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8, // Max height
+              maxWidth: MediaQuery.of(context).size.width * 0.9,  // Max width
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Display photo with aspect ratio preserved
+                Expanded(
+                  child: Image.file(
+                    file,
+                    fit: BoxFit.contain, // Preserve aspect ratio
+                  ),
+                ),
+                // Close button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Close"),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
+
+    // Auto-close logic if enabled
+    if (autoClose) {
+      Future.delayed(Duration(seconds: secondsToClosePhoto), () {
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      });
+    }
   }
 
-  void _showVideoDialog(CapturedVideo video) {
+
+  void _showVideoDialog(CapturedVideo video, {bool autoClose = false}) {
+
+    final file = File(video.videoPath);
+
+    // Check if the file exists
+    if (!file.existsSync()) {
+      // Show error message if the file doesn't exist
+      AlertUtils.showFileMissingDialog("Video", context);
+      return;
+    }
+
+    // Proceed with showing the video if the file exists
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-          child: VideoPlayerScreen(videoPath: video.videoPath),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8, // Max height
+              maxWidth: MediaQuery.of(context).size.width * 0.9,  // Max width
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Video player with aspect ratio preserved
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9, // Default video aspect ratio
+                    child: VideoPlayerScreen(videoPath: video.videoPath),
+                  ),
+                ),
+                // Close button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Close"),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
+
+    // Auto-close logic if enabled
+    if (autoClose) {
+      Future.delayed(Duration(seconds: secondsToClosePhoto), () {
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      });
+    }
   }
+
 
   // Displays the number of connected devices and opens a modal for details
   Widget _connectedDevicesWidget() {
@@ -391,132 +474,183 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
 
+  // Build the initial UI when no session is active
   Widget _buildInitialUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _connectedDevicesWidget(),
-        const SizedBox(height: 20),
-        CourtSelectionWidget(
-          groupedCourts: groupedCourts,
-          onCourtSelected: (selectedName, selectedGuid) {
-            setState(() {
-              selectedCourtName = selectedName;
-              selectedCourtGuid = selectedGuid;
-            });
-          },
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _startOrEndSession, // Always clickable
-          child: const Text("Start Session"),
-        ),
-        const SizedBox(height: 5),
-        ElevatedButton(
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SportsCentersScreen()),
-          ),
-          child: const Text("Or... Load a Previous One"),
-        ),
+    // Compute button width based on orientation
+    final buttonWidth = MediaQuery.of(context).orientation == Orientation.portrait
+        ? MediaQuery.of(context).size.width * 0.8 // 80% width when vertical
+        : MediaQuery.of(context).size.width * 0.4; // 40% width when horizontal
 
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Connected devices widget at the top
+          _connectedDevicesWidget(),
+          const SizedBox(height: 20),
+          // Court selection widget with consistent width
+          SizedBox(
+            width: buttonWidth,
+            child: CourtSelectionWidget(
+              groupedCourts: groupedCourts,
+              onCourtSelected: (selectedName, selectedGuid) {
+                setState(() {
+                  selectedCourtName = selectedName;
+                  selectedCourtGuid = selectedGuid;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Buttons with consistent width and spacing
+          SizedBox(
+            width: buttonWidth,
+            child: ElevatedButton(
+              onPressed: _startOrEndSession, // Always clickable
+              child: const Text("Start Session"),
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: buttonWidth,
+            child: ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SportsCentersScreen()),
+              ),
+              child: const Text("Or... Load a Previous One"),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  // Build the UI when a session is active
   Widget _buildSessionUI() {
-
-
     String? sessionGuid = SessionManager.instance.sessionGuid;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final buttonWidth = constraints.maxWidth * 0.8; // El 80% del ancho total
+    // Compute button width for vertical layout
+    final buttonWidth = MediaQuery.of(context).orientation == Orientation.portrait
+        ? MediaQuery.of(context).size.width * 0.8 // 80% width in portrait
+        : MediaQuery.of(context).size.width * 0.4; // 40% width in landscape
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _connectedDevicesWidget(),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: buttonWidth,
-              child: ElevatedButton(
-                onPressed: sessionGuid != null ? _takeRealPhoto : null,
-                child: Text("Take Photo"),
-              ),
+    final double buttonDistance = MediaQuery.of(context).orientation == Orientation.portrait ? 10 : 5;
+
+    // Buttons and connected devices widget
+    Widget controls = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Connected devices widget
+        _connectedDevicesWidget(),
+        SizedBox(height: buttonDistance * 2),
+        // Buttons
+        SizedBox(
+          width: buttonWidth,
+          child: ElevatedButton(
+            onPressed: sessionGuid != null ? _takeRealPhoto : null,
+            child: const Text("Take Photo"),
+          ),
+        ),
+        SizedBox(height: buttonDistance),
+        SizedBox(
+          width: buttonWidth,
+          child: ElevatedButton(
+            onPressed: sessionGuid != null ? _toggleRecording : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isRecording ? Colors.red : Colors.green,
             ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: buttonWidth,
-              child: ElevatedButton(
-                onPressed: sessionGuid != null
-                    ? () {
-                  _toggleRecording();
-                }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isRecording ? Colors.red : Colors.green,
-                ),
-                child: Text(isRecording ? "Stop Recording" : "Start Recording"),
-              ),
-            ),/*
-            const SizedBox(height: 10),
-            //TODO DELETE ME
-            SizedBox(
-              width: buttonWidth,
-              child: ElevatedButton(
-                onPressed: (photos.isNotEmpty || videos.isNotEmpty) && sessionGuid != null
-                    ? _uploadAllMedia
-                    : null,
-                child: Text("Upload All Media"),
-              ),
-            ),*/
-            const SizedBox(height: 10),
-            SizedBox(
-              width: buttonWidth,
-              child: ElevatedButton(
-                onPressed: sessionGuid != null ? _startOrEndSession : null,
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text("End Session"),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: buttonWidth,
-              child: const AddGalleryMediaButton(),
-            ),
-            const SizedBox(height: 20),
-            // List to display photos and videos
-            Expanded(
-              child: MediaListWidget(
-                photos: photos,
-                videos: videos,
-                onPhotoTap: _showPhotoDialog,
-                onVideoTap: _showVideoDialog,
-              ),
-            ),
-          ],
-        );
-      },
+            child: Text(isRecording ? "Stop Recording" : "Start Recording"),
+          ),
+        ),
+        SizedBox(height: buttonDistance),
+        SizedBox(
+          width: buttonWidth,
+          child: ElevatedButton(
+            onPressed: sessionGuid != null ? _startOrEndSession : null,
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text("End Session"),
+          ),
+        ),
+        SizedBox(height: buttonDistance),
+        SizedBox(
+          width: buttonWidth,
+          child: const AddGalleryMediaButton(),
+        ),
+      ],
     );
+
+    // Media list widget
+    Widget mediaList = MediaListWidget(
+      photos: photos,
+      videos: videos,
+      onPhotoTap: (photo) => _showPhotoDialog(photo), // No auto-close
+      onVideoTap: (video) => _showVideoDialog(video), // No auto-close
+    );
+
+    // Adjust layout based on orientation
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      // Vertical layout: controls and media list stacked
+      return Column(
+        children: [
+          IntrinsicHeight(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: controls,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: mediaList,
+            ),
+          ),
+        ],
+      );
+    } else {
+      // Horizontal layout: controls on the left, media list on the right
+      return Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: controls,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: mediaList,
+            ),
+          ),
+        ],
+      );
+    }
   }
 
-
+  // Build the final widget for the whole screen
   @override
   Widget build(BuildContext context) {
     String? sessionGuid = SessionManager.instance.sessionGuid;
+
     return WillPopScope(
       onWillPop: () async {
-
         if (isRecording) return false;
 
         // Handle the back button press
         _server.stopServer();
         _announcer.stopBroadcasting();
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+          context,
+          MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
         );
         return false; // Prevent the default behavior
       },
@@ -539,13 +673,11 @@ class _MasterScreenState extends State<MasterScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                sessionActive
-                    ? "Session Active: $sessionGuid"
-                    : "",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+                sessionActive ? "Session Active: $sessionGuid" : "",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
               ),
             ),
-            // Centered UI for session management
+            // Expanded widget to allow content to scroll if necessary
             Expanded(
               child: Center(
                 child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
@@ -553,11 +685,12 @@ class _MasterScreenState extends State<MasterScreen> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
-
 }
+
+
 
 /// VideoPlayerScreen - A widget to play video using the video_player plugin.
 class VideoPlayerScreen extends StatefulWidget {
@@ -600,10 +733,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           )
         else
           const CircularProgressIndicator(),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text("Close"),
-        ),
       ],
     );
   }
