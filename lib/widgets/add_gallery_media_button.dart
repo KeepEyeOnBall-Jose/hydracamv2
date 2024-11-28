@@ -43,13 +43,8 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       _showNoSessionAlert();
       return;
     }
-    // Check and request permissions
-    bool permissionsGranted = true; //await PermissionService.requestAllPermissions();
-    if (!permissionsGranted) {
-      // Show alert if permissions are not granted
-      _showPermissionsAlert();
-      return;
-    }
+
+    // TODO: Check permissions (avoiding storage troll one)
 
     // Open filter dialog
     _openFilterDialog();
@@ -183,11 +178,18 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
 
 
     // Collect all media from each album
-    List<AssetEntity> allMedia = [];
+    Map<String, AssetEntity> allMediaMap = {};  // Use a map so we can track ids and avoid duplicates
     for (var album in albums) {
       List<AssetEntity> mediaInAlbum = await album.getAssetListPaged(page: 0, size: 1000);
-      allMedia.addAll(mediaInAlbum);
+      for (var asset in mediaInAlbum) {
+        // Add only if id is not already present in the map
+        if (!allMediaMap.containsKey(asset.id)) {
+          allMediaMap[asset.id] = asset;
+        }
+      }
     }
+
+    List<AssetEntity> allMedia = allMediaMap.values.toList();
 
     // Return the combined list of all media
     return allMedia;
