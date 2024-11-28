@@ -8,6 +8,7 @@ class SettingsService {
   static const String _cameraQualityKey = 'cameraQuality';                    // Use max, mid or minimum quality available for the camera
   static const String _deleteLocalAfterUploadKey = 'deleteLocalAfterUpload';  // Choose if delete or not the media after uploading
   static const String _autoUploadMaterialsKey = 'autoUploadMaterials';        // Choose if automatically upload materials or not
+  static const String _autoplayVideoOnMasterKey = 'autoplayVideoOnMaster';    // Toggle auto video play in master device after recording
 
   /// Retrieve the current value for "masterShouldRecord"
   static Future<bool> getMasterShouldRecord() async {
@@ -62,5 +63,18 @@ class SettingsService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_autoUploadMaterialsKey, value);
     LogService.instance.registerLog("Update autoUploadMaterials value to $value");
+  }
+
+  /// Retrieve the current value for "autoplayVideoOnMaster".
+  static Future<bool> getAutoplayVideoOnMaster() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_autoplayVideoOnMasterKey) ?? false; // Default to false
+  }
+
+  /// Update the value for "autoplayVideoOnMaster".
+  static Future<void> setAutoplayVideoOnMaster(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_autoplayVideoOnMasterKey, value);
+    LogService.instance.registerLog("Updated autoplayVideoOnMaster value to $value");
   }
 }

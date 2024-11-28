@@ -152,7 +152,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   Future<CapturedVideo> _stopMasterRecordingVideo() async {
 
-    // Send command to slaves before stoppin from master
+    // Send command to slaves before stopping from master
     _server.sendCommand('stopRecordingVideo');
 
     String videoPath = await _server.cameraService.stopRecordingVideo();
@@ -184,7 +184,10 @@ class _MasterScreenState extends State<MasterScreen> {
 
 
 
+  /// Open the "camera" preview screen while recording and then return video and show preview.
   void _showMasterVideoPreview() async {
+
+    // Move to recording preview screen and get recorded video
     final capturedVideo = await Navigator.push<CapturedVideo>(
       context,
       MaterialPageRoute(
@@ -196,12 +199,15 @@ class _MasterScreenState extends State<MasterScreen> {
     );
 
     if (capturedVideo != null) {
-      // Delay showing the dialog to prevent any touch event conflicts
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (mounted) {
-          _showVideoDialog(capturedVideo, autoClose: true);
-        }
-      });
+      // Automatically show recorded video only if autoplay setting is active
+      bool autoplayEnabled = await SettingsService.getAutoplayVideoOnMaster();
+      if (autoplayEnabled) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) {
+            _showVideoDialog(capturedVideo, autoClose: true);
+          }
+        });
+      }
     }
   }
 

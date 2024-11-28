@@ -59,6 +59,32 @@ class AlertUtils {
     Navigator.of(context, rootNavigator: true).pop();
   }
 
+  /// Shows an informational dialog with a title and message.
+  static void showInfoDialog({
+    required BuildContext context,
+    required String title,
+    required String message,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title, style: AppTheme.headline1),
+          content: Text(message, style: AppTheme.bodyText1),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.accentColor,
+              ),
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// ------------------
   /// SPECIFIC DIALOGS
   /// ------------------
