@@ -14,7 +14,7 @@ class PermissionService {
       if (Platform.isAndroid)// && !Platform.version.startsWith('11'))
         Permission.storage,
       if (Platform.isIOS) Permission.photos,
-      Permission.location,
+        Permission.location,
     ];
 
     // Request permissions

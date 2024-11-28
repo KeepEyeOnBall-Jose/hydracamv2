@@ -17,7 +17,7 @@ class MasterAnnouncer {
       return;
     }
     _isBroadcasting = true;
-    _timer = Timer.periodic(Duration(seconds: 2), (timer) async {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) async {
       try{
         final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
         socket.broadcastEnabled = true;
