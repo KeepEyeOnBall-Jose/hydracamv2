@@ -1,4 +1,5 @@
 // constants.dart
+/// Hardcoded list of available courts and centers (in the future, from api and for user)
 final Map<String, List<Map<String, String>>> groupedCourts = {
   "Airport Squash & Fitness Berlin": [
     {"name": "Court 2", "guid": "3e61b917-7d7b-4d74-be07-ea6972a164f8"},
@@ -30,6 +31,22 @@ final Map<String, List<Map<String, String>>> groupedCourts = {
   ],
   "Testing Sports Center": [
     {"name": "Testing Court", "guid": "a2387237-cb34-428a-81cd-49a4563d2768"},
+  ],
+  "Sportcenter Wittenau": [],
+  "Test SC": [
+    {"name": "Court 1", "guid": "96fb980c-8063-49d0-b17a-0290ca826a0a"},
+    {"name": "Court 2", "guid": "2a82b9ba-b8c1-463f-b7d9-23ca8f746a73"},
+    {"name": "Court 3", "guid": "534428ec-df9f-41ff-8eb2-a3472ca9bbab"},
+    {"name": "Court 4", "guid": "2a6750df-8a8b-4623-9ae8-773137ad4210"},
+    {"name": "Court 5", "guid": "29b9cc2a-1899-4c9e-9ee4-69999a7ca9fa"},
+    {"name": "Court 6", "guid": "58c7afd4-d498-4fb9-9555-25ea9c4e1db9"},
+    {"name": "Court 7", "guid": "2d58f1b8-def0-4f08-a169-f6272d040da0"},
+    {"name": "Court 8", "guid": "d4377606-dbbe-4c37-8928-70b9d39dc159"},
+    {"name": "addadsa", "guid": "b42e8ad9-f438-48a2-b912-06e99da52620"},
+    {"name": "sada1", "guid": "c5555702-5bb4-4f80-9a3e-8af794d7d416"},
+    {"name": "sada2", "guid": "5032693b-c96d-4c12-8f36-7a980737a55c"},
+    {"name": "sada3", "guid": "4d2a0ff3-657d-4520-ac18-fdea475c33e2"},
+    {"name": "sada4", "guid": "ac004659-3731-4e4f-ae7b-4a59414f356a"},
   ],
   "Hasta La Vista Wroclaw": [
     {"name": "Court 1", "guid": "e59ab8c0-52b1-47df-bfe3-c799daccaecc"},

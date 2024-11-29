@@ -389,6 +389,16 @@ class _MasterScreenState extends State<MasterScreen> {
 
   // Build the initial UI when no session is active
   Widget _buildInitialUI() {
+
+    // Order courts and centers for widget
+    Map<String, List<Map<String, String>>> sortedGroupedCourts = {
+      for (var entry in (groupedCourts.entries.toList()
+        ..sort((a, b) => a.key.compareTo(b.key))) // Order centers
+      )
+        entry.key: entry.value..sort((a, b) => a['name']!.compareTo(b['name']!)) // Order courts
+    };
+
+
     // Compute button width based on orientation
     final buttonWidth = MediaQuery.of(context).orientation == Orientation.portrait
         ? MediaQuery.of(context).size.width * 0.8 // 80% width when vertical
@@ -414,7 +424,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 SizedBox(
                   width: buttonWidth,
                   child: CourtSelectionWidget(
-                    groupedCourts: groupedCourts,
+                    groupedCourts: sortedGroupedCourts,
                     onCourtSelected: (selectedName, selectedGuid) {
                       setState(() {
                         selectedCourtName = selectedName;
