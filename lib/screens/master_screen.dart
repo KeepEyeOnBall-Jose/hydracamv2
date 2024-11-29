@@ -242,106 +242,28 @@ class _MasterScreenState extends State<MasterScreen> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Photo command sent to slaves")),
+      const SnackBar(content: Text("Photo command sent to slaves")),
     );
   }
 
   void _showPhotoDialog(CapturedPhoto photo, {bool autoClose = false}) {
-
-    final file = File(photo.photoPath);
-
-    // Check if the file exists
-    if (!file.existsSync()) {
-      // Show error message if the file doesn't exist
-      AlertUtils.showFileMissingDialog("Photo", context);
-      return;
-    }
-
-    // Proceed with showing the photo if the file exists
-    showDialog(
+    AlertUtils.showMediaDialog(
       context: context,
-      builder: (context) {
-        return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.file(File(photo.photoPath)),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Close"),
-              ),
-            ],
-          ),
-        );
-      },
+      media: photo,
+      isAutoCloseEnabled: autoClose,
+      autoCloseSeconds: secondsToClosePhoto,
     );
-
-    // Auto-close logic if enabled
-    if (autoClose) {
-      Future.delayed(Duration(seconds: secondsToClosePhoto), () {
-        if (Navigator.canPop(context)) {
-          Navigator.pop(context);
-        }
-      });
-    }
   }
-
 
   void _showVideoDialog(CapturedVideo video, {bool autoClose = false}) {
-
-    final file = File(video.videoPath);
-
-    // Check if the file exists
-    if (!file.existsSync()) {
-      // Show error message if the file doesn't exist
-      AlertUtils.showFileMissingDialog("Video", context);
-      return;
-    }
-
-    // Proceed with showing the video if the file exists
-    showDialog(
+    AlertUtils.showMediaDialog(
       context: context,
-      builder: (context) {
-        return Dialog(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8, // Max height
-              maxWidth: MediaQuery.of(context).size.width * 0.9,  // Max width
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Video player with aspect ratio preserved
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9, // Default video aspect ratio
-                    child: VideoPlayerScreen(videoPath: video.videoPath),
-                  ),
-                ),
-                // Close button
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Close"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      media: video,
+      isAutoCloseEnabled: autoClose,
+      autoCloseSeconds: secondsToClosePhoto,
     );
-
-    // Auto-close logic if enabled
-    if (autoClose) {
-      Future.delayed(Duration(seconds: secondsToClosePhoto), () {
-        if (Navigator.canPop(context)) {
-          Navigator.pop(context);
-        }
-      });
-    }
   }
+
 
 
   // Displays the number of connected devices and opens a modal for details
@@ -588,8 +510,8 @@ class _MasterScreenState extends State<MasterScreen> {
     Widget mediaList = MediaListWidget(
       photos: photos,
       videos: videos,
-      onPhotoTap: (photo) => _showPhotoDialog(photo), // No auto-close
-      onVideoTap: (video) => _showVideoDialog(video), // No auto-close
+      onPhotoTap: (photo) => _showPhotoDialog(photo, autoClose: false), // No auto-close
+      onVideoTap: (video) => _showVideoDialog(video, autoClose: false), // No auto-close
       showPlaceholder: true,
     );
 

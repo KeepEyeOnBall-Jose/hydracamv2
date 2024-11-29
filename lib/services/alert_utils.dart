@@ -1,9 +1,10 @@
 /// A CLASS THAT EXTRACTS THE LOGIC OF SHOWING ALERTS, POP UPS, LOADING MESSAGES...
-
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../app_theme.dart';
+import '../models/CapturedPhoto.dart';
+import '../screens/master_screen.dart';
 import 'device_service.dart';
 import 'location_service.dart';
 
@@ -83,6 +84,80 @@ class AlertUtils {
         );
       },
     );
+  }
+
+  /// Displays a dialog for showing a photo or video.
+  /// Automatically adjusts to the screen size and supports auto-closing for master screens.
+ static void showMediaDialog({
+    required BuildContext context,
+    required dynamic media, // CapturedPhoto or CapturedVideo
+    required bool isAutoCloseEnabled, // Auto-close for master screens
+    int autoCloseSeconds = 5, // Default auto-close time
+  }) {
+    final isPhoto = media is CapturedPhoto;
+    final filePath = isPhoto ? media.photoPath : media.videoPath;
+
+    // Check if the file exists
+    final file = File(filePath);
+    if (!file.existsSync()) {
+      AlertUtils.showFileMissingDialog(isPhoto ? "Photo" : "Video", context);
+      return;
+    }
+
+    // Flag to track if the dialog is open
+    bool isDialogOpen = true;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(16.0), // Space from screen edges
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8, // 80% height
+              maxWidth: MediaQuery.of(context).size.width * 0.9,  // 90% width
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Media viewer
+                Expanded(
+                  child: isPhoto
+                      ? Image.file(file, fit: BoxFit.contain) // Show photo
+                      : AspectRatio(
+                    aspectRatio: 16 / 9, // Default video aspect ratio
+                    child: VideoPlayerScreen(videoPath: filePath), // Show video
+                  ),
+                ),
+                // Close button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      isDialogOpen = false;
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Close"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ).then((_) {
+      // When the dialog is closed (manually or automatically), mark it as closed
+      isDialogOpen = false;
+    });
+
+    // Auto-close logic for master screens
+    if (isAutoCloseEnabled) {
+      Future.delayed(Duration(seconds: autoCloseSeconds), () {
+        if (isDialogOpen && Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      });
+    }
   }
 
   /// ------------------

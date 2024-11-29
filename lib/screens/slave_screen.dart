@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import '../globals.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import '../services/alert_utils.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../slave/slave_client.dart';
@@ -57,37 +57,19 @@ class _SlaveScreenState extends State<SlaveScreen> {
             });
             LogService.instance.registerLog("Photo taken!!!");
 
-            // Flag to track if the dialog is still open
-            bool isDialogOpen = true;
-
-            // Show the taken photo in a modal
-            showDialog(
+            // Use the unified dialog function with placeholder metadata to wrap photo into CapturePhoto
+            AlertUtils.showMediaDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                title: const Text("Photo Taken"),
-                content: Image.file(File(path)),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      // Mark the dialog as closed and manually close it
-                      isDialogOpen = false;
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Close"),
-                  ),
-                ],
+              media: CapturedPhoto(
+                photoPath: path,
+                photoData: null,
+                captureDate: DateTime.now(),
+                receivedDate: DateTime.now(),
+                slaveDeviceId: "", // Populate as needed
               ),
-            ).then((_) {
-              // When the dialog is closed (manually or automatically), mark it as closed
-              isDialogOpen = false;
-            });
-
-            // Automatically close after N seconds
-            Future.delayed(Duration(seconds: secondsToClosePhoto), () {
-              if (isDialogOpen && Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
-            });
+              isAutoCloseEnabled: true, // No auto-close for slave
+              autoCloseSeconds: secondsToClosePhoto
+            );
           },
           onRecordingStarted: _handleRecordingStarted,
           onRecordingStopped: _handleRecordingStopped,
@@ -331,37 +313,21 @@ class _SlaveScreenState extends State<SlaveScreen> {
     }
   }
 
-
-
-// TODO: EXTRACT TO WIDGET TO AVOID REPEAT CODE WITH MASTER
   void _showPhotoDialog(CapturedPhoto photo) {
-    showDialog(
+    AlertUtils.showMediaDialog(
       context: context,
-      builder: (context) {
-        return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.file(File(photo.photoPath)),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Close"),
-              ),
-            ],
-          ),
-        );
-      },
+      media: photo,
+      isAutoCloseEnabled: false, // Auto-close is disabled for slave screens
+      autoCloseSeconds: secondsToClosePhoto
     );
   }
 
   void _showVideoDialog(CapturedVideo video) {
-    showDialog(
+    AlertUtils.showMediaDialog(
       context: context,
-      builder: (context) {
-        return Dialog(
-          child: VideoPlayerScreen(videoPath: video.videoPath),
-        );
-      },
+      media: video,
+      isAutoCloseEnabled: false, // Auto-close is disabled for slave screens
     );
   }
+
 }
