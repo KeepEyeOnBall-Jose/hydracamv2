@@ -140,6 +140,14 @@ class SlaveClient {
                     SessionManager.instance.startSession(sessionGuid, deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
+                } else if (command == 'sessionEnded') {
+                  // End session
+                  SessionManager.instance.endSession();
+                  LogService.instance.registerLog("Session ended as per master command.");
+                } else if (command == 'noSession') {
+                  // No active session on master
+                  SessionManager.instance.endSession();
+                  LogService.instance.registerLog("No active session on master.");
                 }
                 // Additional JSON-based commands can be handled here
               }

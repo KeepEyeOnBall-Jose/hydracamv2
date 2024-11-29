@@ -78,9 +78,33 @@ class MasterServer {
                     _notifyClientCount();
                     LogService.instance.registerLog("Registered new slave with deviceId: $deviceId");
 
-                  }
+                    // After registering the slave, send the session status
+                    if (SessionManager.instance.isSessionActive && SessionManager.instance.sessionGuid != null) {
+                      // Send session status
+                      var sessionStatusMessage = jsonEncode({
+                        'command': 'sessionStatus',
+                        'sessionGuid': SessionManager.instance.sessionGuid,
+                      });
 
+                      // Send the message to the client
+                      socket.add(sessionStatusMessage);
+
+                      LogService.instance.registerLog("Sent sessionStatus to $deviceId: $sessionStatusMessage");
+                    }
+                    else {
+                      // No active session
+                      var noSessionMessage = jsonEncode({
+                        'command': 'noSession',
+                      });
+
+                      // Send the message to the client
+                      socket.add(noSessionMessage);
+
+                      LogService.instance.registerLog("Sent noSession to $deviceId");
+                    }
+                  }
                 }
+
                 // Receive media
                 else if (messageType == 'photo' || messageType == 'video') {
                   // Process media data
@@ -129,6 +153,37 @@ class MasterServer {
                     LogService.instance.registerLog("Received heartbeat from $deviceId");
                   }
                 }
+
+                // Respond to explicit requests on session status
+                else if (messageType == 'getSessionStatus') {
+                  // Handle getSessionStatus
+                  LogService.instance.registerLog("Received getSessionStatus from $deviceId");
+
+                  // Prepare response
+                  if (SessionManager.instance.isSessionActive && SessionManager.instance.sessionGuid != null) {
+                    // Send session status
+                    var sessionStatusMessage = jsonEncode({
+                      'command': 'sessionStatus',
+                      'sessionGuid': SessionManager.instance.sessionGuid,
+                    });
+
+                    // Send the message to the client
+                    socket.add(sessionStatusMessage);
+
+                    LogService.instance.registerLog("Sent sessionStatus to $deviceId: $sessionStatusMessage");
+                  } else {
+                    // No active session
+                    var noSessionMessage = jsonEncode({
+                      'command': 'noSession',
+                    });
+
+                    // Send the message to the client
+                    socket.add(noSessionMessage);
+
+                    LogService.instance.registerLog("Sent noSession to $deviceId");
+                  }
+                }
+
               } else {
                 LogService.instance.registerLog("Unexpected data format received: $data");
               }
@@ -262,7 +317,6 @@ class MasterServer {
 
   void endCurrentSession() {
     if (SessionManager.instance.currentSession != null) {
-
       // Register logs
       LogService.instance.registerLog(
           "Capture session with GUID: ${SessionManager.instance.sessionGuid} ended and stored in history."
@@ -270,6 +324,12 @@ class MasterServer {
 
       // End session through SessionManager
       SessionManager.instance.endSession();
+
+      // Notify slaves that session ended
+      var sessionEndedCommand = jsonEncode({
+        'command': 'sessionEnded',
+      });
+      sendCommandToAll(sessionEndedCommand);
 
     } else {
       LogService.instance.registerLog("No active session to end.");
