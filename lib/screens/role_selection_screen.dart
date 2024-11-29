@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/session_info_widget.dart';
 import 'master_screen.dart';
 import 'slave_screen.dart';
 
@@ -8,33 +9,50 @@ class RoleSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Device Role"),
+        title: const Text("Select Device Role"),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start, // Center
           children: [
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to MasterScreen when the Master role is selected
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MasterScreen()),
-                );
-              },
-              child: Text("Master Mode"),
+
+            // Display session active status at the top
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child:  SessionInfoWidget(
+                sessionDisplay: "No active session",
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to SlaveScreen when the Slave role is selected
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SlaveScreen()),
-                );
-              },
-              child: Text("Slave Mode"),
+
+            const Spacer(),
+            // Buttons
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to MasterScreen when the Master role is selected
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MasterScreen()),
+                    );
+                  },
+                  child: Text("Master Mode"),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to SlaveScreen when the Slave role is selected
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SlaveScreen()),
+                    );
+                  },
+                  child: Text("Slave Mode"),
+                ),
+              ],
             ),
+            const Spacer()
           ],
         ),
       ),

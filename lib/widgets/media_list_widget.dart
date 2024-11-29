@@ -12,6 +12,7 @@ class MediaListWidget extends StatelessWidget {
   final Function(CapturedVideo)? onVideoTap;
   final Function(CapturedPhoto)? onRetryPhotoUpload;
   final Function(CapturedVideo)? onRetryVideoUpload;
+  final bool showPlaceholder; // Show or not a placeholder image and text if there is still no media
 
   /// Constructor
   const MediaListWidget({
@@ -22,12 +23,51 @@ class MediaListWidget extends StatelessWidget {
     this.onVideoTap,
     this.onRetryPhotoUpload,
     this.onRetryVideoUpload,
+    this.showPlaceholder = false
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final totalItems = photos.length + videos.length;
 
+    // Show placeholder if enabled and there are no media items
+    if (showPlaceholder && totalItems == 0) {
+      return SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(
+                Icons.perm_media_outlined, // Multimedia icon
+                size: 100, // Adjust the size as needed
+                color: Colors.grey, // Set the icon color
+              ),
+              SizedBox(height: 20),
+              Text(
+                "No media available",
+                style: TextStyle(
+                  fontSize: 18, // Text size
+                  color: Colors.grey, // Text color
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Photos and videos will appear here once captured.",
+                style: TextStyle(
+                  fontSize: 14, // Smaller text size
+                  color: Colors.grey, // Text color
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Else, proceed normally...
+    // Build the list of media items
     return ListView.builder(
       itemCount: totalItems,
       itemBuilder: (context, index) {

@@ -246,5 +246,21 @@ class UploaderService {
     return Duration(seconds: estimatedSeconds.round());
   }
 
+  /// Resets the UploaderService by clearing the queue and resetting the internal state.
+  void reset() {
+    LogService.instance.registerLog("UploaderService: Resetting upload queue and state.");
+
+    // Clear the upload queue to remove any pending media from the previous session
+    _uploadQueue.clear();
+
+    // Reset the uploading flag to ensure no ongoing uploads remain
+    _isUploading = false;
+
+    // Clear current upload notifier and reset estimated time notifier
+    currentlyUploadingNotifier.value = null;
+    estimatedTimeNotifier.value = Duration.zero;
+
+    LogService.instance.registerLog("UploaderService: Reset completed.");
+  }
 
 }

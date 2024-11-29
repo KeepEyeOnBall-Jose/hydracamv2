@@ -36,21 +36,35 @@ class SessionManager extends ChangeNotifier {
 
   /// Set the session GUID and initialize a new `CaptureSession`.
   void startSession(String sessionGuid, {required String deviceType}) {
+
+    // Reset UploaderService to ensure a clean state for the new session
+    UploaderService().reset();
+
+    // Set the session GUID and initialize a new session object
     _sessionGuid = sessionGuid;
     _deviceType = deviceType;
     _currentSession = CaptureSession(
       sessionId: sessionGuid,
       startTime: DateTime.now(),
     );
+
+    // Log session start and notify listeners
     LogService.instance.registerLog("Session started with GUID: $_sessionGuid on device type: $_deviceType");
     notifyListeners();
   }
 
   /// Ends the current session, clearing data.
   void endSession() {
+    // End current session
     _currentSession?.endSession();
     _currentSession = null;
     _sessionGuid = null;
+
+    // Reset the uploader to clear any pending operations
+    UploaderService().reset();
+
+    // Log operation and notify UI
+    LogService.instance.registerLog("Session ended and uploader reset.");
     notifyListeners();
   }
 

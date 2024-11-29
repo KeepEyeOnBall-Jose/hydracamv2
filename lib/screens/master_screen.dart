@@ -262,31 +262,15 @@ class _MasterScreenState extends State<MasterScreen> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8, // Max height
-              maxWidth: MediaQuery.of(context).size.width * 0.9,  // Max width
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Display photo with aspect ratio preserved
-                Expanded(
-                  child: Image.file(
-                    file,
-                    fit: BoxFit.contain, // Preserve aspect ratio
-                  ),
-                ),
-                // Close button
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Close"),
-                  ),
-                ),
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.file(File(photo.photoPath)),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Close"),
+              ),
+            ],
           ),
         );
       },
@@ -488,49 +472,59 @@ class _MasterScreenState extends State<MasterScreen> {
         ? MediaQuery.of(context).size.width * 0.8 // 80% width when vertical
         : MediaQuery.of(context).size.width * 0.4; // 40% width when horizontal
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Connected devices widget at the top
-          _connectedDevicesWidget(),
-          const SizedBox(height: 20),
-          // Court selection widget with consistent width
-          SizedBox(
-            width: buttonWidth,
-            child: CourtSelectionWidget(
-              groupedCourts: groupedCourts,
-              onCourtSelected: (selectedName, selectedGuid) {
-                setState(() {
-                  selectedCourtName = selectedName;
-                  selectedCourtGuid = selectedGuid;
-                });
-              },
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height, // Full screen height
+          minWidth: MediaQuery.of(context).size.width
+        ),
+        child: IntrinsicHeight(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Connected devices widget at the top
+                _connectedDevicesWidget(),
+                const SizedBox(height: 20),
+                // Court selection widget with consistent width
+                SizedBox(
+                  width: buttonWidth,
+                  child: CourtSelectionWidget(
+                    groupedCourts: groupedCourts,
+                    onCourtSelected: (selectedName, selectedGuid) {
+                      setState(() {
+                        selectedCourtName = selectedName;
+                        selectedCourtGuid = selectedGuid;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Buttons with consistent width and spacing
+                SizedBox(
+                  width: buttonWidth,
+                  child: ElevatedButton(
+                    onPressed: _startOrEndSession, // Always clickable
+                    child: const Text("Start Session"),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: buttonWidth,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SportsCentersScreen()),
+                    ),
+                    child: const Text("Or... Load a Previous One"),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 20),
-          // Buttons with consistent width and spacing
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton(
-              onPressed: _startOrEndSession, // Always clickable
-              child: const Text("Start Session"),
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SportsCentersScreen()),
-              ),
-              child: const Text("Or... Load a Previous One"),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -596,6 +590,7 @@ class _MasterScreenState extends State<MasterScreen> {
       videos: videos,
       onPhotoTap: (photo) => _showPhotoDialog(photo), // No auto-close
       onVideoTap: (video) => _showVideoDialog(video), // No auto-close
+      showPlaceholder: true,
     );
 
     // Adjust layout based on orientation

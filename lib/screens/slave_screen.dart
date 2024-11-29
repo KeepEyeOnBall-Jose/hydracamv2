@@ -203,16 +203,73 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        _cleanUpSlaveMode();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
-        );
-        return false;
-      },
-      child: Scaffold(
+    // Media list widget with placeholder enabled
+    Widget mediaList = MediaListWidget(
+      photos: photos,
+      videos: videos,
+      onPhotoTap: _showPhotoDialog,
+      onVideoTap: _showVideoDialog,
+      showPlaceholder: true, // Enable placeholder
+    );
+
+    // Controls and camera preview widget
+    Widget controlsAndPreview = Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SessionInfoWidget(
+            sessionDisplay: SessionManager.instance.sessionGuid ?? "No active session",
+          ),
+        ),
+        const AddGalleryMediaButton(),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Stack(
+            children: [
+              if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
+                Positioned.fill(
+                  child: CameraPreview(_client!.cameraController!),
+                )
+              else
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        statusMessage,
+                        style: const TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+                        const Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: CircularProgressIndicator(),
+                        ),
+                    ],
+                  ),
+                ),
+              if (isRecording)
+                const Positioned(
+                  bottom: 20,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Text(
+                      'Recording...',
+                      style: TextStyle(color: Colors.red, fontSize: 24),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    // Adjust layout based on orientation
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      // Vertical layout: controls and media list stacked
+      return Scaffold(
         appBar: HydraCamAppBar(
           title: "HydraCam - Slave Device",
           onBack: () {
@@ -224,70 +281,56 @@ class _SlaveScreenState extends State<SlaveScreen> {
           },
         ),
         body: Column(
-          children:[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SessionInfoWidget(
-                sessionDisplay: SessionManager.instance.sessionGuid ?? "No active session",
+          children: [
+            Expanded(
+              flex: 2,
+              child: controlsAndPreview,
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: mediaList,
               ),
             ),
-
-            const AddGalleryMediaButton(),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Stack(
-                children: [
-                  if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
-                    Positioned.fill(
-                      child: CameraPreview(_client!.cameraController!),
-                    )
-                  else
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            statusMessage,
-                            style: const TextStyle(fontSize: 18),
-                            textAlign: TextAlign.center,
-                          ),
-                          if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
-                            const Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: CircularProgressIndicator(),
-                            ),
-                        ],
-                      ),
-                    ),
-                  if (isRecording)
-                    const Positioned(
-                      bottom: 20,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: Text(
-                          'Recording...',
-                          style: TextStyle(color: Colors.red, fontSize: 24),
-                        ),
-                      ),
-                    ),
-                ],
-              )
-            ),
-            // Photo and video list
-            Expanded(
-              child: MediaListWidget(
-                photos: photos,
-                videos: videos,
-                onPhotoTap: _showPhotoDialog,
-                onVideoTap: _showVideoDialog,
-              ),
-            ),
-          ]
+          ],
         ),
-      ),
-    );
+      );
+    } else {
+      // Horizontal layout: controls on the left, media list on the right
+      return Scaffold(
+        appBar: HydraCamAppBar(
+          title: "HydraCam - Slave Device",
+          onBack: () {
+            _cleanUpSlaveMode();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+            );
+          },
+        ),
+        body: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: controlsAndPreview,
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: mediaList,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
+
 
 
 // TODO: EXTRACT TO WIDGET TO AVOID REPEAT CODE WITH MASTER
