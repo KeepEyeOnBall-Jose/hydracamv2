@@ -183,6 +183,27 @@ class _SlaveScreenState extends State<SlaveScreen> {
     super.dispose();
   }
 
+  Widget _buildStatusMessage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            statusMessage,
+            style: const TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+          if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+            const Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // Media list widget with placeholder enabled
@@ -206,44 +227,67 @@ class _SlaveScreenState extends State<SlaveScreen> {
         const AddGalleryMediaButton(),
         const SizedBox(height: 10),
         Expanded(
-          child: Stack(
-            children: [
-              if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
-                Positioned.fill(
-                  child: CameraPreview(_client!.cameraController!),
+          child: _client?.cameraController != null
+              ? ValueListenableBuilder<CameraValue>(
+                    valueListenable: _client!.cameraController!,
+                    builder: (context, cameraValue, child) {
+                      return Stack(
+                        children: [
+                          if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
+                            Positioned.fill(
+                              child: CameraPreview(_client!.cameraController!),
+                            )
+                          else
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    statusMessage,
+                                    style: const TextStyle(fontSize: 18),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          if (isRecording)
+                            const Positioned(
+                              bottom: 20,
+                              left: 0,
+                              right: 0,
+                              child: Center(
+                                child: Text(
+                                  'Recording...',
+                                  style: TextStyle(color: Colors.red, fontSize: 24),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    }
                 )
-              else
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        statusMessage,
-                        style: const TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                      ),
-                      if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
-                        const Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: CircularProgressIndicator(),
+              : Stack(
+                  children: [
+                    _buildStatusMessage(),
+                    if (isRecording)
+                      const Positioned(
+                        bottom: 20,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Text(
+                            'Recording...',
+                            style: TextStyle(color: Colors.red, fontSize: 24),
+                          ),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
-              if (isRecording)
-                const Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Text(
-                      'Recording...',
-                      style: TextStyle(color: Colors.red, fontSize: 24),
-                    ),
-                  ),
-                ),
-            ],
-          ),
         ),
       ],
     );

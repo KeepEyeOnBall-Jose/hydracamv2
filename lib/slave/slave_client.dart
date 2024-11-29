@@ -183,7 +183,7 @@ class SlaveClient {
 
   /// Processes specific commands received from the master.
   /// Gets commands like taking pictures or videos.
-  void _processCommand(String message) {
+  void _processCommand(String message) async{
     if (message == 'takePhoto') {
       photoCaptureDate = DateTime.now();
       _cameraService.takePhoto().then((photoPath) async {
@@ -214,7 +214,7 @@ class SlaveClient {
     else if (message == 'startRecordingVideo') {
       LogService.instance.registerLog("Starting video recording");
       videoStartRecordingDate = DateTime.now();
-      _cameraService.startRecordingVideo();
+      await _cameraService.startRecordingVideo();
       isRecordingVideo = true;
       onRecordingStarted?.call();
       _statusStreamController.add("Recording video...");

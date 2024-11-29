@@ -21,6 +21,8 @@ import 'log_service.dart';
 /// - Supports quality settings for camera resolution.
 /// - List and select available cameras for the device (TBI).
 class CameraService {
+
+  // TODO: Check if should be singleton or not, and in case not, ensure only master server and slave client interact with it, and they dispose the service after finishing with it
   CameraController? _controller; // The camera controller instance
   CameraController? get controller => _controller; // Getter for accessing the controller
 
