@@ -1,4 +1,4 @@
-package com.example.sport_cam_sync
+package com.amaia23.hydracam
 
 import io.flutter.embedding.android.FlutterActivity
 

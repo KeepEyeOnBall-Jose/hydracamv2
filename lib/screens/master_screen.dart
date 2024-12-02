@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sport_cam_sync/screens/role_selection_screen.dart';
-import 'package:sport_cam_sync/screens/sports_centers_screen.dart';
+import 'package:hydracam/screens/role_selection_screen.dart';
+import 'package:hydracam/screens/sports_centers_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
 import '../constants.dart';
 import '../globals.dart';

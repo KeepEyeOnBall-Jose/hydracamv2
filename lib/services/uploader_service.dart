@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:sport_cam_sync/services/settings_service.dart';
+import 'package:hydracam/services/settings_service.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'hydracam_api_service.dart';

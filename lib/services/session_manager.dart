@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:sport_cam_sync/services/settings_service.dart';
-import 'package:sport_cam_sync/services/uploader_service.dart';
+import 'package:hydracam/services/settings_service.dart';
+import 'package:hydracam/services/uploader_service.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';

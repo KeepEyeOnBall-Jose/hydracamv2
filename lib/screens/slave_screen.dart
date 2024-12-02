@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:sport_cam_sync/screens/role_selection_screen.dart';
+import 'package:hydracam/screens/role_selection_screen.dart';
 import '../globals.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';

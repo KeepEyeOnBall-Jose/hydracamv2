@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:sport_cam_sync/services/settings_service.dart';
+import 'package:hydracam/services/settings_service.dart';
 import '../constants.dart';
 import 'log_service.dart';
 import 'new_camera_service.dart';

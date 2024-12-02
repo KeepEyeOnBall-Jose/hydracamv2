@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sport_cam_sync/screens/slave_screen.dart';
+import 'package:hydracam/screens/slave_screen.dart';
 //import 'package:sport_cam_sync/screens/role_selection_screen.dart';
-import 'package:sport_cam_sync/services/device_id_provider.dart';
-import 'package:sport_cam_sync/services/device_service.dart';
-import 'package:sport_cam_sync/services/location_service.dart';
-import 'package:sport_cam_sync/services/log_service.dart';
-import 'package:sport_cam_sync/services/permission_service.dart';
-import 'package:sport_cam_sync/app_theme.dart';
+import 'package:hydracam/services/device_id_provider.dart';
+import 'package:hydracam/services/device_service.dart';
+import 'package:hydracam/services/location_service.dart';
+import 'package:hydracam/services/log_service.dart';
+import 'package:hydracam/services/permission_service.dart';
+import 'package:hydracam/app_theme.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
