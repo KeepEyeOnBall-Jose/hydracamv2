@@ -337,22 +337,94 @@ class MasterServer {
   }
 
 
-  /// Sends a command to specific slave device or to all. (TODO: Merge with the sendcommandtoall)
-  void sendCommand(String command, {String? deviceId}) {
+  // TODO: Merge with the sendcommandtoall
+  /// Sends a command to one or all connected slaves with optional target execution time.
+  ///
+  /// - `command`: The command to send (e.g., `takePhoto`, `startRecordingVideo`).
+  /// - `deviceId`: If specified, sends the command to a single device.
+  /// - `targetTime`: An optional future `DateTime` for synchronized execution.
+  void sendCommand(String command, {String? deviceId, DateTime? targetTime}) {
+    // Prepare the base payload
+    final payload = {
+      'command': command,
+    };
 
-    LogService.instance.registerLog("Sending command $command");
+    // If a targetTime is provided, include it in the payload
+    if (targetTime != null) {
+      payload['timestamp'] = targetTime.toIso8601String();
+    }
+
+    // Encode the payload as a JSON string
+    final jsonCommand = jsonEncode(payload);
+
+    LogService.instance.registerLog("Sending command: $jsonCommand");
 
     if (_clients.isEmpty) {
       LogService.instance.registerLog("No slave devices connected. Command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
-      _clients[deviceId]?.add(command);
+      _clients[deviceId]?.add(jsonCommand);
       LogService.instance.registerLog("Command '$command' sent to slave with deviceId: $deviceId.");
     } else {
       for (var client in _clients.values) {
-        client.add(command);
+        client.add(jsonCommand);
       }
       LogService.instance.registerLog("Command '$command' sent to all connected slaves.");
     }
+  }
+
+  /// Sends a command with optional delay and manages countdown notifications.
+  ///
+  /// - `command`: The command to send (e.g., `takePhoto`).
+  /// - `deviceId`: If specified, sends the command to a single device.
+  /// - `targetTime`: The scheduled time for the command to execute.
+  /// - `notifyCountdown`: If true, sends a notification to start countdowns.
+  void scheduleCommand(
+      String command, {
+        String? deviceId,
+        required DateTime targetTime,
+        bool notifyCountdown = true,
+      }) {
+    // Prepare the base payload
+    final payload = {
+      'command': command,
+      'timestamp': targetTime.toIso8601String(),
+    };
+
+    // Encode the payload as JSON
+    final jsonCommand = jsonEncode(payload);
+
+    LogService.instance.registerLog("Scheduling command: $jsonCommand");
+
+    // Notify connected slaves
+    if (_clients.isEmpty) {
+      LogService.instance.registerLog("No slaves connected. Command not sent.");
+    } else if (deviceId != null && _clients.containsKey(deviceId)) {
+      _clients[deviceId]?.add(jsonCommand);
+    } else {
+      for (var client in _clients.values) {
+        client.add(jsonCommand);
+      }
+    }
+
+    if (notifyCountdown) {
+      _notifyCountdown(targetTime);
+    }
+  }
+
+  /// Sends a countdown notification to all clients when a command is scheduled.
+  void _notifyCountdown(DateTime targetTime) {
+    final countdownPayload = {
+      'command': 'startCountdown',
+      'timestamp': targetTime.toIso8601String(),
+    };
+
+    final jsonCountdown = jsonEncode(countdownPayload);
+
+    for (var client in _clients.values) {
+      client.add(jsonCountdown);
+    }
+
+    LogService.instance.registerLog("Countdown notification sent: $jsonCountdown");
   }
 
   /// Stops the WebSocket server and cleans up all connections.

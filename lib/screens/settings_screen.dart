@@ -21,7 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
-  int _timerDuration = 5;
+  int _timerDuration = 6;
   bool _screenAutoOff = false; // Default value for screen auto-off
 
   @override
@@ -211,8 +211,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Slider(
                     value: _timerDuration.toDouble(),
                     min: 0,
-                    max: 5,
-                    divisions: 5,
+                    max: 6,
+                    divisions: 6,
                     label: "$_timerDuration seconds",
                     onChanged: _updateTimerDuration,
                     thumbColor: AppTheme.primaryColor,

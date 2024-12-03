@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert'; // Import for jsonEncode
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
@@ -10,6 +11,8 @@ import '../services/device_service.dart'; // Import for device ID service
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
+import '../widgets/animated_countdown_timer.dart';
+import 'package:context_holder/context_holder.dart';
 
 /// SlaveClient - Handles the WebSocket client for slave devices.
 /// This class manages communication with the master device, sending captured media
@@ -201,8 +204,54 @@ class SlaveClient {
 
 
   /// Processes specific commands received from the master.
-  /// Gets commands like taking pictures or videos.
-  void _processCommand(String message) async{
+  /// Handles commands like taking pictures or videos, with optional delay handling.
+  void _processCommand(String message) async {
+    try {
+      final decodedMessage = jsonDecode(message);
+
+      if (decodedMessage['command'] == 'startCountdown' && decodedMessage['timestamp'] != null) {
+        final targetTimestamp = DateTime.parse(decodedMessage['timestamp']);
+        _showCountdown(targetTimestamp);
+      } else {
+        // Handle other commands (e.g., takePhoto, startRecordingVideo)
+        if (decodedMessage['timestamp'] != null) {
+          final targetTimestamp = DateTime.parse(decodedMessage['timestamp']);
+          final delay = targetTimestamp.difference(DateTime.now());
+
+          if (delay.isNegative) {
+            _executeCommand(decodedMessage['command']);
+          } else {
+            Timer(delay, () => _executeCommand(decodedMessage['command']));
+          }
+        } else {
+          _executeCommand(decodedMessage['command']);
+        }
+      }
+    } catch (e) {
+      // Fallback to simple command handling
+      LogService.instance.registerLog("Error processing command: $e");
+      _executeCommand(message);
+    }
+  }
+
+  void _showCountdown(DateTime targetTime) {
+    showDialog(
+      context: ContextHolder.currentContext, // TODO: Move to screen???
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          content: CountdownTimer(
+            targetTime: targetTime,
+            onComplete: () => Navigator.of(context).pop(),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+  void _executeCommand(String message) async {
     if (message == 'takePhoto') {
       photoCaptureDate = DateTime.now();
       _cameraService.takePhoto().then((photoPath) async {
