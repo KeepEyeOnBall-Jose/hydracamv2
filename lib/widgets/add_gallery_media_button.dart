@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+import '../app_theme.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import '../services/device_service.dart';
@@ -12,7 +13,9 @@ import 'media_selection_screen.dart';
 
 /// A button widget that allows adding media from the gallery to the current session.
 class AddGalleryMediaButton extends StatefulWidget {
-  const AddGalleryMediaButton({Key? key}) : super(key: key);
+  final bool enabled; // New parameter to control enable/disable state
+
+  const AddGalleryMediaButton({Key? key, this.enabled = true}) : super(key: key);
 
   @override
   _AddGalleryMediaButtonState createState() => _AddGalleryMediaButtonState();
@@ -68,6 +71,7 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     );
   }
 
+  // TODO: Remove or use
   void _showPermissionsAlert() {
     showDialog(
       context: context,
@@ -244,8 +248,12 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
   @override
   Widget build(BuildContext context) {
     bool sessionActive = SessionManager.instance.isSessionActive;
+    bool isButtonEnabled = widget.enabled && sessionActive;
     return ElevatedButton(
-      onPressed: sessionActive ? _onPressed : null,
+      onPressed: isButtonEnabled ? _onPressed : null,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isButtonEnabled ? null : AppTheme.disabledButtonColor, // Optional style for disabled state
+      ),
       child: const Text('Add Media from Gallery'),
     );
   }

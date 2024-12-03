@@ -274,7 +274,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
             sessionDisplay: SessionManager.instance.sessionGuid ?? "No active session",
           ),
         ),
-        const AddGalleryMediaButton(),
+        AddGalleryMediaButton(enabled: !isRecording),
         const SizedBox(height: 10),
         Expanded(
           child: _client?.cameraController != null

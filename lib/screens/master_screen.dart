@@ -511,7 +511,7 @@ class _MasterScreenState extends State<MasterScreen> {
         SizedBox(height: buttonDistance),
         SizedBox(
           width: buttonWidth,
-          child: const AddGalleryMediaButton(),
+          child: AddGalleryMediaButton(enabled: !isRecording),
         ),
       ],
     );
