@@ -9,6 +9,8 @@ class SettingsService {
   static const String _deleteLocalAfterUploadKey = 'deleteLocalAfterUpload';  // Choose if delete or not the media after uploading
   static const String _autoUploadMaterialsKey = 'autoUploadMaterials';        // Choose if automatically upload materials or not
   static const String _autoplayVideoOnMasterKey = 'autoplayVideoOnMaster';    // Toggle auto video play in master device after recording
+  static const String _timerDurationKey = 'timerDuration';                    // Key for the timer duration setting
+  static const String _screenAutoOffKey = 'screenAutoOff';                    // Key for auto screen off setting
 
   /// Retrieve the current value for "masterShouldRecord"
   static Future<bool> getMasterShouldRecord() async {
@@ -76,5 +78,31 @@ class SettingsService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_autoplayVideoOnMasterKey, value);
     LogService.instance.registerLog("Updated autoplayVideoOnMaster value to $value");
+  }
+
+  /// Retrieve the current value for "timerDuration"
+  static Future<int> getTimerDuration() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_timerDurationKey) ?? 5; // Default to 5 seconds
+  }
+
+  /// Update the value for "timerDuration"
+  static Future<void> setTimerDuration(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_timerDurationKey, value);
+    LogService.instance.registerLog("Updated timerDuration to $value seconds");
+  }
+
+  /// Retrieve the current value for "screenAutoOff"
+  static Future<bool> getScreenAutoOff() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_screenAutoOffKey) ?? false; // Default to false (screen stays on)
+  }
+
+  /// Update the value for "screenAutoOff"
+  static Future<void> setScreenAutoOff(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_screenAutoOffKey, value);
+    LogService.instance.registerLog("Updated screenAutoOff to $value");
   }
 }

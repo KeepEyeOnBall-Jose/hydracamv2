@@ -13,11 +13,16 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
+  /// List of available settings
+
   bool _masterShouldRecord = true;
   String _cameraQuality = 'high';
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
-  bool _autoplayVideoOnMaster = false; // New setting
+  bool _autoplayVideoOnMaster = false;
+  int _timerDuration = 5;
+  bool _screenAutoOff = false; // Default value for screen auto-off
 
   @override
   void initState() {
@@ -32,6 +37,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final deleteLocalAfterUpload = await SettingsService.getDeleteLocalAfterUpload();
     final autoUploadMaterials = await SettingsService.getAutoUploadMaterials();
     final autoplayVideoOnMaster = await SettingsService.getAutoplayVideoOnMaster();
+    final timerDuration = await SettingsService.getTimerDuration();
+    final screenAutoOff = await SettingsService.getScreenAutoOff();
 
     setState(() {
       _masterShouldRecord = shouldRecord;
@@ -39,10 +46,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _deleteLocalAfterUpload = deleteLocalAfterUpload;
       _autoUploadMaterials = autoUploadMaterials;
       _autoplayVideoOnMaster = autoplayVideoOnMaster;
+      _timerDuration = timerDuration;
+      _screenAutoOff = screenAutoOff;
     });
   }
 
-  // Update methods for each setting
+  /// Update methods for each setting
+
   Future<void> _updateMasterRecording(bool value) async {
     await SettingsService.setMasterShouldRecord(value);
     setState(() {
@@ -82,6 +92,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  Future<void> _updateTimerDuration(double value) async {
+    final newDuration = value.toInt();
+    await SettingsService.setTimerDuration(newDuration);
+    setState(() {
+      _timerDuration = newDuration;
+    });
+  }
+
+  Future<void> _updateScreenAutoOff(bool value) async {
+    await SettingsService.setScreenAutoOff(value);
+    setState(() {
+      _screenAutoOff = value;
+    });
+  }
+
+
   /// Map quality string to CameraQuality enum.
   CameraQuality _mapQualityStringToEnum(String quality) {
     switch (quality) {
@@ -96,6 +122,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  /// Widget with actual screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +182,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
-            // New setting with description
             SettingsOption(
               title: "Autoplay video on master",
               description:
@@ -163,6 +189,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _autoplayVideoOnMaster,
                 onChanged: _updateAutoplayVideoOnMaster,
+                activeColor: AppTheme.primaryColor,
+                inactiveThumbColor: AppTheme.disabledButtonColor,
+              ),
+            ),
+            SettingsOption(
+              title: "Timer Duration",
+              description: "Set the number of seconds for countdown timers.",
+              control: Column(
+                children: [
+                  Slider(
+                    value: _timerDuration.toDouble(),
+                    min: 0,
+                    max: 5,
+                    divisions: 5,
+                    label: "$_timerDuration seconds",
+                    onChanged: _updateTimerDuration,
+                  ),
+                  Text("Current timer duration: $_timerDuration seconds"),
+                ],
+              ),
+            ),
+            SettingsOption(
+              title: "Screen Auto-Off",
+              description: "Turn off the screen during recording to save battery. The screen will reactivate automatically or when you wake it manually.",
+              control: Switch(
+                value: _screenAutoOff,
+                onChanged: _updateScreenAutoOff,
                 activeColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
