@@ -8,6 +8,7 @@ import '../models/CapturedVideo.dart';
 import '../services/alert_utils.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
+import '../services/settings_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
 import '../widgets/add_gallery_media_button.dart';
@@ -37,6 +38,10 @@ class _SlaveScreenState extends State<SlaveScreen> {
 
   bool _isConnected = false; // Local variable for connection status
 
+  Timer? dimTimer; // Timer for screen dimming
+  int dimTime = 10; // Number of seconds before turning screen black
+  bool isScreenDimmed = false; // To control the dimmed screen state
+
   // Getters for SessionManager photos and videos
   List<CapturedPhoto> get photos => SessionManager.instance.currentSession?.capturedPhotos ?? [];
   List<CapturedVideo> get videos => SessionManager.instance.currentSession?.capturedVideos ?? [];
@@ -47,6 +52,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   void initState() {
     super.initState();
 
+    // Master discovery and other initializations
     _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
       LogService.instance.registerLog("Connecting to master at IP: $masterIp");
       _client = SlaveClient(
@@ -140,7 +146,8 @@ class _SlaveScreenState extends State<SlaveScreen> {
   void _handleRecordingStarted() {
     if(mounted){
       setState(() {
-        isRecording = true;
+        isRecording = true; // Update recording flag
+        _startDimTimer();   // Start dim timer in case we want to set screen black
       });
     }
   }
@@ -149,10 +156,35 @@ class _SlaveScreenState extends State<SlaveScreen> {
     if (mounted) {
       setState(() {
         isRecording = false;
+        isScreenDimmed = false;
+      });
+      dimTimer?.cancel();
+    }
+  }
+
+  void _startDimTimer() async {
+    dimTimer?.cancel();
+    if (await _getAutoOffSetting()) {
+      dimTimer = Timer(Duration(seconds: dimTime), () {
+        if (isRecording) {
+          setState(() {
+            isScreenDimmed = true;
+          });
+        }
       });
     }
   }
 
+  void _resetDimTimer() async {
+    setState(() {
+      isScreenDimmed = false;
+    });
+    _startDimTimer();
+  }
+
+  Future<bool> _getAutoOffSetting() async {
+    return await SettingsService.getScreenAutoOff();
+  }
 
   void _transitionToMasterScreen() {
     // Stop any activity related to Slave
@@ -181,6 +213,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   @override
   void dispose() {
     try{
+      dimTimer?.cancel();
       _statusSubscription?.cancel(); // Cancel the subscription to avoid memory leaks
       _connectionStatusSubscription?.cancel();
       _client?.disconnect();
@@ -312,62 +345,102 @@ class _SlaveScreenState extends State<SlaveScreen> {
     // Adjust layout based on orientation
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
       // Vertical layout: controls and media list stacked
-      return Scaffold(
-        appBar: HydraCamAppBar(
-          title: "HydraCam - Slave Device",
-          onBack: () {
-            _cleanUpSlaveMode();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
-            );
-          },
-        ),
-        body: Column(
+      return GestureDetector(
+        onTap: _resetDimTimer, // Reset dimming on user interaction
+        child: Stack(
           children: [
-            Expanded(
-              flex: 2,
-              child: controlsAndPreview,
-            ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: mediaList,
+            Scaffold(
+              appBar: HydraCamAppBar(
+                title: "HydraCam - Slave Device",
+                onBack: () {
+                  _cleanUpSlaveMode();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+                  );
+                },
+              ),
+              body: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: controlsAndPreview,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mediaList,
+                    ),
+                  ),
+                ],
               ),
             ),
+            if (isScreenDimmed)
+              GestureDetector(
+                onTap: _resetDimTimer, // Wake up the screen
+                child: Container(
+                  color: Colors.black,
+                  child: const Center(
+                    child: Text(
+                      "Screen Off - Tap to wake",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ),
           ],
-        ),
+        )
       );
     } else {
       // Horizontal layout: controls on the left, media list on the right
-      return Scaffold(
-        appBar: HydraCamAppBar(
-          title: "HydraCam - Slave Device",
-          onBack: () {
-            _cleanUpSlaveMode();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
-            );
-          },
-        ),
-        body: Row(
+      return GestureDetector(
+        onTap: _resetDimTimer,
+        child: Stack(
           children: [
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: controlsAndPreview,
+            Scaffold(
+              appBar: HydraCamAppBar(
+                title: "HydraCam - Slave Device",
+                onBack: () {
+                  _cleanUpSlaveMode();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+                  );
+                },
+              ),
+              body: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: controlsAndPreview,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mediaList,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: mediaList,
+            if (isScreenDimmed)
+              GestureDetector(
+                onTap: _resetDimTimer, // Wake up the screen
+                child: Container(
+                  color: Colors.black,
+                  child: const Center(
+                    child: Text(
+                      "Screen Off - Tap to wake",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
               ),
-            ),
           ],
         ),
       );

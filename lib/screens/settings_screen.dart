@@ -194,8 +194,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SettingsOption(
+              title: "Screen Auto-Off",
+              description: "Turn off the slave screen during recording to save battery. The screen will reactivate automatically or when you wake it manually.",
+              control: Switch(
+                value: _screenAutoOff,
+                onChanged: _updateScreenAutoOff,
+                activeColor: AppTheme.primaryColor,
+                inactiveThumbColor: AppTheme.disabledButtonColor,
+              ),
+            ),
+            SettingsOption(
               title: "Timer Duration",
-              description: "Set the number of seconds for countdown timers.",
+              description: "Set the number of seconds for countdown timers when recording videos or taking photos.",
               control: Column(
                 children: [
                   Slider(
@@ -205,19 +215,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     divisions: 5,
                     label: "$_timerDuration seconds",
                     onChanged: _updateTimerDuration,
+                    thumbColor: AppTheme.primaryColor,
+                    activeColor: AppTheme.lightAccentColor,
+                    inactiveColor: AppTheme.disabledButtonColor,
                   ),
                   Text("Current timer duration: $_timerDuration seconds"),
                 ],
-              ),
-            ),
-            SettingsOption(
-              title: "Screen Auto-Off",
-              description: "Turn off the screen during recording to save battery. The screen will reactivate automatically or when you wake it manually.",
-              control: Switch(
-                value: _screenAutoOff,
-                onChanged: _updateScreenAutoOff,
-                activeColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
           ],

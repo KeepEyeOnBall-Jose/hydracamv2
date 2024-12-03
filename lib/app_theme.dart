@@ -6,6 +6,7 @@ class AppTheme {
   static const Color primaryColor = Color(0xFFFF4f6c); // Color(0xFF81FFBF); // Light green
   static const Color secondaryColor = Color(0xFFF5F5F5); // Light gray for backgrounds
   static const Color accentColor = Color(0xFF790026);    //Color(0xFF00796B); // Teal for accents
+  static const Color lightAccentColor = Color(0xFFc74a71);
   static const Color buttonTextColor = Colors.black; // Black for button text
   static const Color disabledButtonColor = Color(0xFF949494); // Grey
 
