@@ -222,7 +222,7 @@ class MasterServer {
 
   /// Starts a periodic check for inactive clients based on heartbeat timestamps.
   void _startHeartbeatCheck() {
-    _heartbeatCheckTimer = Timer.periodic(Duration(seconds: 10), (_) {
+    _heartbeatCheckTimer = Timer.periodic(const Duration(seconds: 10), (_) {
       final now = DateTime.now();
       final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
         final lastSeen = _lastHeartbeat[deviceId];

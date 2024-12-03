@@ -5,13 +5,22 @@ import '../services/log_service.dart';
 /// Calls onMasterDiscovered with the master's IP once discovered.
 class MasterDiscovery {
   static const int broadcastPort = 4041;
-  final Function(String) onMasterDiscovered;
+  final Function(String) onMasterDiscovered; // Callback function implemented by slave
   RawDatagramSocket? _socket; // Store the socket as a member variable
+  bool _isListening = false;
 
   MasterDiscovery({required this.onMasterDiscovered});
 
   /// Starts listening for the master broadcast message.
   Future<void> startListening() async {
+    if (_isListening) {
+      // Already listening
+      return;
+    }
+
+    _isListening = true;
+
+
     // Close any existing socket before creating a new one
     await stopListening();
 
@@ -40,6 +49,9 @@ class MasterDiscovery {
 
             LogService.instance.registerLog("Master discovered at IP: $masterIp");
             onMasterDiscovered(masterIp);
+
+            // Stop listening after discovering the master
+            stopListening();
           }
         }
       }
@@ -70,5 +82,6 @@ class MasterDiscovery {
       _socket = null;
       LogService.instance.registerLog("Stopped listening for master broadcast.");
     }
+    _isListening = false;
   }
 }

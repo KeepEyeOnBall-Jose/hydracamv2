@@ -30,10 +30,12 @@ class SlaveScreen extends StatefulWidget {
 class _SlaveScreenState extends State<SlaveScreen> {
   SlaveClient? _client;
   StreamSubscription<String>? _statusSubscription; // Subscription to listen to status updates
-  bool isConnected = false;
+  StreamSubscription<bool>? _connectionStatusSubscription; // Subscription to listen to connection status
   String statusMessage = "Waiting for camera commands...";
   Timer? autoModeTimer; // Timer for auto mode logic
   bool isRecording = false;
+
+  bool _isConnected = false; // Local variable for connection status
 
   // Getters for SessionManager photos and videos
   List<CapturedPhoto> get photos => SessionManager.instance.currentSession?.capturedPhotos ?? [];
@@ -46,19 +48,18 @@ class _SlaveScreenState extends State<SlaveScreen> {
     super.initState();
 
     _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
-      if (!isConnected) {
-        LogService.instance.registerLog("Connecting to master at IP: $masterIp");
-        _client = SlaveClient(
-          'ws://$masterIp:4040/ws',
-          onPhotoTaken: (path) {
-            if (!mounted) return;
-            setState(() {
-              statusMessage = "Photo taken!";
-            });
-            LogService.instance.registerLog("Photo taken!!!");
+      LogService.instance.registerLog("Connecting to master at IP: $masterIp");
+      _client = SlaveClient(
+        'ws://$masterIp:4040/ws',
+        onPhotoTaken: (path) {
+          if (!mounted) return;
+          setState(() {
+            statusMessage = "Photo taken!";
+          });
+          LogService.instance.registerLog("Photo taken!!!");
 
-            // Use the unified dialog function with placeholder metadata to wrap photo into CapturePhoto
-            AlertUtils.showMediaDialog(
+          // Use the unified dialog function with placeholder metadata to wrap photo into CapturePhoto
+          AlertUtils.showMediaDialog(
               context: context,
               media: CapturedPhoto(
                 photoPath: path,
@@ -69,32 +70,47 @@ class _SlaveScreenState extends State<SlaveScreen> {
               ),
               isAutoCloseEnabled: true, // No auto-close for slave
               autoCloseSeconds: secondsToClosePhoto
-            );
-          },
-          onRecordingStarted: _handleRecordingStarted,
-          onRecordingStopped: _handleRecordingStopped,
-        );
-        _client?.connect();
+          );
+        },
+        onRecordingStarted: _handleRecordingStarted,
+        onRecordingStopped: _handleRecordingStopped,
+      );
 
-
-        // Listen to the client's status stream
-        _statusSubscription = _client?.statusStream.listen((message) {
-          if (mounted) {
-            setState(() {
-              statusMessage = message;
-            });
-          }
-        });
-
-
-        setState(() {
-          isConnected = true;
-          statusMessage = "Connected to master at $masterIp";
-        });
-
-        if (widget.isAutoMode) {
-          autoModeTimer?.cancel(); // Stop auto mode if master is found
+      // Listen to the client's status stream
+      _statusSubscription = _client?.statusStream.listen((message) {
+        if (mounted) {
+          setState(() {
+            statusMessage = message;
+          });
         }
+      });
+
+      // Listen to the client's connection status stream
+      _connectionStatusSubscription = _client?.connectionStatusStream.listen((isConnected) {
+
+        if (mounted) {
+          setState(() {
+            _isConnected = isConnected;
+          });
+        }
+
+        if (!isConnected) {
+          // Connection lost, restart discovery
+          LogService.instance.registerLog("Connection lost. Restarting discovery.");
+          _client?.disconnect();
+          _client = null;
+          _masterDiscovery?.startListening();
+        }
+      });
+
+      // Connect to master
+      _client?.connect();
+
+      // Stop discovery once connected
+      _masterDiscovery?.stopListening();
+
+      if (widget.isAutoMode) {
+        autoModeTimer?.cancel(); // Stop auto mode if master is found
       }
     });
 
@@ -104,7 +120,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
     if (widget.isAutoMode) {
       // Automatically transition to MasterScreen if no master is found
       autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
-        if (!isConnected) {
+        if (!_isConnected) {
           LogService.instance.registerLog("No master found, switching to Master mode.");
           _transitionToMasterScreen();
         }
@@ -166,6 +182,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   void dispose() {
     try{
       _statusSubscription?.cancel(); // Cancel the subscription to avoid memory leaks
+      _connectionStatusSubscription?.cancel();
       _client?.disconnect();
       _client = null;
       autoModeTimer?.cancel();

@@ -54,6 +54,12 @@ class SlaveClient {
   /// Stream of status messages for the UI to listen to.
   Stream<String> get statusStream => _statusStreamController.stream;
 
+  /// StreamController for broadcasting connection status updates to the UI.
+  final StreamController<bool> _connectionStatusStreamController = StreamController.broadcast();
+
+  /// Stream of connection status updates.
+  Stream<bool> get connectionStatusStream => _connectionStatusStreamController.stream;
+
   /// Timestamps for photo and video operations.
   DateTime? photoCaptureDate;
   DateTime? videoStartRecordingDate;
@@ -98,6 +104,7 @@ class SlaveClient {
 
       _isConnected = true;
       _statusStreamController.add("Connected to master at $serverAddress.");
+      _connectionStatusStreamController.add(true); // Notify UI of connection status
 
       // Send a JSON message containing the device ID after connecting
       _channel?.sink.add(jsonEncode({
@@ -165,6 +172,7 @@ class SlaveClient {
           LogService.instance.registerLog("Connection error: $error");
           _statusStreamController.add("Connection error: $error");
           _isConnected = false;
+          _connectionStatusStreamController.add(false); // Notify UI of connection status
           _stopHeartbeat();
           _attemptReconnect();
         },
@@ -173,6 +181,7 @@ class SlaveClient {
           LogService.instance.registerLog("Connection closed");
           _statusStreamController.add("Connection closed.");
           _isConnected = false;
+          _connectionStatusStreamController.add(false); // Notify UI of connection status
           _stopHeartbeat();
           _attemptReconnect();
         },
@@ -182,8 +191,10 @@ class SlaveClient {
       _statusStreamController.add("Failed to connect: $e");
       LogService.instance.registerLog("Failed to connect to WebSocket at $serverAddress: $e");
       _isConnected = false;
+      _connectionStatusStreamController.add(false); // Notify UI of connection status
+
       // Add a delay before reconnecting to prevent immediate retries on failure
-      await Future.delayed(Duration(seconds: 2));  // <-- This line is added
+      await Future.delayed(const Duration(seconds: 2));
       _attemptReconnect();
     }
   }
@@ -283,7 +294,7 @@ class SlaveClient {
   /// Starts the periodic heartbeat to maintain the WebSocket connection.
   void _startHeartbeat() {
     _stopHeartbeat(); // Ensure no duplicate timers
-    _heartbeatTimer = Timer.periodic(Duration(seconds: 5), (_) {
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (_isConnected) {
         _channel?.sink.add(jsonEncode({
           'type': 'heartbeat',
@@ -297,29 +308,35 @@ class SlaveClient {
 
   /// Stops the periodic heartbeat.
   void _stopHeartbeat() {
-    _heartbeatTimer?.cancel();
-    _heartbeatTimer = null;
+    if (_heartbeatTimer != null){
+      _heartbeatTimer?.cancel();
+      _heartbeatTimer = null;
+    }
   }
 
   /// Attempts to reconnect to the WebSocket server.
   void _attemptReconnect() {
-    if (_reconnectTimer == null || !_reconnectTimer!.isActive) {
-      _reconnectTimer = Timer.periodic(Duration(seconds: 5), (timer) {
-        if (!_isConnected) {
-          LogService.instance.registerLog("Attempting to reconnect to master WebSocket...");
-          connect();
-        } else {
-          timer.cancel();
-        }
-      });
+    if (_reconnectTimer != null && _reconnectTimer!.isActive) {
+      return; // Already attempting to reconnect
     }
+
+    _reconnectTimer = Timer(const Duration(seconds: 5), () {
+      if (!_isConnected) {
+        LogService.instance.registerLog("Attempting to reconnect to master WebSocket...");
+        connect();
+      } else {
+        _reconnectTimer?.cancel();
+      }
+    });
   }
 
   void disconnect() {
     _channel?.sink.close();
     _channel = null;  // Nullify to ensure a new connection is created on reconnect
     _isConnected = false;
+    _connectionStatusStreamController.add(false); // Notify UI of connection status
     _reconnectTimer?.cancel();
+    _stopHeartbeat();
   }
 
 }
