@@ -139,10 +139,10 @@ class HydraCamApiService {
       );
 
       if (response.statusCode == 200) {
-        LogService.instance.registerLog('Dispositivo notificó al servidor que está listo para transmitir');
+        LogService.instance.registerLog('Notified API that we are ready to transmit');
         return true;
       } else {
-        LogService.instance.registerLog('Fallo al notificar al servidor: ${response.body}');
+        LogService.instance.registerLog('Error when notifiying server: ${response.body}');
         return false;
       }
     } catch (e) {

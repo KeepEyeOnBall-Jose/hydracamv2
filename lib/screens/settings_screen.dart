@@ -13,7 +13,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _masterShouldRecord = false;
+  bool _masterShouldRecord = true;
   String _cameraQuality = 'high';
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;

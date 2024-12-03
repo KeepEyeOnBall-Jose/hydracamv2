@@ -13,7 +13,7 @@ class SettingsService {
   /// Retrieve the current value for "masterShouldRecord"
   static Future<bool> getMasterShouldRecord() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_masterShouldRecordKey) ?? false; // Default to false
+    return prefs.getBool(_masterShouldRecordKey) ?? true; // Default to true
   }
 
   /// Update the value for "masterShouldRecord"

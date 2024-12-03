@@ -277,18 +277,14 @@ class SlaveClient {
   }
 
   /// Sends a notification to the server that the slave is ready to transmit media.
-  Future<void> notifyReadyToTransmit(String sessionGuid) async {
+  Future<bool> notifyReadyToTransmit(String sessionGuid) async {
     String deviceId = _deviceId ?? 'Unknown';
 
-    // Llama al servicio de API para notificar que el dispositivo está listo
+    // Call API service to notify server that device is ready to transmit
     var apiService = HydraCamApiService();
     bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
 
-    if (success) {
-      LogService.instance.registerLog("Dispositivo notificó al servidor que está listo para transmitir.");
-    } else {
-      LogService.instance.registerLog("Fallo al notificar al servidor que está listo para transmitir.");
-    }
+    return success;
   }
 
   /// Starts the periodic heartbeat to maintain the WebSocket connection.
