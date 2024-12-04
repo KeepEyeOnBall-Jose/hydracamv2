@@ -150,14 +150,21 @@ class SlaveClient {
                     SessionManager.instance.startSession(sessionGuid, deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
-                } else if (command == 'sessionEnded') {
+                }
+                else if (command == 'sessionEnded') {
                   // End session
                   SessionManager.instance.endSession();
                   LogService.instance.registerLog("Session ended as per master command.");
-                } else if (command == 'noSession') {
+                }
+                else if (command == 'noSession') {
                   // No active session on master
                   SessionManager.instance.endSession();
                   LogService.instance.registerLog("No active session on master.");
+                }
+                else{
+                  // Process rest of json commands
+                  print("Sending json to processcommand");
+                  _processCommand(message);
                 }
                 // Additional JSON-based commands can be handled here
               }
@@ -206,7 +213,60 @@ class SlaveClient {
   /// Processes specific commands received from the master.
   /// Gets commands like taking pictures or videos.
   /// This includes scheduled commands for synchronized execution.
-  void _processCommand(String message) async{
+  /// Processes specific commands received from the master.
+  /// Handles both scheduled commands and immediate commands, whether JSON-based or plain text.
+  void _processCommand(String message) async {
+    if (message.trim().startsWith('{')){
+      print("Desde processcommand veo que es json");
+
+      try {
+        // Attempt to decode the message as JSON
+        final decodedMessage = jsonDecode(message);
+
+        if (decodedMessage is Map<String, dynamic>) {
+          final String? type = decodedMessage['type'];
+          final String? command = decodedMessage['command'];
+
+          if (type != null && type == 'scheduledCommand' && command != null) {
+            // Handle scheduled commands
+            final DateTime scheduledTime = DateTime.parse(decodedMessage['scheduledTime']);
+            _scheduleExecution(command, scheduledTime);
+            print("Acabado de schedulear");
+          } else if (type == 'sessionStarted' || type == 'sessionStatus') {
+            // Handle session start/status
+            final String sessionGuid = decodedMessage['sessionGuid'];
+            SessionManager.instance.startSession(sessionGuid, deviceType: "Slave");
+            notifyReadyToTransmit(sessionGuid);
+          } else if (type == 'sessionEnded') {
+            // Handle session end
+            SessionManager.instance.endSession();
+            LogService.instance.registerLog("Session ended as per master command.");
+          } else if (type == 'noSession') {
+            // Handle no active session
+            SessionManager.instance.endSession();
+            LogService.instance.registerLog("No active session on master.");
+          } else {
+            // Unknown JSON command type
+            LogService.instance.registerLog("Unknown JSON command type: $type");
+          }
+        } else {
+          // If not a JSON message, treat it as a plain text command
+          _executeCommand(message);
+        }
+      } catch (e) {
+        // Handle errors in JSON decoding or processing
+        LogService.instance.registerLog("Error decoding or processing message in processcommand: $e");
+      }
+    }
+
+    else{
+      print("Desde processcommand veo que no es json: $message");
+      _executeCommand(message);
+    }
+  }
+
+
+  /*void _processCommand(String message) async{
 
     // Check if message is a JSON with scheduled time
     if (message.trim().startsWith('{')) {
@@ -230,15 +290,17 @@ class SlaveClient {
     // Existing classic command handling
     _executeCommand(message);
 
-  }
+  }*/
 
   /// Schedules the execution of a command for a specific time.
   /// This ensures synchronized execution across devices.
   void _scheduleExecution(String command, DateTime scheduledTime) {
 
+    print("Voy a schedulear el comando $command");
     // Find how much time left for scheduled execution
     final Duration delay = scheduledTime.difference(DateTime.now());
 
+    print("Delay: $delay");
     // If we already late, we execute immediately
     if (delay.isNegative) {
       LogService.instance.registerLog("Scheduled time for '$command' has already passed. Executing immediately.");
@@ -250,6 +312,8 @@ class SlaveClient {
 
       // Show countdown
 
+      print("Ahora dialog: TODO");
+      /*
       final BuildContext context = ContextHolder.currentContext!;
       showDialog(
         context: context,
@@ -261,10 +325,12 @@ class SlaveClient {
             _executeCommand(command);
           },
         ),
-      );
-
+      );*/
+      print("Ahora timer");
       Timer(delay, () => _executeCommand(command));
     }
+
+    print("Fin del scheduled");
   }
 
   /// Executes the received command.

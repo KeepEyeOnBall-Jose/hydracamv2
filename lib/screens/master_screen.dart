@@ -151,7 +151,7 @@ class _MasterScreenState extends State<MasterScreen> {
     final String command = isRecording ? 'stopRecordingVideo' : 'startRecordingVideo';
 
     // Show countdown timer while waiting for the scheduled time
-    await showDialog(
+    showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => AnimatedCountdownTimer(
@@ -300,7 +300,7 @@ class _MasterScreenState extends State<MasterScreen> {
     final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
 
     // Show countdown timer while waiting for the scheduled time
-    await showDialog(
+    showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => AnimatedCountdownTimer(

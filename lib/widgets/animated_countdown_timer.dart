@@ -121,12 +121,14 @@ class _AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
+                        decoration: TextDecoration.none, // Remove underline
                       ))
                       : (widget.finalMessageStyle ??
                       const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: AppTheme.accentColor,
+                        decoration: TextDecoration.none, // Remove underline
                       )),
                 ),
               );
