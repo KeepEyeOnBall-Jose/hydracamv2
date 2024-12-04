@@ -338,35 +338,22 @@ class MasterServer {
 
 
   // TODO: Merge with the sendcommandtoall
-  /// Sends a command to one or all connected slaves with optional target execution time.
+  /// Sends a command to one or all connected slaves with optional device id.
   ///
   /// - `command`: The command to send (e.g., `takePhoto`, `startRecordingVideo`).
   /// - `deviceId`: If specified, sends the command to a single device.
-  /// - `targetTime`: An optional future `DateTime` for synchronized execution.
-  void sendCommand(String command, {String? deviceId, DateTime? targetTime}) {
-    // Prepare the base payload
-    final payload = {
-      'command': command,
-    };
+  void sendCommand(String command, {String? deviceId}) {
 
-    // If a targetTime is provided, include it in the payload
-    if (targetTime != null) {
-      payload['timestamp'] = targetTime.toIso8601String();
-    }
-
-    // Encode the payload as a JSON string
-    final jsonCommand = jsonEncode(payload);
-
-    LogService.instance.registerLog("Sending command: $jsonCommand");
+    LogService.instance.registerLog("Sending command $command");
 
     if (_clients.isEmpty) {
       LogService.instance.registerLog("No slave devices connected. Command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
-      _clients[deviceId]?.add(jsonCommand);
+      _clients[deviceId]?.add(command);
       LogService.instance.registerLog("Command '$command' sent to slave with deviceId: $deviceId.");
     } else {
       for (var client in _clients.values) {
-        client.add(jsonCommand);
+        client.add(command);
       }
       LogService.instance.registerLog("Command '$command' sent to all connected slaves.");
     }
