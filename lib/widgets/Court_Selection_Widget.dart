@@ -4,7 +4,7 @@ class CourtSelectionWidget extends StatefulWidget {
   final Map<String, List<Map<String, String>>> groupedCourts; // Grouped by Sports Center
   final Function(String, String) onCourtSelected; // Callback to select court
 
-  CourtSelectionWidget({required this.groupedCourts, required this.onCourtSelected});
+  const CourtSelectionWidget({super.key, required this.groupedCourts, required this.onCourtSelected});
 
   @override
   _CourtSelectionWidgetState createState() => _CourtSelectionWidgetState();

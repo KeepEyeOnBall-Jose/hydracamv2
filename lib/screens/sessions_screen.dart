@@ -5,7 +5,7 @@ import '../services/session_manager.dart';
 class SessionsScreen extends StatelessWidget {
   final String courtGuid;
 
-  SessionsScreen({required this.courtGuid});
+  SessionsScreen({super.key, required this.courtGuid});
 
   final HydraCamApiService _apiService = HydraCamApiService();
 

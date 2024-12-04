@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../app_theme.dart';
 import '../screens/login_screen.dart';
 import '../screens/settings_screen.dart';
@@ -18,6 +19,31 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onBack,
     this.additionalActions,
   }) : super(key: key);
+
+
+  Future<void> _showAppVersionDialog(BuildContext context) async {
+    // Obtain package information
+    final packageInfo = await PackageInfo.fromPlatform();
+    final version = packageInfo.version;
+    final buildNumber = packageInfo.buildNumber;
+
+    // Show a dialog with version info
+    if (context.mounted){
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("App Version"),
+          content: Text("Version: $version\nBuild: $buildNumber"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +87,10 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
+            } else if (value == 'App Version') {
+              _showAppVersionDialog(context); // Show app version dialog
             }
+
           },
           itemBuilder: (context) => [
             PopupMenuItem(
@@ -111,6 +140,16 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Icon(Icons.cloud_upload, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Uploader Info'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'App Version',
+              child: Row(
+                children: const [
+                  Icon(Icons.info, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('App Version'),
                 ],
               ),
             ),

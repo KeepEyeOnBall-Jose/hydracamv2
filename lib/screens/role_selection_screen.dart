@@ -5,6 +5,8 @@ import 'slave_screen.dart';
 
 /// RoleSelectionScreen - Initial screen to select the role of the device (Master or Slave).
 class RoleSelectionScreen extends StatelessWidget {
+  const RoleSelectionScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -40,10 +42,10 @@ class RoleSelectionScreen extends StatelessWidget {
                       // Navigate to MasterScreen when the Master role is selected
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MasterScreen()),
+                        MaterialPageRoute(builder: (context) => const MasterScreen()),
                       );
                     },
-                    child: Text("Master Mode"),
+                    child: const Text("Master Mode"),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
@@ -51,10 +53,10 @@ class RoleSelectionScreen extends StatelessWidget {
                       // Navigate to SlaveScreen when the Slave role is selected
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SlaveScreen()),
+                        MaterialPageRoute(builder: (context) => const SlaveScreen()),
                       );
                     },
-                    child: Text("Slave Mode"),
+                    child: const Text("Slave Mode"),
                   ),
                 ],
               ),

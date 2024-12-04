@@ -117,26 +117,31 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
 
     if (mediaList.isEmpty) {
       // Show message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No media found with the specified filters')),
-      );
+      if (context.mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No media found with the specified filters')),
+        );
+      }
       return;
     }
 
     // Show media selection screen
-    final selectedMedia = await Navigator.push<List<AssetEntity>>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MediaSelectionScreen(
-          mediaList: mediaList,
+    if (context.mounted){
+      final selectedMedia = await Navigator.push<List<AssetEntity>>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MediaSelectionScreen(
+            mediaList: mediaList,
+          ),
         ),
-      ),
-    );
-
-    if (selectedMedia != null && selectedMedia.isNotEmpty) {
-      // Add selected media to session
-      await _addMediaToSession(selectedMedia);
+      );
+      if (selectedMedia != null && selectedMedia.isNotEmpty) {
+        // Add selected media to session
+        await _addMediaToSession(selectedMedia);
+      }
     }
+
+
   }
 
   Future<List<AssetEntity>> _fetchMedia(MediaFilters filters) async {
@@ -228,7 +233,7 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
           videoPath: file.path,
           slaveDeviceId: deviceId,
           startRecordingDate: createDate,
-          endRecordingDate: createDate.add(asset.videoDuration ?? Duration.zero),
+          endRecordingDate: createDate.add(asset.videoDuration),
           receivedDate: now,
         );
 
@@ -240,9 +245,11 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     SessionManager.instance.notifyListeners();
 
     // Show confirmation
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Media added to session')),
-    );
+    if (context.mounted){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Media added to session')),
+      );
+    }
   }
 
   @override

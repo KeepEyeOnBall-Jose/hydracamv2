@@ -14,7 +14,7 @@ class DeviceIdService {
 
     // If the device ID doesn't exist, generate a new one and save it.
     if (deviceId == null) {
-      deviceId = Uuid().v4(); // Generate a new unique ID (UUID v4).
+      deviceId = const Uuid().v4(); // Generate a new unique ID (UUID v4).
       await prefs.setString(_deviceIdKey, deviceId);
       LogService.instance.registerLog('Generated new Device ID: $deviceId');
     } else {

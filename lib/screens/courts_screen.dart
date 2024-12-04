@@ -5,7 +5,7 @@ import 'sessions_screen.dart';
 class CourtsScreen extends StatelessWidget {
   final String sportsCenterGuid;
 
-  CourtsScreen({required this.sportsCenterGuid});
+  CourtsScreen({super.key, required this.sportsCenterGuid});
 
   final HydraCamApiService _apiService = HydraCamApiService();
 

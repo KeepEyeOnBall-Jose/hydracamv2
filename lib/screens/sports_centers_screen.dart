@@ -5,6 +5,8 @@ import 'courts_screen.dart';
 class SportsCentersScreen extends StatelessWidget {
   final HydraCamApiService _apiService = HydraCamApiService();
 
+  SportsCentersScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

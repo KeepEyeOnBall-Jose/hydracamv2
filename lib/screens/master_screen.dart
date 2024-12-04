@@ -26,6 +26,8 @@ import '../widgets/media_list_widget.dart';
 import '../widgets/session_info_widget.dart';
 
 class MasterScreen extends StatefulWidget {
+  const MasterScreen({super.key});
+
   @override
   _MasterScreenState createState() => _MasterScreenState();
 }
@@ -153,14 +155,16 @@ class _MasterScreenState extends State<MasterScreen> {
     final String command = isRecording ? 'stopRecordingVideo' : 'startRecordingVideo';
 
     // Show countdown timer while waiting for the scheduled time
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AnimatedCountdownTimer(
-        duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-        onComplete: () => Navigator.of(context).pop(),
-      ),
-    );
+    if (context.mounted){
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AnimatedCountdownTimer(
+          duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+          onComplete: () => Navigator.of(context).pop(),
+        ),
+      );
+    }
 
     // Send the scheduled command to slaves
     _server.scheduleCommand(command, scheduledTime);
@@ -304,14 +308,16 @@ class _MasterScreenState extends State<MasterScreen> {
     final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
 
     // Show countdown timer while waiting for the scheduled time
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AnimatedCountdownTimer(
-        duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-        onComplete: () => Navigator.of(context).pop(),
-      ),
-    );
+    if (context.mounted){
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AnimatedCountdownTimer(
+          duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+          onComplete: () => Navigator.of(context).pop(),
+        ),
+      );
+    }
 
     // Send the scheduled command to slaves
     _server.scheduleCommand('takePhoto', scheduledTime);
@@ -342,9 +348,13 @@ class _MasterScreenState extends State<MasterScreen> {
       _showPhotoDialog(capturedPhoto, autoClose: true);
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
-    );
+    final currentContext = context;
+
+    if (currentContext.mounted){
+      ScaffoldMessenger.of(currentContext).showSnackBar(
+        SnackBar(content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
+      );
+    }
 
     LogService.instance.registerLog("Photo command executed by master at ${DateTime.now()}");
   }
@@ -409,13 +419,17 @@ class _MasterScreenState extends State<MasterScreen> {
       LogService.instance.registerLog("Session created with GUID: $sessionGuid");
 
       setState(() {});
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Session created successfully: $sessionGuid")),
-      );
+      if (context.mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Session created successfully: $sessionGuid")),
+        );
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to create session")),
-      );
+      if (context.mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to create session")),
+        );
+      }
     }
   }
 
@@ -452,13 +466,17 @@ class _MasterScreenState extends State<MasterScreen> {
         if (success) {
           _server.endCurrentSession(); // End locally
           setState((){});
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Capture session ended")),
-          );
+          if (context.mounted){
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Capture session ended")),
+            );
+          }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Failed to end session on the server")),
-          );
+          if (context.mounted){
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Failed to end session on the server")),
+            );
+          }
         }
       }
     }
@@ -688,7 +706,7 @@ class _MasterScreenState extends State<MasterScreen> {
         _announcer.stopBroadcasting();
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+          MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
         );
         return false; // Prevent the default behavior
       },
@@ -700,7 +718,7 @@ class _MasterScreenState extends State<MasterScreen> {
             _announcer.stopBroadcasting();
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+              MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
             );
           },
         ),
@@ -733,7 +751,7 @@ class _MasterScreenState extends State<MasterScreen> {
 class VideoPlayerScreen extends StatefulWidget {
   final String videoPath;
 
-  VideoPlayerScreen({required this.videoPath});
+  const VideoPlayerScreen({super.key, required this.videoPath});
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();

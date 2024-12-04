@@ -195,7 +195,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
     // Move to master screen
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MasterScreen()),
+      MaterialPageRoute(builder: (context) => const MasterScreen()),
     );
   }
 
@@ -374,7 +374,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                   _cleanUpSlaveMode();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+                    MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
                   );
                 },
               ),
@@ -423,7 +423,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                   _cleanUpSlaveMode();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+                    MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
                   );
                 },
               ),

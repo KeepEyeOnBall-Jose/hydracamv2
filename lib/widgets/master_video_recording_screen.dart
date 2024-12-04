@@ -34,15 +34,16 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
       // Get scheduled time
       final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
 
-      // Show countdown
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AnimatedCountdownTimer(
-          duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-          onComplete: () => Navigator.of(context).pop(),
-        ),
-      );
+      if(context.mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AnimatedCountdownTimer(
+            duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+            onComplete: () => Navigator.of(context).pop(),
+          ),
+        );
+      }
 
       // Wait for timer to stop
       await Future.delayed(scheduledTime.difference(DateTime.now()));
