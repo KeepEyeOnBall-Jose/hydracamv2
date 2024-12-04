@@ -247,6 +247,22 @@ class SlaveClient {
     // Else, we wait until scheduled time and then execute
     else {
       LogService.instance.registerLog("Command '$command' scheduled for $scheduledTime.");
+
+      // Show countdown
+
+      final BuildContext context = ContextHolder.currentContext!;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AnimatedCountdownTimer(
+          duration: delay.inMilliseconds,
+          onComplete: () {
+            Navigator.of(context).pop(); // Close timer dialog
+            _executeCommand(command);
+          },
+        ),
+      );
+
       Timer(delay, () => _executeCommand(command));
     }
   }

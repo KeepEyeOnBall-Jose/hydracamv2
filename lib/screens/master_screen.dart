@@ -19,6 +19,7 @@ import '../services/settings_service.dart';
 import '../services/user_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/add_gallery_media_button.dart';
+import '../widgets/animated_countdown_timer.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/master_video_recording_screen.dart';
 import '../widgets/media_list_widget.dart';
@@ -148,6 +149,16 @@ class _MasterScreenState extends State<MasterScreen> {
 
     final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
     final String command = isRecording ? 'stopRecordingVideo' : 'startRecordingVideo';
+
+    // Show countdown timer while waiting for the scheduled time
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AnimatedCountdownTimer(
+        duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+        onComplete: () => Navigator.of(context).pop(),
+      ),
+    );
 
     // Send the scheduled command to slaves
     _server.scheduleCommand(command, scheduledTime);
@@ -287,6 +298,16 @@ class _MasterScreenState extends State<MasterScreen> {
 
   void _takeRealPhoto() async {
     final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+
+    // Show countdown timer while waiting for the scheduled time
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AnimatedCountdownTimer(
+        duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+        onComplete: () => Navigator.of(context).pop(),
+      ),
+    );
 
     // Send the scheduled command to slaves
     _server.scheduleCommand('takePhoto', scheduledTime);
