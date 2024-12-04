@@ -19,7 +19,6 @@ import '../services/settings_service.dart';
 import '../services/user_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/add_gallery_media_button.dart';
-import '../widgets/animated_countdown_timer.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/master_video_recording_screen.dart';
 import '../widgets/media_list_widget.dart';
@@ -118,48 +117,44 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
 
-  /// Toggles video recording on or off.
-  ///
-  /// If the recording is currently active, this method stops it. Otherwise, it starts recording.
-  /// It uses the `SettingsService` to determine if the master should record locally
-  /// and handles delays using the configured `timerDuration` setting.
-  ///
-  /// - When starting recording:
-  ///   - Sends the `startRecordingVideo` command to slaves with a synchronized timestamp.
-  ///   - Displays a countdown timer if the delay is configured.
-  ///   - Starts recording locally on the master if enabled in settings.
-  ///
-  /// - When stopping recording:
-  ///   - Sends the `stopRecordingVideo` command to slaves with a synchronized timestamp.
-  ///   - Displays a countdown timer if the delay is configured.
-  ///   - Stops recording locally on the master if enabled in settings.
   void _toggleRecording() async {
-    return;
+    LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
+
+    if (isRecording) {
+      // Stop recording
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _stopMasterRecordingVideo(); // Command is already sent from here
+      } else {
+        _server.sendCommand('stopRecordingVideo'); // Command sent explicitly
+        setState(() {
+          isRecording = false;
+        });
+      }
+    } else {
+      // Start recording
+      _server.sendCommand('startRecordingVideo');
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _startMasterRecordingVideo();
+      } else {
+        setState(() {
+          isRecording = true;
+        });
+      }
+    }
   }
 
-  /// Starts recording a video locally on the master.
-  ///
-  /// This method initializes the camera service to start recording
-  /// and displays the camera preview overlay during the recording session.
   Future<void> _startMasterRecordingVideo() async {
     LogService.instance.registerLog("Will record from master and show preview");
     await _server.cameraService.startRecordingVideo();
-
     // Show camera preview overlay
     _showMasterVideoPreview();
   }
 
-  /// Stops recording a video locally on the master.
-  ///
-  /// This method stops the camera service and saves the recorded video.
-  /// It updates the session with the captured video details.
-  ///
-  /// - Returns: The `CapturedVideo` object representing the recorded video.
   Future<CapturedVideo> _stopMasterRecordingVideo() async {
+
     // Send command to slaves before stopping from master
     _server.sendCommand('stopRecordingVideo');
 
-    // Stop recording locally
     String videoPath = await _server.cameraService.stopRecordingVideo();
 
     // Get the device ID
@@ -182,36 +177,17 @@ class _MasterScreenState extends State<MasterScreen> {
       isRecording = false; // Update recording state
     });
 
+    // Do not show the dialog here
+    // Return the captured video
     return capturedVideo;
   }
 
-  /// Displays a countdown timer until the target time, then executes the given callback.
-  ///
-  /// - `targetTime`: The future `DateTime` at which the action should execute.
-  /// - `onComplete`: The callback to execute when the countdown ends.
-  void _showCountdown(DateTime targetTime, Future<void> Function() onComplete) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          content: CountdownTimer(
-            targetTime: targetTime,
-            onComplete: () async {
-              Navigator.of(context).pop();
-              await onComplete();
-            },
-          ),
-        );
-      },
-    );
-  }
 
-  /// Opens the camera preview screen while recording and shows the preview.
-  ///
-  /// This method navigates to the recording preview screen and handles
-  /// the display of the captured video once recording stops.
+
+  /// Open the "camera" preview screen while recording and then return video and show preview.
   void _showMasterVideoPreview() async {
+
+    // Move to recording preview screen and get recorded video
     final capturedVideo = await Navigator.push<CapturedVideo>(
       context,
       MaterialPageRoute(
@@ -235,12 +211,10 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-
   void _takeRealPhoto() async {
-    return;
-  }
+    // Send command to slaves for taking pics
+    _server.sendCommand('takePhoto');
 
-  Future<void> _executeMasterPhoto() async {
     // Verify if master should also take a pic
     bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
     if (shouldMasterRecord) {
@@ -267,6 +241,9 @@ class _MasterScreenState extends State<MasterScreen> {
       _showPhotoDialog(capturedPhoto, autoClose: true);
     }
 
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Photo command sent to slaves")),
+    );
   }
 
   void _showPhotoDialog(CapturedPhoto photo, {bool autoClose = false}) {
