@@ -147,7 +147,9 @@ class _MasterScreenState extends State<MasterScreen> {
   void _toggleRecording() async {
     LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
 
-    final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+    // Get timer duration
+    final timerDuration = await SettingsService.getTimerDuration();
+    final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
     final String command = isRecording ? 'stopRecordingVideo' : 'startRecordingVideo';
 
     // Show countdown timer while waiting for the scheduled time
@@ -297,7 +299,9 @@ class _MasterScreenState extends State<MasterScreen> {
   */
 
   void _takeRealPhoto() async {
-    final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+
+    final timerDuration = await SettingsService.getTimerDuration();
+    final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
 
     // Show countdown timer while waiting for the scheduled time
     showDialog(

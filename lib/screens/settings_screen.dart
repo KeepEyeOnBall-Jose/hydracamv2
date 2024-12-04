@@ -21,7 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
-  int _timerDuration = 6;
+  int _timerDuration = 3;
   bool _screenAutoOff = false; // Default value for screen auto-off
 
   @override

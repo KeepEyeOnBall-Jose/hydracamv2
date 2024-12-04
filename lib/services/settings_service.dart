@@ -83,7 +83,7 @@ class SettingsService {
   /// Retrieve the current value for "timerDuration"
   static Future<int> getTimerDuration() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_timerDurationKey) ?? 6; // Default to 5 seconds
+    return prefs.getInt(_timerDurationKey) ?? 3; // Default to 3 seconds
   }
 
   /// Update the value for "timerDuration"

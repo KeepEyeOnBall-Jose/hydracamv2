@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
+import '../services/settings_service.dart';
 import '../widgets/camera_preview_widget.dart';
+import 'animated_countdown_timer.dart';
 
 class MasterVideoRecordingScreen extends StatefulWidget {
   final CameraService cameraService;
@@ -21,12 +23,35 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
 
   bool _isStopping = false; // State variable to avoid button spam
 
-  void _handleStopRecording() {
+  void _handleStopRecording() async{
 
     if (_isStopping) return; // Prevent multiple presses
+
+    // Get possible timer
+    final timerDuration = await SettingsService.getTimerDuration();
+
+    if (timerDuration > 0){
+      // Get scheduled time
+      final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
+
+      // Show countdown
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AnimatedCountdownTimer(
+          duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+          onComplete: () => Navigator.of(context).pop(),
+        ),
+      );
+
+      // Wait for timer to stop
+      await Future.delayed(scheduledTime.difference(DateTime.now()));
+    }
+
     setState(() {
       _isStopping = true;
     });
+
 
     final navigator = Navigator.of(context);
 
