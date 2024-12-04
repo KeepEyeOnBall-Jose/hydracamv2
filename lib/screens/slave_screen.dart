@@ -12,6 +12,7 @@ import '../services/settings_service.dart';
 import '../slave/slave_client.dart';
 import '../slave/master_discovery.dart';
 import '../widgets/add_gallery_media_button.dart';
+import '../widgets/animated_countdown_timer.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/media_list_widget.dart';
 import '../widgets/session_info_widget.dart';
@@ -57,6 +58,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
       LogService.instance.registerLog("Connecting to master at IP: $masterIp");
       _client = SlaveClient(
         'ws://$masterIp:4040/ws',
+        onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
         onPhotoTaken: (path) {
           if (!mounted) return;
           setState(() {
@@ -207,6 +209,22 @@ class _SlaveScreenState extends State<SlaveScreen> {
     _masterDiscovery = null;
 
     LogService.instance.registerLog("Cleaned up Slave mode.");
+  }
+
+  /// Displays a countdown timer and executes the command after completion.
+  void _showCountdownTimer(String command, DateTime scheduledTime) {
+    final Duration delay = scheduledTime.difference(DateTime.now());
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AnimatedCountdownTimer(
+        duration: delay.inMilliseconds,
+        onComplete: () {
+          Navigator.of(context).pop(); // Close the dialog
+        },
+      ),
+    );
   }
 
 

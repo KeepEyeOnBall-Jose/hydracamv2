@@ -11,8 +11,6 @@ import '../services/device_service.dart'; // Import for device ID service
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
-import '../widgets/animated_countdown_timer.dart';
-import 'package:context_holder/context_holder.dart';
 
 /// SlaveClient - Handles the WebSocket client for slave devices.
 /// This class manages communication with the master device, sending captured media
@@ -75,14 +73,19 @@ class SlaveClient {
   final VoidCallback? onRecordingStarted;
   final VoidCallback? onRecordingStopped;
 
+  /// Callback for scheduled tasks that typically notifies UI to show countdown.
+  final Function(String command, DateTime scheduledTime)? onScheduledCommand;
+
   /// Constructor for `SlaveClient`.
   ///
   /// - `serverAddress`: The WebSocket server address of the master device.
+  /// - `serverAddress`: Callback for scheduled tasks that typically notifies UI to show countdown.
   /// - `onPhotoTaken`: Callback for when a photo is captured.
   /// - `onRecordingStarted`: Callback for when video recording starts.
   /// - `onRecordingStopped`: Callback for when video recording stops.
   SlaveClient(
       this.serverAddress, {
+        this.onScheduledCommand,
         Function(String)? onPhotoTaken,
         this.onRecordingStarted,
         this.onRecordingStopped,
@@ -163,7 +166,6 @@ class SlaveClient {
                 }
                 else{
                   // Process rest of json commands
-                  print("Sending json to processcommand");
                   _processCommand(message);
                 }
                 // Additional JSON-based commands can be handled here
@@ -217,7 +219,6 @@ class SlaveClient {
   /// Handles both scheduled commands and immediate commands, whether JSON-based or plain text.
   void _processCommand(String message) async {
     if (message.trim().startsWith('{')){
-      print("Desde processcommand veo que es json");
 
       try {
         // Attempt to decode the message as JSON
@@ -231,7 +232,6 @@ class SlaveClient {
             // Handle scheduled commands
             final DateTime scheduledTime = DateTime.parse(decodedMessage['scheduledTime']);
             _scheduleExecution(command, scheduledTime);
-            print("Acabado de schedulear");
           } else if (type == 'sessionStarted' || type == 'sessionStatus') {
             // Handle session start/status
             final String sessionGuid = decodedMessage['sessionGuid'];
@@ -260,7 +260,7 @@ class SlaveClient {
     }
 
     else{
-      print("Desde processcommand veo que no es json: $message");
+      // Not a JSON, continue executing raw command
       _executeCommand(message);
     }
   }
@@ -295,12 +295,9 @@ class SlaveClient {
   /// Schedules the execution of a command for a specific time.
   /// This ensures synchronized execution across devices.
   void _scheduleExecution(String command, DateTime scheduledTime) {
-
-    print("Voy a schedulear el comando $command");
     // Find how much time left for scheduled execution
     final Duration delay = scheduledTime.difference(DateTime.now());
 
-    print("Delay: $delay");
     // If we already late, we execute immediately
     if (delay.isNegative) {
       LogService.instance.registerLog("Scheduled time for '$command' has already passed. Executing immediately.");
@@ -310,27 +307,11 @@ class SlaveClient {
     else {
       LogService.instance.registerLog("Command '$command' scheduled for $scheduledTime.");
 
-      // Show countdown
+      // Notify the UI to handle the countdown
+      onScheduledCommand?.call(command, scheduledTime);
 
-      print("Ahora dialog: TODO");
-      /*
-      final BuildContext context = ContextHolder.currentContext!;
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AnimatedCountdownTimer(
-          duration: delay.inMilliseconds,
-          onComplete: () {
-            Navigator.of(context).pop(); // Close timer dialog
-            _executeCommand(command);
-          },
-        ),
-      );*/
-      print("Ahora timer");
       Timer(delay, () => _executeCommand(command));
     }
-
-    print("Fin del scheduled");
   }
 
   /// Executes the received command.
