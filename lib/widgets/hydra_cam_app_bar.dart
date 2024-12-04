@@ -147,7 +147,7 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
               value: 'App Version',
               child: Row(
                 children: const [
-                  Icon(Icons.info, color: Colors.green),
+                  Icon(Icons.perm_device_info, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('App Version'),
                 ],
