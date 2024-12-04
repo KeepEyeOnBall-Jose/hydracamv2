@@ -129,8 +129,8 @@ class SlaveClient {
       _channel?.stream.listen(
             (message) {
 
-              LogService.instance.registerLog("Command received from master: $message");
-              _statusStreamController.add("Received command: $message");
+          LogService.instance.registerLog("Command received from master: $message");
+          _statusStreamController.add("Received command: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
           if (message.trim().startsWith('{') || message.trim().startsWith('[')) {
@@ -204,55 +204,56 @@ class SlaveClient {
 
 
   /// Processes specific commands received from the master.
-  /// Handles commands like taking pictures or videos, with optional delay handling.
-  void _processCommand(String message) async {
-    try {
-      final decodedMessage = jsonDecode(message);
+  /// Gets commands like taking pictures or videos.
+  /// This includes scheduled commands for synchronized execution.
+  void _processCommand(String message) async{
 
-      if (decodedMessage['command'] == 'startCountdown' && decodedMessage['timestamp'] != null) {
-        final targetTimestamp = DateTime.parse(decodedMessage['timestamp']);
-        _showCountdown(targetTimestamp);
-      } else {
-        // Handle other commands (e.g., takePhoto, startRecordingVideo)
-        if (decodedMessage['timestamp'] != null) {
-          final targetTimestamp = DateTime.parse(decodedMessage['timestamp']);
-          final delay = targetTimestamp.difference(DateTime.now());
+    // Check if message is a JSON with scheduled time
+    if (message.trim().startsWith('{')) {
+      try {
+        var decodedMessage = jsonDecode(message);
 
-          if (delay.isNegative) {
-            _executeCommand(decodedMessage['command']);
-          } else {
-            Timer(delay, () => _executeCommand(decodedMessage['command']));
-          }
-        } else {
-          _executeCommand(decodedMessage['command']);
+        if (decodedMessage['type'] == 'scheduledCommand') {
+          String command = decodedMessage['command'];
+          DateTime scheduledTime = DateTime.parse(decodedMessage['scheduledTime']);
+
+          // Schedule the command execution
+          _scheduleExecution(command, scheduledTime);
+          return;
         }
+      } catch (e) {
+        LogService.instance.registerLog("Error decoding JSON message: $e");
+        return;
       }
-    } catch (e) {
-      // Fallback to simple command handling
-      LogService.instance.registerLog("Error processing command: $e");
-      _executeCommand(message);
+    }
+
+    // Existing classic command handling
+    _executeCommand(message);
+
+  }
+
+  /// Schedules the execution of a command for a specific time.
+  /// This ensures synchronized execution across devices.
+  void _scheduleExecution(String command, DateTime scheduledTime) {
+
+    // Find how much time left for scheduled execution
+    final Duration delay = scheduledTime.difference(DateTime.now());
+
+    // If we already late, we execute immediately
+    if (delay.isNegative) {
+      LogService.instance.registerLog("Scheduled time for '$command' has already passed. Executing immediately.");
+      _executeCommand(command);
+    }
+    // Else, we wait until scheduled time and then execute
+    else {
+      LogService.instance.registerLog("Command '$command' scheduled for $scheduledTime.");
+      Timer(delay, () => _executeCommand(command));
     }
   }
 
-  void _showCountdown(DateTime targetTime) {
-    showDialog(
-      context: ContextHolder.currentContext, // TODO: Move to screen???
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          content: CountdownTimer(
-            targetTime: targetTime,
-            onComplete: () => Navigator.of(context).pop(),
-          ),
-        );
-      },
-    );
-  }
-
-
-
-  void _executeCommand(String message) async {
-    if (message == 'takePhoto') {
+  /// Executes the received command.
+  void _executeCommand(String command) async{
+    if (command == 'takePhoto') {
       photoCaptureDate = DateTime.now();
       _cameraService.takePhoto().then((photoPath) async {
         final receivedDate = DateTime.now();
@@ -279,7 +280,7 @@ class SlaveClient {
         // _channel?.sink.add(jsonEncode({...}));
       });
     }
-    else if (message == 'startRecordingVideo') {
+    else if (command == 'startRecordingVideo') {
       LogService.instance.registerLog("Starting video recording");
       videoStartRecordingDate = DateTime.now();
       await _cameraService.startRecordingVideo();
@@ -287,7 +288,7 @@ class SlaveClient {
       onRecordingStarted?.call();
       _statusStreamController.add("Recording video...");
     }
-    else if (message == 'stopRecordingVideo') {
+    else if (command == 'stopRecordingVideo') {
       LogService.instance.registerLog("Stopping video recording");
       videoEndRecordingDate = DateTime.now();
       _cameraService.stopRecordingVideo().then((videoPath) async {
@@ -319,9 +320,12 @@ class SlaveClient {
         // _channel?.sink.add(jsonEncode({...}));
       });
     }
-    else if (message == 'stopCamera') {
+    else if (command == 'stopCamera') {
       // Stop the camera service when receiving 'stopCamera' command
       _cameraService.stopCamera();
+    }
+    else {
+      LogService.instance.registerLog("Unknown command received: $command");
     }
   }
 

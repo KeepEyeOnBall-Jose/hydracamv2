@@ -134,46 +134,7 @@ class _MasterScreenState extends State<MasterScreen> {
   ///   - Displays a countdown timer if the delay is configured.
   ///   - Stops recording locally on the master if enabled in settings.
   void _toggleRecording() async {
-    LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
-
-    final int timerDuration = await SettingsService.getTimerDuration();
-    final DateTime targetTime = DateTime.now().add(Duration(seconds: timerDuration));
-
-    if (isRecording) {
-      // Handle stopping recording
-      _server.scheduleCommand('stopRecordingVideo', targetTime: targetTime);
-
-      if (await SettingsService.getMasterShouldRecord()) {
-        // Show countdown if delay is configured, then stop locally
-        if (timerDuration > 0) {
-          _showCountdown(targetTime, _stopMasterRecordingVideo);
-        } else {
-          await _stopMasterRecordingVideo();
-        }
-      } else {
-        // Update state immediately if master is not recording
-        setState(() {
-          isRecording = false;
-        });
-      }
-    } else {
-      // Handle starting recording
-      _server.scheduleCommand('startRecordingVideo', targetTime: targetTime);
-
-      if (await SettingsService.getMasterShouldRecord()) {
-        // Show countdown if delay is configured, then start locally
-        if (timerDuration > 0) {
-          _showCountdown(targetTime, _startMasterRecordingVideo);
-        } else {
-          await _startMasterRecordingVideo();
-        }
-      } else {
-        // Update state immediately if master is not recording
-        setState(() {
-          isRecording = true;
-        });
-      }
-    }
+    return;
   }
 
   /// Starts recording a video locally on the master.
@@ -276,38 +237,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
 
   void _takeRealPhoto() async {
-
-    final int timerDuration = await SettingsService.getTimerDuration();
-    final DateTime targetTime = DateTime.now().add(Duration(seconds: timerDuration));
-
-    // Schedule command with timestamp
-    _server.scheduleCommand('takePhoto', targetTime: targetTime);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Photo command sent to slaves")),
-    );
-
-    if (timerDuration > 0) {
-      // Show countdown widget on master
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            content: CountdownTimer(
-              targetTime: targetTime,
-              onComplete: () async {
-                Navigator.of(context).pop();
-                await _executeMasterPhoto();
-              },
-            ),
-          );
-        },
-      );
-    } else {
-      // No countdown, just execute
-      await _executeMasterPhoto();
-    }
+    return;
   }
 
   Future<void> _executeMasterPhoto() async {

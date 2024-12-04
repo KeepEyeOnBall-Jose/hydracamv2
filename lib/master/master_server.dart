@@ -359,44 +359,37 @@ class MasterServer {
     }
   }
 
-  /// Sends a command with optional delay and manages countdown notifications.
-  ///
-  /// - `command`: The command to send (e.g., `takePhoto`).
-  /// - `deviceId`: If specified, sends the command to a single device.
-  /// - `targetTime`: The scheduled time for the command to execute.
-  /// - `notifyCountdown`: If true, sends a notification to start countdowns.
-  void scheduleCommand(
-      String command, {
-        String? deviceId,
-        required DateTime targetTime,
-        bool notifyCountdown = true,
-      }) {
-    // Prepare the base payload
-    final payload = {
-      'command': command,
-      'timestamp': targetTime.toIso8601String(),
-    };
+  /// Schedules a command to be executed at a specific date and time.
+  /// Sends the command along with the timestamp to all connected devices.
+  void scheduleCommand(String command, DateTime scheduledTime, {String? deviceId}) {
+    // Convert the scheduled time to ISO 8601 format for standard communication
+    final String scheduledTimeString = scheduledTime.toIso8601String();
 
-    // Encode the payload as JSON
-    final jsonCommand = jsonEncode(payload);
+    LogService.instance.registerLog("Scheduling command '$command' for $scheduledTimeString");
 
-    LogService.instance.registerLog("Scheduling command: $jsonCommand");
-
-    // Notify connected slaves
     if (_clients.isEmpty) {
-      LogService.instance.registerLog("No slaves connected. Command not sent.");
+      LogService.instance.registerLog("No slave devices connected. Scheduled command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
-      _clients[deviceId]?.add(jsonCommand);
+      // Send the scheduled command to a specific slave
+      _clients[deviceId]?.add(jsonEncode({
+        'type': 'scheduledCommand',
+        'command': command,
+        'scheduledTime': scheduledTimeString,
+      }));
+      LogService.instance.registerLog("Scheduled command '$command' sent to slave with deviceId: $deviceId.");
     } else {
+      // Send the scheduled command to all slaves
       for (var client in _clients.values) {
-        client.add(jsonCommand);
+        client.add(jsonEncode({
+          'type': 'scheduledCommand',
+          'command': command,
+          'scheduledTime': scheduledTimeString,
+        }));
       }
-    }
-
-    if (notifyCountdown) {
-      _notifyCountdown(targetTime);
+      LogService.instance.registerLog("Scheduled command '$command' sent to all connected slaves.");
     }
   }
+
 
   /// Sends a countdown notification to all clients when a command is scheduled.
   void _notifyCountdown(DateTime targetTime) {
