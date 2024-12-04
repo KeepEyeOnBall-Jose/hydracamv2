@@ -2,13 +2,23 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
 
-  // Define main colors
+  // Define main
+  /*
   static const Color primaryColor = Color(0xFFFF4f6c); // Color(0xFF81FFBF); // Light green
   static const Color secondaryColor = Color(0xFFF5F5F5); // Light gray for backgrounds
   static const Color accentColor = Color(0xFF790026);    //Color(0xFF00796B); // Teal for accents
   static const Color lightAccentColor = Color(0xFFc74a71);
   static const Color buttonTextColor = Colors.black; // Black for button text
   static const Color disabledButtonColor = Color(0xFF949494); // Grey
+  */
+  // Define main colors
+  static const Color primaryColor = Color(0xFFFFC107); // Amarillo principal
+  static const Color secondaryColor = Color(0xFFF5F5F5); // Gris claro para fondos (monocromático, sin cambios)
+  static const Color accentColor = Color(0xFFFFA000); // Amarillo más oscuro para acentos
+  static const Color lightAccentColor = Color(0xFFFFD54F); // Amarillo más claro para acentos suaves
+  static const Color buttonTextColor = Colors.black; // Negro para texto de botones (monocromático, sin cambios)
+  static const Color disabledButtonColor = Color(0xFF949494); // Gris para botones deshabilitados (monocromático, sin cambios)
+
 
   // Define text styles
   static const TextStyle headline1 = TextStyle(
