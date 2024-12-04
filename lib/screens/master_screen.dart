@@ -116,7 +116,7 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-
+/*
   void _toggleRecording() async {
     LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
 
@@ -142,6 +142,43 @@ class _MasterScreenState extends State<MasterScreen> {
       }
     }
   }
+  */
+  void _toggleRecording() async {
+    LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
+
+    final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+    final String command = isRecording ? 'stopRecordingVideo' : 'startRecordingVideo';
+
+    // Send the scheduled command to slaves
+    _server.scheduleCommand(command, scheduledTime);
+
+    // Master also waits until the scheduled time before executing
+    await Future.delayed(scheduledTime.difference(DateTime.now()));
+
+    if (isRecording) {
+      // Stop recording
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _stopMasterRecordingVideo();
+      } else {
+        setState(() {
+          isRecording = false;
+        });
+      }
+    }
+    else {
+      // Start recording
+      if (await SettingsService.getMasterShouldRecord()) {
+        await _startMasterRecordingVideo();
+      } else {
+        setState(() {
+          isRecording = true;
+        });
+      }
+    }
+
+    LogService.instance.registerLog("Command '$command' finished executing by master at ${DateTime.now()}");
+  }
+
 
   Future<void> _startMasterRecordingVideo() async {
     LogService.instance.registerLog("Will record from master and show preview");
@@ -211,6 +248,7 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
+  /*
   void _takeRealPhoto() async {
     // Send command to slaves for taking pics
     _server.sendCommand('takePhoto');
@@ -245,6 +283,47 @@ class _MasterScreenState extends State<MasterScreen> {
       const SnackBar(content: Text("Photo command sent to slaves")),
     );
   }
+  */
+
+  void _takeRealPhoto() async {
+    final DateTime scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+
+    // Send the scheduled command to slaves
+    _server.scheduleCommand('takePhoto', scheduledTime);
+
+    // Master also waits until the scheduled time before executing
+    await Future.delayed(scheduledTime.difference(DateTime.now()));
+
+    // TODO: We should know before waiting? or we better wait even if we don't take pic?
+    // Verify if master should also take a pic
+    bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
+    if (shouldMasterRecord) {
+      final String photoPath = await _server.cameraService.takePhoto();
+
+      final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
+      final capturedPhoto = CapturedPhoto(
+        photoData: null,
+        photoPath: photoPath,
+        captureDate: DateTime.now(),
+        receivedDate: DateTime.now(),
+        slaveDeviceId: deviceId,
+      );
+
+      SessionManager.instance.addPhoto(capturedPhoto);
+
+      setState(() {});
+
+      _showPhotoDialog(capturedPhoto, autoClose: true);
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
+    );
+
+    LogService.instance.registerLog("Photo command executed by master at ${DateTime.now()}");
+  }
+
 
   void _showPhotoDialog(CapturedPhoto photo, {bool autoClose = false}) {
     AlertUtils.showMediaDialog(
