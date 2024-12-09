@@ -13,7 +13,7 @@ class HydraCamApiService {
   HydraCamApiService._internal();
 
   // Base URL for the API
-  final String _baseUrl = 'https://keobmotherboardweb.azurewebsites.net/api/hydracam';
+  final String _baseUrl = 'https://motherboard.azurewebsites.net/api/hydracam';
 
   /// Create a new capture session
   Future<Map<String, dynamic>?> createSession(String sessionId, {String? courtGuid, String? userGuid}) async {
