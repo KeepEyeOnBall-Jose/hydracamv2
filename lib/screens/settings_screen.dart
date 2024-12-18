@@ -22,7 +22,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
   int _timerDuration = 3;
-  bool _screenAutoOff = false; // Default value for screen auto-off
+  bool _screenAutoOff = false;
+  bool _flashForVideoAnnounce = false;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final autoplayVideoOnMaster = await SettingsService.getAutoplayVideoOnMaster();
     final timerDuration = await SettingsService.getTimerDuration();
     final screenAutoOff = await SettingsService.getScreenAutoOff();
+    final flashForVideoAnnounce = await SettingsService.getFlashForVideoAnnounce();
 
     setState(() {
       _masterShouldRecord = shouldRecord;
@@ -48,6 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _autoplayVideoOnMaster = autoplayVideoOnMaster;
       _timerDuration = timerDuration;
       _screenAutoOff = screenAutoOff;
+      _flashForVideoAnnounce = flashForVideoAnnounce;
     });
   }
 
@@ -221,6 +224,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   Text("Current timer duration: $_timerDuration seconds"),
                 ],
+              ),
+            ),
+            SettingsOption(
+              title: "Flash for Video Announcements",
+              description: "If enabled, the camera flash will blink before and after video recording to signal start/end.",
+              control: Switch(
+                value: _flashForVideoAnnounce,
+                onChanged: (value) async {
+                  await SettingsService.setFlashForVideoAnnounce(value);
+                  setState(() {
+                    _flashForVideoAnnounce = value;
+                  });
+                },
+                activeColor: AppTheme.primaryColor,
+                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
           ],

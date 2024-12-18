@@ -11,6 +11,20 @@ class SettingsService {
   static const String _autoplayVideoOnMasterKey = 'autoplayVideoOnMaster';    // Toggle auto video play in master device after recording
   static const String _timerDurationKey = 'timerDuration';                    // Key for the timer duration setting
   static const String _screenAutoOffKey = 'screenAutoOff';                    // Key for auto screen off setting
+  static const String _flashForVideoAnnounceKey = 'flashForVideoAnnounce';    // Key for flashing on start/stop recording
+
+  /// Retrieve the current value for "flashForVideoAnnounce".
+  static Future<bool> getFlashForVideoAnnounce() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_flashForVideoAnnounceKey) ?? false; // Default to false
+  }
+
+  /// Update the value for "flashForVideoAnnounce".
+  static Future<void> setFlashForVideoAnnounce(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_flashForVideoAnnounceKey, value);
+    LogService.instance.registerLog("Updated flashForVideoAnnounce value to $value");
+  }
 
   /// Retrieve the current value for "masterShouldRecord"
   static Future<bool> getMasterShouldRecord() async {

@@ -141,6 +141,25 @@ class CameraService {
     }
   }
 
+  /// Announces the start or end of video recording using the flash, if enabled in settings.
+  Future<void> announceRecordingWithFlash() async {
+    final flashEnabled = await SettingsService.getFlashForVideoAnnounce();
+    if (!flashEnabled || _controller == null) return;
+
+    // Perform a double flash: turn on torch for short period, turn off, repeat
+    try {
+      for (int i = 0; i < 2; i++) {
+        await _controller?.setFlashMode(FlashMode.torch);
+        await Future.delayed(const Duration(milliseconds: 300));
+        await _controller?.setFlashMode(FlashMode.off);
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+      LogService.instance.registerLog("Performed flash announcement for video recording");
+    } catch (e) {
+      LogService.instance.registerLog("Error performing flash announcement: $e");
+    }
+  }
+
   /// Starts recording a video.
   ///
   /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
@@ -148,19 +167,19 @@ class CameraService {
     try {
       await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
 
+      // Announce with flash before starting (if setting is enabled)
+      await announceRecordingWithFlash();
+
       if (enableFlash) {
         await _controller?.setFlashMode(FlashMode.torch); // Turn on flash for video recording
       }
 
-
       videoStartRecordingDate = DateTime.now();
       await _controller?.startVideoRecording();
-LogService.instance.registerLog("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
+      LogService.instance.registerLog("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
 
     } catch (e) {
-
       LogService.instance.registerLog("Error starting video recording: $e");
-
     }
   }
 
@@ -172,7 +191,10 @@ LogService.instance.registerLog("Video recording started with flash ${enableFlas
       final XFile video = await _controller!.stopVideoRecording();
       videoEndRecordingDate = DateTime.now();
 
-      // TODO: ISOLATE FROM MAIN THREAD
+      // Announce with flash after stopping (if setting is enabled)
+      await announceRecordingWithFlash();
+
+      // TODO: ISOLATE FROM MAIN THREAD IF THAT INCREASES PERFORMANCE?
       LogService.instance.registerLog("Video recorded at path: ${video.path}");
 
       // Save to gallery
