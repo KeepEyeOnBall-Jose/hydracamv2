@@ -42,10 +42,9 @@ void main() async {
   // GlobalKey para ScaffoldMessenger
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
-  // Inicializar BatteryService
+  // Init BatteryService
   BatteryService.initialize(
     scaffoldMessengerKey: scaffoldMessengerKey,
-    lowBatteryThreshold: 30, // umbral opcional
   );
 
   runApp(
