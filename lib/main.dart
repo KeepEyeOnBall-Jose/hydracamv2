@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydracam/services/battery_service.dart';
 import 'package:provider/provider.dart';
 import 'package:hydracam/screens/slave_screen.dart';
 //import 'package:sport_cam_sync/screens/role_selection_screen.dart';
@@ -38,22 +39,36 @@ void main() async {
   // Prevent screen from turning off
   WakelockPlus.enable();
 
+  // GlobalKey para ScaffoldMessenger
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
+  // Inicializar BatteryService
+  BatteryService.initialize(
+    scaffoldMessengerKey: scaffoldMessengerKey,
+    lowBatteryThreshold: 30, // umbral opcional
+  );
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => DeviceIdProvider(deviceId),
-      child: const HydraCamApp(),
+      child: HydraCamApp(
+        scaffoldMessengerKey: scaffoldMessengerKey,
+      ),
     ),
   );
 }
 
 class HydraCamApp extends StatelessWidget {
-  const HydraCamApp({super.key});
+
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
+  const HydraCamApp({super.key, required this.scaffoldMessengerKey});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HydraCam',
       theme: AppTheme.lightTheme,
+      scaffoldMessengerKey: scaffoldMessengerKey, // For global snackbars
       home: const SlaveScreen(isAutoMode: true), // Start in SlaveScreen with auto mode
     );
   }

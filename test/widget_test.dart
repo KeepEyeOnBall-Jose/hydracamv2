@@ -16,8 +16,11 @@ import 'package:hydracam/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+
+    final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const HydraCamApp());
+    await tester.pumpWidget(HydraCamApp(scaffoldMessengerKey: scaffoldMessengerKey,));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
