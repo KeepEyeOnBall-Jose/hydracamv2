@@ -217,4 +217,71 @@ class SessionManager extends ChangeNotifier {
 
     return sessionDirs;
   }
+
+  // Method to scan and reconstruct session metadata
+  Future<List<String>> scanAndReconstructSessions() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final sessionDirs = Directory(directory.path)
+        .listSync()
+        .where((entity) => entity is Directory && entity.path.contains('session_'))
+        .toList();
+
+    List<String> reconstructedSessions = [];
+
+    for (var dir in sessionDirs) {
+      final sessionId = dir.path.split('_').last;
+      final metadataFile = File('${dir.path}/metadata.json');
+
+      // Skip if metadata already exists
+      if (metadataFile.existsSync()) continue;
+
+      try {
+        // Reconstruct metadata from files
+        List<CapturedPhoto> photos = [];
+        List<CapturedVideo> videos = [];
+
+        for (var entity in Directory(dir.path).listSync()) {
+          if (entity is File) {
+            if (entity.path.endsWith('.jpg')) {
+              photos.add(CapturedPhoto(
+                photoPath: entity.path,
+                slaveDeviceId: "", // Placeholder
+                captureDate: FileStat.statSync(entity.path).changed,
+                receivedDate: DateTime.now(),
+                isUploaded: false,
+              ));
+            } else if (entity.path.endsWith('.mp4')) {
+              videos.add(CapturedVideo(
+                videoPath: entity.path,
+                slaveDeviceId: "", // Placeholder
+                startRecordingDate: FileStat.statSync(entity.path).changed,
+                endRecordingDate: DateTime.now(),
+                receivedDate: DateTime.now(),
+                isUploaded: false,
+              ));
+            }
+          }
+        }
+
+        // Create session object
+        CaptureSession session = CaptureSession(
+          sessionId: sessionId,
+          startTime: DateTime.now(), // Use first file timestamp if available
+          capturedPhotos: photos,
+          capturedVideos: videos,
+        );
+
+        // Save reconstructed metadata
+        _currentSession = session;
+        await saveSessionMetadata();
+        reconstructedSessions.add(sessionId);
+
+      } catch (e) {
+        LogService.instance.registerLog("Failed to reconstruct session: $e");
+      }
+    }
+
+    return reconstructedSessions;
+  }
+
 }

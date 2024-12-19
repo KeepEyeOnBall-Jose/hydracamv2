@@ -46,7 +46,42 @@ class _PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Previous Sessions")),
+      appBar: AppBar(
+        title: const Text("Previous Sessions"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () async {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Scanning for previous sessions...")),
+              );
+
+              final reconstructedSessions =
+              await SessionManager.instance.scanAndReconstructSessions();
+
+              if (reconstructedSessions.isNotEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        "Reconstructed ${reconstructedSessions.length} sessions."),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("No new sessions found during the scan.")),
+                );
+              }
+
+              // Reload the list of available sessions
+              setState(() {
+                _availableSessions =
+                    SessionManager.instance.getAvailableSessions();
+              });
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<String>>(
         future: _availableSessions,
         builder: (context, snapshot) {
@@ -71,7 +106,6 @@ class _PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
                   _handleSessionTap(context, sessionId);
                 },
               );
-
             },
           );
         },
