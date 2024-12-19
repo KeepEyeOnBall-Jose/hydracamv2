@@ -92,6 +92,8 @@ lib/
 │   └── uploader_info_screen.dart   # Shows upload status for photos and videos.
 ├── services/
 │   ├── alert_utils.dart            # Utility for showing alerts and pop-ups.
+│   ├── auth0_service.dart          # Handles authentication with Auth0 using OAuth2.
+│   ├── battery_service.dart        # Monitors device battery level and shows alerts for low battery.
 │   ├── camera_service.dart         # Manages camera operations on the devices.
 │   ├── device_id_provider.dart     # Provides device identification.
 │   ├── device_service.dart         # Retrieves or generates unique device IDs.
@@ -99,6 +101,7 @@ lib/
 │   ├── location_service.dart       # Handles location tracking with geolocator.
 │   ├── log_service.dart            # Centralized service for logging events.
 │   ├── permission_service.dart     # Ensures necessary permissions are granted.
+│   ├── scheduled_task_service.dart # Manages scheduled tasks, such as delayed executions.
 │   ├── session_manager.dart        # Handles session logic, shared by master and slaves.
 │   ├── settings_service.dart       # Manages read/write configurations over the app.
 │   └── uploader_service.dart       # Manages upload queue and retries for media files.
