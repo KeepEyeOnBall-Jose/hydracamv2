@@ -36,11 +36,25 @@ class _PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
     }
   }
 
+  Future<void> _refreshSessions() async {
+    setState(() {
+      _availableSessions = Future.value([]); // Clean view temporally
+    });
+
+    // Rebuilt previous sessions if needed
+    await SessionManager.instance.scanAndReconstructSessions();
+
+    // Get available sessions after scan
+    setState(() {
+      _availableSessions = SessionManager.instance.getAvailableSessions();
+    });
+  }
+
 
   @override
   void initState() {
     super.initState();
-    _availableSessions = SessionManager.instance.getAvailableSessions();
+    _refreshSessions();
   }
 
   @override
@@ -53,31 +67,9 @@ class _PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
             icon: const Icon(Icons.refresh),
             onPressed: () async {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Scanning for previous sessions...")),
+                const SnackBar(content: Text("Scanning and refreshing sessions...")),
               );
-
-              final reconstructedSessions =
-              await SessionManager.instance.scanAndReconstructSessions();
-
-              if (reconstructedSessions.isNotEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        "Reconstructed ${reconstructedSessions.length} sessions."),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text("No new sessions found during the scan.")),
-                );
-              }
-
-              // Reload the list of available sessions
-              setState(() {
-                _availableSessions =
-                    SessionManager.instance.getAvailableSessions();
-              });
+              await _refreshSessions();
             },
           ),
         ],

@@ -233,20 +233,31 @@ class SessionManager extends ChangeNotifier {
       final metadataFile = File('${dir.path}/metadata.json');
 
       // Skip if metadata already exists
-      if (metadataFile.existsSync()) continue;
+      if (metadataFile.existsSync()) {
+        LogService.instance.registerLog("Metadata already exists for session: $sessionId");
+        continue;
+      }
 
       try {
-        // Reconstruct metadata from files
+        // Collect photos and videos
         List<CapturedPhoto> photos = [];
         List<CapturedVideo> videos = [];
+        DateTime? earliestDate;
 
         for (var entity in Directory(dir.path).listSync()) {
           if (entity is File) {
+            final fileStat = await entity.stat();
+
+            // Update the earliest timestamp
+            if (earliestDate == null || fileStat.changed.isBefore(earliestDate)) {
+              earliestDate = fileStat.changed;
+            }
+
             if (entity.path.endsWith('.jpg')) {
               photos.add(CapturedPhoto(
                 photoPath: entity.path,
                 slaveDeviceId: "", // Placeholder
-                captureDate: FileStat.statSync(entity.path).changed,
+                captureDate: fileStat.changed,
                 receivedDate: DateTime.now(),
                 isUploaded: false,
               ));
@@ -254,8 +265,8 @@ class SessionManager extends ChangeNotifier {
               videos.add(CapturedVideo(
                 videoPath: entity.path,
                 slaveDeviceId: "", // Placeholder
-                startRecordingDate: FileStat.statSync(entity.path).changed,
-                endRecordingDate: DateTime.now(),
+                startRecordingDate: fileStat.changed,
+                endRecordingDate: fileStat.changed,
                 receivedDate: DateTime.now(),
                 isUploaded: false,
               ));
@@ -263,21 +274,27 @@ class SessionManager extends ChangeNotifier {
           }
         }
 
-        // Create session object
-        CaptureSession session = CaptureSession(
+        if (photos.isEmpty && videos.isEmpty) {
+          LogService.instance.registerLog("No media files found in session directory: $sessionId");
+          continue;
+        }
+
+        // Create session
+        final session = CaptureSession(
           sessionId: sessionId,
-          startTime: DateTime.now(), // Use first file timestamp if available
+          startTime: earliestDate ?? DateTime.now(),
           capturedPhotos: photos,
           capturedVideos: videos,
         );
 
-        // Save reconstructed metadata
+        // Save metadata
         _currentSession = session;
         await saveSessionMetadata();
         reconstructedSessions.add(sessionId);
 
+        LogService.instance.registerLog("Reconstructed session: $sessionId with ${photos.length} photos and ${videos.length} videos.");
       } catch (e) {
-        LogService.instance.registerLog("Failed to reconstruct session: $e");
+        LogService.instance.registerLog("Failed to reconstruct session: $sessionId, Error: $e");
       }
     }
 
