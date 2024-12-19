@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydracam/screens/previous_sessions_screen.dart';
 import 'package:hydracam/screens/role_selection_screen.dart';
 import 'package:hydracam/screens/sports_centers_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
@@ -575,6 +576,20 @@ class _MasterScreenState extends State<MasterScreen> {
                     child: const Text("Or... Load a Previous One"),
                   ),
                 ),
+                const SizedBox(height:20),
+                SizedBox(
+                  width: buttonWidth,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PreviousSessionsScreen()),
+                      );
+                    },
+                    child: const Text("View Local Sessions"),
+                  ),
+                ),
+
               ],
             ),
           ),
