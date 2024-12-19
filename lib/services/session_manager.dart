@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:hydracam/services/settings_service.dart';
 import 'package:hydracam/services/uploader_service.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
@@ -112,5 +115,106 @@ class SessionManager extends ChangeNotifier {
         LogService.instance.registerLog("File not found for deletion: $filePath");
       }
     }
+  }
+
+  /// --------------------------------
+  /// METHODS FOR PERSISTENT SESSIONS
+  /// --------------------------------
+
+  // For writing session metadata
+  Future<void> saveSessionMetadata() async {
+    if (_currentSession == null) return;
+
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionId}');
+      if (!sessionDirectory.existsSync()) {
+        sessionDirectory.createSync(recursive: true);
+      }
+
+      final metadataFile = File('${sessionDirectory.path}/metadata.json');
+      final metadata = {
+        'sessionId': _currentSession!.sessionId,
+        'sessionGuid': _sessionGuid,
+        'startTime': _currentSession!.startTime.toIso8601String(),
+        'endTime': _currentSession!.endTime?.toIso8601String(),
+        'deviceType': _deviceType,
+        'photos': _currentSession!.capturedPhotos.map((photo) => {
+          'photoPath': photo.photoPath,
+          'captureDate': photo.captureDate.toIso8601String(),
+          'receivedDate': photo.receivedDate.toIso8601String(),
+          'isUploaded': photo.isUploaded,
+        }).toList(),
+        'videos': _currentSession!.capturedVideos.map((video) => {
+          'videoPath': video.videoPath,
+          'startRecordingDate': video.startRecordingDate.toIso8601String(),
+          'endRecordingDate': video.endRecordingDate.toIso8601String(),
+          'receivedDate': video.receivedDate.toIso8601String(),
+          'isUploaded': video.isUploaded,
+        }).toList(),
+      };
+
+      await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
+      LogService.instance.registerLog("Session metadata saved to ${metadataFile.path}");
+    } catch (e) {
+      LogService.instance.registerLog("Error saving session metadata: $e");
+    }
+  }
+
+  // For loading session metadata
+  Future<CaptureSession?> loadSessionMetadata(String sessionId) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final metadataFile = File('${directory.path}/session_$sessionId/metadata.json');
+      if (!metadataFile.existsSync()) {
+        LogService.instance.registerLog("No metadata file found for session $sessionId");
+        return null;
+      }
+
+      final metadata = jsonDecode(await metadataFile.readAsString());
+      final session = CaptureSession(
+        sessionId: metadata['sessionId'],
+        startTime: DateTime.parse(metadata['startTime']),
+        endTime: metadata['endTime'] != null ? DateTime.parse(metadata['endTime']) : null,
+        capturedPhotos: (metadata['photos'] as List<dynamic>).map((photo) {
+          return CapturedPhoto(
+            photoPath: photo['photoPath'],
+            slaveDeviceId: "", // Placeholder, as device ID may not be stored
+            captureDate: DateTime.parse(photo['captureDate']),
+            receivedDate: DateTime.parse(photo['receivedDate']),
+            isUploaded: photo['isUploaded'],
+          );
+        }).toList(),
+        capturedVideos: (metadata['videos'] as List<dynamic>).map((video) {
+          return CapturedVideo(
+            videoPath: video['videoPath'],
+            slaveDeviceId: "", // Placeholder
+            startRecordingDate: DateTime.parse(video['startRecordingDate']),
+            endRecordingDate: DateTime.parse(video['endRecordingDate']),
+            receivedDate: DateTime.parse(video['receivedDate']),
+            isUploaded: video['isUploaded'],
+          );
+        }).toList(),
+      );
+
+      _sessionGuid = metadata['sessionGuid'];
+      _deviceType = metadata['deviceType'];
+      LogService.instance.registerLog("Session metadata loaded for session $sessionId");
+      return session;
+    } catch (e) {
+      LogService.instance.registerLog("Error loading session metadata: $e");
+      return null;
+    }
+  }
+
+  // Utility to list past sessions
+  Future<List<String>> getAvailableSessions() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final sessionDirs = Directory(directory.path).listSync()
+        .where((entity) => entity is Directory && entity.path.contains('session_'))
+        .map((entity) => entity.path.split('_').last)
+        .toList();
+
+    return sessionDirs;
   }
 }
