@@ -5,6 +5,7 @@ import '../services/uploader_service.dart';
 import 'dart:io';
 
 /// Reusable widget to show list of recorded photos and videos for a device (both slave or master)
+/// Used both in uploader screen and master/slave screens, with different functionalities in each case
 class MediaListWidget extends StatelessWidget {
   final List<CapturedPhoto> photos;
   final List<CapturedVideo> videos;

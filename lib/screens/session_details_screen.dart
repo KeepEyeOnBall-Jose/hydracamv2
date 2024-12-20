@@ -112,7 +112,7 @@ class SessionDetailsScreen extends StatelessWidget {
       ),
       trailing: !media.isUploaded
           ? IconButton(
-        icon: const Icon(Icons.cloud_upload, color: Colors.green),
+        icon: const Icon(Icons.cloud_off, color: Colors.red),
         onPressed: () => _uploadMedia(media, context),
       )
           : const Icon(Icons.cloud_done, color: Colors.blue),
