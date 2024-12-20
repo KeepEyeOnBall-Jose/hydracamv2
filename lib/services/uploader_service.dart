@@ -158,6 +158,10 @@ class UploaderService {
       media.isUploaded = true;
       media.uploadDuration = DateTime.now().difference(media.uploadStartTime!);
       LogService.instance.registerLog("Media uploaded: ${media.mediaPath}");
+
+      // Update metadata.json with uploaded media
+      await SessionManager.instance.safeUpdateMetadata();
+
       // Trigger deletion of the local file
       await SessionManager.instance.deleteFileIfAllowed(media.mediaPath);
 

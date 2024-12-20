@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:hydracam/services/settings_service.dart';
 import 'package:hydracam/services/uploader_service.dart';
@@ -37,6 +37,10 @@ class SessionManager extends ChangeNotifier {
   String get deviceType => _deviceType;
   bool get isSessionActive => _currentSession != null;
 
+  /// Lock for updating metadata.json
+  final Completer<void> _metadataUpdateLock = Completer<void>()..complete();
+
+
   /// Set the session GUID and initialize a new `CaptureSession`.
   void startSession(String sessionGuid, {required String deviceType}) {
 
@@ -57,9 +61,18 @@ class SessionManager extends ChangeNotifier {
   }
 
   /// Ends the current session, clearing data.
-  void endSession() {
+  void endSession() async {
+
+    if (_currentSession == null) {
+      LogService.instance.registerLog("No active session to end.");
+      return;
+    }
+
     // End current session
     _currentSession?.endSession();
+    // Update metadata.json file
+    await _safeUpdateMetadata();
+    // Clean variables
     _currentSession = null;
     _sessionGuid = null;
 
@@ -80,6 +93,9 @@ class SessionManager extends ChangeNotifier {
 
     LogService.instance.registerLog("Adding photo to upload queue: ${photo.photoPath}");
 
+    // Update metadata
+    _safeUpdateMetadata();
+
     // Add photo to uploader queue
     UploaderService().addMediaToQueue(photo);
 
@@ -93,6 +109,9 @@ class SessionManager extends ChangeNotifier {
     notifyListeners();
 
     LogService.instance.registerLog("Adding video to upload queue: ${video.videoPath}");
+
+    // Update metadata
+    _safeUpdateMetadata();
 
     // Add video to uploader queue
     UploaderService().addMediaToQueue(video);
@@ -218,8 +237,14 @@ class SessionManager extends ChangeNotifier {
     return sessionDirs;
   }
 
-  // Method to scan and reconstruct session metadata
+  /// Method to scan and reconstruct session metadata
+  /// Typically used from previous sessions screen
   Future<List<String>> scanAndReconstructSessions() async {
+
+    // store current session if exists
+    var previousSession = _currentSession;
+
+
     final directory = await getApplicationDocumentsDirectory();
     print("Scanning directory: ${directory.path}");
     final sessionDirs = Directory(directory.path)
@@ -306,7 +331,66 @@ class SessionManager extends ChangeNotifier {
       }
     }
 
+    // clean _currentSession with the previous (may be null) one
+    _currentSession = previousSession;
+
     return reconstructedSessions;
   }
+
+  /// Method to safely update metadata.json, without concurrency errors
+  Future<void> _safeUpdateMetadata() async {
+    // Enqueue the task in the metadata update lock
+    final previousTask = _metadataUpdateLock.future;
+    final newTask = Completer<void>();
+
+    _metadataUpdateLock.complete(newTask.future);
+
+    await previousTask; // Wait until previous update is finished
+    try {
+      if (_currentSession == null) return;
+
+      final directory = await getApplicationDocumentsDirectory();
+      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionId}');
+      if (!sessionDirectory.existsSync()) {
+        sessionDirectory.createSync(recursive: true);
+      }
+
+      final metadataFile = File('${sessionDirectory.path}/metadata.json');
+      final metadata = {
+        'sessionId': _currentSession!.sessionId,
+        'sessionGuid': _sessionGuid,
+        'startTime': _currentSession!.startTime.toIso8601String(),
+        'endTime': _currentSession!.endTime?.toIso8601String(),
+        'deviceType': _deviceType,
+        'photos': _currentSession!.capturedPhotos.map((photo) => {
+          'photoPath': photo.photoPath,
+          'captureDate': photo.captureDate.toIso8601String(),
+          'receivedDate': photo.receivedDate.toIso8601String(),
+          'isUploaded': photo.isUploaded,
+        }).toList(),
+        'videos': _currentSession!.capturedVideos.map((video) => {
+          'videoPath': video.videoPath,
+          'startRecordingDate': video.startRecordingDate.toIso8601String(),
+          'endRecordingDate': video.endRecordingDate.toIso8601String(),
+          'receivedDate': video.receivedDate.toIso8601String(),
+          'isUploaded': video.isUploaded,
+        }).toList(),
+      };
+
+      await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
+      LogService.instance.registerLog("Session metadata updated at ${metadataFile.path}");
+    } catch (e) {
+      LogService.instance.registerLog("Error updating session metadata: $e");
+    } finally {
+      newTask.complete(); // Mark task as completed!
+    }
+  }
+
+  /// Public method to safely update the metadata
+  Future<void> safeUpdateMetadata() async {
+    await _safeUpdateMetadata();
+  }
+
+
 
 }
