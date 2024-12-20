@@ -38,10 +38,6 @@ class SessionManager extends ChangeNotifier {
   String get deviceType => _deviceType;
   bool get isSessionActive => _currentSession != null;
 
-  /// Lock for updating metadata.json
-  Completer<void> _metadataUpdateLock = Completer<void>()..complete();
-
-
   /// Set the session GUID and initialize a new `CaptureSession`.
   void startSession(String sessionGuid, String? sessionId, {required String deviceType}) {
 
@@ -75,7 +71,7 @@ print("End session del manager");
     // End current session
     _currentSession?.endSession();
     // Update metadata.json file
-    //await _safeUpdateMetadata(); TODO
+    await updateMetadata();
 
     print("Now clean and all that");
     // Clean variables
@@ -100,7 +96,7 @@ print("End session del manager");
     LogService.instance.registerLog("Adding photo to upload queue: ${photo.photoPath}");
 
     // Update metadata
-    _safeUpdateMetadata();
+    updateMetadata();
 
     // Add photo to uploader queue
     UploaderService().addMediaToQueue(photo);
@@ -117,7 +113,7 @@ print("End session del manager");
     LogService.instance.registerLog("Adding video to upload queue: ${video.videoPath}");
 
     // Update metadata
-    _safeUpdateMetadata();
+    updateMetadata();
 
     // Add video to uploader queue
     UploaderService().addMediaToQueue(video);
@@ -379,31 +375,16 @@ print("End session del manager");
     return reconstructedSessions;
   }
 
-  /// Method to safely update metadata.json, without concurrency errors
-  Future<void> _safeUpdateMetadata() async {
-return;
-//TODO
-    print("safeupdatemetadata");
 
-    // Si el Completer actual está completo o no inicializado, creamos uno nuevo
-    if (_metadataUpdateLock.isCompleted) {
-      _metadataUpdateLock = Completer<void>();
-    }
-
-    final previousTask = _metadataUpdateLock.future;
-
-    // Crear un nuevo Completer para la nueva tarea
-    final newTask = Completer<void>();
-    _metadataUpdateLock.complete(newTask.future);
-
-    await previousTask; // Espera a que la tarea anterior termine.
+  /// Simple method to update current metadata. TODO: Avoid concurrency errors if called at the same time from different parts of the app
+  Future<void> updateMetadata() async {
     try {
-      if (_currentSession == null) {
-        print("curent session es null");
+      if (_currentSession == null || _sessionGuid == null) {
+        print("No active session or session GUID is null. Skipping metadata update.");
         return;
       }
 
-      print("guardando metadata");
+      print("Saving metadata...");
       final directory = await getApplicationDocumentsDirectory();
       final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionGuid}');
       if (!sessionDirectory.existsSync()) {
@@ -419,12 +400,14 @@ return;
         'deviceType': _deviceType,
         'photos': _currentSession!.capturedPhotos.map((photo) => {
           'photoPath': photo.photoPath,
+          'slaveDeviceId': photo.slaveDeviceId,
           'captureDate': photo.captureDate.toIso8601String(),
           'receivedDate': photo.receivedDate.toIso8601String(),
           'isUploaded': photo.isUploaded,
         }).toList(),
         'videos': _currentSession!.capturedVideos.map((video) => {
           'videoPath': video.videoPath,
+          'slaveDeviceId': video.slaveDeviceId,
           'startRecordingDate': video.startRecordingDate.toIso8601String(),
           'endRecordingDate': video.endRecordingDate.toIso8601String(),
           'receivedDate': video.receivedDate.toIso8601String(),
@@ -433,22 +416,12 @@ return;
       };
 
       await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
-      LogService.instance.registerLog("Session metadata updated at ${metadataFile.path}");
+      LogService.instance.registerLog("Session metadata saved to ${metadataFile.path}");
     } catch (e) {
-      LogService.instance.registerLog("Error updating session metadata: $e");
-    } finally {
-      if (!newTask.isCompleted) {
-        newTask.complete();
-      } // Mark task as completed!
-
-      print("acabao");
+      LogService.instance.registerLog("Error saving session metadata: $e");
     }
   }
 
-  /// Public method to safely update the metadata
-  Future<void> safeUpdateMetadata() async {
-    await _safeUpdateMetadata();
-  }
 
 
 

@@ -160,7 +160,7 @@ class UploaderService {
       LogService.instance.registerLog("Media uploaded: ${media.mediaPath}");
 
       // Update metadata.json with uploaded media
-      //await SessionManager.instance.safeUpdateMetadata();
+      await SessionManager.instance.updateMetadata();
 
       // Trigger deletion of the local file
       await SessionManager.instance.deleteFileIfAllowed(media.mediaPath);

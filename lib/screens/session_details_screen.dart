@@ -6,6 +6,7 @@ import '../models/CapturedVideo.dart';
 import '../services/alert_utils.dart';
 import '../services/session_manager.dart';
 import '../services/uploader_service.dart';
+import 'master_screen.dart';
 
 class SessionDetailsScreen extends StatelessWidget {
   final CaptureSession session;
@@ -138,13 +139,6 @@ class SessionDetailsScreen extends StatelessWidget {
     );
   }
 
-  void _uploadMedia(dynamic media, BuildContext context) {
-    UploaderService().addMediaToQueue(media);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Media added to upload queue.")),
-    );
-  }
-
   void _showPhotoDialog(BuildContext context, CapturedPhoto photo) {
     showDialog(
       context: context,
@@ -206,6 +200,13 @@ class SessionDetailsScreen extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Session loaded and unsent media added to upload queue.")),
       );
+
+      // Navigate to the Master screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MasterScreen()),
+      );
+
 
       // Init upload process
       UploaderService().startUploadingManually();

@@ -18,6 +18,7 @@ class RoleSelectionScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Select Device Role"),
+          automaticallyImplyLeading: false, // Disable the "back" button
         ),
         body: Center(
           child: Column(
