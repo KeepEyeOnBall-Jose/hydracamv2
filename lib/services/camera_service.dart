@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:hydracam/services/session_manager.dart';
 import 'package:hydracam/services/settings_service.dart';
+import 'package:path_provider/path_provider.dart';
 import '../constants.dart';
 import 'log_service.dart';
 
@@ -121,20 +124,22 @@ class CameraService {
       }
 
       final XFile photo = await _controller!.takePicture();
-      LogService.instance.registerLog("Photo taken at path: ${photo.path}");
+      final newPath = await _getSessionMediaPath(photo.name);
+      await File(photo.path).copy(newPath); // Move to session directory
+      LogService.instance.registerLog("Photo saved to session path: $newPath");
 
       // Save to gallery
-      await GallerySaver.saveImage(photo.path, albumName: 'HydraCam');
+      await GallerySaver.saveImage(newPath, albumName: 'HydraCam');
 
       if (onPhotoTaken != null) {
-        onPhotoTaken!(photo.path);
+        onPhotoTaken!(newPath);
       }
 
       if (enableFlash) {
         await _controller?.setFlashMode(FlashMode.off); // Turn off flash after taking the photo
       }
 
-      return photo.path;
+      return newPath;
     } catch (e) {
       LogService.instance.registerLog("Error taking photo: $e");
       return "Error taking photo";
@@ -191,22 +196,26 @@ class CameraService {
       final XFile video = await _controller!.stopVideoRecording();
       videoEndRecordingDate = DateTime.now();
 
+      final newPath = await _getSessionMediaPath(video.name);
+      await File(video.path).copy(newPath); // Move to session directory
+      LogService.instance.registerLog("Video saved to session path: $newPath");
+
       // Announce with flash after stopping (if setting is enabled)
       await announceRecordingWithFlash();
 
       // TODO: ISOLATE FROM MAIN THREAD IF THAT INCREASES PERFORMANCE?
-      LogService.instance.registerLog("Video recorded at path: ${video.path}");
+      LogService.instance.registerLog("Video recorded at path: ${newPath}");
 
       // Save to gallery
-      await GallerySaver.saveVideo(video.path, albumName: 'HydraCam');
+      await GallerySaver.saveVideo(newPath, albumName: 'HydraCam');
 
       if (onVideoRecorded != null) {
-        onVideoRecorded!(video.path);
+        onVideoRecorded!(newPath);
       }
 
       await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off after recording
 
-      return video.path;
+      return newPath;
     } catch (e) {
       LogService.instance.registerLog("Error stopping video recording: $e");
       return "Error stopping video recording";
@@ -263,4 +272,17 @@ class CameraService {
 
   /// Returns the current camera quality.
   CameraQuality get currentQuality => _currentQuality;
+
+
+  /// Function to find session directory to store files
+  /// Directory would be something like /data/user/0/com.amaia23.hydracam/session_<<sessionGuid>>/... in android
+  Future<String> _getSessionMediaPath(String fileName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final sessionDir = Directory('${directory.path}/session_${SessionManager.instance.sessionGuid}');
+    if (!sessionDir.existsSync()) {
+      sessionDir.createSync(recursive: true);
+    }
+    return '${sessionDir.path}/$fileName';
+  }
+
 }

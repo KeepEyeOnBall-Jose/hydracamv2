@@ -221,14 +221,17 @@ class SessionManager extends ChangeNotifier {
   // Method to scan and reconstruct session metadata
   Future<List<String>> scanAndReconstructSessions() async {
     final directory = await getApplicationDocumentsDirectory();
+    print("Scanning directory: ${directory.path}");
     final sessionDirs = Directory(directory.path)
         .listSync()
         .where((entity) => entity is Directory && entity.path.contains('session_'))
         .toList();
 
+    print("Found directories: ${sessionDirs.map((e) => e.path).toList()}");
     List<String> reconstructedSessions = [];
 
     for (var dir in sessionDirs) {
+      print("Checking directory: ${dir.path}");
       final sessionId = dir.path.split('_').last;
       final metadataFile = File('${dir.path}/metadata.json');
 
@@ -239,6 +242,10 @@ class SessionManager extends ChangeNotifier {
       }
 
       try {
+        print("Scanning contents of directory: ${dir.path}");
+        final directoryContents = Directory(dir.path).listSync();
+        print("Contents: ${directoryContents.map((e) => e.path).toList()}");
+
         // Collect photos and videos
         List<CapturedPhoto> photos = [];
         List<CapturedVideo> videos = [];
@@ -254,6 +261,7 @@ class SessionManager extends ChangeNotifier {
             }
 
             if (entity.path.endsWith('.jpg')) {
+              print("Found photo: ${entity.path}");
               photos.add(CapturedPhoto(
                 photoPath: entity.path,
                 slaveDeviceId: "", // Placeholder
