@@ -104,6 +104,7 @@ class _MasterScreenState extends State<MasterScreen> {
   // Method to init a new session
   void _startOrEndSession() async {
     if (sessionActive) {
+      print("end current session");
       // End the session
       _endCurrentSession();
     } else {
@@ -414,7 +415,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
     if (response != null) {
       String sessionGuid = response['guid'];
-      SessionManager.instance.startSession(sessionGuid, deviceType: "Master");
+      SessionManager.instance.startSession(sessionGuid, sessionId, deviceType: "Master");
       _server.startNewSession(sessionGuid); // Notify slaves
 
       LogService.instance.registerLog("Session created with GUID: $sessionGuid");

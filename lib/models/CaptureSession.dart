@@ -28,6 +28,7 @@ class CaptureSession {
   /// If no lists are provided, empty lists are used.
   CaptureSession({
     required this.sessionId,
+    this.sessionGuid,
     required this.startTime,
     this.endTime,
     List<CapturedPhoto>? capturedPhotos,
@@ -48,5 +49,11 @@ class CaptureSession {
   /// Marks the session as ended by setting the `endTime` to the current date and time.
   void endSession() {
     endTime = DateTime.now();
+  }
+
+  /// Updates the `sessionGuid` for the session.
+  /// This can be useful when the GUID is obtained asynchronously or needs to be modified.
+  void updateGuid(String? newGuid) {
+    sessionGuid = newGuid;
   }
 }

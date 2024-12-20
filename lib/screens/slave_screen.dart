@@ -6,6 +6,7 @@ import '../globals.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import '../services/alert_utils.dart';
+import '../services/device_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../services/settings_service.dart';
@@ -59,12 +60,14 @@ class _SlaveScreenState extends State<SlaveScreen> {
       _client = SlaveClient(
         'ws://$masterIp:4040/ws',
         onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
-        onPhotoTaken: (path) {
+        onPhotoTaken: (path) async {
           if (!mounted) return;
           setState(() {
             statusMessage = "Photo taken!";
           });
           LogService.instance.registerLog("Photo taken!!!");
+
+          final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
           // Use the unified dialog function with placeholder metadata to wrap photo into CapturePhoto
           AlertUtils.showMediaDialog(
@@ -74,7 +77,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                 photoData: null,
                 captureDate: DateTime.now(),
                 receivedDate: DateTime.now(),
-                slaveDeviceId: "", // Populate as needed
+                slaveDeviceId: deviceId, // Populate as needed
               ),
               isAutoCloseEnabled: true, // No auto-close for slave
               autoCloseSeconds: secondsToClosePhoto

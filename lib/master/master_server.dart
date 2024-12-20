@@ -292,7 +292,7 @@ class MasterServer {
 
   void startNewSession(String sessionGuid) {
     // Init new session through SessionManager
-    SessionManager.instance.startSession(sessionGuid, deviceType: "Master");
+    SessionManager.instance.startSession(sessionGuid, null, deviceType: "Master");
 
     // Register logs
     LogService.instance.registerLog("New capture session started with GUID: $sessionGuid");

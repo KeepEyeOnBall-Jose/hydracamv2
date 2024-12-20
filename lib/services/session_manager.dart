@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import 'device_service.dart';
 import 'log_service.dart';
 import 'dart:io';
 
@@ -38,11 +39,11 @@ class SessionManager extends ChangeNotifier {
   bool get isSessionActive => _currentSession != null;
 
   /// Lock for updating metadata.json
-  final Completer<void> _metadataUpdateLock = Completer<void>()..complete();
+  Completer<void> _metadataUpdateLock = Completer<void>()..complete();
 
 
   /// Set the session GUID and initialize a new `CaptureSession`.
-  void startSession(String sessionGuid, {required String deviceType}) {
+  void startSession(String sessionGuid, String? sessionId, {required String deviceType}) {
 
     // Reset UploaderService to ensure a clean state for the new session
     UploaderService().reset();
@@ -51,9 +52,11 @@ class SessionManager extends ChangeNotifier {
     _sessionGuid = sessionGuid;
     _deviceType = deviceType;
     _currentSession = CaptureSession(
-      sessionId: sessionGuid,
+      sessionId: sessionId ?? sessionGuid,
+      sessionGuid: sessionGuid,
       startTime: DateTime.now(),
     );
+
 
     // Log session start and notify listeners
     LogService.instance.registerLog("Session started with GUID: $_sessionGuid on device type: $_deviceType");
@@ -62,8 +65,9 @@ class SessionManager extends ChangeNotifier {
 
   /// Ends the current session, clearing data.
   void endSession() async {
-
+print("End session del manager");
     if (_currentSession == null) {
+      print("Ya es null");
       LogService.instance.registerLog("No active session to end.");
       return;
     }
@@ -71,7 +75,9 @@ class SessionManager extends ChangeNotifier {
     // End current session
     _currentSession?.endSession();
     // Update metadata.json file
-    await _safeUpdateMetadata();
+    //await _safeUpdateMetadata(); TODO
+
+    print("Now clean and all that");
     // Clean variables
     _currentSession = null;
     _sessionGuid = null;
@@ -142,11 +148,14 @@ class SessionManager extends ChangeNotifier {
 
   // For writing session metadata
   Future<void> saveSessionMetadata() async {
-    if (_currentSession == null) return;
+    if (_currentSession == null || _sessionGuid == null) {
+      LogService.instance.registerLog("No active session or session GUID is null. Skipping metadata save.");
+      return;
+    }
 
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionId}');
+      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionGuid}');
       if (!sessionDirectory.existsSync()) {
         sessionDirectory.createSync(recursive: true);
       }
@@ -160,12 +169,14 @@ class SessionManager extends ChangeNotifier {
         'deviceType': _deviceType,
         'photos': _currentSession!.capturedPhotos.map((photo) => {
           'photoPath': photo.photoPath,
+          'slaveDeviceId': photo.slaveDeviceId,
           'captureDate': photo.captureDate.toIso8601String(),
           'receivedDate': photo.receivedDate.toIso8601String(),
           'isUploaded': photo.isUploaded,
         }).toList(),
         'videos': _currentSession!.capturedVideos.map((video) => {
           'videoPath': video.videoPath,
+          'slaveDeviceId': video.slaveDeviceId,
           'startRecordingDate': video.startRecordingDate.toIso8601String(),
           'endRecordingDate': video.endRecordingDate.toIso8601String(),
           'receivedDate': video.receivedDate.toIso8601String(),
@@ -181,24 +192,27 @@ class SessionManager extends ChangeNotifier {
   }
 
   // For loading session metadata
-  Future<CaptureSession?> loadSessionMetadata(String sessionId) async {
+  Future<CaptureSession?> loadSessionMetadata(String sessionGuid) async {
+    print("load session metadata");
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final metadataFile = File('${directory.path}/session_$sessionId/metadata.json');
+      final metadataFile = File('${directory.path}/session_$sessionGuid/metadata.json');
       if (!metadataFile.existsSync()) {
-        LogService.instance.registerLog("No metadata file found for session $sessionId");
+        LogService.instance.registerLog("No metadata file found for session $sessionGuid");
         return null;
       }
 
       final metadata = jsonDecode(await metadataFile.readAsString());
+      final String deviceId = await DeviceIdService.getOrCreateDeviceId();
       final session = CaptureSession(
         sessionId: metadata['sessionId'],
+        sessionGuid: metadata['sessionGuid'] ?? sessionGuid, // Correct if null
         startTime: DateTime.parse(metadata['startTime']),
         endTime: metadata['endTime'] != null ? DateTime.parse(metadata['endTime']) : null,
         capturedPhotos: (metadata['photos'] as List<dynamic>).map((photo) {
           return CapturedPhoto(
             photoPath: photo['photoPath'],
-            slaveDeviceId: "", // Placeholder, as device ID may not be stored
+            slaveDeviceId: photo['slaveDeviceId']?.isEmpty ?? true ? deviceId : photo['slaveDeviceId'],
             captureDate: DateTime.parse(photo['captureDate']),
             receivedDate: DateTime.parse(photo['receivedDate']),
             isUploaded: photo['isUploaded'],
@@ -207,7 +221,7 @@ class SessionManager extends ChangeNotifier {
         capturedVideos: (metadata['videos'] as List<dynamic>).map((video) {
           return CapturedVideo(
             videoPath: video['videoPath'],
-            slaveDeviceId: "", // Placeholder
+            slaveDeviceId: video['slaveDeviceId']?.isEmpty ?? true ? deviceId : video['slaveDeviceId'],
             startRecordingDate: DateTime.parse(video['startRecordingDate']),
             endRecordingDate: DateTime.parse(video['endRecordingDate']),
             receivedDate: DateTime.parse(video['receivedDate']),
@@ -216,9 +230,19 @@ class SessionManager extends ChangeNotifier {
         }).toList(),
       );
 
+      // Correct sessionguid if null
+      if (session.sessionGuid == null) {
+        session.sessionGuid = sessionGuid;
+        await saveSessionMetadata(); // Save updated metadata
+        LogService.instance.registerLog("Session GUID was null. Corrected to $sessionGuid and saved.");
+      }
+
       _sessionGuid = metadata['sessionGuid'];
       _deviceType = metadata['deviceType'];
-      LogService.instance.registerLog("Session metadata loaded for session $sessionId");
+
+      notifyListeners();
+
+      LogService.instance.registerLog("Session metadata loaded for session $sessionGuid");
       return session;
     } catch (e) {
       LogService.instance.registerLog("Error loading session metadata: $e");
@@ -257,17 +281,31 @@ class SessionManager extends ChangeNotifier {
 
     for (var dir in sessionDirs) {
       print("Checking directory: ${dir.path}");
-      final sessionId = dir.path.split('_').last;
+      final sessionGuid = dir.path.split('_').last;
       final metadataFile = File('${dir.path}/metadata.json');
 
-      // Skip if metadata already exists
-      if (metadataFile.existsSync()) {
-        LogService.instance.registerLog("Metadata already exists for session: $sessionId");
-        continue;
-      }
-
       try {
+
+        // Skip if metadata already exists
+        if (metadataFile.existsSync()) {
+          final metadata = jsonDecode(await metadataFile.readAsString());
+
+          print("Metadata content for session $sessionGuid:");
+          print(jsonEncode(metadata)); // Convertir a String para imprimir el JSON completo
+
+          // Correct sessionGuid if null
+          if (metadata['sessionGuid'] == null) {
+            metadata['sessionGuid'] = sessionGuid;
+            await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
+            LogService.instance.registerLog("Session GUID in metadata was null. Corrected to $sessionGuid and saved.");
+          }
+
+          reconstructedSessions.add(sessionGuid);
+          continue;
+        }
+
         print("Scanning contents of directory: ${dir.path}");
+        // If there is no metadata, rebuild
         final directoryContents = Directory(dir.path).listSync();
         print("Contents: ${directoryContents.map((e) => e.path).toList()}");
 
@@ -275,6 +313,7 @@ class SessionManager extends ChangeNotifier {
         List<CapturedPhoto> photos = [];
         List<CapturedVideo> videos = [];
         DateTime? earliestDate;
+        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
         for (var entity in Directory(dir.path).listSync()) {
           if (entity is File) {
@@ -289,7 +328,7 @@ class SessionManager extends ChangeNotifier {
               print("Found photo: ${entity.path}");
               photos.add(CapturedPhoto(
                 photoPath: entity.path,
-                slaveDeviceId: "", // Placeholder
+                slaveDeviceId: deviceId,
                 captureDate: fileStat.changed,
                 receivedDate: DateTime.now(),
                 isUploaded: false,
@@ -297,7 +336,7 @@ class SessionManager extends ChangeNotifier {
             } else if (entity.path.endsWith('.mp4')) {
               videos.add(CapturedVideo(
                 videoPath: entity.path,
-                slaveDeviceId: "", // Placeholder
+                slaveDeviceId: deviceId,
                 startRecordingDate: fileStat.changed,
                 endRecordingDate: fileStat.changed,
                 receivedDate: DateTime.now(),
@@ -308,13 +347,14 @@ class SessionManager extends ChangeNotifier {
         }
 
         if (photos.isEmpty && videos.isEmpty) {
-          LogService.instance.registerLog("No media files found in session directory: $sessionId");
+          LogService.instance.registerLog("No media files found in session directory: $sessionGuid");
           continue;
         }
 
         // Create session
         final session = CaptureSession(
-          sessionId: sessionId,
+          sessionId: sessionGuid,
+          sessionGuid: sessionGuid,
           startTime: earliestDate ?? DateTime.now(),
           capturedPhotos: photos,
           capturedVideos: videos,
@@ -322,12 +362,14 @@ class SessionManager extends ChangeNotifier {
 
         // Save metadata
         _currentSession = session;
-        await saveSessionMetadata();
-        reconstructedSessions.add(sessionId);
+        _sessionGuid = sessionGuid;
 
-        LogService.instance.registerLog("Reconstructed session: $sessionId with ${photos.length} photos and ${videos.length} videos.");
+        await saveSessionMetadata();
+        reconstructedSessions.add(sessionGuid);
+
+        LogService.instance.registerLog("Reconstructed session: $sessionGuid with ${photos.length} photos and ${videos.length} videos.");
       } catch (e) {
-        LogService.instance.registerLog("Failed to reconstruct session: $sessionId, Error: $e");
+        LogService.instance.registerLog("Failed to reconstruct session: $sessionGuid, Error: $e");
       }
     }
 
@@ -339,18 +381,31 @@ class SessionManager extends ChangeNotifier {
 
   /// Method to safely update metadata.json, without concurrency errors
   Future<void> _safeUpdateMetadata() async {
-    // Enqueue the task in the metadata update lock
-    final previousTask = _metadataUpdateLock.future;
-    final newTask = Completer<void>();
+return;
+//TODO
+    print("safeupdatemetadata");
 
+    // Si el Completer actual está completo o no inicializado, creamos uno nuevo
+    if (_metadataUpdateLock.isCompleted) {
+      _metadataUpdateLock = Completer<void>();
+    }
+
+    final previousTask = _metadataUpdateLock.future;
+
+    // Crear un nuevo Completer para la nueva tarea
+    final newTask = Completer<void>();
     _metadataUpdateLock.complete(newTask.future);
 
-    await previousTask; // Wait until previous update is finished
+    await previousTask; // Espera a que la tarea anterior termine.
     try {
-      if (_currentSession == null) return;
+      if (_currentSession == null) {
+        print("curent session es null");
+        return;
+      }
 
+      print("guardando metadata");
       final directory = await getApplicationDocumentsDirectory();
-      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionId}');
+      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionGuid}');
       if (!sessionDirectory.existsSync()) {
         sessionDirectory.createSync(recursive: true);
       }
@@ -382,7 +437,11 @@ class SessionManager extends ChangeNotifier {
     } catch (e) {
       LogService.instance.registerLog("Error updating session metadata: $e");
     } finally {
-      newTask.complete(); // Mark task as completed!
+      if (!newTask.isCompleted) {
+        newTask.complete();
+      } // Mark task as completed!
+
+      print("acabao");
     }
   }
 

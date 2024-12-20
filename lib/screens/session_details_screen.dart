@@ -56,7 +56,7 @@ class SessionDetailsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text("Session ID: ${session.sessionId}"),
-          if (session.sessionGuid != null) Text("Session GUID: ${session.sessionGuid}"),
+          Text("Session GUID: ${session.sessionGuid ?? 'Unavailable'}"),
           Text("Start Time: ${session.startTime}"),
           if (session.endTime != null) Text("End Time: ${session.endTime}"),
           Text("Total Photos: ${session.capturedPhotos.length}"),
@@ -184,18 +184,22 @@ class SessionDetailsScreen extends StatelessWidget {
   void _loadSessionAndUploadMedia(BuildContext context) async {
     try {
       // Load session
-      SessionManager.instance.startSession(session.sessionGuid!, deviceType: "Master"); // TODO: Master or the previous one??
+      print("Try to load session. Is session != null : ${session != null}");
+      print("Is guid != null: ${session.sessionGuid != null}");
 
-      // Enqueue upload any media not uploaded
-      for (final photo in session.capturedPhotos) {
-        if (!photo.isUploaded) {
-          UploaderService().addMediaToQueue(photo);
-        }
+      SessionManager.instance.startSession(session.sessionGuid!, null, deviceType: "Master"); // TODO: Master or the previous one??
+
+      final loadedSession = await SessionManager.instance.loadSessionMetadata(session.sessionGuid!);
+
+      if (loadedSession == null) {
+        throw Exception("Failed to load session metadata for GUID: ${session.sessionGuid!}");
       }
-      for (final video in session.capturedVideos) {
-        if (!video.isUploaded) {
-          UploaderService().addMediaToQueue(video);
-        }
+
+      for (final photo in loadedSession.capturedPhotos) {
+        SessionManager.instance.addPhoto(photo);
+      }
+      for (final video in loadedSession.capturedVideos) {
+        SessionManager.instance.addVideo(video);
       }
 
       // Notify user

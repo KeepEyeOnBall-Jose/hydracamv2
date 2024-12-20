@@ -150,7 +150,7 @@ class SlaveClient {
                   String sessionGuid = decodedMessage['sessionGuid'];
                   LogService.instance.registerLog("Session guid: $sessionGuid");
                   if (sessionGuid.isNotEmpty) {
-                    SessionManager.instance.startSession(sessionGuid, deviceType: "Slave"); // Store the session
+                    SessionManager.instance.startSession(sessionGuid, null, deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
                 }
@@ -235,7 +235,7 @@ class SlaveClient {
           } else if (type == 'sessionStarted' || type == 'sessionStatus') {
             // Handle session start/status
             final String sessionGuid = decodedMessage['sessionGuid'];
-            SessionManager.instance.startSession(sessionGuid, deviceType: "Slave");
+            SessionManager.instance.startSession(sessionGuid, null, deviceType: "Slave");
             notifyReadyToTransmit(sessionGuid);
           } else if (type == 'sessionEnded') {
             // Handle session end

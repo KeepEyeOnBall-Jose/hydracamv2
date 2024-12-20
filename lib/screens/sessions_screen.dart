@@ -11,7 +11,7 @@ class SessionsScreen extends StatelessWidget {
 
   void _loadSession(BuildContext context, Map<String, dynamic> session) {
     // Start a session with SessionManager
-    SessionManager.instance.startSession(session['guid'], deviceType: "Master");
+    SessionManager.instance.startSession(session['guid'], session['id'], deviceType: "Master");
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Session loaded: ${session['sessionId']}")),
     );
