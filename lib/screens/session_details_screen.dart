@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/CaptureSession.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import '../services/alert_utils.dart';
+import '../services/session_manager.dart';
 import '../services/uploader_service.dart';
 
 class SessionDetailsScreen extends StatelessWidget {
@@ -110,12 +112,22 @@ class SessionDetailsScreen extends StatelessWidget {
           Text("Status: $uploadStatus"),
         ],
       ),
-      trailing: !media.isUploaded
-          ? IconButton(
-        icon: const Icon(Icons.cloud_off, color: Colors.red),
-        onPressed: () => _uploadMedia(media, context),
-      )
-          : const Icon(Icons.cloud_done, color: Colors.blue),
+      trailing: IconButton(
+        icon: media.isUploaded
+            ? const Icon(Icons.cloud_done, color: Colors.blue)
+            : const Icon(Icons.cloud_upload_outlined, color: Colors.red),
+        onPressed: () {
+          if (media.isUploaded) {
+            // Show info alert for already uploaded media
+            AlertUtils.showUploadedMediaAlert(context, path);
+          } else {
+            // Ask to load session and upload all unsent media
+            AlertUtils.showUploadAllMediaAlert(
+              context,() => _loadSessionAndUploadMedia(context),
+            );
+          }
+        },
+      ),
       onTap: () {
         if (isPhoto) {
           _showPhotoDialog(context, media);
@@ -166,4 +178,38 @@ class SessionDetailsScreen extends StatelessWidget {
       },
     );
   }
+
+
+  // TODO: Extract from here
+  void _loadSessionAndUploadMedia(BuildContext context) async {
+    try {
+      // Load session
+      SessionManager.instance.startSession(session.sessionGuid!, deviceType: "Master"); // TODO: Master or the previous one??
+
+      // Enqueue upload any media not uploaded
+      for (final photo in session.capturedPhotos) {
+        if (!photo.isUploaded) {
+          UploaderService().addMediaToQueue(photo);
+        }
+      }
+      for (final video in session.capturedVideos) {
+        if (!video.isUploaded) {
+          UploaderService().addMediaToQueue(video);
+        }
+      }
+
+      // Notify user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Session loaded and unsent media added to upload queue.")),
+      );
+
+      // Init upload process
+      UploaderService().startUploadingManually();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to load session: $e")),
+      );
+    }
+  }
+
 }

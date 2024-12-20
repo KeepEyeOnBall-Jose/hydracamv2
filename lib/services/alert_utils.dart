@@ -285,6 +285,52 @@ class AlertUtils {
     );
   }
 
+  static void showUploadedMediaAlert(BuildContext context, String mediaPath) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Media Already Uploaded"),
+          content: Text("The file at $mediaPath has already been uploaded."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static void showUploadAllMediaAlert(
+      BuildContext context, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Upload Unsent Media"),
+          content: const Text(
+              "Do you want to load this session and upload all unsent media?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                onConfirm(); // Execute the action
+              },
+              child: const Text("Confirm"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }
 
 // Use example
