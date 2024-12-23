@@ -28,17 +28,24 @@ class StorageService {
   /// Prevent instantiation.
   StorageService._();
 
+  /// Critical threshold at which recording stops automatically (in gigabytes).
+  static double _criticalStorageThreshold = 0.5; // Default critical threshold: 0.5GB
+
+
   /// Initialize the StorageService.
   ///
   /// [scaffoldMessengerKey]: A GlobalKey<ScaffoldMessengerState> to display SnackBars.
   /// [lowStorageThreshold]: Storage threshold in GB below which the warning is shown. Defaults to 2GB.
+  /// [criticalStorageThreshold]: Threshold in GB for triggering critical storage actions. Defaults to 0.5GB
   static void initialize({
     required GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey,
     double lowStorageThreshold = 2.0,
+    double criticalStorageThreshold = 0.5,
     required Function() onCriticalStorageCallback,
   }) {
     _scaffoldMessengerKey = scaffoldMessengerKey;
     _lowStorageThreshold = lowStorageThreshold;
+    _criticalStorageThreshold = criticalStorageThreshold;
     _onCriticalStorageCallback = onCriticalStorageCallback;
     _startMonitoringStorage();
   }
@@ -63,20 +70,25 @@ class StorageService {
 
   /// Handles the available storage level and determines whether to show a warning.
   static void _handleStorageLevel(double availableStorage) {
-    if (availableStorage < _lowStorageThreshold) {
-      final now = DateTime.now();
+    final now = DateTime.now();
 
+    // Check critical threshold
+    if (availableStorage < _criticalStorageThreshold) {
       if (!_blockRecording) {
         _blockRecording = true;
-        _onCriticalStorageCallback?.call(); // Stop recording callback
+        _onCriticalStorageCallback?.call(); // Trigger critical storage callback
       }
+    }
 
+    // Check low storage warning threshold
+    if (availableStorage < _lowStorageThreshold) {
       if (_shouldShowWarning(now)) {
         _showLowStorageWarning(availableStorage);
         _lastWarningShownTime = now;
       }
     } else {
-      _blockRecording = false; // Allow recording if storage improves
+      // Reset block flag if storage improves
+      _blockRecording = false;
     }
   }
 
