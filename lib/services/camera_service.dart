@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hydracam/services/session_manager.dart';
 import 'package:hydracam/services/settings_service.dart';
+import 'package:hydracam/services/storage_service.dart';
 import 'package:path_provider/path_provider.dart';
 import '../constants.dart';
 import 'log_service.dart';
@@ -169,6 +170,16 @@ class CameraService {
   ///
   /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
   Future<void> startRecordingVideo({bool enableFlash = false}) async {
+    // Check if storage is critically low before proceeding
+    if (StorageService.isRecordingBlocked) {
+      LogService.instance.registerLog("Cannot start recording: Storage is critically low.");
+
+      // Notify user
+      StorageService.showNotification("Cannot start recording: Storage is critically low.");
+
+      return;
+    }
+    // Continue
     try {
       await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
 

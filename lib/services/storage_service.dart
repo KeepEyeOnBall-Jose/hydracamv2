@@ -21,6 +21,10 @@ class StorageService {
   /// Minimum interval to re-show warning if the storage remains low.
   static const Duration _reshowInterval = Duration(minutes: 5);
 
+  /// Flag and callback to stop recording when storage is critically low
+  static bool _blockRecording = false; // Prevents further recording if storage is critical
+  static Function()? _onCriticalStorageCallback; // Callback to stop recording
+
   /// Prevent instantiation.
   StorageService._();
 
@@ -31,9 +35,11 @@ class StorageService {
   static void initialize({
     required GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey,
     double lowStorageThreshold = 2.0,
+    required Function() onCriticalStorageCallback,
   }) {
     _scaffoldMessengerKey = scaffoldMessengerKey;
     _lowStorageThreshold = lowStorageThreshold;
+    _onCriticalStorageCallback = onCriticalStorageCallback;
     _startMonitoringStorage();
   }
 
@@ -60,25 +66,27 @@ class StorageService {
     if (availableStorage < _lowStorageThreshold) {
       final now = DateTime.now();
 
+      if (!_blockRecording) {
+        _blockRecording = true;
+        _onCriticalStorageCallback?.call(); // Stop recording callback
+      }
+
       if (_shouldShowWarning(now)) {
         _showLowStorageWarning(availableStorage);
         _lastWarningShownTime = now;
       }
+    } else {
+      _blockRecording = false; // Allow recording if storage improves
     }
   }
+
+  static bool get isRecordingBlocked => _blockRecording;
 
   /// Determines if a low storage warning should be shown based on:
   /// - Whether enough time has passed since the last warning.
   static bool _shouldShowWarning(DateTime now) {
-    if (_lastWarningShownTime == null) {
-      return true;
-    }
-
-    if (now.difference(_lastWarningShownTime!) > _reshowInterval) {
-      return true;
-    }
-
-    return false;
+    return _lastWarningShownTime == null ||
+        now.difference(_lastWarningShownTime!) > _reshowInterval;
   }
 
   /// Displays the low storage warning SnackBar.
@@ -110,6 +118,20 @@ class StorageService {
     );
 
     messenger.showSnackBar(snackBar);
+  }
+
+  /// Displays a custom notification. Tipially invoked from camera service on low space.
+  static void showNotification(String message) {
+    final messenger = _scaffoldMessengerKey?.currentState;
+    if (messenger != null) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.red.shade100,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
   }
 
   /// Dispose of the timer when the app is closed or service is no longer needed.

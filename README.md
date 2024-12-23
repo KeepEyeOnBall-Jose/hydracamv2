@@ -104,6 +104,7 @@ lib/
 │   ├── scheduled_task_service.dart # Manages scheduled tasks, such as delayed executions.
 │   ├── session_manager.dart        # Handles session logic, shared by master and slaves.
 │   ├── settings_service.dart       # Manages read/write configurations over the app.
+│   ├── storage_service.dart        # Monitors device free storage and shows alerts for low space.
 │   └── uploader_service.dart       # Manages upload queue and retries for media files.
 ├── slave/
 │   ├── master_discovery.dart       # Finds and connects to the master device.
