@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydracam/services/battery_service.dart';
+import 'package:hydracam/services/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:hydracam/screens/slave_screen.dart';
 //import 'package:sport_cam_sync/screens/role_selection_screen.dart';
@@ -46,6 +47,13 @@ void main() async {
   BatteryService.initialize(
     scaffoldMessengerKey: scaffoldMessengerKey,
   );
+
+  // Init StorageService
+  StorageService.initialize(
+    scaffoldMessengerKey: scaffoldMessengerKey,
+    lowStorageThreshold: 1.5, // Optional custom threshold in GB
+  );
+
 
   runApp(
     ChangeNotifierProvider(
