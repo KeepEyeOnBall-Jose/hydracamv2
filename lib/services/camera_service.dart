@@ -6,6 +6,8 @@ import 'package:hydracam/services/settings_service.dart';
 import 'package:hydracam/services/storage_service.dart';
 import 'package:path_provider/path_provider.dart';
 import '../constants.dart';
+import '../models/CapturedVideo.dart';
+import 'device_service.dart';
 import 'log_service.dart';
 
 /// CameraService - Manages camera operations such as taking photos and recording videos.
@@ -232,6 +234,37 @@ class CameraService {
       return "Error stopping video recording";
     }
   }
+
+  /// Forces stop recording in case we reached full storage
+  Future<void> forceStopRecordingDueToStorage() async {
+    try {
+      // Verify if the camera is actually recording before stopping
+      if (_controller != null && _controller!.value.isRecordingVideo) {
+        LogService.instance.registerLog("Stopping recording due to critical storage.");
+
+        // Stop recording
+        final videoPath = await stopRecordingVideo();
+
+        // Notify user
+        StorageService.showNotification("Recording stopped due to low storage.");
+
+        // Register video in SessionManager
+        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+        final capturedVideo = CapturedVideo(
+          videoData: null,
+          videoPath: videoPath,
+          slaveDeviceId: deviceId,
+          startRecordingDate: videoStartRecordingDate!,
+          endRecordingDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+        );
+        SessionManager.instance.addVideo(capturedVideo);
+      }
+    } catch (e) {
+      LogService.instance.registerLog("Error force-stopping recording: $e");
+    }
+  }
+
 
   /// Stops the camera and disposes of its resources.
   Future<void> stopCamera() async {

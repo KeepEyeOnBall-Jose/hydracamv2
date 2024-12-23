@@ -54,10 +54,9 @@ void main() async {
     scaffoldMessengerKey: scaffoldMessengerKey,
     lowStorageThreshold: 1.5, // Optional custom threshold in GB
     onCriticalStorageCallback: () {
-      // TODO: Define la lógica para manejar almacenamiento crítico
-      // Por ejemplo, detén la grabación si está activa
+      // Callback: force stop recording if low storage
       LogService.instance.registerLog("Critical storage: triggering recording stop.");
-      CameraService().stopRecordingVideo(); // TODO: Maybe something different
+      CameraService().forceStopRecordingDueToStorage();
     },
   );
 
