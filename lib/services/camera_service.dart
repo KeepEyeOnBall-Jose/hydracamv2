@@ -238,6 +238,9 @@ class CameraService {
   /// Forces stop recording in case we reached full storage
   Future<void> forceStopRecordingDueToStorage() async {
     try {
+
+      await Future.delayed(const Duration(seconds:10));
+
       // Verify if the camera is actually recording before stopping
       if (_controller != null && _controller!.value.isRecordingVideo) {
         LogService.instance.registerLog("Stopping recording due to critical storage.");

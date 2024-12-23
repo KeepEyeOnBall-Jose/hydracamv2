@@ -178,9 +178,6 @@ class SessionDetailsScreen extends StatelessWidget {
   void _loadSessionAndUploadMedia(BuildContext context) async {
     try {
       // Load session
-      print("Try to load session. Is session != null : ${session != null}");
-      print("Is guid != null: ${session.sessionGuid != null}");
-
       SessionManager.instance.startSession(session.sessionGuid!, null, deviceType: "Master"); // TODO: Master or the previous one??
 
       final loadedSession = await SessionManager.instance.loadSessionMetadata(session.sessionGuid!);

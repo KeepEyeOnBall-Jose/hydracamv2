@@ -52,8 +52,8 @@ void main() async {
   // Init StorageService
   StorageService.initialize(
     scaffoldMessengerKey: scaffoldMessengerKey,
-    lowStorageThreshold: 1.5,       // Custom warning threshold
-    criticalStorageThreshold: 0.5,  // Custom critical threshold
+    lowStorageThreshold: 1.5,       // Custom warning threshold 1.5 GB
+    criticalStorageThreshold: 0.5,  // Custom critical threshold 0.5 GB
     onCriticalStorageCallback: () {
       // Callback: force stop recording if low storage
       LogService.instance.registerLog("Critical storage: triggering recording stop.");

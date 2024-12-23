@@ -17,6 +17,7 @@ import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../services/settings_service.dart';
+import '../services/storage_service.dart';
 import '../services/user_service.dart';
 import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/add_gallery_media_button.dart';
@@ -104,7 +105,6 @@ class _MasterScreenState extends State<MasterScreen> {
   // Method to init a new session
   void _startOrEndSession() async {
     if (sessionActive) {
-      print("end current session");
       // End the session
       _endCurrentSession();
     } else {
@@ -149,6 +149,15 @@ class _MasterScreenState extends State<MasterScreen> {
   }
   */
   void _toggleRecording() async {
+
+    if (StorageService.isRecordingBlocked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Cannot start recording: Storage is critically low.")),
+      );
+      LogService.instance.registerLog("Recording toggle blocked due to critical storage.");
+      return;
+    }
+
     LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
 
     // Get timer duration

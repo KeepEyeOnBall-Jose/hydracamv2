@@ -61,9 +61,7 @@ class SessionManager extends ChangeNotifier {
 
   /// Ends the current session, clearing data.
   void endSession() async {
-print("End session del manager");
     if (_currentSession == null) {
-      print("Ya es null");
       LogService.instance.registerLog("No active session to end.");
       return;
     }
@@ -73,7 +71,6 @@ print("End session del manager");
     // Update metadata.json file
     await updateMetadata();
 
-    print("Now clean and all that");
     // Clean variables
     _currentSession = null;
     _sessionGuid = null;
@@ -189,7 +186,6 @@ print("End session del manager");
 
   // For loading session metadata
   Future<CaptureSession?> loadSessionMetadata(String sessionGuid) async {
-    print("load session metadata");
     try {
       final directory = await getApplicationDocumentsDirectory();
       final metadataFile = File('${directory.path}/session_$sessionGuid/metadata.json');
@@ -266,17 +262,14 @@ print("End session del manager");
 
 
     final directory = await getApplicationDocumentsDirectory();
-    print("Scanning directory: ${directory.path}");
     final sessionDirs = Directory(directory.path)
         .listSync()
         .where((entity) => entity is Directory && entity.path.contains('session_'))
         .toList();
 
-    print("Found directories: ${sessionDirs.map((e) => e.path).toList()}");
     List<String> reconstructedSessions = [];
 
     for (var dir in sessionDirs) {
-      print("Checking directory: ${dir.path}");
       final sessionGuid = dir.path.split('_').last;
       final metadataFile = File('${dir.path}/metadata.json');
 
@@ -286,7 +279,6 @@ print("End session del manager");
         if (metadataFile.existsSync()) {
           final metadata = jsonDecode(await metadataFile.readAsString());
 
-          print("Metadata content for session $sessionGuid:");
           print(jsonEncode(metadata)); // Convertir a String para imprimir el JSON completo
 
           // Correct sessionGuid if null
@@ -300,10 +292,8 @@ print("End session del manager");
           continue;
         }
 
-        print("Scanning contents of directory: ${dir.path}");
         // If there is no metadata, rebuild
         final directoryContents = Directory(dir.path).listSync();
-        print("Contents: ${directoryContents.map((e) => e.path).toList()}");
 
         // Collect photos and videos
         List<CapturedPhoto> photos = [];
@@ -321,7 +311,6 @@ print("End session del manager");
             }
 
             if (entity.path.endsWith('.jpg')) {
-              print("Found photo: ${entity.path}");
               photos.add(CapturedPhoto(
                 photoPath: entity.path,
                 slaveDeviceId: deviceId,
@@ -380,11 +369,9 @@ print("End session del manager");
   Future<void> updateMetadata() async {
     try {
       if (_currentSession == null || _sessionGuid == null) {
-        print("No active session or session GUID is null. Skipping metadata update.");
         return;
       }
 
-      print("Saving metadata...");
       final directory = await getApplicationDocumentsDirectory();
       final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionGuid}');
       if (!sessionDirectory.existsSync()) {

@@ -70,10 +70,14 @@ class StorageService {
 
   /// Handles the available storage level and determines whether to show a warning.
   static void _handleStorageLevel(double availableStorage) {
+
+    double availableStorageGB = availableStorage / 1024; // Convert MB to GB
+
+    print("Storage level: $availableStorageGB GB");
     final now = DateTime.now();
 
     // Check critical threshold
-    if (availableStorage < _criticalStorageThreshold) {
+    if (availableStorageGB < _criticalStorageThreshold) {
       if (!_blockRecording) {
         _blockRecording = true;
         _onCriticalStorageCallback?.call(); // Trigger critical storage callback
@@ -81,9 +85,9 @@ class StorageService {
     }
 
     // Check low storage warning threshold
-    if (availableStorage < _lowStorageThreshold) {
+    if (availableStorageGB < _lowStorageThreshold) {
       if (_shouldShowWarning(now)) {
-        _showLowStorageWarning(availableStorage);
+        _showLowStorageWarning(availableStorageGB);
         _lastWarningShownTime = now;
       }
     } else {
