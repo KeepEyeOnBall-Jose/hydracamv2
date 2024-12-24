@@ -121,33 +121,6 @@ class _MasterScreenState extends State<MasterScreen> {
     }
   }
 
-/*
-  void _toggleRecording() async {
-    LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
-
-    if (isRecording) {
-      // Stop recording
-      if (await SettingsService.getMasterShouldRecord()) {
-        await _stopMasterRecordingVideo(); // Command is already sent from here
-      } else {
-        _server.sendCommand('stopRecordingVideo'); // Command sent explicitly
-        setState(() {
-          isRecording = false;
-        });
-      }
-    } else {
-      // Start recording
-      _server.sendCommand('startRecordingVideo');
-      if (await SettingsService.getMasterShouldRecord()) {
-        await _startMasterRecordingVideo();
-      } else {
-        setState(() {
-          isRecording = true;
-        });
-      }
-    }
-  }
-  */
   void _toggleRecording() async {
 
     if (StorageService.isRecordingBlocked) {
@@ -275,43 +248,6 @@ class _MasterScreenState extends State<MasterScreen> {
       }
     }
   }
-
-  /*
-  void _takeRealPhoto() async {
-    // Send command to slaves for taking pics
-    _server.sendCommand('takePhoto');
-
-    // Verify if master should also take a pic
-    bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
-    if (shouldMasterRecord) {
-      final String photoPath = await _server.cameraService.takePhoto();
-
-      // Get the device ID
-      final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-
-      // Add photo to current session
-      final capturedPhoto = CapturedPhoto(
-        photoData: null,
-        photoPath: photoPath,
-        captureDate: DateTime.now(),
-        receivedDate: DateTime.now(),
-        slaveDeviceId: deviceId,
-      );
-
-      SessionManager.instance.addPhoto(capturedPhoto);
-
-      setState(() {
-      });
-
-      // Show pop up for preview
-      _showPhotoDialog(capturedPhoto, autoClose: true);
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Photo command sent to slaves")),
-    );
-  }
-  */
 
   void _takeRealPhoto() async {
 
