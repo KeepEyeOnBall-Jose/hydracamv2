@@ -26,7 +26,7 @@ class _MediaSelectionScreenState extends State<MediaSelectionScreen> {
             },
             child: const Text(
               'Done',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             ),
           ),
         ],

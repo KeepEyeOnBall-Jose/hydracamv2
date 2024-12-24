@@ -45,19 +45,9 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       return;
     }
 
-    final hasPermission = await _checkGalleryPermissions();
-    if (!hasPermission) {
-      _showPermissionsAlert();
-      return;
-    }
-
     _openFilterDialog();
   }
 
-  Future<bool> _checkGalleryPermissions() async {
-    PermissionState permission = await PhotoManager.requestPermissionExtend();
-    return true;//permission.isAuth;
-  }
 
   void _showNoSessionAlert() {
     showDialog(
@@ -70,32 +60,6 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showPermissionsAlert() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Permissions Required'),
-          content: const Text(
-              'Please grant gallery permissions to access media. Go to app settings to enable permissions.'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                await PhotoManager.openSetting();
-              },
-              child: const Text('Open Settings'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
             ),
           ],
         );
@@ -147,14 +111,28 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       filterOption: options,
     );
 
+    final Set<String> uniqueIds = {}; // Set to track unique asset IDs
     List<AssetEntity> allMedia = [];
+
     for (var album in albums) {
-      allMedia.addAll(await album.getAssetListPaged(page: 0, size: 100));
-      LogService.instance.registerLog('Album: ${album.name}');
+      final assets = await album.getAssetListPaged(page: 0, size: 100);
+
+      for (var asset in assets) {
+        if (!uniqueIds.contains(asset.id)) {
+          uniqueIds.add(asset.id); // Add the asset's ID to the set
+          allMedia.add(asset); // Add the unique asset to the media list
+        }
+      }
+
+      LogService.instance.registerLog('Album: ${album.name}, Assets Processed: ${assets.length}');
     }
+
+    // Sort media by creation date (most recent first)
+    allMedia.sort((a, b) => b.createDateTime.compareTo(a.createDateTime));
 
     return allMedia;
   }
+
 
   Future<void> _queryAndSelectMedia(MediaFilters filters) async {
     List<AssetEntity> media = await _fetchMedia(filters);
