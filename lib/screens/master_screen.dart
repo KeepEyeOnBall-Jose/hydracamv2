@@ -54,6 +54,12 @@ class _MasterScreenState extends State<MasterScreen> {
     return _server.getConnectedDeviceIds();
   }
 
+  // Processing indicators to prevent user from spamming buttons
+  bool isProcessingEndSession = false;    // To block button "End Session"
+  bool isProcessingStartSession = false;  // To block button "Start Session"
+  bool isProcessingTakePhoto = false;     // To block button "Take Photo"
+
+
   @override
   void initState() {
     super.initState();
@@ -251,59 +257,72 @@ class _MasterScreenState extends State<MasterScreen> {
 
   void _takeRealPhoto() async {
 
-    final timerDuration = await SettingsService.getTimerDuration();
-    final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
+    if (isProcessingTakePhoto) return; // Prevent user from spamming
 
-    // Show countdown timer while waiting for the scheduled time
-    if (context.mounted){
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AnimatedCountdownTimer(
-          duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-          onComplete: () => Navigator.of(context).pop(),
-        ),
-      );
+    setState(() {
+      isProcessingTakePhoto = true; // Block the button
+    });
+
+    try{
+      final timerDuration = await SettingsService.getTimerDuration();
+      final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
+
+      // Show countdown timer while waiting for the scheduled time
+      if (context.mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AnimatedCountdownTimer(
+            duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
+            onComplete: () => Navigator.of(context).pop(),
+          ),
+        );
+      }
+
+      // Send the scheduled command to slaves
+      _server.scheduleCommand('takePhoto', scheduledTime);
+
+      // Master also waits until the scheduled time before executing
+      await Future.delayed(scheduledTime.difference(DateTime.now()));
+
+      // TODO: We should know before waiting? or we better wait even if we don't take pic?
+      // Verify if master should also take a pic
+      bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
+      if (shouldMasterRecord) {
+        final String photoPath = await _server.cameraService.takePhoto();
+
+        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
+        final capturedPhoto = CapturedPhoto(
+          photoData: null,
+          photoPath: photoPath,
+          captureDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+          slaveDeviceId: deviceId,
+        );
+
+        SessionManager.instance.addPhoto(capturedPhoto);
+
+        setState(() {});
+
+        _showPhotoDialog(capturedPhoto, autoClose: true);
+      }
+
+      final currentContext = context;
+
+      if (currentContext.mounted){
+        ScaffoldMessenger.of(currentContext).showSnackBar(
+          SnackBar(content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
+        );
+      }
+
+      LogService.instance.registerLog("Photo command executed by master at ${DateTime.now()}");
     }
-
-    // Send the scheduled command to slaves
-    _server.scheduleCommand('takePhoto', scheduledTime);
-
-    // Master also waits until the scheduled time before executing
-    await Future.delayed(scheduledTime.difference(DateTime.now()));
-
-    // TODO: We should know before waiting? or we better wait even if we don't take pic?
-    // Verify if master should also take a pic
-    bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
-    if (shouldMasterRecord) {
-      final String photoPath = await _server.cameraService.takePhoto();
-
-      final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-
-      final capturedPhoto = CapturedPhoto(
-        photoData: null,
-        photoPath: photoPath,
-        captureDate: DateTime.now(),
-        receivedDate: DateTime.now(),
-        slaveDeviceId: deviceId,
-      );
-
-      SessionManager.instance.addPhoto(capturedPhoto);
-
-      setState(() {});
-
-      _showPhotoDialog(capturedPhoto, autoClose: true);
+    finally{
+      setState(() {
+        isProcessingTakePhoto = false; // Unlock button
+      });
     }
-
-    final currentContext = context;
-
-    if (currentContext.mounted){
-      ScaffoldMessenger.of(currentContext).showSnackBar(
-        SnackBar(content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
-      );
-    }
-
-    LogService.instance.registerLog("Photo command executed by master at ${DateTime.now()}");
   }
 
 
@@ -345,87 +364,115 @@ class _MasterScreenState extends State<MasterScreen> {
 
 
   Future<void> _createSession() async {
-    var sessionId = DateTime.now().toIso8601String();
 
-    // Get the user GUID if logged in
-    String? userGuid = UserService().guid;
+    if (isProcessingStartSession) return; // Prevent user from spamming
 
-    var response = await _apiService.createSession(
-      sessionId,
-      courtGuid: selectedCourtGuid,
-      userGuid: userGuid, // Pass the user GUID if available
-    );
+    setState(() {
+      isProcessingStartSession = true; // Block the button
+    });
 
-    LogService.instance.registerLog("Response to create session: $response");
+    try{
+      var sessionId = DateTime.now().toIso8601String();
 
-    if (response != null) {
-      String sessionGuid = response['guid'];
-      SessionManager.instance.startSession(sessionGuid, sessionId, deviceType: "Master");
-      _server.startNewSession(sessionGuid); // Notify slaves
+      // Get the user GUID if logged in
+      String? userGuid = UserService().guid;
 
-      LogService.instance.registerLog("Session created with GUID: $sessionGuid");
+      var response = await _apiService.createSession(
+        sessionId,
+        courtGuid: selectedCourtGuid,
+        userGuid: userGuid, // Pass the user GUID if available
+      );
 
-      setState(() {});
-      if (context.mounted){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Session created successfully: $sessionGuid")),
-        );
+      LogService.instance.registerLog("Response to create session: $response");
+
+      if (response != null) {
+        String sessionGuid = response['guid'];
+        SessionManager.instance.startSession(sessionGuid, sessionId, deviceType: "Master");
+        _server.startNewSession(sessionGuid); // Notify slaves
+
+        LogService.instance.registerLog("Session created with GUID: $sessionGuid");
+
+        setState(() {});
+        if (context.mounted){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Session created successfully: $sessionGuid")),
+          );
+        }
+      } else {
+        if (context.mounted){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Failed to create session")),
+          );
+        }
       }
-    } else {
-      if (context.mounted){
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to create session")),
-        );
-      }
+    }
+    finally{
+      setState(() {
+        isProcessingStartSession = false; // Desbloquea el botón
+      });
     }
   }
 
 
   void _endCurrentSession() async {
-    bool confirmEnd = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("End Current Session"),
-          content: const Text("Are you sure you want to end the current session?"),
-          actions: [
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop(false); // Dont end
-              },
-            ),
-            TextButton(
-              child: const Text("End Session"),
-              onPressed: () {
-                Navigator.of(context).pop(true); // Confirm end
-              },
-            ),
-          ],
-        );
-      },
-    );
 
-    if (confirmEnd) {
-      // Call API method endSession
-      if (SessionManager.instance.currentSession != null) {
-        bool success = await _apiService.endSession(SessionManager.instance.sessionGuid!);
-        if (success) {
-          _server.endCurrentSession(); // End locally
-          setState((){});
-          if (context.mounted){
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Capture session ended")),
-            );
-          }
-        } else {
-          if (context.mounted){
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Failed to end session on the server")),
-            );
+    if (isProcessingEndSession) return; // Prevent spamming
+
+    setState(() {
+      isProcessingEndSession = true; // Block button
+    });
+
+    try{
+      bool? confirmEnd = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("End Current Session"),
+            content: const Text("Are you sure you want to end the current session?"),
+            actions: [
+              TextButton(
+                child: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Dont end
+                },
+              ),
+              TextButton(
+                child: const Text("End Session"),
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Confirm end
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirmEnd!= null && confirmEnd) {
+        // Call API method endSession
+        if (SessionManager.instance.currentSession != null) {
+          bool success = await _apiService.endSession(SessionManager.instance.sessionGuid!);
+          if (success) {
+            _server.endCurrentSession(); // End locally
+            setState((){});
+            if (context.mounted){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Capture session ended")),
+              );
+            }
+          } else {
+            if (context.mounted){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Failed to end session on the server")),
+              );
+            }
           }
         }
       }
+    }
+    finally {
+      setState(() {
+        isProcessingEndSession = false; // Unlock button
+      });
     }
   }
 
@@ -507,8 +554,14 @@ class _MasterScreenState extends State<MasterScreen> {
                 SizedBox(
                   width: buttonWidth,
                   child: ElevatedButton(
-                    onPressed: _startOrEndSession, // Always clickable
-                    child: const Text("Start Session"),
+                    onPressed: isProcessingStartSession ? null : _startOrEndSession,
+                    child: isProcessingStartSession
+                        ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                    )
+                        : const Text("Start Session"),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -567,8 +620,14 @@ class _MasterScreenState extends State<MasterScreen> {
         SizedBox(
           width: buttonWidth,
           child: ElevatedButton(
-            onPressed: sessionGuid != null ? _takeRealPhoto : null,
-            child: const Text("Take Photo"),
+            onPressed: sessionGuid != null && !isProcessingTakePhoto ? _takeRealPhoto : null,
+            child: isProcessingTakePhoto
+                ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+            )
+                : const Text("Take Photo"),
           ),
         ),
         SizedBox(height: buttonDistance),
@@ -586,9 +645,15 @@ class _MasterScreenState extends State<MasterScreen> {
         SizedBox(
           width: buttonWidth,
           child: ElevatedButton(
-            onPressed: sessionGuid != null ? _startOrEndSession : null,
+            onPressed: isProcessingEndSession || sessionGuid == null ? null : _endCurrentSession,
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text("End Session"),
+            child: isProcessingEndSession
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                  )
+                : const Text("End Session"),
           ),
         ),
         SizedBox(height: buttonDistance),
