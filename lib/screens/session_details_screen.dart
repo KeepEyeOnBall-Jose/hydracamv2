@@ -26,7 +26,7 @@ class SessionDetailsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Session metadata
-          _buildSessionMetadata(),
+          _buildSessionMetadata(context),
 
           const Divider(),
 
@@ -45,27 +45,83 @@ class SessionDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSessionMetadata() {
+  Widget _buildSessionMetadata(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Session Details",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Session Details",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text("Session ID: ${session.sessionId}"),
+                Text("Session GUID: ${session.sessionGuid ?? 'Unavailable'}"),
+                Text("Start Time: ${session.startTime}"),
+                if (session.endTime != null) Text("End Time: ${session.endTime}"),
+                Text("Total Photos: ${session.capturedPhotos.length}"),
+                Text("Total Videos: ${session.capturedVideos.length}"),
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          Text("Session ID: ${session.sessionId}"),
-          Text("Session GUID: ${session.sessionGuid ?? 'Unavailable'}"),
-          Text("Start Time: ${session.startTime}"),
-          if (session.endTime != null) Text("End Time: ${session.endTime}"),
-          Text("Total Photos: ${session.capturedPhotos.length}"),
-          Text("Total Videos: ${session.capturedVideos.length}"),
+          // Compact button with icon
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.file_download_outlined, color: Colors.blue),
+              tooltip: 'Load Session',
+              onPressed: () => _loadSessionWithoutUploading(context),
+            ),
+          ),
         ],
       ),
     );
   }
+
+  void _loadSessionWithoutUploading(BuildContext context) async {
+    try {
+      // Jut load session without uploading anything
+      SessionManager.instance.startSession(session.sessionGuid!, null, deviceType: "Master");
+
+      final loadedSession = await SessionManager.instance.loadSessionMetadata(session.sessionGuid!);
+
+      if (loadedSession == null) {
+        throw Exception("Failed to load session metadata for GUID: ${session.sessionGuid!}");
+      }
+
+      for (final photo in loadedSession.capturedPhotos) {
+        SessionManager.instance.addPhoto(photo);
+      }
+      for (final video in loadedSession.capturedVideos) {
+        SessionManager.instance.addVideo(video);
+      }
+
+      // Show confirmation
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Session loaded successfully.")),
+      );
+
+      // Redirect to main page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MasterScreen()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to load session: $e")),
+      );
+    }
+  }
+
+
 
   Widget _buildMediaSection(String title, List<dynamic> mediaList, BuildContext context) {
     if (mediaList.isEmpty) {
