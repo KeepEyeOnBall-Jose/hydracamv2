@@ -6,6 +6,10 @@ import '../widgets/camera_preview_widget.dart';
 import 'animated_countdown_timer.dart';
 
 class MasterVideoRecordingScreen extends StatefulWidget {
+
+  static final GlobalKey<NavigatorState> recordingNavigatorKey = GlobalKey<NavigatorState>();
+
+
   final CameraService cameraService;
   final Future<CapturedVideo> Function() onStopRecording;
 
@@ -75,62 +79,92 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    // Listen to interruption from CameraService
+    widget.cameraService.recordingInterrupted.addListener(() {
+      // Print statement to log the change in the notifier value
+      print("ValueNotifier update received. Current value: ${widget.cameraService.recordingInterrupted.value}");
+
+      if (widget.cameraService.recordingInterrupted.value) {
+        if (MasterVideoRecordingScreen.recordingNavigatorKey.currentState?.canPop() == true) {
+          MasterVideoRecordingScreen.recordingNavigatorKey.currentState?.pop();
+        } else {
+          print("Cannot pop navigator. Either navigator is null or cannot pop.");
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.cameraService.recordingInterrupted.removeListener(() {});
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // Prevent back navigation
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: null,
-        body: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {}, // Absorb taps
-          child: Stack(
-            children: [
-              // Full-screen camera preview
-              Positioned.fill(
-                child: CameraPreviewWidget(controller: widget.cameraService.controller!),
-              ),
-              // Stop Recording button
-              Positioned(
-                bottom: 30,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: _isStopping ? null : _handleStopRecording, // Disable if stopping
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      textStyle: const TextStyle(fontSize: 18),
-                    ),
-                    child: const Text('Stop Recording'),
+    return Navigator(
+      key: MasterVideoRecordingScreen.recordingNavigatorKey, // Asociar el GlobalKey
+      onGenerateRoute: (_) => MaterialPageRoute(
+        builder: (_) => WillPopScope(
+          onWillPop: () async => false, // Prevent back navigation
+          child: Scaffold(
+            backgroundColor: Colors.black,
+            body: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {}, // Absorb taps
+              child: Stack(
+                children: [
+                  // Full-screen camera preview
+                  Positioned.fill(
+                    child: CameraPreviewWidget(controller: widget.cameraService.controller!),
                   ),
-                ),
-              ),
-              // Loading indicator
-              if (_isStopping)
-                Positioned.fill(
-                  child: Container(
-                    color: Colors.black.withOpacity(0.5), // Semi-transparent overlay
+                  // Stop Recording button
+                  Positioned(
+                    bottom: 30,
+                    left: 0,
+                    right: 0,
                     child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 16),
-                          Text(
-                            'Processing video, please wait...',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                      child: ElevatedButton(
+                        onPressed: _isStopping ? null : _handleStopRecording, // Disable if stopping
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                        child: const Text('Stop Recording'),
                       ),
                     ),
                   ),
-                ),
-            ],
+                  // Loading indicator
+                  if (_isStopping)
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withOpacity(0.5), // Semi-transparent overlay
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 16),
+                              Text(
+                                'Processing video, please wait...',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
+
 }

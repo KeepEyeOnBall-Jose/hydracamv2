@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hydracam/services/session_manager.dart';
 import 'package:hydracam/services/settings_service.dart';
@@ -42,6 +43,12 @@ class CameraService {
 
   // Current camera quality setting (default: high)
   CameraQuality _currentQuality = CameraQuality.high;
+
+  // To notify screens of critic events
+  ValueNotifier<bool> recordingInterrupted = ValueNotifier(false);
+
+  bool _isRecording = false; // Internal recording state
+  bool get isRecording => _isRecording;
 
   /// Constructor that allows optional callbacks for photo and video capture.
   CameraService({this.onPhotoTaken, this.onVideoRecorded});
@@ -93,6 +100,8 @@ class CameraService {
   /// - Configures the flash to be off by default.
   /// - Throws an exception if initialization fails.
   Future<void> ensureCameraIsReady() async {
+
+    print("ENSURE CAMERA IS READY");
     if (_isCameraInitialized && _controller?.value.isInitialized == true) {
       LogService.instance.registerLog("Camera is already initialized and ready.");
       return; // Camera is already ready
@@ -172,6 +181,8 @@ class CameraService {
   ///
   /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
   Future<void> startRecordingVideo({bool enableFlash = false}) async {
+
+    print("Start recording video");
     // Check if storage is critically low before proceeding
     if (StorageService.isRecordingBlocked) {
       LogService.instance.registerLog("Cannot start recording: Storage is critically low.");
@@ -196,8 +207,13 @@ class CameraService {
       await _controller?.startVideoRecording();
       LogService.instance.registerLog("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
 
+      _isRecording = true;
+      print("Ahora is recording es true (start)");
+
     } catch (e) {
       LogService.instance.registerLog("Error starting video recording: $e");
+      _isRecording = false;
+      print("Ahora is recording es false (start)");
     }
   }
 
@@ -208,6 +224,9 @@ class CameraService {
     try {
       final XFile video = await _controller!.stopVideoRecording();
       videoEndRecordingDate = DateTime.now();
+
+      _isRecording = false;
+      print("Ahora is recording es false (stop)");
 
       final newPath = await _getSessionMediaPath(video.name);
       await File(video.path).copy(newPath); // Move to session directory
@@ -231,6 +250,8 @@ class CameraService {
       return newPath;
     } catch (e) {
       LogService.instance.registerLog("Error stopping video recording: $e");
+      _isRecording = false;
+      print("Ahora is recording es false (stop catch) ");
       return "Error stopping video recording";
     }
   }
@@ -239,10 +260,11 @@ class CameraService {
   Future<void> forceStopRecordingDueToStorage() async {
     try {
 
-      await Future.delayed(const Duration(seconds:10));
+      //await Future.delayed(const Duration(seconds:10)); //TODO: wait for timer if active
 
+      print("is recording es $_isRecording desde el forcestop");
       // Verify if the camera is actually recording before stopping
-      if (_controller != null && _controller!.value.isRecordingVideo) {
+      if (_isRecording) {
         LogService.instance.registerLog("Stopping recording due to critical storage.");
 
         // Stop recording
@@ -262,6 +284,13 @@ class CameraService {
           receivedDate: DateTime.now(),
         );
         SessionManager.instance.addVideo(capturedVideo);
+
+        // Notify interruption
+        recordingInterrupted.value = true;
+      }
+
+      else {
+        print("Not recording according to internal state!"); //TODO problem here from critical storage callback
       }
     } catch (e) {
       LogService.instance.registerLog("Error force-stopping recording: $e");

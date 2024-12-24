@@ -137,6 +137,13 @@ class _MasterScreenState extends State<MasterScreen> {
       return;
     }
 
+    if (_server.cameraService.recordingInterrupted.value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Recording already interrupted due to low storage.")),
+      );
+      return;
+    }
+
     LogService.instance.registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
 
     // Get timer duration
