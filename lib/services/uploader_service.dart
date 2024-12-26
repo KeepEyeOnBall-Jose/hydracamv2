@@ -24,6 +24,9 @@ class UploaderService {
   // Reference to the API service
   final HydraCamApiService _apiService = HydraCamApiService();
 
+  // To track and notify process upload
+  ValueNotifier<double> uploadProgressNotifier = ValueNotifier(0.0);
+
   /// Processes a media file (photo or video) and adds it to the queue
   void addMediaToQueue(dynamic media) async {
     if (media is CapturedPhoto || media is CapturedVideo) {
@@ -80,7 +83,8 @@ class UploaderService {
     if (_uploadQueue.isEmpty) {
       _isUploading = false;
       currentlyUploadingNotifier.value = null;
-      estimatedTimeNotifier.value = Duration.zero;
+      estimatedTimeNotifier.value = Duration.zero; // TODO UNUSED WIP
+      uploadProgressNotifier.value = 0.0;
       LogService.instance.registerLog("UploaderService: Queue is empty. Uploading stopped.");
       return;
     }
@@ -137,6 +141,9 @@ class UploaderService {
         slaveDeviceId,
         captureDate,
         receivedDate,
+        (progress) {
+          uploadProgressNotifier.value = progress; // Notify progress
+        },
       );
 
     } else if (media is CapturedVideo) {
@@ -150,6 +157,9 @@ class UploaderService {
         slaveDeviceId,
         captureDate,
         receivedDate,
+        (progress) {
+          uploadProgressNotifier.value = progress; // Notify progress
+        },
       );
     }
 

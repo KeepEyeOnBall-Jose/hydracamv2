@@ -140,14 +140,25 @@ class MediaListWidget extends StatelessWidget {
   /// Builds the upload icon dynamically based on the upload state.
   Widget _buildUploadIcon(dynamic media, dynamic currentlyUploading) {
     if (media == currentlyUploading) {
-      // Currently uploading
-      return const SizedBox(
-        width: 24, // Adjust size as needed
-        height: 24,
-        child: CircularProgressIndicator(
-          strokeWidth: 2, // Adjust stroke width for a thinner loader
-          color: Colors.blue,
-        ),
+      // Show circular progress with percentage
+      return ValueListenableBuilder<double>(
+        valueListenable: UploaderService().uploadProgressNotifier,
+        builder: (context, progress, child) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              CircularProgressIndicator(
+                value: progress, // Progress from 0.0 to 1.0
+                strokeWidth: 2,
+                color: Colors.blue,
+              ),
+              Text(
+                "${(progress * 100).toInt()}%", // Percentage text
+                style: const TextStyle(fontSize: 10, color: Colors.black),
+              ),
+            ],
+          );
+        },
       );
     } else if (media.isUploaded) {
       // Already uploaded

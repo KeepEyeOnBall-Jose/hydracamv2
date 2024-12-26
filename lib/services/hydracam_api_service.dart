@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -76,7 +77,7 @@ class HydraCamApiService {
     }
   }
 
-  /// Upload a media file to the server
+  /// Upload a media file to the server with progress tracking
   Future<bool> uploadMedia(
       String sessionGuid,
       File file,
@@ -84,6 +85,7 @@ class HydraCamApiService {
       String slaveDeviceId,
       DateTime captureDate,
       DateTime receivedDate,
+      Function(double)? onProgress, // Progress callback
       ) async {
     try {
       LogService.instance.registerLog("Uploading from hydracam api service for session $sessionGuid. isPhoto = $isPhoto");
@@ -93,14 +95,35 @@ class HydraCamApiService {
         Uri.parse('$_baseUrl/UploadMedia?sessionGuid=$sessionGuid&isPhoto=$isPhoto'),
       );
 
-      // Add the file
-      request.files.add(await http.MultipartFile.fromPath('files', file.path));
-
       // Add metadata as fields
       request.fields['slaveDeviceId'] = slaveDeviceId;
       request.fields['captureDate'] = captureDate.toIso8601String();
       request.fields['receivedDate'] = receivedDate.toIso8601String();
 
+      // File length for progress calculation
+      final fileLength = await file.length();
+      int uploadedBytes = 0; // Local variable to track uploaded bytes
+
+      // Add the file
+      request.files.add(
+        http.MultipartFile(
+          'files',
+          file.openRead().transform(
+            StreamTransformer<List<int>, List<int>>.fromHandlers(
+              handleData: (data, sink) {
+                // Update progress based on chunk size
+                uploadedBytes += data.length;
+                onProgress?.call(uploadedBytes / fileLength); // Notify progress
+                sink.add(data); // Continue the stream
+              },
+            ),
+          ),
+          fileLength,
+          filename: file.path.split('/').last,
+        ),
+      );
+
+      // Send the request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse); // Convert to http.Response
 
