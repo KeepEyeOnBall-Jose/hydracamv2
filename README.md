@@ -50,6 +50,22 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 - *On Master Devices*: The master device organizes received media into sessions and saves them locally. Once the session ends, the media is uploaded to the MoBo API.
 - **Media Storage**: Both photos and videos captured by slave devices are saved in the device gallery under a specific album named `HydraCam`. This ensures easy access to locally captured media for further use or review.
 
+### Camera Singleton Integration
+
+The camera functionality has been centralized into a singleton pattern using `CameraServiceSingleton`. This ensures a single shared instance of the camera service is used across the app, improving resource management and consistency.
+
+#### Key Updates:
+- **Singleton Architecture**:
+    - Both master and slave roles now interact with the same `CameraService` instance via `CameraServiceSingleton`. This prevents redundant reinitializations and ensures consistent behavior.
+- **Dynamic Callback Handling**:
+    - Master and slave roles dynamically set or update callbacks (e.g., for `onPhotoTaken` or `onVideoRecorded`) without reinitializing the camera.
+
+#### Benefits:
+- **Efficiency**: The camera is initialized once and reused across all interactions.
+- **Consistency**: Camera state and configuration are maintained throughout the app lifecycle.
+- **Flexibility**: Callbacks can be changed as roles or contexts shift during operation.
+
+
 ### Flash Mode Control
 When capturing photos or videos, the `enableFlash` parameter can be used to dynamically toggle the flash. For example:
 - **Enable Flash**: Use `enableFlash: true` to turn on the flash for the duration of the photo or video capture.
@@ -78,17 +94,23 @@ When capturing photos or videos, the `enableFlash` parameter can be used to dyna
 lib/
 ├── master/
 │   ├── master_announcer.dart       # Broadcasts the master device's presence.
+│   ├── master_screen.dart          # Master control interface.
 │   └── master_server.dart          # WebSocket server to communicate with slaves.
 ├── models/
 │   ├── CapturedPhoto.dart          # Represents a captured photo.
 │   ├── CapturedVideo.dart          # Represents a recorded video.
 │   └── CaptureSession.dart         # Manages a capture session's media and metadata.
 ├── screens/
+│   ├── courts_screen.dart          # Displays courts for a selected sports center.
 │   ├── log_screen.dart             # Displays logs for debugging purposes.
-│   ├── master_screen.dart          # Master control interface.
+│   ├── login_screen.dart           # Handles user authentication and login/logout flow.
+│   ├── previous_sessions_screen.dart
+│                                   # Lists previously recorded sessions for review or upload.
 │   ├── role_selection_screen.dart  # Initial screen for selecting device role.
+│   ├── sports_centers_screen.dart  # Displays available sports centers with court information.
+│   ├── session_details_screen.dart # Displays details of a specific session with media review options.
+│   ├── sessions_screen.dart        # Displays sessions associated with a specific court.
 │   ├── settings_screen.dart        # Screen accessible from appbar to access app preferences.
-│   ├── slave_screen.dart           # Slave interface for receiving commands.
 │   └── uploader_info_screen.dart   # Shows upload status for photos and videos.
 ├── services/
 │   ├── alert_utils.dart            # Utility for showing alerts and pop-ups.
@@ -108,6 +130,7 @@ lib/
 │   └── uploader_service.dart       # Manages upload queue and retries for media files.
 ├── slave/
 │   ├── master_discovery.dart       # Finds and connects to the master device.
+│   ├── slave_screen.dart           # Slave interface for receiving commands.
 │   └── slave_client.dart           # WebSocket client for slave devices.
 ├── widgets/
 │   ├── camera_preview_widget.dart  # Displays the camera's live preview (slave only).
