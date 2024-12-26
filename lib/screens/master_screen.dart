@@ -801,6 +801,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         setState(() {}); // Refresh to show the video
         _controller.play();
       });
+    SessionManager.instance.addListener(_onSessionChanged);
+  }
+
+  void _onSessionChanged() {
+    // This will be triggered whenever SessionManager calls notifyListeners()
+    if (mounted) {
+      setState(() {
+        // Just to rebuild
+      });
+    }
   }
 
   @override
