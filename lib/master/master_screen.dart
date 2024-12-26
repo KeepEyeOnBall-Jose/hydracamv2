@@ -5,8 +5,8 @@ import 'package:hydracam/screens/sports_centers_screen.dart';
 import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
 import '../constants.dart';
 import '../globals.dart';
-import '../master/master_announcer.dart';
-import '../master/master_server.dart';
+import 'master_announcer.dart';
+import 'master_server.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';

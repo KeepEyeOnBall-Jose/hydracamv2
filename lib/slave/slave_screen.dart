@@ -10,14 +10,14 @@ import '../services/device_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
 import '../services/settings_service.dart';
-import '../slave/slave_client.dart';
-import '../slave/master_discovery.dart';
+import 'slave_client.dart';
+import 'master_discovery.dart';
 import '../widgets/add_gallery_media_button.dart';
 import '../widgets/animated_countdown_timer.dart';
 import '../widgets/hydra_cam_app_bar.dart';
 import '../widgets/media_list_widget.dart';
 import '../widgets/session_info_widget.dart';
-import 'master_screen.dart';
+import '../master/master_screen.dart';
 
 class SlaveScreen extends StatefulWidget {
 
@@ -162,6 +162,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
       setState(() {
         isRecording = false;
         isScreenDimmed = false;
+        statusMessage = "Recording stopped.";
       });
       dimTimer?.cancel();
     }
@@ -264,7 +265,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
             style: const TextStyle(fontSize: 18),
             textAlign: TextAlign.center,
           ),
-          if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+          if (statusMessage != "Recording stopped" && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
             const Padding(
               padding: EdgeInsets.only(top: 20),
               child: CircularProgressIndicator(),
@@ -318,7 +319,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                                     style: const TextStyle(fontSize: 18),
                                     textAlign: TextAlign.center,
                                   ),
-                                  if (statusMessage.contains("Taking") || statusMessage.contains("Recording"))
+                                  if (statusMessage != "Recording stopped." && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
                                     const Padding(
                                       padding: EdgeInsets.only(top: 20),
                                       child: CircularProgressIndicator(),

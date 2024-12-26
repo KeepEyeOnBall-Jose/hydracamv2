@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// File for global VARIABLES used across the app
 
 int secondsToClosePhoto = 3; // Seconds after photo taken pop up automatically closes
@@ -6,3 +8,8 @@ int timeToStopSearching = 3; // Seconds after slave automatically stops trying t
 int inactivityThreshold = 10; // Inactivity time before disconnecting slave client in seconds
 
 int locationTimeout = 5; // Maximum number of seconds for location service to try get location before timeout
+
+
+class MasterGlobals {
+  static GlobalKey<ScaffoldMessengerState>? masterScaffoldKey;
+}

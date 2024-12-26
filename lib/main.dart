@@ -3,7 +3,7 @@ import 'package:hydracam/services/battery_service.dart';
 import 'package:hydracam/services/camera_service_singleton.dart';
 import 'package:hydracam/services/storage_service.dart';
 import 'package:provider/provider.dart';
-import 'package:hydracam/screens/slave_screen.dart';
+import 'package:hydracam/slave/slave_screen.dart';
 //import 'package:sport_cam_sync/screens/role_selection_screen.dart';
 import 'package:hydracam/services/device_id_provider.dart';
 import 'package:hydracam/services/device_service.dart';
@@ -12,6 +12,8 @@ import 'package:hydracam/services/log_service.dart';
 import 'package:hydracam/services/permission_service.dart';
 import 'package:hydracam/app_theme.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+
+import 'globals.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +45,7 @@ void main() async {
 
   // GlobalKey para ScaffoldMessenger
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  MasterGlobals.masterScaffoldKey = scaffoldMessengerKey;
 
   // Init BatteryService
   BatteryService.initialize(

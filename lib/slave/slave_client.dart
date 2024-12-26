@@ -93,7 +93,10 @@ class SlaveClient {
       }) : _cameraService = CameraServiceSingleton.instance {
       // Reassign callback after the colon:
       _cameraService.onPhotoTaken = onPhotoTaken;
-    }
+      // Listener for forced stop:
+      CameraServiceSingleton.instance.recordingInterrupted.addListener(_handleRecordingInterrupted);
+
+  }
 
   /// Connects the client to the WebSocket server and initializes communication.
   Future<void> connect() async {
@@ -268,33 +271,6 @@ class SlaveClient {
     }
   }
 
-
-  /*void _processCommand(String message) async{
-
-    // Check if message is a JSON with scheduled time
-    if (message.trim().startsWith('{')) {
-      try {
-        var decodedMessage = jsonDecode(message);
-
-        if (decodedMessage['type'] == 'scheduledCommand') {
-          String command = decodedMessage['command'];
-          DateTime scheduledTime = DateTime.parse(decodedMessage['scheduledTime']);
-
-          // Schedule the command execution
-          _scheduleExecution(command, scheduledTime);
-          return;
-        }
-      } catch (e) {
-        LogService.instance.registerLog("Error decoding JSON message: $e");
-        return;
-      }
-    }
-
-    // Existing classic command handling
-    _executeCommand(message);
-
-  }*/
-
   /// Schedules the execution of a command for a specific time.
   /// This ensures synchronized execution across devices.
   void _scheduleExecution(String command, DateTime scheduledTime) {
@@ -355,6 +331,11 @@ class SlaveClient {
       _statusStreamController.add("Recording video...");
     }
     else if (command == 'stopRecordingVideo') {
+      if (!isRecordingVideo) {
+        LogService.instance.registerLog("Already not recording. Doing nothing.");
+        return;
+      }
+
       LogService.instance.registerLog("Stopping video recording");
       videoEndRecordingDate = DateTime.now();
       _cameraService.stopRecordingVideo().then((videoPath) async {
@@ -405,6 +386,33 @@ class SlaveClient {
 
     return success;
   }
+
+  /// Notifies the master that recording has been forcibly stopped due to low storage.
+  void _notifyMasterForcedStop() {
+    if (_channel != null && _isConnected) {
+      final message = {
+        'type': 'forcedStop',
+        'deviceId': _deviceId,
+        'reason': 'storageFull',
+      };
+      _channel!.sink.add(jsonEncode(message));
+      LogService.instance.registerLog("Sent forcedStop notification to master");
+    }
+  }
+
+  /// A private method to handle forced-stop events from the camera service.
+  void _handleRecordingInterrupted() {
+    final interrupted = CameraServiceSingleton.instance.recordingInterrupted.value;
+    if (interrupted) {
+      // 1) Update local flag
+      isRecordingVideo = false;
+      onRecordingStopped?.call(); // So that SlaveScreen will do setState() => no more “Recording…”
+
+      // 2) Notify the Master about forced stop
+      _notifyMasterForcedStop();
+    }
+  }
+
 
   /// Starts the periodic heartbeat to maintain the WebSocket connection.
   void _startHeartbeat() {

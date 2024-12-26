@@ -6,7 +6,7 @@ import '../models/CapturedVideo.dart';
 import '../services/alert_utils.dart';
 import '../services/session_manager.dart';
 import '../services/uploader_service.dart';
-import 'master_screen.dart';
+import '../master/master_screen.dart';
 
 class SessionDetailsScreen extends StatelessWidget {
   final CaptureSession session;

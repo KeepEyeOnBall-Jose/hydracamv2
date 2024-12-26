@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../app_theme.dart';
+import '../globals.dart';
 import '../models/CapturedPhoto.dart';
-import '../screens/master_screen.dart';
+import '../master/master_screen.dart';
 import 'device_service.dart';
 import 'location_service.dart';
+import 'log_service.dart';
 
 class AlertUtils {
   /// Displays a loading dialog with a custom title and message.
@@ -331,6 +333,25 @@ class AlertUtils {
   }
 
 
+  static void showMasterSnackBar(String message) {
+    // Access the MasterGlobals key:
+    final messengerState = MasterGlobals.masterScaffoldKey?.currentState;
+    if (messengerState == null) {
+      LogService.instance.registerLog("No Master ScaffoldMessenger available, cannot show SnackBar: $message");
+      return;
+    }
+
+    // Show the SnackBar
+    messengerState.clearSnackBars();
+    messengerState.showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(color: Colors.black)),
+        backgroundColor: Colors.red.shade100,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 5),
+      ),
+    );
+  }
 }
 
 // Use example

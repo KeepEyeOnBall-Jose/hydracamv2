@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
+import '../services/alert_utils.dart';
 import '../services/camera_service.dart';
 import '../services/log_service.dart';
 import '../services/session_manager.dart';
@@ -182,6 +183,16 @@ class MasterServer {
 
                     LogService.instance.registerLog("Sent noSession to $deviceId");
                   }
+                }
+
+                // Process forced stop interruptions from slaves
+                else if (messageType == 'forcedStop'){
+                  final deviceId = decodedData['deviceId'];
+                  final reason   = decodedData['reason'];  // e.g. "storageFull"
+                  LogService.instance.registerLog("Slave $deviceId forcibly stopped. Reason: $reason");
+
+                  // Show snackbar in screen
+                  AlertUtils.showMasterSnackBar("Slave $deviceId forcibly stopped: $reason");
                 }
 
               } else {
