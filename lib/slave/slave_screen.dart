@@ -265,7 +265,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
             style: const TextStyle(fontSize: 18),
             textAlign: TextAlign.center,
           ),
-          if (statusMessage != "Recording stopped" && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
+          if (!statusMessage.contains("stop") && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
             const Padding(
               padding: EdgeInsets.only(top: 20),
               child: CircularProgressIndicator(),
@@ -319,7 +319,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                                     style: const TextStyle(fontSize: 18),
                                     textAlign: TextAlign.center,
                                   ),
-                                  if (statusMessage != "Recording stopped." && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
+                                  if (!statusMessage.contains("stop") && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
                                     const Padding(
                                       padding: EdgeInsets.only(top: 20),
                                       child: CircularProgressIndicator(),
