@@ -37,7 +37,7 @@ class MasterServer {
   /// Camera service is used for capturing media directly on the master device
   final CameraService cameraService;
 
-  /// Constructor for MasterServer.
+  /// Optional constructor for MasterServer. Probably will be deleted
   ///
   /// - `cameraService`: The service to handle camera-related operations.
   MasterServer(this.cameraService);
@@ -393,6 +393,7 @@ class MasterServer {
 
   /// Sends a countdown notification to all clients when a command is scheduled.
   void _notifyCountdown(DateTime targetTime) {
+    //TODO UNUSED YET?
     final countdownPayload = {
       'command': 'startCountdown',
       'timestamp': targetTime.toIso8601String(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
 import '../constants.dart';
-import '../services/camera_service.dart';
+import '../services/camera_service_singleton.dart';
 import '../services/settings_service.dart';
 import '../widgets/settings_option.dart'; // Import the widget
 
@@ -71,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // Apply setting to camera
     final CameraQuality newQuality = _mapQualityStringToEnum(quality);
-    await CameraService().setCameraQuality(newQuality);
+    await CameraServiceSingleton.instance.setCameraQuality(newQuality);
   }
 
   Future<void> _updateDeleteLocalAfterUpload(bool value) async {

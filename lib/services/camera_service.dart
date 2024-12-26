@@ -12,15 +12,15 @@ import 'device_service.dart';
 import 'log_service.dart';
 
 /// CameraService - Manages camera operations such as taking photos and recording videos.
-/// This service uses the `camera` plugin to control the device's camera, ensuring
-/// consistent behavior across Android and iOS platforms.
+/// Singleton usage recommended via `CameraServiceSingleton`.
 ///
 /// ### Responsibilities:
 /// - Initializes and configures the camera.
 /// - Handles photo capture and video recording with optional flash control.
 /// - Saves captured media to the device's gallery.
 /// - Provides callback support for notifying external components when media is captured.
-///
+/// - Exposes a `ValueNotifier<bool>` for interrupted recordings if storage is low, etc.
+
 /// ### Features:
 /// - Ensures the camera is ready before any operation.
 /// - Provides an API to control flash settings during photo and video capture.
@@ -29,7 +29,6 @@ import 'log_service.dart';
 /// - List and select available cameras for the device (TBI).
 class CameraService {
 
-  // TODO: Check if should be singleton or not, and in case not, ensure only master server and slave client interact with it, and they dispose the service after finishing with it
   CameraController? _controller; // The camera controller instance
   CameraController? get controller => _controller; // Getter for accessing the controller
 
@@ -38,19 +37,22 @@ class CameraService {
   DateTime? videoStartRecordingDate; // Timestamp for when video recording starts
   DateTime? videoEndRecordingDate; // Timestamp for when video recording ends
 
-  Function(String)? onPhotoTaken; // Callback to notify screen about taken photos
-  Function(String)? onVideoRecorded; // Callback to notify screen about videos
+  /// Optional callbacks for photo/video captures.
+  /// You can assign them at runtime (e.g., in `SlaveClient` or `MasterScreen`).
+  Function(String)? onPhotoTaken;
+  Function(String)? onVideoRecorded;
 
   // Current camera quality setting (default: high)
   CameraQuality _currentQuality = CameraQuality.high;
 
-  // To notify screens of critic events
+  // Notify screens of critical events, e.g., forced stop
   ValueNotifier<bool> recordingInterrupted = ValueNotifier(false);
 
   bool _isRecording = false; // Internal recording state
   bool get isRecording => _isRecording;
 
-  /// Constructor that allows optional callbacks for photo and video capture.
+  /// Constructor used only via the singleton
+  /// Empty or optional for advanced use.
   CameraService({this.onPhotoTaken, this.onVideoRecorded});
 
   /// Starts the camera and initializes it with default settings.
@@ -229,6 +231,8 @@ class CameraService {
       print("Ahora is recording es false (stop)");
 
       final newPath = await _getSessionMediaPath(video.name);
+
+      print("New path: $newPath");
       await File(video.path).copy(newPath); // Move to session directory
       LogService.instance.registerLog("Video saved to session path: $newPath");
 
@@ -264,7 +268,7 @@ class CameraService {
 
       print("is recording es $_isRecording desde el forcestop");
       // Verify if the camera is actually recording before stopping
-      if (_isRecording) {
+      if (_isRecording) { //TODO this for some reason resets to false
         LogService.instance.registerLog("Stopping recording due to critical storage.");
 
         // Stop recording

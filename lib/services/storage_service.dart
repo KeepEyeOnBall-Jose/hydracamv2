@@ -142,7 +142,9 @@ class StorageService {
     if (messenger != null) {
       messenger.showSnackBar(
         SnackBar(
-          content: Text(message),
+          content: Text(message ,style: TextStyle(
+            color: Colors.black
+          )),
           backgroundColor: Colors.red.shade100,
           duration: const Duration(seconds: 5),
         ),

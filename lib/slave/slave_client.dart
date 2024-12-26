@@ -7,6 +7,7 @@ import 'package:web_socket_channel/io.dart';
 import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
+import '../services/camera_service_singleton.dart';
 import '../services/device_service.dart'; // Import for device ID service
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
@@ -89,8 +90,10 @@ class SlaveClient {
         Function(String)? onPhotoTaken,
         this.onRecordingStarted,
         this.onRecordingStopped,
-      }) : _cameraService = CameraService(onPhotoTaken: onPhotoTaken);
-
+      }) : _cameraService = CameraServiceSingleton.instance {
+      // Reassign callback after the colon:
+      _cameraService.onPhotoTaken = onPhotoTaken;
+    }
 
   /// Connects the client to the WebSocket server and initializes communication.
   Future<void> connect() async {

@@ -11,7 +11,7 @@ import '../models/CapturedPhoto.dart';
 import '../models/CapturedVideo.dart';
 import 'dart:io';
 import '../services/alert_utils.dart';
-import '../services/camera_service.dart';
+import '../services/camera_service_singleton.dart';
 import '../services/device_service.dart';
 import '../services/hydracam_api_service.dart';
 import '../services/log_service.dart';
@@ -35,7 +35,7 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
-  final MasterServer _server = MasterServer(CameraService());
+  final MasterServer _server = MasterServer(CameraServiceSingleton.instance); // Assign the singleton unique camera service TODO: SIMPLIFY DELETE CONSTRUCTOR
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   final HydraCamApiService _apiService = HydraCamApiService(); // API service instance
 

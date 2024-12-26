@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydracam/services/battery_service.dart';
-import 'package:hydracam/services/camera_service.dart';
+import 'package:hydracam/services/camera_service_singleton.dart';
 import 'package:hydracam/services/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:hydracam/screens/slave_screen.dart';
@@ -52,12 +52,12 @@ void main() async {
   // Init StorageService
   StorageService.initialize(
     scaffoldMessengerKey: scaffoldMessengerKey,
-    lowStorageThreshold: 1.5,       // Custom warning threshold 1.5 GB
-    criticalStorageThreshold: 0.5,  // Custom critical threshold 0.5 GB
+    lowStorageThreshold: 30,       // Custom warning threshold 1.5 GB
+    criticalStorageThreshold: 30,  // Custom critical threshold 0.5 GB
     onCriticalStorageCallback: () {
       // Callback: force stop recording if low storage
       LogService.instance.registerLog("Critical storage: triggering recording stop.");
-      CameraService().forceStopRecordingDueToStorage();
+      CameraServiceSingleton.instance.forceStopRecordingDueToStorage();
     },
   );
 
