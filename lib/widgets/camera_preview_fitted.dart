@@ -1,8 +1,9 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
-/// A widget that wraps CameraPreview to maintain its true aspect ratio.
-/// This helps prevent stretching or squashing when the phone is in portrait mode.
+/// A widget that wraps CameraPreview and ensures a correct aspect ratio,
+/// even if the raw camera preview is naturally landscape but the device is in portrait.
 class CameraPreviewFitted extends StatelessWidget {
   final CameraController controller;
 
@@ -10,42 +11,35 @@ class CameraPreviewFitted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If the controller isn't initialized, show a loader or an empty container
+    // If the camera isn't initialized, show a loader
     if (!controller.value.isInitialized) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // The previewSize is set once the controller finishes initializing
     final previewSize = controller.value.previewSize;
     if (previewSize == null) {
       return const SizedBox.shrink();
     }
 
-    // Usually width > height for back cameras, but let's just compute aspect ratio
-    final aspectRatio = previewSize.width / previewSize.height;
+    // 1. Get the sensor orientation from the camera description
+    final int sensorOrientation = controller.description.sensorOrientation;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth;
-        final maxHeight = constraints.maxHeight;
+    // 2. Compute the raw aspect ratio as the camera sees it
+    //    Typically width > height for back cameras in "landscape" mode
+    double aspectRatio = previewSize.width / previewSize.height;
 
-        // We'll try to use the full available width first
-        double fittedWidth = maxWidth;
-        double fittedHeight = fittedWidth / aspectRatio;
+    // 3. If the sensor orientation is 90 or 270, invert that ratio
+    //    so we don't end up "squashed" in portrait
+    if (sensorOrientation == 90 || sensorOrientation == 270) {
+      aspectRatio = 1 / aspectRatio;
+    }
 
-        // If that height is bigger than what's available, swap the logic
-        if (fittedHeight > maxHeight) {
-          fittedHeight = maxHeight;
-          fittedWidth = fittedHeight * aspectRatio;
-        }
-
-        // Render the CameraPreview in a box of the appropriate size
-        return SizedBox(
-          width: fittedWidth,
-          height: fittedHeight,
-          child: CameraPreview(controller),
-        );
-      },
+    // 4. Use AspectRatio to enforce the camera’s ratio.
+    //    That means if your device is portrait, the preview might have black bars
+    //    (letterboxing) above or below, but won't look squashed.
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: CameraPreview(controller),
     );
   }
 }
