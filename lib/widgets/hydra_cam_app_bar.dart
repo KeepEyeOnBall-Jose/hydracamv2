@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../app_theme.dart';
+import '../screens/camera_selection_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/log_screen.dart';
@@ -90,6 +91,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
             } else if (value == 'App Version') {
               _showAppVersionDialog(context); // Show app version dialog
             }
+            else if (value == 'Camera Selection') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CameraSelectionScreen()),
+              );
+            }
 
           },
           itemBuilder: (context) => [
@@ -110,6 +117,16 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Icon(Icons.settings, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Settings'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'Camera Selection',
+              child: Row(
+                children: const [
+                  Icon(Icons.camera_alt, color: AppTheme.accentColor),
+                  SizedBox(width: 8),
+                  Text('Camera Selection'),
                 ],
               ),
             ),

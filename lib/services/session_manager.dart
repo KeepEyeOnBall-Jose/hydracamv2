@@ -279,8 +279,6 @@ class SessionManager extends ChangeNotifier {
         if (metadataFile.existsSync()) {
           final metadata = jsonDecode(await metadataFile.readAsString());
 
-          print(jsonEncode(metadata)); // Convertir a String para imprimir el JSON completo
-
           // Correct sessionGuid if null
           if (metadata['sessionGuid'] == null) {
             metadata['sessionGuid'] = sessionGuid;

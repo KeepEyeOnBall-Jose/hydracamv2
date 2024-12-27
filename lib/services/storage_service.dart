@@ -73,7 +73,6 @@ class StorageService {
 
     double availableStorageGB = availableStorage / 1024; // Convert MB to GB
 
-    print("Storage level: $availableStorageGB GB");
     final now = DateTime.now();
 
     // Check critical threshold

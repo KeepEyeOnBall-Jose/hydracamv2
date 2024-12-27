@@ -26,7 +26,7 @@ import 'log_service.dart';
 /// - Provides an API to control flash settings during photo and video capture.
 /// - Logs all operations for debugging and monitoring purposes.
 /// - Supports quality settings for camera resolution.
-/// - List and select available cameras for the device (TBI).
+/// - List and select available cameras for the device (WIP).
 class CameraService {
 
   CameraController? _controller; // The camera controller instance
@@ -51,20 +51,63 @@ class CameraService {
   bool _isRecording = false; // Internal recording state
   bool get isRecording => _isRecording;
 
+  /// List of cameras and selected one
+  List<CameraDescription> _deviceCameras = []; // List of all available cameras on the device
+  int _selectedCameraIndex = 0;                   // Index of the currently selected camera
+
+
   /// Constructor used only via the singleton
   /// Empty or optional for advanced use.
   CameraService({this.onPhotoTaken, this.onVideoRecorded});
 
+  /// Returns a copy of the list of cameras (for read-only use in the UI).
+  List<CameraDescription> get deviceCameras => List.unmodifiable(_deviceCameras);
+  /// Returns the index of the currently selected camera.
+  int get selectedCameraIndex => _selectedCameraIndex;
+
+  /// Initializes the camera service by loading the list of device cameras.
+  /// This is a separate step from actually creating a CameraController.
+  Future<void> initAvailableCameras() async {
+    try {
+      _deviceCameras = await availableCameras();
+      LogService.instance.registerLog("Found ${_deviceCameras.length} camera(s) on this device.");
+    } catch (e) {
+      LogService.instance.registerLog("Error loading available cameras: $e");
+      _deviceCameras = [];
+    }
+  }
+
+
   /// Starts the camera and initializes it with default settings.
   ///
-  /// - Uses the first available camera (usually the back camera).
+  /// - If no index is provided, it uses the current `_selectedCameraIndex`.
   /// - Loads previous camera setting if exists.
   /// - Ensures the flash is turned off during initialization.
-  Future<void> startCamera() async {
-    final cameras = await availableCameras();
+  Future<void> startCamera({int? cameraIndex}) async {
+
+    // If there's no camera on the device, exit gracefully
+    if (_deviceCameras.isEmpty) {
+      LogService.instance.registerLog("No cameras found on device. Aborting startCamera.");
+      return;
+    }
+
+    // Use a provided index if any, or the existing selectedCameraIndex
+    if (cameraIndex != null) {
+      _selectedCameraIndex = cameraIndex;
+    }
+
     final quality = await _loadCameraQuality();
 
-    _controller = CameraController(cameras[0], quality);
+    // Dispose any existing controller before creating a new one
+    await _controller?.dispose();
+
+    // Clamping to avoid out of range index
+    if (_selectedCameraIndex >= _deviceCameras.length) {
+      _selectedCameraIndex = 0;
+    }
+
+    final cameraDescription = _deviceCameras[_selectedCameraIndex];
+    _controller = CameraController(cameraDescription, quality);
 
     try {
       await _controller?.initialize();
@@ -96,6 +139,17 @@ class CameraService {
     }
   }
 
+  /// Changes the currently selected camera to the specified index and restarts the camera.
+  Future<void> switchCamera(int newCameraIndex) async {
+    if (newCameraIndex < 0 || newCameraIndex >= _deviceCameras.length) {
+      LogService.instance.registerLog("Invalid camera index: $newCameraIndex");
+      return;
+    }
+
+    LogService.instance.registerLog("Switching camera from $_selectedCameraIndex to $newCameraIndex");
+    await startCamera(cameraIndex: newCameraIndex);
+  }
+
   /// Ensures the camera is ready before performing any operation.
   ///
   /// - Initializes the camera if it has not been initialized already.
@@ -103,7 +157,6 @@ class CameraService {
   /// - Throws an exception if initialization fails.
   Future<void> ensureCameraIsReady() async {
 
-    print("ENSURE CAMERA IS READY");
     if (_isCameraInitialized && _controller?.value.isInitialized == true) {
       LogService.instance.registerLog("Camera is already initialized and ready.");
       return; // Camera is already ready
@@ -183,8 +236,6 @@ class CameraService {
   ///
   /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
   Future<void> startRecordingVideo({bool enableFlash = false}) async {
-
-    print("Start recording video");
     // Check if storage is critically low before proceeding
     if (StorageService.isRecordingBlocked) {
       LogService.instance.registerLog("Cannot start recording: Storage is critically low.");
@@ -210,12 +261,10 @@ class CameraService {
       LogService.instance.registerLog("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
 
       _isRecording = true;
-      print("Ahora is recording es true (start)");
 
     } catch (e) {
       LogService.instance.registerLog("Error starting video recording: $e");
       _isRecording = false;
-      print("Ahora is recording es false (start)");
     }
   }
 
@@ -228,11 +277,9 @@ class CameraService {
       videoEndRecordingDate = DateTime.now();
 
       _isRecording = false;
-      print("Ahora is recording es false (stop)");
 
       final newPath = await _getSessionMediaPath(video.name);
 
-      print("New path: $newPath");
       await File(video.path).copy(newPath); // Move to session directory
       LogService.instance.registerLog("Video saved to session path: $newPath");
 
@@ -255,7 +302,6 @@ class CameraService {
     } catch (e) {
       LogService.instance.registerLog("Error stopping video recording: $e");
       _isRecording = false;
-      print("Ahora is recording es false (stop catch) ");
       return "Error stopping video recording";
     }
   }
@@ -266,7 +312,6 @@ class CameraService {
 
       //await Future.delayed(const Duration(seconds:10)); //TODO: wait for timer if active
 
-      print("is recording es $_isRecording desde el forcestop");
       // Verify if the camera is actually recording before stopping
       if (_isRecording) { //TODO this for some reason resets to false
         LogService.instance.registerLog("Stopping recording due to critical storage.");
@@ -293,9 +338,6 @@ class CameraService {
         recordingInterrupted.value = true;
       }
 
-      else {
-        print("Not recording according to internal state!"); //TODO problem here from critical storage callback
-      }
     } catch (e) {
       LogService.instance.registerLog("Error force-stopping recording: $e");
     }

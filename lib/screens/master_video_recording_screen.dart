@@ -81,8 +81,6 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
 
     // Listen to interruption from CameraService
     widget.cameraService.recordingInterrupted.addListener(() {
-      // Print statement to log the change in the notifier value
-      print("ValueNotifier update received. Current value: ${widget.cameraService.recordingInterrupted.value}");
 
       if (widget.cameraService.recordingInterrupted.value) {
         Navigator.of(context).pop();
