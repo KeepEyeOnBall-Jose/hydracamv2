@@ -8,7 +8,7 @@ import '../services/device_service.dart';
 import '../services/session_manager.dart';
 import '../services/log_service.dart';
 import 'media_filter_dialog.dart';
-import 'media_selection_screen.dart';
+import '../screens/media_selection_screen.dart';
 
 /// A button widget that allows adding media from the gallery to the current session.
 class AddGalleryMediaButton extends StatefulWidget {

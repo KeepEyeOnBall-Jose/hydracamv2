@@ -23,7 +23,7 @@ import '../widgets/Court_Selection_Widget.dart';
 import '../widgets/add_gallery_media_button.dart';
 import '../widgets/animated_countdown_timer.dart';
 import '../widgets/hydra_cam_app_bar.dart';
-import '../widgets/master_video_recording_screen.dart';
+import '../screens/master_video_recording_screen.dart';
 import '../widgets/media_list_widget.dart';
 import '../widgets/session_info_widget.dart';
 

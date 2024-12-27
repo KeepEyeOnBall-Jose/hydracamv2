@@ -3,7 +3,7 @@ import '../models/CapturedVideo.dart';
 import '../services/camera_service.dart';
 import '../services/settings_service.dart';
 import '../widgets/camera_preview_widget.dart';
-import 'animated_countdown_timer.dart';
+import '../widgets/animated_countdown_timer.dart';
 
 class MasterVideoRecordingScreen extends StatefulWidget {
 
