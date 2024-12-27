@@ -62,6 +62,20 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
     });
   }
 
+  // Helper method to map the enum to a user-friendly string
+  String _getOrientationString(CameraLensDirection direction) {
+    switch (direction) {
+      case CameraLensDirection.back:
+        return 'Back';
+      case CameraLensDirection.front:
+        return 'Front';
+      case CameraLensDirection.external:
+        return 'External';
+      default:
+        return 'Unknown';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -89,8 +103,10 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
           final isSelected = (index == _selectedIndex);
 
           return ListTile(
-            title: Text('Camera $index: ${cameraDescription.name}'),
-            subtitle: Text(cameraDescription.lensDirection.toString()),
+            title: Text('Camera "${cameraDescription.name}"'),
+            subtitle: Text(
+              'Lens direction: ${_getOrientationString(cameraDescription.lensDirection)}',
+            ),
             trailing: isSelected
                 ? const Icon(Icons.check_circle, color: Colors.green)
                 : null,
