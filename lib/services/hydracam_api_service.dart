@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-
 import 'log_service.dart';
 
 /// Singleton class to manage API communication for HydraCam
