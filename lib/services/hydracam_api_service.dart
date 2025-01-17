@@ -39,8 +39,6 @@ class HydraCamApiService {
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
 
-        // Debug: Print response details
-        print('Debug: Parsed Response from $endpoint: $decoded');
 
         if (decoded is List) {
           // Return list directly if response is a JSON array
@@ -62,7 +60,6 @@ class HydraCamApiService {
     } catch (e) {
       // Log errors
       LogService.instance.registerLog('Error on GET $endpoint: $e');
-      print('Debug: Error on GET $endpoint: $e');
       return null;
     }
   }
@@ -134,29 +131,23 @@ class HydraCamApiService {
     try {
       // Construct the endpoint
       final endpoint = 'sessions?courtGuid=$courtGuid';
-      print('Debug: Sending GET request to endpoint: $endpoint');
 
       // Fetch the response
       final response = await _get(endpoint);
 
-      // Debug: Log the raw response
-      print('Debug: Raw response from $endpoint: $response');
 
       // Parse the response if it is a list
       if (response is List) {
         final parsedList = List<Map<String, dynamic>>.from(response);
-        print('Debug: Parsed sessions list: $parsedList');
         LogService.instance.registerLog('Parsed list (sessions): $parsedList');
         return parsedList;
       } else {
         // Log unexpected response structure
-        print('Debug: Unexpected structure for sessions: $response');
         LogService.instance.registerLog('Unexpected structure (sessions): $response');
         return null;
       }
     } catch (e) {
       // Handle and log exceptions
-      print('Debug: Error fetching sessions: $e');
       LogService.instance.registerLog('Error fetching sessions: $e');
       return null;
     }
@@ -210,34 +201,21 @@ class HydraCamApiService {
         'StartTime': DateTime.now().toIso8601String(),
       };
 
-      // Debug: Print request details
-      print('Debug: Sending POST request to endpoint: $_baseUrl/$endpoint');
       final headers = await _getHeaders();
-      print('Debug: Request headers: $headers');
-      print('Debug: Request body: $body');
 
       // Make the POST request
       final uri = Uri.parse('$_baseUrl/$endpoint');
       final response = await http.post(uri, headers: headers, body: jsonEncode(body));
 
-      // Debug: Print response details
-      print('Debug: Response Status Code: ${response.statusCode}');
-      print('Debug: Response Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print('Debug: Session created successfully.');
-        print('Debug: Response Data: $responseData');
         LogService.instance.registerLog('Session created successfully: $responseData');
         return responseData;
       } else {
-        print('Debug: Failed to create session. Status Code: ${response.statusCode}');
         LogService.instance.registerLog('Failed to create session: ${response.body}');
         return null;
       }
     } catch (e) {
-      // Debug: Catch and print errors
-      print('Debug: Error occurred during createSession: $e');
       LogService.instance.registerLog('Error creating session: $e');
       return null;
     }
@@ -274,7 +252,8 @@ class HydraCamApiService {
       String slaveDeviceId,
       DateTime captureDate,
       DateTime receivedDate,
-      Function(double)? onProgress) async {
+      Function(double)? onProgress,
+      ) async {
     try {
       final headers = await _getHeaders();
       final uri = Uri.parse(
@@ -283,8 +262,8 @@ class HydraCamApiService {
       final request = http.MultipartRequest('POST', uri)
         ..headers.addAll(headers)
         ..fields['slaveDeviceId'] = slaveDeviceId
-        ..fields['captureDate'] = captureDate.toIso8601String()
-        ..fields['receivedDate'] = receivedDate.toIso8601String();
+        ..fields['captureDate'] = captureDate.toUtc().toIso8601String()
+        ..fields['receivedDate'] = receivedDate.toUtc().toIso8601String();
 
       final fileLength = await file.length();
       int uploadedBytes = 0;
@@ -322,6 +301,8 @@ class HydraCamApiService {
       return false;
     }
   }
+
+
 
   /// Get user GUID by email
   Future<String?> getUserGuidByEmail(String email) async {
