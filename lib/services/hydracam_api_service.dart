@@ -85,20 +85,28 @@ class HydraCamApiService {
 
   /// Fetch courts, optionally filtered by Sports Center GUID
   Future<List<Map<String, dynamic>>?> fetchCourts({String? sportsCenterGuid}) async {
-    final endpoint = sportsCenterGuid != null
-        ? 'courts?sportsCenterGuid=$sportsCenterGuid'
-        : 'courts';
-    final response = await _get(endpoint);
+    try {
+      final endpoint = sportsCenterGuid != null
+          ? 'courts?sportsCenterGuid=$sportsCenterGuid'
+          : 'courts';
+      final response = await _get(endpoint);
 
-    if (response != null && response['\$values'] != null) {
-      final parsedList = List<Map<String, dynamic>>.from(response['\$values']);
-      LogService.instance.registerLog('Parsed list (courts): $parsedList');
-      return parsedList;
-    } else {
-      LogService.instance.registerLog('Unexpected structure (courts): $response');
+      if (response is List) {
+        // If the response is a list, parse it as a list of maps
+        final parsedList = List<Map<String, dynamic>>.from(response);
+        LogService.instance.registerLog('Parsed list (courts): $parsedList');
+        return parsedList;
+      } else {
+        // If the response structure is unexpected, log it
+        LogService.instance.registerLog('Unexpected structure (courts): $response');
+        return null;
+      }
+    } catch (e) {
+      LogService.instance.registerLog('Error fetching courts: $e');
       return null;
     }
   }
+
 
   /// Fetch sports centers
   Future<List<Map<String, dynamic>>?> fetchSportsCenters() async {
