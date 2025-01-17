@@ -14,13 +14,14 @@ class M2MAuthService {
   DateTime? _expiresAt;
 
   // Auth0 details
-  final String _clientId = 'wChCAH6ZES2UU8sGKRDjgN7JEETblQKf';
-  final String _clientSecret = 'u1b25uMgtmX8Bl-N7Hr256zS1owso0Dfgh0EPccJwvFOW1Z3son19lt-Yh4eiIxm';
+  final String _clientId = 'ZEmOESTl7gRkVv5QZip21uYvCjnGagy1';
+  final String _clientSecret = 'I25-X9328VP3T9JO15Q_6yKRMKmhiwRK1M9yD1yYqFgpohXaFKPWnTdMtYks_71B';
   final String _audience = 'https://hydracam/api';
   final String _tokenUrl = 'https://keepeyeonball.eu.auth0.com/oauth/token';
 
   /// Get M2M token, refreshing it if expired
   Future<String?> getToken() async {
+    LogService.instance.registerLog(("Get token"));
     if (_accessToken != null && _expiresAt != null && DateTime.now().isBefore(_expiresAt!)) {
       return _accessToken;
     }
@@ -30,6 +31,7 @@ class M2MAuthService {
 
   /// Fetch a new token from Auth0
   Future<String?> _fetchToken() async {
+    LogService.instance.registerLog(("Fetch token"));
     try {
       final response = await http.post(
         Uri.parse(_tokenUrl),
