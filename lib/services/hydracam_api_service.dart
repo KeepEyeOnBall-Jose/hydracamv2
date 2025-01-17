@@ -18,8 +18,7 @@ class HydraCamApiService {
 
   /// Obtiene las cabeceras comunes, incluyendo Authorization: Bearer <token>
   Future<Map<String, String>> _getHeaders() async {
-    final token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik9EZzFNa015UVRneU1UazVRVGsxUXpnMlFqTTRSakkyUkRZNU16ZzBNa0U1T1VOQk1qQTJNUSJ9.eyJpc3MiOiJodHRwczovL2tlZXBleWVvbmJhbGwuZXUuYXV0aDAuY29tLyIsInN1YiI6IlpFbU9FU1RsN2dSa1Z2NVFaaXAyMXVZdkNqbkdhZ3kxQGNsaWVudHMiLCJhdWQiOiJodHRwczovL2h5ZHJhY2FtL2FwaSIsImlhdCI6MTczNzExMDY1MCwiZXhwIjoxNzM3MTk3MDUwLCJzY29wZSI6ImNyZWF0ZTpzZXNzaW9ucyBlbmQ6c2Vzc2lvbnMgdXBsb2FkOm1lZGlhIHJlYWQ6c3BvcnRzY2VudGVycyByZWFkOmNvdXJ0cyByZWFkOnVzZXJzIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwiYXpwIjoiWkVtT0VTVGw3Z1JrVnY1UVppcDIxdVl2Q2puR2FneTEiLCJwZXJtaXNzaW9ucyI6WyJjcmVhdGU6c2Vzc2lvbnMiLCJlbmQ6c2Vzc2lvbnMiLCJ1cGxvYWQ6bWVkaWEiLCJyZWFkOnNwb3J0c2NlbnRlcnMiLCJyZWFkOmNvdXJ0cyIsInJlYWQ6dXNlcnMiXX0.lhvXDaayYjE1-jbkgJTPfdquz1h9MdOOs_035EKNA6LTKJA0OWkVB_-PX65BPdgQe3H-Obq_x1kfSks1GZ8_bg7gVRSmvg7oZedxpdFxUByVmjmVPQqLKEJszGb2vWcmSs_YnCcIfDSwSmZlC7huHUcSABwGGFHtadl3p-wGSMkfOc4HLP9JV_0OePLUAY1okDmDoohlmQ8aVCYxX91c3SPHEbLA9xstd311sPcc5Km4m5LkC-EJ3mf_Wb2PWz6MHXkY-Q0PAwxOhI_LdfznwWyE-OPIU3jqQ7uzqOBDhszJvmJNNBN4DT_CXR0p4QvIhVWxeg_OxWfPtGr4VjN3HA";
-    //await M2MAuthService().getToken();
+    final token = await M2MAuthService().getToken();
     if (token == null) {
       throw Exception("Failed to retrieve M2M token");
     }
@@ -29,6 +28,7 @@ class HydraCamApiService {
     };
   }
 
+  /// Generic GET request with headers and parsing
   /// Generic GET request with headers and parsing
   Future<dynamic> _get(String endpoint) async {
     try {
@@ -40,7 +40,7 @@ class HydraCamApiService {
         final decoded = jsonDecode(response.body);
 
         // Debug: Print response details
-        print('Debug: Response from $endpoint: $decoded');
+        print('Debug: Parsed Response from $endpoint: $decoded');
 
         if (decoded is List) {
           // Return list directly if response is a JSON array
@@ -54,14 +54,19 @@ class HydraCamApiService {
           return null;
         }
       } else {
-        LogService.instance.registerLog('GET $endpoint failed: ${response.body}');
+        // Log non-200 responses
+        LogService.instance.registerLog(
+            'GET $endpoint failed: StatusCode=${response.statusCode}, Body=${response.body}');
         return null;
       }
     } catch (e) {
+      // Log errors
       LogService.instance.registerLog('Error on GET $endpoint: $e');
+      print('Debug: Error on GET $endpoint: $e');
       return null;
     }
   }
+
 
 
   /// Realiza un POST genérico con headers y parsing
@@ -124,19 +129,40 @@ class HydraCamApiService {
   }
 
 
-  /// Fetch sessions for a court
+  /// Fetch sessions for a specific court
   Future<List<Map<String, dynamic>>?> fetchSessions(String courtGuid) async {
-    final response = await _get('sessions?courtGuid=$courtGuid');
+    try {
+      // Construct the endpoint
+      final endpoint = 'sessions?courtGuid=$courtGuid';
+      print('Debug: Sending GET request to endpoint: $endpoint');
 
-    if (response != null && response['\$values'] != null) {
-      final parsedList = List<Map<String, dynamic>>.from(response['\$values']);
-      LogService.instance.registerLog('Parsed list (sessions): $parsedList');
-      return parsedList;
-    } else {
-      LogService.instance.registerLog('Unexpected structure (sessions): $response');
+      // Fetch the response
+      final response = await _get(endpoint);
+
+      // Debug: Log the raw response
+      print('Debug: Raw response from $endpoint: $response');
+
+      // Parse the response if it is a list
+      if (response is List) {
+        final parsedList = List<Map<String, dynamic>>.from(response);
+        print('Debug: Parsed sessions list: $parsedList');
+        LogService.instance.registerLog('Parsed list (sessions): $parsedList');
+        return parsedList;
+      } else {
+        // Log unexpected response structure
+        print('Debug: Unexpected structure for sessions: $response');
+        LogService.instance.registerLog('Unexpected structure (sessions): $response');
+        return null;
+      }
+    } catch (e) {
+      // Handle and log exceptions
+      print('Debug: Error fetching sessions: $e');
+      LogService.instance.registerLog('Error fetching sessions: $e');
       return null;
     }
   }
+
+
 
   /// Notify server that device is ready to transmit
   Future<bool> notifyReadyToTransmit(String deviceId, String sessionGuid) async {
