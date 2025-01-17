@@ -248,9 +248,23 @@ class HydraCamApiService {
 
   /// End a session
   Future<bool> endSession(String sessionGuid) async {
-    final response = await _post('sessions/end', {'sessionGuid': sessionGuid});
-    return response != null;
+    try {
+      final response = await _post(
+        'sessions/end?sessionGuid=$sessionGuid',
+        {},
+      );
+      if (response != null) {
+        LogService.instance.registerLog('Session ended successfully');
+        return true;
+      }
+      LogService.instance.registerLog('Failed to end session: No response');
+      return false;
+    } catch (e) {
+      LogService.instance.registerLog('Error ending session: $e');
+      return false;
+    }
   }
+
 
   /// Upload media
   Future<bool> uploadMedia(
@@ -260,21 +274,17 @@ class HydraCamApiService {
       String slaveDeviceId,
       DateTime captureDate,
       DateTime receivedDate,
-      Function(double)? onProgress,
-      ) async {
+      Function(double)? onProgress) async {
     try {
-
       final headers = await _getHeaders();
       final uri = Uri.parse(
           '$_baseUrl/sessions/upload-media?sessionGuid=$sessionGuid&isPhoto=$isPhoto');
 
-      final request = http.MultipartRequest('POST', uri);
-      request.headers.addAll(headers);
-
-      // Add fields
-      request.fields['slaveDeviceId'] = slaveDeviceId;
-      request.fields['captureDate'] = captureDate.toIso8601String();
-      request.fields['receivedDate'] = receivedDate.toIso8601String();
+      final request = http.MultipartRequest('POST', uri)
+        ..headers.addAll(headers)
+        ..fields['slaveDeviceId'] = slaveDeviceId
+        ..fields['captureDate'] = captureDate.toIso8601String()
+        ..fields['receivedDate'] = receivedDate.toIso8601String();
 
       final fileLength = await file.length();
       int uploadedBytes = 0;
@@ -283,7 +293,7 @@ class HydraCamApiService {
         http.MultipartFile(
           'files',
           file.openRead().transform(
-            StreamTransformer<List<int>, List<int>>.fromHandlers(
+            StreamTransformer.fromHandlers(
               handleData: (chunk, sink) {
                 uploadedBytes += chunk.length;
                 onProgress?.call(uploadedBytes / fileLength);
@@ -303,7 +313,8 @@ class HydraCamApiService {
         LogService.instance.registerLog('Media uploaded successfully');
         return true;
       } else {
-        LogService.instance.registerLog('Failed to upload media: ${response.body}');
+        LogService.instance.registerLog(
+            'Failed to upload media: ${response.statusCode} - ${response.body}');
         return false;
       }
     } catch (e) {
