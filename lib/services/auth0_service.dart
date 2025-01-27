@@ -13,9 +13,12 @@ class AuthService {
   // Store access token and email
   String? _accessToken;
   String? _email;
+  String? _profilePicture;
 
   String? get accessToken => _accessToken;
   String? get email => _email;
+
+  String? get profilePicture => _profilePicture;
 
   Future<void> login() async {
     try {
@@ -32,7 +35,11 @@ class AuthService {
         _accessToken = result.accessToken;
         final idToken = result.idToken; // Can parse for additional claims
         final email = _parseEmailFromIdToken(idToken);
+        final profile = _parseProfileFromIdToken(idToken);
         _email = email;
+        _profilePicture = profile;
+
+        print("He puesto este profile: $profile");
       }
     } catch (e) {
       throw Exception('Failed to log in: $e');
@@ -56,6 +63,32 @@ class AuthService {
     // Parse the JSON payload
     final payloadMap = json.decode(payload) as Map<String, dynamic>;
 
-    return payloadMap['email'] as String?;
+    // Extract email and profile picture URL
+    _email = payloadMap['email'] as String?;
+
+    return _email;
+  }
+
+  String? _parseProfileFromIdToken(String? idToken) {
+    if (idToken == null) return null;
+
+    // Split the token into its components
+    final parts = idToken.split('.');
+    if (parts.length != 3) return null;
+
+    // Fix the padding issue for Base64
+    String normalizedPayload = parts[1];
+    normalizedPayload += List.filled((4 - normalizedPayload.length % 4) % 4, '=').join();
+
+    // Decode the payload
+    final payload = utf8.decode(base64Url.decode(normalizedPayload));
+
+    // Parse the JSON payload
+    final payloadMap = json.decode(payload) as Map<String, dynamic>;
+
+    // Extract profile picture URL
+    _profilePicture = payloadMap['picture'] as String?;
+
+    return _profilePicture;
   }
 }
