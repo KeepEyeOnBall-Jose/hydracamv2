@@ -60,10 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _fetchUserDetails() async {
     if (_userService.guid != null) {
       setState(() {
-        _isUserDetailsLoading = true;  // Start loading user details
+        _isUserDetailsLoading = true; // Start loading user details
       });
 
       try {
+        print("will fetch user details");
         final userDetails = await _userService.fetchUserDetails(_userService.guid!);
         setState(() {
           _userDetails = userDetails;
@@ -74,11 +75,12 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       } finally {
         setState(() {
-          _isUserDetailsLoading = false;  // Stop loading user details
+          _isUserDetailsLoading = false; // Stop loading user details
         });
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

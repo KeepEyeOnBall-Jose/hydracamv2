@@ -309,4 +309,27 @@ class HydraCamApiService {
     final response = await _get('users/get-by-email?email=$email');
     return response?['guid'];
   }
+
+  /// Fetch user details by GUID
+  Future<Map?> fetchUserDetails(String guid) async {
+    try {
+      // Call the existing _get method with the appropriate endpoint
+      final response = await _get('users/$guid/info');
+
+      if (response is Map) {
+        // Return the user details if the response is a map
+        return response;
+      } else {
+        // Log and return null if the response is not as expected
+        LogService.instance.registerLog('Unexpected structure (user details): $response');
+        return null;
+      }
+    } catch (e) {
+      // Log any exceptions that occur
+      LogService.instance.registerLog('Error fetching user details: $e');
+      return null;
+    }
+  }
+
+
 }

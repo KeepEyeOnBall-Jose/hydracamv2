@@ -65,12 +65,23 @@ class UserService {
 
 
   Future<Map<String, dynamic>?> fetchUserDetails(String guid) async {
-    final response = await http.get(Uri.parse('$baseUrl$guid/info'));
+    try {
+      // Call the new fetchUserDetails method from HydraCamApiService
+      final response = await HydraCamApiService().fetchUserDetails(guid);
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to load user details');
+      if (response != null) {
+        // Ensure the response is a Map<String, dynamic>
+        return Map<String, dynamic>.from(response);
+      } else {
+        // Log an error if the response is null
+        print("Error: User details not found.");
+        throw Exception('Failed to load user details');
+      }
+    } catch (e) {
+      // Log any exceptions
+      print("Exception: $e");
+      rethrow;
     }
   }
+
 }
