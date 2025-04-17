@@ -291,7 +291,7 @@ class SessionManager extends ChangeNotifier {
         }
 
         // If there is no metadata, rebuild
-        final directoryContents = Directory(dir.path).listSync();
+        Directory(dir.path).listSync();
 
         // Collect photos and videos
         List<CapturedPhoto> photos = [];

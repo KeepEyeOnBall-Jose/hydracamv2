@@ -402,22 +402,6 @@ class MasterServer {
   }
 
 
-  /// Sends a countdown notification to all clients when a command is scheduled.
-  void _notifyCountdown(DateTime targetTime) {
-    //TODO UNUSED YET?
-    final countdownPayload = {
-      'command': 'startCountdown',
-      'timestamp': targetTime.toIso8601String(),
-    };
-
-    final jsonCountdown = jsonEncode(countdownPayload);
-
-    for (var client in _clients.values) {
-      client.add(jsonCountdown);
-    }
-
-    LogService.instance.registerLog("Countdown notification sent: $jsonCountdown");
-  }
 
   /// Stops the WebSocket server and cleans up all connections.
   void stopServer() {
