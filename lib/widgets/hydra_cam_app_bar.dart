@@ -100,70 +100,70 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
 
           },
           itemBuilder: (context) => [
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'Device Info',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.info_outline, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Device Info'),
                 ],
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'Settings',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.settings, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Settings'),
                 ],
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'Camera Selection',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.camera_alt, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Camera Selection'),
                 ],
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'Location Info',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.location_on, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Location Info'),
                 ],
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'Logs',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.list_alt, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Logs'),
                 ],
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'Uploader Info',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.cloud_upload, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('Uploader Info'),
                 ],
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'App Version',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.perm_device_info, color: AppTheme.accentColor),
                   SizedBox(width: 8),
                   Text('App Version'),

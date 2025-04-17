@@ -131,10 +131,10 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
                 Positioned.fill(
                   child: Container(
                     color: Colors.black.withOpacity(0.5), // Semi-transparent overlay
-                    child: Center(
+                    child: const Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           CircularProgressIndicator(),
                           SizedBox(height: 16),
                           Text(

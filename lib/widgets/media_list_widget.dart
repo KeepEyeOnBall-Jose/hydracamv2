@@ -33,11 +33,11 @@ class MediaListWidget extends StatelessWidget {
 
     // Show placeholder if enabled and there are no media items
     if (showPlaceholder && totalItems == 0) {
-      return SingleChildScrollView(
+      return const SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(
                 Icons.perm_media_outlined, // Multimedia icon
                 size: 100, // Adjust the size as needed

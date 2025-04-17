@@ -76,14 +76,14 @@ class AppTheme {
       textTheme: ButtonTextTheme.primary, // Ensure button text respects text color
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return primaryColor; // Active state thumb color
         }
         return disabledButtonColor; // Inactive state thumb color
       }),
-      trackColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return accentColor.withOpacity(0.5); // Active state track color
         }
         return secondaryColor; // Inactive state track color

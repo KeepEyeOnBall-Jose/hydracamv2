@@ -1,9 +1,7 @@
-import 'dart:convert';
 
 import 'auth0_service.dart';
 import 'hydracam_api_service.dart';
 import 'log_service.dart';
-import 'package:http/http.dart' as http;
 
 
 /// Singleton service to manage the current user's state and data.

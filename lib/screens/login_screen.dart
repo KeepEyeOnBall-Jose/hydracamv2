@@ -149,11 +149,11 @@ class _LoginScreenState extends State<LoginScreen> {
           radius: 50,
           backgroundImage: profilePictureUrl != null
               ? NetworkImage(profilePictureUrl)
-              : null, // Show default icon if no profile picture
+              : null,
+          backgroundColor: Colors.grey.shade300, // Show default icon if no profile picture
           child: profilePictureUrl == null
               ? const Icon(Icons.person, size: 50, color: Colors.white)
               : null,
-          backgroundColor: Colors.grey.shade300,
         ),
         const SizedBox(height: 20),
         Text(

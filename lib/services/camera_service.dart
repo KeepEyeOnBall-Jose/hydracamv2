@@ -287,7 +287,7 @@ class CameraService {
       await announceRecordingWithFlash();
 
       // TODO: ISOLATE FROM MAIN THREAD IF THAT INCREASES PERFORMANCE?
-      LogService.instance.registerLog("Video recorded at path: ${newPath}");
+      LogService.instance.registerLog("Video recorded at path: $newPath");
 
       // Save to gallery
       await GallerySaver.saveVideo(newPath, albumName: 'HydraCam');
