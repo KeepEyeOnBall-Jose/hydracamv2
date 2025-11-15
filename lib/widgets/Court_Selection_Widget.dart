@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class CourtSelectionWidget extends StatefulWidget {
   final Map<String, List<Map<String, String>>> groupedCourts; // Grouped by Sports Center
@@ -7,10 +7,10 @@ class CourtSelectionWidget extends StatefulWidget {
   const CourtSelectionWidget({super.key, required this.groupedCourts, required this.onCourtSelected});
 
   @override
-  _CourtSelectionWidgetState createState() => _CourtSelectionWidgetState();
+  CourtSelectionWidgetState createState() => CourtSelectionWidgetState();
 }
 
-class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
+class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
   String? selectedSportsCenter;
   String? selectedCourtName;
   String? selectedCourtGuid;
@@ -18,9 +18,9 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
 
   List<Map<String, String>> getFilteredCourts() {
     if (selectedSportsCenter == null) return [];
-    String searchText = searchController.text.toLowerCase();
+    final String searchText = searchController.text.toLowerCase();
     return widget.groupedCourts[selectedSportsCenter]!
-        .where((court) => court['name']!.toLowerCase().contains(searchText))
+        .where((court) => court["name"]!.toLowerCase().contains(searchText))
         .toList();
   }
 
@@ -29,9 +29,9 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
       selectedCourtName = courtName;
       selectedCourtGuid = courtName != null
           ? getFilteredCourts().firstWhere(
-            (court) => court['name'] == courtName,
+            (court) => court["name"] == courtName,
         orElse: () => {"guid": ""},
-      )['guid']
+      )["guid"]
           : null;
     });
 
@@ -89,8 +89,8 @@ class _CourtSelectionWidgetState extends State<CourtSelectionWidget> {
                     isExpanded: true,
                     items: getFilteredCourts().map((court) {
                       return DropdownMenuItem<String>(
-                        value: court['name'],
-                        child: Text(court['name']!),
+                        value: court["name"],
+                        child: Text(court["name"]!),
                       );
                     }).toList(),
                     onChanged: (value) {

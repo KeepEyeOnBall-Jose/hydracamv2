@@ -1,7 +1,7 @@
-import 'dart:async';
-import 'package:geolocator/geolocator.dart';
-import '../globals.dart';
-import 'log_service.dart';
+import "dart:async";
+import "package:geolocator/geolocator.dart";
+import "../globals.dart";
+import "log_service.dart";
 
 /// LocationService - Manages location-related functionality in the app.
 /// This service handles location permissions, retrieves the current location,
@@ -86,7 +86,9 @@ class LocationService {
     try {
       LogService.instance.registerLog("Try get location: $_currentPosition");
       _currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+        ),
       ).timeout(Duration(seconds: locationTimeout), onTimeout: () {
         LogService.instance.registerLog("Timeout obtaining location");
         throw TimeoutException("Timeout obtaining location");

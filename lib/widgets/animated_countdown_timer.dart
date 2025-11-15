@@ -1,7 +1,7 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
+import "dart:async";
+import "package:flutter/material.dart";
 
-import '../app_theme.dart';
+import "../app_theme.dart";
 
 /// AnimatedCountdownTimer - A circular countdown timer widget.
 /// Displays an animated number in the center that updates in real-time,
@@ -22,19 +22,19 @@ class AnimatedCountdownTimer extends StatefulWidget {
   final TextStyle? finalMessageStyle; // Style for final message
 
   const AnimatedCountdownTimer({
-    Key? key,
+    super.key,
     required this.duration,
     required this.onComplete,
     this.finalMessage = "Go!",
     this.textStyle,
     this.finalMessageStyle,
-  }) : super(key: key);
+  });
 
   @override
-  _AnimatedCountdownTimerState createState() => _AnimatedCountdownTimerState();
+  AnimatedCountdownTimerState createState() => AnimatedCountdownTimerState();
 }
 
-class _AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
+class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -72,7 +72,8 @@ class _AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
 
   void _startCountdown() {
     const int tickInterval = 10; // Update every 10ms for smoother animations
-    _timer = Timer.periodic(const Duration(milliseconds: tickInterval), (timer) {
+    _timer =
+        Timer.periodic(const Duration(milliseconds: tickInterval), (timer) {
       setState(() {
         _remainingTime -= tickInterval;
         if (_remainingTime <= 0) {
@@ -108,7 +109,8 @@ class _AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
             animation: _scaleAnimation,
             builder: (context, child) {
               final String displayText = _remainingTime > 0
-                  ? (_remainingTime / 1000).toStringAsFixed(1) // Format seconds with milliseconds
+                  ? (_remainingTime / 1000)
+                      .toStringAsFixed(1) // Format seconds with milliseconds
                   : widget.finalMessage;
 
               return Transform.scale(
@@ -117,19 +119,19 @@ class _AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
                   displayText,
                   style: _remainingTime > 0
                       ? (widget.textStyle ??
-                      const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        decoration: TextDecoration.none, // Remove underline
-                      ))
+                          const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            decoration: TextDecoration.none, // Remove underline
+                          ))
                       : (widget.finalMessageStyle ??
-                      const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.accentColor,
-                        decoration: TextDecoration.none, // Remove underline
-                      )),
+                          const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.accentColor,
+                            decoration: TextDecoration.none, // Remove underline
+                          )),
                 ),
               );
             },

@@ -1,5 +1,5 @@
-import 'dart:io';
-import '../services/log_service.dart';
+import "dart:io";
+import "../services/log_service.dart";
 
 /// MasterDiscovery - Listens for master's broadcast message to discover its IP.
 /// Calls onMasterDiscovered with the master's IP once discovered.

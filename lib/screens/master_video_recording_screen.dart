@@ -1,41 +1,41 @@
-import 'package:flutter/material.dart';
-import '../models/CapturedVideo.dart';
-import '../services/camera_service.dart';
-import '../services/settings_service.dart';
-import '../widgets/camera_preview_widget.dart';
-import '../widgets/animated_countdown_timer.dart';
+import "package:flutter/material.dart";
+import "../models/captured_video.dart";
+import "../services/camera_service.dart";
+import "../services/settings_service.dart";
+import "../widgets/camera_preview_widget.dart";
+import "../widgets/animated_countdown_timer.dart";
 
 class MasterVideoRecordingScreen extends StatefulWidget {
-
   final CameraService cameraService;
   final Future<CapturedVideo> Function() onStopRecording;
 
   const MasterVideoRecordingScreen({
-    Key? key,
+    super.key,
     required this.cameraService,
     required this.onStopRecording,
-  }) : super(key: key);
+  });
 
   @override
-  _MasterVideoRecordingScreenState createState() => _MasterVideoRecordingScreenState();
+  MasterVideoRecordingScreenState createState() =>
+      MasterVideoRecordingScreenState();
 }
 
-class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen> {
-
+class MasterVideoRecordingScreenState
+    extends State<MasterVideoRecordingScreen> {
   bool _isStopping = false; // State variable to avoid button spam
 
-  void _handleStopRecording() async{
-
+  void _handleStopRecording() async {
     if (_isStopping) return; // Prevent multiple presses
 
     // Get possible timer
     final timerDuration = await SettingsService.getTimerDuration();
 
-    if (timerDuration > 0){
+    if (timerDuration > 0) {
       // Get scheduled time
-      final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
+      final DateTime scheduledTime =
+          DateTime.now().add(Duration(seconds: timerDuration));
 
-      if(context.mounted){
+      if (mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -48,12 +48,15 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
 
       // Wait for timer to stop
       await Future.delayed(scheduledTime.difference(DateTime.now()));
+
+      if (!mounted) return;
     }
 
     setState(() {
       _isStopping = true;
     });
 
+    if (!mounted) return;
 
     final navigator = Navigator.of(context);
 
@@ -64,13 +67,12 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
     }).catchError((error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error stopping recording: $error')),
+          SnackBar(content: Text("Error stopping recording: $error")),
         );
 
         setState(() {
           _isStopping = false;
         });
-
       }
     });
   }
@@ -81,7 +83,6 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
 
     // Listen to interruption from CameraService
     widget.cameraService.recordingInterrupted.addListener(() {
-
       if (widget.cameraService.recordingInterrupted.value) {
         Navigator.of(context).pop();
       }
@@ -96,8 +97,8 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // Prevent back navigation
+    return PopScope(
+      canPop: false, // Prevent back navigation
       child: Scaffold(
         backgroundColor: Colors.black,
         body: GestureDetector(
@@ -107,7 +108,8 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
             children: [
               // Full-screen camera preview
               Positioned.fill(
-                child: CameraPreviewWidget(controller: widget.cameraService.controller!),
+                child: CameraPreviewWidget(
+                    controller: widget.cameraService.controller!),
               ),
               // Stop Recording button
               Positioned(
@@ -116,13 +118,16 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
                 right: 0,
                 child: Center(
                   child: ElevatedButton(
-                    onPressed: _isStopping ? null : _handleStopRecording, // Disable if stopping
+                    onPressed: _isStopping
+                        ? null
+                        : _handleStopRecording, // Disable if stopping
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
                       textStyle: const TextStyle(fontSize: 18),
                     ),
-                    child: const Text('Stop Recording'),
+                    child: const Text("Stop Recording"),
                   ),
                 ),
               ),
@@ -130,7 +135,8 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
               if (_isStopping)
                 Positioned.fill(
                   child: Container(
-                    color: Colors.black.withOpacity(0.5), // Semi-transparent overlay
+                    color: Colors.black
+                        .withValues(alpha: 0.5), // Semi-transparent overlay
                     child: const Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -138,7 +144,7 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
                           CircularProgressIndicator(),
                           SizedBox(height: 16),
                           Text(
-                            'Processing video, please wait...',
+                            "Processing video, please wait...",
                             style: TextStyle(color: Colors.white),
                           ),
                         ],
@@ -152,5 +158,4 @@ class _MasterVideoRecordingScreenState extends State<MasterVideoRecordingScreen>
       ),
     );
   }
-
 }

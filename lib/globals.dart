@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 /// File for global VARIABLES used across the app
 
@@ -9,7 +9,7 @@ int inactivityThreshold = 10; // Inactivity time before disconnecting slave clie
 
 int locationTimeout = 5; // Maximum number of seconds for location service to try get location before timeout
 
-
+// ignore: avoid_classes_with_only_static_members
 class MasterGlobals {
   static GlobalKey<ScaffoldMessengerState>? masterScaffoldKey;
 }

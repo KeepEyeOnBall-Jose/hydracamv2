@@ -1,7 +1,7 @@
 
-import 'auth0_service.dart';
-import 'hydracam_api_service.dart';
-import 'log_service.dart';
+import "auth0_service.dart";
+import "hydracam_api_service.dart";
+import "log_service.dart";
 
 
 /// Singleton service to manage the current user's state and data.
@@ -33,22 +33,22 @@ class UserService {
       _email = _authService.email;
       _profilePicture = _authService.profilePicture;
 
-      print("Desde user service he puesto este profile: $_profilePicture");
+      LogService.instance.registerLog("Profile set from user service: $_profilePicture", function: "login", file: "user_service.dart");
 
       if (_email != null) {
-        LogService.instance.registerLog('Fetching GUID for email: $_email');
+        LogService.instance.registerLog("Fetching GUID for email: $_email");
         final fetchedGuid = await _apiService.getUserGuidByEmail(_email!);
 
         if (fetchedGuid != null) {
           _guid = fetchedGuid;
           _isLoggedIn = true;
-          LogService.instance.registerLog('User logged in successfully. GUID: $_guid');
+          LogService.instance.registerLog("User logged in successfully. GUID: $_guid");
         } else {
-          LogService.instance.registerLog('Failed to fetch GUID: User not found for $_email');
+          LogService.instance.registerLog("Failed to fetch GUID: User not found for $_email");
         }
       }
     } catch (e) {
-      LogService.instance.registerLog('Error during login: $e');
+      LogService.instance.registerLog("Error during login: $e");
       rethrow;
     }
   }
@@ -58,7 +58,7 @@ class UserService {
     _isLoggedIn = false;
     _email = null;
     _guid = null;
-    LogService.instance.registerLog('User logged out.');
+    LogService.instance.registerLog("User logged out.");
   }
 
 
@@ -72,12 +72,12 @@ class UserService {
         return Map<String, dynamic>.from(response);
       } else {
         // Log an error if the response is null
-        print("Error: User details not found.");
-        throw Exception('Failed to load user details');
+        LogService.instance.registerLog("Error: User details not found.", function: "fetchUserDetails", file: "user_service.dart");
+        throw Exception("Failed to load user details");
       }
     } catch (e) {
       // Log any exceptions
-      print("Exception: $e");
+      LogService.instance.registerLog("Exception: $e", function: "fetchUserDetails", file: "user_service.dart");
       rethrow;
     }
   }

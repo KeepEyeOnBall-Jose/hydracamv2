@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
+import "package:flutter/material.dart";
+import "package:camera/camera.dart";
 
 class CameraPreviewWidget extends StatelessWidget {
   final CameraController controller;
 
-  const CameraPreviewWidget({Key? key, required this.controller}) : super(key: key);
+  const CameraPreviewWidget({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

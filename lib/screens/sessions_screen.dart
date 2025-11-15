@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import '../services/hydracam_api_service.dart';
-import '../services/session_manager.dart';
+import "package:flutter/material.dart";
+import "../services/hydracam_api_service.dart";
+import "../services/log_service.dart";
+import "../services/session_manager.dart";
 
 class SessionsScreen extends StatelessWidget {
   final String courtGuid;
@@ -10,10 +11,10 @@ class SessionsScreen extends StatelessWidget {
   final HydraCamApiService _apiService = HydraCamApiService();
 
   void _loadSession(BuildContext context, Map<String, dynamic> session) {
-    print(session);
+    LogService.instance.registerLog("Loading session: $session", function: "_loadSession", file: "sessions_screen.dart");
 
     // Start a session with SessionManager
-    SessionManager.instance.startSession(session['guid'], session['sessionId'], deviceType: "Master");
+    SessionManager.instance.startSession(session["guid"], session["sessionId"], deviceType: "Master");
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Session loaded: ${session['sessionId']}")),
     );
@@ -39,7 +40,7 @@ class SessionsScreen extends StatelessWidget {
               final session = sessions[index];
               return Card(
                 child: ListTile(
-                  title: Text(session['sessionId']),
+                  title: Text(session["sessionId"]),
                   subtitle: Text(
                     "Start: ${session['startTime']}\nEnd: ${session['endTime']}",
                   ),

@@ -3,20 +3,21 @@
 /// optionally previews a camera on long press,
 /// blocks user interaction while cameras are loading/switching,
 /// and ensures consistency in the CameraServiceSingleton.
+library;
 
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-import 'package:hydracam/services/camera_service_singleton.dart';
-import 'package:hydracam/widgets/camera_preview_fitted.dart';
+import "package:camera/camera.dart";
+import "package:flutter/material.dart";
+import "../services/camera_service_singleton.dart";
+import "../widgets/camera_preview_fitted.dart";
 
 class CameraSelectionScreen extends StatefulWidget {
-  const CameraSelectionScreen({Key? key}) : super(key: key);
+  const CameraSelectionScreen({super.key});
 
   @override
-  State<CameraSelectionScreen> createState() => _CameraSelectionScreenState();
+  State<CameraSelectionScreen> createState() => CameraSelectionScreenState();
 }
 
-class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
+class CameraSelectionScreenState extends State<CameraSelectionScreen> {
   /// Local copies of the camera list and the selected index.
   List<CameraDescription> _cameras = [];
   int _selectedIndex = 0;
@@ -118,13 +119,13 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
   String _getOrientationString(CameraLensDirection direction) {
     switch (direction) {
       case CameraLensDirection.back:
-        return 'Back';
+        return "Back";
       case CameraLensDirection.front:
-        return 'Front';
+        return "Front";
       case CameraLensDirection.external:
-        return 'External';
+        return "External";
       default:
-        return 'Unknown';
+        return "Unknown";
     }
   }
 
@@ -136,10 +137,10 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
         title: const Text("How to use Camera Selection"),
         content: const Text(
           "• Tap on a camera to select it.\n"
-              "• Long-press on a camera to quickly preview it (after a confirmation).\n"
-              "• While a camera is loading, interactions are disabled.\n"
-              "• The preview temporarily switches the global camera.\n"
-              "  After closing, it returns to your original selection.\n",
+          "• Long-press on a camera to quickly preview it (after a confirmation).\n"
+          "• While a camera is loading, interactions are disabled.\n"
+          "• The preview temporarily switches the global camera.\n"
+          "  After closing, it returns to your original selection.\n",
         ),
         actions: [
           TextButton(
@@ -156,7 +157,7 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
     /// If still loading cameras (and we have none yet), just show a spinner.
     if (_isLoading && _cameras.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Camera Selection')),
+        appBar: AppBar(title: const Text("Camera Selection")),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -164,8 +165,8 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
     /// If we loaded cameras but `_cameras.isEmpty`, no cameras found.
     if (_cameras.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Camera Selection')),
-        body: const Center(child: Text('No cameras found on this device.')),
+        appBar: AppBar(title: const Text("Camera Selection")),
+        body: const Center(child: Text("No cameras found on this device.")),
       );
     }
 
@@ -175,7 +176,7 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
         // 1) The main UI
         Scaffold(
           appBar: AppBar(
-            title: const Text('Camera Selection'),
+            title: const Text("Camera Selection"),
             actions: [
               IconButton(
                 icon: const Icon(Icons.help_outline),
@@ -192,7 +193,7 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
               return ListTile(
                 title: Text('Camera "${cameraDescription.name}"'),
                 subtitle: Text(
-                  'Lens direction: ${_getOrientationString(cameraDescription.lensDirection)}',
+                  "Lens direction: ${_getOrientationString(cameraDescription.lensDirection)}",
                 ),
                 trailing: isSelected
                     ? const Icon(Icons.check_circle, color: Colors.green)
@@ -200,7 +201,8 @@ class _CameraSelectionScreenState extends State<CameraSelectionScreen> {
                 // Tap => select camera
                 onTap: _isLoading ? null : () => _onCameraSelected(index),
                 // Long press => confirm & preview (temp switch -> show -> switch back)
-                onLongPress: _isLoading ? null : () => _onCameraLongPress(index),
+                onLongPress:
+                    _isLoading ? null : () => _onCameraLongPress(index),
               );
             },
           ),

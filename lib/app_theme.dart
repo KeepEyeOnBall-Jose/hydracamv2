@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class AppTheme {
 
@@ -22,14 +22,14 @@ class AppTheme {
 
   // Define text styles
   static const TextStyle headline1 = TextStyle(
-    fontFamily: 'Roboto',
+    fontFamily: "Roboto",
     fontSize: 32,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );
 
   static const TextStyle bodyText1 = TextStyle(
-    fontFamily: 'Roboto',
+    fontFamily: "Roboto",
     fontSize: 16,
     fontWeight: FontWeight.normal,
     color: Colors.black87,
@@ -43,7 +43,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: primaryColor,
       titleTextStyle: TextStyle(
-        fontFamily: 'Roboto',
+        fontFamily: "Roboto",
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: Colors.black,
@@ -61,7 +61,7 @@ class AppTheme {
         backgroundColor: primaryColor, // Button background color
         foregroundColor: buttonTextColor, // Button text color (black by default)
         textStyle: const TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: "Roboto",
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -84,7 +84,7 @@ class AppTheme {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return accentColor.withOpacity(0.5); // Active state track color
+          return accentColor.withValues(alpha: 0.5); // Active state track color
         }
         return secondaryColor; // Inactive state track color
       }),

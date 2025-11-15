@@ -1,15 +1,16 @@
 /// A CLASS THAT EXTRACTS THE LOGIC OF SHOWING ALERTS, POP UPS, LOADING MESSAGES...
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import '../app_theme.dart';
-import '../globals.dart';
-import '../models/CapturedPhoto.dart';
-import '../master/master_screen.dart';
-import 'device_service.dart';
-import 'location_service.dart';
-import 'log_service.dart';
+library;
 
+import "dart:io";
+import "package:flutter/material.dart";
+import "package:geolocator/geolocator.dart";
+import "../app_theme.dart";
+import "../models/captured_photo.dart";
+import "../master/master_screen.dart";
+import "device_service.dart";
+import "location_service.dart";
+
+// ignore: avoid_classes_with_only_static_members
 class AlertUtils {
   /// Displays a loading dialog with a custom title and message.
   static void showLoadingDialog({
@@ -21,10 +22,10 @@ class AlertUtils {
       context: context,
       barrierDismissible: false, // Prevent closing the dialog by tapping outside
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false, // Prevent closing with the back button
+        return PopScope(
+          canPop: false, // Prevent closing with the back button
           child: Dialog(
-            backgroundColor: Colors.white.withOpacity(0.9), // White translucent background
+            backgroundColor: Colors.white.withValues(alpha: 0.9), // White translucent background
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
@@ -155,7 +156,9 @@ class AlertUtils {
     // Auto-close logic for master screens
     if (isAutoCloseEnabled) {
       Future.delayed(Duration(seconds: autoCloseSeconds), () {
+        // ignore: use_build_context_synchronously
         if (isDialogOpen && Navigator.canPop(context)) {
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
         }
       });
@@ -205,13 +208,13 @@ class AlertUtils {
                 ],
               );
             } else {
-              Map<String, dynamic> deviceInfo = snapshot.data!;
+              final Map<String, dynamic> deviceInfo = snapshot.data!;
               return AlertDialog(
                 title: const Text("Device Information"),
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: deviceInfo.entries.map((entry) {
-                      return Text('${entry.key}: ${entry.value}');
+                      return Text("${entry.key}: ${entry.value}");
                     }).toList(),
                   ),
                 ),
@@ -238,7 +241,7 @@ class AlertUtils {
 
     // Fetch the latest location or fallback to "not available"
     String locationInfo;
-    Position? position = locationService.currentPosition;
+    final Position? position = locationService.currentPosition;
     if (position != null) {
       locationInfo = "Latitude: ${position.latitude}\n"
           "Longitude: ${position.longitude}\n"
@@ -333,13 +336,8 @@ class AlertUtils {
   }
 
 
-  static void showMasterSnackBar(String message) {
-    // Access the MasterGlobals key:
-    final messengerState = MasterGlobals.masterScaffoldKey?.currentState;
-    if (messengerState == null) {
-      LogService.instance.registerLog("No Master ScaffoldMessenger available, cannot show SnackBar: $message");
-      return;
-    }
+  static void showMasterSnackBar(BuildContext context, String message) {
+    final messengerState = ScaffoldMessenger.of(context);
 
     // Show the SnackBar
     messengerState.clearSnackBars();

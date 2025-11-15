@@ -1,23 +1,23 @@
-import 'dart:async';
-import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
-import 'package:hydracam/screens/role_selection_screen.dart';
-import '../globals.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import '../services/alert_utils.dart';
-import '../services/device_service.dart';
-import '../services/log_service.dart';
-import '../services/session_manager.dart';
-import '../services/settings_service.dart';
-import 'slave_client.dart';
-import 'master_discovery.dart';
-import '../widgets/add_gallery_media_button.dart';
-import '../widgets/animated_countdown_timer.dart';
-import '../widgets/hydra_cam_app_bar.dart';
-import '../widgets/media_list_widget.dart';
-import '../widgets/session_info_widget.dart';
-import '../master/master_screen.dart';
+import "dart:async";
+import "package:camera/camera.dart";
+import "package:flutter/material.dart";
+import "../screens/role_selection_screen.dart";
+import "../globals.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../services/alert_utils.dart";
+import "../services/device_service.dart";
+import "../services/log_service.dart";
+import "../services/session_manager.dart";
+import "../services/settings_service.dart";
+import "slave_client.dart";
+import "master_discovery.dart";
+import "../widgets/add_gallery_media_button.dart";
+import "../widgets/animated_countdown_timer.dart";
+import "../widgets/hydra_cam_app_bar.dart";
+import "../widgets/media_list_widget.dart";
+import "../widgets/session_info_widget.dart";
+import "../master/master_screen.dart";
 
 class SlaveScreen extends StatefulWidget {
 
@@ -27,10 +27,10 @@ class SlaveScreen extends StatefulWidget {
   const SlaveScreen({super.key, this.isAutoMode = false}); // Default is manual mode
 
   @override
-  _SlaveScreenState createState() => _SlaveScreenState();
+  SlaveScreenState createState() => SlaveScreenState();
 }
 
-class _SlaveScreenState extends State<SlaveScreen> {
+class SlaveScreenState extends State<SlaveScreen> {
   SlaveClient? _client;
   StreamSubscription<String>? _statusSubscription; // Subscription to listen to status updates
   StreamSubscription<bool>? _connectionStatusSubscription; // Subscription to listen to connection status
@@ -58,7 +58,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
     _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
       LogService.instance.registerLog("Connecting to master at IP: $masterIp");
       _client = SlaveClient(
-        'ws://$masterIp:4040/ws',
+        "ws://$masterIp:4040/ws",
         onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
         onPhotoTaken: (path) async {
           if (!mounted) return;
@@ -68,6 +68,8 @@ class _SlaveScreenState extends State<SlaveScreen> {
           LogService.instance.registerLog("Photo taken!!!");
 
           final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
+          if (!mounted) return;
 
           // Use the unified dialog function with placeholder metadata to wrap photo into CapturePhoto
           AlertUtils.showMediaDialog(
@@ -279,7 +281,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
   @override
   Widget build(BuildContext context) {
     // Media list widget with placeholder enabled
-    Widget mediaList = MediaListWidget(
+    final Widget mediaList = MediaListWidget(
       photos: photos,
       videos: videos,
       onPhotoTap: _showPhotoDialog,
@@ -288,7 +290,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
     );
 
     // Controls and camera preview widget
-    Widget controlsAndPreview = Column(
+    final Widget controlsAndPreview = Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -334,7 +336,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                               right: 0,
                               child: Center(
                                 child: Text(
-                                  'Recording...',
+                                  "Recording...",
                                   style: TextStyle(color: Colors.red, fontSize: 24),
                                 ),
                               ),
@@ -353,7 +355,7 @@ class _SlaveScreenState extends State<SlaveScreen> {
                         right: 0,
                         child: Center(
                           child: Text(
-                            'Recording...',
+                            "Recording...",
                             style: TextStyle(color: Colors.red, fontSize: 24),
                           ),
                         ),

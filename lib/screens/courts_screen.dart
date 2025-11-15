@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import '../services/hydracam_api_service.dart';
-import 'sessions_screen.dart';
+import "package:flutter/material.dart";
+import "../services/hydracam_api_service.dart";
+import "sessions_screen.dart";
 
 class CourtsScreen extends StatelessWidget {
   final String sportsCenterGuid;
@@ -29,13 +29,13 @@ class CourtsScreen extends StatelessWidget {
               final court = courts[index];
               return Card(
                 child: ListTile(
-                  title: Text(court['name']),
-                  subtitle: Text(court['location'] ?? 'No location'),
+                  title: Text(court["name"]),
+                  subtitle: Text(court["location"] ?? "No location"),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          SessionsScreen(courtGuid: court['guid']),
+                          SessionsScreen(courtGuid: court["guid"]),
                     ),
                   ),
                 ),

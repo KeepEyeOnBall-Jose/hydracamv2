@@ -1,5 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
+import "dart:io";
+import "dart:typed_data";
 
 /// CapturedVideo - Represents a video captured by a slave device.
 /// This class holds the binary data of the video (temporarily), the file path where it's stored,

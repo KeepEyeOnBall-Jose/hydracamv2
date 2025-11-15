@@ -1,7 +1,7 @@
-import 'dart:io';
-import 'package:network_info_plus/network_info_plus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'log_service.dart';
+import "dart:io";
+import "package:network_info_plus/network_info_plus.dart";
+import "package:connectivity_plus/connectivity_plus.dart";
+import "log_service.dart";
 
 class NetworkInfoService {
   static final NetworkInfo _networkInfo = NetworkInfo();
@@ -11,7 +11,7 @@ class NetworkInfoService {
   static Future<String?> getSSID() async {
     try {
       final ssid = await _networkInfo.getWifiName();
-      return ssid?.replaceAll('"', ''); // Remove quotes if present
+      return ssid?.replaceAll('"', ""); // Remove quotes if present
     } catch (e) {
       LogService.instance.registerLog("Error getting SSID: $e");
       return null; // Return null if unable to get SSID
@@ -46,16 +46,17 @@ class NetworkInfoService {
   /// Get the current network type (Wi-Fi or Mobile Data).
   static Future<String> getNetworkType() async {
     try {
-      final connectivityResult = await _connectivity.checkConnectivity();
-      switch (connectivityResult) {
-        case ConnectivityResult.wifi:
-          final ssid = await getSSID();
-          return ssid != null ? "Wi-Fi ($ssid)" : "Wi-Fi (Unknown)";
-        case ConnectivityResult.mobile:
-          return "Mobile Data";
-        case ConnectivityResult.none:
-        default:
-          return "No Connection";
+      final connectivityResults = await _connectivity.checkConnectivity();
+      // connectivity_plus now returns List<ConnectivityResult>
+      if (connectivityResults.contains(ConnectivityResult.wifi)) {
+        final ssid = await getSSID();
+        return ssid != null ? "Wi-Fi ($ssid)" : "Wi-Fi (Unknown)";
+      } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
+        return "Mobile Data";
+      } else if (connectivityResults.contains(ConnectivityResult.none) || connectivityResults.isEmpty) {
+        return "No Connection";
+      } else {
+        return "Connected";
       }
     } catch (e) {
       LogService.instance.registerLog("Error determining network type: $e");
@@ -69,8 +70,8 @@ class NetworkInfoService {
     final ip = await getIPAddress();
 
     return {
-      'networkType': networkType,
-      'ip': ip ?? "Unknown IP",
+      "networkType": networkType,
+      "ip": ip ?? "Unknown IP",
     };
   }
 }

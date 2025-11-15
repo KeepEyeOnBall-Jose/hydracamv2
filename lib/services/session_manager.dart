@@ -1,15 +1,15 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:hydracam/services/settings_service.dart';
-import 'package:hydracam/services/uploader_service.dart';
-import 'package:path_provider/path_provider.dart';
-import '../models/CaptureSession.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import 'device_service.dart';
-import 'log_service.dart';
-import 'dart:io';
+import "dart:async";
+import "dart:convert";
+import "package:flutter/foundation.dart";
+import "settings_service.dart";
+import "uploader_service.dart";
+import "package:path_provider/path_provider.dart";
+import "../models/capture_session.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "device_service.dart";
+import "log_service.dart";
+import "dart:io";
 
 /// A global manager to handle session-related information across Master and Slave.
 /// Provides a centralized place to access the current session and its GUID.
@@ -148,32 +148,32 @@ class SessionManager extends ChangeNotifier {
 
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionGuid}');
+      final sessionDirectory = Directory("${directory.path}/session_${_currentSession!.sessionGuid}");
       if (!sessionDirectory.existsSync()) {
         sessionDirectory.createSync(recursive: true);
       }
 
-      final metadataFile = File('${sessionDirectory.path}/metadata.json');
+      final metadataFile = File("${sessionDirectory.path}/metadata.json");
       final metadata = {
-        'sessionId': _currentSession!.sessionId,
-        'sessionGuid': _sessionGuid,
-        'startTime': _currentSession!.startTime.toIso8601String(),
-        'endTime': _currentSession!.endTime?.toIso8601String(),
-        'deviceType': _deviceType,
-        'photos': _currentSession!.capturedPhotos.map((photo) => {
-          'photoPath': photo.photoPath,
-          'slaveDeviceId': photo.slaveDeviceId,
-          'captureDate': photo.captureDate.toIso8601String(),
-          'receivedDate': photo.receivedDate.toIso8601String(),
-          'isUploaded': photo.isUploaded,
+        "sessionId": _currentSession!.sessionId,
+        "sessionGuid": _sessionGuid,
+        "startTime": _currentSession!.startTime.toIso8601String(),
+        "endTime": _currentSession!.endTime?.toIso8601String(),
+        "deviceType": _deviceType,
+        "photos": _currentSession!.capturedPhotos.map((photo) => {
+          "photoPath": photo.photoPath,
+          "slaveDeviceId": photo.slaveDeviceId,
+          "captureDate": photo.captureDate.toIso8601String(),
+          "receivedDate": photo.receivedDate.toIso8601String(),
+          "isUploaded": photo.isUploaded,
         }).toList(),
-        'videos': _currentSession!.capturedVideos.map((video) => {
-          'videoPath': video.videoPath,
-          'slaveDeviceId': video.slaveDeviceId,
-          'startRecordingDate': video.startRecordingDate.toIso8601String(),
-          'endRecordingDate': video.endRecordingDate.toIso8601String(),
-          'receivedDate': video.receivedDate.toIso8601String(),
-          'isUploaded': video.isUploaded,
+        "videos": _currentSession!.capturedVideos.map((video) => {
+          "videoPath": video.videoPath,
+          "slaveDeviceId": video.slaveDeviceId,
+          "startRecordingDate": video.startRecordingDate.toIso8601String(),
+          "endRecordingDate": video.endRecordingDate.toIso8601String(),
+          "receivedDate": video.receivedDate.toIso8601String(),
+          "isUploaded": video.isUploaded,
         }).toList(),
       };
 
@@ -188,7 +188,7 @@ class SessionManager extends ChangeNotifier {
   Future<CaptureSession?> loadSessionMetadata(String sessionGuid) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final metadataFile = File('${directory.path}/session_$sessionGuid/metadata.json');
+      final metadataFile = File("${directory.path}/session_$sessionGuid/metadata.json");
       if (!metadataFile.existsSync()) {
         LogService.instance.registerLog("No metadata file found for session $sessionGuid");
         return null;
@@ -197,27 +197,27 @@ class SessionManager extends ChangeNotifier {
       final metadata = jsonDecode(await metadataFile.readAsString());
       final String deviceId = await DeviceIdService.getOrCreateDeviceId();
       final session = CaptureSession(
-        sessionId: metadata['sessionId'],
-        sessionGuid: metadata['sessionGuid'] ?? sessionGuid, // Correct if null
-        startTime: DateTime.parse(metadata['startTime']),
-        endTime: metadata['endTime'] != null ? DateTime.parse(metadata['endTime']) : null,
-        capturedPhotos: (metadata['photos'] as List<dynamic>).map((photo) {
+        sessionId: metadata["sessionId"],
+        sessionGuid: metadata["sessionGuid"] ?? sessionGuid, // Correct if null
+        startTime: DateTime.parse(metadata["startTime"]),
+        endTime: metadata["endTime"] != null ? DateTime.parse(metadata["endTime"]) : null,
+        capturedPhotos: (metadata["photos"] as List<dynamic>).map((photo) {
           return CapturedPhoto(
-            photoPath: photo['photoPath'],
-            slaveDeviceId: photo['slaveDeviceId']?.isEmpty ?? true ? deviceId : photo['slaveDeviceId'],
-            captureDate: DateTime.parse(photo['captureDate']),
-            receivedDate: DateTime.parse(photo['receivedDate']),
-            isUploaded: photo['isUploaded'],
+            photoPath: photo["photoPath"],
+            slaveDeviceId: photo["slaveDeviceId"]?.isEmpty ?? true ? deviceId : photo["slaveDeviceId"],
+            captureDate: DateTime.parse(photo["captureDate"]),
+            receivedDate: DateTime.parse(photo["receivedDate"]),
+            isUploaded: photo["isUploaded"],
           );
         }).toList(),
-        capturedVideos: (metadata['videos'] as List<dynamic>).map((video) {
+        capturedVideos: (metadata["videos"] as List<dynamic>).map((video) {
           return CapturedVideo(
-            videoPath: video['videoPath'],
-            slaveDeviceId: video['slaveDeviceId']?.isEmpty ?? true ? deviceId : video['slaveDeviceId'],
-            startRecordingDate: DateTime.parse(video['startRecordingDate']),
-            endRecordingDate: DateTime.parse(video['endRecordingDate']),
-            receivedDate: DateTime.parse(video['receivedDate']),
-            isUploaded: video['isUploaded'],
+            videoPath: video["videoPath"],
+            slaveDeviceId: video["slaveDeviceId"]?.isEmpty ?? true ? deviceId : video["slaveDeviceId"],
+            startRecordingDate: DateTime.parse(video["startRecordingDate"]),
+            endRecordingDate: DateTime.parse(video["endRecordingDate"]),
+            receivedDate: DateTime.parse(video["receivedDate"]),
+            isUploaded: video["isUploaded"],
           );
         }).toList(),
       );
@@ -229,8 +229,8 @@ class SessionManager extends ChangeNotifier {
         LogService.instance.registerLog("Session GUID was null. Corrected to $sessionGuid and saved.");
       }
 
-      _sessionGuid = metadata['sessionGuid'];
-      _deviceType = metadata['deviceType'];
+      _sessionGuid = metadata["sessionGuid"];
+      _deviceType = metadata["deviceType"];
 
       notifyListeners();
 
@@ -246,8 +246,8 @@ class SessionManager extends ChangeNotifier {
   Future<List<String>> getAvailableSessions() async {
     final directory = await getApplicationDocumentsDirectory();
     final sessionDirs = Directory(directory.path).listSync()
-        .where((entity) => entity is Directory && entity.path.contains('session_'))
-        .map((entity) => entity.path.split('_').last)
+        .where((entity) => entity is Directory && entity.path.contains("session_"))
+        .map((entity) => entity.path.split("_").last)
         .toList();
 
     return sessionDirs;
@@ -258,20 +258,20 @@ class SessionManager extends ChangeNotifier {
   Future<List<String>> scanAndReconstructSessions() async {
 
     // store current session if exists
-    var previousSession = _currentSession;
+    final previousSession = _currentSession;
 
 
     final directory = await getApplicationDocumentsDirectory();
     final sessionDirs = Directory(directory.path)
         .listSync()
-        .where((entity) => entity is Directory && entity.path.contains('session_'))
+        .where((entity) => entity is Directory && entity.path.contains("session_"))
         .toList();
 
-    List<String> reconstructedSessions = [];
+    final List<String> reconstructedSessions = [];
 
     for (var dir in sessionDirs) {
-      final sessionGuid = dir.path.split('_').last;
-      final metadataFile = File('${dir.path}/metadata.json');
+      final sessionGuid = dir.path.split("_").last;
+      final metadataFile = File("${dir.path}/metadata.json");
 
       try {
 
@@ -280,8 +280,8 @@ class SessionManager extends ChangeNotifier {
           final metadata = jsonDecode(await metadataFile.readAsString());
 
           // Correct sessionGuid if null
-          if (metadata['sessionGuid'] == null) {
-            metadata['sessionGuid'] = sessionGuid;
+          if (metadata["sessionGuid"] == null) {
+            metadata["sessionGuid"] = sessionGuid;
             await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
             LogService.instance.registerLog("Session GUID in metadata was null. Corrected to $sessionGuid and saved.");
           }
@@ -294,8 +294,8 @@ class SessionManager extends ChangeNotifier {
         Directory(dir.path).listSync();
 
         // Collect photos and videos
-        List<CapturedPhoto> photos = [];
-        List<CapturedVideo> videos = [];
+        final List<CapturedPhoto> photos = [];
+        final List<CapturedVideo> videos = [];
         DateTime? earliestDate;
         final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
@@ -308,7 +308,7 @@ class SessionManager extends ChangeNotifier {
               earliestDate = fileStat.changed;
             }
 
-            if (entity.path.endsWith('.jpg')) {
+            if (entity.path.endsWith(".jpg")) {
               photos.add(CapturedPhoto(
                 photoPath: entity.path,
                 slaveDeviceId: deviceId,
@@ -316,7 +316,7 @@ class SessionManager extends ChangeNotifier {
                 receivedDate: DateTime.now(),
                 isUploaded: false,
               ));
-            } else if (entity.path.endsWith('.mp4')) {
+            } else if (entity.path.endsWith(".mp4")) {
               videos.add(CapturedVideo(
                 videoPath: entity.path,
                 slaveDeviceId: deviceId,
@@ -371,32 +371,32 @@ class SessionManager extends ChangeNotifier {
       }
 
       final directory = await getApplicationDocumentsDirectory();
-      final sessionDirectory = Directory('${directory.path}/session_${_currentSession!.sessionGuid}');
+      final sessionDirectory = Directory("${directory.path}/session_${_currentSession!.sessionGuid}");
       if (!sessionDirectory.existsSync()) {
         sessionDirectory.createSync(recursive: true);
       }
 
-      final metadataFile = File('${sessionDirectory.path}/metadata.json');
+      final metadataFile = File("${sessionDirectory.path}/metadata.json");
       final metadata = {
-        'sessionId': _currentSession!.sessionId,
-        'sessionGuid': _sessionGuid,
-        'startTime': _currentSession!.startTime.toIso8601String(),
-        'endTime': _currentSession!.endTime?.toIso8601String(),
-        'deviceType': _deviceType,
-        'photos': _currentSession!.capturedPhotos.map((photo) => {
-          'photoPath': photo.photoPath,
-          'slaveDeviceId': photo.slaveDeviceId,
-          'captureDate': photo.captureDate.toIso8601String(),
-          'receivedDate': photo.receivedDate.toIso8601String(),
-          'isUploaded': photo.isUploaded,
+        "sessionId": _currentSession!.sessionId,
+        "sessionGuid": _sessionGuid,
+        "startTime": _currentSession!.startTime.toIso8601String(),
+        "endTime": _currentSession!.endTime?.toIso8601String(),
+        "deviceType": _deviceType,
+        "photos": _currentSession!.capturedPhotos.map((photo) => {
+          "photoPath": photo.photoPath,
+          "slaveDeviceId": photo.slaveDeviceId,
+          "captureDate": photo.captureDate.toIso8601String(),
+          "receivedDate": photo.receivedDate.toIso8601String(),
+          "isUploaded": photo.isUploaded,
         }).toList(),
-        'videos': _currentSession!.capturedVideos.map((video) => {
-          'videoPath': video.videoPath,
-          'slaveDeviceId': video.slaveDeviceId,
-          'startRecordingDate': video.startRecordingDate.toIso8601String(),
-          'endRecordingDate': video.endRecordingDate.toIso8601String(),
-          'receivedDate': video.receivedDate.toIso8601String(),
-          'isUploaded': video.isUploaded,
+        "videos": _currentSession!.capturedVideos.map((video) => {
+          "videoPath": video.videoPath,
+          "slaveDeviceId": video.slaveDeviceId,
+          "startRecordingDate": video.startRecordingDate.toIso8601String(),
+          "endRecordingDate": video.endRecordingDate.toIso8601String(),
+          "receivedDate": video.receivedDate.toIso8601String(),
+          "isUploaded": video.isUploaded,
         }).toList(),
       };
 

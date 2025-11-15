@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
+import "package:flutter/material.dart";
+import "package:camera/camera.dart";
 
 /// A widget that wraps CameraPreview and ensures a correct aspect ratio,
 /// even if the raw camera preview is naturally landscape but the device is in portrait.
 class CameraPreviewFitted extends StatelessWidget {
   final CameraController controller;
 
-  const CameraPreviewFitted({Key? key, required this.controller}) : super(key: key);
+  const CameraPreviewFitted({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

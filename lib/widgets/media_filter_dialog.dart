@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 /// Class to hold media filter options.
 class MediaFilters {
@@ -18,13 +18,13 @@ class MediaFilters {
 
 /// A dialog widget to select media filters.
 class MediaFilterDialog extends StatefulWidget {
-  const MediaFilterDialog({Key? key}) : super(key: key);
+  const MediaFilterDialog({super.key});
 
   @override
-  _MediaFilterDialogState createState() => _MediaFilterDialogState();
+  MediaFilterDialogState createState() => MediaFilterDialogState();
 }
 
-class _MediaFilterDialogState extends State<MediaFilterDialog> {
+class MediaFilterDialogState extends State<MediaFilterDialog> {
   bool isPhoto = true;
   DateTime? startDate;
   DateTime? endDate;
@@ -33,7 +33,7 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Select Media Filters'),
+      title: const Text("Select Media Filters"),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,13 +41,13 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
             // Media Type
             Row(
               children: [
-                const Text('Media Type:'),
+                const Text("Media Type:"),
                 const SizedBox(width: 10),
                 DropdownButton<bool>(
                   value: isPhoto,
                   items: const [
-                    DropdownMenuItem(value: true, child: Text('Photos')),
-                    DropdownMenuItem(value: false, child: Text('Videos')),
+                    DropdownMenuItem(value: true, child: Text("Photos")),
+                    DropdownMenuItem(value: false, child: Text("Videos")),
                   ],
                   onChanged: (value) {
                     setState(() {
@@ -59,7 +59,7 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
             ),
             // Date Range
             const SizedBox(height: 10),
-            const Text('Date Range:'),
+            const Text("Date Range:"),
             Row(
               children: [
                 Expanded(
@@ -67,7 +67,7 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
                     title: Text(
                       startDate != null
                           ? 'From: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
-                          : 'From: Any',
+                          : "From: Any",
                     ),
                     onTap: _pickStartDate,
                   ),
@@ -77,7 +77,7 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
                     title: Text(
                       endDate != null
                           ? 'To: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
-                          : 'To: Any',
+                          : "To: Any",
                     ),
                     onTap: _pickEndDate,
                   ),
@@ -89,11 +89,11 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
               Column(
                 children: [
                   const SizedBox(height: 10),
-                  const Text('Minimum Duration (minutes):'),
+                  const Text("Minimum Duration (minutes):"),
                   TextField(
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      hintText: 'e.g., 1',
+                      hintText: "e.g., 1",
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -109,12 +109,12 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context), // Cancel
-          child: const Text('Cancel'),
+          child: const Text("Cancel"),
         ),
         TextButton(
           onPressed: () {
             // Return the filters
-            MediaFilters filters = MediaFilters(
+            final MediaFilters filters = MediaFilters(
               isPhoto: isPhoto,
               startDate: startDate,
               endDate: endDate,
@@ -124,14 +124,14 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
             );
             Navigator.pop(context, filters);
           },
-          child: const Text('Apply'),
+          child: const Text("Apply"),
         ),
       ],
     );
   }
 
   Future<void> _pickStartDate() async {
-    DateTime? picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: startDate ?? DateTime.now(),
       firstDate: DateTime(2000),
@@ -145,7 +145,7 @@ class _MediaFilterDialogState extends State<MediaFilterDialog> {
   }
 
   Future<void> _pickEndDate() async {
-    DateTime? picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: endDate ?? DateTime.now(),
       firstDate: DateTime(2000),

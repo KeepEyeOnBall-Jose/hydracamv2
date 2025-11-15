@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:hydracam/screens/session_details_screen.dart';
-import '../services/session_manager.dart';
+import "package:flutter/material.dart";
+import "session_details_screen.dart";
+import "../services/session_manager.dart";
 
 class PreviousSessionsScreen extends StatefulWidget {
   const PreviousSessionsScreen({super.key});
 
   @override
-  _PreviousSessionsScreenState createState() => _PreviousSessionsScreenState();
+  PreviousSessionsScreenState createState() => PreviousSessionsScreenState();
 }
 
-class _PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
+class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
   late Future<List<String>> _availableSessions;
 
   void _handleSessionTap(BuildContext context, String sessionId) async {

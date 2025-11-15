@@ -1,17 +1,17 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:shared_preferences/shared_preferences.dart";
 
-import 'log_service.dart';
+import "log_service.dart";
 
 class SettingsService {
 
-  static const String _masterShouldRecordKey = 'masterShouldRecord';          // Whether or not master should also take pics/videos
-  static const String _cameraQualityKey = 'cameraQuality';                    // Use max, mid or minimum quality available for the camera
-  static const String _deleteLocalAfterUploadKey = 'deleteLocalAfterUpload';  // Choose if delete or not the media after uploading
-  static const String _autoUploadMaterialsKey = 'autoUploadMaterials';        // Choose if automatically upload materials or not
-  static const String _autoplayVideoOnMasterKey = 'autoplayVideoOnMaster';    // Toggle auto video play in master device after recording
-  static const String _timerDurationKey = 'timerDuration';                    // Key for the timer duration setting
-  static const String _screenAutoOffKey = 'screenAutoOff';                    // Key for auto screen off setting
-  static const String _flashForVideoAnnounceKey = 'flashForVideoAnnounce';    // Key for flashing on start/stop recording
+  static const String _masterShouldRecordKey = "masterShouldRecord";          // Whether or not master should also take pics/videos
+  static const String _cameraQualityKey = "cameraQuality";                    // Use max, mid or minimum quality available for the camera
+  static const String _deleteLocalAfterUploadKey = "deleteLocalAfterUpload";  // Choose if delete or not the media after uploading
+  static const String _autoUploadMaterialsKey = "autoUploadMaterials";        // Choose if automatically upload materials or not
+  static const String _autoplayVideoOnMasterKey = "autoplayVideoOnMaster";    // Toggle auto video play in master device after recording
+  static const String _timerDurationKey = "timerDuration";                    // Key for the timer duration setting
+  static const String _screenAutoOffKey = "screenAutoOff";                    // Key for auto screen off setting
+  static const String _flashForVideoAnnounceKey = "flashForVideoAnnounce";    // Key for flashing on start/stop recording
 
   /// Retrieve the current value for "flashForVideoAnnounce".
   static Future<bool> getFlashForVideoAnnounce() async {
@@ -43,7 +43,7 @@ class SettingsService {
   /// Retrieve the current camera quality setting
   static Future<String> getCameraQuality() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_cameraQualityKey) ?? 'high'; // Default to 'high'
+    return prefs.getString(_cameraQualityKey) ?? "high"; // Default to 'high'
   }
 
   /// Update the camera quality setting

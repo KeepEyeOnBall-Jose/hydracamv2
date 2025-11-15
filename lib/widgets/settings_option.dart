@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import '../app_theme.dart';
-import '../services/alert_utils.dart';
+import "package:flutter/material.dart";
+import "../app_theme.dart";
+import "../services/alert_utils.dart";
 
 /// A reusable widget for settings options with an optional info icon.
 class SettingsOption extends StatelessWidget {
@@ -9,11 +9,11 @@ class SettingsOption extends StatelessWidget {
   final Widget control;
 
   const SettingsOption({
-    Key? key,
+    super.key,
     required this.title,
     this.description,
     required this.control,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,14 +1,23 @@
-import 'package:hydracam/services/camera_service.dart';
+import "camera_service.dart";
+import "storage_service.dart";
 
-/// CameraServiceSingleton - a global singleton wrapper for CameraService.
+/// CameraServiceSingleton - a singleton for CameraService.
 /// Ensures we only have ONE camera resource for the entire app (per device).
 class CameraServiceSingleton {
-  // Private constructor prevents direct instantiation.
+  static CameraService? _instance;
+
+  /// Returns the CameraService instance.
+  static CameraService get instance {
+    if (_instance == null) throw Exception("CameraServiceSingleton not initialized");
+    return _instance!;
+  }
+
+  /// Private constructor to prevent instantiation.
   CameraServiceSingleton._();
 
-  // A single, lazily-initialized instance of CameraService.
-  static final CameraService _instance = CameraService();
-
-  /// Returns the global (singleton) CameraService instance.
-  static CameraService get instance => _instance;
+  /// Initializes the singleton with the given [storageService].
+  static CameraService initialize(StorageService storageService) {
+    _instance = CameraService(storageService: storageService);
+    return _instance!;
+  }
 }

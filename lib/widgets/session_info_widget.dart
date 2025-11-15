@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import '../services/network_info_service.dart';
+import "package:flutter/material.dart";
+import "../services/network_info_service.dart";
 
 class SessionInfoWidget extends StatelessWidget {
   final String sessionDisplay;
 
   const SessionInfoWidget({
-    Key? key,
+    super.key,
     required this.sessionDisplay,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +43,8 @@ class SessionInfoWidget extends StatelessWidget {
               );
             } else {
               final data = snapshot.data!;
-              final networkType = data['networkType'] ?? "Unknown Network";
-              final ip = data['ip'] ?? "Unknown IP";
+              final networkType = data["networkType"] ?? "Unknown Network";
+              final ip = data["ip"] ?? "Unknown IP";
               return Text(
                 "Network: $networkType | IP: $ip",
                 style: const TextStyle(

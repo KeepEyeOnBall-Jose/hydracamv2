@@ -85,3 +85,10 @@ final Map<String, List<Map<String, String>>> groupedCourts = {
 
 /// Enum to represent available quality settings.
 enum CameraQuality { high, medium, low }
+
+const int secondsToClosePhoto = 3; // Seconds after photo taken pop up automatically closes
+const int timeToStopSearching = 3; // Seconds after slave automatically stops trying to find master and becomes master
+
+const int inactivityThreshold = 10; // Inactivity time before disconnecting slave client in seconds
+
+const int locationTimeout = 5; // Maximum number of seconds for location service to try get location before timeout

@@ -1,17 +1,16 @@
-import 'dart:async';
-import 'dart:convert'; // Import for jsonDecode
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import '../globals.dart';
-import '../models/CaptureSession.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import '../services/alert_utils.dart';
-import '../services/camera_service.dart';
-import '../services/log_service.dart';
-import '../services/session_manager.dart';
+import "dart:async";
+import "dart:convert"; // Import for jsonDecode
+import "dart:io";
+import "package:flutter/foundation.dart";
+import "../globals.dart";
+import "../models/capture_session.dart";
+import "package:path_provider/path_provider.dart";
+// import "package:gallery_saver/gallery_saver.dart";  // Temporarily disabled - incompatible plugin
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../services/camera_service.dart";
+import "../services/log_service.dart";
+import "../services/session_manager.dart";
 
 /// MasterServer - Handles the master device's WebSocket server.
 /// This class manages communication with slave devices, tracks active connections,
@@ -48,15 +47,15 @@ class MasterServer {
   /// This method binds to a specific port and listens for incoming connections.
   Future<void> startServer() async {
     try {
-      _server = await HttpServer.bind('0.0.0.0', 4040);
+      _server = await HttpServer.bind("0.0.0.0", 4040);
       LogService.instance.registerLog("WebSocket Server successfully started on port 4040");
 
       // Init check to verify inactive clients
       _startHeartbeatCheck();
 
       await for (HttpRequest request in _server!) {
-        if (request.uri.path == '/ws') {
-          var socket = await WebSocketTransformer.upgrade(request);
+        if (request.uri.path == "/ws") {
+          final socket = await WebSocketTransformer.upgrade(request);
           LogService.instance.registerLog("New WebSocket client connected.");
 
           String? deviceId;
@@ -69,11 +68,11 @@ class MasterServer {
               LogService.instance.registerLog("Data received from slave: $decodedData");
 
               if (decodedData is Map<String, dynamic>) {
-                String? messageType = decodedData['type'];
-                deviceId = decodedData['deviceId'] ?? 'Unknown';
+                final String? messageType = decodedData["type"];
+                deviceId = decodedData["deviceId"] ?? "Unknown";
 
                 // Register client
-                if (messageType == 'deviceId') {
+                if (messageType == "deviceId") {
                   if (deviceId != null) {
                     _clients[deviceId!] = socket;
                     _notifyClientCount();
@@ -82,9 +81,9 @@ class MasterServer {
                     // After registering the slave, send the session status
                     if (SessionManager.instance.isSessionActive && SessionManager.instance.sessionGuid != null) {
                       // Send session status
-                      var sessionStatusMessage = jsonEncode({
-                        'command': 'sessionStatus',
-                        'sessionGuid': SessionManager.instance.sessionGuid,
+                      final sessionStatusMessage = jsonEncode({
+                        "command": "sessionStatus",
+                        "sessionGuid": SessionManager.instance.sessionGuid,
                       });
 
                       // Send the message to the client
@@ -94,8 +93,8 @@ class MasterServer {
                     }
                     else {
                       // No active session
-                      var noSessionMessage = jsonEncode({
-                        'command': 'noSession',
+                      final noSessionMessage = jsonEncode({
+                        "command": "noSession",
                       });
 
                       // Send the message to the client
@@ -107,14 +106,14 @@ class MasterServer {
                 }
 
                 // Receive media
-                else if (messageType == 'photo' || messageType == 'video') {
+                else if (messageType == "photo" || messageType == "video") {
                   // Process media data
-                  final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData['data']));
-                  final String filePath = await _saveMediaLocally(binaryData, messageType == 'photo');
+                  final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData["data"]));
+                  final String filePath = await _saveMediaLocally(binaryData, messageType == "photo");
                   final DateTime receivedDate = DateTime.now();
 
-                  if (messageType == 'photo') {
-                    final DateTime captureDate = DateTime.parse(decodedData['captureDate']);
+                  if (messageType == "photo") {
+                    final DateTime captureDate = DateTime.parse(decodedData["captureDate"]);
                     final receivedPhoto = CapturedPhoto(
                       photoData: null,
                       photoPath: filePath,
@@ -128,9 +127,9 @@ class MasterServer {
 
                     onMediaReceived?.call(receivedPhoto);
                     LogService.instance.registerLog("Photo from slave device ($deviceId) received and stored at: $filePath");
-                  } else if (messageType == 'video') {
-                    final DateTime startRecordingDate = DateTime.parse(decodedData['startRecordingDate']);
-                    final DateTime endRecordingDate = DateTime.parse(decodedData['endRecordingDate']);
+                  } else if (messageType == "video") {
+                    final DateTime startRecordingDate = DateTime.parse(decodedData["startRecordingDate"]);
+                    final DateTime endRecordingDate = DateTime.parse(decodedData["endRecordingDate"]);
                     final receivedVideo = CapturedVideo(
                       videoData: null,
                       videoPath: filePath,
@@ -148,7 +147,7 @@ class MasterServer {
                 }
 
                 // Receive heartbeats from slaves
-                else if (messageType == 'heartbeat') {
+                else if (messageType == "heartbeat") {
                   if (deviceId != null) {
                     _lastHeartbeat[deviceId!] = DateTime.now(); // Update last heartbeat
                     LogService.instance.registerLog("Received heartbeat from $deviceId");
@@ -156,16 +155,16 @@ class MasterServer {
                 }
 
                 // Respond to explicit requests on session status
-                else if (messageType == 'getSessionStatus') {
+                else if (messageType == "getSessionStatus") {
                   // Handle getSessionStatus
                   LogService.instance.registerLog("Received getSessionStatus from $deviceId");
 
                   // Prepare response
                   if (SessionManager.instance.isSessionActive && SessionManager.instance.sessionGuid != null) {
                     // Send session status
-                    var sessionStatusMessage = jsonEncode({
-                      'command': 'sessionStatus',
-                      'sessionGuid': SessionManager.instance.sessionGuid,
+                    final sessionStatusMessage = jsonEncode({
+                      "command": "sessionStatus",
+                      "sessionGuid": SessionManager.instance.sessionGuid,
                     });
 
                     // Send the message to the client
@@ -174,8 +173,8 @@ class MasterServer {
                     LogService.instance.registerLog("Sent sessionStatus to $deviceId: $sessionStatusMessage");
                   } else {
                     // No active session
-                    var noSessionMessage = jsonEncode({
-                      'command': 'noSession',
+                    final noSessionMessage = jsonEncode({
+                      "command": "noSession",
                     });
 
                     // Send the message to the client
@@ -186,13 +185,13 @@ class MasterServer {
                 }
 
                 // Process forced stop interruptions from slaves
-                else if (messageType == 'forcedStop'){
-                  final deviceId = decodedData['deviceId'];
-                  final reason   = decodedData['reason'];  // e.g. "storageFull"
+                else if (messageType == "forcedStop"){
+                  final deviceId = decodedData["deviceId"];
+                  final reason   = decodedData["reason"];  // e.g. "storageFull"
                   LogService.instance.registerLog("Slave $deviceId forcibly stopped. Reason: $reason");
 
                   // Show snackbar in screen
-                  AlertUtils.showMasterSnackBar("Slave $deviceId forcibly stopped: $reason");
+                  LogService.instance.registerLog("Slave $deviceId forcibly stopped: $reason");
                 }
 
               } else {
@@ -284,19 +283,22 @@ class MasterServer {
     final directory = await getApplicationDocumentsDirectory();
     //final String sessionDirectoryPath = '${directory.path}/session_${currentSession?.sessionId}'; // TODO: Extract storage manager???
     final String sessionDirectoryPath =
-        '${directory.path}/session_${SessionManager.instance.sessionGuid}';
+        "${directory.path}/session_${SessionManager.instance.sessionGuid}";
     await Directory(sessionDirectoryPath).create(recursive: true);
-    final String fileExtension = binaryData[0] == 0xFF ? 'jpg' : 'mp4';
-    final String filePath = '$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
+    final String fileExtension = binaryData[0] == 0xFF ? "jpg" : "mp4";
+    final String filePath = "$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension";
     final file = File(filePath);
     await file.writeAsBytes(binaryData);
 
-    // Save to gallery
+    // Save to gallery (temporarily disabled - incompatible plugin)
+    // TODO: Use photo_manager to save to gallery
+    /*
     if (isPhoto) {
-      await GallerySaver.saveImage(filePath, albumName: 'HydraCam/${SessionManager.instance.sessionGuid}');
+      await GallerySaver.saveImage(filePath, albumName: "HydraCam/${SessionManager.instance.sessionGuid}");
     } else { // Video
-      await GallerySaver.saveVideo(filePath, albumName: 'HydraCam/${SessionManager.instance.sessionGuid}');
+      await GallerySaver.saveVideo(filePath, albumName: "HydraCam/${SessionManager.instance.sessionGuid}");
     }
+    */
 
     return filePath;
   }
@@ -309,9 +311,9 @@ class MasterServer {
     LogService.instance.registerLog("New capture session started with GUID: $sessionGuid");
 
     // Notify slaves that session started
-    var sessionStartedCommand = jsonEncode({
-      'command': 'sessionStarted',
-      'sessionGuid': sessionGuid,
+    final sessionStartedCommand = jsonEncode({
+      "command": "sessionStarted",
+      "sessionGuid": sessionGuid,
     });
     sendCommandToAll(sessionStartedCommand);
   }
@@ -337,8 +339,8 @@ class MasterServer {
       SessionManager.instance.endSession();
 
       // Notify slaves that session ended
-      var sessionEndedCommand = jsonEncode({
-        'command': 'sessionEnded',
+      final sessionEndedCommand = jsonEncode({
+        "command": "sessionEnded",
       });
       sendCommandToAll(sessionEndedCommand);
 
@@ -383,18 +385,18 @@ class MasterServer {
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
       // Send the scheduled command to a specific slave
       _clients[deviceId]?.add(jsonEncode({
-        'type': 'scheduledCommand',
-        'command': command,
-        'scheduledTime': scheduledTimeString,
+        "type": "scheduledCommand",
+        "command": command,
+        "scheduledTime": scheduledTimeString,
       }));
       LogService.instance.registerLog("Scheduled command '$command' sent to slave with deviceId: $deviceId.");
     } else {
       // Send the scheduled command to all slaves
       for (var client in _clients.values) {
         client.add(jsonEncode({
-          'type': 'scheduledCommand',
-          'command': command,
-          'scheduledTime': scheduledTimeString,
+          "type": "scheduledCommand",
+          "command": command,
+          "scheduledTime": scheduledTimeString,
         }));
       }
       LogService.instance.registerLog("Scheduled command '$command' sent to all connected slaves.");

@@ -1,6 +1,6 @@
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
-import 'log_service.dart';
+import "dart:io";
+import "package:permission_handler/permission_handler.dart";
+import "log_service.dart";
 
 class PermissionService {
   /// Requests all required permissions and returns `true` if all are granted.
@@ -32,15 +32,15 @@ class PermissionService {
         .toList();
 
     // Construct the log message
-    final logMessage = 'Permission request completed.\n'
-        'Granted: $grantedPermissions\n'
-        'Denied: $deniedPermissions';
+    final logMessage = "Permission request completed.\n"
+        "Granted: $grantedPermissions\n"
+        "Denied: $deniedPermissions";
 
     // Log the permissions status
     LogService.instance.registerLog(
       logMessage,
-      function: 'requestAllPermissions',
-      file: 'PermissionService',
+      function: "requestAllPermissions",
+      file: "PermissionService",
     );
 
     // Check if all permissions are granted

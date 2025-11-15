@@ -1,5 +1,5 @@
-import 'CapturedPhoto.dart';
-import 'CapturedVideo.dart';
+import "captured_photo.dart";
+import "captured_video.dart";
 
 /// Represents a session of photo or video capture, storing all captured photos,
 /// videos, and related metadata for the session.

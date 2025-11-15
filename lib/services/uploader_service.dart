@@ -1,12 +1,12 @@
-import 'dart:collection';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
-import 'package:hydracam/services/settings_service.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import 'hydracam_api_service.dart';
-import 'session_manager.dart';
-import 'log_service.dart';
+import "dart:collection";
+import "dart:io";
+import "package:flutter/cupertino.dart";
+import "settings_service.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "hydracam_api_service.dart";
+import "session_manager.dart";
+import "log_service.dart";
 
 /// Singleton Module that manages the upload process of every media file recorded
 class UploaderService {
@@ -99,7 +99,7 @@ class UploaderService {
     bool success = false;
 
     // Get session GUID
-    String? sessionGuid = SessionManager.instance.sessionGuid;
+    final String? sessionGuid = SessionManager.instance.sessionGuid;
     LogService.instance.registerLog("UploaderService: sessionGuid=$sessionGuid");
 
     if (sessionGuid == null) {
@@ -112,7 +112,7 @@ class UploaderService {
     }
 
     // Prepare file
-    File file = File(media.mediaPath);
+    final File file = File(media.mediaPath);
 
     // Check if file exists
     if (!file.existsSync()) {
@@ -181,6 +181,7 @@ class UploaderService {
     }
 
     // Notify listeners to update UI
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     SessionManager.instance.notifyListeners();
     currentlyUploadingNotifier.value = null;
 

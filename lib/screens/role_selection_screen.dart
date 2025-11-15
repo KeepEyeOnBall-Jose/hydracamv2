@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import '../widgets/session_info_widget.dart';
-import '../master/master_screen.dart';
-import '../slave/slave_screen.dart';
+import "package:flutter/material.dart";
+import "../widgets/session_info_widget.dart";
+import "../master/master_screen.dart";
+import "../slave/slave_screen.dart";
 
 /// RoleSelectionScreen - Initial screen to select the role of the device (Master or Slave).
 class RoleSelectionScreen extends StatelessWidget {
@@ -9,12 +9,8 @@ class RoleSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // return false to prevent app from closing on pressing "back"
-        return false;
-      },
-
+    return PopScope(
+      canPop: false, // Prevent app from closing on pressing "back"
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Select Device Role"),

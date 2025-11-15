@@ -1,6 +1,6 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
 /// A singleton service to manage application logs.
 class LogService {
@@ -21,14 +21,14 @@ class LogService {
   void registerLog(String message,
       {DateTime? timestamp, String? function, String? file}) {
     final logEntry = {
-      'message': message,
-      'timestamp': timestamp ?? DateTime.now(),
-      'function': function,
-      'file': file,
+      "message": message,
+      "timestamp": timestamp ?? DateTime.now(),
+      "function": function,
+      "file": file,
     };
     _logs.add(logEntry);
     if (kDebugMode) {
-      print('Log registered: $logEntry');
+      print("Log registered: $logEntry");
     }
   }
 

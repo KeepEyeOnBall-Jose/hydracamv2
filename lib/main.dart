@@ -1,36 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:hydracam/services/battery_service.dart';
-import 'package:hydracam/services/camera_service_singleton.dart';
-import 'package:hydracam/services/storage_service.dart';
-import 'package:provider/provider.dart';
-import 'package:hydracam/slave/slave_screen.dart';
-//import 'package:sport_cam_sync/screens/role_selection_screen.dart';
-import 'package:hydracam/services/device_id_provider.dart';
-import 'package:hydracam/services/device_service.dart';
-import 'package:hydracam/services/location_service.dart';
-import 'package:hydracam/services/log_service.dart';
-import 'package:hydracam/services/permission_service.dart';
-import 'package:hydracam/app_theme.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
-
-import 'globals.dart';
+import "package:flutter/material.dart";
+import "services/battery_service.dart";
+import "services/camera_service.dart";
+import "services/camera_service_singleton.dart";
+import "services/storage_service.dart";
+import "package:provider/provider.dart";
+import "slave/slave_screen.dart";
+import "services/device_id_provider.dart";
+import "services/device_service.dart";
+import "services/location_service.dart";
+import "services/log_service.dart";
+import "services/permission_service.dart";
+import "app_theme.dart";
+import "package:wakelock_plus/wakelock_plus.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Ensure permissions are granted
-  bool permissionsGranted = await PermissionService.requestAllPermissions();
+  final bool permissionsGranted = await PermissionService.requestAllPermissions();
 
   if (!permissionsGranted) {
     LogService.instance.registerLog("Some permissions were not granted. The app may not work as expected.");
   }
 
-  // Initialize the Device ID
-  String deviceId = await DeviceIdService.getOrCreateDeviceId();
-  LogService.instance.registerLog('Device ID: $deviceId');
+  final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+  LogService.instance.registerLog("Device ID: $deviceId");
 
   LogService.instance.registerLog("Initialize LocationService and try to get the location");
-  // Initialize LocationService and try to get the location
   try {
     final locationService = LocationService();
     await locationService.initialize();
@@ -38,56 +33,53 @@ void main() async {
     LogService.instance.registerLog("Failed to initialize location service: $e", function: "main()", file: "main.dart");
   }
 
-
   LogService.instance.registerLog("Prevent screen from turning off");
-  // Prevent screen from turning off
   WakelockPlus.enable();
-
-  // GlobalKey para ScaffoldMessenger
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  MasterGlobals.masterScaffoldKey = scaffoldMessengerKey;
-
-  // Init BatteryService
-  BatteryService.initialize(
-    scaffoldMessengerKey: scaffoldMessengerKey,
-  );
-
-  // Init StorageService
-  StorageService.initialize(
-    scaffoldMessengerKey: scaffoldMessengerKey,
-    lowStorageThreshold: 1.5,       // Custom warning threshold 1.5 GB
-    criticalStorageThreshold: 0.5,  // Custom critical threshold 0.5 GB
-    onCriticalStorageCallback: () {
-      // Callback: force stop recording if low storage
-      LogService.instance.registerLog("Critical storage: triggering recording stop.");
-      CameraServiceSingleton.instance.forceStopRecordingDueToStorage();
-    },
-  );
-
-
 
   runApp(
     ChangeNotifierProvider(
       create: (_) => DeviceIdProvider(deviceId),
-      child: HydraCamApp(
-        scaffoldMessengerKey: scaffoldMessengerKey,
-      ),
+      child: const HydraCamApp(),
     ),
   );
 }
 
 class HydraCamApp extends StatelessWidget {
-
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
-  const HydraCamApp({super.key, required this.scaffoldMessengerKey});
+  const HydraCamApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HydraCam',
-      theme: AppTheme.lightTheme,
-      scaffoldMessengerKey: scaffoldMessengerKey, // For global snackbars
-      home: const SlaveScreen(isAutoMode: true), // Start in SlaveScreen with auto mode
+    return MultiProvider(
+      providers: [
+        Provider<StorageService>(
+          create: (context) => StorageService(
+            messengerState: ScaffoldMessenger.of(context),
+            lowStorageThreshold: 1.5,
+            criticalStorageThreshold: 0.5,
+            onCriticalStorageCallback: () {
+              LogService.instance.registerLog("Critical storage: triggering recording stop.");
+              CameraServiceSingleton.instance.forceStopRecordingDueToStorage();
+            },
+          ),
+          dispose: (_, service) => service.dispose(),
+        ),
+        Provider<BatteryService>(
+          create: (context) => BatteryService(
+            messengerState: ScaffoldMessenger.of(context),
+          ),
+          dispose: (_, service) => service.dispose(),
+        ),
+        Provider<CameraService>(
+          create: (context) => CameraServiceSingleton.initialize(
+            Provider.of<StorageService>(context, listen: false),
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        title: "HydraCam",
+        theme: AppTheme.lightTheme,
+        home: const SlaveScreen(isAutoMode: true),
+      ),
     );
   }
 }

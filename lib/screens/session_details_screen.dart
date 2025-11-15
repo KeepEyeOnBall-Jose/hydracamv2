@@ -1,17 +1,17 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import '../models/CaptureSession.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import '../services/alert_utils.dart';
-import '../services/session_manager.dart';
-import '../services/uploader_service.dart';
-import '../master/master_screen.dart';
+import "dart:io";
+import "package:flutter/material.dart";
+import "../models/capture_session.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../services/alert_utils.dart";
+import "../services/session_manager.dart";
+import "../services/uploader_service.dart";
+import "../master/master_screen.dart";
 
 class SessionDetailsScreen extends StatelessWidget {
   final CaptureSession session;
 
-  const SessionDetailsScreen({Key? key, required this.session}) : super(key: key);
+  const SessionDetailsScreen({super.key, required this.session});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,8 @@ class SessionDetailsScreen extends StatelessWidget {
                 Text("Session ID: ${session.sessionId}"),
                 Text("Session GUID: ${session.sessionGuid ?? 'Unavailable'}"),
                 Text("Start Time: ${session.startTime}"),
-                if (session.endTime != null) Text("End Time: ${session.endTime}"),
+                if (session.endTime != null)
+                  Text("End Time: ${session.endTime}"),
                 Text("Total Photos: ${session.capturedPhotos.length}"),
                 Text("Total Videos: ${session.capturedVideos.length}"),
               ],
@@ -76,8 +77,9 @@ class SessionDetailsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: IconButton(
-              icon: const Icon(Icons.file_download_outlined, color: Colors.blue),
-              tooltip: 'Load Session',
+              icon:
+                  const Icon(Icons.file_download_outlined, color: Colors.blue),
+              tooltip: "Load Session",
               onPressed: () => _loadSessionWithoutUploading(context),
             ),
           ),
@@ -89,12 +91,15 @@ class SessionDetailsScreen extends StatelessWidget {
   void _loadSessionWithoutUploading(BuildContext context) async {
     try {
       // Jut load session without uploading anything
-      SessionManager.instance.startSession(session.sessionGuid!, null, deviceType: "Master");
+      SessionManager.instance
+          .startSession(session.sessionGuid!, null, deviceType: "Master");
 
-      final loadedSession = await SessionManager.instance.loadSessionMetadata(session.sessionGuid!);
+      final loadedSession = await SessionManager.instance
+          .loadSessionMetadata(session.sessionGuid!);
 
       if (loadedSession == null) {
-        throw Exception("Failed to load session metadata for GUID: ${session.sessionGuid!}");
+        throw Exception(
+            "Failed to load session metadata for GUID: ${session.sessionGuid!}");
       }
 
       for (final photo in loadedSession.capturedPhotos) {
@@ -103,6 +108,8 @@ class SessionDetailsScreen extends StatelessWidget {
       for (final video in loadedSession.capturedVideos) {
         SessionManager.instance.addVideo(video);
       }
+
+      if (!context.mounted) return;
 
       // Show confirmation
       ScaffoldMessenger.of(context).showSnackBar(
@@ -115,15 +122,15 @@ class SessionDetailsScreen extends StatelessWidget {
         MaterialPageRoute(builder: (context) => const MasterScreen()),
       );
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to load session: $e")),
       );
     }
   }
 
-
-
-  Widget _buildMediaSection(String title, List<dynamic> mediaList, BuildContext context) {
+  Widget _buildMediaSection(
+      String title, List<dynamic> mediaList, BuildContext context) {
     if (mediaList.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
@@ -146,7 +153,7 @@ class SessionDetailsScreen extends StatelessWidget {
         ),
         ...mediaList.map((media) {
           return _buildMediaItem(media, context);
-        }).toList(),
+        }),
       ],
     );
   }
@@ -180,7 +187,8 @@ class SessionDetailsScreen extends StatelessWidget {
           } else {
             // Ask to load session and upload all unsent media
             AlertUtils.showUploadAllMediaAlert(
-              context,() => _loadSessionAndUploadMedia(context),
+              context,
+              () => _loadSessionAndUploadMedia(context),
             );
           }
         },
@@ -229,17 +237,19 @@ class SessionDetailsScreen extends StatelessWidget {
     );
   }
 
-
   // TODO: Extract from here
   void _loadSessionAndUploadMedia(BuildContext context) async {
     try {
       // Load session
-      SessionManager.instance.startSession(session.sessionGuid!, null, deviceType: "Master"); // TODO: Master or the previous one??
+      SessionManager.instance.startSession(session.sessionGuid!, null,
+          deviceType: "Master"); // TODO: Master or the previous one??
 
-      final loadedSession = await SessionManager.instance.loadSessionMetadata(session.sessionGuid!);
+      final loadedSession = await SessionManager.instance
+          .loadSessionMetadata(session.sessionGuid!);
 
       if (loadedSession == null) {
-        throw Exception("Failed to load session metadata for GUID: ${session.sessionGuid!}");
+        throw Exception(
+            "Failed to load session metadata for GUID: ${session.sessionGuid!}");
       }
 
       for (final photo in loadedSession.capturedPhotos) {
@@ -249,9 +259,13 @@ class SessionDetailsScreen extends StatelessWidget {
         SessionManager.instance.addVideo(video);
       }
 
+      if (!context.mounted) return;
+
       // Notify user
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Session loaded and unsent media added to upload queue.")),
+        const SnackBar(
+            content:
+                Text("Session loaded and unsent media added to upload queue.")),
       );
 
       // Navigate to the Master screen
@@ -260,14 +274,13 @@ class SessionDetailsScreen extends StatelessWidget {
         MaterialPageRoute(builder: (context) => const MasterScreen()),
       );
 
-
       // Init upload process
       UploaderService().startUploadingManually();
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to load session: $e")),
       );
     }
   }
-
 }

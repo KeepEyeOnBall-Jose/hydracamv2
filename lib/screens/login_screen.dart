@@ -1,19 +1,21 @@
-import 'package:flutter/material.dart';
-import '../services/user_service.dart';
+import "package:flutter/material.dart";
+import "../services/log_service.dart";
+import "../services/user_service.dart";
 
 /// Login Screen to manage authentication and display the current login state.
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
-  bool _isUserDetailsLoading = false;  // Added for user details loading
+  bool _isUserDetailsLoading = false; // Added for user details loading
   String? _errorMessage;
-  Map<String, dynamic>? _userDetails; // To store user details fetched from the API
+  Map<String, dynamic>?
+      _userDetails; // To store user details fetched from the API
 
   final UserService _userService = UserService();
 
@@ -25,10 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _userService.login();
-      await _fetchUserDetails();  // Fetch user details after login
+      await _fetchUserDetails(); // Fetch user details after login
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to log in. Please try again.';
+        _errorMessage = "Failed to log in. Please try again.";
       });
     } finally {
       setState(() {
@@ -47,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await _userService.logout();
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to log out. Please try again.';
+        _errorMessage = "Failed to log out. Please try again.";
       });
     } finally {
       setState(() {
@@ -64,14 +66,16 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        print("will fetch user details");
-        final userDetails = await _userService.fetchUserDetails(_userService.guid!);
+        LogService.instance.registerLog("will fetch user details",
+            function: "_loadUserDetails", file: "login_screen.dart");
+        final userDetails =
+            await _userService.fetchUserDetails(_userService.guid!);
         setState(() {
           _userDetails = userDetails;
         });
       } catch (e) {
         setState(() {
-          _errorMessage = 'Failed to fetch user details. Please try again.';
+          _errorMessage = "Failed to fetch user details. Please try again.";
         });
       } finally {
         setState(() {
@@ -81,23 +85,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Authentication'),
+        title: const Text("User Authentication"),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: _isLoading
-              ? const CircularProgressIndicator()  // Show loading while logging in
+              ? const CircularProgressIndicator() // Show loading while logging in
               : _userService.isLoggedIn
-              ? _isUserDetailsLoading  // Show loading while fetching user details
-              ? const CircularProgressIndicator()
-              : _buildLoggedInView()
-              : _buildLoggedOutView(),
+                  ? _isUserDetailsLoading // Show loading while fetching user details
+                      ? const CircularProgressIndicator()
+                      : _buildLoggedInView()
+                  : _buildLoggedOutView(),
         ),
       ),
     );
@@ -118,14 +121,14 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 20),
         Text(
-          'Welcome! Please log in to continue.',
+          "Welcome! Please log in to continue.",
           style: Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: _login,
-          child: const Text('Login'),
+          child: const Text("Login"),
         ),
         if (_errorMessage != null) ...[
           const SizedBox(height: 20),
@@ -150,14 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundImage: profilePictureUrl != null
               ? NetworkImage(profilePictureUrl)
               : null,
-          backgroundColor: Colors.grey.shade300, // Show default icon if no profile picture
+          backgroundColor:
+              Colors.grey.shade300, // Show default icon if no profile picture
           child: profilePictureUrl == null
               ? const Icon(Icons.person, size: 50, color: Colors.white)
               : null,
         ),
         const SizedBox(height: 20),
         Text(
-          _userService.email ?? 'Unknown User',
+          _userService.email ?? "Unknown User",
           style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
@@ -170,14 +174,14 @@ class _LoginScreenState extends State<LoginScreen> {
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: _logout,
-          child: const Text('Logout'),
+          child: const Text("Logout"),
         ),
         const SizedBox(height: 20),
         const Divider(),
         const SizedBox(height: 10),
         _userDetails == null
-            ? const Text('Loading user details...')
-            : _buildUserDetailsView(),  // Display user details once loaded
+            ? const Text("Loading user details...")
+            : _buildUserDetailsView(), // Display user details once loaded
       ],
     );
   }
@@ -185,37 +189,37 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildUserDetailsView() {
     if (_userDetails == null) return Container();
 
-    final gender = _userDetails!['gender'] ?? 'Unknown';
-    final country = _userDetails!['country'] ?? 'Unknown';
-    final sports = _userDetails!['sports'] ?? 'None';
-    final fullName = _userDetails!['fullName'] ?? 'Unknown';
-    final email = _userDetails!['email'] ?? 'Unknown';
+    final gender = _userDetails!["gender"] ?? "Unknown";
+    final country = _userDetails!["country"] ?? "Unknown";
+    final sports = _userDetails!["sports"] ?? "None";
+    final fullName = _userDetails!["fullName"] ?? "Unknown";
+    final email = _userDetails!["email"] ?? "Unknown";
 
     return Column(
       children: [
         const SizedBox(height: 20),
         Text(
-          'Full Name: $fullName',
+          "Full Name: $fullName",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 10),
         Text(
-          'Email: $email',
+          "Email: $email",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 10),
         Text(
-          'Country: $country',
+          "Country: $country",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 10),
         Text(
-          'Gender: $gender',
+          "Gender: $gender",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 10),
         Text(
-          'Sports: $sports',
+          "Sports: $sports",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],

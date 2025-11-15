@@ -1,17 +1,17 @@
-import 'dart:async';
-import 'dart:convert'; // Import for jsonEncode
-import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:web_socket_channel/io.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import '../services/camera_service.dart';
-import '../services/camera_service_singleton.dart';
-import '../services/device_service.dart'; // Import for device ID service
-import '../services/hydracam_api_service.dart';
-import '../services/log_service.dart';
-import '../services/session_manager.dart';
+import "dart:async";
+import "dart:convert"; // Import for jsonEncode
+import "package:camera/camera.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:web_socket_channel/io.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../services/camera_service.dart";
+import "../services/camera_service_singleton.dart";
+import "../services/device_service.dart"; // Import for device ID service
+import "../services/hydracam_api_service.dart";
+import "../services/log_service.dart";
+import "../services/session_manager.dart";
 
 /// SlaveClient - Handles the WebSocket client for slave devices.
 /// This class manages communication with the master device, sending captured media
@@ -120,14 +120,14 @@ class SlaveClient {
 
       // Send a JSON message containing the device ID after connecting
       _channel?.sink.add(jsonEncode({
-        'type': 'deviceId',
-        'deviceId': _deviceId,
+        "type": "deviceId",
+        "deviceId": _deviceId,
       }));
 
       // Also ask status of session
       _channel?.sink.add(jsonEncode({
-        'type': 'getSessionStatus',
-        'deviceId': _deviceId,
+        "type": "getSessionStatus",
+        "deviceId": _deviceId,
       }));
 
       LogService.instance.registerLog("Connected to WebSocket at $serverAddress");
@@ -142,30 +142,30 @@ class SlaveClient {
           _statusStreamController.add("Received command: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
-          if (message.trim().startsWith('{') || message.trim().startsWith('[')) {
+          if (message.trim().startsWith("{") || message.trim().startsWith("[")) {
             try {
               // Attempt to decode the message as JSON
-              var decodedMessage = jsonDecode(message);
+              final decodedMessage = jsonDecode(message);
 
               if (decodedMessage is Map<String, dynamic>) {
                 // If the decoded message is a Map, process it as a command
-                String? command = decodedMessage['command'];
+                final String? command = decodedMessage["command"];
 
-                if (command == 'sessionStarted' || command == 'sessionStatus') {
+                if (command == "sessionStarted" || command == "sessionStatus") {
                   LogService.instance.registerLog("Command: $message");
-                  String sessionGuid = decodedMessage['sessionGuid'];
+                  final String sessionGuid = decodedMessage["sessionGuid"];
                   LogService.instance.registerLog("Session guid: $sessionGuid");
                   if (sessionGuid.isNotEmpty) {
                     SessionManager.instance.startSession(sessionGuid, null, deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
                 }
-                else if (command == 'sessionEnded') {
+                else if (command == "sessionEnded") {
                   // End session
                   SessionManager.instance.endSession();
                   LogService.instance.registerLog("Session ended as per master command.");
                 }
-                else if (command == 'noSession') {
+                else if (command == "noSession") {
                   // No active session on master
                   SessionManager.instance.endSession();
                   LogService.instance.registerLog("No active session on master.");
@@ -224,30 +224,30 @@ class SlaveClient {
   /// Processes specific commands received from the master.
   /// Handles both scheduled commands and immediate commands, whether JSON-based or plain text.
   void _processCommand(String message) async {
-    if (message.trim().startsWith('{')){
+    if (message.trim().startsWith("{")){
 
       try {
         // Attempt to decode the message as JSON
         final decodedMessage = jsonDecode(message);
 
         if (decodedMessage is Map<String, dynamic>) {
-          final String? type = decodedMessage['type'];
-          final String? command = decodedMessage['command'];
+          final String? type = decodedMessage["type"];
+          final String? command = decodedMessage["command"];
 
-          if (type != null && type == 'scheduledCommand' && command != null) {
+          if (type != null && type == "scheduledCommand" && command != null) {
             // Handle scheduled commands
-            final DateTime scheduledTime = DateTime.parse(decodedMessage['scheduledTime']);
+            final DateTime scheduledTime = DateTime.parse(decodedMessage["scheduledTime"]);
             _scheduleExecution(command, scheduledTime);
-          } else if (type == 'sessionStarted' || type == 'sessionStatus') {
+          } else if (type == "sessionStarted" || type == "sessionStatus") {
             // Handle session start/status
-            final String sessionGuid = decodedMessage['sessionGuid'];
+            final String sessionGuid = decodedMessage["sessionGuid"];
             SessionManager.instance.startSession(sessionGuid, null, deviceType: "Slave");
             notifyReadyToTransmit(sessionGuid);
-          } else if (type == 'sessionEnded') {
+          } else if (type == "sessionEnded") {
             // Handle session end
             SessionManager.instance.endSession();
             LogService.instance.registerLog("Session ended as per master command.");
-          } else if (type == 'noSession') {
+          } else if (type == "noSession") {
             // Handle no active session
             SessionManager.instance.endSession();
             LogService.instance.registerLog("No active session on master.");
@@ -295,7 +295,7 @@ class SlaveClient {
 
   /// Executes the received command.
   void _executeCommand(String command) async{
-    if (command == 'takePhoto') {
+    if (command == "takePhoto") {
       photoCaptureDate = DateTime.now();
       _cameraService.takePhoto().then((photoPath) async {
         final receivedDate = DateTime.now();
@@ -322,7 +322,7 @@ class SlaveClient {
         // _channel?.sink.add(jsonEncode({...}));
       });
     }
-    else if (command == 'startRecordingVideo') {
+    else if (command == "startRecordingVideo") {
       LogService.instance.registerLog("Starting video recording");
       videoStartRecordingDate = DateTime.now();
       await _cameraService.startRecordingVideo();
@@ -330,7 +330,7 @@ class SlaveClient {
       onRecordingStarted?.call();
       _statusStreamController.add("Recording video...");
     }
-    else if (command == 'stopRecordingVideo') {
+    else if (command == "stopRecordingVideo") {
       if (!isRecordingVideo) {
         LogService.instance.registerLog("Already not recording. Doing nothing.");
         return;
@@ -367,7 +367,7 @@ class SlaveClient {
         // _channel?.sink.add(jsonEncode({...}));
       });
     }
-    else if (command == 'stopCamera') {
+    else if (command == "stopCamera") {
       // Stop the camera service when receiving 'stopCamera' command
       _cameraService.stopCamera();
     }
@@ -378,11 +378,11 @@ class SlaveClient {
 
   /// Sends a notification to the server that the slave is ready to transmit media.
   Future<bool> notifyReadyToTransmit(String sessionGuid) async {
-    String deviceId = _deviceId ?? 'Unknown';
+    final String deviceId = _deviceId ?? "Unknown";
 
     // Call API service to notify server that device is ready to transmit
-    var apiService = HydraCamApiService();
-    bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
+    final apiService = HydraCamApiService();
+    final bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
 
     return success;
   }
@@ -391,9 +391,9 @@ class SlaveClient {
   void _notifyMasterForcedStop() {
     if (_channel != null && _isConnected) {
       final message = {
-        'type': 'forcedStop',
-        'deviceId': _deviceId,
-        'reason': 'storageFull',
+        "type": "forcedStop",
+        "deviceId": _deviceId,
+        "reason": "storageFull",
       };
       _channel!.sink.add(jsonEncode(message));
       LogService.instance.registerLog("Sent forcedStop notification to master");
@@ -420,9 +420,9 @@ class SlaveClient {
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (_isConnected) {
         _channel?.sink.add(jsonEncode({
-          'type': 'heartbeat',
-          'deviceId': _deviceId,
-          'timestamp': DateTime.now().toIso8601String(),
+          "type": "heartbeat",
+          "deviceId": _deviceId,
+          "timestamp": DateTime.now().toIso8601String(),
         }));
         //LogService.instance.registerLog("Sent heartbeat to master.");
       }

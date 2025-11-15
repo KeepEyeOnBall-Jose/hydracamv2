@@ -1,26 +1,26 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart';
-import '../app_theme.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import '../services/device_service.dart';
-import '../services/session_manager.dart';
-import '../services/log_service.dart';
-import 'media_filter_dialog.dart';
-import '../screens/media_selection_screen.dart';
+import "dart:io";
+import "package:flutter/material.dart";
+import "package:photo_manager/photo_manager.dart";
+import "../app_theme.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../services/device_service.dart";
+import "../services/session_manager.dart";
+import "../services/log_service.dart";
+import "media_filter_dialog.dart";
+import "../screens/media_selection_screen.dart";
 
 /// A button widget that allows adding media from the gallery to the current session.
 class AddGalleryMediaButton extends StatefulWidget {
   final bool enabled; // New parameter to control enable/disable state
 
-  const AddGalleryMediaButton({Key? key, this.enabled = true}) : super(key: key);
+  const AddGalleryMediaButton({super.key, this.enabled = true});
 
   @override
-  _AddGalleryMediaButtonState createState() => _AddGalleryMediaButtonState();
+  AddGalleryMediaButtonState createState() => AddGalleryMediaButtonState();
 }
 
-class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
+class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
   @override
   void initState() {
     super.initState();
@@ -48,18 +48,18 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     _openFilterDialog();
   }
 
-
   void _showNoSessionAlert() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('No Active Session'),
-          content: const Text('Please start a session before adding media from the gallery.'),
+          title: const Text("No Active Session"),
+          content: const Text(
+              "Please start a session before adding media from the gallery."),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: const Text("OK"),
             ),
           ],
         );
@@ -81,7 +81,7 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
   }
 
   Future<List<AssetEntity>> _fetchMedia(MediaFilters filters) async {
-    FilterOptionGroup options = FilterOptionGroup();
+    final FilterOptionGroup options = FilterOptionGroup();
 
     if (filters.isPhoto) {
       options.setOption(
@@ -106,13 +106,13 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       );
     }
 
-    List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
+    final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
       type: filters.isPhoto ? RequestType.image : RequestType.video,
       filterOption: options,
     );
 
     final Set<String> uniqueIds = {}; // Set to track unique asset IDs
-    List<AssetEntity> allMedia = [];
+    final List<AssetEntity> allMedia = [];
 
     for (var album in albums) {
       final assets = await album.getAssetListPaged(page: 0, size: 100);
@@ -124,7 +124,8 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
         }
       }
 
-      LogService.instance.registerLog('Album: ${album.name}, Assets Processed: ${assets.length}');
+      LogService.instance.registerLog(
+          "Album: ${album.name}, Assets Processed: ${assets.length}");
     }
 
     // Sort media by creation date (most recent first)
@@ -133,32 +134,33 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     return allMedia;
   }
 
-
   Future<void> _queryAndSelectMedia(MediaFilters filters) async {
-    List<AssetEntity> media = await _fetchMedia(filters);
+    final List<AssetEntity> media = await _fetchMedia(filters);
 
     if (media.isEmpty) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No media found with the specified filters')),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("No media found with the specified filters")),
+      );
       return;
     }
 
-    if (context.mounted) {
-      final selectedMedia = await Navigator.push<List<AssetEntity>>(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MediaSelectionScreen(
-            mediaList: media,
-          ),
-        ),
-      );
+    if (!mounted) return;
 
-      if (selectedMedia != null && selectedMedia.isNotEmpty) {
-        await _addMediaToSession(selectedMedia);
-      }
+    final selectedMedia = await Navigator.push<List<AssetEntity>>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MediaSelectionScreen(
+          mediaList: media,
+        ),
+      ),
+    );
+
+    if (!mounted) return;
+
+    if (selectedMedia != null && selectedMedia.isNotEmpty) {
+      await _addMediaToSession(selectedMedia);
     }
   }
 
@@ -166,11 +168,11 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
     for (var asset in selectedMedia) {
-      File? file = await asset.file;
+      final File? file = await asset.file;
       if (file == null) continue;
 
       if (asset.type == AssetType.image) {
-        CapturedPhoto photo = CapturedPhoto(
+        final CapturedPhoto photo = CapturedPhoto(
           photoPath: file.path,
           captureDate: asset.createDateTime,
           receivedDate: DateTime.now(),
@@ -178,7 +180,7 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
         );
         SessionManager.instance.addPhoto(photo);
       } else if (asset.type == AssetType.video) {
-        CapturedVideo video = CapturedVideo(
+        final CapturedVideo video = CapturedVideo(
           videoPath: file.path,
           startRecordingDate: asset.createDateTime,
           endRecordingDate: asset.createDateTime.add(asset.videoDuration),
@@ -189,25 +191,26 @@ class _AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       }
     }
 
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     SessionManager.instance.notifyListeners();
 
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Media added to session')),
-      );
-    }
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Media added to session")),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    bool sessionActive = SessionManager.instance.isSessionActive;
-    bool isButtonEnabled = widget.enabled && sessionActive;
+    final bool sessionActive = SessionManager.instance.isSessionActive;
+    final bool isButtonEnabled = widget.enabled && sessionActive;
     return ElevatedButton(
       onPressed: isButtonEnabled ? _onPressed : null,
       style: ElevatedButton.styleFrom(
         backgroundColor: isButtonEnabled ? null : AppTheme.disabledButtonColor,
       ),
-      child: const Text('Add Media from Gallery'),
+      child: const Text("Add Media from Gallery"),
     );
   }
 }

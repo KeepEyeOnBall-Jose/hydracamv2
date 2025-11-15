@@ -1,41 +1,42 @@
-import 'package:flutter/material.dart';
-import 'package:hydracam/screens/previous_sessions_screen.dart';
-import 'package:hydracam/screens/role_selection_screen.dart';
-import 'package:hydracam/screens/sports_centers_screen.dart';
-import 'package:video_player/video_player.dart'; // Add video_player dependency in pubspec.yaml
-import '../constants.dart';
-import '../globals.dart';
-import 'master_announcer.dart';
-import 'master_server.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import 'dart:io';
-import '../services/alert_utils.dart';
-import '../services/camera_service_singleton.dart';
-import '../services/device_service.dart';
-import '../services/hydracam_api_service.dart';
-import '../services/log_service.dart';
-import '../services/session_manager.dart';
-import '../services/settings_service.dart';
-import '../services/storage_service.dart';
-import '../services/user_service.dart';
-import '../widgets/Court_Selection_Widget.dart';
-import '../widgets/add_gallery_media_button.dart';
-import '../widgets/animated_countdown_timer.dart';
-import '../widgets/hydra_cam_app_bar.dart';
-import '../screens/master_video_recording_screen.dart';
-import '../widgets/media_list_widget.dart';
-import '../widgets/session_info_widget.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "../screens/previous_sessions_screen.dart";
+import "../screens/role_selection_screen.dart";
+import "../screens/sports_centers_screen.dart";
+import "package:video_player/video_player.dart"; // Add video_player dependency in pubspec.yaml
+import "../constants.dart" as constants;
+import "master_announcer.dart";
+import "master_server.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "dart:io";
+import "../services/alert_utils.dart";
+import "../services/camera_service.dart";
+import "../services/camera_service_singleton.dart";
+import "../services/device_service.dart";
+import "../services/hydracam_api_service.dart";
+import "../services/log_service.dart";
+import "../services/session_manager.dart";
+import "../services/settings_service.dart";
+import "../services/storage_service.dart";
+import "../services/user_service.dart";
+import "../widgets/court_selection_widget.dart";
+import "../widgets/add_gallery_media_button.dart";
+import "../widgets/animated_countdown_timer.dart";
+import "../widgets/hydra_cam_app_bar.dart";
+import "../screens/master_video_recording_screen.dart";
+import "../widgets/media_list_widget.dart";
+import "../widgets/session_info_widget.dart";
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
 
   @override
-  _MasterScreenState createState() => _MasterScreenState();
+  MasterScreenState createState() => MasterScreenState();
 }
 
-class _MasterScreenState extends State<MasterScreen> {
-  final MasterServer _server = MasterServer(CameraServiceSingleton.instance); // Assign the singleton unique camera service TODO: SIMPLIFY DELETE CONSTRUCTOR
+class MasterScreenState extends State<MasterScreen> {
+  late final MasterServer _server;
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   final HydraCamApiService _apiService = HydraCamApiService(); // API service instance
 
@@ -59,10 +60,18 @@ class _MasterScreenState extends State<MasterScreen> {
   bool isProcessingStartSession = false;  // To block button "Start Session"
   bool isProcessingTakePhoto = false;     // To block button "Take Photo"
 
+  late final StorageService _storageService;
+  late final CameraService _cameraService;
+
 
   @override
   void initState() {
     super.initState();
+    _storageService = Provider.of<StorageService>(context, listen: false);
+    // Use the singleton CameraService directly instead of a non-existent wrapper type
+    _cameraService = CameraServiceSingleton.instance;
+    _server = MasterServer(_cameraService);
+
     _server.onClientCountChange = (count) {
       if (mounted){
         setState(() {
@@ -129,7 +138,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   void _toggleRecording() async {
 
-    if (StorageService.isRecordingBlocked) {
+    if (_storageService.isRecordingBlocked) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Cannot start recording: Storage is critically low.")),
       );
@@ -149,16 +158,17 @@ class _MasterScreenState extends State<MasterScreen> {
     // Get timer duration
     final timerDuration = await SettingsService.getTimerDuration();
     final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
-    final String command = isRecording ? 'stopRecordingVideo' : 'startRecordingVideo';
+    final String command = isRecording ? "stopRecordingVideo" : "startRecordingVideo";
 
-    // Show countdown timer while waiting for the scheduled time
-    if (context.mounted){
+    // Show countdown timer while waiting for the scheduled time - capture context before async
+    final currentContext = context;
+    if (mounted){
       showDialog(
-        context: context,
+        context: currentContext,
         barrierDismissible: false,
         builder: (_) => AnimatedCountdownTimer(
           duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-          onComplete: () => Navigator.of(context).pop(),
+          onComplete: () => Navigator.of(currentContext).pop(),
         ),
       );
     }
@@ -168,6 +178,8 @@ class _MasterScreenState extends State<MasterScreen> {
 
     // Master also waits until the scheduled time before executing
     await Future.delayed(scheduledTime.difference(DateTime.now()));
+
+    if (!mounted) return;
 
     if (isRecording) {
       // Stop recording
@@ -204,9 +216,9 @@ class _MasterScreenState extends State<MasterScreen> {
   Future<CapturedVideo> _stopMasterRecordingVideo() async {
 
     // Send command to slaves before stopping from master
-    _server.sendCommand('stopRecordingVideo');
+    _server.sendCommand("stopRecordingVideo");
 
-    String videoPath = await _server.cameraService.stopRecordingVideo();
+    final String videoPath = await _server.cameraService.stopRecordingVideo();
 
     // Get the device ID
     final String deviceId = await DeviceIdService.getOrCreateDeviceId();
@@ -251,7 +263,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
     if (capturedVideo != null) {
       // Automatically show recorded video only if autoplay setting is active
-      bool autoplayEnabled = await SettingsService.getAutoplayVideoOnMaster();
+      final bool autoplayEnabled = await SettingsService.getAutoplayVideoOnMaster();
       if (autoplayEnabled) {
         Future.delayed(const Duration(milliseconds: 100), () {
           if (mounted) {
@@ -275,7 +287,7 @@ class _MasterScreenState extends State<MasterScreen> {
       final DateTime scheduledTime = DateTime.now().add(Duration(seconds: timerDuration));
 
       // Show countdown timer while waiting for the scheduled time
-      if (context.mounted){
+      if (mounted){
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -287,14 +299,16 @@ class _MasterScreenState extends State<MasterScreen> {
       }
 
       // Send the scheduled command to slaves
-      _server.scheduleCommand('takePhoto', scheduledTime);
+      _server.scheduleCommand("takePhoto", scheduledTime);
 
       // Master also waits until the scheduled time before executing
       await Future.delayed(scheduledTime.difference(DateTime.now()));
 
+      if (!mounted) return;
+
       // TODO: We should know before waiting? or we better wait even if we don't take pic?
       // Verify if master should also take a pic
-      bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
+      final bool shouldMasterRecord = await SettingsService.getMasterShouldRecord();
       if (shouldMasterRecord) {
         final String photoPath = await _server.cameraService.takePhoto();
 
@@ -338,7 +352,7 @@ class _MasterScreenState extends State<MasterScreen> {
       context: context,
       media: photo,
       isAutoCloseEnabled: autoClose,
-      autoCloseSeconds: secondsToClosePhoto,
+      autoCloseSeconds: constants.secondsToClosePhoto,
     );
   }
 
@@ -347,7 +361,7 @@ class _MasterScreenState extends State<MasterScreen> {
       context: context,
       media: video,
       isAutoCloseEnabled: autoClose,
-      autoCloseSeconds: secondsToClosePhoto,
+      autoCloseSeconds: constants.secondsToClosePhoto,
     );
   }
 
@@ -379,12 +393,12 @@ class _MasterScreenState extends State<MasterScreen> {
     });
 
     try{
-      var sessionId = DateTime.now().toIso8601String();
+      final sessionId = DateTime.now().toIso8601String();
 
       // Get the user GUID if logged in
-      String? userGuid = UserService().guid;
+      final String? userGuid = UserService().guid;
 
-      var response = await _apiService.createSession(
+      final response = await _apiService.createSession(
         sessionId,
         courtGuid: selectedCourtGuid,
         userGuid: userGuid, // Pass the user GUID if available
@@ -392,8 +406,10 @@ class _MasterScreenState extends State<MasterScreen> {
 
       LogService.instance.registerLog("Response to create session: $response");
 
+      if (!mounted) return;
+
       if (response != null) {
-        String sessionGuid = response['guid'];
+        final String sessionGuid = response["guid"];
         SessionManager.instance.startSession(sessionGuid, sessionId, deviceType: "Master");
         _server.startNewSession(sessionGuid); // Notify slaves
 
@@ -430,7 +446,7 @@ class _MasterScreenState extends State<MasterScreen> {
     });
 
     try{
-      bool? confirmEnd = await showDialog(
+      final bool? confirmEnd = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -457,7 +473,10 @@ class _MasterScreenState extends State<MasterScreen> {
       if (confirmEnd!= null && confirmEnd) {
         // Call API method endSession
         if (SessionManager.instance.currentSession != null) {
-          bool success = await _apiService.endSession(SessionManager.instance.sessionGuid!);
+          final bool success = await _apiService.endSession(SessionManager.instance.sessionGuid!);
+
+          if (!mounted) return;
+
           if (success) {
             _server.endCurrentSession(); // End locally
             setState((){});
@@ -488,20 +507,20 @@ class _MasterScreenState extends State<MasterScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        List<String> devices = getConnectedDevices();
+        final List<String> devices = getConnectedDevices();
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Connected Devices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text("Connected Devices", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               if (devices.isNotEmpty)
                 ...devices.map((deviceId) => ListTile(
-                  title: Text('Device ID: $deviceId'),
+                  title: Text("Device ID: $deviceId"),
                 ))
               else
-                const Center(child: Text('No connected devices')),
+                const Center(child: Text("No connected devices")),
             ],
           ),
         );
@@ -514,11 +533,11 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget _buildInitialUI() {
 
     // Order courts and centers for widget
-    Map<String, List<Map<String, String>>> sortedGroupedCourts = {
-      for (var entry in (groupedCourts.entries.toList()
+    final Map<String, List<Map<String, String>>> sortedGroupedCourts = {
+      for (var entry in (constants.groupedCourts.entries.toList()
         ..sort((a, b) => a.key.compareTo(b.key))) // Order centers
       )
-        entry.key: entry.value..sort((a, b) => a['name']!.compareTo(b['name']!)) // Order courts
+        entry.key: entry.value..sort((a, b) => a["name"]!.compareTo(b["name"]!)) // Order courts
     };
 
 
@@ -606,7 +625,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   // Build the UI when a session is active
   Widget _buildSessionUI() {
-    String? sessionGuid = SessionManager.instance.sessionGuid;
+    final String? sessionGuid = SessionManager.instance.sessionGuid;
 
     // Compute button width for vertical layout
     final buttonWidth = MediaQuery.of(context).orientation == Orientation.portrait
@@ -616,7 +635,7 @@ class _MasterScreenState extends State<MasterScreen> {
     final double buttonDistance = MediaQuery.of(context).orientation == Orientation.portrait ? 10 : 5;
 
     // Buttons and connected devices widget
-    Widget controls = Column(
+    final Widget controls = Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -672,7 +691,7 @@ class _MasterScreenState extends State<MasterScreen> {
     );
 
     // Media list widget
-    Widget mediaList = MediaListWidget(
+    final Widget mediaList = MediaListWidget(
       photos: photos,
       videos: videos,
       onPhotoTap: (photo) => _showPhotoDialog(photo, autoClose: false), // No auto-close
@@ -728,11 +747,12 @@ class _MasterScreenState extends State<MasterScreen> {
   // Build the final widget for the whole screen
   @override
   Widget build(BuildContext context) {
-    String? sessionGuid = SessionManager.instance.sessionGuid;
+    final String? sessionGuid = SessionManager.instance.sessionGuid;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (isRecording) return false;
+    return PopScope(
+      canPop: false, // We handle back navigation ourselves
+      onPopInvokedWithResult: (didPop, result) {
+        if (isRecording) return; // Ignore back while recording
 
         // Handle the back button press
         _server.stopServer();
@@ -741,7 +761,6 @@ class _MasterScreenState extends State<MasterScreen> {
           context,
           MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
         );
-        return false; // Prevent the default behavior
       },
       child: Scaffold(
         appBar: HydraCamAppBar(
@@ -787,10 +806,10 @@ class VideoPlayerScreen extends StatefulWidget {
   const VideoPlayerScreen({super.key, required this.videoPath});
 
   @override
-  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+  VideoPlayerScreenState createState() => VideoPlayerScreenState();
 }
 
-class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+class VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
 
   @override

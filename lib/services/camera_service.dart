@@ -1,15 +1,15 @@
-import 'dart:io';
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:hydracam/services/session_manager.dart';
-import 'package:hydracam/services/settings_service.dart';
-import 'package:hydracam/services/storage_service.dart';
-import 'package:path_provider/path_provider.dart';
-import '../constants.dart';
-import '../models/CapturedVideo.dart';
-import 'device_service.dart';
-import 'log_service.dart';
+import "dart:io";
+import "package:camera/camera.dart";
+import "package:flutter/cupertino.dart";
+// import "package:gallery_saver/gallery_saver.dart";  // Temporarily disabled - use photo_manager alternative
+import "session_manager.dart";
+import "settings_service.dart";
+import "storage_service.dart";
+import "package:path_provider/path_provider.dart";
+import "../constants.dart";
+import "../models/captured_video.dart";
+import "device_service.dart";
+import "log_service.dart";
 
 /// CameraService - Manages camera operations such as taking photos and recording videos.
 /// Singleton usage recommended via `CameraServiceSingleton`.
@@ -28,6 +28,7 @@ import 'log_service.dart';
 /// - Supports quality settings for camera resolution.
 /// - List and select available cameras for the device (WIP).
 class CameraService {
+  final StorageService _storageService; // Inject StorageService
 
   CameraController? _controller; // The camera controller instance
   CameraController? get controller => _controller; // Getter for accessing the controller
@@ -55,10 +56,10 @@ class CameraService {
   List<CameraDescription> _deviceCameras = []; // List of all available cameras on the device
   int _selectedCameraIndex = 0;                   // Index of the currently selected camera
 
-
   /// Constructor used only via the singleton
   /// Empty or optional for advanced use.
-  CameraService({this.onPhotoTaken, this.onVideoRecorded});
+  CameraService({required StorageService storageService, this.onPhotoTaken, this.onVideoRecorded})
+      : _storageService = storageService;
 
   /// Returns a copy of the list of cameras (for read-only use in the UI).
   List<CameraDescription> get deviceCameras => List.unmodifiable(_deviceCameras);
@@ -126,13 +127,13 @@ class CameraService {
   Future<ResolutionPreset> _loadCameraQuality() async {
     final quality = await SettingsService.getCameraQuality();
     switch (quality) {
-      case 'medium':
+      case "medium":
         _currentQuality = CameraQuality.medium;
         return ResolutionPreset.medium;
-      case 'low':
+      case "low":
         _currentQuality = CameraQuality.low;
         return ResolutionPreset.low;
-      case 'high':
+      case "high":
       default:
         _currentQuality = CameraQuality.high;
         return ResolutionPreset.high;
@@ -195,8 +196,9 @@ class CameraService {
       await File(photo.path).copy(newPath); // Move to session directory
       LogService.instance.registerLog("Photo saved to session path: $newPath");
 
-      // Save to gallery
-      await GallerySaver.saveImage(newPath, albumName: 'HydraCam');
+      // Save to gallery (temporarily disabled - incompatible plugin)
+      // await GallerySaver.saveImage(newPath, albumName: "HydraCam");
+      // TODO: Use photo_manager to save to gallery
 
       if (onPhotoTaken != null) {
         onPhotoTaken!(newPath);
@@ -237,11 +239,11 @@ class CameraService {
   /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
   Future<void> startRecordingVideo({bool enableFlash = false}) async {
     // Check if storage is critically low before proceeding
-    if (StorageService.isRecordingBlocked) {
+    if (_storageService.isRecordingBlocked) {
       LogService.instance.registerLog("Cannot start recording: Storage is critically low.");
 
       // Notify user
-      StorageService.showNotification("Cannot start recording: Storage is critically low.");
+      _storageService.showNotification("Cannot start recording: Storage is critically low.");
 
       return;
     }
@@ -289,8 +291,9 @@ class CameraService {
       // TODO: ISOLATE FROM MAIN THREAD IF THAT INCREASES PERFORMANCE?
       LogService.instance.registerLog("Video recorded at path: $newPath");
 
-      // Save to gallery
-      await GallerySaver.saveVideo(newPath, albumName: 'HydraCam');
+      // Save to gallery (temporarily disabled - incompatible plugin)
+      // await GallerySaver.saveVideo(newPath, albumName: "HydraCam");
+      // TODO: Use photo_manager to save to gallery
 
       if (onVideoRecorded != null) {
         onVideoRecorded!(newPath);
@@ -320,7 +323,7 @@ class CameraService {
         final videoPath = await stopRecordingVideo();
 
         // Notify user
-        StorageService.showNotification("Recording stopped due to low storage.");
+        _storageService.showNotification("Recording stopped due to low storage.");
 
         // Register video in SessionManager
         final String deviceId = await DeviceIdService.getOrCreateDeviceId();
@@ -400,11 +403,11 @@ class CameraService {
   /// Directory would be something like /data/user/0/com.amaia23.hydracam/session_<<sessionGuid>>/... in android
   Future<String> _getSessionMediaPath(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
-    final sessionDir = Directory('${directory.path}/session_${SessionManager.instance.sessionGuid}');
+    final sessionDir = Directory("${directory.path}/session_${SessionManager.instance.sessionGuid}");
     if (!sessionDir.existsSync()) {
       sessionDir.createSync(recursive: true);
     }
-    return '${sessionDir.path}/$fileName';
+    return "${sessionDir.path}/$fileName";
   }
 
 }

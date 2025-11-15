@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import '../models/CapturedPhoto.dart';
-import '../models/CapturedVideo.dart';
-import '../services/uploader_service.dart';
-import 'dart:io';
+import "package:flutter/material.dart";
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../services/uploader_service.dart";
+import "dart:io";
 
 /// Reusable widget to show list of recorded photos and videos for a device (both slave or master)
 /// Used both in uploader screen and master/slave screens, with different functionalities in each case
@@ -13,19 +13,19 @@ class MediaListWidget extends StatelessWidget {
   final Function(CapturedVideo)? onVideoTap;
   final Function(CapturedPhoto)? onRetryPhotoUpload;
   final Function(CapturedVideo)? onRetryVideoUpload;
-  final bool showPlaceholder; // Show or not a placeholder image and text if there is still no media
+  final bool
+      showPlaceholder; // Show or not a placeholder image and text if there is still no media
 
   /// Constructor
-  const MediaListWidget({
-    Key? key,
-    required this.photos,
-    required this.videos,
-    this.onPhotoTap,
-    this.onVideoTap,
-    this.onRetryPhotoUpload,
-    this.onRetryVideoUpload,
-    this.showPlaceholder = false
-  }) : super(key: key);
+  const MediaListWidget(
+      {super.key,
+      required this.photos,
+      required this.videos,
+      this.onPhotoTap,
+      this.onVideoTap,
+      this.onRetryPhotoUpload,
+      this.onRetryVideoUpload,
+      this.showPlaceholder = false});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,8 @@ class MediaListWidget extends StatelessWidget {
             valueListenable: UploaderService().currentlyUploadingNotifier,
             builder: (context, currentlyUploading, _) {
               return ListTile(
-                leading: Image.file(File(photo.photoPath), width: 50, height: 50),
+                leading:
+                    Image.file(File(photo.photoPath), width: 50, height: 50),
                 title: Text("Photo from: ${photo.slaveDeviceId}"),
                 subtitle: Text("Captured: ${photo.captureDate}"),
                 trailing: Row(

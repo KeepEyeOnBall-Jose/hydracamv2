@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import '../services/hydracam_api_service.dart';
-import 'courts_screen.dart';
+import "package:flutter/material.dart";
+import "../services/hydracam_api_service.dart";
+import "courts_screen.dart";
 
 class SportsCentersScreen extends StatelessWidget {
   final HydraCamApiService _apiService = HydraCamApiService();
@@ -27,14 +27,14 @@ class SportsCentersScreen extends StatelessWidget {
               final sportsCenter = sportsCenters[index];
               return Card(
                 child: ListTile(
-                  title: Text(sportsCenter['name']),
-                  subtitle: Text(sportsCenter['city'] ?? 'Unknown location'),
+                  title: Text(sportsCenter["name"]),
+                  subtitle: Text(sportsCenter["city"] ?? "Unknown location"),
                   trailing: Text("Courts: ${sportsCenter['numberOfCourts']}"),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CourtsScreen(sportsCenterGuid: sportsCenter['guid']),
+                          CourtsScreen(sportsCenterGuid: sportsCenter["guid"]),
                     ),
                   ),
                 ),

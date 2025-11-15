@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
-import '../app_theme.dart';
-import '../constants.dart';
-import '../services/camera_service_singleton.dart';
-import '../services/settings_service.dart';
-import '../widgets/settings_option.dart'; // Import the widget
+import "package:flutter/material.dart";
+import "../app_theme.dart";
+import "../constants.dart";
+import "../services/camera_service_singleton.dart";
+import "../services/settings_service.dart";
+import "../widgets/settings_option.dart"; // Import the widget
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
+  SettingsScreenState createState() => SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class SettingsScreenState extends State<SettingsScreen> {
 
   /// List of available settings
 
   bool _masterShouldRecord = true;
-  String _cameraQuality = 'high';
+  String _cameraQuality = "high";
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
@@ -114,14 +114,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// Map quality string to CameraQuality enum.
   CameraQuality _mapQualityStringToEnum(String quality) {
     switch (quality) {
-      case 'high':
+      case "high":
         return CameraQuality.high;
-      case 'medium':
+      case "medium":
         return CameraQuality.medium;
-      case 'low':
+      case "low":
         return CameraQuality.low;
       default:
-        throw Exception('Invalid quality string: $quality');
+        throw Exception("Invalid quality string: $quality");
     }
   }
 
@@ -156,9 +156,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               control: DropdownButton<String>(
                 value: _cameraQuality,
                 items: const [
-                  DropdownMenuItem(value: 'high', child: Text("High")),
-                  DropdownMenuItem(value: 'medium', child: Text("Medium")),
-                  DropdownMenuItem(value: 'low', child: Text("Low")),
+                  DropdownMenuItem(value: "high", child: Text("High")),
+                  DropdownMenuItem(value: "medium", child: Text("Medium")),
+                  DropdownMenuItem(value: "low", child: Text("Low")),
                 ],
                 onChanged: (value) {
                   if (value != null) {
