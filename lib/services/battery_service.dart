@@ -1,4 +1,3 @@
-
 import "dart:async";
 // import "dart:io" show Platform;
 // import "package:battery_info/model/iso_battery_info.dart";
@@ -29,7 +28,8 @@ class BatteryService {
 
   void _startListening() {
     // Battery monitoring temporarily disabled - battery_info plugin incompatible with current Android Gradle
-    LogService.instance.registerLog("BatteryService: Temporarily disabled due to plugin incompatibility");
+    LogService.instance.registerLog(
+        "BatteryService: Temporarily disabled due to plugin incompatibility");
     /*
     _batterySubscription?.cancel();
     _batterySubscription = null;

@@ -31,11 +31,13 @@ class CameraService {
   final StorageService _storageService; // Inject StorageService
 
   CameraController? _controller; // The camera controller instance
-  CameraController? get controller => _controller; // Getter for accessing the controller
+  CameraController? get controller =>
+      _controller; // Getter for accessing the controller
 
   bool _isCameraInitialized = false; // Tracks camera initialization status
 
-  DateTime? videoStartRecordingDate; // Timestamp for when video recording starts
+  DateTime?
+      videoStartRecordingDate; // Timestamp for when video recording starts
   DateTime? videoEndRecordingDate; // Timestamp for when video recording ends
 
   /// Optional callbacks for photo/video captures.
@@ -53,16 +55,22 @@ class CameraService {
   bool get isRecording => _isRecording;
 
   /// List of cameras and selected one
-  List<CameraDescription> _deviceCameras = []; // List of all available cameras on the device
-  int _selectedCameraIndex = 0;                   // Index of the currently selected camera
+  List<CameraDescription> _deviceCameras =
+      []; // List of all available cameras on the device
+  int _selectedCameraIndex = 0; // Index of the currently selected camera
 
   /// Constructor used only via the singleton
   /// Empty or optional for advanced use.
-  CameraService({required StorageService storageService, this.onPhotoTaken, this.onVideoRecorded})
+  CameraService(
+      {required StorageService storageService,
+      this.onPhotoTaken,
+      this.onVideoRecorded})
       : _storageService = storageService;
 
   /// Returns a copy of the list of cameras (for read-only use in the UI).
-  List<CameraDescription> get deviceCameras => List.unmodifiable(_deviceCameras);
+  List<CameraDescription> get deviceCameras =>
+      List.unmodifiable(_deviceCameras);
+
   /// Returns the index of the currently selected camera.
   int get selectedCameraIndex => _selectedCameraIndex;
 
@@ -71,13 +79,13 @@ class CameraService {
   Future<void> initAvailableCameras() async {
     try {
       _deviceCameras = await availableCameras();
-      LogService.instance.registerLog("Found ${_deviceCameras.length} camera(s) on this device.");
+      LogService.instance.registerLog(
+          "Found ${_deviceCameras.length} camera(s) on this device.");
     } catch (e) {
       LogService.instance.registerLog("Error loading available cameras: $e");
       _deviceCameras = [];
     }
   }
-
 
   /// Starts the camera and initializes it with default settings.
   ///
@@ -85,10 +93,10 @@ class CameraService {
   /// - Loads previous camera setting if exists.
   /// - Ensures the flash is turned off during initialization.
   Future<void> startCamera({int? cameraIndex}) async {
-
     // If there's no camera on the device, exit gracefully
     if (_deviceCameras.isEmpty) {
-      LogService.instance.registerLog("No cameras found on device. Aborting startCamera.");
+      LogService.instance
+          .registerLog("No cameras found on device. Aborting startCamera.");
       return;
     }
 
@@ -112,7 +120,8 @@ class CameraService {
 
     try {
       await _controller?.initialize();
-      await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off at startup
+      await _controller
+          ?.setFlashMode(FlashMode.off); // Ensure the flash is off at startup
       _isCameraInitialized = true;
       LogService.instance.registerLog("Camera initialized with flash off");
     } catch (e) {
@@ -147,7 +156,8 @@ class CameraService {
       return;
     }
 
-    LogService.instance.registerLog("Switching camera from $_selectedCameraIndex to $newCameraIndex");
+    LogService.instance.registerLog(
+        "Switching camera from $_selectedCameraIndex to $newCameraIndex");
     await startCamera(cameraIndex: newCameraIndex);
   }
 
@@ -157,9 +167,9 @@ class CameraService {
   /// - Configures the flash to be off by default.
   /// - Throws an exception if initialization fails.
   Future<void> ensureCameraIsReady() async {
-
     if (_isCameraInitialized && _controller?.value.isInitialized == true) {
-      LogService.instance.registerLog("Camera is already initialized and ready.");
+      LogService.instance
+          .registerLog("Camera is already initialized and ready.");
       return; // Camera is already ready
     }
 
@@ -169,9 +179,11 @@ class CameraService {
 
     try {
       await _controller?.initialize();
-      await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off during initialization
+      await _controller?.setFlashMode(
+          FlashMode.off); // Ensure the flash is off during initialization
       _isCameraInitialized = true;
-      LogService.instance.registerLog("Camera successfully initialized with flash off.");
+      LogService.instance
+          .registerLog("Camera successfully initialized with flash off.");
     } catch (e) {
       LogService.instance.registerLog("Error initializing camera: $e");
       _isCameraInitialized = false;
@@ -188,7 +200,8 @@ class CameraService {
       await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
 
       if (enableFlash) {
-        await _controller?.setFlashMode(FlashMode.torch); // Turn on flash before taking the photo
+        await _controller?.setFlashMode(
+            FlashMode.torch); // Turn on flash before taking the photo
       }
 
       final XFile photo = await _controller!.takePicture();
@@ -205,7 +218,8 @@ class CameraService {
       }
 
       if (enableFlash) {
-        await _controller?.setFlashMode(FlashMode.off); // Turn off flash after taking the photo
+        await _controller?.setFlashMode(
+            FlashMode.off); // Turn off flash after taking the photo
       }
 
       return newPath;
@@ -228,9 +242,11 @@ class CameraService {
         await _controller?.setFlashMode(FlashMode.off);
         await Future.delayed(const Duration(milliseconds: 300));
       }
-      LogService.instance.registerLog("Performed flash announcement for video recording");
+      LogService.instance
+          .registerLog("Performed flash announcement for video recording");
     } catch (e) {
-      LogService.instance.registerLog("Error performing flash announcement: $e");
+      LogService.instance
+          .registerLog("Error performing flash announcement: $e");
     }
   }
 
@@ -240,10 +256,12 @@ class CameraService {
   Future<void> startRecordingVideo({bool enableFlash = false}) async {
     // Check if storage is critically low before proceeding
     if (_storageService.isRecordingBlocked) {
-      LogService.instance.registerLog("Cannot start recording: Storage is critically low.");
+      LogService.instance
+          .registerLog("Cannot start recording: Storage is critically low.");
 
       // Notify user
-      _storageService.showNotification("Cannot start recording: Storage is critically low.");
+      _storageService.showNotification(
+          "Cannot start recording: Storage is critically low.");
 
       return;
     }
@@ -255,15 +273,16 @@ class CameraService {
       await announceRecordingWithFlash();
 
       if (enableFlash) {
-        await _controller?.setFlashMode(FlashMode.torch); // Turn on flash for video recording
+        await _controller?.setFlashMode(
+            FlashMode.torch); // Turn on flash for video recording
       }
 
       videoStartRecordingDate = DateTime.now();
       await _controller?.startVideoRecording();
-      LogService.instance.registerLog("Video recording started with flash ${enableFlash ? 'on' : 'off'}");
+      LogService.instance.registerLog(
+          "Video recording started with flash ${enableFlash ? 'on' : 'off'}");
 
       _isRecording = true;
-
     } catch (e) {
       LogService.instance.registerLog("Error starting video recording: $e");
       _isRecording = false;
@@ -299,7 +318,8 @@ class CameraService {
         onVideoRecorded!(newPath);
       }
 
-      await _controller?.setFlashMode(FlashMode.off); // Ensure the flash is off after recording
+      await _controller?.setFlashMode(
+          FlashMode.off); // Ensure the flash is off after recording
 
       return newPath;
     } catch (e) {
@@ -312,18 +332,20 @@ class CameraService {
   /// Forces stop recording in case we reached full storage
   Future<void> forceStopRecordingDueToStorage() async {
     try {
-
       //await Future.delayed(const Duration(seconds:10)); //TODO: wait for timer if active
 
       // Verify if the camera is actually recording before stopping
-      if (_isRecording) { //TODO this for some reason resets to false
-        LogService.instance.registerLog("Stopping recording due to critical storage.");
+      if (_isRecording) {
+        //TODO this for some reason resets to false
+        LogService.instance
+            .registerLog("Stopping recording due to critical storage.");
 
         // Stop recording
         final videoPath = await stopRecordingVideo();
 
         // Notify user
-        _storageService.showNotification("Recording stopped due to low storage.");
+        _storageService
+            .showNotification("Recording stopped due to low storage.");
 
         // Register video in SessionManager
         final String deviceId = await DeviceIdService.getOrCreateDeviceId();
@@ -340,17 +362,16 @@ class CameraService {
         // Notify interruption
         recordingInterrupted.value = true;
       }
-
     } catch (e) {
       LogService.instance.registerLog("Error force-stopping recording: $e");
     }
   }
 
-
   /// Stops the camera and disposes of its resources.
   Future<void> stopCamera() async {
     try {
-      await _controller?.setFlashMode(FlashMode.off); // Turn off flash when stopping the camera
+      await _controller?.setFlashMode(
+          FlashMode.off); // Turn off flash when stopping the camera
       await _controller?.dispose();
       LogService.instance.registerLog("Camera stopped");
     } catch (e) {
@@ -360,7 +381,8 @@ class CameraService {
 
   /// Sets the camera quality and reinitializes the controller.
   Future<void> setCameraQuality(CameraQuality quality) async {
-    LogService.instance.registerLog("Changing camera quality to $quality (current: $_currentQuality)");
+    LogService.instance.registerLog(
+        "Changing camera quality to $quality (current: $_currentQuality)");
     _currentQuality = quality;
 
     ResolutionPreset preset;
@@ -389,7 +411,8 @@ class CameraService {
       await _controller?.initialize();
       await _controller?.setFlashMode(FlashMode.off);
       _isCameraInitialized = true;
-      LogService.instance.registerLog("Camera quality set to $_currentQuality and reinitialized.");
+      LogService.instance.registerLog(
+          "Camera quality set to $_currentQuality and reinitialized.");
     } catch (e) {
       LogService.instance.registerLog("Error setting camera quality: $e");
     }
@@ -398,16 +421,15 @@ class CameraService {
   /// Returns the current camera quality.
   CameraQuality get currentQuality => _currentQuality;
 
-
   /// Function to find session directory to store files
   /// Directory would be something like /data/user/0/com.amaia23.hydracam/session_<<sessionGuid>>/... in android
   Future<String> _getSessionMediaPath(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
-    final sessionDir = Directory("${directory.path}/session_${SessionManager.instance.sessionGuid}");
+    final sessionDir = Directory(
+        "${directory.path}/session_${SessionManager.instance.sessionGuid}");
     if (!sessionDir.existsSync()) {
       sessionDir.createSync(recursive: true);
     }
     return "${sessionDir.path}/$fileName";
   }
-
 }

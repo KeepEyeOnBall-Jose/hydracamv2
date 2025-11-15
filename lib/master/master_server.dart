@@ -25,14 +25,18 @@ import "../services/session_manager.dart";
 
 class MasterServer {
   HttpServer? _server;
-  final Map<String, WebSocket> _clients = {}; // Map to store clients with deviceId as key
-  final Map<String, DateTime> _lastHeartbeat = {}; // Track last heartbeat per client
+  final Map<String, WebSocket> _clients =
+      {}; // Map to store clients with deviceId as key
+  final Map<String, DateTime> _lastHeartbeat =
+      {}; // Track last heartbeat per client
   Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
   // CaptureSession? currentSession; // Current Capture Session is now used in Session Manager Singleton
-  List<CaptureSession> sessionHistory = []; // List to store past sessions TODO: EXTRACT TO MANAGER TOO
+  List<CaptureSession> sessionHistory =
+      []; // List to store past sessions TODO: EXTRACT TO MANAGER TOO
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
-  Function(String, int)? onClientRemoved; // Callback for managing slaves disconnecting
+  Function(String, int)?
+      onClientRemoved; // Callback for managing slaves disconnecting
 
   /// Camera service is used for capturing media directly on the master device
   final CameraService cameraService;
@@ -42,13 +46,13 @@ class MasterServer {
   /// - `cameraService`: The service to handle camera-related operations.
   MasterServer(this.cameraService);
 
-
   /// Starts the WebSocket server on the master device and initializes the heartbeat check mechanism.
   /// This method binds to a specific port and listens for incoming connections.
   Future<void> startServer() async {
     try {
       _server = await HttpServer.bind("0.0.0.0", 4040);
-      LogService.instance.registerLog("WebSocket Server successfully started on port 4040");
+      LogService.instance
+          .registerLog("WebSocket Server successfully started on port 4040");
 
       // Init check to verify inactive clients
       _startHeartbeatCheck();
@@ -65,7 +69,8 @@ class MasterServer {
             try {
               // Decode message
               final decodedData = jsonDecode(data as String);
-              LogService.instance.registerLog("Data received from slave: $decodedData");
+              LogService.instance
+                  .registerLog("Data received from slave: $decodedData");
 
               if (decodedData is Map<String, dynamic>) {
                 final String? messageType = decodedData["type"];
@@ -76,10 +81,12 @@ class MasterServer {
                   if (deviceId != null) {
                     _clients[deviceId!] = socket;
                     _notifyClientCount();
-                    LogService.instance.registerLog("Registered new slave with deviceId: $deviceId");
+                    LogService.instance.registerLog(
+                        "Registered new slave with deviceId: $deviceId");
 
                     // After registering the slave, send the session status
-                    if (SessionManager.instance.isSessionActive && SessionManager.instance.sessionGuid != null) {
+                    if (SessionManager.instance.isSessionActive &&
+                        SessionManager.instance.sessionGuid != null) {
                       // Send session status
                       final sessionStatusMessage = jsonEncode({
                         "command": "sessionStatus",
@@ -89,9 +96,9 @@ class MasterServer {
                       // Send the message to the client
                       socket.add(sessionStatusMessage);
 
-                      LogService.instance.registerLog("Sent sessionStatus to $deviceId: $sessionStatusMessage");
-                    }
-                    else {
+                      LogService.instance.registerLog(
+                          "Sent sessionStatus to $deviceId: $sessionStatusMessage");
+                    } else {
                       // No active session
                       final noSessionMessage = jsonEncode({
                         "command": "noSession",
@@ -100,7 +107,8 @@ class MasterServer {
                       // Send the message to the client
                       socket.add(noSessionMessage);
 
-                      LogService.instance.registerLog("Sent noSession to $deviceId");
+                      LogService.instance
+                          .registerLog("Sent noSession to $deviceId");
                     }
                   }
                 }
@@ -108,12 +116,15 @@ class MasterServer {
                 // Receive media
                 else if (messageType == "photo" || messageType == "video") {
                   // Process media data
-                  final Uint8List binaryData = Uint8List.fromList(List<int>.from(decodedData["data"]));
-                  final String filePath = await _saveMediaLocally(binaryData, messageType == "photo");
+                  final Uint8List binaryData =
+                      Uint8List.fromList(List<int>.from(decodedData["data"]));
+                  final String filePath = await _saveMediaLocally(
+                      binaryData, messageType == "photo");
                   final DateTime receivedDate = DateTime.now();
 
                   if (messageType == "photo") {
-                    final DateTime captureDate = DateTime.parse(decodedData["captureDate"]);
+                    final DateTime captureDate =
+                        DateTime.parse(decodedData["captureDate"]);
                     final receivedPhoto = CapturedPhoto(
                       photoData: null,
                       photoPath: filePath,
@@ -126,10 +137,13 @@ class MasterServer {
                     SessionManager.instance.addPhoto(receivedPhoto);
 
                     onMediaReceived?.call(receivedPhoto);
-                    LogService.instance.registerLog("Photo from slave device ($deviceId) received and stored at: $filePath");
+                    LogService.instance.registerLog(
+                        "Photo from slave device ($deviceId) received and stored at: $filePath");
                   } else if (messageType == "video") {
-                    final DateTime startRecordingDate = DateTime.parse(decodedData["startRecordingDate"]);
-                    final DateTime endRecordingDate = DateTime.parse(decodedData["endRecordingDate"]);
+                    final DateTime startRecordingDate =
+                        DateTime.parse(decodedData["startRecordingDate"]);
+                    final DateTime endRecordingDate =
+                        DateTime.parse(decodedData["endRecordingDate"]);
                     final receivedVideo = CapturedVideo(
                       videoData: null,
                       videoPath: filePath,
@@ -142,25 +156,30 @@ class MasterServer {
                     // Add photo via SessionManager
                     SessionManager.instance.addVideo(receivedVideo);
                     onMediaReceived?.call(receivedVideo);
-                    LogService.instance.registerLog("Video from slave device ($deviceId) received and stored at: $filePath");
+                    LogService.instance.registerLog(
+                        "Video from slave device ($deviceId) received and stored at: $filePath");
                   }
                 }
 
                 // Receive heartbeats from slaves
                 else if (messageType == "heartbeat") {
                   if (deviceId != null) {
-                    _lastHeartbeat[deviceId!] = DateTime.now(); // Update last heartbeat
-                    LogService.instance.registerLog("Received heartbeat from $deviceId");
+                    _lastHeartbeat[deviceId!] =
+                        DateTime.now(); // Update last heartbeat
+                    LogService.instance
+                        .registerLog("Received heartbeat from $deviceId");
                   }
                 }
 
                 // Respond to explicit requests on session status
                 else if (messageType == "getSessionStatus") {
                   // Handle getSessionStatus
-                  LogService.instance.registerLog("Received getSessionStatus from $deviceId");
+                  LogService.instance
+                      .registerLog("Received getSessionStatus from $deviceId");
 
                   // Prepare response
-                  if (SessionManager.instance.isSessionActive && SessionManager.instance.sessionGuid != null) {
+                  if (SessionManager.instance.isSessionActive &&
+                      SessionManager.instance.sessionGuid != null) {
                     // Send session status
                     final sessionStatusMessage = jsonEncode({
                       "command": "sessionStatus",
@@ -170,7 +189,8 @@ class MasterServer {
                     // Send the message to the client
                     socket.add(sessionStatusMessage);
 
-                    LogService.instance.registerLog("Sent sessionStatus to $deviceId: $sessionStatusMessage");
+                    LogService.instance.registerLog(
+                        "Sent sessionStatus to $deviceId: $sessionStatusMessage");
                   } else {
                     // No active session
                     final noSessionMessage = jsonEncode({
@@ -180,22 +200,25 @@ class MasterServer {
                     // Send the message to the client
                     socket.add(noSessionMessage);
 
-                    LogService.instance.registerLog("Sent noSession to $deviceId");
+                    LogService.instance
+                        .registerLog("Sent noSession to $deviceId");
                   }
                 }
 
                 // Process forced stop interruptions from slaves
-                else if (messageType == "forcedStop"){
+                else if (messageType == "forcedStop") {
                   final deviceId = decodedData["deviceId"];
-                  final reason   = decodedData["reason"];  // e.g. "storageFull"
-                  LogService.instance.registerLog("Slave $deviceId forcibly stopped. Reason: $reason");
+                  final reason = decodedData["reason"]; // e.g. "storageFull"
+                  LogService.instance.registerLog(
+                      "Slave $deviceId forcibly stopped. Reason: $reason");
 
                   // Show snackbar in screen
-                  LogService.instance.registerLog("Slave $deviceId forcibly stopped: $reason");
+                  LogService.instance
+                      .registerLog("Slave $deviceId forcibly stopped: $reason");
                 }
-
               } else {
-                LogService.instance.registerLog("Unexpected data format received: $data");
+                LogService.instance
+                    .registerLog("Unexpected data format received: $data");
               }
             } catch (e) {
               LogService.instance.registerLog("Error decoding data: $e");
@@ -206,7 +229,8 @@ class MasterServer {
               _clients.remove(deviceId);
               _lastHeartbeat.remove(deviceId); // Clean heartbeat data
               _notifyClientCount();
-              LogService.instance.registerLog("Client $deviceId disconnected. Total clients: ${_clients.length}");
+              LogService.instance.registerLog(
+                  "Client $deviceId disconnected. Total clients: ${_clients.length}");
             }
           }, onError: (error) {
             // Manage error in connection
@@ -214,7 +238,8 @@ class MasterServer {
               _clients.remove(deviceId);
               _lastHeartbeat.remove(deviceId); // Clean heartbeat data
               _notifyClientCount();
-              LogService.instance.registerLog("Error with client $deviceId: $error. Removed from clients.");
+              LogService.instance.registerLog(
+                  "Error with client $deviceId: $error. Removed from clients.");
             }
           });
         } else {
@@ -236,13 +261,15 @@ class MasterServer {
       final now = DateTime.now();
       final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
         final lastSeen = _lastHeartbeat[deviceId];
-        return lastSeen == null || now.difference(lastSeen).inSeconds > inactivityThreshold;
+        return lastSeen == null ||
+            now.difference(lastSeen).inSeconds > inactivityThreshold;
       }).toList();
 
       for (var deviceId in inactiveClients) {
         _clients.remove(deviceId);
         _lastHeartbeat.remove(deviceId);
-        LogService.instance.registerLog("Client $deviceId removed due to inactivity.");
+        LogService.instance
+            .registerLog("Client $deviceId removed due to inactivity.");
 
         // Notify disconnection to callback if defined
         if (onClientRemoved != null) {
@@ -258,8 +285,6 @@ class MasterServer {
     _heartbeatCheckTimer?.cancel();
     _heartbeatCheckTimer = null;
   }
-
-
 
   void _notifyClientCount() {
     if (onClientCountChange != null) {
@@ -277,7 +302,6 @@ class MasterServer {
   /// - `isPhoto`: Whether the media is a photo (`true`) or a video (`false`).
   /// Returns the file path where the media is saved.
   Future<String> _saveMediaLocally(Uint8List binaryData, bool isPhoto) async {
-
     LogService.instance.registerLog("Save media locally");
 
     final directory = await getApplicationDocumentsDirectory();
@@ -286,7 +310,8 @@ class MasterServer {
         "${directory.path}/session_${SessionManager.instance.sessionGuid}";
     await Directory(sessionDirectoryPath).create(recursive: true);
     final String fileExtension = binaryData[0] == 0xFF ? "jpg" : "mp4";
-    final String filePath = "$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension";
+    final String filePath =
+        "$sessionDirectoryPath/media_${DateTime.now().millisecondsSinceEpoch}.$fileExtension";
     final file = File(filePath);
     await file.writeAsBytes(binaryData);
 
@@ -305,10 +330,12 @@ class MasterServer {
 
   void startNewSession(String sessionGuid) {
     // Init new session through SessionManager
-    SessionManager.instance.startSession(sessionGuid, null, deviceType: "Master");
+    SessionManager.instance
+        .startSession(sessionGuid, null, deviceType: "Master");
 
     // Register logs
-    LogService.instance.registerLog("New capture session started with GUID: $sessionGuid");
+    LogService.instance
+        .registerLog("New capture session started with GUID: $sessionGuid");
 
     // Notify slaves that session started
     final sessionStartedCommand = jsonEncode({
@@ -318,22 +345,20 @@ class MasterServer {
     sendCommandToAll(sessionStartedCommand);
   }
 
-
   /// Sends a command to all connected slave devices.
   void sendCommandToAll(String message) {
     for (var client in _clients.values) {
       client.add(message);
     }
-    LogService.instance.registerLog("Command sent to all connected slaves: $message");
+    LogService.instance
+        .registerLog("Command sent to all connected slaves: $message");
   }
-
 
   void endCurrentSession() {
     if (SessionManager.instance.currentSession != null) {
       // Register logs
       LogService.instance.registerLog(
-          "Capture session with GUID: ${SessionManager.instance.sessionGuid} ended and stored in history."
-      );
+          "Capture session with GUID: ${SessionManager.instance.sessionGuid} ended and stored in history.");
 
       // End session through SessionManager
       SessionManager.instance.endSession();
@@ -343,12 +368,10 @@ class MasterServer {
         "command": "sessionEnded",
       });
       sendCommandToAll(sessionEndedCommand);
-
     } else {
       LogService.instance.registerLog("No active session to end.");
     }
   }
-
 
   // TODO: Merge with the sendcommandtoall
   /// Sends a command to one or all connected slaves with optional device id.
@@ -356,32 +379,37 @@ class MasterServer {
   /// - `command`: The command to send (e.g., `takePhoto`, `startRecordingVideo`).
   /// - `deviceId`: If specified, sends the command to a single device.
   void sendCommand(String command, {String? deviceId}) {
-
     LogService.instance.registerLog("Sending command $command");
 
     if (_clients.isEmpty) {
-      LogService.instance.registerLog("No slave devices connected. Command '$command' not sent.");
+      LogService.instance.registerLog(
+          "No slave devices connected. Command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
       _clients[deviceId]?.add(command);
-      LogService.instance.registerLog("Command '$command' sent to slave with deviceId: $deviceId.");
+      LogService.instance.registerLog(
+          "Command '$command' sent to slave with deviceId: $deviceId.");
     } else {
       for (var client in _clients.values) {
         client.add(command);
       }
-      LogService.instance.registerLog("Command '$command' sent to all connected slaves.");
+      LogService.instance
+          .registerLog("Command '$command' sent to all connected slaves.");
     }
   }
 
   /// Schedules a command to be executed at a specific date and time.
   /// Sends the command along with the timestamp to all connected devices.
-  void scheduleCommand(String command, DateTime scheduledTime, {String? deviceId}) {
+  void scheduleCommand(String command, DateTime scheduledTime,
+      {String? deviceId}) {
     // Convert the scheduled time to ISO 8601 format for standard communication
     final String scheduledTimeString = scheduledTime.toIso8601String();
 
-    LogService.instance.registerLog("Scheduling command '$command' for $scheduledTimeString");
+    LogService.instance
+        .registerLog("Scheduling command '$command' for $scheduledTimeString");
 
     if (_clients.isEmpty) {
-      LogService.instance.registerLog("No slave devices connected. Scheduled command '$command' not sent.");
+      LogService.instance.registerLog(
+          "No slave devices connected. Scheduled command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
       // Send the scheduled command to a specific slave
       _clients[deviceId]?.add(jsonEncode({
@@ -389,7 +417,8 @@ class MasterServer {
         "command": command,
         "scheduledTime": scheduledTimeString,
       }));
-      LogService.instance.registerLog("Scheduled command '$command' sent to slave with deviceId: $deviceId.");
+      LogService.instance.registerLog(
+          "Scheduled command '$command' sent to slave with deviceId: $deviceId.");
     } else {
       // Send the scheduled command to all slaves
       for (var client in _clients.values) {
@@ -399,11 +428,10 @@ class MasterServer {
           "scheduledTime": scheduledTimeString,
         }));
       }
-      LogService.instance.registerLog("Scheduled command '$command' sent to all connected slaves.");
+      LogService.instance.registerLog(
+          "Scheduled command '$command' sent to all connected slaves.");
     }
   }
-
-
 
   /// Stops the WebSocket server and cleans up all connections.
   void stopServer() {
@@ -421,6 +449,4 @@ class MasterServer {
     LogService.instance.registerLog("WebSocket Server stopped");
     _notifyClientCount();
   }
-
-
 }
