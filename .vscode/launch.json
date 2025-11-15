@@ -1,27 +1,43 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Flutter",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "Flutter (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "Flutter (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "Flutter: Attach to Device",
-            "request": "attach",
-            "type": "dart"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "HydraCam (Android Emulator)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "emulator-5554"
+    },
+    {
+      "name": "HydraCam (iPhone Simulator)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F"
+    },
+    {
+      "name": "HydraCam (Physical iPhone)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "00008101-000A68811E43001E"
+    },
+    {
+      "name": "Flutter (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Flutter (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter: Attach to Device",
+      "request": "attach",
+      "type": "dart"
+    }
+  ]
 }

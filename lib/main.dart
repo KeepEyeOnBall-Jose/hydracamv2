@@ -16,21 +16,25 @@ import "package:wakelock_plus/wakelock_plus.dart";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final bool permissionsGranted = await PermissionService.requestAllPermissions();
+  final bool permissionsGranted =
+      await PermissionService.requestAllPermissions();
 
   if (!permissionsGranted) {
-    LogService.instance.registerLog("Some permissions were not granted. The app may not work as expected.");
+    LogService.instance.registerLog(
+        "Some permissions were not granted. The app may not work as expected.");
   }
 
   final String deviceId = await DeviceIdService.getOrCreateDeviceId();
   LogService.instance.registerLog("Device ID: $deviceId");
 
-  LogService.instance.registerLog("Initialize LocationService and try to get the location");
+  LogService.instance
+      .registerLog("Initialize LocationService and try to get the location");
   try {
     final locationService = LocationService();
     await locationService.initialize();
   } catch (e) {
-    LogService.instance.registerLog("Failed to initialize location service: $e", function: "main()", file: "main.dart");
+    LogService.instance.registerLog("Failed to initialize location service: $e",
+        function: "main()", file: "main.dart");
   }
 
   LogService.instance.registerLog("Prevent screen from turning off");
@@ -47,38 +51,38 @@ void main() async {
 class HydraCamApp extends StatelessWidget {
   const HydraCamApp({super.key});
 
+  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<StorageService>(
-          create: (context) => StorageService(
-            messengerState: ScaffoldMessenger.of(context),
-            lowStorageThreshold: 1.5,
-            criticalStorageThreshold: 0.5,
-            onCriticalStorageCallback: () {
-              LogService.instance.registerLog("Critical storage: triggering recording stop.");
-              CameraServiceSingleton.instance.forceStopRecordingDueToStorage();
-            },
-          ),
-          dispose: (_, service) => service.dispose(),
-        ),
-        Provider<BatteryService>(
-          create: (context) => BatteryService(
-            messengerState: ScaffoldMessenger.of(context),
-          ),
-          dispose: (_, service) => service.dispose(),
-        ),
-        Provider<CameraService>(
-          create: (context) => CameraServiceSingleton.initialize(
-            Provider.of<StorageService>(context, listen: false),
-          ),
-        ),
-      ],
-      child: MaterialApp(
-        title: "HydraCam",
-        theme: AppTheme.lightTheme,
-        home: const SlaveScreen(isAutoMode: true),
+    return MaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerKey,
+      title: "HydraCam",
+      theme: AppTheme.lightTheme,
+      home: Builder(
+        builder: (context) {
+          // Initialize services with messenger after MaterialApp builds
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (scaffoldMessengerKey.currentState != null) {
+              // Initialize StorageService singleton
+              StorageService(
+                messengerState: scaffoldMessengerKey.currentState!,
+                lowStorageThreshold: 1.5,
+                criticalStorageThreshold: 0.5,
+                onCriticalStorageCallback: () {
+                  LogService.instance.registerLog(
+                      "Critical storage: triggering recording stop.");
+                  CameraServiceSingleton.instance
+                      .forceStopRecordingDueToStorage();
+                },
+              );
+              // Initialize CameraService singleton
+              CameraServiceSingleton.initialize(StorageService.instance);
+            }
+          });
+          return const SlaveScreen(isAutoMode: true);
+        },
       ),
     );
   }

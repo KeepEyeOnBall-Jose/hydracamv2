@@ -1,0 +1,72 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "flutter: Clean All",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["clean"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "flutter: Get Dependencies",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["pub", "get"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "flutter: Build Android APK",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["build", "apk", "--debug"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "flutter: Run All Tests",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["test"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "iOS: Grant Full Disk Access Instructions",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "To fix iOS build issues:\n1. Open System Settings → Privacy & Security → Full Disk Access\n2. Add Terminal and/or Xcode\n3. Alternatively, open ios/Runner.xcworkspace in Xcode and build from there\n4. Or move project to ~/Projects/ if it's in a protected location"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated"
+      }
+    }
+  ]
+}
