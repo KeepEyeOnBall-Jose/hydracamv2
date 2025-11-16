@@ -73,8 +73,8 @@ class HydraCamApp extends StatelessWidget {
                 onCriticalStorageCallback: () {
                   LogService.instance.registerLog(
                       "Critical storage: triggering recording stop.");
-                  CameraServiceSingleton.instance
-                      .forceStopRecordingDueToStorage();
+                  // CameraServiceSingleton.instance
+                  //     .forceStopRecordingDueToStorage();
                 },
               );
               // Initialize CameraService singleton
