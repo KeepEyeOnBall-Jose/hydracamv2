@@ -16,11 +16,12 @@ class GalleryPersistenceService {
     await _saveMedia(filePath, isPhoto: false);
   }
 
-  static Future<void> _saveMedia(String filePath, {required bool isPhoto}) async {
+  static Future<void> _saveMedia(String filePath,
+      {required bool isPhoto}) async {
     final file = File(filePath);
     if (!file.existsSync()) {
-      LogService.instance
-          .registerLog("GalleryPersistenceService: File not found -> $filePath");
+      LogService.instance.registerLog(
+          "GalleryPersistenceService: File not found -> $filePath");
       return;
     }
 
@@ -29,24 +30,24 @@ class GalleryPersistenceService {
     }
 
     try {
-        final filename = file.uri.pathSegments.last;
+      final filename = file.uri.pathSegments.last;
 
-        if (isPhoto) {
-          await PhotoManager.editor.saveImageWithPath(
-            filePath,
-            title: filename,
-            relativePath: _albumName,
-          );
-        } else {
-          await PhotoManager.editor.saveVideo(
-            file,
-            title: filename,
-            relativePath: _albumName,
-          );
-        }
+      if (isPhoto) {
+        await PhotoManager.editor.saveImageWithPath(
+          filePath,
+          title: filename,
+          relativePath: _albumName,
+        );
+      } else {
+        await PhotoManager.editor.saveVideo(
+          file,
+          title: filename,
+          relativePath: _albumName,
+        );
+      }
 
-      LogService.instance
-          .registerLog("GalleryPersistenceService: Saved media ${file.uri.pathSegments.last} to gallery");
+      LogService.instance.registerLog(
+          "GalleryPersistenceService: Saved media ${file.uri.pathSegments.last} to gallery");
     } catch (error) {
       LogService.instance.registerLog(
           "GalleryPersistenceService: Failed to save media ($filePath) -> $error");
@@ -62,8 +63,8 @@ class GalleryPersistenceService {
     _hasPermission = state.hasAccess;
 
     if (!_hasPermission) {
-      LogService.instance.registerLog(
-          "GalleryPersistenceService: Photos permission denied.");
+      LogService.instance
+          .registerLog("GalleryPersistenceService: Photos permission denied.");
     }
 
     return _hasPermission;

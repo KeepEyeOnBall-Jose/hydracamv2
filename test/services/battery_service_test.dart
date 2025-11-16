@@ -3,7 +3,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/battery_service.dart";
 
 void main() {
-  testWidgets("BatteryService shows warning when battery level is low", (tester) async {
+  testWidgets("BatteryService shows warning when battery level is low",
+      (tester) async {
     final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
     await tester.pumpWidget(

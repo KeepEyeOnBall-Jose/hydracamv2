@@ -51,7 +51,8 @@ class StorageService {
       return;
     }
 
-    _storageCheckTimer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+    _storageCheckTimer =
+        Timer.periodic(const Duration(minutes: 1), (timer) async {
       try {
         final diskSpace = DiskSpacePlus();
         final availableStorage = await diskSpace.getFreeDiskSpace;
@@ -65,7 +66,8 @@ class StorageService {
   }
 
   void _handleStorageLevel(double availableStorage) {
-    final double availableStorageGB = availableStorage / 1024; // Convert MB to GB
+    final double availableStorageGB =
+        availableStorage / 1024; // Convert MB to GB
 
     final now = DateTime.now();
 

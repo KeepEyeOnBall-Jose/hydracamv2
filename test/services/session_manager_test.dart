@@ -13,7 +13,8 @@ import "package:shared_preferences/shared_preferences.dart";
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final _TestPathProviderPlatform testPathProvider = _TestPathProviderPlatform();
+  final _TestPathProviderPlatform testPathProvider =
+      _TestPathProviderPlatform();
 
   setUpAll(() async {
     PathProviderPlatform.instance = testPathProvider;
@@ -33,7 +34,8 @@ void main() {
 
     setUp(() async {
       sessionManager = SessionManager.instance;
-      tempMediaDir = Directory.systemTemp.createTempSync("session_manager_test_media");
+      tempMediaDir =
+          Directory.systemTemp.createTempSync("session_manager_test_media");
       // Reset state before each test
       if (sessionManager.isSessionActive) {
         await sessionManager.endSession();
@@ -64,14 +66,16 @@ void main() {
       });
 
       test("startSession creates new session", () {
-        sessionManager.startSession("test-guid", "test-id", deviceType: "Master");
+        sessionManager.startSession("test-guid", "test-id",
+            deviceType: "Master");
 
         expect(sessionManager.isSessionActive, true);
         expect(sessionManager.sessionGuid, "test-guid");
       });
 
       test("endSession clears session state", () async {
-        sessionManager.startSession("test-guid", "test-id", deviceType: "Master");
+        sessionManager.startSession("test-guid", "test-id",
+            deviceType: "Master");
         await sessionManager.endSession();
 
         expect(sessionManager.isSessionActive, false);
@@ -81,7 +85,8 @@ void main() {
 
     group("Media management", () {
       setUp(() {
-        sessionManager.startSession("test-guid", "test-id", deviceType: "Master");
+        sessionManager.startSession("test-guid", "test-id",
+            deviceType: "Master");
       });
 
       test("addPhoto adds photo to current session", () {
@@ -149,7 +154,8 @@ class _TestPathProviderPlatform extends PathProviderPlatform {
 
   @override
   Future<String?> getApplicationDocumentsPath() async {
-    _documentsDir ??= Directory.systemTemp.createTempSync("session_manager_docs");
+    _documentsDir ??=
+        Directory.systemTemp.createTempSync("session_manager_docs");
     return _documentsDir!.path;
   }
 
@@ -160,4 +166,3 @@ class _TestPathProviderPlatform extends PathProviderPlatform {
     _documentsDir = null;
   }
 }
-

@@ -46,7 +46,9 @@ void main() {
   });
 
   group("StorageService anchors", () {
-    testWidgets("blocks recording and triggers callback when storage is critical", (tester) async {
+    testWidgets(
+        "blocks recording and triggers callback when storage is critical",
+        (tester) async {
       StorageService.configureMonitoring(enabled: false);
 
       final messengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -81,4 +83,3 @@ void main() {
     });
   });
 }
-

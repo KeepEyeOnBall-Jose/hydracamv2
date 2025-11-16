@@ -66,4 +66,3 @@ class FakeSessionManager extends Fake implements SessionManager {
     _isSessionActive = false;
   }
 }
-

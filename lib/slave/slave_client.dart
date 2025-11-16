@@ -51,16 +51,19 @@ class SlaveClient {
   String? _deviceId;
 
   /// StreamController for broadcasting status updates to the UI.
-  final StreamController<String> _statusStreamController = StreamController.broadcast();
+  final StreamController<String> _statusStreamController =
+      StreamController.broadcast();
 
   /// Stream of status messages for the UI to listen to.
   Stream<String> get statusStream => _statusStreamController.stream;
 
   /// StreamController for broadcasting connection status updates to the UI.
-  final StreamController<bool> _connectionStatusStreamController = StreamController.broadcast();
+  final StreamController<bool> _connectionStatusStreamController =
+      StreamController.broadcast();
 
   /// Stream of connection status updates.
-  Stream<bool> get connectionStatusStream => _connectionStatusStreamController.stream;
+  Stream<bool> get connectionStatusStream =>
+      _connectionStatusStreamController.stream;
 
   /// Timestamps for photo and video operations.
   DateTime? photoCaptureDate;
@@ -85,38 +88,43 @@ class SlaveClient {
   /// - `onRecordingStarted`: Callback for when video recording starts.
   /// - `onRecordingStopped`: Callback for when video recording stops.
   SlaveClient(
-      this.serverAddress, {
-        this.onScheduledCommand,
-        Function(String)? onPhotoTaken,
-        this.onRecordingStarted,
-        this.onRecordingStopped,
-      }) : _cameraService = CameraServiceSingleton.instance {
-      // Reassign callback after the colon:
-      _cameraService.onPhotoTaken = onPhotoTaken;
-      // Listener for forced stop:
-      CameraServiceSingleton.instance.recordingInterrupted.addListener(_handleRecordingInterrupted);
-
+    this.serverAddress, {
+    this.onScheduledCommand,
+    Function(String)? onPhotoTaken,
+    this.onRecordingStarted,
+    this.onRecordingStopped,
+  }) : _cameraService = CameraServiceSingleton.instance {
+    // Reassign callback after the colon:
+    _cameraService.onPhotoTaken = onPhotoTaken;
+    // Listener for forced stop:
+    CameraServiceSingleton.instance.recordingInterrupted
+        .addListener(_handleRecordingInterrupted);
   }
 
   /// Connects the client to the WebSocket server and initializes communication.
   Future<void> connect() async {
-
     if (_isConnected) {
-      LogService.instance.registerLog("Already connected to WebSocket. Skipping connection.");
-      _statusStreamController.add("Already connected to WebSocket. Skipping connection.");
+      LogService.instance
+          .registerLog("Already connected to WebSocket. Skipping connection.");
+      _statusStreamController
+          .add("Already connected to WebSocket. Skipping connection.");
       return;
     }
 
-    _deviceId = await DeviceIdService.getOrCreateDeviceId(); // Retrieve or create device ID
-    _statusStreamController.add("Attempting to connect to master at $serverAddress...");
-    LogService.instance.registerLog("Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
+    _deviceId = await DeviceIdService
+        .getOrCreateDeviceId(); // Retrieve or create device ID
+    _statusStreamController
+        .add("Attempting to connect to master at $serverAddress...");
+    LogService.instance.registerLog(
+        "Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
 
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));
 
       _isConnected = true;
       _statusStreamController.add("Connected to master at $serverAddress.");
-      _connectionStatusStreamController.add(true); // Notify UI of connection status
+      _connectionStatusStreamController
+          .add(true); // Notify UI of connection status
 
       // Send a JSON message containing the device ID after connecting
       _channel?.sink.add(jsonEncode({
@@ -130,19 +138,21 @@ class SlaveClient {
         "deviceId": _deviceId,
       }));
 
-      LogService.instance.registerLog("Connected to WebSocket at $serverAddress");
+      LogService.instance
+          .registerLog("Connected to WebSocket at $serverAddress");
 
       // Start sending heartbeat messages
       _startHeartbeat();
 
       _channel?.stream.listen(
         (message) async {
-
-          LogService.instance.registerLog("Command received from master: $message");
+          LogService.instance
+              .registerLog("Command received from master: $message");
           _statusStreamController.add("Received command: $message");
 
           // Check if the message appears to be JSON before attempting to decode it
-          if (message.trim().startsWith("{") || message.trim().startsWith("[")) {
+          if (message.trim().startsWith("{") ||
+              message.trim().startsWith("[")) {
             try {
               // Attempt to decode the message as JSON
               final decodedMessage = jsonDecode(message);
@@ -156,21 +166,21 @@ class SlaveClient {
                   final String sessionGuid = decodedMessage["sessionGuid"];
                   LogService.instance.registerLog("Session guid: $sessionGuid");
                   if (sessionGuid.isNotEmpty) {
-                    SessionManager.instance.startSession(sessionGuid, null, deviceType: "Slave"); // Store the session
+                    SessionManager.instance.startSession(sessionGuid, null,
+                        deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
-                }
-                else if (command == "sessionEnded") {
+                } else if (command == "sessionEnded") {
                   // End session
                   await SessionManager.instance.endSession();
-                  LogService.instance.registerLog("Session ended as per master command.");
-                }
-                else if (command == "noSession") {
+                  LogService.instance
+                      .registerLog("Session ended as per master command.");
+                } else if (command == "noSession") {
                   // No active session on master
                   await SessionManager.instance.endSession();
-                  LogService.instance.registerLog("No active session on master.");
-                }
-                else{
+                  LogService.instance
+                      .registerLog("No active session on master.");
+                } else {
                   // Process rest of json commands
                   _processCommand(message);
                 }
@@ -178,7 +188,8 @@ class SlaveClient {
               }
             } catch (e) {
               // Log an error if JSON decoding fails
-              LogService.instance.registerLog("Error decoding JSON message: $e");
+              LogService.instance
+                  .registerLog("Error decoding JSON message: $e");
             }
           } else {
             // Process non-JSON (simple text) messages as specific commands
@@ -190,7 +201,8 @@ class SlaveClient {
           LogService.instance.registerLog("Connection error: $error");
           _statusStreamController.add("Connection error: $error");
           _isConnected = false;
-          _connectionStatusStreamController.add(false); // Notify UI of connection status
+          _connectionStatusStreamController
+              .add(false); // Notify UI of connection status
           _stopHeartbeat();
           _attemptReconnect();
         },
@@ -199,17 +211,19 @@ class SlaveClient {
           LogService.instance.registerLog("Connection closed");
           _statusStreamController.add("Connection closed.");
           _isConnected = false;
-          _connectionStatusStreamController.add(false); // Notify UI of connection status
+          _connectionStatusStreamController
+              .add(false); // Notify UI of connection status
           _stopHeartbeat();
           _attemptReconnect();
         },
       );
-
     } catch (e) {
       _statusStreamController.add("Failed to connect: $e");
-      LogService.instance.registerLog("Failed to connect to WebSocket at $serverAddress: $e");
+      LogService.instance
+          .registerLog("Failed to connect to WebSocket at $serverAddress: $e");
       _isConnected = false;
-      _connectionStatusStreamController.add(false); // Notify UI of connection status
+      _connectionStatusStreamController
+          .add(false); // Notify UI of connection status
 
       // Add a delay before reconnecting to prevent immediate retries on failure
       await Future.delayed(const Duration(seconds: 2));
@@ -217,15 +231,13 @@ class SlaveClient {
     }
   }
 
-
   /// Processes specific commands received from the master.
   /// Gets commands like taking pictures or videos.
   /// This includes scheduled commands for synchronized execution.
   /// Processes specific commands received from the master.
   /// Handles both scheduled commands and immediate commands, whether JSON-based or plain text.
   void _processCommand(String message) async {
-    if (message.trim().startsWith("{")){
-
+    if (message.trim().startsWith("{")) {
       try {
         // Attempt to decode the message as JSON
         final decodedMessage = jsonDecode(message);
@@ -236,17 +248,20 @@ class SlaveClient {
 
           if (type != null && type == "scheduledCommand" && command != null) {
             // Handle scheduled commands
-            final DateTime scheduledTime = DateTime.parse(decodedMessage["scheduledTime"]);
+            final DateTime scheduledTime =
+                DateTime.parse(decodedMessage["scheduledTime"]);
             _scheduleExecution(command, scheduledTime);
           } else if (type == "sessionStarted" || type == "sessionStatus") {
             // Handle session start/status
             final String sessionGuid = decodedMessage["sessionGuid"];
-            SessionManager.instance.startSession(sessionGuid, null, deviceType: "Slave");
+            SessionManager.instance
+                .startSession(sessionGuid, null, deviceType: "Slave");
             notifyReadyToTransmit(sessionGuid);
           } else if (type == "sessionEnded") {
             // Handle session end
             await SessionManager.instance.endSession();
-            LogService.instance.registerLog("Session ended as per master command.");
+            LogService.instance
+                .registerLog("Session ended as per master command.");
           } else if (type == "noSession") {
             // Handle no active session
             await SessionManager.instance.endSession();
@@ -261,11 +276,10 @@ class SlaveClient {
         }
       } catch (e) {
         // Handle errors in JSON decoding or processing
-        LogService.instance.registerLog("Error decoding or processing message in processcommand: $e");
+        LogService.instance.registerLog(
+            "Error decoding or processing message in processcommand: $e");
       }
-    }
-
-    else{
+    } else {
       // Not a JSON, continue executing raw command
       _executeCommand(message);
     }
@@ -279,12 +293,14 @@ class SlaveClient {
 
     // If we already late, we execute immediately
     if (delay.isNegative) {
-      LogService.instance.registerLog("Scheduled time for '$command' has already passed. Executing immediately.");
+      LogService.instance.registerLog(
+          "Scheduled time for '$command' has already passed. Executing immediately.");
       _executeCommand(command);
     }
     // Else, we wait until scheduled time and then execute
     else {
-      LogService.instance.registerLog("Command '$command' scheduled for $scheduledTime.");
+      LogService.instance
+          .registerLog("Command '$command' scheduled for $scheduledTime.");
 
       // Notify the UI to handle the countdown
       onScheduledCommand?.call(command, scheduledTime);
@@ -294,7 +310,7 @@ class SlaveClient {
   }
 
   /// Executes the received command.
-  void _executeCommand(String command) async{
+  void _executeCommand(String command) async {
     if (command == "takePhoto") {
       photoCaptureDate = DateTime.now();
       _cameraService.takePhoto().then((photoPath) async {
@@ -321,18 +337,17 @@ class SlaveClient {
         // final Uint8List photoData = await file.readAsBytes();
         // _channel?.sink.add(jsonEncode({...}));
       });
-    }
-    else if (command == "startRecordingVideo") {
+    } else if (command == "startRecordingVideo") {
       LogService.instance.registerLog("Starting video recording");
       videoStartRecordingDate = DateTime.now();
       await _cameraService.startRecordingVideo();
       isRecordingVideo = true;
       onRecordingStarted?.call();
       _statusStreamController.add("Recording video...");
-    }
-    else if (command == "stopRecordingVideo") {
+    } else if (command == "stopRecordingVideo") {
       if (!isRecordingVideo) {
-        LogService.instance.registerLog("Already not recording. Doing nothing.");
+        LogService.instance
+            .registerLog("Already not recording. Doing nothing.");
         return;
       }
 
@@ -356,7 +371,8 @@ class SlaveClient {
         SessionManager.instance.addVideo(capturedVideo);
 
         // Update the UI
-        _statusStreamController.add("Video recording stopped and saved locally.");
+        _statusStreamController
+            .add("Video recording stopped and saved locally.");
 
         isRecordingVideo = false;
         onRecordingStopped?.call();
@@ -366,12 +382,10 @@ class SlaveClient {
         // final Uint8List videoData = await file.readAsBytes();
         // _channel?.sink.add(jsonEncode({...}));
       });
-    }
-    else if (command == "stopCamera") {
+    } else if (command == "stopCamera") {
       // Stop the camera service when receiving 'stopCamera' command
       _cameraService.stopCamera();
-    }
-    else {
+    } else {
       LogService.instance.registerLog("Unknown command received: $command");
     }
   }
@@ -382,7 +396,8 @@ class SlaveClient {
 
     // Call API service to notify server that device is ready to transmit
     final apiService = HydraCamApiService();
-    final bool success = await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
+    final bool success =
+        await apiService.notifyReadyToTransmit(deviceId, sessionGuid);
 
     return success;
   }
@@ -402,17 +417,18 @@ class SlaveClient {
 
   /// A private method to handle forced-stop events from the camera service.
   void _handleRecordingInterrupted() {
-    final interrupted = CameraServiceSingleton.instance.recordingInterrupted.value;
+    final interrupted =
+        CameraServiceSingleton.instance.recordingInterrupted.value;
     if (interrupted) {
       // 1) Update local flag
       isRecordingVideo = false;
-      onRecordingStopped?.call(); // So that SlaveScreen will do setState() => no more “Recording…”
+      onRecordingStopped
+          ?.call(); // So that SlaveScreen will do setState() => no more “Recording…”
 
       // 2) Notify the Master about forced stop
       _notifyMasterForcedStop();
     }
   }
-
 
   /// Starts the periodic heartbeat to maintain the WebSocket connection.
   void _startHeartbeat() {
@@ -431,7 +447,7 @@ class SlaveClient {
 
   /// Stops the periodic heartbeat.
   void _stopHeartbeat() {
-    if (_heartbeatTimer != null){
+    if (_heartbeatTimer != null) {
       _heartbeatTimer?.cancel();
       _heartbeatTimer = null;
     }
@@ -445,7 +461,8 @@ class SlaveClient {
 
     _reconnectTimer = Timer(const Duration(seconds: 5), () {
       if (!_isConnected) {
-        LogService.instance.registerLog("Attempting to reconnect to master WebSocket...");
+        LogService.instance
+            .registerLog("Attempting to reconnect to master WebSocket...");
         connect();
       } else {
         _reconnectTimer?.cancel();
@@ -455,11 +472,12 @@ class SlaveClient {
 
   void disconnect() {
     _channel?.sink.close();
-    _channel = null;  // Nullify to ensure a new connection is created on reconnect
+    _channel =
+        null; // Nullify to ensure a new connection is created on reconnect
     _isConnected = false;
-    _connectionStatusStreamController.add(false); // Notify UI of connection status
+    _connectionStatusStreamController
+        .add(false); // Notify UI of connection status
     _reconnectTimer?.cancel();
     _stopHeartbeat();
   }
-
 }

@@ -8,7 +8,8 @@ class CameraServiceSingleton {
 
   /// Returns the CameraService instance.
   static CameraService get instance {
-    if (_instance == null) throw Exception("CameraServiceSingleton not initialized");
+    if (_instance == null)
+      throw Exception("CameraServiceSingleton not initialized");
     return _instance!;
   }
 

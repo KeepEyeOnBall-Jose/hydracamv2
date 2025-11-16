@@ -27,7 +27,8 @@ void main() {
     BatteryService.configureMonitoring(enabled: true);
   });
 
-  testWidgets("HydraCamApp builds without crashing", (WidgetTester tester) async {
+  testWidgets("HydraCamApp builds without crashing",
+      (WidgetTester tester) async {
     // Build the app and trigger a frame.
     await tester.pumpWidget(const HydraCamApp());
 

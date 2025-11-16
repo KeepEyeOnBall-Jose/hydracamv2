@@ -42,12 +42,12 @@ class BatteryService {
 
     if (!_monitoringEnabled) {
       LogService.instance.registerLog(
-        "BatteryService monitoring disabled - timer not started.");
+          "BatteryService monitoring disabled - timer not started.");
       return;
     }
 
     _batteryCheckTimer =
-      Timer.periodic(_pollInterval, (_) => _checkBatteryLevel());
+        Timer.periodic(_pollInterval, (_) => _checkBatteryLevel());
 
     _batteryStateSubscription =
         _battery.onBatteryStateChanged.listen((_) => _checkBatteryLevel());
