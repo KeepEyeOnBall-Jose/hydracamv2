@@ -11,8 +11,22 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 
 import "package:hydracam/main.dart";
+import "package:hydracam/services/battery_service.dart";
+import "package:hydracam/services/storage_service.dart";
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() {
+    StorageService.configureMonitoring(enabled: false);
+    BatteryService.configureMonitoring(enabled: false);
+  });
+
+  tearDownAll(() {
+    StorageService.configureMonitoring(enabled: true);
+    BatteryService.configureMonitoring(enabled: true);
+  });
+
   testWidgets("HydraCamApp builds without crashing", (WidgetTester tester) async {
     // Build the app and trigger a frame.
     await tester.pumpWidget(const HydraCamApp());

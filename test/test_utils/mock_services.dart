@@ -61,7 +61,7 @@ class FakeSessionManager extends Fake implements SessionManager {
   }
 
   @override
-  void endSession() {
+  Future<void> endSession() async {
     _sessionGuid = null;
     _isSessionActive = false;
   }

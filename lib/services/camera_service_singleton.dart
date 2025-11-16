@@ -12,6 +12,8 @@ class CameraServiceSingleton {
     return _instance!;
   }
 
+  static bool get isInitialized => _instance != null;
+
   /// Private constructor to prevent instantiation.
   CameraServiceSingleton._();
 

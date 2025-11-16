@@ -5,6 +5,7 @@ import "package:flutter/cupertino.dart";
 import "session_manager.dart";
 import "settings_service.dart";
 import "storage_service.dart";
+import "gallery_persistence_service.dart";
 import "package:path_provider/path_provider.dart";
 import "../constants.dart";
 import "../models/captured_video.dart";
@@ -209,9 +210,7 @@ class CameraService {
       await File(photo.path).copy(newPath); // Move to session directory
       LogService.instance.registerLog("Photo saved to session path: $newPath");
 
-      // Save to gallery (temporarily disabled - incompatible plugin)
-      // await GallerySaver.saveImage(newPath, albumName: "HydraCam");
-      // TODO: Use photo_manager to save to gallery
+      await GalleryPersistenceService.savePhoto(newPath);
 
       if (onPhotoTaken != null) {
         onPhotoTaken!(newPath);
@@ -310,9 +309,7 @@ class CameraService {
       // TODO: ISOLATE FROM MAIN THREAD IF THAT INCREASES PERFORMANCE?
       LogService.instance.registerLog("Video recorded at path: $newPath");
 
-      // Save to gallery (temporarily disabled - incompatible plugin)
-      // await GallerySaver.saveVideo(newPath, albumName: "HydraCam");
-      // TODO: Use photo_manager to save to gallery
+      await GalleryPersistenceService.saveVideo(newPath);
 
       if (onVideoRecorded != null) {
         onVideoRecorded!(newPath);

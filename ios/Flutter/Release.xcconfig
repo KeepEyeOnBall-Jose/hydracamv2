@@ -1,2 +1,7 @@
 #include "Generated.xcconfig"
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+// If CocoaPods reported the need to include the profile configuration,
+// include it here so the Runner target picks up the pods' profile settings
+// (used for e.g. ad-hoc/profile builds). This addresses the CocoaPods
+// warning about base configuration not being set for the Runner target.
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"

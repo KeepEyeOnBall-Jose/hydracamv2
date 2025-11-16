@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "services/battery_service.dart";
-import "services/camera_service.dart";
 import "services/camera_service_singleton.dart";
 import "services/storage_service.dart";
 import "package:provider/provider.dart";
@@ -64,21 +63,28 @@ class HydraCamApp extends StatelessWidget {
         builder: (context) {
           // Initialize services with messenger after MaterialApp builds
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (scaffoldMessengerKey.currentState != null) {
-              // Initialize StorageService singleton
-              StorageService(
-                messengerState: scaffoldMessengerKey.currentState!,
+            final messenger = scaffoldMessengerKey.currentState;
+            if (messenger != null) {
+              final storageService = StorageService(
+                messengerState: messenger,
                 lowStorageThreshold: 1.5,
                 criticalStorageThreshold: 0.5,
-                onCriticalStorageCallback: () {
+                onCriticalStorageCallback: () async {
                   LogService.instance.registerLog(
                       "Critical storage: triggering recording stop.");
-                  // CameraServiceSingleton.instance
-                  //     .forceStopRecordingDueToStorage();
+                  if (CameraServiceSingleton.isInitialized) {
+                    await CameraServiceSingleton.instance
+                        .forceStopRecordingDueToStorage();
+                  }
                 },
               );
-              // Initialize CameraService singleton
-              CameraServiceSingleton.initialize(StorageService.instance);
+
+              CameraServiceSingleton.initialize(storageService);
+
+              BatteryService(
+                messengerState: messenger,
+                lowBatteryThreshold: 25,
+              );
             }
           });
           return const SlaveScreen(isAutoMode: true);

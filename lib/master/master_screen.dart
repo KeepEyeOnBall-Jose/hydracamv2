@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:provider/provider.dart";
 import "../screens/previous_sessions_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../screens/sports_centers_screen.dart";
@@ -11,7 +10,6 @@ import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "dart:io";
 import "../services/alert_utils.dart";
-import "../services/camera_service.dart";
 import "../services/camera_service_singleton.dart";
 import "../services/device_service.dart";
 import "../services/hydracam_api_service.dart";
@@ -475,7 +473,7 @@ class MasterScreenState extends State<MasterScreen> {
           if (!mounted) return;
 
           if (success) {
-            _server.endCurrentSession(); // End locally
+            await _server.endCurrentSession(); // End locally
             setState(() {});
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(

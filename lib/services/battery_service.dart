@@ -1,65 +1,68 @@
 import "dart:async";
-// import "dart:io" show Platform;
-// import "package:battery_info/model/iso_battery_info.dart";
+import "package:battery_plus/battery_plus.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-// import "package:battery_info/battery_info_plugin.dart";
-// import "package:battery_info/model/android_battery_info.dart";
 
 import "log_service.dart";
 
-// Battery service temporarily disabled due to battery_info plugin incompatibility with current Android Gradle
+/// BatteryService monitors battery level and shows warnings when it becomes low.
 class BatteryService {
+  static BatteryService? _instance;
+  static bool _monitoringEnabled = true;
+
+  static BatteryService get instance {
+    if (_instance == null) throw Exception("BatteryService not initialized");
+    return _instance!;
+  }
+
   final ScaffoldMessengerState _messengerState;
   final int _lowBatteryThreshold;
+  final Battery _battery = Battery();
 
-  StreamSubscription? _batterySubscription;
+  Timer? _batteryCheckTimer;
+  StreamSubscription<BatteryState>? _batteryStateSubscription;
   DateTime? _lastWarningShownTime;
   int? _lastWarningLevel;
 
-  static const Duration _reshowInterval = Duration(minutes: 1);
+  static const Duration _reshowInterval = Duration(minutes: 5);
+  static const Duration _pollInterval = Duration(minutes: 1);
 
   BatteryService({
     required ScaffoldMessengerState messengerState,
     int lowBatteryThreshold = 30,
   })  : _messengerState = messengerState,
         _lowBatteryThreshold = lowBatteryThreshold {
-    _startListening();
+    _startMonitoring();
+    _instance = this;
   }
 
-  void _startListening() {
-    // Battery monitoring temporarily disabled - battery_info plugin incompatible with current Android Gradle
-    LogService.instance.registerLog(
-        "BatteryService: Temporarily disabled due to plugin incompatibility");
-    /*
-    _batterySubscription?.cancel();
-    _batterySubscription = null;
+  void _startMonitoring() {
+    _batteryCheckTimer?.cancel();
+    _batteryStateSubscription?.cancel();
 
-    final batteryPlugin = BatteryInfoPlugin();
-
-    if (Platform.isAndroid) {
-      _batterySubscription = batteryPlugin.androidBatteryInfoStream.listen(
-        (AndroidBatteryInfo? info) {
-          if (info == null || info.batteryLevel == null) return;
-          _handleBatteryLevel(info.batteryLevel!);
-        },
-        onError: (error) {
-          LogService.instance.registerLog("Error listening to Android battery info: $error");
-        },
-      );
-    } else if (Platform.isIOS) {
-      _batterySubscription = batteryPlugin.iosBatteryInfoStream.listen(
-        (IosBatteryInfo? info) {
-          if (info == null || info.batteryLevel == null) return;
-          _handleBatteryLevel(info.batteryLevel!);
-        },
-        onError: (error) {
-          LogService.instance.registerLog("Error listening to iOS battery info: $error");
-        },
-      );
-    } else {
-      LogService.instance.registerLog("BatteryService: Platform not supported by battery_info. No streaming started.");
+    if (!_monitoringEnabled) {
+      LogService.instance.registerLog(
+        "BatteryService monitoring disabled - timer not started.");
+      return;
     }
-    */
+
+    _batteryCheckTimer =
+      Timer.periodic(_pollInterval, (_) => _checkBatteryLevel());
+
+    _batteryStateSubscription =
+        _battery.onBatteryStateChanged.listen((_) => _checkBatteryLevel());
+
+    _checkBatteryLevel();
+  }
+
+  Future<void> _checkBatteryLevel() async {
+    try {
+      final int level = await _battery.batteryLevel;
+      _handleBatteryLevel(level);
+    } catch (error) {
+      LogService.instance
+          .registerLog("BatteryService: Error reading battery level: $error");
+    }
   }
 
   void _handleBatteryLevel(int currentLevel) {
@@ -122,7 +125,29 @@ class BatteryService {
   }
 
   void dispose() {
-    _batterySubscription?.cancel();
-    _batterySubscription = null;
+    _batteryCheckTimer?.cancel();
+    _batteryCheckTimer = null;
+    _batteryStateSubscription?.cancel();
+    _batteryStateSubscription = null;
+  }
+
+  @visibleForTesting
+  void simulateBatteryLevel(int level) {
+    _handleBatteryLevel(level);
+  }
+
+  /// Allows widget tests to disable monitoring to avoid MissingPluginExceptions.
+  @visibleForTesting
+  static void configureMonitoring({required bool enabled}) {
+    _monitoringEnabled = enabled;
+
+    if (!enabled) {
+      _instance?._batteryCheckTimer?.cancel();
+      _instance?._batteryCheckTimer = null;
+      _instance?._batteryStateSubscription?.cancel();
+      _instance?._batteryStateSubscription = null;
+    } else {
+      _instance?._startMonitoring();
+    }
   }
 }

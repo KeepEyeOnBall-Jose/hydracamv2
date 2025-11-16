@@ -136,7 +136,7 @@ class SlaveClient {
       _startHeartbeat();
 
       _channel?.stream.listen(
-            (message) {
+        (message) async {
 
           LogService.instance.registerLog("Command received from master: $message");
           _statusStreamController.add("Received command: $message");
@@ -162,12 +162,12 @@ class SlaveClient {
                 }
                 else if (command == "sessionEnded") {
                   // End session
-                  SessionManager.instance.endSession();
+                  await SessionManager.instance.endSession();
                   LogService.instance.registerLog("Session ended as per master command.");
                 }
                 else if (command == "noSession") {
                   // No active session on master
-                  SessionManager.instance.endSession();
+                  await SessionManager.instance.endSession();
                   LogService.instance.registerLog("No active session on master.");
                 }
                 else{
@@ -245,11 +245,11 @@ class SlaveClient {
             notifyReadyToTransmit(sessionGuid);
           } else if (type == "sessionEnded") {
             // Handle session end
-            SessionManager.instance.endSession();
+            await SessionManager.instance.endSession();
             LogService.instance.registerLog("Session ended as per master command.");
           } else if (type == "noSession") {
             // Handle no active session
-            SessionManager.instance.endSession();
+            await SessionManager.instance.endSession();
             LogService.instance.registerLog("No active session on master.");
           } else {
             // Unknown JSON command type

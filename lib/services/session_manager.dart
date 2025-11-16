@@ -60,7 +60,7 @@ class SessionManager extends ChangeNotifier {
   }
 
   /// Ends the current session, clearing data.
-  void endSession() async {
+  Future<void> endSession() async {
     if (_currentSession == null) {
       LogService.instance.registerLog("No active session to end.");
       return;

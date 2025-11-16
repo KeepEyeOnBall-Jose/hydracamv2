@@ -1,12 +1,14 @@
 import "dart:async";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:disk_space_plus/disk_space_plus.dart"; 
+import "package:disk_space_plus/disk_space_plus.dart";
 import "log_service.dart";
 
 /// StorageService monitors the device's available storage and shows a warning
 /// SnackBar when the storage falls below a defined threshold.
 class StorageService {
   static StorageService? _instance;
+  static bool _monitoringEnabled = true;
 
   static StorageService get instance {
     if (_instance == null) throw Exception("StorageService not initialized");
@@ -42,6 +44,12 @@ class StorageService {
   /// Starts monitoring the device's storage periodically.
   void _startMonitoringStorage() {
     _storageCheckTimer?.cancel();
+
+    if (!_monitoringEnabled) {
+      LogService.instance.registerLog(
+          "StorageService monitoring disabled - timer not started.");
+      return;
+    }
 
     _storageCheckTimer = Timer.periodic(const Duration(minutes: 1), (timer) async {
       try {
@@ -122,8 +130,26 @@ class StorageService {
     );
   }
 
+  @visibleForTesting
+  void simulateStorageLevel(double availableStorageMb) {
+    _handleStorageLevel(availableStorageMb);
+  }
+
   void dispose() {
     _storageCheckTimer?.cancel();
     _storageCheckTimer = null;
+  }
+
+  /// Allows tests to disable or enable periodic monitoring to avoid pending timers.
+  @visibleForTesting
+  static void configureMonitoring({required bool enabled}) {
+    _monitoringEnabled = enabled;
+
+    if (!enabled) {
+      _instance?._storageCheckTimer?.cancel();
+      _instance?._storageCheckTimer = null;
+    } else {
+      _instance?._startMonitoringStorage();
+    }
   }
 }

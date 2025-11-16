@@ -9,6 +9,7 @@ import "package:path_provider/path_provider.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../services/camera_service.dart";
+import "../services/gallery_persistence_service.dart";
 import "../services/log_service.dart";
 import "../services/session_manager.dart";
 
@@ -315,15 +316,11 @@ class MasterServer {
     final file = File(filePath);
     await file.writeAsBytes(binaryData);
 
-    // Save to gallery (temporarily disabled - incompatible plugin)
-    // TODO: Use photo_manager to save to gallery
-    /*
     if (isPhoto) {
-      await GallerySaver.saveImage(filePath, albumName: "HydraCam/${SessionManager.instance.sessionGuid}");
-    } else { // Video
-      await GallerySaver.saveVideo(filePath, albumName: "HydraCam/${SessionManager.instance.sessionGuid}");
+      await GalleryPersistenceService.savePhoto(filePath);
+    } else {
+      await GalleryPersistenceService.saveVideo(filePath);
     }
-    */
 
     return filePath;
   }
@@ -354,14 +351,14 @@ class MasterServer {
         .registerLog("Command sent to all connected slaves: $message");
   }
 
-  void endCurrentSession() {
+  Future<void> endCurrentSession() async {
     if (SessionManager.instance.currentSession != null) {
       // Register logs
       LogService.instance.registerLog(
           "Capture session with GUID: ${SessionManager.instance.sessionGuid} ended and stored in history.");
 
       // End session through SessionManager
-      SessionManager.instance.endSession();
+      await SessionManager.instance.endSession();
 
       // Notify slaves that session ended
       final sessionEndedCommand = jsonEncode({
