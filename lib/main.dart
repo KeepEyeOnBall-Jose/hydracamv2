@@ -1,19 +1,26 @@
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:wakelock_plus/wakelock_plus.dart";
+
+import "app_theme.dart";
+import "automation/automation_bridge.dart";
+import "automation/automation_config.dart";
 import "services/battery_service.dart";
 import "services/camera_service_singleton.dart";
-import "services/storage_service.dart";
-import "package:provider/provider.dart";
-import "slave/slave_screen.dart";
 import "services/device_id_provider.dart";
 import "services/device_service.dart";
 import "services/location_service.dart";
 import "services/log_service.dart";
 import "services/permission_service.dart";
-import "app_theme.dart";
-import "package:wakelock_plus/wakelock_plus.dart";
+import "services/storage_service.dart";
+import "slave/slave_screen.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (automationEnabled) {
+    await AutomationBridge.instance.ensureInitialized();
+  }
 
   final bool permissionsGranted =
       await PermissionService.requestAllPermissions();

@@ -1,7 +1,8 @@
 import "dart:async";
 import "dart:convert";
-import "package:http/http.dart" as http;
 import "dart:io";
+import "package:flutter/foundation.dart";
+import "package:http/http.dart" as http;
 import "log_service.dart";
 import "auth0_m2m_service.dart";
 
@@ -15,6 +16,18 @@ class HydraCamApiService {
 
   // Base URL for the API
   final String _baseUrl = "https://hydracam.azurewebsites.net/api";
+
+  http.Client _httpClient = http.Client();
+
+  @visibleForTesting
+  static void configureHttpClient(http.Client client) {
+    _instance._httpClient = client;
+  }
+
+  @visibleForTesting
+  static void resetHttpClient() {
+    _instance._httpClient = http.Client();
+  }
 
   /// Obtiene las cabeceras comunes, incluyendo Authorization: Bearer <token>
   Future<Map<String, String>> _getHeaders() async {
@@ -34,11 +47,10 @@ class HydraCamApiService {
     try {
       final headers = await _getHeaders();
       final uri = Uri.parse("$_baseUrl/$endpoint".replaceAll(" ", ""));
-      final response = await http.get(uri, headers: headers);
+      final response = await _httpClient.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
-
 
         if (decoded is List) {
           // Return list directly if response is a JSON array
@@ -48,7 +60,8 @@ class HydraCamApiService {
           return decoded;
         } else {
           // Log unexpected structure
-          LogService.instance.registerLog("Unexpected JSON structure: $decoded");
+          LogService.instance
+              .registerLog("Unexpected JSON structure: $decoded");
           return null;
         }
       } else {
@@ -64,19 +77,20 @@ class HydraCamApiService {
     }
   }
 
-
-
   /// Realiza un POST genérico con headers y parsing
-  Future<Map<String, dynamic>?> _post(String endpoint, Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>?> _post(
+      String endpoint, Map<String, dynamic> body) async {
     try {
       final headers = await _getHeaders();
       final uri = Uri.parse("$_baseUrl / $endpoint".replaceAll(" ", ""));
-      final response = await http.post(uri, headers: headers, body: jsonEncode(body));
+      final response =
+          await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        LogService.instance.registerLog("POST $endpoint failed: ${response.body}");
+        LogService.instance
+            .registerLog("POST $endpoint failed: ${response.body}");
         return null;
       }
     } catch (e) {
@@ -86,7 +100,8 @@ class HydraCamApiService {
   }
 
   /// Fetch courts, optionally filtered by Sports Center GUID
-  Future<List<Map<String, dynamic>>?> fetchCourts({String? sportsCenterGuid}) async {
+  Future<List<Map<String, dynamic>>?> fetchCourts(
+      {String? sportsCenterGuid}) async {
     try {
       final endpoint = sportsCenterGuid != null
           ? "courts?sportsCenterGuid=$sportsCenterGuid"
@@ -100,7 +115,8 @@ class HydraCamApiService {
         return parsedList;
       } else {
         // If the response structure is unexpected, log it
-        LogService.instance.registerLog("Unexpected structure (courts): $response");
+        LogService.instance
+            .registerLog("Unexpected structure (courts): $response");
         return null;
       }
     } catch (e) {
@@ -109,7 +125,6 @@ class HydraCamApiService {
     }
   }
 
-
   /// Fetch sports centers
   Future<List<Map<String, dynamic>>?> fetchSportsCenters() async {
     final response = await _get("sportscenters");
@@ -117,14 +132,15 @@ class HydraCamApiService {
     if (response is List) {
       // Parse the list of sports centers
       final parsedList = List<Map<String, dynamic>>.from(response);
-      LogService.instance.registerLog("Parsed list (sportscenters): $parsedList");
+      LogService.instance
+          .registerLog("Parsed list (sportscenters): $parsedList");
       return parsedList;
     } else {
-      LogService.instance.registerLog("Unexpected structure (sportscenters): $response");
+      LogService.instance
+          .registerLog("Unexpected structure (sportscenters): $response");
       return null;
     }
   }
-
 
   /// Fetch sessions for a specific court
   Future<List<Map<String, dynamic>>?> fetchSessions(String courtGuid) async {
@@ -135,7 +151,6 @@ class HydraCamApiService {
       // Fetch the response
       final response = await _get(endpoint);
 
-
       // Parse the response if it is a list
       if (response is List) {
         final parsedList = List<Map<String, dynamic>>.from(response);
@@ -143,7 +158,8 @@ class HydraCamApiService {
         return parsedList;
       } else {
         // Log unexpected response structure
-        LogService.instance.registerLog("Unexpected structure (sessions): $response");
+        LogService.instance
+            .registerLog("Unexpected structure (sessions): $response");
         return null;
       }
     } catch (e) {
@@ -153,10 +169,9 @@ class HydraCamApiService {
     }
   }
 
-
-
   /// Notify server that device is ready to transmit
-  Future<bool> notifyReadyToTransmit(String deviceId, String sessionGuid) async {
+  Future<bool> notifyReadyToTransmit(
+      String deviceId, String sessionGuid) async {
     try {
       final response = await _post(
         "device/ReadyToTransmit",
@@ -167,7 +182,8 @@ class HydraCamApiService {
       );
 
       if (response != null) {
-        LogService.instance.registerLog("Notified API that the device is ready to transmit");
+        LogService.instance
+            .registerLog("Notified API that the device is ready to transmit");
         return true;
       } else {
         LogService.instance.registerLog("Failed to notify server: No response");
@@ -178,7 +194,6 @@ class HydraCamApiService {
       return false;
     }
   }
-
 
   /// Create a new capture session
   /// Create a new capture session
@@ -205,14 +220,17 @@ class HydraCamApiService {
 
       // Make the POST request
       final uri = Uri.parse("$_baseUrl/$endpoint");
-      final response = await http.post(uri, headers: headers, body: jsonEncode(body));
+      final response =
+          await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        LogService.instance.registerLog("Session created successfully: $responseData");
+        LogService.instance
+            .registerLog("Session created successfully: $responseData");
         return responseData;
       } else {
-        LogService.instance.registerLog("Failed to create session: ${response.body}");
+        LogService.instance
+            .registerLog("Failed to create session: ${response.body}");
         return null;
       }
     } catch (e) {
@@ -220,9 +238,6 @@ class HydraCamApiService {
       return null;
     }
   }
-
-
-
 
   /// End a session
   Future<bool> endSession(String sessionGuid) async {
@@ -243,17 +258,16 @@ class HydraCamApiService {
     }
   }
 
-
   /// Upload media
   Future<bool> uploadMedia(
-      String sessionGuid,
-      File file,
-      bool isPhoto,
-      String slaveDeviceId,
-      DateTime captureDate,
-      DateTime receivedDate,
-      Function(double)? onProgress,
-      ) async {
+    String sessionGuid,
+    File file,
+    bool isPhoto,
+    String slaveDeviceId,
+    DateTime captureDate,
+    DateTime receivedDate,
+    Function(double)? onProgress,
+  ) async {
     try {
       final headers = await _getHeaders();
       final uri = Uri.parse(
@@ -285,7 +299,7 @@ class HydraCamApiService {
         ),
       );
 
-      final streamedResponse = await request.send();
+      final streamedResponse = await _httpClient.send(request);
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
@@ -301,8 +315,6 @@ class HydraCamApiService {
       return false;
     }
   }
-
-
 
   /// Get user GUID by email
   Future<String?> getUserGuidByEmail(String email) async {
@@ -321,7 +333,8 @@ class HydraCamApiService {
         return response;
       } else {
         // Log and return null if the response is not as expected
-        LogService.instance.registerLog("Unexpected structure (user details): $response");
+        LogService.instance
+            .registerLog("Unexpected structure (user details): $response");
         return null;
       }
     } catch (e) {
@@ -330,6 +343,4 @@ class HydraCamApiService {
       return null;
     }
   }
-
-
 }

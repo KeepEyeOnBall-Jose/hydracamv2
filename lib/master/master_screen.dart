@@ -1,14 +1,15 @@
 import "package:flutter/material.dart";
+import "package:video_player/video_player.dart"; // Add video_player dependency in pubspec.yaml
+
+import "../automation/automation_bridge.dart";
+import "../automation/automation_config.dart";
+import "../constants.dart" as constants;
+import "../models/captured_photo.dart";
+import "../models/captured_video.dart";
+import "../screens/master_video_recording_screen.dart";
 import "../screens/previous_sessions_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../screens/sports_centers_screen.dart";
-import "package:video_player/video_player.dart"; // Add video_player dependency in pubspec.yaml
-import "../constants.dart" as constants;
-import "master_announcer.dart";
-import "master_server.dart";
-import "../models/captured_photo.dart";
-import "../models/captured_video.dart";
-import "dart:io";
 import "../services/alert_utils.dart";
 import "../services/camera_service_singleton.dart";
 import "../services/device_service.dart";
@@ -18,13 +19,15 @@ import "../services/session_manager.dart";
 import "../services/settings_service.dart";
 import "../services/storage_service.dart";
 import "../services/user_service.dart";
-import "../widgets/court_selection_widget.dart";
 import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
+import "../widgets/court_selection_widget.dart";
 import "../widgets/hydra_cam_app_bar.dart";
-import "../screens/master_video_recording_screen.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
+import "master_announcer.dart";
+import "master_server.dart";
+import "dart:io";
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
@@ -38,6 +41,7 @@ class MasterScreenState extends State<MasterScreen> {
   final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
   final HydraCamApiService _apiService =
       HydraCamApiService(); // API service instance
+  final Map<String, AutomationHandler> _automationHandlers = {};
 
   int connectedClients = 0; // To display connected clients count
   bool isRecording = false;
@@ -91,10 +95,18 @@ class MasterScreenState extends State<MasterScreen> {
       );
     };
     _server.startServer();
+
+    if (automationEnabled) {
+      _registerAutomationHandlers();
+    }
   }
 
   @override
   void dispose() {
+    if (automationEnabled && _automationHandlers.isNotEmpty) {
+      AutomationBridge.instance.unregisterCommands(_automationHandlers.keys);
+      _automationHandlers.clear();
+    }
     try {
       // Nullify callbacks to prevent setState() after dispose
       _server.onClientCountChange = null;
@@ -115,55 +127,55 @@ class MasterScreenState extends State<MasterScreen> {
   // Method to init a new session
   void _startOrEndSession() async {
     if (sessionActive) {
-      // End the session
-      _endCurrentSession();
+      await _endCurrentSession();
     } else {
-      // Start a new session
-      if (selectedCourtGuid == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("No court selected. Proceeding without a court."),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
       await _createSession();
     }
   }
 
-  void _toggleRecording() async {
+  void _handleToggleRecordingButton() {
+    _toggleRecording();
+  }
+
+  Future<void> _toggleRecording({
+    bool showCountdown = true,
+    bool suppressSnackbars = false,
+  }) async {
     if (StorageService.instance.isRecordingBlocked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content:
-                Text("Cannot start recording: Storage is critically low.")),
-      );
+      if (!suppressSnackbars) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text("Cannot start recording: Storage is critically low.")),
+        );
+      }
       LogService.instance
           .registerLog("Recording toggle blocked due to critical storage.");
       return;
     }
 
     if (_server.cameraService.recordingInterrupted.value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Recording already interrupted due to low storage.")),
-      );
+      if (!suppressSnackbars) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text("Recording already interrupted due to low storage.")),
+        );
+      }
       return;
     }
 
     LogService.instance
         .registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
 
-    // Get timer duration
     final timerDuration = await SettingsService.getTimerDuration();
     final DateTime scheduledTime =
         DateTime.now().add(Duration(seconds: timerDuration));
     final String command =
         isRecording ? "stopRecordingVideo" : "startRecordingVideo";
 
-    // Show countdown timer while waiting for the scheduled time - capture context before async
     final currentContext = context;
-    if (mounted) {
+    if (showCountdown && mounted) {
       showDialog(
         context: currentContext,
         barrierDismissible: false,
@@ -174,16 +186,12 @@ class MasterScreenState extends State<MasterScreen> {
       );
     }
 
-    // Send the scheduled command to slaves
     _server.scheduleCommand(command, scheduledTime);
-
-    // Master also waits until the scheduled time before executing
     await Future.delayed(scheduledTime.difference(DateTime.now()));
 
     if (!mounted) return;
 
     if (isRecording) {
-      // Stop recording
       if (await SettingsService.getMasterShouldRecord()) {
         await _stopMasterRecordingVideo();
       } else {
@@ -192,7 +200,6 @@ class MasterScreenState extends State<MasterScreen> {
         });
       }
     } else {
-      // Start recording
       if (await SettingsService.getMasterShouldRecord()) {
         await _startMasterRecordingVideo();
       } else {
@@ -204,6 +211,56 @@ class MasterScreenState extends State<MasterScreen> {
 
     LogService.instance.registerLog(
         "Command '$command' finished executing by master at ${DateTime.now()}");
+  }
+
+  Future<void> _ensureRecordingState({required bool shouldRecord}) async {
+    if (shouldRecord == isRecording) {
+      return;
+    }
+    await _toggleRecording(showCountdown: false, suppressSnackbars: true);
+  }
+
+  void _registerAutomationHandlers() {
+    if (!automationEnabled) {
+      return;
+    }
+
+    final handlers = <String, AutomationHandler>{
+      "start_session": (payload) async {
+        await _createSession(
+          suppressSnackbars: true,
+          skipCourtSelectionWarning: true,
+          overrideCourtGuid: payload["courtGuid"] as String?,
+          overrideSessionId: payload["sessionId"] as String?,
+        );
+        return AutomationBridge.instance.buildSessionSnapshot();
+      },
+      "end_session": (payload) async {
+        await _endCurrentSession(
+          requireConfirmation: false,
+          suppressSnackbars: true,
+        );
+        return AutomationBridge.instance.buildSessionSnapshot();
+      },
+      "take_photo": (payload) async {
+        await _executeTakePhoto(
+          showCountdown: payload["showCountdown"] as bool? ?? false,
+          suppressSnackbars: true,
+        );
+        return AutomationBridge.instance.buildSessionSnapshot();
+      },
+      "start_recording": (payload) async {
+        await _ensureRecordingState(shouldRecord: true);
+        return AutomationBridge.instance.buildSessionSnapshot();
+      },
+      "stop_recording": (payload) async {
+        await _ensureRecordingState(shouldRecord: false);
+        return AutomationBridge.instance.buildSessionSnapshot();
+      },
+    };
+
+    handlers.forEach(AutomationBridge.instance.registerCommand);
+    _automationHandlers.addAll(handlers);
   }
 
   Future<void> _startMasterRecordingVideo() async {
@@ -271,11 +328,18 @@ class MasterScreenState extends State<MasterScreen> {
     }
   }
 
-  void _takeRealPhoto() async {
-    if (isProcessingTakePhoto) return; // Prevent user from spamming
+  void _handleTakePhotoButton() {
+    _executeTakePhoto(showCountdown: true);
+  }
+
+  Future<void> _executeTakePhoto({
+    required bool showCountdown,
+    bool suppressSnackbars = false,
+  }) async {
+    if (isProcessingTakePhoto) return;
 
     setState(() {
-      isProcessingTakePhoto = true; // Block the button
+      isProcessingTakePhoto = true;
     });
 
     try {
@@ -283,8 +347,7 @@ class MasterScreenState extends State<MasterScreen> {
       final DateTime scheduledTime =
           DateTime.now().add(Duration(seconds: timerDuration));
 
-      // Show countdown timer while waiting for the scheduled time
-      if (mounted) {
+      if (showCountdown && mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -295,21 +358,15 @@ class MasterScreenState extends State<MasterScreen> {
         );
       }
 
-      // Send the scheduled command to slaves
       _server.scheduleCommand("takePhoto", scheduledTime);
-
-      // Master also waits until the scheduled time before executing
       await Future.delayed(scheduledTime.difference(DateTime.now()));
 
       if (!mounted) return;
 
-      // TODO: We should know before waiting? or we better wait even if we don't take pic?
-      // Verify if master should also take a pic
       final bool shouldMasterRecord =
           await SettingsService.getMasterShouldRecord();
       if (shouldMasterRecord) {
         final String photoPath = await _server.cameraService.takePhoto();
-
         final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
         final capturedPhoto = CapturedPhoto(
@@ -321,16 +378,15 @@ class MasterScreenState extends State<MasterScreen> {
         );
 
         SessionManager.instance.addPhoto(capturedPhoto);
-
         setState(() {});
 
-        _showPhotoDialog(capturedPhoto, autoClose: true);
+        if (!suppressSnackbars) {
+          _showPhotoDialog(capturedPhoto, autoClose: true);
+        }
       }
 
-      final currentContext = context;
-
-      if (currentContext.mounted) {
-        ScaffoldMessenger.of(currentContext).showSnackBar(
+      if (!suppressSnackbars && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
         );
@@ -339,9 +395,11 @@ class MasterScreenState extends State<MasterScreen> {
       LogService.instance
           .registerLog("Photo command executed by master at ${DateTime.now()}");
     } finally {
-      setState(() {
-        isProcessingTakePhoto = false; // Unlock button
-      });
+      if (mounted) {
+        setState(() {
+          isProcessingTakePhoto = false;
+        });
+      }
     }
   }
 
@@ -378,23 +436,35 @@ class MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  Future<void> _createSession() async {
-    if (isProcessingStartSession) return; // Prevent user from spamming
+  Future<void> _createSession({
+    bool suppressSnackbars = false,
+    bool skipCourtSelectionWarning = false,
+    String? overrideCourtGuid,
+    String? overrideSessionId,
+  }) async {
+    if (isProcessingStartSession) return;
 
     setState(() {
-      isProcessingStartSession = true; // Block the button
+      isProcessingStartSession = true;
     });
 
     try {
-      final sessionId = DateTime.now().toIso8601String();
+      final sessionId = overrideSessionId ?? DateTime.now().toIso8601String();
 
-      // Get the user GUID if logged in
+      if (!skipCourtSelectionWarning && selectedCourtGuid == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("No court selected. Proceeding without a court."),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+
       final String? userGuid = UserService().guid;
-
       final response = await _apiService.createSession(
         sessionId,
-        courtGuid: selectedCourtGuid,
-        userGuid: userGuid, // Pass the user GUID if available
+        courtGuid: overrideCourtGuid ?? selectedCourtGuid,
+        userGuid: userGuid,
       );
 
       LogService.instance.registerLog("Response to create session: $response");
@@ -405,95 +475,107 @@ class MasterScreenState extends State<MasterScreen> {
         final String sessionGuid = response["guid"];
         SessionManager.instance
             .startSession(sessionGuid, sessionId, deviceType: "Master");
-        _server.startNewSession(sessionGuid); // Notify slaves
+        _server.startNewSession(sessionGuid);
 
         LogService.instance
             .registerLog("Session created with GUID: $sessionGuid");
 
         setState(() {});
-        if (context.mounted) {
+        if (!suppressSnackbars && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text("Session created successfully: $sessionGuid")),
           );
         }
       } else {
-        if (context.mounted) {
+        if (!suppressSnackbars && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Failed to create session")),
           );
         }
       }
     } finally {
-      setState(() {
-        isProcessingStartSession = false; // Desbloquea el botón
-      });
+      if (mounted) {
+        setState(() {
+          isProcessingStartSession = false;
+        });
+      }
     }
   }
 
-  void _endCurrentSession() async {
-    if (isProcessingEndSession) return; // Prevent spamming
+  Future<void> _endCurrentSession({
+    bool requireConfirmation = true,
+    bool suppressSnackbars = false,
+  }) async {
+    if (isProcessingEndSession) return;
 
     setState(() {
-      isProcessingEndSession = true; // Block button
+      isProcessingEndSession = true;
     });
 
     try {
-      final bool? confirmEnd = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("End Current Session"),
-            content:
-                const Text("Are you sure you want to end the current session?"),
-            actions: [
-              TextButton(
-                child: const Text("Cancel"),
-                onPressed: () {
-                  Navigator.of(context).pop(false); // Dont end
-                },
-              ),
-              TextButton(
-                child: const Text("End Session"),
-                onPressed: () {
-                  Navigator.of(context).pop(true); // Confirm end
-                },
-              ),
-            ],
-          );
-        },
-      );
+      bool proceed = true;
+      if (requireConfirmation) {
+        final bool? confirmEnd = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("End Current Session"),
+              content: const Text(
+                  "Are you sure you want to end the current session?"),
+              actions: [
+                TextButton(
+                  child: const Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                TextButton(
+                  child: const Text("End Session"),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        proceed = confirmEnd ?? false;
+      }
 
-      if (confirmEnd != null && confirmEnd) {
-        // Call API method endSession
-        if (SessionManager.instance.currentSession != null) {
-          final bool success = await _apiService
-              .endSession(SessionManager.instance.sessionGuid!);
+      if (!proceed) {
+        return;
+      }
 
-          if (!mounted) return;
+      if (SessionManager.instance.currentSession != null) {
+        final bool success =
+            await _apiService.endSession(SessionManager.instance.sessionGuid!);
 
-          if (success) {
-            await _server.endCurrentSession(); // End locally
-            setState(() {});
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Capture session ended")),
-              );
-            }
-          } else {
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text("Failed to end session on the server")),
-              );
-            }
+        if (!mounted) return;
+
+        if (success) {
+          await _server.endCurrentSession();
+          setState(() {});
+          if (!suppressSnackbars && context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Capture session ended")),
+            );
+          }
+        } else {
+          if (!suppressSnackbars && context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text("Failed to end session on the server")),
+            );
           }
         }
       }
     } finally {
-      setState(() {
-        isProcessingEndSession = false; // Unlock button
-      });
+      if (mounted) {
+        setState(() {
+          isProcessingEndSession = false;
+        });
+      }
     }
   }
 
@@ -647,7 +729,7 @@ class MasterScreenState extends State<MasterScreen> {
           width: buttonWidth,
           child: ElevatedButton(
             onPressed: sessionGuid != null && !isProcessingTakePhoto
-                ? _takeRealPhoto
+                ? _handleTakePhotoButton
                 : null,
             child: isProcessingTakePhoto
                 ? const SizedBox(
@@ -663,7 +745,8 @@ class MasterScreenState extends State<MasterScreen> {
         SizedBox(
           width: buttonWidth,
           child: ElevatedButton(
-            onPressed: sessionGuid != null ? _toggleRecording : null,
+            onPressed:
+                sessionGuid != null ? _handleToggleRecordingButton : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: isRecording ? Colors.red : Colors.green,
             ),
