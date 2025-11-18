@@ -1,0 +1,118 @@
+{
+  "name": "quad_smoke",
+  "description": "Master orchestrates a short capture cycle while slaves observe.",
+  "context": {
+    "sessionId": "quad-{{timestamp}}"
+  },
+  "steps": [
+    {
+      "action": "setContext",
+      "name": "seed-session",
+      "values": {
+        "sessionId": "quad-{{timestamp}}",
+        "note": "{{isoTimestamp}}"
+      }
+    },
+    {
+      "action": "settings",
+      "name": "enable-auto-upload",
+      "targets": "all",
+      "payload": {
+        "autoUploadMaterials": true,
+        "masterShouldRecord": true
+      }
+    },
+    {
+      "action": "command",
+      "name": "start-session",
+      "role": "master",
+      "command": "start_session",
+      "payload": {
+        "sessionId": "{{sessionId}}",
+        "label": "Quad Smoke {{isoTimestamp}}"
+      },
+      "capture": {
+        "sessionGuid": "sessionGuid"
+      }
+    },
+    {
+      "action": "await",
+      "name": "session-live",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 20,
+      "expect": {
+        "path": "isActive",
+        "equals": true,
+        "capture": {
+          "sessionGuid": "sessionGuid"
+        }
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 2.0
+    },
+    {
+      "action": "command",
+      "name": "countdown-photo",
+      "role": "master",
+      "command": "take_photo",
+      "payload": {
+        "showCountdown": false
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 1.0
+    },
+    {
+      "action": "command",
+      "name": "start-recording",
+      "role": "master",
+      "command": "start_recording",
+      "payload": {
+        "mode": "video",
+        "maxDurationSeconds": 8
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 4.0
+    },
+    {
+      "action": "command",
+      "name": "stop-recording",
+      "role": "master",
+      "command": "stop_recording",
+      "payload": {}
+    },
+    {
+      "action": "command",
+      "name": "end-session",
+      "role": "master",
+      "command": "end_session",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "session-complete",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "expect": {
+        "path": "isActive",
+        "equals": false
+      }
+    },
+    {
+      "action": "get",
+      "name": "snapshot-session",
+      "role": "master",
+      "path": "/session",
+      "capture": {
+        "sessionGuid": "sessionGuid"
+      }
+    }
+  ]
+}

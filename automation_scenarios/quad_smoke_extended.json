@@ -1,0 +1,27 @@
+{
+  "name": "quad_smoke_extended",
+  "description": "Extended quad smoke: longer recording and post-recording wait to let uploader run.",
+  "devices": {
+    "masterCount": 1,
+    "slaveCount": 0
+  },
+  "steps": [
+    { "name": "seed-session", "action": "setContext", "values": { "sessionId": "quad-EXT-{timestamp}" } },
+    { "name": "enable-auto-upload", "action": "settings", "targets": "all", "payload": { "autoUploadMaterials": true, "masterShouldRecord": true } },
+    { "name": "start-session", "action": "command", "targets": ["master"], "command": "start_session" },
+    { "name": "session-live", "action": "await", "path": "/session", "timeoutSec": 30, "intervalSec": 1, "expect": { "path": "isActive", "equals": true } },
+
+    { "name": "countdown-photo", "action": "command", "targets": ["master"], "command": "take_photo", "payload": { "showCountdown": false } },
+    { "name": "sleep-after-photo", "action": "sleep", "seconds": 2 },
+
+    { "name": "start-recording", "action": "command", "targets": ["master"], "command": "start_recording", "payload": { "mode": "video", "maxDurationSeconds": 8 } },
+    { "name": "sleep-while-recording", "action": "sleep", "seconds": 6 },
+    { "name": "stop-recording", "action": "command", "targets": ["master"], "command": "stop_recording" },
+
+    { "name": "long-post-recording-wait", "action": "sleep", "seconds": 12 },
+    { "name": "await-upload-queue-empty", "action": "await", "path": "/session", "timeoutSec": 60, "intervalSec": 2, "expect": { "path": "queueLength", "equals": 0 } },
+
+    { "name": "end-session", "action": "command", "targets": ["master"], "command": "end_session" },
+    { "name": "session-complete", "action": "await", "path": "/session", "timeoutSec": 30, "intervalSec": 1, "expect": { "path": "isActive", "equals": false } }
+  ]
+}

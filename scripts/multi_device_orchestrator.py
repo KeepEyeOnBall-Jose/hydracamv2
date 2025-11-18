@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hashlib
+import http.client
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -18,8 +20,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, cast
 from urllib.parse import urlparse
 
+# optional emulator control helpers
+from scripts.emulator_manager import EmulatorManager
+
 AUTOMATION_REMOTE_PORT = 4762
 DEFAULT_PORT_BASE = 5900
+HTTP_TIMEOUT_SECONDS = 120
+PLACEHOLDER_PATTERN: re.Pattern[str] = re.compile(
+    r"{{\s*([a-zA-Z0-9_.-]+)\s*}}",
+)
 
 
 @dataclass
@@ -61,6 +70,13 @@ class MultiDeviceOrchestrator:
         )
         self.backend_token = backend_token
         self.run_dir: Optional[Path] = None
+        now = dt.datetime.now(dt.timezone.utc)
+        self.context: Dict[str, Any] = {
+            "timestamp": int(now.timestamp()),
+            "isoTimestamp": now.isoformat(),
+            "scenario": scenario,
+        }
+        self._cached_manifest: Optional[Dict[str, Any]] = None
         self.summary_stub: Dict[str, object] = {
             "scenario": scenario,
             "dryRun": dry_run,
@@ -118,6 +134,8 @@ class MultiDeviceOrchestrator:
 
     def _run_scenario(self) -> Dict[str, Any]:
         scenario = self.scenario.lower()
+        if self.manifest:
+            return self._run_manifest_scenario()
         if scenario == "smoke":
             return self._run_smoke_scenario()
         raise OrchestratorError(f"Unknown scenario '{self.scenario}'")
@@ -129,7 +147,9 @@ class MultiDeviceOrchestrator:
                 "Smoke scenario requires at least one master device",
             )
 
-        payload: Dict[str, object] = {"sessionId": f"automation-{int(time.time())}"}
+        payload: Dict[str, object] = {
+            "sessionId": f"automation-{int(time.time())}",
+        }
         self._log("Triggering session start on master %s", master.serial)
         start_response = self._post(master, "/commands/start_session", payload)
         self._log(
@@ -227,12 +247,433 @@ class MultiDeviceOrchestrator:
             suffix += 1
         candidate.mkdir(parents=True)
         self.run_dir = candidate
+        self.context["runDir"] = str(candidate)
         devices_path = self.run_dir / "devices.json"
         devices_path.write_text(
             json.dumps(self.summary_stub["devices"], indent=2),
             encoding="utf-8",
         )
         self._log("Artifacts will be stored under %s", self.run_dir)
+
+    def _load_manifest(self) -> Dict[str, Any]:
+        if not self.manifest:
+            raise OrchestratorError("Manifest path not provided")
+        if self._cached_manifest is not None:
+            return self._cached_manifest
+        if not self.manifest.exists():
+            raise OrchestratorError(
+                f"Manifest file {self.manifest} does not exist",
+            )
+        try:
+            content = self.manifest.read_text(encoding="utf-8")
+            manifest = json.loads(content)
+        except (OSError, json.JSONDecodeError) as exc:
+            raise OrchestratorError(
+                f"Failed to load manifest {self.manifest}: {exc}",
+            ) from exc
+        steps = manifest.get("steps")
+        if not isinstance(steps, list) or not steps:
+            raise OrchestratorError(
+                ("Manifest %s must include a non-empty 'steps' array" % self.manifest),
+            )
+        manifest_context = manifest.get("context")
+        if isinstance(manifest_context, Mapping):
+            rendered_context = self._render_value(manifest_context)
+            if not isinstance(rendered_context, Mapping):
+                raise OrchestratorError(
+                    "Manifest context must resolve to an object",
+                )
+            context_mapping = cast(Mapping[str, Any], rendered_context)
+            rendered_map: Dict[str, Any] = {}
+            for key, value in context_mapping.items():
+                rendered_map[str(key)] = value
+            self.context.update(rendered_map)
+        self._cached_manifest = manifest
+        return manifest
+
+    def _run_manifest_scenario(self) -> Dict[str, Any]:
+        manifest = self._load_manifest()
+        steps = manifest["steps"]
+        manifest_info: Dict[str, Any] = {
+            "path": str(self.manifest),
+            "name": manifest.get("name"),
+            "description": manifest.get("description"),
+        }
+        handlers = {
+            "command": self._manifest_step_command,
+            "settings": self._manifest_step_settings,
+            "get": self._manifest_step_get,
+            "await": self._manifest_step_await,
+            "sleep": self._manifest_step_sleep,
+            "setContext": self._manifest_step_set_context,
+        }
+        results: List[Dict[str, Any]] = []
+        for index, raw_step in enumerate(steps):
+            if not isinstance(raw_step, Mapping):
+                raise OrchestratorError(
+                    f"Manifest step #{index + 1} must be an object",
+                )
+            step = cast(Mapping[str, Any], raw_step)
+            action = step.get("action")
+            if not isinstance(action, str):
+                raise OrchestratorError(
+                    f"Manifest step #{index + 1} is missing an 'action' field",
+                )
+            handler = handlers.get(action)
+            if handler is None:
+                raise OrchestratorError(
+                    f"Unsupported manifest action '{action}'",
+                )
+            label = step.get("name") or step.get("label")
+            if not label:
+                label = f"step_{index + 1}"
+            self._log("Executing manifest step %s (%s)", label, action)
+            step_result = handler(step)
+            results.append(
+                {
+                    "index": index,
+                    "name": label,
+                    "action": action,
+                    "result": step_result,
+                }
+            )
+        scenario_guid = self.context.get("sessionGuid")
+        if isinstance(scenario_guid, str) and scenario_guid:
+            session_guid_value = scenario_guid
+        else:
+            session_guid_value = None
+        return {
+            "manifest": manifest_info,
+            "steps": results,
+            "sessionGuid": session_guid_value,
+        }
+
+    def _manifest_step_command(
+        self,
+        step: Mapping[str, Any],
+    ) -> Dict[str, Any]:
+        command = step.get("command")
+        if not isinstance(command, str) or not command:
+            raise OrchestratorError("Manifest command step requires 'command'")
+        payload_raw = self._ensure_mapping(
+            step.get("payload", {}),
+            "command payload",
+        )
+        payload = cast(Dict[str, Any], self._render_value(payload_raw))
+        targets = self._select_targets(step, default_to_master=True)
+        responses: List[Dict[str, Any]] = []
+        for device in targets:
+            response = self._post_with_retry(
+                device,
+                f"/commands/{command}",
+                payload,
+                command,
+            )
+            responses.append({"serial": device.serial, "response": response})
+            capture_cfg = step.get("capture")
+            if capture_cfg is not None:
+                capture_map = self._ensure_mapping(
+                    capture_cfg,
+                    "command capture",
+                )
+                self._capture_from_payload(response, capture_map)
+            if command == "start_session":
+                session_guid = response.get("sessionGuid")
+                if isinstance(session_guid, str) and session_guid:
+                    self.context.setdefault("sessionGuid", session_guid)
+        return {
+            "command": command,
+            "targets": [device.serial for device in targets],
+            "payload": payload,
+            "responses": responses,
+        }
+
+    def _manifest_step_settings(
+        self,
+        step: Mapping[str, Any],
+    ) -> Dict[str, Any]:
+        payload_raw = self._ensure_mapping(
+            step.get("payload"),
+            "settings payload",
+        )
+        payload = cast(Dict[str, Any], self._render_value(payload_raw))
+        targets = self._select_targets(
+            step,
+            default_to_master=False,
+            allow_all=True,
+        )
+        responses: List[Dict[str, Any]] = []
+        for device in targets:
+            response = self._post(device, "/settings", payload)
+            responses.append({"serial": device.serial, "response": response})
+        return {
+            "targets": [device.serial for device in targets],
+            "payload": payload,
+            "responses": responses,
+        }
+
+    def _manifest_step_get(self, step: Mapping[str, Any]) -> Dict[str, Any]:
+        path = step.get("path")
+        if not isinstance(path, str) or not path.startswith("/"):
+            raise OrchestratorError(
+                "GET step requires a 'path' starting with /",
+            )
+        targets = self._select_targets(step, default_to_master=True)
+        snapshots: List[Dict[str, Any]] = []
+        for device in targets:
+            payload = self._get(device, path)
+            capture_cfg = step.get("capture")
+            if capture_cfg is not None:
+                capture_map = self._ensure_mapping(
+                    capture_cfg,
+                    "get capture",
+                )
+                self._capture_from_payload(payload, capture_map)
+            snapshots.append({"serial": device.serial, "payload": payload})
+        return {
+            "path": path,
+            "targets": [d.serial for d in targets],
+            "payloads": snapshots,
+        }
+
+    def _manifest_step_await(self, step: Mapping[str, Any]) -> Dict[str, Any]:
+        path = step.get("path")
+        if not isinstance(path, str) or not path.startswith("/"):
+            raise OrchestratorError(
+                "Await step requires a 'path' starting with /",
+            )
+        expect = self._ensure_mapping(step.get("expect"), "await expect")
+        timeout = float(step.get("timeoutSec", 30.0))
+        interval = float(step.get("intervalSec", 1.0))
+        targets = self._select_targets(step, default_to_master=True)
+        fulfilled: List[Dict[str, Any]] = []
+        for device in targets:
+            payload = self._await_expectation(
+                device,
+                path,
+                expect,
+                timeout,
+                interval,
+            )
+            fulfilled.append({"serial": device.serial, "payload": payload})
+        return {
+            "path": path,
+            "targets": [device.serial for device in targets],
+            "timeoutSec": timeout,
+            "intervalSec": interval,
+            "result": fulfilled,
+        }
+
+    def _manifest_step_sleep(self, step: Mapping[str, Any]) -> Dict[str, Any]:
+        seconds = float(step.get("seconds", 1.0))
+        self._log("Sleeping for %.2f second(s)", seconds)
+        time.sleep(seconds)
+        return {"slept": seconds}
+
+    def _manifest_step_set_context(
+        self,
+        step: Mapping[str, Any],
+    ) -> Dict[str, Any]:
+        values = self._ensure_mapping(step.get("values"), "setContext values")
+        rendered = self._render_value(values)
+        if not isinstance(rendered, Mapping):
+            raise OrchestratorError(
+                "setContext values must resolve to an object",
+            )
+        rendered_mapping = cast(Mapping[str, Any], rendered)
+        rendered_map: Dict[str, Any] = {}
+        for key, value in rendered_mapping.items():
+            rendered_map[str(key)] = value
+        self.context.update(rendered_map)
+        return {"context": dict(rendered_map)}
+
+    def _capture_from_payload(
+        self,
+        payload: Mapping[str, Any],
+        capture_cfg: Mapping[str, Any],
+    ) -> None:
+        for context_key, raw_path in capture_cfg.items():
+            key_str = str(context_key)
+            if not isinstance(raw_path, str):
+                continue
+            value = self._extract_path(payload, raw_path)
+            if value is not None:
+                self.context[key_str] = value
+
+    def _await_expectation(
+        self,
+        device: DeviceTarget,
+        path: str,
+        expect: Mapping[str, Any],
+        timeout: float,
+        interval: float,
+    ) -> Dict[str, Any]:
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            payload = self._get(device, path)
+            if self._matches_expectation(payload, expect):
+                capture_cfg = expect.get("capture")
+                if capture_cfg is not None:
+                    capture_map = self._ensure_mapping(
+                        capture_cfg,
+                        "await capture",
+                    )
+                    self._capture_from_payload(payload, capture_map)
+                return payload
+            time.sleep(interval)
+        raise OrchestratorError(
+            f"Await step timed out after {timeout:.1f}s on {device.serial}",
+        )
+
+    def _matches_expectation(
+        self,
+        payload: Mapping[str, Any],
+        expect: Mapping[str, Any],
+    ) -> bool:
+        path = expect.get("path")
+        if not isinstance(path, str):
+            return False
+        actual = self._extract_path(payload, path)
+        if "equals" in expect:
+            return actual == expect.get("equals")
+        if "notEquals" in expect:
+            return actual != expect.get("notEquals")
+        if "contains" in expect:
+            needle = expect.get("contains")
+            if isinstance(actual, list):
+                return needle in actual
+            if isinstance(actual, str) and isinstance(needle, str):
+                return needle in actual
+        if "exists" in expect:
+            should_exist = bool(expect.get("exists"))
+            exists = actual is not None
+            return exists if should_exist else not exists
+        if "truthy" in expect:
+            should_be_truthy = bool(expect.get("truthy"))
+            return bool(actual) == should_be_truthy
+        return False
+
+    def _extract_path(self, payload: Any, path: str) -> Any:
+        current: Any = payload
+        for raw_part in path.split("."):
+            part = raw_part.strip()
+            if part == "":
+                continue
+            if isinstance(current, Mapping):
+                mapping_current = cast(Mapping[str, Any], current)
+                current = mapping_current.get(part)
+            elif isinstance(current, list):
+                try:
+                    index = int(part)
+                except ValueError:
+                    return None
+                list_current = cast(List[Any], current)
+                if 0 <= index < len(list_current):
+                    current = list_current[index]
+                else:
+                    return None
+            else:
+                return None
+        return current
+
+    def _select_targets(
+        self,
+        step: Mapping[str, Any],
+        *,
+        default_to_master: bool,
+        allow_all: bool = False,
+    ) -> List[DeviceTarget]:
+        selected: List[DeviceTarget] = []
+        serials: List[str] = []
+        roles: List[str] = []
+        serial_value = step.get("serial")
+        if isinstance(serial_value, str):
+            serials.append(serial_value)
+        serials_value = step.get("serials")
+        if isinstance(serials_value, list):
+            serials_list = cast(List[Any], serials_value)
+            for entry in serials_list:
+                serials.append(str(entry))
+        role_value = step.get("role")
+        if isinstance(role_value, str):
+            roles.append(role_value)
+        roles_value = step.get("roles")
+        if isinstance(roles_value, list):
+            roles_list = cast(List[Any], roles_value)
+            for entry in roles_list:
+                roles.append(str(entry))
+        if step.get("targets") == "all" and allow_all:
+            selected = list(self.devices)
+        else:
+            if serials:
+                for serial in serials:
+                    device = self._find_device_by_serial(serial)
+                    if device and device not in selected:
+                        selected.append(device)
+            if roles:
+                for role in roles:
+                    role_lower = role.lower()
+                    for device in self.devices:
+                        if device.role.lower() == role_lower:
+                            if device not in selected:
+                                selected.append(device)
+        if not selected:
+            if allow_all and step.get("targets") == "all":
+                selected = list(self.devices)
+        if not selected and default_to_master:
+            master = self._get_master()
+            if master is None:
+                raise OrchestratorError(
+                    "Manifest step requires a master device",
+                )
+            selected = [master]
+        if not selected:
+            raise OrchestratorError(
+                "Manifest step requires at least one target device",
+            )
+        return selected
+
+    def _find_device_by_serial(self, serial: str) -> Optional[DeviceTarget]:
+        for device in self.devices:
+            if device.serial == serial:
+                return device
+        return None
+
+    def _render_value(self, value: Any) -> Any:
+        if isinstance(value, str):
+            return self._render_string(value)
+        if isinstance(value, list):
+            list_value = cast(List[Any], value)
+            rendered_list: List[Any] = []
+            for item in list_value:
+                rendered_list.append(self._render_value(item))
+            return rendered_list
+        if isinstance(value, Mapping):
+            mapping_value = cast(Mapping[str, Any], value)
+            rendered_dict: Dict[str, Any] = {}
+            for key, val in mapping_value.items():
+                rendered_dict[str(key)] = self._render_value(val)
+            return rendered_dict
+        return value
+
+    def _render_string(self, value: str) -> str:
+        def _replacement(match: re.Match[str]) -> str:
+            key = match.group(1)
+            replacement = self.context.get(key)
+            if replacement is not None:
+                return str(replacement)
+            return match.group(0)
+
+        return PLACEHOLDER_PATTERN.sub(_replacement, value)
+
+    def _ensure_mapping(
+        self,
+        value: Any,
+        label: str,
+    ) -> Mapping[str, Any]:
+        if not isinstance(value, Mapping):
+            raise OrchestratorError(f"{label} must be an object")
+        return cast(Mapping[str, Any], value)
 
     def _collect_device_artifacts(self) -> List[Dict[str, Any]]:
         if not self.run_dir:
@@ -342,9 +783,9 @@ class MultiDeviceOrchestrator:
                 for entry in raw_entries:
                     if isinstance(entry, Mapping):
                         entry_map = cast(Mapping[str, Any], entry)
-                        url_candidate = entry_map.get("downloadUrl") or entry_map.get(
-                            "url"
-                        )
+                        download_url = entry_map.get("downloadUrl")
+                        fallback_url = entry_map.get("url")
+                        url_candidate = download_url or fallback_url
                         if isinstance(url_candidate, str) and url_candidate:
                             assets.append({"url": url_candidate})
         # Some APIs might flatten into `uploads` object keyed by guid
@@ -354,7 +795,9 @@ class MultiDeviceOrchestrator:
             for entry in uploads_map.values():
                 if isinstance(entry, Mapping):
                     entry_map = cast(Mapping[str, Any], entry)
-                    url_candidate = entry_map.get("downloadUrl") or entry_map.get("url")
+                    download_url = entry_map.get("downloadUrl")
+                    fallback_url = entry_map.get("url")
+                    url_candidate = download_url or fallback_url
                     if isinstance(url_candidate, str) and url_candidate:
                         assets.append({"url": url_candidate})
         return assets
@@ -428,6 +871,59 @@ class MultiDeviceOrchestrator:
     ) -> Dict[str, object]:
         return self._request(device, path, method="POST", payload=payload)
 
+    def _post_with_retry(
+        self,
+        device: DeviceTarget,
+        path: str,
+        payload: Mapping[str, object],
+        command: str,
+        retries: int = 5,
+        delay_seconds: float = 3.0,
+    ) -> Dict[str, object]:
+        last_error: Optional[Exception] = None
+        for attempt in range(1, retries + 1):
+            try:
+                return self._post(device, path, payload)
+            except OrchestratorError as exc:
+                last_error = exc
+                if not self._is_retryable_error(exc) or attempt == retries:
+                    raise
+                self._log(
+                    (
+                        "Command %s on %s failed (%s) (attempt %d/%d). "
+                        "Retrying in %.1fs..."
+                    ),
+                    command,
+                    device.serial,
+                    self._describe_error(exc),
+                    attempt,
+                    retries,
+                    delay_seconds,
+                )
+                time.sleep(delay_seconds)
+        raise OrchestratorError(
+            "Command %s failed on %s after %d attempts"
+            % (command, device.serial, retries)
+        ) from last_error
+
+    def _is_retryable_error(self, error: OrchestratorError) -> bool:
+        cause = getattr(error, "__cause__", None)
+        if isinstance(cause, urllib.error.HTTPError):
+            return cause.code == 404
+        if isinstance(cause, TimeoutError):
+            return True
+        if isinstance(cause, urllib.error.URLError):
+            if isinstance(getattr(cause, "reason", None), TimeoutError):
+                return True
+        text = str(error).lower()
+        return "404" in text or "timed out" in text
+
+    def _describe_error(self, error: OrchestratorError) -> str:
+        cause = getattr(error, "__cause__", None)
+        if cause is not None:
+            return str(cause)
+        return str(error)
+
     def _request(
         self,
         device: DeviceTarget,
@@ -448,9 +944,17 @@ class MultiDeviceOrchestrator:
             method=method,
         )
         try:
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with urllib.request.urlopen(
+                req,
+                timeout=HTTP_TIMEOUT_SECONDS,
+            ) as response:
                 body = response.read().decode("utf-8")
-        except urllib.error.URLError as exc:  # pragma: no cover
+        except (
+            urllib.error.URLError,
+            http.client.HTTPException,
+            ConnectionError,
+            TimeoutError,
+        ) as exc:  # pragma: no cover
             raise OrchestratorError(
                 f"HTTP {method} {url} failed: {exc}",
             ) from exc
@@ -593,13 +1097,43 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--manifest",
         type=Path,
-        help="Optional scenario manifest (reserved for future phases)",
+        help="Path to a manifest JSON file that drives multi-step scenarios",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path("automation_runs"),
         help="Directory to store run artifacts",
+    )
+    # emulator control flags for experiments
+    parser.add_argument(
+        "--boot-emulators",
+        type=int,
+        default=0,
+        help="Start N Android emulators for experiments",
+    )
+    parser.add_argument(
+        "--avd-base",
+        type=str,
+        default="Pixel_7",
+        help="Base AVD name to use when booting emulators",
+    )
+    parser.add_argument(
+        "--emulator-start-port",
+        type=int,
+        default=5554,
+        help="Starting port for first emulator (increments by 2)",
+    )
+    parser.add_argument(
+        "--shutdown-emulators",
+        type=int,
+        default=0,
+        help="Power down N running Android emulators",
+    )
+    parser.add_argument(
+        "--kill-all-emulators",
+        action="store_true",
+        help="Kill all Android emulators and shutdown iOS simulators",
     )
     parser.add_argument(
         "--backend-base-url",
@@ -615,6 +1149,34 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
 def main(argv: Optional[List[str]] = None) -> int:
     args = parse_args(argv)
     try:
+        # handle emulator control commands first (short-circuit)
+        if args.boot_emulators and args.boot_emulators > 0:
+            manager = EmulatorManager()
+            print(f"[orchestrator] Booting {args.boot_emulators} emulator(s)")
+            manager.start_n_emulators(
+                args.avd_base, args.boot_emulators, args.emulator_start_port
+            )
+            print("[orchestrator] Boot requests issued")
+            return 0
+
+        if args.shutdown_emulators and args.shutdown_emulators > 0:
+            manager = EmulatorManager()
+            android = manager.list_android_emulators()
+            to_stop = android[: args.shutdown_emulators]
+            for dev in to_stop:
+                print(f"[orchestrator] Stopping {dev}")
+                manager.stop_android_emulator(dev)
+            print("[orchestrator] Stop requests issued")
+            return 0
+
+        if args.kill_all_emulators:
+            manager = EmulatorManager()
+            print("[orchestrator] Killing all emulators (android + ios)")
+            manager.kill_all_emulators(force=False)
+            ok = manager.verify_no_emulators()
+            print(f"[orchestrator] verify_no_emulators -> {ok}")
+            return 0
+
         devices = _load_devices(args)
         backend_base = args.backend_base_url or os.getenv("HYDRACAM_API_BASE")
         backend_token = args.backend_token or os.getenv(

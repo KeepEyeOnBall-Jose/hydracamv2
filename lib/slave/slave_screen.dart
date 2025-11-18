@@ -20,11 +20,18 @@ import "../widgets/session_info_widget.dart";
 import "../master/master_screen.dart";
 
 class SlaveScreen extends StatefulWidget {
-
   // Mode that controls if we entered here manually or on app init.
   // If is auto mode, after some time without finding master will move automatically to master screen
   final bool isAutoMode;
-  const SlaveScreen({super.key, this.isAutoMode = false}); // Default is manual mode
+  final String? preferredMasterIp;
+  final bool forceSlaveMode;
+
+  const SlaveScreen({
+    super.key,
+    this.isAutoMode = false,
+    this.preferredMasterIp,
+    this.forceSlaveMode = false,
+  }); // Default is manual mode
 
   @override
   SlaveScreenState createState() => SlaveScreenState();
@@ -32,8 +39,10 @@ class SlaveScreen extends StatefulWidget {
 
 class SlaveScreenState extends State<SlaveScreen> {
   SlaveClient? _client;
-  StreamSubscription<String>? _statusSubscription; // Subscription to listen to status updates
-  StreamSubscription<bool>? _connectionStatusSubscription; // Subscription to listen to connection status
+  StreamSubscription<String>?
+      _statusSubscription; // Subscription to listen to status updates
+  StreamSubscription<bool>?
+      _connectionStatusSubscription; // Subscription to listen to connection status
   String statusMessage = "Waiting for camera commands...";
   Timer? autoModeTimer; // Timer for auto mode logic
   bool isRecording = false;
@@ -45,116 +54,124 @@ class SlaveScreenState extends State<SlaveScreen> {
   bool isScreenDimmed = false; // To control the dimmed screen state
 
   // Getters for SessionManager photos and videos
-  List<CapturedPhoto> get photos => SessionManager.instance.currentSession?.capturedPhotos ?? [];
-  List<CapturedVideo> get videos => SessionManager.instance.currentSession?.capturedVideos ?? [];
+  List<CapturedPhoto> get photos =>
+      SessionManager.instance.currentSession?.capturedPhotos ?? [];
+  List<CapturedVideo> get videos =>
+      SessionManager.instance.currentSession?.capturedVideos ?? [];
 
-  MasterDiscovery? _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
+  MasterDiscovery?
+      _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
 
   @override
   void initState() {
     super.initState();
 
     // Master discovery and other initializations
-    _masterDiscovery = MasterDiscovery(onMasterDiscovered: (masterIp) {
-      LogService.instance.registerLog("Connecting to master at IP: $masterIp");
-      _client = SlaveClient(
-        "ws://$masterIp:4040/ws",
-        onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
-        onPhotoTaken: (path) async {
-          if (!mounted) return;
-          setState(() {
-            statusMessage = "Photo taken!";
-          });
-          LogService.instance.registerLog("Photo taken!!!");
+    _masterDiscovery = MasterDiscovery(onMasterDiscovered: _connectToMaster);
 
-          final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+    if (widget.preferredMasterIp != null) {
+      _connectToMaster(widget.preferredMasterIp!);
+    } else {
+      _masterDiscovery?.startListening();
+    }
 
-          if (!mounted) return;
-
-          // Use the unified dialog function with placeholder metadata to wrap photo into CapturePhoto
-          AlertUtils.showMediaDialog(
-              context: context,
-              media: CapturedPhoto(
-                photoPath: path,
-                photoData: null,
-                captureDate: DateTime.now(),
-                receivedDate: DateTime.now(),
-                slaveDeviceId: deviceId, // Populate as needed
-              ),
-              isAutoCloseEnabled: true, // No auto-close for slave
-              autoCloseSeconds: secondsToClosePhoto
-          );
-        },
-        onRecordingStarted: _handleRecordingStarted,
-        onRecordingStopped: _handleRecordingStopped,
-      );
-
-      // Listen to the client's status stream
-      _statusSubscription = _client?.statusStream.listen((message) {
-        if (mounted) {
-          setState(() {
-            statusMessage = message;
-          });
-        }
-      });
-
-      // Listen to the client's connection status stream
-      _connectionStatusSubscription = _client?.connectionStatusStream.listen((isConnected) {
-
-        if (mounted) {
-          setState(() {
-            _isConnected = isConnected;
-          });
-        }
-
-        if (!isConnected) {
-          // Connection lost, restart discovery
-          LogService.instance.registerLog("Connection lost. Restarting discovery.");
-          _client?.disconnect();
-          _client = null;
-          _masterDiscovery?.startListening();
-        }
-      });
-
-      // Connect to master
-      _client?.connect();
-
-      // Stop discovery once connected
-      _masterDiscovery?.stopListening();
-
-      if (widget.isAutoMode) {
-        autoModeTimer?.cancel(); // Stop auto mode if master is found
-      }
-    });
-
-    _masterDiscovery?.startListening();
-
-
-    if (widget.isAutoMode) {
+    final bool shouldAutoPromote = widget.isAutoMode &&
+        !widget.forceSlaveMode &&
+        widget.preferredMasterIp == null;
+    if (shouldAutoPromote) {
       // Automatically transition to MasterScreen if no master is found
       autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
         if (!_isConnected) {
-          LogService.instance.registerLog("No master found, switching to Master mode.");
+          LogService.instance
+              .registerLog("No master found, switching to Master mode.");
           _transitionToMasterScreen();
         }
       });
     }
 
-
     // Add listener
     SessionManager.instance.addListener(_onSessionChanged);
-
   }
 
   void _onSessionChanged() {
     setState(() {});
   }
 
+  void _connectToMaster(String masterIp) {
+    LogService.instance.registerLog("Connecting to master at IP: $masterIp");
+
+    _statusSubscription?.cancel();
+    _connectionStatusSubscription?.cancel();
+    _client?.disconnect();
+
+    _client = SlaveClient(
+      "ws://$masterIp:4040/ws",
+      onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
+      onPhotoTaken: (path) async {
+        if (!mounted) return;
+        setState(() {
+          statusMessage = "Photo taken!";
+        });
+        LogService.instance.registerLog("Photo taken!!!");
+
+        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
+        if (!mounted) return;
+
+        AlertUtils.showMediaDialog(
+            context: context,
+            media: CapturedPhoto(
+              photoPath: path,
+              photoData: null,
+              captureDate: DateTime.now(),
+              receivedDate: DateTime.now(),
+              slaveDeviceId: deviceId,
+            ),
+            isAutoCloseEnabled: true,
+            autoCloseSeconds: secondsToClosePhoto);
+      },
+      onRecordingStarted: _handleRecordingStarted,
+      onRecordingStopped: _handleRecordingStopped,
+    );
+
+    _statusSubscription = _client?.statusStream.listen((message) {
+      if (mounted) {
+        setState(() {
+          statusMessage = message;
+        });
+      }
+    });
+
+    _connectionStatusSubscription =
+        _client?.connectionStatusStream.listen((isConnected) {
+      if (mounted) {
+        setState(() {
+          _isConnected = isConnected;
+        });
+      }
+
+      if (!isConnected) {
+        LogService.instance
+            .registerLog("Connection lost. Restarting discovery.");
+        _client?.disconnect();
+        _client = null;
+        _masterDiscovery?.startListening();
+      }
+    });
+
+    _client?.connect();
+    _masterDiscovery?.stopListening();
+
+    if (widget.isAutoMode) {
+      autoModeTimer?.cancel();
+    }
+  }
+
   void _handleRecordingStarted() {
-    if(mounted){
+    if (mounted) {
       setState(() {
         isRecording = true; // Update recording flag
-        _startDimTimer();   // Start dim timer in case we want to set screen black
+        _startDimTimer(); // Start dim timer in case we want to set screen black
       });
     }
   }
@@ -233,12 +250,12 @@ class SlaveScreenState extends State<SlaveScreen> {
     );
   }
 
-
   @override
   void dispose() {
-    try{
+    try {
       dimTimer?.cancel();
-      _statusSubscription?.cancel(); // Cancel the subscription to avoid memory leaks
+      _statusSubscription
+          ?.cancel(); // Cancel the subscription to avoid memory leaks
       _connectionStatusSubscription?.cancel();
       _client?.disconnect();
       _client = null;
@@ -246,8 +263,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       autoModeTimer = null;
       _masterDiscovery?.stopListening();
       _masterDiscovery = null;
-    }
-    catch(e){
+    } catch (e) {
       LogService.instance.registerLog("Exception: $e");
     }
 
@@ -267,7 +283,9 @@ class SlaveScreenState extends State<SlaveScreen> {
             style: const TextStyle(fontSize: 18),
             textAlign: TextAlign.center,
           ),
-          if (!statusMessage.contains("stop") && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
+          if (!statusMessage.contains("stop") &&
+              (statusMessage.contains("Taking") ||
+                  statusMessage.contains("Recording")))
             const Padding(
               padding: EdgeInsets.only(top: 20),
               child: CircularProgressIndicator(),
@@ -276,7 +294,6 @@ class SlaveScreenState extends State<SlaveScreen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +312,8 @@ class SlaveScreenState extends State<SlaveScreen> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: SessionInfoWidget(
-            sessionDisplay: SessionManager.instance.sessionGuid ?? "No active session",
+            sessionDisplay:
+                SessionManager.instance.sessionGuid ?? "No active session",
           ),
         ),
         AddGalleryMediaButton(enabled: !isRecording),
@@ -303,48 +321,52 @@ class SlaveScreenState extends State<SlaveScreen> {
         Expanded(
           child: _client?.cameraController != null
               ? ValueListenableBuilder<CameraValue>(
-                    valueListenable: _client!.cameraController!,
-                    builder: (context, cameraValue, child) {
-                      return Stack(
-                        children: [
-                          if (isRecording && _client?.cameraController != null && _client!.cameraController!.value.isInitialized)
-                            Positioned.fill(
-                              child: CameraPreview(_client!.cameraController!),
-                            )
-                          else
-                            Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    statusMessage,
-                                    style: const TextStyle(fontSize: 18),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  if (!statusMessage.contains("stop") && (statusMessage.contains("Taking") || statusMessage.contains("Recording")))
-                                    const Padding(
-                                      padding: EdgeInsets.only(top: 20),
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          if (isRecording)
-                            const Positioned(
-                              bottom: 20,
-                              left: 0,
-                              right: 0,
-                              child: Center(
-                                child: Text(
-                                  "Recording...",
-                                  style: TextStyle(color: Colors.red, fontSize: 24),
+                  valueListenable: _client!.cameraController!,
+                  builder: (context, cameraValue, child) {
+                    return Stack(
+                      children: [
+                        if (isRecording &&
+                            _client?.cameraController != null &&
+                            _client!.cameraController!.value.isInitialized)
+                          Positioned.fill(
+                            child: CameraPreview(_client!.cameraController!),
+                          )
+                        else
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  statusMessage,
+                                  style: const TextStyle(fontSize: 18),
+                                  textAlign: TextAlign.center,
                                 ),
+                                if (!statusMessage.contains("stop") &&
+                                    (statusMessage.contains("Taking") ||
+                                        statusMessage.contains("Recording")))
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: CircularProgressIndicator(),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        if (isRecording)
+                          const Positioned(
+                            bottom: 20,
+                            left: 0,
+                            right: 0,
+                            child: Center(
+                              child: Text(
+                                "Recording...",
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 24),
                               ),
                             ),
-                        ],
-                      );
-                    }
-                )
+                          ),
+                      ],
+                    );
+                  })
               : Stack(
                   children: [
                     _buildStatusMessage(),
@@ -370,52 +392,52 @@ class SlaveScreenState extends State<SlaveScreen> {
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
       // Vertical layout: controls and media list stacked
       return GestureDetector(
-        onTap: _resetDimTimer, // Reset dimming on user interaction
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: HydraCamAppBar(
-                title: "HydraCam - Slave Device",
-                onBack: () {
-                  _cleanUpSlaveMode();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
-                  );
-                },
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: controlsAndPreview,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: mediaList,
+          onTap: _resetDimTimer, // Reset dimming on user interaction
+          child: Stack(
+            children: [
+              Scaffold(
+                appBar: HydraCamAppBar(
+                  title: "HydraCam - Slave Device",
+                  onBack: () {
+                    _cleanUpSlaveMode();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RoleSelectionScreen()),
+                    );
+                  },
+                ),
+                body: Column(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: controlsAndPreview,
                     ),
-                  ),
-                ],
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: mediaList,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (isScreenDimmed)
-              GestureDetector(
-                onTap: _resetDimTimer, // Wake up the screen
-                child: Container(
-                  color: Colors.black,
-                  child: const Center(
-                    child: Text(
-                      "Screen Off - Tap to wake",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+              if (isScreenDimmed)
+                GestureDetector(
+                  onTap: _resetDimTimer, // Wake up the screen
+                  child: Container(
+                    color: Colors.black,
+                    child: const Center(
+                      child: Text(
+                        "Screen Off - Tap to wake",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
                     ),
                   ),
                 ),
-              ),
-          ],
-        )
-      );
+            ],
+          ));
     } else {
       // Horizontal layout: controls on the left, media list on the right
       return GestureDetector(
@@ -429,7 +451,8 @@ class SlaveScreenState extends State<SlaveScreen> {
                   _cleanUpSlaveMode();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const RoleSelectionScreen()),
                   );
                 },
               ),
@@ -473,11 +496,10 @@ class SlaveScreenState extends State<SlaveScreen> {
 
   void _showPhotoDialog(CapturedPhoto photo) {
     AlertUtils.showMediaDialog(
-      context: context,
-      media: photo,
-      isAutoCloseEnabled: false, // Auto-close is disabled for slave screens
-      autoCloseSeconds: secondsToClosePhoto
-    );
+        context: context,
+        media: photo,
+        isAutoCloseEnabled: false, // Auto-close is disabled for slave screens
+        autoCloseSeconds: secondsToClosePhoto);
   }
 
   void _showVideoDialog(CapturedVideo video) {
@@ -487,5 +509,4 @@ class SlaveScreenState extends State<SlaveScreen> {
       isAutoCloseEnabled: false, // Auto-close is disabled for slave screens
     );
   }
-
 }

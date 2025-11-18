@@ -110,6 +110,54 @@ After boot, install the automation APK on each device and launch the app with th
 
 Artifacts default to `automation_runs/`, but you can override with `--output-dir`.
 
+### Scenario manifests (4-device orchestration)
+
+Complex runs now live in JSON manifests under `automation_scenarios/`. Each manifest
+declares:
+
+- Optional top-level `context` values (strings can reference `{{timestamp}}`,
+  `{{isoTimestamp}}`, etc.).
+- A `steps` array where every entry carries an `action` plus targeting hints.
+- Supported actions: `setContext`, `settings`, `command`, `await`, `sleep`, and `get`.
+  Commands default to the master unless you pass `role`, `roles`, `serial`, or
+  `targets: "all"`.
+
+Example (excerpt from `automation_scenarios/quad_smoke.json`):
+
+```json
+{
+  "name": "quad_smoke",
+  "context": {"sessionId": "quad-{{timestamp}}"},
+  "steps": [
+    {"action": "settings", "targets": "all", "payload": {"autoUploadMaterials": true}},
+    {"action": "command", "role": "master", "command": "start_session",
+     "payload": {"sessionId": "{{sessionId}}"},
+     "capture": {"sessionGuid": "sessionGuid"}},
+    {"action": "command", "role": "master", "command": "take_photo",
+     "payload": {"showCountdown": true}},
+    {"action": "command", "role": "master", "command": "end_session"}
+  ]
+}
+```
+
+Run it alongside the four prepared emulators:
+
+```sh
+python3 scripts/multi_device_orchestrator.py \
+  --serials \
+    emulator-5554:master,emulator-5556:slave,emulator-5558:slave,emulator-5560:slave \
+  --manifest automation_scenarios/quad_smoke.json \
+  --scenario quad_smoke
+```
+
+During execution the orchestrator:
+
+1. Applies adb forwarding + health checks (same as the smoke test).
+2. Loads the manifest, interpolates placeholders, and executes each action in order.
+3. Persists a step-by-step transcript inside `automation_runs/<ts>-quad_smoke/summary.json`.
+4. Captures per-device session/log dumps plus backend re-downloads when the API info
+   is provided.
+
 ### Backend verification toggle
 
 Set the following env vars (or pass CLI flags) to enable automatic re-download of uploaded assets:

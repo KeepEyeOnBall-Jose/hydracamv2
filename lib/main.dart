@@ -5,10 +5,12 @@ import "package:wakelock_plus/wakelock_plus.dart";
 import "app_theme.dart";
 import "automation/automation_bridge.dart";
 import "automation/automation_config.dart";
+import "master/master_screen.dart";
 import "services/battery_service.dart";
 import "services/camera_service_singleton.dart";
 import "services/device_id_provider.dart";
 import "services/device_service.dart";
+import "services/launch_config_service.dart";
 import "services/location_service.dart";
 import "services/log_service.dart";
 import "services/permission_service.dart";
@@ -21,6 +23,8 @@ void main() async {
   if (automationEnabled) {
     await AutomationBridge.instance.ensureInitialized();
   }
+
+  final LaunchConfig? launchConfig = await LaunchConfigService.instance.load();
 
   final bool permissionsGranted =
       await PermissionService.requestAllPermissions();
@@ -49,13 +53,15 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (_) => DeviceIdProvider(deviceId),
-      child: const HydraCamApp(),
+      child: HydraCamApp(launchConfig: launchConfig),
     ),
   );
 }
 
 class HydraCamApp extends StatelessWidget {
-  const HydraCamApp({super.key});
+  const HydraCamApp({super.key, this.launchConfig});
+
+  final LaunchConfig? launchConfig;
 
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -94,7 +100,23 @@ class HydraCamApp extends StatelessWidget {
               );
             }
           });
-          return const SlaveScreen(isAutoMode: true);
+
+          final LaunchConfig? config = launchConfig;
+          final bool automationMaster =
+              automationEnabled && (config?.wantsMaster ?? false);
+          final bool forceSlave = automationEnabled &&
+              ((config?.wantsSlave ?? false) ||
+                  (config?.forceSlaveMode ?? false));
+
+          if (automationMaster) {
+            return const MasterScreen();
+          }
+
+          return SlaveScreen(
+            isAutoMode: !forceSlave,
+            preferredMasterIp: config?.preferredMasterIp,
+            forceSlaveMode: forceSlave,
+          );
         },
       ),
     );
