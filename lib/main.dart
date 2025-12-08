@@ -50,6 +50,23 @@ void main() async {
   LogService.instance.registerLog("Prevent screen from turning off");
   WakelockPlus.enable();
 
+  // Initialize CameraServiceSingleton early (before runApp)
+  // with a temporary StorageService until we have the messenger
+  final tempStorageService = StorageService(
+    messengerState: null,
+    lowStorageThreshold: 1.5,
+    criticalStorageThreshold: 0.5,
+    onCriticalStorageCallback: () async {
+      LogService.instance
+          .registerLog("Critical storage: triggering recording stop.");
+      if (CameraServiceSingleton.isInitialized) {
+        await CameraServiceSingleton.instance.forceStopRecordingDueToStorage();
+      }
+    },
+  );
+  CameraServiceSingleton.initialize(tempStorageService);
+  LogService.instance.registerLog("CameraServiceSingleton initialized");
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => DeviceIdProvider(deviceId),
@@ -74,10 +91,11 @@ class HydraCamApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       home: Builder(
         builder: (context) {
-          // Initialize services with messenger after MaterialApp builds
+          // Initialize BatteryService with messenger after MaterialApp builds
           WidgetsBinding.instance.addPostFrameCallback((_) {
             final messenger = scaffoldMessengerKey.currentState;
             if (messenger != null) {
+              // Update StorageService with the actual messenger
               final storageService = StorageService(
                 messengerState: messenger,
                 lowStorageThreshold: 1.5,
@@ -91,7 +109,7 @@ class HydraCamApp extends StatelessWidget {
                   }
                 },
               );
-
+              // Re-initialize with proper messenger for notifications
               CameraServiceSingleton.initialize(storageService);
 
               BatteryService(
@@ -108,10 +126,20 @@ class HydraCamApp extends StatelessWidget {
               ((config?.wantsSlave ?? false) ||
                   (config?.forceSlaveMode ?? false));
 
+          LogService.instance.registerLog(
+              "Navigation decision: automationEnabled=$automationEnabled, "
+              "config=$config, automationMaster=$automationMaster, "
+              "forceSlave=$forceSlave");
+
           if (automationMaster) {
+            LogService.instance.registerLog("Navigating to MasterScreen");
             return const MasterScreen();
           }
 
+          LogService.instance.registerLog(
+              "Navigating to SlaveScreen(isAutoMode=${!forceSlave}, "
+              "preferredMasterIp=${config?.preferredMasterIp}, "
+              "forceSlaveMode=$forceSlave)");
           return SlaveScreen(
             isAutoMode: !forceSlave,
             preferredMasterIp: config?.preferredMasterIp,

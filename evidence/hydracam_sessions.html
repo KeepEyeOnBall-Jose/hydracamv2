@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Basic page settings -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HydraCam Sessions - HydraCam</title>
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="/css/HomeStyles.css" />
+    <link rel="stylesheet" href="/css/CustomButtonStyles.css" />
+
+    <!-- Include jQuery once -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100;200;300;400;500;600;700;800;900;1000&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap & main CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css?v=g_jmuFeF1o85BfgNmmvzI-zBg4aGEd-xPC3bOLEhyXc" />
+    <link rel="stylesheet" href="/css/profile-day.css?v=m0ZVXhY_5D_-ixRy1sZDlb9CgNBvyTWHlQu6Zu0ITn0" />
+    <link rel="stylesheet" href="/css/sidebar.css?v=MqWJqv-KcsCu9Bw_CgMwnW2NkgDgZbvQ_ZkDDL5azQs" />
+
+    <!-- Font Awesome / Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+
+    <!-- Chart library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Additional style overrides -->
+    <style>
+
+        /* Example: if you remove body padding, you can rely on .mt-5 in the container below */
+        body {
+            /* padding-top: 80px; */
+        }
+
+
+            .sidebar-panel a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidebar-panel a:hover {
+                    color: #f1f1f1;
+                }
+
+        /* Push main content to avoid hidden content behind navbar if needed */
+        main {
+            margin-top: 80px; /* Or .mt-5 in the container */
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header b-cbewxouny1>
+        <nav b-cbewxouny1 class="navbar navbar-expand-sm navbar-light navbar-background-soft-blue border-bottom box-shadow mb-3 fixed-top">
+            <div b-cbewxouny1 class="container-fluid">
+                <!-- Left: brand link (Home) -->
+                <a class="navbar-brand" href="/">
+                    HydraCam
+                </a>
+
+                <!-- Right: Profile/Login only (NO language selector) -->
+                <div b-cbewxouny1 class="d-flex align-items-center">
+                        <a class="nav-link text-dark" href="/Account/Login">
+                            Identificarse
+                        </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN content -->
+    <div b-cbewxouny1 class="container mt-5">
+        <main b-cbewxouny1 role="main" class="pb-3">
+            
+
+<div class="container text-center mt-4">
+    <h2 class="mb-3">HydraCam : Sports MultiCapture</h2>
+    <p class="lead">Navigate to the main HydraCam views and manage your sessions and resources.</p>
+    <hr />
+
+    <style>
+        .admin-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 150px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            margin: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+
+            .admin-option:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+        .material-symbols-outlined {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <div class="row justify-content-center mb-4">
+        <a class="admin-option" href="/HydraCam/SportsCenters">
+            <span class="material-symbols-outlined" style="color: #007bff;">location_city</span>
+            Sports Centers
+        </a>
+        <a class="admin-option" href="/HydraCam/Courts">
+            <span class="material-symbols-outlined" style="color: #6c757d;">sports_tennis</span>
+            Courts
+        </a>
+        <a class="admin-option" href="/HydraCam">
+            <span class="material-symbols-outlined" style="color: #28a745;">videocam</span>
+            Capture Sessions
+        </a>
+        <a class="admin-option" href="/HydraCamUsers">
+            <span class="material-symbols-outlined" style="color: #6b29b3;">group</span>
+            Users
+        </a>
+    </div>
+</div>
+
+<hr />
+
+<h2>Latest HydraCam Sessions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Session ID</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>2025-11-18T09:40:45.514814</td>
+                <td>18/11/2025 9:40:45</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/447">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T09:41:07.466704</td>
+                <td>18/11/2025 9:41:07</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/448">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T09:42:47.475038</td>
+                <td>18/11/2025 9:42:47</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/449">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T09:44:50.686086</td>
+                <td>18/11/2025 9:44:50</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/450">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T09:46:32.772319</td>
+                <td>18/11/2025 9:46:32</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/451">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T09:47:18.387721</td>
+                <td>18/11/2025 9:47:18</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/452">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T10:07:58.878535</td>
+                <td>18/11/2025 10:07:58</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/453">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T10:08:59.635363</td>
+                <td>18/11/2025 10:08:59</td>
+                <td></td>
+                <td>
+                    <a href="/HydraCam/Details/454">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-18T10:10:46.010440</td>
+                <td>18/11/2025 10:10:46</td>
+                <td>18/11/2025 9:11:14</td>
+                <td>
+                    <a href="/HydraCam/Details/455">View</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-11-20T22:24:26.726047</td>
+                <td>20/11/2025 22:24:26</td>
+                <td>20/11/2025 21:26:55</td>
+                <td>
+                    <a href="/HydraCam/Details/456">View</a>
+                </td>
+            </tr>
+    </tbody>
+</table>
+
+<a href="/HydraCam/Create" class="btn btn-primary">Create New Session</a>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-top footer text-muted">
+    <div class="container d-flex flex-column align-items-center justify-content-center">
+        <!-- Copyright -->
+        <div>
+            &copy; 2025 - HydraCam
+        </div>
+    </div>
+</footer>
+
+    <!-- SCRIPTS -->
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=hRQyftXiu1lLX2P9Ly9xa4gHJgLeR1uGN5qegUobtGo"></script>
+    
+</body>
+</html>

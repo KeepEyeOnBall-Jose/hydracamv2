@@ -22,6 +22,9 @@ class AutomationBridge {
   HttpServer? _server;
   bool _initialized = false;
 
+  // Callback to get current recording state from master screen
+  bool Function()? getRecordingState;
+
   Future<void> ensureInitialized() async {
     if (_initialized || !automationEnabled) {
       return;
@@ -53,6 +56,7 @@ class AutomationBridge {
       "videoCount": session?.capturedVideos.length ?? 0,
       "queueLength": UploaderService().queueLength,
       "isUploading": UploaderService().isUploading,
+      "isRecording": getRecordingState?.call() ?? false,
     };
   }
 

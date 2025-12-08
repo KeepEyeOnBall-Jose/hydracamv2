@@ -1,0 +1,145 @@
+{
+  "name": "quad_smoke_with_video_fixed",
+  "description": "Fixed quad smoke test with proper video recording waits",
+  "devices": {
+    "masterCount": 1,
+    "slaveCount": 0
+  },
+  "steps": [
+        {
+          "name": "seed-session",
+          "action": "setContext",
+          "values": {
+            "sessionId": "quad-FIXED-{timestamp}"
+          }
+        },
+        {
+          "name": "enable-auto-upload",
+          "action": "settings",
+          "targets": "all",
+          "payload": {
+            "autoUploadMaterials": true,
+            "masterShouldRecord": true
+          }
+        },
+        {
+          "name": "start-session",
+          "action": "command",
+          "targets": ["master"],
+          "command": "start_session",
+          "payload": {}
+        },
+        {
+          "name": "session-live",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 30,
+          "intervalSec": 1,
+          "expect": {
+            "path": "isActive",
+            "equals": true
+          }
+        },
+        {
+          "name": "take-photo",
+          "action": "command",
+          "targets": ["master"],
+          "command": "take_photo",
+          "payload": {
+            "showCountdown": false
+          }
+        },
+        {
+          "name": "wait-photo-in-queue",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 10,
+          "intervalSec": 0.5,
+          "expect": {
+            "path": "photoCount",
+            "gte": 1
+          }
+        },
+        {
+          "name": "start-recording",
+          "action": "command",
+          "targets": ["master"],
+          "command": "start_recording",
+          "payload": {}
+        },
+        {
+          "name": "wait-recording-started",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 40,
+          "intervalSec": 1,
+          "expect": {
+            "path": "isRecording",
+            "equals": true
+          }
+        },
+        {
+          "name": "sleep-while-recording",
+          "action": "sleep",
+          "seconds": 10
+        },
+        {
+          "name": "stop-recording",
+          "action": "command",
+          "targets": ["master"],
+          "command": "stop_recording",
+          "payload": {}
+        },
+        {
+          "name": "wait-recording-stopped",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 15,
+          "intervalSec": 0.5,
+          "expect": {
+            "path": "isRecording",
+            "equals": false
+          }
+        },
+        {
+          "name": "wait-video-saved",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 10,
+          "intervalSec": 0.5,
+          "expect": {
+            "path": "videoCount",
+            "gte": 1
+          }
+        },
+        {
+          "name": "wait-uploads-complete",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 120,
+          "intervalSec": 2,
+          "expect": {
+            "path": "queueLength",
+            "equals": 0
+          }
+        },
+        {
+          "name": "end-session",
+          "action": "command",
+          "targets": ["master"],
+          "command": "end_session",
+          "payload": {}
+        },
+        {
+          "name": "session-complete",
+          "action": "await",
+          "path": "/session",
+          "timeoutSec": 30,
+          "intervalSec": 1,
+          "expect": {
+            "path": "isActive",
+            "equals": false
+          }
+        }
+      ]
+}

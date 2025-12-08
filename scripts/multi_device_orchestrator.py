@@ -3,10 +3,15 @@
 
 from __future__ import annotations
 
+# Ensure project root is on sys.path so this script can be run directly
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import argparse
 import datetime as dt
 import hashlib
-import http.client
 import json
 import os
 import re
@@ -15,6 +20,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import requests
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, cast
@@ -933,32 +939,33 @@ class MultiDeviceOrchestrator:
         payload: Optional[Mapping[str, object]] = None,
     ) -> Dict[str, object]:
         url = self._build_url(device, path)
-        data = None
         headers = {"Content-Type": "application/json"}
-        if payload is not None:
-            data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            url,
-            data=data,
-            headers=headers,
-            method=method,
-        )
         try:
-            with urllib.request.urlopen(
-                req,
-                timeout=HTTP_TIMEOUT_SECONDS,
-            ) as response:
-                body = response.read().decode("utf-8")
+            if method == "GET":
+                response = requests.get(
+                    url,
+                    headers=headers,
+                    timeout=HTTP_TIMEOUT_SECONDS,
+                )
+            elif method == "POST":
+                response = requests.post(
+                    url,
+                    json=payload if payload else {},
+                    headers=headers,
+                    timeout=HTTP_TIMEOUT_SECONDS,
+                )
+            else:
+                raise OrchestratorError(f"Unsupported HTTP method: {method}")
+            response.raise_for_status()
+            return response.json() if response.text else {}
         except (
-            urllib.error.URLError,
-            http.client.HTTPException,
+            requests.RequestException,
             ConnectionError,
             TimeoutError,
         ) as exc:  # pragma: no cover
             raise OrchestratorError(
                 f"HTTP {method} {url} failed: {exc}",
             ) from exc
-        return json.loads(body) if body else {}
 
     # ------------------------------------------------------------------
     # Process helpers

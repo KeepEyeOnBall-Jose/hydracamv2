@@ -17,7 +17,7 @@ class StorageService {
 
   static void setInstance(StorageService s) => _instance = s;
 
-  final ScaffoldMessengerState _messengerState;
+  final ScaffoldMessengerState? _messengerState;
   final double _lowStorageThreshold;
   final double _criticalStorageThreshold;
   final Function() _onCriticalStorageCallback;
@@ -29,7 +29,7 @@ class StorageService {
   static const Duration _reshowInterval = Duration(minutes: 5);
 
   StorageService({
-    required ScaffoldMessengerState messengerState,
+    required ScaffoldMessengerState? messengerState,
     double lowStorageThreshold = 2.0,
     double criticalStorageThreshold = 0.5,
     required Function() onCriticalStorageCallback,
@@ -96,7 +96,8 @@ class StorageService {
   }
 
   void _showLowStorageWarning(double availableStorage) {
-    _messengerState.clearSnackBars();
+    if (_messengerState == null) return;
+    _messengerState!.clearSnackBars();
 
     final snackBar = SnackBar(
       content: Row(
@@ -119,11 +120,12 @@ class StorageService {
       duration: const Duration(seconds: 5),
     );
 
-    _messengerState.showSnackBar(snackBar);
+    _messengerState!.showSnackBar(snackBar);
   }
 
   void showNotification(String message) {
-    _messengerState.showSnackBar(
+    if (_messengerState == null) return;
+    _messengerState!.showSnackBar(
       SnackBar(
         content: Text(message, style: const TextStyle(color: Colors.black)),
         backgroundColor: Colors.red.shade100,

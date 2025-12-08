@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """Small helper to stop all emulators (Android + iOS) and verify none are left."""
 
-from scripts.emulator_manager import EmulatorManager
+# Make the project root importable so callers can run this script directly
+# without setting PYTHONPATH externally.
+import os
 import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from scripts.emulator_manager import EmulatorManager
 
 
 def main() -> int:

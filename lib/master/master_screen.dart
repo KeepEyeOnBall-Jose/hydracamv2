@@ -45,6 +45,8 @@ class MasterScreenState extends State<MasterScreen> {
 
   int connectedClients = 0; // To display connected clients count
   bool isRecording = false;
+  bool _isRecordingTransitioning =
+      false; // Track if recording state is changing
   // String? sessionGuid; // Store the session GUID from the API (Now from Session Manager)
   bool get sessionActive => SessionManager
       .instance.isSessionActive; // TODO: Extract to session manager??
@@ -98,6 +100,8 @@ class MasterScreenState extends State<MasterScreen> {
 
     if (automationEnabled) {
       _registerAutomationHandlers();
+      // Register callback for automation bridge to get recording state
+      AutomationBridge.instance.getRecordingState = () => isRecording;
     }
   }
 
@@ -214,10 +218,35 @@ class MasterScreenState extends State<MasterScreen> {
   }
 
   Future<void> _ensureRecordingState({required bool shouldRecord}) async {
+    // Wait for any ongoing state transitions
+    int waitCount = 0;
+    while (_isRecordingTransitioning && waitCount < 100) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      waitCount++;
+    }
+
     if (shouldRecord == isRecording) {
       return;
     }
-    await _toggleRecording(showCountdown: false, suppressSnackbars: true);
+
+    _isRecordingTransitioning = true;
+    try {
+      await _toggleRecording(showCountdown: false, suppressSnackbars: true);
+
+      // Wait for recording state to actually change (with timeout)
+      waitCount = 0;
+      while (isRecording != shouldRecord && waitCount < 300) {
+        await Future.delayed(const Duration(milliseconds: 100));
+        waitCount++;
+      }
+
+      if (isRecording != shouldRecord) {
+        LogService.instance.registerLog(
+            "Warning: Recording state did not change to $shouldRecord after 30s");
+      }
+    } finally {
+      _isRecordingTransitioning = false;
+    }
   }
 
   void _registerAutomationHandlers() {
@@ -508,6 +537,24 @@ class MasterScreenState extends State<MasterScreen> {
     bool suppressSnackbars = false,
   }) async {
     if (isProcessingEndSession) return;
+
+    // If recording is active, stop and save video first
+    if (isRecording) {
+      LogService.instance
+          .registerLog("Stopping active recording before ending session");
+      try {
+        if (await SettingsService.getMasterShouldRecord()) {
+          await _stopMasterRecordingVideo();
+        } else {
+          setState(() {
+            isRecording = false;
+          });
+        }
+      } catch (e) {
+        LogService.instance
+            .registerLog("Error stopping recording before session end: $e");
+      }
+    }
 
     setState(() {
       isProcessingEndSession = true;
