@@ -4,6 +4,59 @@
 
 HydraCamV2 is a Flutter-based application designed for multi-device camera automation, supporting Android and iOS platforms. The project includes automation scripts for testing across multiple devices and emulators.
 
+## Turn Completion Protocol (MANDATORY)
+
+**Before handing off control back to the user, EVERY turn MUST complete these two steps:**
+
+### 1. Validation Tests (Binary Pass/Fail)
+
+Define and execute **at least 3 specific, binary tests** that verify the change works:
+
+| Test | Command/URL | Expected Result |
+|------|-------------|-----------------|
+| Test 1 | `flutter analyze` | No issues found |
+| Test 2 | `flutter test test/specific_test.dart` | All tests pass |
+| Test 3 | `curl -s http://localhost:PORT/endpoint` | Specific success criteria |
+
+**Each test must be:**
+- **Specific**: Exact command to check
+- **Binary**: Clear pass/fail (not "looks good")
+- **Executed**: Actually run before handoff, not just proposed
+
+**Do NOT hand off until all tests pass.**
+
+### 2. Next Action Proposal (Agent Self-Planning)
+
+After completing the current task, the agent MUST **propose the next logical step IT can take** to advance the development process toward long-term goals. This is NOT a suggestion for the human—it's the agent's forward-looking plan for what IT will do next when given the opportunity.
+
+**The proposal should anticipate one of these development patterns:**
+- **Implementation turns**: Build the next feature or fix
+- **Plan/verification turns**: Validate assumptions, check test coverage, audit code quality
+- **Hypothesis validation turns**: Test an approach before committing to it
+- **Investigation turns**: Gather context needed for the next implementation
+- **Cleanup/refactor turns**: Address technical debt blocking progress
+
+**Selection criteria (in priority order):**
+1. What unblocks the most progress toward long-term project goals?
+2. What reduces uncertainty or risk for upcoming work?
+3. What provides compounding value for future development?
+
+Format:
+```
+**Next step I'll take:** [One sentence describing the agent's next action]
+**Advances goal:** [Which long-term project goal this serves]
+**Turn type:** [implementation | verification | hypothesis | investigation | cleanup]
+**Starting point:** [File, command, or API to begin with]
+```
+
+**Examples of good proposals:**
+- "Next step I'll take: Add integration tests for the new ball-tracking API endpoints" (verification)
+- "Next step I'll take: Investigate why pose extraction fails on videos > 10 minutes" (investigation)  
+- "Next step I'll take: Implement the homography calculation service" (implementation)
+- "Next step I'll take: Validate that the new schema migration is backwards-compatible" (hypothesis)
+
+---
+
 ## Coding Guidelines
 
 ### Starting Android Emulators
