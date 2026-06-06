@@ -1,0 +1,69 @@
+Resolving dependencies...
+Downloading packages...
+  camera 0.11.2+1 (0.12.0+1 available)
+  camera_android_camerax 0.6.19+1 (0.7.2+1 available)
+  camera_avfoundation 0.9.21+2 (0.10.1 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  cli_util 0.4.2 (0.5.1 available)
+  device_info_plus 12.4.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  image 4.8.0 (4.9.1 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+! path_provider_android 2.2.19 (overridden) (2.3.1 available)
+! path_provider_foundation 2.4.2 (overridden) (2.6.0 available)
+  test_api 0.7.11 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  win32 5.15.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing dependency-toolchain-upgrade...                       
+
+   info • Classes should define instance members. Try adding instance behavior or moving the members out of the class • lib/app_theme.dart:3:7 • avoid_classes_with_only_static_members
+   info • Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check. Guard a 'State.context' use with a 'mounted' check on the State, and other BuildContext use with a 'mounted' check on the BuildContext • lib/master/master_screen.dart:184:9 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check. Guard a 'State.context' use with a 'mounted' check on the State, and other BuildContext use with a 'mounted' check on the BuildContext • lib/master/master_screen.dart:418:30 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps. Try rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check • lib/master/master_screen.dart:567:11 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check. Guard a 'State.context' use with a 'mounted' check on the State, and other BuildContext use with a 'mounted' check on the BuildContext • lib/master/master_screen.dart:607:34 • use_build_context_synchronously
+warning • This default clause is covered by the previous cases. Try removing the default clause, or restructuring the preceding patterns • lib/screens/camera_selection_screen.dart:127:7 • unreachable_switch_default
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/settings_screen.dart:150:17 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/settings_screen.dart:175:17 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/settings_screen.dart:184:17 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/settings_screen.dart:195:17 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/settings_screen.dart:205:17 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre. Try replacing the use of the deprecated member with the replacement • lib/screens/settings_screen.dart:240:17 • deprecated_member_use
+   info • The import of 'package:flutter/foundation.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart'. Try removing the import directive • lib/services/battery_service.dart:3:8 • unnecessary_import
+   info • Angle brackets will be interpreted as HTML. Try using backticks around the content with angle brackets, or try replacing `<` with `&lt;` and `>` with `&gt;` • lib/services/camera_service.dart:422:84 • unintended_html_in_doc_comment
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/camera_service_singleton.dart:12:7 • curly_braces_in_flow_control_structures
+   info • Classes should define instance members. Try adding instance behavior or moving the members out of the class • lib/services/device_service.dart:7:7 • avoid_classes_with_only_static_members
+   info • Classes should define instance members. Try adding instance behavior or moving the members out of the class • lib/services/gallery_persistence_service.dart:7:7 • avoid_classes_with_only_static_members
+   info • Angle brackets will be interpreted as HTML. Try using backticks around the content with angle brackets, or try replacing `<` with `&lt;` and `>` with `&gt;` • lib/services/hydracam_api_service.dart:32:71 • unintended_html_in_doc_comment
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:52:31 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:52:75 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:54:13 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:54:75 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:56:13 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:74:39 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:83:44 • prefer_double_quotes
+   info • Unnecessary use of single quotes. Try using double quotes unless the string contains double quotes • lib/services/launch_config_service.dart:84:39 • prefer_double_quotes
+   info • Classes should define instance members. Try adding instance behavior or moving the members out of the class • lib/services/network_info_service.dart:6:7 • avoid_classes_with_only_static_members
+   info • Classes should define instance members. Try adding instance behavior or moving the members out of the class • lib/services/permission_service.dart:5:7 • avoid_classes_with_only_static_members
+   info • Classes should define instance members. Try adding instance behavior or moving the members out of the class • lib/services/settings_service.dart:6:7 • avoid_classes_with_only_static_members
+   info • The import of 'package:flutter/foundation.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart'. Try removing the import directive • lib/services/storage_service.dart:2:8 • unnecessary_import
+   info • The file name 'Court_Selection_Widget.dart' isn't a lower_case_with_underscores identifier. Try changing the name to follow the lower_case_with_underscores style • lib/widgets/Court_Selection_Widget.dart:1:1 • file_names
+   info • The imported package 'path_provider_platform_interface' isn't a dependency of the importing package. Try adding a dependency for 'path_provider_platform_interface' in the 'pubspec.yaml' file • test/platform/multi_device_orchestration_test.dart:9:8 • depend_on_referenced_packages
+   info • The imported package 'path_provider_platform_interface' isn't a dependency of the importing package. Try adding a dependency for 'path_provider_platform_interface' in the 'pubspec.yaml' file • test/services/session_manager_test.dart:6:8 • depend_on_referenced_packages
+   info • The local variable '_createTempMediaFile' starts with an underscore. Try renaming the variable to not start with an underscore • test/services/session_manager_test.dart:55:12 • no_leading_underscores_for_local_identifiers
+
