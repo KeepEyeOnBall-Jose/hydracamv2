@@ -77,7 +77,7 @@ class CameraService {
       this.onVideoRecorded,
       bool? useMockCamera})
       : _storageService = storageService,
-        _useMockCamera = useMockCamera ?? Platform.isMacOS;
+        _useMockCamera = useMockCamera ?? false;
 
   bool get isUsingMockCamera => _useMockCamera;
 
@@ -99,7 +99,7 @@ class CameraService {
       _deviceCameras = const [_mockCameraDescription];
       _isCameraInitialized = true;
       LogService.instance.registerLog(
-          "Using mock camera for native controller mode on macOS.");
+          "Using mock camera because HYDRACAM_MOCK_CAMERA is enabled.");
       return;
     }
 
@@ -110,6 +110,7 @@ class CameraService {
     } catch (e) {
       LogService.instance.registerLog("Error loading available cameras: $e");
       _deviceCameras = [];
+      _isCameraInitialized = false;
     }
   }
 
@@ -158,6 +159,10 @@ class CameraService {
       LogService.instance.registerLog("Camera initialized");
     } catch (e) {
       LogService.instance.registerLog("Error initializing camera: $e");
+      _isCameraInitialized = false;
+      await _controller?.dispose();
+      _controller = null;
+      _flashAvailable = null;
     }
   }
 

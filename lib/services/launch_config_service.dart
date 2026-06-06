@@ -70,6 +70,23 @@ class LaunchConfigService {
           .registerLog("Failed to load launch config from platform: $error");
     }
 
+    if (automationRole.isNotEmpty ||
+        automationPreferredMasterIp.isNotEmpty ||
+        automationForceSlaveMode) {
+      LogService.instance
+          .registerLog("Launch config from Dart defines: role=$automationRole, "
+              "preferredMasterIp=$automationPreferredMasterIp, "
+              "forceSlaveMode=$automationForceSlaveMode");
+      _cached = LaunchConfig(
+        role: automationRole.isEmpty ? null : automationRole,
+        preferredMasterIp: automationPreferredMasterIp.isEmpty
+            ? null
+            : automationPreferredMasterIp,
+        forceSlaveMode: automationForceSlaveMode,
+      );
+      return _cached;
+    }
+
     // Fallback: load from SharedPreferences (persisted from previous launch)
     final savedRole = prefs.getString("launch_role");
     if (savedRole != null && savedRole.isNotEmpty) {

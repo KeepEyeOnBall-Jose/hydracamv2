@@ -8,6 +8,7 @@ library;
 import "package:camera/camera.dart";
 import "package:flutter/material.dart";
 import "../services/camera_service_singleton.dart";
+import "../services/log_service.dart";
 import "../widgets/camera_preview_fitted.dart";
 
 class CameraSelectionScreen extends StatefulWidget {
@@ -25,6 +26,7 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
   /// Whether the screen is in a "loading" state (e.g., switching cameras).
   /// We use this to block user interaction and show a spinner.
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -37,13 +39,29 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     setState(() => _isLoading = true);
 
     final cameraService = CameraServiceSingleton.instance;
-    await cameraService.initAvailableCameras();
+    try {
+      await cameraService.initAvailableCameras();
 
-    setState(() {
-      _cameras = cameraService.deviceCameras;
-      _selectedIndex = cameraService.selectedCameraIndex;
-      _isLoading = false;
-    });
+      if (!mounted) return;
+      setState(() {
+        _cameras = cameraService.deviceCameras;
+        _selectedIndex = cameraService.selectedCameraIndex;
+        _errorMessage = _cameras.isEmpty
+            ? "No cameras found. Check camera permissions and connections."
+            : null;
+        _isLoading = false;
+      });
+    } catch (error, stackTrace) {
+      LogService.instance
+          .registerLog("Failed to load cameras: $error\n$stackTrace");
+      if (!mounted) return;
+      setState(() {
+        _cameras = [];
+        _errorMessage = "Camera access failed. Check permissions and retry.";
+        _isLoading = false;
+      });
+      _showCameraSnackBar(_errorMessage!);
+    }
   }
 
   /// Switches to a new camera index in the singleton service, and refreshes local state.
@@ -51,12 +69,22 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     setState(() => _isLoading = true);
 
     final cameraService = CameraServiceSingleton.instance;
-    await cameraService.switchCamera(index);
+    try {
+      await cameraService.switchCamera(index);
 
-    setState(() {
-      _selectedIndex = cameraService.selectedCameraIndex;
-      _isLoading = false;
-    });
+      if (!mounted) return;
+      setState(() {
+        _selectedIndex = cameraService.selectedCameraIndex;
+        _errorMessage = null;
+        _isLoading = false;
+      });
+    } catch (error, stackTrace) {
+      LogService.instance
+          .registerLog("Failed to switch camera: $error\n$stackTrace");
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      _showCameraSnackBar("Could not switch camera. Check camera access.");
+    }
   }
 
   /// Long press: confirm, then temporarily switch the global camera to [index] for a quick preview,
@@ -89,8 +117,26 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     final oldIndex = cameraService.selectedCameraIndex;
 
     setState(() => _isLoading = true);
-    await cameraService.switchCamera(index);
+    try {
+      await cameraService.switchCamera(index);
+    } catch (error, stackTrace) {
+      LogService.instance
+          .registerLog("Failed to open camera preview: $error\n$stackTrace");
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      _showCameraSnackBar("Could not open camera preview.");
+      return;
+    }
+    if (!mounted) return;
     setState(() => _isLoading = false);
+
+    final controller = cameraService.controller;
+    if (controller == null || !controller.value.isInitialized) {
+      LogService.instance.registerLog(
+          "Camera preview unavailable after selecting camera index $index.");
+      _showCameraSnackBar("Camera preview is unavailable.");
+      return;
+    }
 
     // 3. Show the preview in a dialog, using the same *global* camera controller
     //    so we remain consistent with the singleton.
@@ -101,18 +147,36 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
         child: Container(
           padding: const EdgeInsets.all(8),
           // Use the new widget so the camera doesn't get distorted:
-          child: CameraPreviewFitted(controller: cameraService.controller!),
+          child: CameraPreviewFitted(controller: controller),
         ),
       ),
     );
 
     // 4. Switch back to the old index so the user's original camera remains active
     setState(() => _isLoading = true);
-    await cameraService.switchCamera(oldIndex);
-    setState(() {
-      _selectedIndex = cameraService.selectedCameraIndex;
-      _isLoading = false;
-    });
+    try {
+      await cameraService.switchCamera(oldIndex);
+      if (!mounted) return;
+      setState(() {
+        _selectedIndex = cameraService.selectedCameraIndex;
+        _isLoading = false;
+      });
+    } catch (error, stackTrace) {
+      LogService.instance.registerLog(
+          "Failed to restore camera selection: $error\n$stackTrace");
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      _showCameraSnackBar("Could not restore the previous camera.");
+    }
+  }
+
+  void _showCameraSnackBar(String message) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   /// A helper method to get a user-friendly string from the lens direction.
@@ -161,7 +225,9 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     if (_cameras.isEmpty) {
       return Scaffold(
         appBar: AppBar(title: const Text("Camera Selection")),
-        body: const Center(child: Text("No cameras found on this device.")),
+        body: Center(
+          child: Text(_errorMessage ?? "No cameras found on this device."),
+        ),
       );
     }
 

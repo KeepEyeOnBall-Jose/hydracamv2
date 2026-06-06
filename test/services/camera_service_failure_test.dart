@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:io";
 
+// ignore: depend_on_referenced_packages
 import "package:camera_platform_interface/camera_platform_interface.dart";
 import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -178,6 +179,13 @@ void main() {
     expect(File(photoPath).existsSync(), isTrue);
     expect(File(videoPath).existsSync(), isTrue);
     expect(cameraService.isRecording, isFalse);
+  });
+
+  test("macOS runtime uses the real camera backend unless mock is explicit",
+      () async {
+    final cameraService = CameraService(storageService: storageService);
+
+    expect(cameraService.isUsingMockCamera, isFalse);
   });
 }
 

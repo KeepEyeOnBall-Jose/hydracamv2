@@ -265,12 +265,19 @@ class MasterScreenState extends State<MasterScreen> {
 
     final handlers = <String, AutomationHandler>{
       "start_session": (payload) async {
-        await _createSession(
-          suppressSnackbars: true,
-          skipCourtSelectionWarning: true,
-          overrideCourtGuid: payload["courtGuid"] as String?,
-          overrideSessionId: payload["sessionId"] as String?,
-        );
+        if (payload["localOnly"] == true) {
+          final sessionGuid = payload["sessionGuid"] as String? ??
+              "local-${DateTime.now().millisecondsSinceEpoch}";
+          _server.startNewSession(sessionGuid);
+          setState(() {});
+        } else {
+          await _createSession(
+            suppressSnackbars: true,
+            skipCourtSelectionWarning: true,
+            overrideCourtGuid: payload["courtGuid"] as String?,
+            overrideSessionId: payload["sessionId"] as String?,
+          );
+        }
         return AutomationBridge.instance.buildSessionSnapshot();
       },
       "end_session": (payload) async {
@@ -286,6 +293,21 @@ class MasterScreenState extends State<MasterScreen> {
           suppressSnackbars: true,
         );
         return AutomationBridge.instance.buildSessionSnapshot();
+      },
+      "list_cameras": (payload) async {
+        final cameraService = _server.cameraService;
+        await cameraService.initAvailableCameras();
+        return {
+          "isUsingMockCamera": cameraService.isUsingMockCamera,
+          "selectedCameraIndex": cameraService.selectedCameraIndex,
+          "cameras": cameraService.deviceCameras
+              .map((camera) => {
+                    "name": camera.name,
+                    "lensDirection": camera.lensDirection.name,
+                    "sensorOrientation": camera.sensorOrientation,
+                  })
+              .toList(),
+        };
       },
       "start_recording": (payload) async {
         await _ensureRecordingState(shouldRecord: true);

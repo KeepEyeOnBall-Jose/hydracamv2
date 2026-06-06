@@ -20,8 +20,14 @@ class CameraServiceSingleton {
   CameraServiceSingleton._();
 
   /// Initializes the singleton with the given [storageService].
-  static CameraService initialize(StorageService storageService) {
-    _instance = CameraService(storageService: storageService);
+  static CameraService initialize(
+    StorageService storageService, {
+    bool? useMockCamera,
+  }) {
+    _instance = CameraService(
+      storageService: storageService,
+      useMockCamera: useMockCamera,
+    );
     return _instance!;
   }
 }

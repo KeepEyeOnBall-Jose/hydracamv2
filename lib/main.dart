@@ -56,8 +56,12 @@ void main() async {
       }
     },
   );
-  CameraServiceSingleton.initialize(tempStorageService);
-  LogService.instance.registerLog("CameraServiceSingleton initialized");
+  CameraServiceSingleton.initialize(
+    tempStorageService,
+    useMockCamera: mockCameraEnabled,
+  );
+  LogService.instance.registerLog(
+      "CameraServiceSingleton initialized; mockCamera=$mockCameraEnabled");
 
   runApp(
     ChangeNotifierProvider(
@@ -102,7 +106,10 @@ class HydraCamApp extends StatelessWidget {
                 },
               );
               // Re-initialize with proper messenger for notifications
-              CameraServiceSingleton.initialize(storageService);
+              CameraServiceSingleton.initialize(
+                storageService,
+                useMockCamera: mockCameraEnabled,
+              );
 
               BatteryService(
                 messengerState: messenger,
