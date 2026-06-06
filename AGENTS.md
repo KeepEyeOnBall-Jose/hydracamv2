@@ -9,6 +9,13 @@ durable project context and working agreements.
 - Keep durable repository guidance in this file. Move transient debugging notes,
   personal scratch plans, and one-off run logs into issue comments, runbooks, or
   `logs/` instead of adding them here.
+- `AGENTS.md` remains the canonical agent control plane. Product status,
+  roadmap, requirements, imported backlog, architecture, and test strategy live
+  under `docs/control/`, with `docs/control/README.md` as the entrypoint.
+- The Google Sheet `HydraCam Dev Process` is historical source provenance only;
+  do not use it as the canonical control tool. If a sheet row becomes actionable,
+  stage it in `docs/control/backlog-import.md` or create a Linear issue once the
+  Linear workspace is connected.
 - Update this file first when changing shared agent behavior. `CLAUDE.md` and
   `.github/copilot-instructions.md` are compatibility adapters that point back to
   this file to prevent instruction drift.
@@ -48,6 +55,12 @@ durable project context and working agreements.
 - For Dart or Flutter code changes, run `flutter analyze` and the most relevant
   `flutter test` target. Use the full `flutter test` suite for shared services,
   session state, WebSocket behavior, or app startup changes.
+- For every recurring project-advancement iteration, follow
+  `docs/control/evidence-first-loop.md`. Device-facing, UI, release, session,
+  network, capture, battery, storage, and upload work requires a run-specific
+  evidence pack under `logs/verification-runs/` with screenshots/video/logs from
+  real or emulated hardware. Analyzer and unit tests are supporting evidence
+  only, except for pure service/model logic.
 - For docs-only or instruction-only changes, run `git diff --check` as the
   minimum validation.
 - If a check cannot run because a device, SDK, signing identity, backend, or
@@ -287,7 +300,8 @@ lib/
 
 ## Debugging iOS White Screen Issue
 
-Current investigation (from `Current_dev_status.txt`):
+Current status lives in `docs/control/status-and-roadmap.md`. Active
+investigation summary:
 - App installs and launches on physical iOS device
 - Shows only white screen (no errors in logs)
 - Works fine on iOS simulator
@@ -366,7 +380,8 @@ await cameraService.stopRecordingVideo();
 
 ## Future Development Priorities
 
-From `GOALS.txt` and README:
+Current goals and roadmap live in `docs/control/status-and-roadmap.md`. Durable
+priority themes:
 1. Fix iOS physical device white screen issue
 2. Enable Android and iOS distribution
 3. Add Windows/macOS/web platform support

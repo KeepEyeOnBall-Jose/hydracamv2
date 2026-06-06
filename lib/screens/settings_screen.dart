@@ -13,7 +13,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-
   /// List of available settings
 
   bool _masterShouldRecord = true;
@@ -35,12 +34,15 @@ class SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadSettings() async {
     final shouldRecord = await SettingsService.getMasterShouldRecord();
     final cameraQuality = await SettingsService.getCameraQuality();
-    final deleteLocalAfterUpload = await SettingsService.getDeleteLocalAfterUpload();
+    final deleteLocalAfterUpload =
+        await SettingsService.getDeleteLocalAfterUpload();
     final autoUploadMaterials = await SettingsService.getAutoUploadMaterials();
-    final autoplayVideoOnMaster = await SettingsService.getAutoplayVideoOnMaster();
+    final autoplayVideoOnMaster =
+        await SettingsService.getAutoplayVideoOnMaster();
     final timerDuration = await SettingsService.getTimerDuration();
     final screenAutoOff = await SettingsService.getScreenAutoOff();
-    final flashForVideoAnnounce = await SettingsService.getFlashForVideoAnnounce();
+    final flashForVideoAnnounce =
+        await SettingsService.getFlashForVideoAnnounce();
 
     setState(() {
       _masterShouldRecord = shouldRecord;
@@ -110,7 +112,6 @@ class SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-
   /// Map quality string to CameraQuality enum.
   CameraQuality _mapQualityStringToEnum(String quality) {
     switch (quality) {
@@ -132,7 +133,8 @@ class SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text("Settings"),
       ),
-      body: SingleChildScrollView( // Allow scrolling if needed
+      body: SingleChildScrollView(
+        // Allow scrolling if needed
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,18 +149,29 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _masterShouldRecord,
                 onChanged: _updateMasterRecording,
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
               title: "Camera Quality",
+              description:
+                  "Maps to Flutter camera ResolutionPreset values; exact pixel dimensions depend on the selected device camera.",
               control: DropdownButton<String>(
                 value: _cameraQuality,
                 items: const [
-                  DropdownMenuItem(value: "high", child: Text("High")),
-                  DropdownMenuItem(value: "medium", child: Text("Medium")),
-                  DropdownMenuItem(value: "low", child: Text("Low")),
+                  DropdownMenuItem(
+                    value: "high",
+                    child: Text("High preset"),
+                  ),
+                  DropdownMenuItem(
+                    value: "medium",
+                    child: Text("Medium preset"),
+                  ),
+                  DropdownMenuItem(
+                    value: "low",
+                    child: Text("Low preset"),
+                  ),
                 ],
                 onChanged: (value) {
                   if (value != null) {
@@ -172,7 +185,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _deleteLocalAfterUpload,
                 onChanged: _updateDeleteLocalAfterUpload,
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
@@ -181,34 +194,36 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _autoUploadMaterials,
                 onChanged: _updateAutoUploadMaterials,
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
               title: "Autoplay video on master",
               description:
-              "Activate or deactivate automatic playback of videos after recording them on the master device.",
+                  "Activate or deactivate automatic playback of videos after recording them on the master device.",
               control: Switch(
                 value: _autoplayVideoOnMaster,
                 onChanged: _updateAutoplayVideoOnMaster,
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
               title: "Screen Auto-Off",
-              description: "Turn off the slave screen during recording to save battery. The screen will reactivate automatically or when you wake it manually.",
+              description:
+                  "Turn off the slave screen during recording to save battery. The screen will reactivate automatically or when you wake it manually.",
               control: Switch(
                 value: _screenAutoOff,
                 onChanged: _updateScreenAutoOff,
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
               title: "Timer Duration",
-              description: "Set the number of seconds for countdown timers when recording videos or taking photos.",
+              description:
+                  "Set the number of seconds for countdown timers when recording videos or taking photos.",
               control: Column(
                 children: [
                   Slider(
@@ -228,7 +243,8 @@ class SettingsScreenState extends State<SettingsScreen> {
             ),
             SettingsOption(
               title: "Flash for Video Announcements",
-              description: "If enabled, the camera flash will blink before and after video recording to signal start/end.",
+              description:
+                  "If enabled, the camera flash will blink before and after video recording to signal start/end.",
               control: Switch(
                 value: _flashForVideoAnnounce,
                 onChanged: (value) async {
@@ -237,7 +253,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     _flashForVideoAnnounce = value;
                   });
                 },
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),

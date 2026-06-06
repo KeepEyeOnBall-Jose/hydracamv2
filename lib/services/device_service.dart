@@ -4,6 +4,7 @@ import "package:uuid/uuid.dart";
 import "package:device_info_plus/device_info_plus.dart";
 import "log_service.dart";
 
+// ignore: avoid_classes_with_only_static_members
 class DeviceIdService {
   static const String _deviceIdKey = "device_id";
 
@@ -18,7 +19,8 @@ class DeviceIdService {
       await prefs.setString(_deviceIdKey, deviceId);
       LogService.instance.registerLog("Generated new Device ID: $deviceId");
     } else {
-      LogService.instance.registerLog("Retrieved existing Device ID: $deviceId");
+      LogService.instance
+          .registerLog("Retrieved existing Device ID: $deviceId");
     }
 
     return deviceId;

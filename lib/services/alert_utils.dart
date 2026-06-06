@@ -20,12 +20,14 @@ class AlertUtils {
   }) {
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent closing the dialog by tapping outside
+      barrierDismissible:
+          false, // Prevent closing the dialog by tapping outside
       builder: (BuildContext context) {
         return PopScope(
           canPop: false, // Prevent closing with the back button
           child: Dialog(
-            backgroundColor: Colors.white.withValues(alpha: 0.9), // White translucent background
+            backgroundColor: Colors.white
+                .withValues(alpha: 0.9), // White translucent background
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
@@ -40,13 +42,15 @@ class AlertUtils {
                   const SizedBox(height: 20),
                   Text(
                     title,
-                    style: AppTheme.headline1.copyWith(fontSize: 20), // Title style
+                    style: AppTheme.headline1
+                        .copyWith(fontSize: 20), // Title style
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
                   Text(
                     message,
-                    style: AppTheme.bodyText1.copyWith(color: AppTheme.accentColor), // Message style
+                    style: AppTheme.bodyText1
+                        .copyWith(color: AppTheme.accentColor), // Message style
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -91,7 +95,7 @@ class AlertUtils {
 
   /// Displays a dialog for showing a photo or video.
   /// Automatically adjusts to the screen size and supports auto-closing for master screens.
- static void showMediaDialog({
+  static void showMediaDialog({
     required BuildContext context,
     required dynamic media, // CapturedPhoto or CapturedVideo
     required bool isAutoCloseEnabled, // Auto-close for master screens
@@ -118,7 +122,7 @@ class AlertUtils {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.8, // 80% height
-              maxWidth: MediaQuery.of(context).size.width * 0.9,  // 90% width
+              maxWidth: MediaQuery.of(context).size.width * 0.9, // 90% width
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -128,9 +132,10 @@ class AlertUtils {
                   child: isPhoto
                       ? Image.file(file, fit: BoxFit.contain) // Show photo
                       : AspectRatio(
-                    aspectRatio: 16 / 9, // Default video aspect ratio
-                    child: VideoPlayerScreen(videoPath: filePath), // Show video
-                  ),
+                          aspectRatio: 16 / 9, // Default video aspect ratio
+                          child: VideoPlayerScreen(
+                              videoPath: filePath), // Show video
+                        ),
                 ),
                 // Close button
                 Padding(
@@ -196,7 +201,8 @@ class AlertUtils {
             } else if (snapshot.hasError) {
               return AlertDialog(
                 title: const Text("Device Information"),
-                content: const Text("Error when obtaining the device information."),
+                content:
+                    const Text("Error when obtaining the device information."),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
@@ -238,6 +244,11 @@ class AlertUtils {
   /// Show dialog with info about device location.
   static Future<void> showLocationInfoDialog(BuildContext context) async {
     final locationService = LocationService(); // Access the singleton instance
+    await locationService.updateLocation();
+
+    if (!context.mounted) {
+      return;
+    }
 
     // Fetch the latest location or fallback to "not available"
     String locationInfo;
@@ -270,7 +281,6 @@ class AlertUtils {
     );
   }
 
-
   /// Show dialog when trying to open a deleted media file.
   static void showFileMissingDialog(String fileType, BuildContext context) {
     showDialog(
@@ -278,7 +288,8 @@ class AlertUtils {
       builder: (context) {
         return AlertDialog(
           title: Text("$fileType Not Found"),
-          content: Text("The selected $fileType file is no longer available on this device."),
+          content: Text(
+              "The selected $fileType file is no longer available on this device."),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -335,7 +346,6 @@ class AlertUtils {
     );
   }
 
-
   static void showMasterSnackBar(BuildContext context, String message) {
     final messengerState = ScaffoldMessenger.of(context);
 
@@ -365,5 +375,3 @@ AlertUtils.showLoadingDialog(
 /*
 AlertUtils.dismissDialog(context);
 */
-
-

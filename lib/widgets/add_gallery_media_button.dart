@@ -134,7 +134,30 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     return allMedia;
   }
 
+  Future<bool> _ensureGalleryPermission() async {
+    final PermissionState state = await PhotoManager.requestPermissionExtend();
+    if (state.hasAccess) {
+      return true;
+    }
+
+    if (!mounted) {
+      return false;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Gallery access is required to import media."),
+      ),
+    );
+    return false;
+  }
+
   Future<void> _queryAndSelectMedia(MediaFilters filters) async {
+    final bool hasPermission = await _ensureGalleryPermission();
+    if (!hasPermission) {
+      return;
+    }
+
     final List<AssetEntity> media = await _fetchMedia(filters);
 
     if (media.isEmpty) {

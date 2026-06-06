@@ -117,16 +117,11 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
 
   /// A helper method to get a user-friendly string from the lens direction.
   String _getOrientationString(CameraLensDirection direction) {
-    switch (direction) {
-      case CameraLensDirection.back:
-        return "Back";
-      case CameraLensDirection.front:
-        return "Front";
-      case CameraLensDirection.external:
-        return "External";
-      default:
-        return "Unknown";
-    }
+    return switch (direction) {
+      CameraLensDirection.back => "Back",
+      CameraLensDirection.front => "Front",
+      CameraLensDirection.external => "External",
+    };
   }
 
   /// Shows a simple help/instructions dialog.

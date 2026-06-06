@@ -1,5 +1,9 @@
 # Migration Notes - November 2025
 
+> Historical migration snapshot. Current project status lives in
+> `docs/control/status-and-roadmap.md`. Re-verify build and platform claims
+> before relying on them.
+
 ## Summary
 Successfully updated the HydraCam Flutter app to work with current Flutter/Dart versions and build on all supported platforms.
 
@@ -13,7 +17,7 @@ Successfully updated the HydraCam Flutter app to work with current Flutter/Dart 
 - **CocoaPods**: Successfully updated all iOS pods
 - **Status**: ⚠️ Build works but has Xcode sandbox permission issues in some environments
 
-### 3. macOS Configuration  
+### 3. macOS Configuration
 - **Deployment Target**: Updated from macOS 10.14 to 10.15 in both `macos/Podfile` and `macos/Runner.xcodeproj/project.pbxproj`
 - **CocoaPods**: Successfully updated all macOS pods
 - **Status**: ✅ Builds successfully
@@ -39,7 +43,7 @@ Successfully updated the HydraCam Flutter app to work with current Flutter/Dart 
 #### gallery_saver (^2.3.2)
 - **Reason**: Incompatible with Android Gradle Plugin 8.7+ (missing namespace declaration)
 - **Impact**: Media is saved to app directory but NOT automatically saved to device gallery
-- **Code Modified**: 
+- **Code Modified**:
   - `lib/services/camera_service.dart`
   - `lib/master/master_server.dart`
 - **Recommendation**: Use `photo_manager` plugin (already in dependencies) to implement gallery saving

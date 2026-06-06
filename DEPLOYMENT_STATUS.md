@@ -1,5 +1,9 @@
 # DEPLOYMENT STATUS - Multi-Platform Development Ready
 
+> Historical snapshot. Current release status and blockers live in
+> `docs/control/status-and-roadmap.md` and `DISTRIBUTION_RUNBOOK.md`. Treat this
+> file as prior evidence only.
+
 ## ✅ ALL SYSTEMS OPERATIONAL
 
 ### Platform Status
@@ -215,7 +219,7 @@ Or create a compound launch configuration in VS Code.
 
 1. **Grant Terminal Full Disk Access** (5 minutes)
    - Follow Option 1 in iOS_BUILD_FIX.md
-   
+
 2. **Test iOS Simulator** (2 minutes)
    ```bash
    flutter run -d 5CF4A12E-A8B5-4285-AE86-407B9067CB5F

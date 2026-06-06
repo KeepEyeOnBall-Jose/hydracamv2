@@ -1,26 +1,18 @@
-import "dart:io";
 import "package:permission_handler/permission_handler.dart";
+import "package:permission_handler/permission_handler.dart"
+    as permission_handler;
 import "log_service.dart";
 
+// ignore: avoid_classes_with_only_static_members
 class PermissionService {
-  /// Requests all required permissions and returns `true` if all are granted.
+  /// Requests the permissions required for initial app use.
   static Future<bool> requestAllPermissions() async {
-    // Add permissions based on the platform
     final permissions = <Permission>[
       Permission.camera,
       Permission.microphone,
-      if (Platform.isAndroid)// && Platform.version.startsWith('11'))
-        Permission.manageExternalStorage,
-      if (Platform.isAndroid)// && !Platform.version.startsWith('11'))
-        Permission.storage,
-      if (Platform.isIOS) Permission.photos,
-        Permission.location,
     ];
 
-    // Request permissions
     final statuses = await permissions.request();
-
-    // Separate permissions into granted and denied categories
     final grantedPermissions = statuses.entries
         .where((entry) => entry.value.isGranted)
         .map((entry) => entry.key.toString())
@@ -31,24 +23,21 @@ class PermissionService {
         .map((entry) => entry.key.toString())
         .toList();
 
-    // Construct the log message
     final logMessage = "Permission request completed.\n"
         "Granted: $grantedPermissions\n"
         "Denied: $deniedPermissions";
 
-    // Log the permissions status
     LogService.instance.registerLog(
       logMessage,
       function: "requestAllPermissions",
       file: "PermissionService",
     );
 
-    // Check if all permissions are granted
     return statuses.values.every((status) => status.isGranted);
   }
 
   /// Opens the app settings page.
   static Future<void> openAppSettings() async {
-    await openAppSettings();
+    await permission_handler.openAppSettings();
   }
 }

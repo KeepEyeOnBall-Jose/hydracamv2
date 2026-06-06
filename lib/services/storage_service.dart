@@ -1,5 +1,4 @@
 import "dart:async";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:disk_space_plus/disk_space_plus.dart";
 import "log_service.dart";

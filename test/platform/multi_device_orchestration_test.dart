@@ -6,6 +6,7 @@ import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/models/captured_video.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/uploader_service.dart";
+// ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
 

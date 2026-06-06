@@ -15,13 +15,29 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios build_store
+
+```sh
+[bundle exec] fastlane ios build_store
+```
+
+Build the release IPA for App Store Connect
+
 ### ios beta
 
 ```sh
 [bundle exec] fastlane ios beta
 ```
 
-Push a new beta build to TestFlight
+Upload a new beta build to TestFlight
+
+### ios upload_latest_beta
+
+```sh
+[bundle exec] fastlane ios upload_latest_beta
+```
+
+Upload the latest local IPA to TestFlight without rebuilding
 
 ### ios device
 

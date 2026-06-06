@@ -27,7 +27,12 @@ from typing import Any, Dict, List, Mapping, Optional, cast
 from urllib.parse import urlparse
 
 # optional emulator control helpers
-from scripts.emulator_manager import EmulatorManager
+from scripts.emulator_manager import (
+    EmulatorLaunchSpec,
+    EmulatorManager,
+    hydra_cluster_specs,
+    parse_emulator_spec,
+)
 
 AUTOMATION_REMOTE_PORT = 4762
 DEFAULT_PORT_BASE = 5900
@@ -384,7 +389,9 @@ class MultiDeviceOrchestrator:
                 )
                 self._capture_from_payload(response, capture_map)
             if command == "start_session":
-                session_guid = response.get("sessionGuid")
+                session_guid = self._extract_session_guid_from_command_response(
+                    response,
+                )
                 if isinstance(session_guid, str) and session_guid:
                     self.context.setdefault("sessionGuid", session_guid)
         return {
@@ -393,6 +400,21 @@ class MultiDeviceOrchestrator:
             "payload": payload,
             "responses": responses,
         }
+
+    def _extract_session_guid_from_command_response(
+        self,
+        response: Mapping[str, Any],
+    ) -> Optional[str]:
+        direct_guid = response.get("sessionGuid")
+        if isinstance(direct_guid, str) and direct_guid:
+            return direct_guid
+        result_payload = response.get("result")
+        if isinstance(result_payload, Mapping):
+            result_map = cast(Mapping[str, Any], result_payload)
+            nested_guid = result_map.get("sessionGuid")
+            if isinstance(nested_guid, str) and nested_guid:
+                return nested_guid
+        return None
 
     def _manifest_step_settings(
         self,
@@ -719,6 +741,10 @@ class MultiDeviceOrchestrator:
         if not scenario_result:
             return None
         session_guid_value = scenario_result.get("sessionGuid")
+        if not isinstance(session_guid_value, str) or not session_guid_value:
+            context_guid = self.context.get("sessionGuid")
+            if isinstance(context_guid, str) and context_guid:
+                session_guid_value = context_guid
         if not isinstance(session_guid_value, str) or not session_guid_value:
             self._log("Skipping backend verification (session guid missing)")
             return None
@@ -1132,6 +1158,23 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         help="Starting port for first emulator (increments by 2)",
     )
     parser.add_argument(
+        "--shared-net-id-start",
+        type=int,
+        help="Starting shared network id (assigns one secondary 10.1.2.x IP per emulator)",
+    )
+    parser.add_argument(
+        "--emulator-spec",
+        action="append",
+        default=[],
+        metavar="AVD:PORT[:SHARED_NET_ID]",
+        help="Explicit emulator launch spec; may be passed multiple times",
+    )
+    parser.add_argument(
+        "--hydra-cluster",
+        action="store_true",
+        help="Boot Hydra_Master_API34 + three Hydra_Slave* AVDs with shared net ids",
+    )
+    parser.add_argument(
         "--shutdown-emulators",
         type=int,
         default=0,
@@ -1153,21 +1196,60 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def resolve_emulator_boot_specs(
+    args: argparse.Namespace, manager: EmulatorManager
+) -> List[EmulatorLaunchSpec]:
+    if args.hydra_cluster:
+        return hydra_cluster_specs(
+            start_port=args.emulator_start_port,
+            start_shared_net_id=(
+                args.shared_net_id_start
+                if args.shared_net_id_start is not None
+                else 11
+            ),
+        )
+
+    if args.emulator_spec:
+        return [parse_emulator_spec(spec_text) for spec_text in args.emulator_spec]
+
+    if args.boot_emulators and args.boot_emulators > 0:
+        return manager.build_n_emulator_specs(
+            args.avd_base,
+            args.boot_emulators,
+            start_port=args.emulator_start_port,
+            shared_net_id_start=args.shared_net_id_start,
+        )
+
+    return []
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     args = parse_args(argv)
     try:
         # handle emulator control commands first (short-circuit)
-        if args.boot_emulators and args.boot_emulators > 0:
-            manager = EmulatorManager()
-            print(f"[orchestrator] Booting {args.boot_emulators} emulator(s)")
-            manager.start_n_emulators(
-                args.avd_base, args.boot_emulators, args.emulator_start_port
-            )
+        manager = EmulatorManager()
+        boot_specs = resolve_emulator_boot_specs(args, manager)
+        if boot_specs:
+            if args.dry_run:
+                print(
+                    f"[orchestrator] Dry-run: would boot {len(boot_specs)} emulator(s):"
+                )
+                for spec in boot_specs:
+                    shared_ip = (
+                        f" secondary IP 10.1.2.{spec.shared_net_id}"
+                        if spec.shared_net_id is not None
+                        else ""
+                    )
+                    print(
+                        f"  - {spec.avd_name} on emulator-{spec.port}{shared_ip}"
+                    )
+                return 0
+            print(f"[orchestrator] Booting {len(boot_specs)} emulator(s)")
+            manager.start_emulator_specs(boot_specs)
             print("[orchestrator] Boot requests issued")
             return 0
 
         if args.shutdown_emulators and args.shutdown_emulators > 0:
-            manager = EmulatorManager()
             android = manager.list_android_emulators()
             to_stop = android[: args.shutdown_emulators]
             for dev in to_stop:
@@ -1177,7 +1259,6 @@ def main(argv: Optional[List[str]] = None) -> int:
             return 0
 
         if args.kill_all_emulators:
-            manager = EmulatorManager()
             print("[orchestrator] Killing all emulators (android + ios)")
             manager.kill_all_emulators(force=False)
             ok = manager.verify_no_emulators()

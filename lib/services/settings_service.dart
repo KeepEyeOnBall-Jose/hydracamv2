@@ -3,6 +3,7 @@ import "package:shared_preferences/shared_preferences.dart";
 
 import "log_service.dart";
 
+// ignore: avoid_classes_with_only_static_members
 class SettingsService {
   static bool? _masterShouldRecordOverride;
   static int? _timerDurationOverride;

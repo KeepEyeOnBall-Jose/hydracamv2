@@ -1,0 +1,20 @@
+{
+  "backend_orchestrator_tests": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+      "scripts/test_multi_device_orchestrator_backend.py"
+    ],
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/Users/jose/src/work/hydracamv2/scripts/test_multi_device_orchestrator_backend.py\", line 10, in <module>\n    from scripts.multi_device_orchestrator import DeviceTarget, MultiDeviceOrchestrator\nModuleNotFoundError: No module named 'scripts'\n"
+  },
+  "backend_env_probe": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+      "scripts/check_backend_env.py"
+    ],
+    "returncode": 0,
+    "stdout": "/Users/jose/src/work/hydracamv2/logs/backend_env_status.json\n",
+    "stderr": ""
+  }
+}

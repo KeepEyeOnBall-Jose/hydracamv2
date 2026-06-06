@@ -11,7 +11,6 @@ import "services/camera_service_singleton.dart";
 import "services/device_id_provider.dart";
 import "services/device_service.dart";
 import "services/launch_config_service.dart";
-import "services/location_service.dart";
 import "services/log_service.dart";
 import "services/permission_service.dart";
 import "services/storage_service.dart";
@@ -37,15 +36,8 @@ void main() async {
   final String deviceId = await DeviceIdService.getOrCreateDeviceId();
   LogService.instance.registerLog("Device ID: $deviceId");
 
-  LogService.instance
-      .registerLog("Initialize LocationService and try to get the location");
-  try {
-    final locationService = LocationService();
-    await locationService.initialize();
-  } catch (e) {
-    LogService.instance.registerLog("Failed to initialize location service: $e",
-        function: "main()", file: "main.dart");
-  }
+  LogService.instance.registerLog(
+      "Location access will be requested on demand when the user opens the location view.");
 
   LogService.instance.registerLog("Prevent screen from turning off");
   WakelockPlus.enable();

@@ -1,5 +1,10 @@
 # HydraCam - Code Quality & Testing Summary
 
+> Historical snapshot. Current test strategy and status live in
+> `docs/control/architecture-and-testing.md` and
+> `docs/control/status-and-roadmap.md`. Re-run the commands before treating any
+> "passing" or "ready" claim in this file as current.
+
 ## Date: November 15, 2025
 
 ## What Was Accomplished
@@ -10,7 +15,7 @@ All 61+ analyzer warnings have been systematically fixed with behavior-preservin
 
 #### File Naming Issues Fixed
 - Renamed `CaptureSession.dart` → `capture_session.dart`
-- Renamed `CapturedPhoto.dart` → `captured_photo.dart`  
+- Renamed `CapturedPhoto.dart` → `captured_photo.dart`
 - Renamed `CapturedVideo.dart` → `captured_video.dart`
 - Renamed `Court_Selection_Widget.dart` → `court_selection_widget.dart`
 - Updated all imports throughout the codebase
@@ -228,4 +233,3 @@ flutter build appbundle --release  # For Google Play Store
 ```
 
 The app successfully compiles and can be deployed to Android and iOS devices for full camera testing.
-

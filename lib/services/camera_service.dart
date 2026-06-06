@@ -419,7 +419,7 @@ class CameraService {
   CameraQuality get currentQuality => _currentQuality;
 
   /// Function to find session directory to store files
-  /// Directory would be something like /data/user/0/com.amaia23.hydracam/session_<<sessionGuid>>/... in android
+  /// Directory would be something like `/data/user/0/com.amaia23.hydracam/session_<sessionGuid>/...` in Android.
   Future<String> _getSessionMediaPath(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     final sessionDir = Directory(

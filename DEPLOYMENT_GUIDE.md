@@ -1,5 +1,9 @@
 # HydraCam Deployment Guide
 
+> Historical deployment guide. Current release gates live in
+> `DISTRIBUTION_RUNBOOK.md` and current project status lives in
+> `docs/control/status-and-roadmap.md`.
+
 ## ✅ Current Status (November 15, 2025)
 
 - **Flutter Analyze**: ✅ 0 issues
@@ -307,4 +311,3 @@ Your deployment is successful when:
 ---
 
 **Ready to deploy!** Connect your Android or iOS device and run `flutter run` to start testing.
-

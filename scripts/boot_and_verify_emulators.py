@@ -14,7 +14,12 @@ import argparse
 import time
 from typing import List
 
-from scripts.emulator_manager import EmulatorManager
+from scripts.emulator_manager import (
+    EmulatorLaunchSpec,
+    EmulatorManager,
+    hydra_cluster_specs,
+    parse_emulator_spec,
+)
 
 
 def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
@@ -41,6 +46,23 @@ def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         help="Starting port for first emulator (increments by 2)",
     )
     p.add_argument(
+        "--shared-net-id-start",
+        type=int,
+        help="Starting shared network id (assigns one secondary 10.1.2.x IP per emulator)",
+    )
+    p.add_argument(
+        "--spec",
+        action="append",
+        default=[],
+        metavar="AVD:PORT[:SHARED_NET_ID]",
+        help="Explicit emulator launch spec; may be passed multiple times",
+    )
+    p.add_argument(
+        "--hydra-cluster",
+        action="store_true",
+        help="Launch Hydra_Master_API34 + three Hydra_Slave* AVDs with shared net ids",
+    )
+    p.add_argument(
         "--timeout",
         type=int,
         default=120,
@@ -60,6 +82,30 @@ def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
+def resolve_launch_specs(
+    args: argparse.Namespace, manager: EmulatorManager
+) -> List[EmulatorLaunchSpec]:
+    if args.hydra_cluster:
+        return hydra_cluster_specs(
+            start_port=args.start_port,
+            start_shared_net_id=(
+                args.shared_net_id_start
+                if args.shared_net_id_start is not None
+                else 11
+            ),
+        )
+
+    if args.spec:
+        return [parse_emulator_spec(spec_text) for spec_text in args.spec]
+
+    return manager.build_n_emulator_specs(
+        args.avd_base,
+        args.count,
+        start_port=args.start_port,
+        shared_net_id_start=args.shared_net_id_start,
+    )
+
+
 def wait_for_emulators(
     manager: EmulatorManager, want: int, timeout: int, interval: float
 ) -> List[str]:
@@ -75,21 +121,30 @@ def wait_for_emulators(
 def main(argv: List[str] | None = None) -> int:
     args = parse_args(argv)
     manager = EmulatorManager()
+    specs = resolve_launch_specs(args, manager)
 
     if not args.start:
-        print(
-            "[boot] Dry-run: would start %d emulator(s) using AVD base '%s'",
-            (args.count, args.avd_base),
-        )
+        print(f"[boot] Dry-run: would start {len(specs)} emulator(s):")
+        for spec in specs:
+            shared_ip = (
+                f" secondary IP 10.1.2.{spec.shared_net_id}"
+                if spec.shared_net_id is not None
+                else ""
+            )
+            read_only = " read-only" if spec.read_only else ""
+            print(
+                f"  - {spec.avd_name} on emulator-{spec.port}"
+                f"{read_only}{shared_ip}"
+            )
         print("[boot] To actually start emulators, pass --start")
         return 0
 
-    print(f"[boot] Starting {args.count} emulator(s) (avd base '{args.avd_base}')")
-    manager.start_n_emulators(args.avd_base, args.count, args.start_port)
+    print(f"[boot] Starting {len(specs)} emulator(s)")
+    manager.start_emulator_specs(specs)
     print("[boot] Start requests issued — waiting for devices to appear in adb")
 
-    found = wait_for_emulators(manager, args.count, args.timeout, args.interval)
-    if len(found) >= args.count:
+    found = wait_for_emulators(manager, len(specs), args.timeout, args.interval)
+    if len(found) >= len(specs):
         print(f"[boot] Success: found {len(found)} emulator(s): {found}")
         return 0
     else:

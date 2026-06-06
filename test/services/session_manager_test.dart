@@ -3,6 +3,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/models/captured_video.dart";
 import "package:hydracam/services/session_manager.dart";
+// ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
@@ -52,7 +53,7 @@ void main() {
       }
     });
 
-    String _createTempMediaFile(String name) {
+    String createTempMediaFile(String name) {
       final file = File("${tempMediaDir.path}/$name");
       file.createSync(recursive: true);
       file.writeAsBytesSync(List<int>.filled(5, 42));
@@ -90,7 +91,7 @@ void main() {
       });
 
       test("addPhoto adds photo to current session", () {
-        final photoPath = _createTempMediaFile("test_photo.jpg");
+        final photoPath = createTempMediaFile("test_photo.jpg");
         final photo = CapturedPhoto(
           photoPath: photoPath,
           photoData: null,
@@ -106,7 +107,7 @@ void main() {
       });
 
       test("addVideo adds video to current session", () {
-        final videoPath = _createTempMediaFile("test_video.mp4");
+        final videoPath = createTempMediaFile("test_video.mp4");
         final video = CapturedVideo(
           videoPath: videoPath,
           videoData: null,
@@ -123,8 +124,8 @@ void main() {
       });
 
       test("multiple media can be added to session", () {
-        final photoPath1 = _createTempMediaFile("test_photo_1.jpg");
-        final photoPath2 = _createTempMediaFile("test_photo_2.jpg");
+        final photoPath1 = createTempMediaFile("test_photo_1.jpg");
+        final photoPath2 = createTempMediaFile("test_photo_2.jpg");
         final photo1 = CapturedPhoto(
           photoPath: photoPath1,
           photoData: null,

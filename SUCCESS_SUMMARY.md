@@ -1,9 +1,13 @@
 # ✅ MISSION ACCOMPLISHED - Multi-Platform Development Ready!
 
+> Historical snapshot. Current project status lives in
+> `docs/control/status-and-roadmap.md`. Treat this file as prior evidence only,
+> not as current readiness proof.
+
 ## 🎯 Status: Android FULLY OPERATIONAL
 
-**Date:** November 15, 2025  
-**Duration:** ~1 hour of troubleshooting  
+**Date:** November 15, 2025
+**Duration:** ~1 hour of troubleshooting
 **Outcome:** Android emulator running perfectly, iOS pending Full Disk Access grant
 
 ---
@@ -59,7 +63,7 @@ Bad state: Tried to read a provider that threw during the creation of its value.
 **Solution:** Removed Provider dependency, used singleton pattern with post-frame initialization:
 ```dart
 class HydraCamApp extends StatelessWidget {
-  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = 
+  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
   @override
@@ -116,11 +120,11 @@ Three device-specific debug configurations created:
 1. **HydraCam (Android Emulator)** ✅ WORKING
    - Device: `emulator-5554`
    - Status: Fully functional
-   
+
 2. **HydraCam (iPhone Simulator)** ⏳ PENDING
    - Device: `5CF4A12E-A8B5-4285-AE86-407B9067CB5F`
    - Blocked by: macOS sandbox
-   
+
 3. **HydraCam (Physical iPhone)** ⏳ PENDING
    - Device: `00008101-000A68811E43001E` (José Ramón's iPhone iOS 18.6)
    - Blocked by: macOS sandbox

@@ -4,8 +4,50 @@
 
 - Flutter SDK + Android SDK/NDK with at least one API 34 system image.
 - Python 3.9+ with standard library (script is dependency-free).
-- `adb` on PATH and emulator images already created (e.g., `Pixel_6_API_34`).
+- `adb` on PATH and emulator images already created (e.g., `Hydra_Master_API34`, `Hydra_SlaveA_API34`).
 - HydraCam APK built with automation flag: `flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true`.
+
+## 1.1 Fastest way to reboot the last known-good automation flow
+
+If you want to resume the previous emulator experiments from the safest default checkpoint, use the restart wrapper:
+
+```sh
+python3 scripts/reboot_automation_run.py \
+  --boot-hydra-cluster \
+  --cluster-size 3 \
+  --manifest automation_scenarios/quad_smoke_extended.json \
+  --scenario quad_smoke_extended
+```
+
+What it does:
+
+1. Builds the Android automation APK unless `--skip-build` is passed.
+2. Boots the standard Hydra emulator cluster when `--boot-hydra-cluster` is used.
+3. Installs the APK, grants camera/audio/location/media permissions, and launches 1 master + N slaves.
+4. Uses `preferredMasterIp=10.0.2.2` for emulator slaves and exposes the master's port `4040` via `adb forward`.
+5. Runs `scripts/multi_device_orchestrator.py` with the chosen manifest.
+6. Optionally shuts emulators back down with `--shutdown-emulators`.
+
+Useful variations:
+
+```sh
+# Preview the whole plan without touching emulators or adb
+python3 scripts/reboot_automation_run.py \
+  --serials emulator-5554,emulator-5556,emulator-5558 \
+  --dry-run
+
+# Reuse already-running devices and skip the APK rebuild
+python3 scripts/reboot_automation_run.py \
+  --serials emulator-5554,emulator-5556,emulator-5558 \
+  --skip-build \
+  --scenario quad_smoke_extended
+```
+
+Important notes:
+
+- Automation mode is enabled by the build-time dart define `HYDRACAM_AUTOMATION=true`; the launch intent only needs role-related extras.
+- The Android package in this repo is `com.amaia23.hydracam`.
+- The most recent successful artifact set in this workspace is `automation_runs/20251120_222427-quad_demo/`.
 
 ### Optional: Bootstrap four emulators from scratch
 
@@ -27,11 +69,11 @@ for name in Hydra_Master_API34 Hydra_SlaveA_API34 Hydra_SlaveB_API34 Hydra_Slave
     --sdcard 512M
 done
 
-# Launch each emulator on its own TCP port (headless example)
-"$SDK_ROOT"/emulator/emulator -avd Hydra_Master_API34 -port 5554 -no-snapshot -gpu swiftshader_indirect &
-"$SDK_ROOT"/emulator/emulator -avd Hydra_SlaveA_API34 -port 5556 -no-snapshot -gpu swiftshader_indirect &
-"$SDK_ROOT"/emulator/emulator -avd Hydra_SlaveB_API34 -port 5558 -no-snapshot -gpu swiftshader_indirect &
-"$SDK_ROOT"/emulator/emulator -avd Hydra_SlaveC_API34 -port 5560 -no-snapshot -gpu swiftshader_indirect &
+# Launch each emulator on its own TCP port and shared emulator network IP
+"$SDK_ROOT"/emulator/emulator -avd Hydra_Master_API34 -port 5554 -shared-net-id 11 -no-snapshot -gpu swiftshader_indirect &
+"$SDK_ROOT"/emulator/emulator -avd Hydra_SlaveA_API34 -port 5556 -shared-net-id 12 -no-snapshot -gpu swiftshader_indirect &
+"$SDK_ROOT"/emulator/emulator -avd Hydra_SlaveB_API34 -port 5558 -shared-net-id 13 -no-snapshot -gpu swiftshader_indirect &
+"$SDK_ROOT"/emulator/emulator -avd Hydra_SlaveC_API34 -port 5560 -shared-net-id 14 -no-snapshot -gpu swiftshader_indirect &
 
 # Pre-grant runtime permissions so automation isn't blocked by dialogs
 for serial in emulator-5554 emulator-5556 emulator-5558 emulator-5560; do
@@ -50,13 +92,45 @@ done
 
 After boot, install the automation APK on each device and launch the app with the right role extras (see Section 2).
 
+You can issue the same launch plan through the helper script:
+
+```sh
+python3 scripts/boot_and_verify_emulators.py --hydra-cluster --start
+```
+
+To boot the Hydra cluster, verify the shared `10.1.2.x` addresses, confirm
+the emulators can reach each other, and then shut them all back down:
+
+```sh
+python3 scripts/smoke_test_shared_network.py
+```
+
+If that smoke test fails with only `10.0.2.15` / `10.0.2.16` showing up, use
+host redirection instead of trying to force peer IPs. Android's emulator docs
+recommend exposing the master on a host port and having the other emulator(s)
+connect to `10.0.2.2:<host-port>`. For Hydra's automation build, the practical
+pattern is:
+
+```sh
+# Expose the master's WebSocket server on the host
+adb -s emulator-5554 forward tcp:4040 tcp:4040
+
+# Launch slaves with a fixed master IP on the emulator host alias
+adb -s emulator-5556 shell am start \
+  -n com.amaia23.hydracam/.MainActivity \
+  --es role slave --es preferredMasterIp 10.0.2.2 --ez forceSlaveMode true
+```
+
+This works with Hydra because `SlaveScreen` already supports `preferredMasterIp`
+when the app is built with `--dart-define=HYDRACAM_AUTOMATION=true`.
+
 ## 2. Launch Devices
 
 1. Start the emulators you need (first will become master by default):
 
     ```sh
-    $ANDROID_HOME/emulator/emulator -avd Pixel_6_API_34 -port 5554 -no-snapshot -camera-back virtualscene &
-    $ANDROID_HOME/emulator/emulator -avd Pixel_6_API_34 -port 5556 -no-snapshot -camera-back virtualscene &
+    $ANDROID_HOME/emulator/emulator -avd Pixel_6_API_34 -port 5554 -shared-net-id 11 -no-snapshot -camera-back virtualscene &
+    $ANDROID_HOME/emulator/emulator -avd Pixel_6_API_34 -port 5556 -shared-net-id 12 -no-snapshot -camera-back virtualscene &
     ```
 
 1. Install the automation build on each device:
@@ -70,17 +144,23 @@ After boot, install the automation APK on each device and launch the app with th
 
    ```sh
    adb -s emulator-5554 shell am start \
-     -n com.mobo.hydracam/.MainActivity \
-     --ez HYDRACAM_AUTOMATION true --es role master
+     -n com.amaia23.hydracam/.MainActivity \
+     --es role master
    adb -s emulator-5556 shell am start \
-     -n com.mobo.hydracam/.MainActivity \
-     --ez HYDRACAM_AUTOMATION true --es role slave
+     -n com.amaia23.hydracam/.MainActivity \
+     --es role slave \
+     --es preferredMasterIp 10.0.2.2 \
+     --ez forceSlaveMode true
    adb -s emulator-5558 shell am start \
-     -n com.mobo.hydracam/.MainActivity \
-     --ez HYDRACAM_AUTOMATION true --es role slave
+     -n com.amaia23.hydracam/.MainActivity \
+     --es role slave \
+     --es preferredMasterIp 10.0.2.2 \
+     --ez forceSlaveMode true
    adb -s emulator-5560 shell am start \
-     -n com.mobo.hydracam/.MainActivity \
-     --ez HYDRACAM_AUTOMATION true --es role slave
+     -n com.amaia23.hydracam/.MainActivity \
+     --es role slave \
+     --es preferredMasterIp 10.0.2.2 \
+     --ez forceSlaveMode true
    ```
 
 ## 3. Run the Orchestrator CLI

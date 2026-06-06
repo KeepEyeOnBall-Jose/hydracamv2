@@ -29,7 +29,7 @@ class HydraCamApiService {
     _instance._httpClient = http.Client();
   }
 
-  /// Obtiene las cabeceras comunes, incluyendo Authorization: Bearer <token>
+  /// Obtiene las cabeceras comunes, incluyendo `Authorization: Bearer <token>`.
   Future<Map<String, String>> _getHeaders() async {
     final token = await M2MAuthService().getToken();
     if (token == null) {

@@ -4,6 +4,7 @@ import "package:photo_manager/photo_manager.dart";
 import "log_service.dart";
 
 /// Handles saving photos and videos to the device gallery under the HydraCam album.
+// ignore: avoid_classes_with_only_static_members
 class GalleryPersistenceService {
   static const String _albumName = "HydraCam";
   static bool _hasPermission = false;

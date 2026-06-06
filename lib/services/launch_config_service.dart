@@ -49,11 +49,11 @@ class LaunchConfigService {
                 "forceSlaveMode=${result['forceSlaveMode']}");
 
         // Persist to SharedPreferences for future restarts
-        await prefs.setString('launch_role', result["role"] as String? ?? '');
+        await prefs.setString("launch_role", result["role"] as String? ?? "");
         await prefs.setString(
-            'launch_master_ip', result["preferredMasterIp"] as String? ?? '');
+            "launch_master_ip", result["preferredMasterIp"] as String? ?? "");
         await prefs.setBool(
-            'launch_force_slave', result["forceSlaveMode"] as bool? ?? false);
+            "launch_force_slave", result["forceSlaveMode"] as bool? ?? false);
 
         _cached = LaunchConfig(
           role: result["role"] as String?,
@@ -71,17 +71,17 @@ class LaunchConfigService {
     }
 
     // Fallback: load from SharedPreferences (persisted from previous launch)
-    final savedRole = prefs.getString('launch_role');
+    final savedRole = prefs.getString("launch_role");
     if (savedRole != null && savedRole.isNotEmpty) {
       LogService.instance
           .registerLog("Launch config from SharedPreferences: role=$savedRole, "
-              "preferredMasterIp=${prefs.getString('launch_master_ip')}, "
-              "forceSlaveMode=${prefs.getBool('launch_force_slave')}");
+              "preferredMasterIp=${prefs.getString("launch_master_ip")}, "
+              "forceSlaveMode=${prefs.getBool("launch_force_slave")}");
 
       _cached = LaunchConfig(
         role: savedRole,
-        preferredMasterIp: prefs.getString('launch_master_ip'),
-        forceSlaveMode: prefs.getBool('launch_force_slave') ?? false,
+        preferredMasterIp: prefs.getString("launch_master_ip"),
+        forceSlaveMode: prefs.getBool("launch_force_slave") ?? false,
       );
       return _cached;
     }

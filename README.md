@@ -1,5 +1,11 @@
 # HydraCam
 
+## Current Control Plane
+
+Current project status, roadmap, requirements, imported backlog, architecture,
+and test strategy live in `docs/control/README.md`. Older top-level status
+reports are historical snapshots and must not override the control docs.
+
 ## Overview
 HydraCam is a mobile application designed for multi-device camera synchronization, intended for sports events like squash or padel matches. It allows a master device to control multiple slave devices' cameras connected via a hotspot. The master device can send commands to start or stop camera recording or capture photos on the slave devices, making it useful for capturing different angles during a sports match.
 
@@ -46,8 +52,12 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 - **SlaveScreen** (`slave/slave_screen.dart`): The main screen on the slave devices that listens for incoming commands, shows camera status, and displays taken photos in a pop-up dialog.
 
 ## Photo and Video Management
-- *On Slave Devices*: Photos and videos are captured and temporarily stored in local storage. The binary data is sent to the master, and then cleared from memory to save resources.
-- *On Master Devices*: The master device organizes received media into sessions and saves them locally. Once the session ends, the media is uploaded to the MoBo API.
+- *On Slave Devices*: Photos and videos are captured and stored locally in the
+  current session. Each device queues its own captured media for upload; slaves
+  do not transfer large media files through the master.
+- *On Master Devices*: The master device coordinates the session and can also
+  capture its own media when configured to do so. Media upload remains
+  device-local through the upload queue.
 - **Media Storage**: Both photos and videos captured by slave devices are saved in the device gallery under a specific album named `HydraCam`. This ensures easy access to locally captured media for further use or review.
 
 ### Camera Singleton Integration
@@ -240,6 +250,5 @@ The theme is applied globally in `main.dart`, ensuring consistent visual styles 
 
 ### **Modifying Styles**
 To customize the app's appearance, you can update the properties in `app_theme.dart`. Changes to colors, fonts, or widget styles will automatically reflect throughout the app. For details, refer to the examples provided within `app_theme.dart`.
-
 
 

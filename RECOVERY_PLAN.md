@@ -1,5 +1,9 @@
 # HydraCam Recovery Plan — 2025-11-16
 
+> Historical snapshot. Current project status and roadmap live in
+> `docs/control/status-and-roadmap.md`. Use this file as recovery context only;
+> do not treat its status table as current without re-verification.
+
 ## 1. Current State Snapshot
 
 | Area | Status | Evidence / Notes |

@@ -11,7 +11,7 @@
 | Layer | Responsibility | Notes |
 | --- | --- | --- |
 | Orchestrator CLI (Python) | Spins up emulators/physical devices, applies roles, drives test scenarios, collects artifacts. | Lives under `scripts/multi_device_orchestrator.py`. Data-driven JSON manifest. |
-| Device Control Adapter | Communicates with each HydraCam instance via a MethodChannel bridge exposed only in automation builds. | Enables commands such as `start_session`, `take_photo`, `toggle_auto_upload`, `fetch_logs`. |
+| Device Control Adapter | Communicates with each HydraCam instance through the in-app HTTP automation bridge exposed only in automation builds. | Uses adb port-forward + `/healthz`, `/session`, `/settings`, and `/commands/*`. |
 | HydraCam App (Automation Hooks) | Responds to automation RPC calls by invoking existing services (SessionManager, MasterServer, etc.). | Guarded by `--dart-define=HYDRACAM_AUTOMATION=true` so production builds remain untouched. |
 | Backend Verifier | Uses HydraCam API to request artifacts for the recorded session(s) and re-download each file for byte comparison. | Reuses `HydraCamApiService` with injectable HTTP client + automation token override. |
 | Report Generator | Summarizes per-scenario status, device logs, backend verification, and media hashes. | Output as JSON + Markdown for humans/CI. |
@@ -24,11 +24,11 @@
 
    ```bash
    adb -s <serial> install build/app/outputs/flutter-apk/app-debug.apk
-   adb -s <serial> shell am start -n com.mobo.hydracam/.MainActivity \
-     --es role master --ez automation true --es preferredMasterIp 10.0.2.2
+   adb -s <serial> shell am start -n com.amaia23.hydracam/.MainActivity \
+     --es role master
    ```
 
-4. **Register** devices inside the orchestrator (wait until MethodChannel handshake confirms automation bridge is ready).
+4. **Register** devices inside the orchestrator (wait until the HTTP automation bridge reports `/healthz` ready).
 5. **Execute Scenario Manifest** (P1–P5, V1–V5, variations). For each scenario:
    - Set timers / flash / auto-upload settings through RPC.
    - Trigger commands (`start_session`, `take_photo`, `start_recording`, `stop_recording`).
@@ -39,7 +39,8 @@
 
 ## 4. Automation Hooks Required in App
 
-- `hydracam_automation` MethodChannel available only when compiled with `--dart-define=HYDRACAM_AUTOMATION=true`.
+- Lightweight HTTP automation bridge available only when compiled with `--dart-define=HYDRACAM_AUTOMATION=true`.
+- Android launch config still uses the `hydracamv2/launch_config` `MethodChannel`, but scenario control happens through the HTTP bridge.
 - Supported commands (initial pass):
   - `get_session_state` → returns guid, counts, pending uploads.
   - `set_setting` → toggles SharedPreferences-backed flags (auto-upload, timer duration, flash, etc.).
@@ -53,7 +54,7 @@
 ```text
 scripts/multi_device_orchestrator.py
 ├── EmulatorManager: create/start/stop, inject camera feed
-├── DeviceSession: wraps adb serial + MethodChannel proxy (via `flutter drive` VM service or `frida`-style channel)
+├── DeviceSession: wraps adb serial + HTTP bridge proxy over forwarded localhost ports
 ├── ScenarioRunner: loads YAML/JSON manifest and issues commands
 ├── BackendVerifier: queries HydraCam API and downloads assets
 └── Reporter: compiles JSON/Markdown summaries

@@ -101,7 +101,7 @@ def upload_via_ftp(video_files, ftp_host, ftp_port=2121, max_files=5):
 
         # Use curl on Android to upload to FTP
         ftp_url = f"ftp://{ftp_host}:{ftp_port}/{video['filename']}"
-        cmd = f'adb shell "curl -T \\"{video[\'path\\']}\\" \\"{ftp_url}\\" --user anonymous: 2>&1"'
+        cmd = f'adb shell "curl -T \\"{video["path"]}\\" \\"{ftp_url}\\" --user anonymous: 2>&1"'
 
         result = run_command(cmd, shell=True)
 
@@ -149,4 +149,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -1,8 +1,22 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+def hasReleaseKeystore =
+    keystorePropertiesFile.exists() &&
+    keystoreProperties["storeFile"] &&
+    file(keystoreProperties["storeFile"]).exists()
 
 android {
     namespace = "com.amaia23.hydracam"
@@ -26,14 +40,26 @@ android {
         applicationId = "com.amaia23.hydracam"
         minSdk = 21
         targetSdk = 35
-        versionCode = 16
-        versionName = "1.4.0"
+        versionCode = flutter.versionCode.toInteger()
+        versionName = flutter.versionName
         manifestPlaceholders["appAuthRedirectScheme"] = "com.hydracam"
+    }
+
+    signingConfigs {
+        release {
+            if (hasReleaseKeystore) {
+                keyAlias = keystoreProperties["keyAlias"]
+                keyPassword = keystoreProperties["keyPassword"]
+                storeFile = file(keystoreProperties["storeFile"])
+                storePassword = keystoreProperties["storePassword"]
+            }
+        }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.debug
+            // Use a real upload key when android/key.properties is present.
+            signingConfig = hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
         }
     }
 }

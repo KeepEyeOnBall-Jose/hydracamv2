@@ -1,5 +1,9 @@
 # ✅ FINAL STATUS: All Critical Issues Fixed
 
+> Historical snapshot. Current project status lives in
+> `docs/control/status-and-roadmap.md`. Treat this file as prior evidence only,
+> not as current proof that all critical issues are fixed.
+
 ## Date: November 15, 2025 - 01:52 AM
 
 ### Build & Test Status
@@ -14,10 +18,10 @@
 ### Critical Errors (FIXED)
 1. ✅ **network_info_service.dart** - ConnectivityResult type mismatch
    - Fixed: Updated to handle `List<ConnectivityResult>` from connectivity_plus package update
-   
+
 2. ✅ **storage_service.dart** - DiskSpacePlus static access error
    - Fixed: Changed from static access to instance method call
-   
+
 3. ✅ **camera_selection_screen.dart** - Missing CameraDescription import
    - Fixed: Added `import "package:camera/camera.dart";`
 
@@ -32,7 +36,7 @@
 ### Style Issues (FIXED)
 6. ✅ **Dangling library doc comments** - Fixed in 2 files
    - Added `library;` directive after doc comments
-   
+
 7. ✅ **Unnecessary toList()** - Fixed in session_details_screen.dart
    - Removed unnecessary `.toList()` in spread operator
 
@@ -46,7 +50,7 @@
 ```
 23 issues found:
 - 0 errors ✅
-- 0 warnings ✅  
+- 0 warnings ✅
 - 23 info messages (style suggestions only)
 ```
 
@@ -66,7 +70,7 @@
 
 ### Passing Tests (24)
 - ✅ Widget smoke test
-- ✅ Storage service tests  
+- ✅ Storage service tests
 - ✅ Camera service tests
 - ✅ Platform behavior tests
 - ✅ Session manager lifecycle tests (partial)
@@ -150,7 +154,7 @@ flutter run -d ios
 - Replaced print() with LogService
 - Upgraded Gradle and Android SDK
 
-### Session 2 (This Round)  
+### Session 2 (This Round)
 - Fixed connectivity_plus API change
 - Fixed DiskSpacePlus API usage
 - Added missing camera import
@@ -216,4 +220,3 @@ flutter run
 ```
 
 All checks pass! ✅
-

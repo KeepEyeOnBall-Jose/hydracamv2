@@ -2,7 +2,74 @@ import os
 import subprocess
 import logging
 import time
+from dataclasses import dataclass
 from typing import List
+
+
+@dataclass(frozen=True)
+class EmulatorLaunchSpec:
+    avd_name: str
+    port: int
+    shared_net_id: int | None = None
+    read_only: bool = False
+
+
+HYDRA_CLUSTER_AVDS = (
+    "Hydra_Master_API34",
+    "Hydra_SlaveA_API34",
+    "Hydra_SlaveB_API34",
+    "Hydra_SlaveC_API34",
+)
+
+
+def hydra_cluster_specs(
+    start_port: int = 5554,
+    start_shared_net_id: int = 11,
+) -> List[EmulatorLaunchSpec]:
+    """Return launch specs for the standard Hydra 4-emulator cluster."""
+    specs: List[EmulatorLaunchSpec] = []
+    for index, avd_name in enumerate(HYDRA_CLUSTER_AVDS):
+        specs.append(
+            EmulatorLaunchSpec(
+                avd_name=avd_name,
+                port=start_port + index * 2,
+                shared_net_id=start_shared_net_id + index,
+            )
+        )
+    return specs
+
+
+def parse_emulator_spec(spec_text: str) -> EmulatorLaunchSpec:
+    """Parse AVD:PORT[:SHARED_NET_ID] into an EmulatorLaunchSpec."""
+    parts = spec_text.split(":")
+    if len(parts) not in (2, 3):
+        raise ValueError(
+            f"Invalid emulator spec '{spec_text}'. Expected AVD:PORT[:SHARED_NET_ID]."
+        )
+
+    avd_name = parts[0].strip()
+    if not avd_name:
+        raise ValueError("AVD name cannot be empty")
+
+    try:
+        port = int(parts[1])
+    except ValueError as exc:
+        raise ValueError(f"Invalid emulator port in '{spec_text}'") from exc
+
+    shared_net_id = None
+    if len(parts) == 3 and parts[2].strip():
+        try:
+            shared_net_id = int(parts[2])
+        except ValueError as exc:
+            raise ValueError(
+                f"Invalid shared network id in '{spec_text}'"
+            ) from exc
+
+    return EmulatorLaunchSpec(
+        avd_name=avd_name,
+        port=port,
+        shared_net_id=shared_net_id,
+    )
 
 
 class EmulatorManager:
@@ -11,7 +78,13 @@ class EmulatorManager:
         os.makedirs(self.log_dir, exist_ok=True)
         logging.basicConfig(level=logging.INFO)
 
-    def start_emulator(self, avd_name, port, read_only: bool = False):
+    def start_emulator(
+        self,
+        avd_name,
+        port,
+        read_only: bool = False,
+        shared_net_id: int | None = None,
+    ):
         """
         Starts an Android emulator with the specified AVD name and port.
         Logs output to a project-specific log file instead of /tmp.
@@ -30,6 +103,9 @@ class EmulatorManager:
         if read_only:
             command.append("-read-only")
 
+        if shared_net_id is not None:
+            command += ["-shared-net-id", str(shared_net_id)]
+
         # continue with GPU selection
         command += [
             "-gpu",
@@ -42,27 +118,54 @@ class EmulatorManager:
                 command, stdout=logfile, stderr=subprocess.STDOUT
             )
 
-        logging.info(
-            "Started emulator %s on port %s. Logs: %s", avd_name, port, log_file
-        )
+        if shared_net_id is None:
+            logging.info(
+                "Started emulator %s on port %s. Logs: %s",
+                avd_name,
+                port,
+                log_file,
+            )
+        else:
+            logging.info(
+                "Started emulator %s on port %s with shared net id %s "
+                "(secondary IP 10.1.2.%s). Logs: %s",
+                avd_name,
+                port,
+                shared_net_id,
+                shared_net_id,
+                log_file,
+            )
         return process
 
-    def start_n_emulators(
+    def _wait_for_emulator(
+        self,
+        device_id: str,
+        per_instance_timeout: int,
+        per_instance_interval: float,
+    ) -> None:
+        deadline = time.time() + float(per_instance_timeout)
+        while time.time() < deadline:
+            ids = self.list_android_emulators()
+            if device_id in ids:
+                logging.info("Emulator %s appeared in adb", device_id)
+                return
+            time.sleep(per_instance_interval)
+
+        logging.warning(
+            "Emulator %s did not appear in adb after %ds",
+            device_id,
+            per_instance_timeout,
+        )
+
+    def build_n_emulator_specs(
         self,
         avd_name_base: str,
         n: int,
         start_port: int = 5554,
-        wait_per_instance: bool = True,
-        per_instance_timeout: int = 90,
-        per_instance_interval: float = 2.0,
-    ) -> List[subprocess.Popen]:
-        """
-        Start `n` emulators using `avd_name_base` as the base AVD name.
-        AVD names will be constructed as `{avd_name_base}_{i}` if `n>1`.
-        Ports will increment by 2 (emulator uses even/odd pair scheme).
-        Returns list of Popen objects for the started processes.
-        """
-        procs = []
+        shared_net_id_start: int | None = None,
+    ) -> List[EmulatorLaunchSpec]:
+        """Build N emulator launch specs from a shared base AVD name."""
+        specs: List[EmulatorLaunchSpec] = []
         for i in range(n):
             # If caller provided a placeholder, use it (e.g. 'Pixel_7_{i}').
             # Otherwise reuse the same AVD name for each instance which is
@@ -81,30 +184,77 @@ class EmulatorManager:
                         avd_name,
                     )
 
-            port = start_port + i * 2
-            proc = self.start_emulator(avd_name, port, read_only=read_only)
+            shared_net_id = None
+            if shared_net_id_start is not None:
+                shared_net_id = shared_net_id_start + i
+
+            specs.append(
+                EmulatorLaunchSpec(
+                    avd_name=avd_name,
+                    port=start_port + i * 2,
+                    shared_net_id=shared_net_id,
+                    read_only=read_only,
+                )
+            )
+        return specs
+
+    def start_emulator_specs(
+        self,
+        specs: List[EmulatorLaunchSpec],
+        wait_per_instance: bool = True,
+        per_instance_timeout: int = 90,
+        per_instance_interval: float = 2.0,
+    ) -> List[subprocess.Popen]:
+        """Start emulators from explicit launch specs."""
+        procs: List[subprocess.Popen] = []
+        for spec in specs:
+            proc = self.start_emulator(
+                spec.avd_name,
+                spec.port,
+                read_only=spec.read_only,
+                shared_net_id=spec.shared_net_id,
+            )
             procs.append(proc)
 
             # give emulator a small stagger to avoid ADB race conditions
             time.sleep(1.0)
 
-            # Optionally wait until the emulator shows up in `adb devices`
             if wait_per_instance:
-                device_id = f"emulator-{port}"
-                deadline = time.time() + float(per_instance_timeout)
-                while time.time() < deadline:
-                    ids = self.list_android_emulators()
-                    if device_id in ids:
-                        logging.info("Emulator %s appeared in adb", device_id)
-                        break
-                    time.sleep(per_instance_interval)
-                else:
-                    logging.warning(
-                        "Emulator %s did not appear in adb after %ds",
-                        device_id,
-                        per_instance_timeout,
-                    )
+                self._wait_for_emulator(
+                    f"emulator-{spec.port}",
+                    per_instance_timeout,
+                    per_instance_interval,
+                )
         return procs
+
+    def start_n_emulators(
+        self,
+        avd_name_base: str,
+        n: int,
+        start_port: int = 5554,
+        shared_net_id_start: int | None = None,
+        wait_per_instance: bool = True,
+        per_instance_timeout: int = 90,
+        per_instance_interval: float = 2.0,
+    ) -> List[subprocess.Popen]:
+        """
+        Start `n` emulators using `avd_name_base` as the base AVD name.
+        AVD names will be constructed as `{avd_name_base}_{i}` if `n>1`.
+        Ports will increment by 2 (emulator uses even/odd pair scheme).
+        Returns list of Popen objects for the started processes.
+        """
+        specs = self.build_n_emulator_specs(
+            avd_name_base,
+            n,
+            start_port=start_port,
+            shared_net_id_start=shared_net_id_start,
+        )
+        return self.start_emulator_specs(
+            specs,
+            wait_per_instance=wait_per_instance,
+            per_instance_timeout=per_instance_timeout,
+            per_instance_interval=per_instance_interval,
+        )
 
     def list_android_emulators(self) -> List[str]:
         """Return list of Android emulator device ids (e.g. emulator-5554)."""
@@ -163,9 +313,10 @@ class EmulatorManager:
         ios_booted = False
         try:
             out = subprocess.check_output(
-                ["xcrun", "simctl", "list", "booted"], encoding="utf-8"
+                ["xcrun", "simctl", "list", "devices", "booted"],
+                encoding="utf-8",
             )
-            ios_booted = bool(out.strip())
+            ios_booted = "(Booted)" in out
         except Exception:
             ios_booted = False
 

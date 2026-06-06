@@ -1,34 +1,87 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+require "shellwords"
 
 default_platform(:ios)
 
+REPO_ROOT = File.expand_path("../..", __dir__)
+IPA_GLOB = File.join(REPO_ROOT, "build/ios/ipa/*.ipa")
+
+def flutter_bin
+  ENV["FLUTTER_BIN"] || "flutter"
+end
+
+def flutter_build_flags
+  flags = []
+  flags += ["--build-name", ENV["BUILD_NAME"]] unless ENV["BUILD_NAME"].to_s.empty?
+  flags += ["--build-number", ENV["BUILD_NUMBER"]] unless ENV["BUILD_NUMBER"].to_s.empty?
+  flags
+end
+
+def build_release_ipa
+  command = [
+    flutter_bin,
+    "build",
+    "ipa",
+    "--release",
+    "--export-method",
+    "app-store"
+  ] + flutter_build_flags
+
+  sh("cd #{Shellwords.escape(REPO_ROOT)} && #{Shellwords.join(command)}")
+end
+
+def latest_ipa
+  ipa = Dir[IPA_GLOB].max_by { |path| File.mtime(path) }
+  UI.user_error!("No IPA found in #{IPA_GLOB}") unless ipa
+  ipa
+end
+
+def app_store_connect_options
+  api_key_path = ENV["APP_STORE_CONNECT_API_KEY_PATH"]
+  return {} if api_key_path.to_s.empty?
+
+  { api_key_path: api_key_path }
+end
+
 platform :ios do
-  desc "Push a new beta build to TestFlight"
+  desc "Build the release IPA for App Store Connect"
+  lane :build_store do
+    build_release_ipa
+  end
+
+  desc "Upload a new beta build to TestFlight"
   lane :beta do
-    build_app(
-      workspace: "Runner.xcworkspace",
-      scheme: "Runner",
-      configuration: "Release",
-      export_method: "development",
-      skip_codesigning: true,
-      build_path: "./build",
-      archive_path: "./build/Runner.xcarchive"
+    build_release_ipa
+
+    groups = ENV["TESTFLIGHT_GROUPS"].to_s
+      .split(",")
+      .map(&:strip)
+      .reject(&:empty?)
+
+    options = app_store_connect_options.merge(
+      ipa: latest_ipa,
+      changelog: ENV["TESTFLIGHT_CHANGELOG"],
+      skip_waiting_for_build_processing: false
+    )
+
+    if ENV["TESTFLIGHT_DISTRIBUTE_EXTERNAL"] == "true"
+      options[:distribute_external] = true
+      options[:groups] = groups unless groups.empty?
+    end
+
+    upload_to_testflight(options)
+  end
+
+  desc "Upload the latest local IPA to TestFlight without rebuilding"
+  lane :upload_latest_beta do
+    upload_to_testflight(
+      app_store_connect_options.merge(
+        ipa: latest_ipa,
+        changelog: ENV["TESTFLIGHT_CHANGELOG"],
+        skip_waiting_for_build_processing: false
+      )
     )
   end
-  
+
   desc "Build for physical device"
   lane :device do
     build_app(

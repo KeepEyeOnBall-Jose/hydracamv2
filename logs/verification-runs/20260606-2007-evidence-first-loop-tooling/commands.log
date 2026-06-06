@@ -1,0 +1,207 @@
+# HydraCam evidence run command log
+
+$ python3 -m unittest scripts/test_evidence_pack.py
+
+$ flutter analyze --no-pub
+
+[stderr]
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.403s
+
+OK
+[exit-code] 0
+Analyzing hydracamv2...                                         
+No issues found! (ran in 4.1s)
+[exit-code] 0
+
+$ flutter test --no-pub integration_test/platform_test.dart -d 5CF4A12E-A8B5-4285-AE86-407B9067CB5F
+00:00 +0: loading /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart
+Updating minimum iOS deployment target to 13.0.
+Upgrading project.pbxproj
+Upgrading AppFrameworkInfo.plist
+Upgrading Podfile
+Adding Swift Package Manager integration...                        34.1s
+Finished migration to UIScene lifecycle. See https://flutter.dev/to/uiscene-migration for details.
+Running pod install...                                             864ms
+Running Xcode build...                                          
+Xcode build done.                                           45.8s
+00:00 +0: Platform Launch Tests App launches successfully on current platform
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TypeWidgetFinder:<Found 0 widgets with type "MaterialApp": []>
+   Which: means none were found but one was expected
+MaterialApp should be present
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/integration_test/platform_test.dart:38:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/jose/src/work/hydracamv2/integration_test/platform_test.dart line 38
+The test description was:
+  App launches successfully on current platform
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +0 -1: Platform Launch Tests App launches successfully on current platform [E]
+  Test failed. See exception logs above.
+  The test description was: App launches successfully on current platform
+  
+00:05 +0 -1: Platform Launch Tests App shows SlaveScreen in auto mode
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following PlatformException was thrown running a test:
+PlatformException(ERROR_ALREADY_REQUESTING_PERMISSIONS, A request for permissions is already
+running, please wait for it to finish before doing another request (note that you can request
+multiple permissions at the same time)., null, null)
+
+When the exception was thrown, this was the stack:
+#0      StandardMethodCodec.decodeEnvelope (package:flutter/src/services/message_codecs.dart:653:7)
+#1      MethodChannel._invokeMethod (package:flutter/src/services/platform_channel.dart:366:18)
+<asynchronous suspension>
+#2      MethodChannelPermissionHandler.requestPermissions (package:permission_handler_platform_interface/src/method_channel/method_channel_permission_handler.dart:80:9)
+<asynchronous suspension>
+#3      PermissionService.requestAllPermissions (package:hydracam/services/permission_service.dart:15:22)
+<asynchronous suspension>
+#4      main (package:hydracam/main.dart:29:7)
+<asynchronous suspension>
+
+The test description was:
+  App shows SlaveScreen in auto mode
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +0 -2: Platform Launch Tests App shows SlaveScreen in auto mode [E]
+  Test failed. See exception logs above.
+  The test description was: App shows SlaveScreen in auto mode
+  
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3081 pos 12: '_pendingFrame == null': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3081:12                                                                          LiveTestWidgetsFlutterBinding.postTest
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+00:05 +0 -2: Platform Launch Tests Services initialize correctly
+00:05 +0 -3: Platform Launch Tests Services initialize correctly [E]
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3056 pos 12: '!inTest': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3056:12                                                                          LiveTestWidgetsFlutterBinding.runTest
+  package:integration_test/integration_test.dart 237:17                                                                  IntegrationTestWidgetsFlutterBinding.runTest
+  package:flutter_test/src/widget_tester.dart 184:24                                                                     testWidgets.<fn>
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3081 pos 12: '_pendingFrame == null': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3081:12                                                                          LiveTestWidgetsFlutterBinding.postTest
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+00:05 +0 -3: Platform Launch Tests Platform-specific checks
+00:05 +0 -4: Platform Launch Tests Platform-specific checks [E]
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3056 pos 12: '!inTest': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3056:12                                                                          LiveTestWidgetsFlutterBinding.runTest
+  package:integration_test/integration_test.dart 237:17                                                                  IntegrationTestWidgetsFlutterBinding.runTest
+  package:flutter_test/src/widget_tester.dart 184:24                                                                     testWidgets.<fn>
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3081 pos 12: '_pendingFrame == null': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3081:12                                                                          LiveTestWidgetsFlutterBinding.postTest
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+00:05 +0 -4: Master Mode Tests Can switch to Master mode
+00:05 +0 -5: Master Mode Tests Can switch to Master mode [E]
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3056 pos 12: '!inTest': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3056:12                                                                          LiveTestWidgetsFlutterBinding.runTest
+  package:integration_test/integration_test.dart 237:17                                                                  IntegrationTestWidgetsFlutterBinding.runTest
+  package:flutter_test/src/widget_tester.dart 184:24                                                                     testWidgets.<fn>
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+  'package:flutter_test/src/binding.dart': Failed assertion: line 3081 pos 12: '_pendingFrame == null': is not true.
+  dart:core                                                                                                              _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 3081:12                                                                          LiveTestWidgetsFlutterBinding.postTest
+  ===== asynchronous gap ===========================
+  package:stream_channel                                                                                                 _GuaranteeSink.add
+  var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/flutter_tools.vrNSuD/flutter_test_listener.wuO01M/listener.dart 56:22  main.<fn>
+  
+00:05 +0 -5: (tearDownAll)
+00:05 +0 -5: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart: Master Mode Tests Can switch to Master mode
+  /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart: Platform Launch Tests App launches successfully on current platform
+  /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart: Platform Launch Tests App shows SlaveScreen in auto mode
+  /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart: Platform Launch Tests Platform-specific checks
+  /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart: Platform Launch Tests Services initialize correctly
+[exit-code] 1
+
+$ xcrun simctl io 5CF4A12E-A8B5-4285-AE86-407B9067CB5F screenshot --type=png logs/verification-runs/20260606-2007-evidence-first-loop-tooling/screenshots/ios-simulator-after-platform-test.png
+
+$ sh -c xcrun simctl spawn 5CF4A12E-A8B5-4285-AE86-407B9067CB5F log show --style compact --last 10m > logs/verification-runs/20260606-2007-evidence-first-loop-tooling/device-logs/ios-simulator-last-10m.log
+
+$ sh -c xcrun simctl io 5CF4A12E-A8B5-4285-AE86-407B9067CB5F recordVideo --codec=h264 --force logs/verification-runs/20260606-2007-evidence-first-loop-tooling/video/ios-simulator-after-platform-test.mp4 & pid=$!; sleep 8; kill -INT $pid; wait $pid || true; test -s logs/verification-runs/20260606-2007-evidence-first-loop-tooling/video/ios-simulator-after-platform-test.mp4
+
+[stderr]
+Note: No display specified. Defaulting to display: 92508712-B9F6-4BED-936E-2DEC2C5833E0 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/jose/src/work/hydracamv2/logs/verification-runs/20260606-2007-evidence-first-loop-tooling/screenshots/ios-simulator-after-platform-test.png
+[exit-code] 0
+
+[stderr]
+getpwuid_r did not find a match for uid 501
+[exit-code] 0
+Recording completed. Writing to disk.
+
+Wrote video to: /Users/jose/src/work/hydracamv2/logs/verification-runs/20260606-2007-evidence-first-loop-tooling/video/ios-simulator-after-platform-test.mp4
+
+[stderr]
+Note: No display specified. Defaulting to display: 92508712-B9F6-4BED-936E-2DEC2C5833E0 (screenID: 1, name: LCD)
+Recording started
+[exit-code] 0
+
+$ python3 -m unittest scripts/test_evidence_pack.py
+
+[stderr]
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.423s
+
+OK
+[exit-code] 0
+
+$ xcrun simctl io 5CF4A12E-A8B5-4285-AE86-407B9067CB5F screenshot --type=png logs/verification-runs/20260606-2007-evidence-first-loop-tooling/screenshots/ios-simulator-after-platform-test.png
+
+[stderr]
+Note: No display specified. Defaulting to display: 92508712-B9F6-4BED-936E-2DEC2C5833E0 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/jose/src/work/hydracamv2/logs/verification-runs/20260606-2007-evidence-first-loop-tooling/screenshots/ios-simulator-after-platform-test.png
+[exit-code] 0
+
+$ sh -c xcrun simctl spawn 5CF4A12E-A8B5-4285-AE86-407B9067CB5F log show --style compact --last 10m > logs/verification-runs/20260606-2007-evidence-first-loop-tooling/device-logs/ios-simulator-last-10m.log
+
+[stderr]
+getpwuid_r did not find a match for uid 501
+[exit-code] 0
+
+$ sh -c xcrun simctl io 5CF4A12E-A8B5-4285-AE86-407B9067CB5F recordVideo --codec=h264 --force logs/verification-runs/20260606-2007-evidence-first-loop-tooling/video/ios-simulator-after-platform-test.mp4 & pid=$!; sleep 8; kill -INT $pid; wait $pid || true; test -s logs/verification-runs/20260606-2007-evidence-first-loop-tooling/video/ios-simulator-after-platform-test.mp4
+Recording completed. Writing to disk.
+
+Wrote video to: /Users/jose/src/work/hydracamv2/logs/verification-runs/20260606-2007-evidence-first-loop-tooling/video/ios-simulator-after-platform-test.mp4
+
+[stderr]
+Note: No display specified. Defaulting to display: 92508712-B9F6-4BED-936E-2DEC2C5833E0 (screenID: 1, name: LCD)
+Recording started
+[exit-code] 0

@@ -1,5 +1,9 @@
 # Quick Start - HydraCam Multi-Platform Development
 
+> Historical quick-start snapshot. Current project status and release blockers
+> live in `docs/control/status-and-roadmap.md`. Verify commands on the current
+> checkout before treating any "working" state here as current.
+
 ## ✅ Working Now
 
 ### Android Emulator

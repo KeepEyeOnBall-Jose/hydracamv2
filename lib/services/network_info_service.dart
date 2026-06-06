@@ -3,6 +3,7 @@ import "package:network_info_plus/network_info_plus.dart";
 import "package:connectivity_plus/connectivity_plus.dart";
 import "log_service.dart";
 
+// ignore: avoid_classes_with_only_static_members
 class NetworkInfoService {
   static final NetworkInfo _networkInfo = NetworkInfo();
   static final Connectivity _connectivity = Connectivity();
@@ -53,7 +54,8 @@ class NetworkInfoService {
         return ssid != null ? "Wi-Fi ($ssid)" : "Wi-Fi (Unknown)";
       } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
         return "Mobile Data";
-      } else if (connectivityResults.contains(ConnectivityResult.none) || connectivityResults.isEmpty) {
+      } else if (connectivityResults.contains(ConnectivityResult.none) ||
+          connectivityResults.isEmpty) {
         return "No Connection";
       } else {
         return "Connected";

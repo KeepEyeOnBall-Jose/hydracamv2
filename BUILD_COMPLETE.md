@@ -1,10 +1,14 @@
 # ✅ HydraCam - FINAL BUILD COMPLETE
 
+> Historical snapshot. Current build/release status lives in
+> `docs/control/status-and-roadmap.md`. Re-run analyzer, tests, and device smoke
+> checks before relying on any "ready" claim in this file.
+
 ## Status: November 15, 2025 - READY FOR DEPLOYMENT
 
 ### Build Status
 - ✅ **Flutter Analyze**: 0 issues (VERIFIED)
-- ✅ **Android Build**: SUCCESS  
+- ✅ **Android Build**: SUCCESS
 - ✅ **iOS Build**: Ready (requires Xcode)
 - ✅ **Tests**: Passing (19 passed, minor file I/O issues expected in unit tests)
 - ✅ **Gradle**: Upgraded to 8.10.2
@@ -137,7 +141,7 @@ Once deployed, verify these features work:
 android {
     compileSdk 35
     namespace "com.amaia23.hydracam"
-    
+
     defaultConfig {
         applicationId "com.amaia23.hydracam"
         minSdkVersion 21
@@ -276,4 +280,3 @@ flutter run
 ```
 
 **The app is READY for real-world testing!** 🚀
-

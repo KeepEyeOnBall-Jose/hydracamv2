@@ -45,6 +45,10 @@ class MasterScreenState extends State<MasterScreen> {
 
   int connectedClients = 0; // To display connected clients count
   bool isRecording = false;
+  bool get _recordingActive =>
+      isRecording ||
+      _server.cameraService.isRecording ||
+      (_server.cameraService.controller?.value.isRecordingVideo ?? false);
   bool _isRecordingTransitioning =
       false; // Track if recording state is changing
   // String? sessionGuid; // Store the session GUID from the API (Now from Session Manager)
@@ -101,7 +105,7 @@ class MasterScreenState extends State<MasterScreen> {
     if (automationEnabled) {
       _registerAutomationHandlers();
       // Register callback for automation bridge to get recording state
-      AutomationBridge.instance.getRecordingState = () => isRecording;
+      AutomationBridge.instance.getRecordingState = () => _recordingActive;
     }
   }
 
@@ -144,6 +148,7 @@ class MasterScreenState extends State<MasterScreen> {
   Future<void> _toggleRecording({
     bool showCountdown = true,
     bool suppressSnackbars = false,
+    bool showPreview = true,
   }) async {
     if (StorageService.instance.isRecordingBlocked) {
       if (!suppressSnackbars) {
@@ -169,23 +174,23 @@ class MasterScreenState extends State<MasterScreen> {
       return;
     }
 
-    LogService.instance
-        .registerLog("PRESSED TOGGLE RECORDING. IS RECORDING = $isRecording");
+    LogService.instance.registerLog(
+        "PRESSED TOGGLE RECORDING. IS RECORDING = $_recordingActive");
 
     final timerDuration = await SettingsService.getTimerDuration();
     final DateTime scheduledTime =
         DateTime.now().add(Duration(seconds: timerDuration));
     final String command =
-        isRecording ? "stopRecordingVideo" : "startRecordingVideo";
+        _recordingActive ? "stopRecordingVideo" : "startRecordingVideo";
 
-    final currentContext = context;
-    if (showCountdown && mounted) {
+    if (!mounted) return;
+    if (showCountdown) {
       showDialog(
-        context: currentContext,
+        context: context,
         barrierDismissible: false,
         builder: (_) => AnimatedCountdownTimer(
           duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-          onComplete: () => Navigator.of(currentContext).pop(),
+          onComplete: () => Navigator.of(context).pop(),
         ),
       );
     }
@@ -195,7 +200,7 @@ class MasterScreenState extends State<MasterScreen> {
 
     if (!mounted) return;
 
-    if (isRecording) {
+    if (_recordingActive) {
       if (await SettingsService.getMasterShouldRecord()) {
         await _stopMasterRecordingVideo();
       } else {
@@ -205,7 +210,7 @@ class MasterScreenState extends State<MasterScreen> {
       }
     } else {
       if (await SettingsService.getMasterShouldRecord()) {
-        await _startMasterRecordingVideo();
+        await _startMasterRecordingVideo(showPreview: showPreview);
       } else {
         setState(() {
           isRecording = true;
@@ -225,22 +230,26 @@ class MasterScreenState extends State<MasterScreen> {
       waitCount++;
     }
 
-    if (shouldRecord == isRecording) {
+    if (shouldRecord == _recordingActive) {
       return;
     }
 
     _isRecordingTransitioning = true;
     try {
-      await _toggleRecording(showCountdown: false, suppressSnackbars: true);
+      await _toggleRecording(
+        showCountdown: false,
+        suppressSnackbars: true,
+        showPreview: false,
+      );
 
       // Wait for recording state to actually change (with timeout)
       waitCount = 0;
-      while (isRecording != shouldRecord && waitCount < 300) {
+      while (_recordingActive != shouldRecord && waitCount < 300) {
         await Future.delayed(const Duration(milliseconds: 100));
         waitCount++;
       }
 
-      if (isRecording != shouldRecord) {
+      if (_recordingActive != shouldRecord) {
         LogService.instance.registerLog(
             "Warning: Recording state did not change to $shouldRecord after 30s");
       }
@@ -292,11 +301,18 @@ class MasterScreenState extends State<MasterScreen> {
     _automationHandlers.addAll(handlers);
   }
 
-  Future<void> _startMasterRecordingVideo() async {
+  Future<void> _startMasterRecordingVideo({bool showPreview = true}) async {
     LogService.instance.registerLog("Will record from master and show preview");
     await _server.cameraService.startRecordingVideo();
-    // Show camera preview overlay
-    _showMasterVideoPreview();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      isRecording = true;
+    });
+    if (showPreview) {
+      _showMasterVideoPreview();
+    }
   }
 
   Future<CapturedVideo> _stopMasterRecordingVideo() async {
@@ -376,7 +392,8 @@ class MasterScreenState extends State<MasterScreen> {
       final DateTime scheduledTime =
           DateTime.now().add(Duration(seconds: timerDuration));
 
-      if (showCountdown && mounted) {
+      if (!mounted) return;
+      if (showCountdown) {
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -414,7 +431,8 @@ class MasterScreenState extends State<MasterScreen> {
         }
       }
 
-      if (!suppressSnackbars && context.mounted) {
+      if (!mounted) return;
+      if (!suppressSnackbars) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
@@ -539,7 +557,7 @@ class MasterScreenState extends State<MasterScreen> {
     if (isProcessingEndSession) return;
 
     // If recording is active, stop and save video first
-    if (isRecording) {
+    if (_recordingActive) {
       LogService.instance
           .registerLog("Stopping active recording before ending session");
       try {
@@ -556,6 +574,7 @@ class MasterScreenState extends State<MasterScreen> {
       }
     }
 
+    if (!mounted) return;
     setState(() {
       isProcessingEndSession = true;
     });
@@ -602,8 +621,9 @@ class MasterScreenState extends State<MasterScreen> {
 
         if (success) {
           await _server.endCurrentSession();
+          if (!mounted) return;
           setState(() {});
-          if (!suppressSnackbars && context.mounted) {
+          if (!suppressSnackbars) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Capture session ended")),
             );
@@ -795,9 +815,10 @@ class MasterScreenState extends State<MasterScreen> {
             onPressed:
                 sessionGuid != null ? _handleToggleRecordingButton : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: isRecording ? Colors.red : Colors.green,
+              backgroundColor: _recordingActive ? Colors.red : Colors.green,
             ),
-            child: Text(isRecording ? "Stop Recording" : "Start Recording"),
+            child:
+                Text(_recordingActive ? "Stop Recording" : "Start Recording"),
           ),
         ),
         SizedBox(height: buttonDistance),
@@ -821,7 +842,7 @@ class MasterScreenState extends State<MasterScreen> {
         SizedBox(height: buttonDistance),
         SizedBox(
           width: buttonWidth,
-          child: AddGalleryMediaButton(enabled: !isRecording),
+          child: AddGalleryMediaButton(enabled: !_recordingActive),
         ),
       ],
     );
@@ -890,7 +911,7 @@ class MasterScreenState extends State<MasterScreen> {
     return PopScope(
       canPop: false, // We handle back navigation ourselves
       onPopInvokedWithResult: (didPop, result) {
-        if (isRecording) return; // Ignore back while recording
+        if (_recordingActive) return; // Ignore back while recording
 
         // Handle the back button press
         _server.stopServer();

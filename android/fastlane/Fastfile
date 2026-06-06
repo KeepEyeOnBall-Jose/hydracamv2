@@ -1,0 +1,85 @@
+require "shellwords"
+
+default_platform(:android)
+
+REPO_ROOT = File.expand_path("../..", __dir__)
+AAB_PATH = File.join(
+  REPO_ROOT,
+  "build/app/outputs/bundle/release/app-release.aab"
+)
+
+def flutter_bin
+  ENV["FLUTTER_BIN"] || "flutter"
+end
+
+def flutter_build_flags
+  flags = []
+  flags += ["--build-name", ENV["BUILD_NAME"]] unless ENV["BUILD_NAME"].to_s.empty?
+  flags += ["--build-number", ENV["BUILD_NUMBER"]] unless ENV["BUILD_NUMBER"].to_s.empty?
+  flags
+end
+
+def build_release_aab
+  command = [
+    flutter_bin,
+    "build",
+    "appbundle",
+    "--release"
+  ] + flutter_build_flags
+
+  sh("cd #{Shellwords.escape(REPO_ROOT)} && #{Shellwords.join(command)}")
+end
+
+def play_upload_options(track)
+  options = {
+    track: track,
+    aab: AAB_PATH,
+    skip_upload_metadata: true,
+    skip_upload_changelogs: false,
+    skip_upload_images: true,
+    skip_upload_screenshots: true
+  }
+
+  json_key = ENV["GOOGLE_PLAY_JSON_KEY"]
+  options[:json_key] = json_key unless json_key.to_s.empty?
+
+  options
+end
+
+platform :android do
+  desc "Build the release Android App Bundle"
+  lane :build_store do
+    build_release_aab
+  end
+
+  desc "Upload a build to Google Play Internal testing"
+  lane :internal do
+    build_release_aab
+    upload_to_play_store(
+      play_upload_options("internal").merge(
+        release_status: "completed"
+      )
+    )
+  end
+
+  desc "Upload a build to a Google Play closed testing track"
+  lane :closed_beta do
+    build_release_aab
+    track = ENV["PLAY_CLOSED_TRACK"].to_s.empty? ? "beta" : ENV["PLAY_CLOSED_TRACK"]
+    upload_to_play_store(
+      play_upload_options(track).merge(
+        release_status: "completed"
+      )
+    )
+  end
+
+  desc "Upload a production draft to Google Play"
+  lane :production_draft do
+    build_release_aab
+    upload_to_play_store(
+      play_upload_options("production").merge(
+        release_status: "draft"
+      )
+    )
+  end
+end

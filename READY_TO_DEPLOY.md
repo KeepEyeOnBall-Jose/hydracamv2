@@ -1,5 +1,9 @@
 # ✅ HydraCam - READY FOR ANDROID & iOS DEPLOYMENT
 
+> Historical snapshot. Current release blockers live in
+> `docs/control/status-and-roadmap.md` and `DISTRIBUTION_RUNBOOK.md`. Do not use
+> this file as proof that the app is currently ready for production deployment.
+
 ## Final Status (November 15, 2025)
 
 ### Code Quality: ✅ PERFECT
@@ -244,4 +248,3 @@ flutter run
 ```
 
 Good luck! 🚀
-

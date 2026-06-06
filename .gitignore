@@ -54,12 +54,18 @@ devtools_options.yaml
 android/app/build/
 android/.gradle/
 android/app/.cxx/
+android/key.properties
+android/*.jks
+android/*.keystore
+android/fastlane/*.json
 
 # iOS
 ios/Pods/
 ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
 ios/Podfile.lock
+ios/fastlane/*.json
+ios/fastlane/AuthKey_*.p8
 
 # macOS
 macos/Flutter/ephemeral/
@@ -81,6 +87,10 @@ coverage/
 # OS
 Thumbs.db
 automation_runs/*
+
+# Evidence packs intentionally keep command transcripts and device logs.
+!logs/verification-runs/**/commands.log
+!logs/verification-runs/**/device-logs/*.log
 
 # Agent worktrees
 .worktrees/
