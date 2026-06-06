@@ -46,7 +46,11 @@ class SettingsService {
       return _masterShouldRecordOverride!;
     }
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_masterShouldRecordKey) ?? true; // Default to true
+    final storedValue = prefs.getBool(_masterShouldRecordKey);
+    if (storedValue != null) {
+      return storedValue;
+    }
+    return defaultTargetPlatform != TargetPlatform.macOS;
   }
 
   /// Update the value for "masterShouldRecord"

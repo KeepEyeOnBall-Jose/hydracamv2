@@ -13,7 +13,7 @@ or informs the mobile app.
 | iOS simulator | Working | Existing repo guidance says simulator runs. Re-verify before relying on this for release readiness. |
 | iOS physical device | Blocked | App installs and launches but shows a white screen. This remains a release blocker. |
 | Android | In development | Existing automation and distribution scaffolding exist, but physical-device validation still needs current proof. |
-| Desktop and web | Planned or experimental | Treat desktop/web as future support unless a task explicitly scopes it. |
+| Desktop and web | macOS controller debug path working; capture deferred | macOS debug `.app` builds and launches for controller/monitoring use with a mock local camera. Windows, Linux, web, and real desktop webcam capture remain future support. |
 | Multi-device capture | Core architecture present | Master/slave WebSocket flow exists; current confidence should come from fresh multi-device validation. |
 | Store distribution | Prepared, not submitted | Distribution runbook and scaffolding exist; real submission depends on signing, credentials, privacy review, and device smoke tests. |
 
@@ -108,3 +108,11 @@ file/gallery persistence, permission behavior, packaging, and cross-platform
 test coverage. Until then, do not create Linear issues for generic "use webcam"
 or "Windows version" rows unless a concrete non-capture monitoring/control
 workflow is requested.
+
+2026-06-07 update: macOS native controller support is now enabled for debug
+builds without implementing desktop webcam capture. The app skips unsupported
+`permission_handler` startup calls on macOS, defaults local master recording off
+on macOS unless the user explicitly enables it, signs debug/release macOS
+targets with local-network/media/location entitlements, and uses a mock local
+camera path so controller flows can run while real desktop capture remains
+deferred.
