@@ -71,15 +71,19 @@ class LaunchConfigService {
           .registerLog("Failed to load launch config from platform: $error");
     }
 
-    if (automationRole.isNotEmpty) {
+    if (automationRole.isNotEmpty ||
+        automationPreferredMasterIp.isNotEmpty ||
+        automationForceSlaveMode) {
       LogService.instance
-          .registerLog("Launch config from dart define: role=$automationRole, "
-              "preferredMasterIp=$automationPreferredMasterIp");
+          .registerLog("Launch config from Dart defines: role=$automationRole, "
+              "preferredMasterIp=$automationPreferredMasterIp, "
+              "forceSlaveMode=$automationForceSlaveMode");
       _cached = LaunchConfig(
-        role: automationRole,
+        role: automationRole.isEmpty ? null : automationRole,
         preferredMasterIp: automationPreferredMasterIp.isEmpty
             ? null
             : automationPreferredMasterIp,
+        forceSlaveMode: automationForceSlaveMode,
       );
       return _cached;
     }

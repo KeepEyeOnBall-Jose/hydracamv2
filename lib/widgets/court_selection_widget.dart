@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
 
 class CourtSelectionWidget extends StatefulWidget {
-  final Map<String, List<Map<String, String>>> groupedCourts; // Grouped by Sports Center
+  final Map<String, List<Map<String, String>>>
+      groupedCourts; // Grouped by Sports Center
   final Function(String, String) onCourtSelected; // Callback to select court
 
-  const CourtSelectionWidget({super.key, required this.groupedCourts, required this.onCourtSelected});
+  const CourtSelectionWidget(
+      {super.key, required this.groupedCourts, required this.onCourtSelected});
 
   @override
   CourtSelectionWidgetState createState() => CourtSelectionWidgetState();
@@ -29,9 +31,9 @@ class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
       selectedCourtName = courtName;
       selectedCourtGuid = courtName != null
           ? getFilteredCourts().firstWhere(
-            (court) => court["name"] == courtName,
-        orElse: () => {"guid": ""},
-      )["guid"]
+              (court) => court["name"] == courtName,
+              orElse: () => {"guid": ""},
+            )["guid"]
           : null;
     });
 

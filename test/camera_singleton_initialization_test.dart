@@ -19,7 +19,10 @@ void main() {
           criticalStorageThreshold: 0.5,
           onCriticalStorageCallback: () async {},
         );
-        CameraServiceSingleton.initialize(storageService);
+        CameraServiceSingleton.initialize(
+          storageService,
+          useMockCamera: true,
+        );
       }
     });
 
@@ -39,11 +42,30 @@ void main() {
         onCriticalStorageCallback: () async {},
       );
 
-      final instance = CameraServiceSingleton.initialize(storageService);
+      final instance = CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
 
       expect(CameraServiceSingleton.isInitialized, isTrue);
       expect(instance, isNotNull);
       expect(CameraServiceSingleton.instance, equals(instance));
+    });
+
+    test("CameraServiceSingleton can initialize with mock camera override", () {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+
+      final instance = CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+
+      expect(instance.isUsingMockCamera, isTrue);
     });
 
     test("CameraServiceSingleton.instance throws when not initialized", () {
@@ -63,7 +85,10 @@ void main() {
           criticalStorageThreshold: 0.5,
           onCriticalStorageCallback: () async {},
         );
-        CameraServiceSingleton.initialize(storageService);
+        CameraServiceSingleton.initialize(
+          storageService,
+          useMockCamera: true,
+        );
       }
 
       // Build MasterScreen
@@ -88,7 +113,10 @@ void main() {
           criticalStorageThreshold: 0.5,
           onCriticalStorageCallback: () async {},
         );
-        CameraServiceSingleton.initialize(storageService);
+        CameraServiceSingleton.initialize(
+          storageService,
+          useMockCamera: true,
+        );
       }
 
       // Build SlaveScreen

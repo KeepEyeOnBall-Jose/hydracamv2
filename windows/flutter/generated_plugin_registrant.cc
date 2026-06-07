@@ -7,6 +7,7 @@
 #include "generated_plugin_registrant.h"
 
 #include <battery_plus/battery_plus_windows_plugin.h>
+#include <camera_desktop/camera_desktop_plugin.h>
 #include <connectivity_plus/connectivity_plus_windows_plugin.h>
 #include <geolocator_windows/geolocator_windows.h>
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
@@ -14,6 +15,8 @@
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   BatteryPlusWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("BatteryPlusWindowsPlugin"));
+  CameraDesktopPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("CameraDesktopPlugin"));
   ConnectivityPlusWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ConnectivityPlusWindowsPlugin"));
   GeolocatorWindowsRegisterWithRegistrar(
