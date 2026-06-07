@@ -11,6 +11,7 @@ import "../models/captured_video.dart";
 import "../services/camera_service.dart";
 import "../services/gallery_persistence_service.dart";
 import "../services/log_service.dart";
+import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 
 /// MasterServer - Handles the master device's WebSocket server.
@@ -24,12 +25,52 @@ import "../services/session_manager.dart";
 /// - Sends commands to all connected slaves or specific devices.
 /// - Tracks the heartbeat of connected clients to identify inactive ones.
 
+class ConnectedDeviceInfo {
+  final String deviceId;
+  final String? remoteIp;
+  final NetworkSnapshot? networkSnapshot;
+  final ConnectedDeviceNetworkStatus networkStatus;
+  final DateTime lastSeen;
+
+  const ConnectedDeviceInfo({
+    required this.deviceId,
+    required this.networkStatus,
+    required this.lastSeen,
+    this.remoteIp,
+    this.networkSnapshot,
+  });
+
+  String get shortDeviceId {
+    if (deviceId.length <= 8) {
+      return deviceId;
+    }
+    return deviceId.substring(0, 8);
+  }
+
+  ConnectedDeviceInfo copyWith({
+    String? remoteIp,
+    NetworkSnapshot? networkSnapshot,
+    ConnectedDeviceNetworkStatus? networkStatus,
+    DateTime? lastSeen,
+  }) {
+    return ConnectedDeviceInfo(
+      deviceId: deviceId,
+      remoteIp: remoteIp ?? this.remoteIp,
+      networkSnapshot: networkSnapshot ?? this.networkSnapshot,
+      networkStatus: networkStatus ?? this.networkStatus,
+      lastSeen: lastSeen ?? this.lastSeen,
+    );
+  }
+}
+
 class MasterServer {
   HttpServer? _server;
   final Map<String, WebSocket> _clients =
       {}; // Map to store clients with deviceId as key
   final Map<String, DateTime> _lastHeartbeat =
       {}; // Track last heartbeat per client
+  final Map<String, ConnectedDeviceInfo> _clientInfo = {};
+  NetworkSnapshot? _masterNetworkSnapshot;
   Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
   // CaptureSession? currentSession; // Current Capture Session is now used in Session Manager Singleton
   List<CaptureSession> sessionHistory =
@@ -60,6 +101,7 @@ class MasterServer {
 
       await for (HttpRequest request in _server!) {
         if (request.uri.path == "/ws") {
+          final remoteIp = request.connectionInfo?.remoteAddress.address;
           final socket = await WebSocketTransformer.upgrade(request);
           LogService.instance.registerLog("New WebSocket client connected.");
 
@@ -80,8 +122,13 @@ class MasterServer {
                 // Register client
                 if (messageType == "deviceId") {
                   if (deviceId != null) {
-                    _clients[deviceId!] = socket;
-                    _notifyClientCount();
+                    await _registerOrUpdateClient(
+                      deviceId: deviceId!,
+                      socket: socket,
+                      remoteIp: remoteIp,
+                      networkSnapshot:
+                          NetworkSnapshot.tryFromJson(decodedData["network"]),
+                    );
                     LogService.instance.registerLog(
                         "Registered new slave with deviceId: $deviceId");
 
@@ -167,6 +214,13 @@ class MasterServer {
                   if (deviceId != null) {
                     _lastHeartbeat[deviceId!] =
                         DateTime.now(); // Update last heartbeat
+                    await _registerOrUpdateClient(
+                      deviceId: deviceId!,
+                      socket: socket,
+                      remoteIp: remoteIp,
+                      networkSnapshot:
+                          NetworkSnapshot.tryFromJson(decodedData["network"]),
+                    );
                     LogService.instance
                         .registerLog("Received heartbeat from $deviceId");
                   }
@@ -229,6 +283,7 @@ class MasterServer {
             if (deviceId != null) {
               _clients.remove(deviceId);
               _lastHeartbeat.remove(deviceId); // Clean heartbeat data
+              _clientInfo.remove(deviceId);
               _notifyClientCount();
               LogService.instance.registerLog(
                   "Client $deviceId disconnected. Total clients: ${_clients.length}");
@@ -238,6 +293,7 @@ class MasterServer {
             if (deviceId != null) {
               _clients.remove(deviceId);
               _lastHeartbeat.remove(deviceId); // Clean heartbeat data
+              _clientInfo.remove(deviceId);
               _notifyClientCount();
               LogService.instance.registerLog(
                   "Error with client $deviceId: $error. Removed from clients.");
@@ -256,6 +312,62 @@ class MasterServer {
 
   //TODO: Split startserver into "handleincomingmessage" method to extract the part where we process the message
 
+  Future<void> _registerOrUpdateClient({
+    required String deviceId,
+    required WebSocket socket,
+    required String? remoteIp,
+    required NetworkSnapshot? networkSnapshot,
+  }) async {
+    _clients[deviceId] = socket;
+    _lastHeartbeat[deviceId] = DateTime.now();
+
+    final masterSnapshot = await _getMasterNetworkSnapshot();
+    final previousInfo = _clientInfo[deviceId];
+    final effectiveSnapshot = networkSnapshot ?? previousInfo?.networkSnapshot;
+    final networkStatus = NetworkInfoService.compareDeviceNetwork(
+      masterSnapshot: masterSnapshot,
+      deviceSnapshot: effectiveSnapshot,
+      socketRemoteIp: remoteIp,
+    );
+
+    _clientInfo[deviceId] = ConnectedDeviceInfo(
+      deviceId: deviceId,
+      remoteIp: remoteIp ?? previousInfo?.remoteIp,
+      networkSnapshot: effectiveSnapshot,
+      networkStatus: networkStatus,
+      lastSeen: DateTime.now(),
+    );
+
+    if (networkStatus == ConnectedDeviceNetworkStatus.wrongNetwork) {
+      socket.add(jsonEncode({
+        "command": "networkMismatch",
+        "message": "This slave is not on the same local network as the master.",
+        "masterNetwork": masterSnapshot.toJson(),
+      }));
+      LogService.instance.registerLog(
+          "Slave $deviceId appears to be on the wrong network. remoteIp=$remoteIp "
+          "slaveSubnet=${effectiveSnapshot?.effectiveSubnetSignature} "
+          "masterSubnet=${masterSnapshot.effectiveSubnetSignature}");
+    }
+
+    _notifyClientCount();
+  }
+
+  Future<NetworkSnapshot> _getMasterNetworkSnapshot() async {
+    try {
+      _masterNetworkSnapshot = await NetworkInfoService.getCurrentSnapshot();
+    } catch (e) {
+      LogService.instance.registerLog("Could not refresh master network: $e");
+    }
+
+    return _masterNetworkSnapshot ??
+        const NetworkSnapshot(
+          isWifiActive: false,
+          source: "master-unavailable",
+          warnings: ["Master network snapshot unavailable."],
+        );
+  }
+
   /// Starts a periodic check for inactive clients based on heartbeat timestamps.
   void _startHeartbeatCheck() {
     _heartbeatCheckTimer = Timer.periodic(const Duration(seconds: 10), (_) {
@@ -269,6 +381,7 @@ class MasterServer {
       for (var deviceId in inactiveClients) {
         _clients.remove(deviceId);
         _lastHeartbeat.remove(deviceId);
+        _clientInfo.remove(deviceId);
         LogService.instance
             .registerLog("Client $deviceId removed due to inactivity.");
 
@@ -295,6 +408,11 @@ class MasterServer {
 
   List<String> getConnectedDeviceIds() {
     return _clients.keys.toList();
+  }
+
+  List<ConnectedDeviceInfo> getConnectedDeviceInfos() {
+    return _clientInfo.values.toList()
+      ..sort((a, b) => a.deviceId.compareTo(b.deviceId));
   }
 
   /// Saves media data locally, either as a photo or video.
@@ -344,8 +462,8 @@ class MasterServer {
 
   /// Sends a command to all connected slave devices.
   void sendCommandToAll(String message) {
-    for (var client in _clients.values) {
-      client.add(message);
+    for (var entry in _commandEligibleClients()) {
+      entry.value.add(message);
     }
     LogService.instance
         .registerLog("Command sent to all connected slaves: $message");
@@ -382,12 +500,17 @@ class MasterServer {
       LogService.instance.registerLog(
           "No slave devices connected. Command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
-      _clients[deviceId]?.add(command);
-      LogService.instance.registerLog(
-          "Command '$command' sent to slave with deviceId: $deviceId.");
+      if (_isCommandEligible(deviceId)) {
+        _clients[deviceId]?.add(command);
+        LogService.instance.registerLog(
+            "Command '$command' sent to slave with deviceId: $deviceId.");
+      } else {
+        LogService.instance.registerLog(
+            "Command '$command' blocked for slave $deviceId due to network mismatch.");
+      }
     } else {
-      for (var client in _clients.values) {
-        client.add(command);
+      for (var entry in _commandEligibleClients()) {
+        entry.value.add(command);
       }
       LogService.instance
           .registerLog("Command '$command' sent to all connected slaves.");
@@ -409,17 +532,22 @@ class MasterServer {
           "No slave devices connected. Scheduled command '$command' not sent.");
     } else if (deviceId != null && _clients.containsKey(deviceId)) {
       // Send the scheduled command to a specific slave
-      _clients[deviceId]?.add(jsonEncode({
-        "type": "scheduledCommand",
-        "command": command,
-        "scheduledTime": scheduledTimeString,
-      }));
-      LogService.instance.registerLog(
-          "Scheduled command '$command' sent to slave with deviceId: $deviceId.");
+      if (_isCommandEligible(deviceId)) {
+        _clients[deviceId]?.add(jsonEncode({
+          "type": "scheduledCommand",
+          "command": command,
+          "scheduledTime": scheduledTimeString,
+        }));
+        LogService.instance.registerLog(
+            "Scheduled command '$command' sent to slave with deviceId: $deviceId.");
+      } else {
+        LogService.instance.registerLog(
+            "Scheduled command '$command' blocked for slave $deviceId due to network mismatch.");
+      }
     } else {
       // Send the scheduled command to all slaves
-      for (var client in _clients.values) {
-        client.add(jsonEncode({
+      for (var entry in _commandEligibleClients()) {
+        entry.value.add(jsonEncode({
           "type": "scheduledCommand",
           "command": command,
           "scheduledTime": scheduledTimeString,
@@ -442,8 +570,18 @@ class MasterServer {
     _server?.close();
     _clients.clear();
     _lastHeartbeat.clear(); // Clean heartbeat registry
+    _clientInfo.clear();
     _stopHeartbeatCheck(); // Stop timer
     LogService.instance.registerLog("WebSocket Server stopped");
     _notifyClientCount();
+  }
+
+  Iterable<MapEntry<String, WebSocket>> _commandEligibleClients() {
+    return _clients.entries.where((entry) => _isCommandEligible(entry.key));
+  }
+
+  bool _isCommandEligible(String deviceId) {
+    final info = _clientInfo[deviceId];
+    return info?.networkStatus != ConnectedDeviceNetworkStatus.wrongNetwork;
   }
 }

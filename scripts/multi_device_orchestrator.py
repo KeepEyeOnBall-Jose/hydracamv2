@@ -70,6 +70,7 @@ class MultiDeviceOrchestrator:
         output_root: Path,
         backend_base_url: Optional[str],
         backend_token: Optional[str],
+        context_overrides: Optional[Mapping[str, str]] = None,
     ) -> None:
         self.devices = devices
         self.dry_run = dry_run
@@ -87,6 +88,10 @@ class MultiDeviceOrchestrator:
             "isoTimestamp": now.isoformat(),
             "scenario": scenario,
         }
+        self.context_overrides: Dict[str, str] = {}
+        if context_overrides:
+            self.context_overrides.update(dict(context_overrides))
+            self.context.update(self.context_overrides)
         self._cached_manifest: Optional[Dict[str, Any]] = None
         self.summary_stub: Dict[str, object] = {
             "scenario": scenario,
@@ -299,6 +304,7 @@ class MultiDeviceOrchestrator:
             for key, value in context_mapping.items():
                 rendered_map[str(key)] = value
             self.context.update(rendered_map)
+            self.context.update(self.context_overrides)
         self._cached_manifest = manifest
         return manifest
 
@@ -572,6 +578,20 @@ class MultiDeviceOrchestrator:
                 return needle in actual
             if isinstance(actual, str) and isinstance(needle, str):
                 return needle in actual
+        if "gte" in expect:
+            threshold = expect.get("gte")
+            if isinstance(actual, (int, float)) and isinstance(
+                threshold,
+                (int, float),
+            ):
+                return actual >= threshold
+        if "lte" in expect:
+            threshold = expect.get("lte")
+            if isinstance(actual, (int, float)) and isinstance(
+                threshold,
+                (int, float),
+            ):
+                return actual <= threshold
         if "exists" in expect:
             should_exist = bool(expect.get("exists"))
             exists = actual is not None
@@ -1026,9 +1046,13 @@ def _load_devices(args: argparse.Namespace) -> List[DeviceTarget]:
     if args.serials:
         serial_descriptors: List[Descriptor] = []
         for entry in args.serials.split(","):
-            serial_role = entry.strip().split(":")
-            serial = serial_role[0]
-            role = serial_role[1] if len(serial_role) > 1 else "slave"
+            serial_entry = entry.strip()
+            if not serial_entry:
+                continue
+            serial, separator, role = serial_entry.rpartition(":")
+            if not separator or role not in {"master", "slave"}:
+                serial = serial_entry
+                role = "slave"
             serial_descriptors.append({"serial": serial, "role": role})
         return _build_devices_from_descriptors(
             serial_descriptors,
@@ -1193,7 +1217,27 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         "--backend-token",
         help=("HydraCam automation API token " "(overrides HYDRACAM_AUTOMATION_TOKEN)"),
     )
+    parser.add_argument(
+        "--context",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help="Manifest context override. May be passed multiple times.",
+    )
     return parser.parse_args(argv)
+
+
+def parse_context_overrides(entries: List[str]) -> Dict[str, str]:
+    overrides: Dict[str, str] = {}
+    for entry in entries:
+        if "=" not in entry:
+            raise OrchestratorError(f"--context requires KEY=VALUE, got {entry!r}")
+        key, value = entry.split("=", 1)
+        key = key.strip()
+        if not key:
+            raise OrchestratorError(f"--context requires a non-empty key: {entry!r}")
+        overrides[key] = value
+    return overrides
 
 
 def resolve_emulator_boot_specs(
@@ -1278,6 +1322,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             output_root=args.output_dir,
             backend_base_url=backend_base,
             backend_token=backend_token,
+            context_overrides=parse_context_overrides(args.context),
         )
         orchestrator.run()
     except OrchestratorError as exc:

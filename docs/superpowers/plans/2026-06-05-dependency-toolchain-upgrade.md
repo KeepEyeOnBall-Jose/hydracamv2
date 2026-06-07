@@ -4,7 +4,7 @@
 
 **Goal:** Bring HydraCam to current stable Flutter, current problem-minimized package versions, and compatible Android/iOS toolchains without mixing dependency changes with unrelated app fixes.
 
-**Architecture:** Treat the upgrade as a sequence of rollback-friendly checkpoints: baseline, Flutter SDK, lockfile-only packages, high-risk plugin groups, Android/iOS native build layers, then device validation. Keep the existing master/slave app architecture unchanged and preserve the known iOS physical-device white-screen issue as a separate diagnosis unless the upgrade directly changes it.
+**Architecture:** Treat the upgrade as a sequence of rollback-friendly checkpoints: baseline, Flutter SDK, lockfile-only packages, high-risk plugin groups, Android/iOS native build layers, then device validation. Keep the existing master/slave app architecture unchanged. Superseding status as of 2026-06-07: the prior broad iOS physical-device white-screen diagnosis has newer iPhone/iPad working evidence; future upgrade validation should focus on release/profile launch, signing, and capture regressions.
 
 **Tech Stack:** Flutter 3.44 stable target, Dart SDK bundled with Flutter, pub.dev packages, Android Gradle Plugin/Kotlin/Gradle/JDK, CocoaPods, Xcode, iOS pods, Flutter analyzer and tests.
 
@@ -679,7 +679,7 @@ flutter run -d <physical-ios-device-id>
 flutter run -d <physical-android-device-id>
 ```
 
-Expected: Android launches. iOS physical-device result is recorded separately because a white-screen issue pre-exists the upgrade.
+Expected: Android launches. iOS physical-device validation records release/profile launch, signing, and capture behavior; do not assume the old broad white-screen diagnosis is current without fresh logs.
 
 - [ ] **Step 5: Update docs with final supported versions**
 
@@ -721,7 +721,9 @@ Expected: commit contains validation evidence and updated docs only.
 - `flutter build ios --simulator` passes.
 - Android emulator launch works.
 - iOS simulator launch works.
-- Physical-device validation result is recorded, with the known iOS white-screen issue kept separate from dependency upgrade regressions.
+- Physical-device validation result is recorded, with any fresh release/profile,
+  signing, local-network, or capture failures separated from dependency upgrade
+  regressions.
 
 ## Rollback Strategy
 

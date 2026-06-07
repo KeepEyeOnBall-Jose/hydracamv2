@@ -1,0 +1,74 @@
+{
+  "error" : {
+    "code" : 10002,
+    "domain" : "com.apple.dt.CoreDeviceError",
+    "userInfo" : {
+      "BundleIdentifier" : {
+        "string" : "com.vectorblanco.hydracam.dev"
+      },
+      "NSLocalizedDescription" : {
+        "string" : "The application failed to launch."
+      },
+      "NSUnderlyingError" : {
+        "error" : {
+          "code" : 1,
+          "domain" : "FBSOpenApplicationServiceErrorDomain",
+          "userInfo" : {
+            "BSErrorCodeDescription" : {
+              "string" : "RequestDenied"
+            },
+            "FBSOpenApplicationRequestID" : {
+              "string" : "0x5348"
+            },
+            "NSLocalizedDescription" : {
+              "string" : "The request to open \"com.vectorblanco.hydracam.dev\" failed."
+            },
+            "NSLocalizedFailureReason" : {
+              "string" : "The request was denied by service delegate (SBMainWorkspace) for reason: Locked (\"Unable to launch com.vectorblanco.hydracam.dev because the device was not, or could not be, unlocked\")."
+            },
+            "NSUnderlyingError" : {
+              "error" : {
+                "code" : 7,
+                "domain" : "FBSOpenApplicationErrorDomain",
+                "userInfo" : {
+                  "BSErrorCodeDescription" : {
+                    "string" : "Locked"
+                  },
+                  "NSLocalizedFailureReason" : {
+                    "string" : "Unable to launch com.vectorblanco.hydracam.dev because the device was not, or could not be, unlocked."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "--terminate-existing",
+      "--activate",
+      "--timeout",
+      "30",
+      "--json-output",
+      "logs/verification-runs/20260607-all-devices-one-by-one-rerun/iphone12-ultraWide-sport1080p60-clean-bridge/devicectl-launch-direct.json",
+      "--log-output",
+      "logs/verification-runs/20260607-all-devices-one-by-one-rerun/iphone12-ultraWide-sport1080p60-clean-bridge/devicectl-launch-direct.log",
+      "com.vectorblanco.hydracam.dev"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "failed",
+    "version" : "518.31"
+  }
+}

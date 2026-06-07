@@ -1,5 +1,6 @@
 import "package:flutter/foundation.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/models/camera_capture_settings.dart";
 import "package:hydracam/services/settings_service.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
@@ -25,5 +26,48 @@ void main() {
     final shouldRecord = await SettingsService.getMasterShouldRecord();
 
     expect(shouldRecord, isTrue);
+  });
+
+  test("new installs default to auto back lens and standard 1080p30", () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final lensPreference = await SettingsService.getCameraLensPreference();
+    final videoProfile = await SettingsService.getVideoCaptureProfile();
+
+    expect(lensPreference, LensPreference.autoBack);
+    expect(videoProfile, VideoCaptureProfile.standard1080p30);
+  });
+
+  test("legacy camera quality migrates to video capture profiles", () async {
+    SharedPreferences.setMockInitialValues({"cameraQuality": "low"});
+    expect(
+      await SettingsService.getVideoCaptureProfile(),
+      VideoCaptureProfile.dataSaver480p30,
+    );
+
+    SharedPreferences.setMockInitialValues({"cameraQuality": "medium"});
+    expect(
+      await SettingsService.getVideoCaptureProfile(),
+      VideoCaptureProfile.compat720p30,
+    );
+
+    SharedPreferences.setMockInitialValues({"cameraQuality": "high"});
+    expect(
+      await SettingsService.getVideoCaptureProfile(),
+      VideoCaptureProfile.standard1080p30,
+    );
+  });
+
+  test("stores selected camera name independently from lens preference", () async {
+    SharedPreferences.setMockInitialValues({});
+
+    await SettingsService.setCameraLensPreference(LensPreference.ultraWide);
+    await SettingsService.setSelectedCameraName("iphone-ultra-wide");
+
+    expect(
+      await SettingsService.getCameraLensPreference(),
+      LensPreference.ultraWide,
+    );
+    expect(await SettingsService.getSelectedCameraName(), "iphone-ultra-wide");
   });
 }

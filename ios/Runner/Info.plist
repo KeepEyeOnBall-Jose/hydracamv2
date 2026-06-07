@@ -39,12 +39,40 @@
 	<string>Camera access is required to capture videos and photos during matches.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We use your location when requested so you can identify the active recording venue.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+		<string>_dartVmService._tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>HydraCam needs local network access to discover and connect to nearby devices for synchronized capture.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone access is required to record audio during matches.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>We need access to your gallery so we can save the pics and videos there.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your gallery so we can save the pics and videos there.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>UIWindowScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>flutter</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

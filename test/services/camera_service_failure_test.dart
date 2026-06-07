@@ -4,6 +4,7 @@ import "dart:io";
 import "package:camera_platform_interface/camera_platform_interface.dart";
 import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/models/camera_capture_settings.dart";
 import "package:hydracam/services/camera_service.dart";
 import "package:hydracam/services/log_service.dart";
 import "package:mocktail/mocktail.dart";
@@ -179,6 +180,82 @@ void main() {
     expect(File(videoPath).existsSync(), isTrue);
     expect(cameraService.isRecording, isFalse);
   });
+
+  test("selected ultra-wide lens uses sport 1080p60 controller settings",
+      () async {
+    final fakePlatform = _FakeCameraPlatform(
+      cameras: const [
+        CameraDescription(
+          name: "iphone-wide",
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          lensType: CameraLensType.wide,
+        ),
+        CameraDescription(
+          name: "iphone-ultra-wide",
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          lensType: CameraLensType.ultraWide,
+        ),
+      ],
+    );
+    CameraPlatform.instance = fakePlatform;
+    SharedPreferences.setMockInitialValues({
+      "cameraLensPreference": LensPreference.ultraWide.storageValue,
+      "videoCaptureProfile": VideoCaptureProfile.sport1080p60.storageValue,
+    });
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: false,
+    );
+
+    await cameraService.startRecordingVideo();
+
+    expect(fakePlatform.lastCreatedCamera?.name, "iphone-ultra-wide");
+    expect(
+      fakePlatform.lastMediaSettings?.resolutionPreset,
+      ResolutionPreset.veryHigh,
+    );
+    expect(fakePlatform.lastMediaSettings?.fps, 60);
+  });
+
+  test("changing video profile preserves the selected camera", () async {
+    final fakePlatform = _FakeCameraPlatform(
+      cameras: const [
+        CameraDescription(
+          name: "iphone-wide",
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          lensType: CameraLensType.wide,
+        ),
+        CameraDescription(
+          name: "iphone-telephoto",
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          lensType: CameraLensType.telephoto,
+        ),
+      ],
+    );
+    CameraPlatform.instance = fakePlatform;
+    SharedPreferences.setMockInitialValues({
+      "selectedCameraName": "iphone-telephoto",
+      "videoCaptureProfile": VideoCaptureProfile.standard1080p30.storageValue,
+    });
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: false,
+    );
+
+    await cameraService.ensureCameraIsReady();
+    await cameraService.setVideoCaptureProfile(VideoCaptureProfile.detail4k30);
+
+    expect(fakePlatform.lastCreatedCamera?.name, "iphone-telephoto");
+    expect(
+      fakePlatform.lastMediaSettings?.resolutionPreset,
+      ResolutionPreset.ultraHigh,
+    );
+    expect(fakePlatform.lastMediaSettings?.fps, 30);
+  });
 }
 
 class _FakeCameraPlatform extends CameraPlatform {
@@ -200,6 +277,8 @@ class _FakeCameraPlatform extends CameraPlatform {
   final PlatformException? setFlashModeError;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
+  CameraDescription? lastCreatedCamera;
+  MediaSettings? lastMediaSettings;
 
   bool _isRecording = false;
   int _nextCameraId = 1;
@@ -211,8 +290,11 @@ class _FakeCameraPlatform extends CameraPlatform {
   Future<int> createCameraWithSettings(
     CameraDescription cameraDescription,
     MediaSettings mediaSettings,
-  ) async =>
-      _nextCameraId++;
+  ) async {
+    lastCreatedCamera = cameraDescription;
+    lastMediaSettings = mediaSettings;
+    return _nextCameraId++;
+  }
 
   @override
   Future<void> initializeCamera(

@@ -101,9 +101,26 @@ Process phones one at a time so labels and serials do not get mixed:
 | Flutter target | `192.168.178.x:5555` |
 | Default role | `master`, `slave`, or `reserve` |
 
+Current Android inventory notes:
+
+| Device | Model / serial | OS/API | Flutter target | Disposition |
+| --- | --- | --- | --- | --- |
+| Samsung Galaxy S10e | `SM-G970F`, USB serial `RF8M90QE7LX` | Android 12 / API 31 | `RF8M90QE7LX` | Supported. Added 2026-06-07 as an API 24+ Android validation target. |
+
 For multi-phone test runs, prefer a stable router/hotspot with client isolation
 disabled. HydraCam master/slave discovery and ADB both need device-to-device LAN
 reachability.
+
+## Deprecated Android Devices
+
+HydraCam's active Android support floor is API 24. Do not spend setup,
+toolchain, or release time on Android 6.0/API 23 or older phones unless the
+support decision is explicitly reopened.
+
+| Device | Model / serial | OS/API | Disposition |
+| --- | --- | --- | --- |
+| Lenovo Phab2 | `Lenovo PB2-690M`, USB serial `9d94c365` | Android 6.0.1 / API 23 | Deprecated. On 2026-06-06, installing the current HydraCam debug APK failed with `INSTALL_FAILED_OLDER_SDK`; do not pursue a lower-SDK variant. |
+| Samsung Galaxy S7 | `SM-G935F`, `192.168.178.64:5555` | Android 8.0 / API 26 | Keep as a low-end supported Android target. On 2026-06-06, HydraCam launched after runtime permissions were granted; fresh debug APK update was blocked by signing mismatch with the already installed app, so app data was preserved. |
 
 ## iPhone Wireless Debugging
 
@@ -127,5 +144,7 @@ flutter run -d <ios-udid>
 
 If `devicectl` sees the iPhone but debugging cannot start, reopen Xcode's
 Devices and Simulators window and let it finish mounting developer support. For
-HydraCam, keep the existing physical-iOS white-screen blocker separate from
-wireless pairing: a paired iPhone can still expose app-startup failures.
+HydraCam, do not treat wireless pairing failures as app startup failures. The
+old broad physical-iOS white-screen status is superseded by newer iPhone/iPad
+evidence, but paired devices can still expose fresh release/profile launch,
+signing, local-network, or capture failures that need their own logs.

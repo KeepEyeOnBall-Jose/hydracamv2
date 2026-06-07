@@ -7,6 +7,8 @@ library;
 
 import "package:camera/camera.dart";
 import "package:flutter/material.dart";
+import "../models/camera_capture_settings.dart";
+import "../services/camera_hardware_metadata_service.dart";
 import "../services/camera_service_singleton.dart";
 import "../widgets/camera_preview_fitted.dart";
 
@@ -20,6 +22,7 @@ class CameraSelectionScreen extends StatefulWidget {
 class CameraSelectionScreenState extends State<CameraSelectionScreen> {
   /// Local copies of the camera list and the selected index.
   List<CameraDescription> _cameras = [];
+  Map<String, CameraHardwareMetadata> _cameraMetadata = {};
   int _selectedIndex = 0;
 
   /// Whether the screen is in a "loading" state (e.g., switching cameras).
@@ -38,9 +41,27 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
 
     final cameraService = CameraServiceSingleton.instance;
     await cameraService.initAvailableCameras();
+    final cameras = cameraService.deviceCameras;
+    final metadataEntries = await Future.wait(
+      cameras.map((camera) async {
+        final metadata = await CameraHardwareMetadataService.getCameraMetadata(
+          camera.name,
+        );
+        return MapEntry(camera.name, metadata);
+      }),
+    );
+    final metadata = <String, CameraHardwareMetadata>{};
+    for (final entry in metadataEntries) {
+      final value = entry.value;
+      if (value != null) {
+        metadata[entry.key] = value;
+      }
+    }
 
+    if (!mounted) return;
     setState(() {
-      _cameras = cameraService.deviceCameras;
+      _cameras = cameras;
+      _cameraMetadata = metadata;
       _selectedIndex = cameraService.selectedCameraIndex;
       _isLoading = false;
     });
@@ -115,7 +136,6 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     });
   }
 
-  /// A helper method to get a user-friendly string from the lens direction.
   String _getOrientationString(CameraLensDirection direction) {
     return switch (direction) {
       CameraLensDirection.back => "Back",
@@ -184,11 +204,15 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
             itemBuilder: (context, index) {
               final cameraDescription = _cameras[index];
               final isSelected = (index == _selectedIndex);
+              final metadata =
+                  _cameraMetadata[cameraDescription.name]?.detailText;
 
               return ListTile(
                 title: Text('Camera "${cameraDescription.name}"'),
                 subtitle: Text(
-                  "Lens direction: ${_getOrientationString(cameraDescription.lensDirection)}",
+                  "${CameraLensLabels.describe(cameraDescription)} • "
+                  "${_getOrientationString(cameraDescription.lensDirection)}"
+                  "${metadata == null ? "" : " • $metadata"}",
                 ),
                 trailing: isSelected
                     ? const Icon(Icons.check_circle, color: Colors.green)

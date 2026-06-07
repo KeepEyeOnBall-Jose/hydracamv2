@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "../app_theme.dart";
-import "../constants.dart";
+import "../models/camera_capture_settings.dart";
 import "../services/camera_service_singleton.dart";
 import "../services/settings_service.dart";
 import "../widgets/settings_option.dart"; // Import the widget
@@ -16,7 +16,9 @@ class SettingsScreenState extends State<SettingsScreen> {
   /// List of available settings
 
   bool _masterShouldRecord = true;
-  String _cameraQuality = "high";
+  LensPreference _lensPreference = LensPreference.autoBack;
+  VideoCaptureProfile _videoCaptureProfile =
+      VideoCaptureProfile.standard1080p30;
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
@@ -33,7 +35,8 @@ class SettingsScreenState extends State<SettingsScreen> {
   /// Load settings from SharedPreferences.
   Future<void> _loadSettings() async {
     final shouldRecord = await SettingsService.getMasterShouldRecord();
-    final cameraQuality = await SettingsService.getCameraQuality();
+    final lensPreference = await SettingsService.getCameraLensPreference();
+    final videoCaptureProfile = await SettingsService.getVideoCaptureProfile();
     final deleteLocalAfterUpload =
         await SettingsService.getDeleteLocalAfterUpload();
     final autoUploadMaterials = await SettingsService.getAutoUploadMaterials();
@@ -46,7 +49,8 @@ class SettingsScreenState extends State<SettingsScreen> {
 
     setState(() {
       _masterShouldRecord = shouldRecord;
-      _cameraQuality = cameraQuality;
+      _lensPreference = lensPreference;
+      _videoCaptureProfile = videoCaptureProfile;
       _deleteLocalAfterUpload = deleteLocalAfterUpload;
       _autoUploadMaterials = autoUploadMaterials;
       _autoplayVideoOnMaster = autoplayVideoOnMaster;
@@ -65,15 +69,26 @@ class SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  Future<void> _updateCameraQuality(String quality) async {
-    await SettingsService.setCameraQuality(quality);
+  Future<void> _updateLensPreference(LensPreference preference) async {
+    await SettingsService.setCameraLensPreference(preference);
     setState(() {
-      _cameraQuality = quality;
+      _lensPreference = preference;
     });
 
-    // Apply setting to camera
-    final CameraQuality newQuality = _mapQualityStringToEnum(quality);
-    await CameraServiceSingleton.instance.setCameraQuality(newQuality);
+    if (CameraServiceSingleton.isInitialized) {
+      await CameraServiceSingleton.instance.setLensPreference(preference);
+    }
+  }
+
+  Future<void> _updateVideoCaptureProfile(VideoCaptureProfile profile) async {
+    await SettingsService.setVideoCaptureProfile(profile);
+    setState(() {
+      _videoCaptureProfile = profile;
+    });
+
+    if (CameraServiceSingleton.isInitialized) {
+      await CameraServiceSingleton.instance.setVideoCaptureProfile(profile);
+    }
   }
 
   Future<void> _updateDeleteLocalAfterUpload(bool value) async {
@@ -112,20 +127,6 @@ class SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  /// Map quality string to CameraQuality enum.
-  CameraQuality _mapQualityStringToEnum(String quality) {
-    switch (quality) {
-      case "high":
-        return CameraQuality.high;
-      case "medium":
-        return CameraQuality.medium;
-      case "low":
-        return CameraQuality.low;
-      default:
-        throw Exception("Invalid quality string: $quality");
-    }
-  }
-
   /// Widget with actual screen
   @override
   Widget build(BuildContext context) {
@@ -153,31 +154,57 @@ class SettingsScreenState extends State<SettingsScreen> {
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
+            Text(
+              "Capture Settings",
+              style: AppTheme.headline1.copyWith(fontSize: 20),
+            ),
             SettingsOption(
-              title: "Camera Quality",
+              title: "Camera Lens",
               description:
-                  "Maps to Flutter camera ResolutionPreset values; exact pixel dimensions depend on the selected device camera.",
-              control: DropdownButton<String>(
-                value: _cameraQuality,
-                items: const [
-                  DropdownMenuItem(
-                    value: "high",
-                    child: Text("High preset"),
-                  ),
-                  DropdownMenuItem(
-                    value: "medium",
-                    child: Text("Medium preset"),
-                  ),
-                  DropdownMenuItem(
-                    value: "low",
-                    child: Text("Low preset"),
-                  ),
-                ],
+                  "Squash: use Ultra Wide (0.5x) when the phone exposes it.",
+              control: DropdownButton<LensPreference>(
+                value: _lensPreference,
+                items: LensPreference.values
+                    .map(
+                      (preference) => DropdownMenuItem(
+                        value: preference,
+                        child: Text(preference.label),
+                      ),
+                    )
+                    .toList(),
                 onChanged: (value) {
                   if (value != null) {
-                    _updateCameraQuality(value);
+                    _updateLensPreference(value);
                   }
                 },
+              ),
+            ),
+            SettingsOption(
+              title: "Video Profile",
+              description:
+                  "Profiles are targets; the phone may fall back if unsupported.",
+              control: DropdownButton<VideoCaptureProfile>(
+                value: _videoCaptureProfile,
+                items: VideoCaptureProfile.values
+                    .map(
+                      (profile) => DropdownMenuItem(
+                        value: profile,
+                        child: Text(profile.label),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    _updateVideoCaptureProfile(value);
+                  }
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Text(
+                "Target: ${_videoCaptureProfile.targetLabel}",
+                style: AppTheme.bodyText1,
               ),
             ),
             SettingsOption(

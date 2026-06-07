@@ -17,6 +17,7 @@ class LaunchConfig {
 
   bool get wantsMaster => role?.toLowerCase() == "master";
   bool get wantsSlave => role?.toLowerCase() == "slave";
+  bool get wantsStandby => role?.toLowerCase() == "standby";
 }
 
 class LaunchConfigService {
@@ -68,6 +69,19 @@ class LaunchConfigService {
     } catch (error) {
       LogService.instance
           .registerLog("Failed to load launch config from platform: $error");
+    }
+
+    if (automationRole.isNotEmpty) {
+      LogService.instance
+          .registerLog("Launch config from dart define: role=$automationRole, "
+              "preferredMasterIp=$automationPreferredMasterIp");
+      _cached = LaunchConfig(
+        role: automationRole,
+        preferredMasterIp: automationPreferredMasterIp.isEmpty
+            ? null
+            : automationPreferredMasterIp,
+      );
+      return _cached;
     }
 
     // Fallback: load from SharedPreferences (persisted from previous launch)

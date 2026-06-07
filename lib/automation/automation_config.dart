@@ -3,4 +3,17 @@ const bool automationEnabled = bool.fromEnvironment(
   defaultValue: false,
 );
 
-const int automationServerPort = 4762;
+const String automationRole = String.fromEnvironment(
+  "HYDRACAM_AUTOMATION_ROLE",
+  defaultValue: "",
+);
+
+const String automationPreferredMasterIp = String.fromEnvironment(
+  "HYDRACAM_AUTOMATION_MASTER_IP",
+  defaultValue: "",
+);
+
+const int automationServerPort = int.fromEnvironment(
+  "HYDRACAM_AUTOMATION_PORT",
+  defaultValue: 4762,
+);

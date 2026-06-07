@@ -1,0 +1,1002 @@
+--------- beginning of main
+06-07 03:32:07.027   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2598 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.027   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2598), pipeId(10)
+06-07 03:32:07.027   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2597 F2598] REQUEST ERROR
+06-07 03:32:07.028   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2597 F2598] setSkipMetaResult(true)
+06-07 03:32:07.028   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2598(2604)), type(2) ISP DONE
+06-07 03:32:07.028   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2598 T2] Skipped frame. Force callback result. frameCount 2598
+06-07 03:32:07.029   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2597) type(1) errorCode(2)
+06-07 03:32:07.029   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2597, errorStream=0x0, errorCode=2
+06-07 03:32:07.030   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2597
+06-07 03:32:07.030   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.031   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2597 , due to buffer error.
+06-07 03:32:07.032   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.033   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.033   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.033   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.033   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.033   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.033   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2601), ret(-22)
+06-07 03:32:07.033   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2601)
+06-07 03:32:07.043   554   554 I android.hardware.health@2.1-service-samsung: updateLrpSysfs: write: 325
+06-07 03:32:07.043   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2599)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.044   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2599), type(2), pipeId(5)
+06-07 03:32:07.044   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2599(2605) T2) 3AA DONE
+--------- beginning of system
+06-07 03:32:07.044   982  1249 D BatteryService: Sending ACTION_BATTERY_CHANGED. scale:100, info:{.chargerAcOnline = false, .chargerUsbOnline = true, .chargerWirelessOnline = false, .maxChargingCurrent = 0, .maxChargingVoltage = 0, .batteryStatus = CHARGING, .batteryHealth = GOOD, .batteryPresent = true, .batteryLevel = 56, .batteryVoltage = 3792, .batteryTemperature = 333, .batteryCurrent = -415, .batteryCycleCount = 0, .batteryFullCharge = 3000000, .batteryChargeCounter = 1683000, .batteryTechnology = Li-ion}
+06-07 03:32:07.044   982  1249 D BatteryService: online:5, current avg:-376, charge type:2, POGO powered:false, power sharing:false, high voltage charger:false, charger_type:0, capacity:280000, misc_event:0x10000, current_event:0x8000, current_now:-337
+06-07 03:32:07.044   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2599 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.044   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2599), pipeId(10)
+06-07 03:32:07.044   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2598 F2599] REQUEST ERROR
+06-07 03:32:07.044   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2598 F2599] setSkipMetaResult(true)
+06-07 03:32:07.044   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2599(2605)), type(2) ISP DONE
+06-07 03:32:07.045   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2599 T2] Skipped frame. Force callback result. frameCount 2599
+06-07 03:32:07.045   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.045   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.045   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.045   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.045   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.045   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.045   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2602), ret(-22)
+06-07 03:32:07.045   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2602)
+06-07 03:32:07.046   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2598) type(1) errorCode(2)
+06-07 03:32:07.046   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2598, errorStream=0x0, errorCode=2
+06-07 03:32:07.046   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2598
+06-07 03:32:07.046   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.048   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2598 , due to buffer error.
+06-07 03:32:07.048   982  1168 D MotionRecognitionService: [SAR]  onReceive : ACTION_BATTERY_CHANGED, Plugged: 2
+06-07 03:32:07.048   982  1168 I MotionRecognitionService: [TA] In/out: true, curr state: 1
+06-07 03:32:07.049   982   982 D SemWifiApBroadcastReceiver: Received : android.intent.action.BATTERY_CHANGED
+06-07 03:32:07.049   982   982 D AdaptiveBrightnessLongtermModelBuilder: Received android.intent.action.BATTERY_CHANGED
+06-07 03:32:07.050  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-07 03:32:07.050  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-07 03:32:07.051  1349  1349 I AODBatteryManager: updateBatteryData: ACTION_BATTERY_CHANGED
+06-07 03:32:07.053  1349  1349 I AODBatteryManager: saveBatteryData : AOD BatteryData [mBatteryLevel=56, mBatteryStatus=CHARGING, mBatteryPlugType=USB, mBatteryPlugged=true, mRemainingChargeTime=14316000, mBatteryChargingType=1, mBatteryChargerType=NORMAL, mBatteryOnline=NOT_DEFINED, mBatterySwellingMode=NONE, mBatteryProtectMode=false]
+06-07 03:32:07.053  1349  1349 I ChargingInfoManager: updateChargingInfo: newState = AOD ChargingInfo [mState=BATTERY_AND_REMAIN_TIME, mIsCharging=true, mIsFullyCharged=false, mIsBatteryProtectMode=false], oldState = AOD ChargingInfo [mState=BATTERY_AND_REMAIN_TIME, mIsCharging=true, mIsFullyCharged=false, mIsBatteryProtectMode=false]
+06-07 03:32:07.055  1349  1349 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-07 03:32:07.055  1349  1349 I PowerUI : mBootCompleted = true |  mFullyConnected = true
+06-07 03:32:07.055  1349  1349 I PowerUI : BATTERY_HEALTH_CHECK extraHealth=2 mBatteryMiscEvent=65536
+06-07 03:32:07.055  1349  1349 D PowerUI : priorPlugType = 2 mPlugType = 2 priorBatteryStatus = 2 mBatteryStatus = 2
+06-07 03:32:07.055  1349  1349 I PowerUI : oldMisalign : false, curMisalign : false
+06-07 03:32:07.058  1349 11685 D PowerUI.Notification: 1. restoreScreenTimeOut - saved_value : :
+06-07 03:32:07.058  1349 11685 E PowerUI.Notification: no saved value, so we do nothing !!
+06-07 03:32:07.058  1349  1349 D PowerUI.Notification: showChargingNotice oldChargingType : 8 currentChargingType : 8 oldChargingTime : 14283000 mChargingTime : 14316000
+06-07 03:32:07.058  1349  1349 D PowerUI.Notification: showChargingNotification()
+06-07 03:32:07.060   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2600)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.061   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2600), type(2), pipeId(5)
+06-07 03:32:07.061   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2600(2606) T2) 3AA DONE
+06-07 03:32:07.061   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2600 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.061   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2600), pipeId(10)
+06-07 03:32:07.061   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2599 F2600] REQUEST ERROR
+06-07 03:32:07.061   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2599 F2600] setSkipMetaResult(true)
+06-07 03:32:07.061   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2600(2606)), type(2) ISP DONE
+06-07 03:32:07.061   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2600 T2] Skipped frame. Force callback result. frameCount 2600
+06-07 03:32:07.062   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.062   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.062   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.062   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.062   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.062   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.062   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2603), ret(-22)
+06-07 03:32:07.062   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2603)
+06-07 03:32:07.063   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2599) type(1) errorCode(2)
+06-07 03:32:07.063   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2599, errorStream=0x0, errorCode=2
+06-07 03:32:07.063   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2599
+06-07 03:32:07.063   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.064   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2599 , due to buffer error.
+06-07 03:32:07.066   982  3196 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = 0
+06-07 03:32:07.067   982  3196 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = -1
+06-07 03:32:07.067   982  3196 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: converting userId from USER_ALLto 0
+06-07 03:32:07.068  1349  1349 D PowerUI : Battery swelling mode - priorBatterySwellingMode = 0 mBatterySwellingMode = 0 mBatteryStatus = 2
+06-07 03:32:07.068  1349  1349 I PowerUI : mBatteryMiscEvent = 65536
+06-07 03:32:07.070  1349  1349 D KeyguardUpdateMonitor: handleBatteryUpdate
+06-07 03:32:07.073   560   929 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-07 03:32:07.073  1349  1349 D KeyguardSecIndicationController: addIndicationTimeout() returned - unlocking
+06-07 03:32:07.073  1349  1349 D KeyguardSecIndicationController: addIndication() returned - unlocking
+06-07 03:32:07.073  1349  1349 D KeyguardSecIndicationController: addBatteryIndication() status = BatteryStatus{status=2,level=56,plugged=2,health=2,maxChargingWattage=-1,remaining=14316000ultraFastCharger=0}
+06-07 03:32:07.077   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2601)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.077   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2601), type(2), pipeId(5)
+06-07 03:32:07.077   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2601(2607) T2) 3AA DONE
+06-07 03:32:07.077   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2601 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.077   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2601), pipeId(10)
+06-07 03:32:07.077   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2600 F2601] REQUEST ERROR
+06-07 03:32:07.077   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2600 F2601] setSkipMetaResult(true)
+06-07 03:32:07.077   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2601(2607)), type(2) ISP DONE
+06-07 03:32:07.077   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2600) type(1) errorCode(2)
+06-07 03:32:07.077   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2601 T2] Skipped frame. Force callback result. frameCount 2601
+06-07 03:32:07.077   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2600, errorStream=0x0, errorCode=2
+06-07 03:32:07.078   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2600
+06-07 03:32:07.078   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.079   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.079   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.079   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.079   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.079   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.079   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.079   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2604), ret(-22)
+06-07 03:32:07.079   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2604)
+06-07 03:32:07.080   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2600 , due to buffer error.
+06-07 03:32:07.081  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.083  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.083  1349  1349 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+06-07 03:32:07.083  1349  1349 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-07 03:32:07.083  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.086  1349  1349 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-07 03:32:07.086  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-07 03:32:07.087  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-07 03:32:07.087  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-07 03:32:07.093   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2602)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.093   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2602), type(2), pipeId(5)
+06-07 03:32:07.093   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2602(2608) T2) 3AA DONE
+06-07 03:32:07.094   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2602 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.094   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2602), pipeId(10)
+06-07 03:32:07.094   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2601 F2602] REQUEST ERROR
+06-07 03:32:07.094   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2601 F2602] setSkipMetaResult(true)
+06-07 03:32:07.094   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2602(2608)), type(2) ISP DONE
+06-07 03:32:07.094   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2602 T2] Skipped frame. Force callback result. frameCount 2602
+06-07 03:32:07.094   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2601) type(1) errorCode(2)
+06-07 03:32:07.094   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2601, errorStream=0x0, errorCode=2
+06-07 03:32:07.095   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.095   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.095   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.095   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.095   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.095   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.095   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2605), ret(-22)
+06-07 03:32:07.095   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2605)
+06-07 03:32:07.095   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2601
+06-07 03:32:07.095   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.096   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2601 , due to buffer error.
+06-07 03:32:07.110   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2603)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.110   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2603), type(2), pipeId(5)
+06-07 03:32:07.111   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2603(2609) T2) 3AA DONE
+06-07 03:32:07.111   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2603 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.111   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2603), pipeId(10)
+06-07 03:32:07.111   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2602 F2603] REQUEST ERROR
+06-07 03:32:07.111   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2602 F2603] setSkipMetaResult(true)
+06-07 03:32:07.111   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2603(2609)), type(2) ISP DONE
+06-07 03:32:07.111   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2603 T2] Skipped frame. Force callback result. frameCount 2603
+06-07 03:32:07.111   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2602) type(1) errorCode(2)
+06-07 03:32:07.111   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2602, errorStream=0x0, errorCode=2
+06-07 03:32:07.112   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2602
+06-07 03:32:07.112   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.112   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.112   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2602 , due to buffer error.
+06-07 03:32:07.112   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.112   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.112   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.112   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.112   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.112   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2606), ret(-22)
+06-07 03:32:07.112   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2606)
+06-07 03:32:07.127   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2604)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.127   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2604), type(2), pipeId(5)
+06-07 03:32:07.127   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2604(2610) T2) 3AA DONE
+06-07 03:32:07.128   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2604 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.128   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2604), pipeId(10)
+06-07 03:32:07.128   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2603 F2604] REQUEST ERROR
+06-07 03:32:07.128   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2603 F2604] setSkipMetaResult(true)
+06-07 03:32:07.128   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2604(2610)), type(2) ISP DONE
+06-07 03:32:07.128   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2604 T2] Skipped frame. Force callback result. frameCount 2604
+06-07 03:32:07.128   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2603) type(1) errorCode(2)
+06-07 03:32:07.128   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2603, errorStream=0x0, errorCode=2
+06-07 03:32:07.129   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2603
+06-07 03:32:07.129   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.130   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.130   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2603 , due to buffer error.
+06-07 03:32:07.130   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.130   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.130   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.130   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.130   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.130   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2607), ret(-22)
+06-07 03:32:07.130   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2607)
+06-07 03:32:07.143   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2605)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.144   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2605), type(2), pipeId(5)
+06-07 03:32:07.144   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2605(2611) T2) 3AA DONE
+06-07 03:32:07.144   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2605 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.144   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2605), pipeId(10)
+06-07 03:32:07.144   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2604 F2605] REQUEST ERROR
+06-07 03:32:07.145   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2604 F2605] setSkipMetaResult(true)
+06-07 03:32:07.145   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2605(2611)), type(2) ISP DONE
+06-07 03:32:07.145   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2605 T2] Skipped frame. Force callback result. frameCount 2605
+06-07 03:32:07.146   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2604) type(1) errorCode(2)
+06-07 03:32:07.146   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2604, errorStream=0x0, errorCode=2
+06-07 03:32:07.147   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.147   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.147   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.147   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.147   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.147   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.147   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2608), ret(-22)
+06-07 03:32:07.147   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2608)
+06-07 03:32:07.149   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2604
+06-07 03:32:07.149   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.150   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2604 , due to buffer error.
+06-07 03:32:07.160   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2606)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.160   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2606), type(2), pipeId(5)
+06-07 03:32:07.160   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2606(2612) T2) 3AA DONE
+06-07 03:32:07.161   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2606 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.161   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2606), pipeId(10)
+06-07 03:32:07.161   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2605 F2606] REQUEST ERROR
+06-07 03:32:07.161   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2605 F2606] setSkipMetaResult(true)
+06-07 03:32:07.161   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2606(2612)), type(2) ISP DONE
+06-07 03:32:07.161   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2606 T2] Skipped frame. Force callback result. frameCount 2606
+06-07 03:32:07.162   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2605) type(1) errorCode(2)
+06-07 03:32:07.162   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2605, errorStream=0x0, errorCode=2
+06-07 03:32:07.162   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2605
+06-07 03:32:07.162   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.164   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.165   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.165   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.165   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.165   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.165   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.165   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2609), ret(-22)
+06-07 03:32:07.165   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2609)
+06-07 03:32:07.167   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2605 , due to buffer error.
+06-07 03:32:07.177   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2607)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.177   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2607), type(2), pipeId(5)
+06-07 03:32:07.177   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2607(2613) T2) 3AA DONE
+06-07 03:32:07.177   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2607 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.178   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2607), pipeId(10)
+06-07 03:32:07.178   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2606 F2607] REQUEST ERROR
+06-07 03:32:07.178   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2606 F2607] setSkipMetaResult(true)
+06-07 03:32:07.178   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2607(2613)), type(2) ISP DONE
+06-07 03:32:07.178   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2607 T2] Skipped frame. Force callback result. frameCount 2607
+06-07 03:32:07.180   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.181   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.181   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.181   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.181   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.181   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.181   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2610), ret(-22)
+06-07 03:32:07.182   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2610)
+06-07 03:32:07.193   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2608)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.194   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2608), type(2), pipeId(5)
+06-07 03:32:07.194   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2608(2614) T2) 3AA DONE
+06-07 03:32:07.194   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2608 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.194   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2608), pipeId(10)
+06-07 03:32:07.194   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2607 F2608] REQUEST ERROR
+06-07 03:32:07.194   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2607 F2608] setSkipMetaResult(true)
+06-07 03:32:07.195   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2608(2614)), type(2) ISP DONE
+06-07 03:32:07.195   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2608 T2] Skipped frame. Force callback result. frameCount 2608
+06-07 03:32:07.197   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.198   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.198   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.198   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.198   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.198   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.198   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2611), ret(-22)
+06-07 03:32:07.198   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2611)
+06-07 03:32:07.207   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2606) type(1) errorCode(2)
+06-07 03:32:07.207   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2606, errorStream=0x0, errorCode=2
+06-07 03:32:07.207   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2606
+06-07 03:32:07.207   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.207   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2606 , due to buffer error.
+06-07 03:32:07.208   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2607) type(1) errorCode(2)
+06-07 03:32:07.208   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2607, errorStream=0x0, errorCode=2
+06-07 03:32:07.209   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2607
+06-07 03:32:07.209   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.209   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2607 , due to buffer error.
+06-07 03:32:07.211   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2609)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.213   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2609), type(2), pipeId(5)
+06-07 03:32:07.213   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2609(2615) T2) 3AA DONE
+06-07 03:32:07.213   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2609 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.213   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2609), pipeId(10)
+06-07 03:32:07.213   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2608 F2609] REQUEST ERROR
+06-07 03:32:07.213   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2608 F2609] setSkipMetaResult(true)
+06-07 03:32:07.213   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2609(2615)), type(2) ISP DONE
+06-07 03:32:07.213   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2609 T2] Skipped frame. Force callback result. frameCount 2609
+06-07 03:32:07.215   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.215   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.215   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.215   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.215   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.215   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.215   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2612), ret(-22)
+06-07 03:32:07.215   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2608) type(1) errorCode(2)
+06-07 03:32:07.215   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2612)
+06-07 03:32:07.216   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2608, errorStream=0x0, errorCode=2
+06-07 03:32:07.216   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2608
+06-07 03:32:07.216   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.216   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2608 , due to buffer error.
+06-07 03:32:07.224   571  7467 W ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_getBuffer[2091]):requestFrameQ wait timeout,Duration(1),LogCnt(79)
+06-07 03:32:07.227   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2610)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.227   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2610), type(2), pipeId(5)
+06-07 03:32:07.227   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2610(2616) T2) 3AA DONE
+06-07 03:32:07.229   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.229   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.229   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.229   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.230   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.230   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.230   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2613), ret(-22)
+06-07 03:32:07.230   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2613)
+06-07 03:32:07.231   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2610 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.231   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2610), pipeId(10)
+06-07 03:32:07.231   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2609 F2610] REQUEST ERROR
+06-07 03:32:07.231   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2609 F2610] setSkipMetaResult(true)
+06-07 03:32:07.233   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2609) type(1) errorCode(2)
+06-07 03:32:07.233   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2610(2616)), type(2) ISP DONE
+06-07 03:32:07.233   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2609, errorStream=0x0, errorCode=2
+06-07 03:32:07.233   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2610 T2] Skipped frame. Force callback result. frameCount 2610
+06-07 03:32:07.233   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2609
+06-07 03:32:07.233   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.234   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2609 , due to buffer error.
+06-07 03:32:07.243   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2611)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.244   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2611), type(2), pipeId(5)
+06-07 03:32:07.244   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2611(2617) T2) 3AA DONE
+06-07 03:32:07.244   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2611 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.244   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2611), pipeId(10)
+06-07 03:32:07.244   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2610 F2611] REQUEST ERROR
+06-07 03:32:07.244   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2610 F2611] setSkipMetaResult(true)
+06-07 03:32:07.244   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2611(2617)), type(2) ISP DONE
+06-07 03:32:07.244   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2611 T2] Skipped frame. Force callback result. frameCount 2611
+06-07 03:32:07.245   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2610) type(1) errorCode(2)
+06-07 03:32:07.245   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2610, errorStream=0x0, errorCode=2
+06-07 03:32:07.246   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.246   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.246   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.246   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.246   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.247   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.247   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2614), ret(-22)
+06-07 03:32:07.247   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2614)
+06-07 03:32:07.248   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2610
+06-07 03:32:07.248   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.249   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2610 , due to buffer error.
+06-07 03:32:07.260   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2612)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.261   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2612), type(2), pipeId(5)
+06-07 03:32:07.261   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2612(2618) T2) 3AA DONE
+06-07 03:32:07.261   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 03:32:07.263   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.263   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.263   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.263   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.263   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.263   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.263   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2615), ret(-22)
+06-07 03:32:07.263   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2615)
+06-07 03:32:07.264   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2612 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.265   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2612), pipeId(10)
+06-07 03:32:07.265   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2611 F2612] REQUEST ERROR
+06-07 03:32:07.265   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2611 F2612] setSkipMetaResult(true)
+06-07 03:32:07.265   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2612(2618)), type(2) ISP DONE
+06-07 03:32:07.265   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2612 T2] Skipped frame. Force callback result. frameCount 2612
+06-07 03:32:07.266   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2611) type(1) errorCode(2)
+06-07 03:32:07.266   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2611, errorStream=0x0, errorCode=2
+06-07 03:32:07.267   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2611
+06-07 03:32:07.267   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.268   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2611 , due to buffer error.
+06-07 03:32:07.272   460   460 D io_stats: !@   8,0 r 414721 17054032 w 201817 119647508 d 0 0 f 0 0 iot 185020 0 th 0 0 0 pt 0 inp 0 0 12626.235
+06-07 03:32:07.278   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 03:32:07.280   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2613)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.280   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2613), type(2), pipeId(5)
+06-07 03:32:07.280   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2613(2619) T2) 3AA DONE
+06-07 03:32:07.281   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2613 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.282   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.282   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.282   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.282   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.282   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.282   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.282   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2616), ret(-22)
+06-07 03:32:07.282   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2616)
+06-07 03:32:07.283   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2613), pipeId(10)
+06-07 03:32:07.283   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2612 F2613] REQUEST ERROR
+06-07 03:32:07.283   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2612 F2613] setSkipMetaResult(true)
+06-07 03:32:07.283   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2613(2619)), type(2) ISP DONE
+06-07 03:32:07.283   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2613 T2] Skipped frame. Force callback result. frameCount 2613
+06-07 03:32:07.283   982  1247 D UsbStatsMonitor: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 17703855194138
+06-07 03:32:07.283   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2612) type(1) errorCode(2)
+06-07 03:32:07.283   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2612, errorStream=0x0, errorCode=2
+06-07 03:32:07.284  5828  5828 I Edge.badge: updateBadge item = com.android.systemui:-1 1
+06-07 03:32:07.284  1777  1777 I Launcher.NotificationListener: onNotificationPosted : com.android.systemui number : 0
+06-07 03:32:07.286  1349  1349 D InterruptionStateProvider: No bubble up: not allowed to bubble: -1|com.android.systemui|2131428820|charging_state|10035
+06-07 03:32:07.287   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2612
+06-07 03:32:07.287   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.288  1349  1349 D InterruptionStateProvider:  no Heads up : edgelighting enabled app. -1|com.android.systemui|2131428820|charging_state|10035
+06-07 03:32:07.289   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2612 , due to buffer error.
+06-07 03:32:07.293   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2614)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.294   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2614), type(2), pipeId(5)
+06-07 03:32:07.294   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2614(2620) T2) 3AA DONE
+06-07 03:32:07.294   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2614 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.295   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2614), pipeId(10)
+06-07 03:32:07.295   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2613 F2614] REQUEST ERROR
+06-07 03:32:07.295   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2613 F2614] setSkipMetaResult(true)
+06-07 03:32:07.295   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2614(2620)), type(2) ISP DONE
+06-07 03:32:07.295   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2614 T2] Skipped frame. Force callback result. frameCount 2614
+06-07 03:32:07.295   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.295   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.295   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.295   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.295   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.295   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.295   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2617), ret(-22)
+06-07 03:32:07.295   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2617)
+06-07 03:32:07.298  1349  1559 D PeopleSpaceWidgetMgr: Sbn doesn't contain valid PeopleTileKey: null/-1/com.android.systemui
+06-07 03:32:07.298   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2613) type(1) errorCode(2)
+06-07 03:32:07.299   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2613, errorStream=0x0, errorCode=2
+06-07 03:32:07.299   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2613
+06-07 03:32:07.299   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.299   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2613 , due to buffer error.
+06-07 03:32:07.300  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.301  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.311   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2615)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.311   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2615), type(2), pipeId(5)
+06-07 03:32:07.311   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2615(2621) T2) 3AA DONE
+06-07 03:32:07.312   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2615 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.313   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.313   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.313   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.313   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.313   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.313   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.313   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2618), ret(-22)
+06-07 03:32:07.313   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2618)
+06-07 03:32:07.314   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2615), pipeId(10)
+06-07 03:32:07.314   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2614 F2615] REQUEST ERROR
+06-07 03:32:07.314   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2614 F2615] setSkipMetaResult(true)
+06-07 03:32:07.314   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2615(2621)), type(2) ISP DONE
+06-07 03:32:07.314   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2615 T2] Skipped frame. Force callback result. frameCount 2615
+06-07 03:32:07.316   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2614) type(1) errorCode(2)
+06-07 03:32:07.316   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2614, errorStream=0x0, errorCode=2
+06-07 03:32:07.317   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2614
+06-07 03:32:07.317   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.317   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2614 , due to buffer error.
+06-07 03:32:07.327   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2616)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.327   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2616), type(2), pipeId(5)
+06-07 03:32:07.327   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2616(2622) T2) 3AA DONE
+06-07 03:32:07.328   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2616 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.328   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.328   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.328   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.328   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.328   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.328   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.328   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2619), ret(-22)
+06-07 03:32:07.328   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2619)
+06-07 03:32:07.329   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2616), pipeId(10)
+06-07 03:32:07.329   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2615 F2616] REQUEST ERROR
+06-07 03:32:07.329   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2615 F2616] setSkipMetaResult(true)
+06-07 03:32:07.329   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2616(2622)), type(2) ISP DONE
+06-07 03:32:07.329   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2616 T2] Skipped frame. Force callback result. frameCount 2616
+06-07 03:32:07.331  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.331  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.331   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2615) type(1) errorCode(2)
+06-07 03:32:07.331   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2615, errorStream=0x0, errorCode=2
+06-07 03:32:07.331   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2615
+06-07 03:32:07.331   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.333   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2615 , due to buffer error.
+06-07 03:32:07.343   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2617)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.344   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2617), type(2), pipeId(5)
+06-07 03:32:07.344   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2617(2623) T2) 3AA DONE
+06-07 03:32:07.344   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2617 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.344   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2617), pipeId(10)
+06-07 03:32:07.344   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2616 F2617] REQUEST ERROR
+06-07 03:32:07.344   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2616 F2617] setSkipMetaResult(true)
+06-07 03:32:07.344   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2617(2623)), type(2) ISP DONE
+06-07 03:32:07.345   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2617 T2] Skipped frame. Force callback result. frameCount 2617
+06-07 03:32:07.345   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.345   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.345   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.345   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.345   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.345   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.345   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2620), ret(-22)
+06-07 03:32:07.345   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2620)
+06-07 03:32:07.345   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2616) type(1) errorCode(2)
+06-07 03:32:07.345   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2616, errorStream=0x0, errorCode=2
+06-07 03:32:07.346   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2616
+06-07 03:32:07.346   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.346   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2616 , due to buffer error.
+06-07 03:32:07.350  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.350  1349  1349 D QS      : setQSExpansion 0.0 -94.85
+06-07 03:32:07.360   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2618)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.360   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2618), type(2), pipeId(5)
+06-07 03:32:07.360   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2618(2624) T2) 3AA DONE
+06-07 03:32:07.361   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2618 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.361   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2618), pipeId(10)
+06-07 03:32:07.361   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2617 F2618] REQUEST ERROR
+06-07 03:32:07.361   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2617 F2618] setSkipMetaResult(true)
+06-07 03:32:07.361   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2618(2624)), type(2) ISP DONE
+06-07 03:32:07.361   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2618 T2] Skipped frame. Force callback result. frameCount 2618
+06-07 03:32:07.362   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2617) type(1) errorCode(2)
+06-07 03:32:07.362   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2617, errorStream=0x0, errorCode=2
+06-07 03:32:07.362   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2617
+06-07 03:32:07.362   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.362   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.362   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.362   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.362   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.362   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.362   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.362   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2621), ret(-22)
+06-07 03:32:07.362   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2621)
+06-07 03:32:07.366   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2617 , due to buffer error.
+06-07 03:32:07.377   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2619)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.377   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2619), type(2), pipeId(5)
+06-07 03:32:07.377   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2619(2625) T2) 3AA DONE
+06-07 03:32:07.377   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2619 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.377   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2619), pipeId(10)
+06-07 03:32:07.377   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2618 F2619] REQUEST ERROR
+06-07 03:32:07.377   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2618 F2619] setSkipMetaResult(true)
+06-07 03:32:07.378   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2619(2625)), type(2) ISP DONE
+06-07 03:32:07.378   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2619 T2] Skipped frame. Force callback result. frameCount 2619
+06-07 03:32:07.378   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2618) type(1) errorCode(2)
+06-07 03:32:07.378   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2618, errorStream=0x0, errorCode=2
+06-07 03:32:07.378   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2618
+06-07 03:32:07.378   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.379   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.379   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.379   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.379   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.379   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.379   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.379   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2622), ret(-22)
+06-07 03:32:07.379   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2622)
+06-07 03:32:07.380   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2618 , due to buffer error.
+06-07 03:32:07.393   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2620)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.394   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2620), type(2), pipeId(5)
+06-07 03:32:07.394   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2620(2626) T2) 3AA DONE
+06-07 03:32:07.394   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2620 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.394   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2620), pipeId(10)
+06-07 03:32:07.394   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2619 F2620] REQUEST ERROR
+06-07 03:32:07.394   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2619 F2620] setSkipMetaResult(true)
+06-07 03:32:07.394   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2620(2626)), type(2) ISP DONE
+06-07 03:32:07.394   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2619) type(1) errorCode(2)
+06-07 03:32:07.394   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2620 T2] Skipped frame. Force callback result. frameCount 2620
+06-07 03:32:07.394   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2619, errorStream=0x0, errorCode=2
+06-07 03:32:07.395   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2619
+06-07 03:32:07.395   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.396   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.396   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.396   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.396   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.396   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.396   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.396   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2623), ret(-22)
+06-07 03:32:07.396   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2623)
+06-07 03:32:07.399   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2619 , due to buffer error.
+06-07 03:32:07.411   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2621)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.411   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2621), type(2), pipeId(5)
+06-07 03:32:07.411   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2621(2627) T2) 3AA DONE
+06-07 03:32:07.411   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2621 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.411   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2621), pipeId(10)
+06-07 03:32:07.411   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2620 F2621] REQUEST ERROR
+06-07 03:32:07.411   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2620 F2621] setSkipMetaResult(true)
+06-07 03:32:07.411   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2621(2627)), type(2) ISP DONE
+06-07 03:32:07.411   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2620) type(1) errorCode(2)
+06-07 03:32:07.411   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2621 T2] Skipped frame. Force callback result. frameCount 2621
+06-07 03:32:07.411   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2620, errorStream=0x0, errorCode=2
+06-07 03:32:07.412   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2620
+06-07 03:32:07.412   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.412   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2620 , due to buffer error.
+06-07 03:32:07.413   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.413   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.413   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.414   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.414   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.414   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.414   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2624), ret(-22)
+06-07 03:32:07.414   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2624)
+06-07 03:32:07.427   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2622)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.427   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2622), type(2), pipeId(5)
+06-07 03:32:07.427   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2622(2628) T2) 3AA DONE
+06-07 03:32:07.427   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2622 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.427   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2622), pipeId(10)
+06-07 03:32:07.427   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2621 F2622] REQUEST ERROR
+06-07 03:32:07.427   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2621 F2622] setSkipMetaResult(true)
+06-07 03:32:07.427   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2622(2628)), type(2) ISP DONE
+06-07 03:32:07.427   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2622 T2] Skipped frame. Force callback result. frameCount 2622
+06-07 03:32:07.431   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.431   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.431   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2621) type(1) errorCode(2)
+06-07 03:32:07.431   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.431   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.431   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.431   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.431   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2625), ret(-22)
+06-07 03:32:07.431   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2621, errorStream=0x0, errorCode=2
+06-07 03:32:07.431   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2625)
+06-07 03:32:07.433   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2621
+06-07 03:32:07.433   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.433   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2621 , due to buffer error.
+06-07 03:32:07.443   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2623)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.444   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2623), type(2), pipeId(5)
+06-07 03:32:07.444   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2623(2629) T2) 3AA DONE
+06-07 03:32:07.444   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.444   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.444   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.444   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.445   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.445   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.445   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2626), ret(-22)
+06-07 03:32:07.445   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2626)
+06-07 03:32:07.445   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2623 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.446   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2623), pipeId(10)
+06-07 03:32:07.446   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2622 F2623] REQUEST ERROR
+06-07 03:32:07.446   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2622 F2623] setSkipMetaResult(true)
+06-07 03:32:07.446   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2623(2629)), type(2) ISP DONE
+06-07 03:32:07.446   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2622) type(1) errorCode(2)
+06-07 03:32:07.446   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2623 T2] Skipped frame. Force callback result. frameCount 2623
+06-07 03:32:07.446   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2622, errorStream=0x0, errorCode=2
+06-07 03:32:07.446   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2622
+06-07 03:32:07.446   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.447   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2622 , due to buffer error.
+06-07 03:32:07.460   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2624)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.464   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2624), type(2), pipeId(5)
+06-07 03:32:07.465   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2624(2630) T2) 3AA DONE
+06-07 03:32:07.465   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2624 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.465   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2624), pipeId(10)
+06-07 03:32:07.465   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2623 F2624] REQUEST ERROR
+06-07 03:32:07.465   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.465   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.465   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.465   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.465   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.465   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.466   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2627), ret(-22)
+06-07 03:32:07.466   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2623 F2624] setSkipMetaResult(true)
+06-07 03:32:07.466   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2627)
+06-07 03:32:07.466   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2624(2630)), type(2) ISP DONE
+06-07 03:32:07.466   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2624 T2] Skipped frame. Force callback result. frameCount 2624
+06-07 03:32:07.466   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2623) type(1) errorCode(2)
+06-07 03:32:07.466   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2623, errorStream=0x0, errorCode=2
+06-07 03:32:07.467   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2623
+06-07 03:32:07.467   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.468   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2623 , due to buffer error.
+06-07 03:32:07.477   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2625)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.477   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2625), type(2), pipeId(5)
+06-07 03:32:07.477   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2625(2631) T2) 3AA DONE
+06-07 03:32:07.477   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2625 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.478   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.478   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.478   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.478   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.478   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.478   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.478   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2628), ret(-22)
+06-07 03:32:07.478   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2628)
+06-07 03:32:07.479   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2625), pipeId(10)
+06-07 03:32:07.479   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2624 F2625] REQUEST ERROR
+06-07 03:32:07.479   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2624 F2625] setSkipMetaResult(true)
+06-07 03:32:07.479   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2625(2631)), type(2) ISP DONE
+06-07 03:32:07.479   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2625 T2] Skipped frame. Force callback result. frameCount 2625
+06-07 03:32:07.480   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2624) type(1) errorCode(2)
+06-07 03:32:07.480   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2624, errorStream=0x0, errorCode=2
+06-07 03:32:07.480   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2624
+06-07 03:32:07.480   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.481   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2624 , due to buffer error.
+06-07 03:32:07.488   560   929 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-07 03:32:07.493   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2626)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.494   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2626), type(2), pipeId(5)
+06-07 03:32:07.494   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2626(2632) T2) 3AA DONE
+06-07 03:32:07.494   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2626 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.494   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2626), pipeId(10)
+06-07 03:32:07.494   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.494   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2625 F2626] REQUEST ERROR
+06-07 03:32:07.494   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.494   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2625 F2626] setSkipMetaResult(true)
+06-07 03:32:07.494   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.494   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2626(2632)), type(2) ISP DONE
+06-07 03:32:07.494   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2626 T2] Skipped frame. Force callback result. frameCount 2626
+06-07 03:32:07.495   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.495   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.495   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.495   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2629), ret(-22)
+06-07 03:32:07.495   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2629)
+06-07 03:32:07.495   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2625) type(1) errorCode(2)
+06-07 03:32:07.495   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2625, errorStream=0x0, errorCode=2
+06-07 03:32:07.499   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2625
+06-07 03:32:07.499   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.500   708   811 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2625 , due to buffer error.
+06-07 03:32:07.511   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2627)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.511   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2627), type(2), pipeId(5)
+06-07 03:32:07.511   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2627(2633) T2) 3AA DONE
+06-07 03:32:07.511   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2627 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.513   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2627), pipeId(10)
+06-07 03:32:07.513   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2626 F2627] REQUEST ERROR
+06-07 03:32:07.513   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2626 F2627] setSkipMetaResult(true)
+06-07 03:32:07.513   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2627(2633)), type(2) ISP DONE
+06-07 03:32:07.513   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2627 T2] Skipped frame. Force callback result. frameCount 2627
+06-07 03:32:07.513   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2626) type(1) errorCode(2)
+06-07 03:32:07.513   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2626, errorStream=0x0, errorCode=2
+06-07 03:32:07.515   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.515   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.515   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.515   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.515   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.515   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.515   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2630), ret(-22)
+06-07 03:32:07.515   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2630)
+06-07 03:32:07.517   708   811 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2626
+06-07 03:32:07.517   708   811 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.518   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2626 , due to buffer error.
+06-07 03:32:07.527   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2628)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.527   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2628), type(2), pipeId(5)
+06-07 03:32:07.527   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2628(2634) T2) 3AA DONE
+06-07 03:32:07.527   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2628 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.527   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2628), pipeId(10)
+06-07 03:32:07.527   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2627 F2628] REQUEST ERROR
+06-07 03:32:07.527   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2627 F2628] setSkipMetaResult(true)
+06-07 03:32:07.527   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2628(2634)), type(2) ISP DONE
+06-07 03:32:07.528   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2628 T2] Skipped frame. Force callback result. frameCount 2628
+06-07 03:32:07.528   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2627) type(1) errorCode(2)
+06-07 03:32:07.528   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2627, errorStream=0x0, errorCode=2
+06-07 03:32:07.528   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2627
+06-07 03:32:07.528   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.529   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2627 , due to buffer error.
+06-07 03:32:07.530   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.530   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.530   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.530   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.530   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.530   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.530   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2631), ret(-22)
+06-07 03:32:07.530   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2631)
+06-07 03:32:07.543   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2629)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.544   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2629), type(2), pipeId(5)
+06-07 03:32:07.544   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2629(2635) T2) 3AA DONE
+06-07 03:32:07.544   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2629 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.544   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2629), pipeId(10)
+06-07 03:32:07.544   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2628 F2629] REQUEST ERROR
+06-07 03:32:07.544   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2628 F2629] setSkipMetaResult(true)
+06-07 03:32:07.544   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2629(2635)), type(2) ISP DONE
+06-07 03:32:07.545   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2629 T2] Skipped frame. Force callback result. frameCount 2629
+06-07 03:32:07.545   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2628) type(1) errorCode(2)
+06-07 03:32:07.545   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2628, errorStream=0x0, errorCode=2
+06-07 03:32:07.545   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2628
+06-07 03:32:07.545   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.545   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.546   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.546   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.546   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.546   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.546   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.546   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2632), ret(-22)
+06-07 03:32:07.546   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2632)
+06-07 03:32:07.546   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2628 , due to buffer error.
+06-07 03:32:07.560   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2630)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.565   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2630), type(2), pipeId(5)
+06-07 03:32:07.565   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2630(2636) T2) 3AA DONE
+06-07 03:32:07.565   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2630 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.571   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2630), pipeId(10)
+06-07 03:32:07.571   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2629 F2630] REQUEST ERROR
+06-07 03:32:07.571   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2629 F2630] setSkipMetaResult(true)
+06-07 03:32:07.571   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2630(2636)), type(2) ISP DONE
+06-07 03:32:07.571   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2629) type(1) errorCode(2)
+06-07 03:32:07.571   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2630 T2] Skipped frame. Force callback result. frameCount 2630
+06-07 03:32:07.571   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2629, errorStream=0x0, errorCode=2
+06-07 03:32:07.571   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2629
+06-07 03:32:07.571   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.573   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2629 , due to buffer error.
+06-07 03:32:07.573   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.573   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.573   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.573   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.573   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.573   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.573   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2633), ret(-22)
+06-07 03:32:07.573   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2633)
+06-07 03:32:07.576   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2631)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.577   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2631), type(2), pipeId(5)
+06-07 03:32:07.577   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2631(2637) T2) 3AA DONE
+06-07 03:32:07.577   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2631 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.577   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2631), pipeId(10)
+06-07 03:32:07.577   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2630 F2631] REQUEST ERROR
+06-07 03:32:07.577   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2630 F2631] setSkipMetaResult(true)
+06-07 03:32:07.577   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2631(2637)), type(2) ISP DONE
+06-07 03:32:07.577   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2631 T2] Skipped frame. Force callback result. frameCount 2631
+06-07 03:32:07.577   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2630) type(1) errorCode(2)
+06-07 03:32:07.578   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2630, errorStream=0x0, errorCode=2
+06-07 03:32:07.578   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2630
+06-07 03:32:07.578   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.578   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.578   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.578   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.578   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.578   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.578   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.578   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2634), ret(-22)
+06-07 03:32:07.578   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2634)
+06-07 03:32:07.579   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2630 , due to buffer error.
+06-07 03:32:07.593   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2632)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.593   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2632), type(2), pipeId(5)
+06-07 03:32:07.593   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2632(2638) T2) 3AA DONE
+06-07 03:32:07.594   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2632 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.594   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.594   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.594   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.594   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.594   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.594   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.594   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2635), ret(-22)
+06-07 03:32:07.594   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2635)
+06-07 03:32:07.595   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2632), pipeId(10)
+06-07 03:32:07.595   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2631 F2632] REQUEST ERROR
+06-07 03:32:07.595   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2631 F2632] setSkipMetaResult(true)
+06-07 03:32:07.595   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2632(2638)), type(2) ISP DONE
+06-07 03:32:07.595   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2632 T2] Skipped frame. Force callback result. frameCount 2632
+06-07 03:32:07.595   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2631) type(1) errorCode(2)
+06-07 03:32:07.595   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2631, errorStream=0x0, errorCode=2
+06-07 03:32:07.596   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2631
+06-07 03:32:07.596   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.597   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2631 , due to buffer error.
+06-07 03:32:07.610   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2633)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.611   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2633), type(2), pipeId(5)
+06-07 03:32:07.611   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2633(2639) T2) 3AA DONE
+06-07 03:32:07.611   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2633 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.611   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2633), pipeId(10)
+06-07 03:32:07.611   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2632 F2633] REQUEST ERROR
+06-07 03:32:07.611   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2632 F2633] setSkipMetaResult(true)
+06-07 03:32:07.611   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2633(2639)), type(2) ISP DONE
+06-07 03:32:07.611   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2633 T2] Skipped frame. Force callback result. frameCount 2633
+06-07 03:32:07.611   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2632) type(1) errorCode(2)
+06-07 03:32:07.611   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2632, errorStream=0x0, errorCode=2
+06-07 03:32:07.612   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2632
+06-07 03:32:07.612   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.613   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.613   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.613   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.614   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.614   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.614   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.614   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2636), ret(-22)
+06-07 03:32:07.614   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2636)
+06-07 03:32:07.615   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2632 , due to buffer error.
+06-07 03:32:07.626   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2634)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.627   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2634), type(2), pipeId(5)
+06-07 03:32:07.627   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2634(2640) T2) 3AA DONE
+06-07 03:32:07.627   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2634 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.627   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2634), pipeId(10)
+06-07 03:32:07.627   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2633 F2634] REQUEST ERROR
+06-07 03:32:07.627   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2633 F2634] setSkipMetaResult(true)
+06-07 03:32:07.627   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2634(2640)), type(2) ISP DONE
+06-07 03:32:07.627   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2634 T2] Skipped frame. Force callback result. frameCount 2634
+06-07 03:32:07.627   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2633) type(1) errorCode(2)
+06-07 03:32:07.627   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2633, errorStream=0x0, errorCode=2
+06-07 03:32:07.628   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2633
+06-07 03:32:07.628   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.630   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2633 , due to buffer error.
+06-07 03:32:07.631   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.631   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.631   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.631   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.631   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.631   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.631   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2637), ret(-22)
+06-07 03:32:07.631   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2637)
+06-07 03:32:07.643   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2635)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.644   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2635), type(2), pipeId(5)
+06-07 03:32:07.644   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2635(2641) T2) 3AA DONE
+06-07 03:32:07.644   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2635 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.644   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2635), pipeId(10)
+06-07 03:32:07.644   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2634 F2635] REQUEST ERROR
+06-07 03:32:07.644   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2634 F2635] setSkipMetaResult(true)
+06-07 03:32:07.644   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2635(2641)), type(2) ISP DONE
+06-07 03:32:07.644   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2635 T2] Skipped frame. Force callback result. frameCount 2635
+06-07 03:32:07.645   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.645   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B3]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.645   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.645   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 208 userptr 208 length 8128512
+06-07 03:32:07.645   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 202 userptr 202 length 40960
+06-07 03:32:07.645   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.645   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2638), ret(-22)
+06-07 03:32:07.645   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2638)
+06-07 03:32:07.646   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2634) type(1) errorCode(2)
+06-07 03:32:07.646   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2634, errorStream=0x0, errorCode=2
+06-07 03:32:07.646   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2634
+06-07 03:32:07.646   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.647   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2634 , due to buffer error.
+06-07 03:32:07.660   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2636)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.660   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2636), type(2), pipeId(5)
+06-07 03:32:07.660   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2636(2642) T2) 3AA DONE
+06-07 03:32:07.664   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2636 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.664   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2636), pipeId(10)
+06-07 03:32:07.664   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2635 F2636] REQUEST ERROR
+06-07 03:32:07.664   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2635 F2636] setSkipMetaResult(true)
+06-07 03:32:07.664   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2636(2642)), type(2) ISP DONE
+06-07 03:32:07.664   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2636 T2] Skipped frame. Force callback result. frameCount 2636
+06-07 03:32:07.664   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2635) type(1) errorCode(2)
+06-07 03:32:07.664   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2635, errorStream=0x0, errorCode=2
+06-07 03:32:07.665   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2635
+06-07 03:32:07.665   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.666   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2635 , due to buffer error.
+06-07 03:32:07.666   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.666   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B4]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.666   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.666   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 209 userptr 209 length 8128512
+06-07 03:32:07.666   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 203 userptr 203 length 40960
+06-07 03:32:07.666   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.666   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2639), ret(-22)
+06-07 03:32:07.666   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2639)
+06-07 03:32:07.677   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2637)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.677   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2637), type(2), pipeId(5)
+06-07 03:32:07.677   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2637(2643) T2) 3AA DONE
+06-07 03:32:07.678   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2637 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.678   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2637), pipeId(10)
+06-07 03:32:07.678   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2636 F2637] REQUEST ERROR
+06-07 03:32:07.678   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2636 F2637] setSkipMetaResult(true)
+06-07 03:32:07.678   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2637(2643)), type(2) ISP DONE
+06-07 03:32:07.678   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2637 T2] Skipped frame. Force callback result. frameCount 2637
+06-07 03:32:07.678   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.678   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B5]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.678   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.678   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 210 userptr 210 length 8128512
+06-07 03:32:07.678   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 204 userptr 204 length 40960
+06-07 03:32:07.678   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.678   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2640), ret(-22)
+06-07 03:32:07.678   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2640)
+06-07 03:32:07.679   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2636) type(1) errorCode(2)
+06-07 03:32:07.679   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2636, errorStream=0x0, errorCode=2
+06-07 03:32:07.680   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2636
+06-07 03:32:07.680   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.681   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2636 , due to buffer error.
+06-07 03:32:07.693   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2638)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.694   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2638), type(2), pipeId(5)
+06-07 03:32:07.694   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2638(2644) T2) 3AA DONE
+06-07 03:32:07.697   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2638 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.700   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.700   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2638), pipeId(10)
+06-07 03:32:07.700   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B0]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.700   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2637 F2638] REQUEST ERROR
+06-07 03:32:07.700   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.700   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2637 F2638] setSkipMetaResult(true)
+06-07 03:32:07.700   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 205 userptr 205 length 8128512
+06-07 03:32:07.700   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2638(2644)), type(2) ISP DONE
+06-07 03:32:07.700   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 199 userptr 199 length 40960
+06-07 03:32:07.700   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2638 T2] Skipped frame. Force callback result. frameCount 2638
+06-07 03:32:07.700   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.700   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2641), ret(-22)
+06-07 03:32:07.700   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2641)
+06-07 03:32:07.704   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2637) type(1) errorCode(2)
+06-07 03:32:07.704   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2637, errorStream=0x0, errorCode=2
+06-07 03:32:07.704   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2637
+06-07 03:32:07.704   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.705   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2637 , due to buffer error.
+06-07 03:32:07.710   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2639)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.710   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2639), type(2), pipeId(5)
+06-07 03:32:07.710   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2639(2645) T2) 3AA DONE
+06-07 03:32:07.711   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2639 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.712   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2639), pipeId(10)
+06-07 03:32:07.712   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2638 F2639] REQUEST ERROR
+06-07 03:32:07.712   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2638 F2639] setSkipMetaResult(true)
+06-07 03:32:07.712   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.712   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B1]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.712   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2639(2645)), type(2) ISP DONE
+06-07 03:32:07.712   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.712   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2639 T2] Skipped frame. Force callback result. frameCount 2639
+06-07 03:32:07.712   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 206 userptr 206 length 8128512
+06-07 03:32:07.712   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 200 userptr 200 length 40960
+06-07 03:32:07.712   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.712   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2642), ret(-22)
+06-07 03:32:07.712   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2642)
+06-07 03:32:07.713   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2638) type(1) errorCode(2)
+06-07 03:32:07.713   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2638, errorStream=0x0, errorCode=2
+06-07 03:32:07.713   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2638
+06-07 03:32:07.713   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.714   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2638 , due to buffer error.
+06-07 03:32:07.727   571  7465 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_getBuffer[2425]):frameCount(2640)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-07 03:32:07.727   571  7470 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13060]):Invalid buffer index(-1), framecount(2640), type(2), pipeId(5)
+06-07 03:32:07.727   571  7470 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F2640(2646) T2) 3AA DONE
+06-07 03:32:07.727   571  7466 E ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(m_putBuffer[1620]):[F2640 T2] Frame get src(0) buffer fail, FrameQ_size (0, 0) size(0) ret(0)
+06-07 03:32:07.727   571  7464 E libexynosv4l2: failed to ioctl: VIDIOC_QBUF (22 - Invalid argument)
+06-07 03:32:07.727   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1499]):[FD141 B2]Failed to exynos_v4l2_qbuf. ret -1
+06-07 03:32:07.728   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1502]):|- v4l2_buf 0xda769630 v4l2_buf.m 0xda769664 type 9 memory 4 length 2 flags 9000 reserved -1
+06-07 03:32:07.728   571  7471 E ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13098]):Src buffer state is error index(-1), framecount(2640), pipeId(10)
+06-07 03:32:07.728   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2831]):[R2639 F2640] REQUEST ERROR
+06-07 03:32:07.728   571  7471 E ExynosCamera: [CAM(0)][Back_0]-(m_sendNotifyError[2859]):[R2639 F2640] setSkipMetaResult(true)
+06-07 03:32:07.728   571  7471 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F2640(2646)), type(2) ISP DONE
+06-07 03:32:07.728   571  7471 W ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13288]):[F2640 T2] Skipped frame. Force callback result. frameCount 2640
+06-07 03:32:07.728   571  7437 W ExynosCameraRequestManager: [CAM(0)][]-(m_callbackOpsNotify[2939]):msg frame(2639) type(1) errorCode(2)
+06-07 03:32:07.729   571  7437 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureMessage: 883: ErrorMessage : frameNumber=2639, errorStream=0x0, errorCode=2
+06-07 03:32:07.728   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P0] plane 0xda769678 plane.m 0xda769680 fd 207 userptr 207 length 8128512
+06-07 03:32:07.729   708 32110 E CameraDeviceClient: notifyError: pid=7254, errorCode=3, errorStreamId=0, frameNumber=2639
+06-07 03:32:07.729   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(m_qBuf[1507]):|-- [P1] plane 0xda7696b4 plane.m 0xda7696bc fd 201 userptr 201 length 40960
+06-07 03:32:07.729   708 32110 E CameraDeviceClient: notifyError: pid=7254, skipClientNotification=false
+06-07 03:32:07.729   571  7464 E ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(putBuffer[993]):qBuf fail
+06-07 03:32:07.729   571  7464 E ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1774]):node(3AA_PREVIEW)->putBuffer() fail, frameCount(2643), ret(-22)
+06-07 03:32:07.729   571  7464 W ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(m_putBuffer[1816]):Capture node putbuffer is Zero, frameCount(2643)
+06-07 03:32:07.730   708 32110 E Camera3-OutputStream: returnBufferCheckedLocked: A frame is dropped for stream 0 frame 2639 , due to buffer error.

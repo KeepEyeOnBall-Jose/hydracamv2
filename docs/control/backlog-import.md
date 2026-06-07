@@ -17,18 +17,110 @@ Default issue schema:
 
 ## Priority Issue Candidates
 
-### 1. Fix iOS physical-device launch white screen
+### 0. ASAP: Validate camera lens and video profile settings on iPhone/Samsung
+
+- Source: 2026-06-07 camera settings implementation plan:
+  `docs/superpowers/plans/2026-06-07-camera-lens-video-settings.md`.
+- Labels: `hydracam`, `mobile`, `camera`, `ios`, `android`,
+  `release-blocker`.
+- Priority: High.
+- Body: HydraCam now has local camera lens and target video profile settings.
+  Each device chooses its own lens/profile before executing existing
+  master/slave capture commands. iPhone devices should expose ultra-wide/wide
+  and telephoto when hardware supports them; Android devices may expose opaque
+  CameraX IDs, enriched with Camera2 focal-length metadata when available.
+- Acceptance checks: iPhone 12 Pro records with Ultra Wide (0.5x) at
+  `sport1080p60` and `detail4k30`; Samsung Galaxy S7 records rear wide at
+  `sport1080p60` and `detail4k30`; S10e or newer Samsung repeats at least one
+  profile; saved-video metadata logs include actual width/height/fps or a clear
+  unavailable message; changing profile does not reset the selected lens.
+- 2026-06-07 verification note:
+  `logs/verification-runs/20260607-camera-settings-device-matrix/summary.md`
+  records the current matrix. Physical iPad passed `autoBack` +
+  `standard1080p30`; Samsung S10e partially passed `autoBack` +
+  `standard1080p30` with `1920x1080, unknown fps` metadata but did not end the
+  automation session cleanly. At that time, iPhone 12 Pro retest was blocked
+  until the device was unlocked; Xiaomi 2201116PG install is blocked by
+  user-restricted install;
+  Samsung S7 baseline and 60 fps capture plus S10e 60 fps hit native
+  Samsung/Exynos Camera3 buffer errors. Keep this issue open.
+- 2026-06-07 rerun note:
+  `logs/verification-runs/20260607-camera-settings-device-matrix-rerun/summary.md`
+  records the latest matrix after automation batching, local session-end, and
+  camera timeout fixes. S10e `standard1080p30` now passes including session end,
+  including a final current-build smoke after reinstalling the debug APK. S10e
+  `sport1080p60`, S7 `standard1080p30`, and S7 `compat720p30` fail with bounded
+  timeouts instead of hanging. iPad still passes capture but reports saved-video
+  metadata unavailable. At that time, iPhone 12 Pro remained blocked by
+  Xcode/debug launch plus locked-device direct launch. Xiaomi remains blocked by
+  `INSTALL_FAILED_USER_RESTRICTED`. Keep this issue open.
+- 2026-06-07 one-by-one rerun note:
+  `logs/verification-runs/20260607-all-devices-one-by-one-rerun/summary.md`
+  records a fresh per-device pass. macOS, physical iPad, and Samsung S10e have
+  current smoke evidence. iOS simulator launches but has no camera. At that
+  time, iPhone 12 Pro remained blocked by locked-device launch/no bridge
+  discovery, Samsung S7 still failed baseline `compat720p30` capture with
+  Exynos camera wait timeouts, and Xiaomi remained blocked by user-restricted
+  APK install. Keep this issue open.
+- 2026-06-07 remaining-blockers rerun note:
+  `logs/verification-runs/20260607-remaining-blockers-rerun/summary.md` records
+  fresh checks for the still-unverified devices. S7 also fails at
+  `dataSaver480p30` after camera initialization with a 12 second photo timeout
+  and Exynos/Camera2 reopening logs. At that time, iPhone 12 Pro direct launch
+  was still denied while locked. Xiaomi still fails install with
+  `INSTALL_FAILED_USER_RESTRICTED`. The later new-devices rerun note supersedes
+  the iPhone lock blocker for debug automation capture. Keep this issue open.
+- 2026-06-07 new-devices rerun note:
+  `logs/verification-runs/20260607-new-devices-rerun/summary.md` records fresh
+  checks after additional devices were connected. iPhone 12 Pro / iOS 26.5 now
+  passes debug automation capture on the 0.5x path for both `sport1080p60` and
+  `detail4k30`, but saved-video metadata remains unavailable. A newly connected
+  Samsung S10e / Android 12 passes `standard1080p30` with `1920x1080, unknown
+  fps` metadata. A newly connected Samsung SM-G960F / Android 10 fails before
+  photo save at both `standard1080p30` and `compat720p30` with CameraX
+  `ImageCaptureException: Not bound to a valid Camera`. Samsung S7 still fails
+  even at `dataSaver480p30` with 12 second photo timeout plus Exynos/Camera2
+  reopen logs. Keep this issue open until iOS metadata or a documented
+  unavailable limitation is accepted and S7/Samsung low-end CameraX handling is
+  resolved or scoped out.
+- 2026-06-07 post-label matrix note:
+  `logs/verification-runs/20260607-post-label-device-matrix/summary.md` records
+  the current matrix after changing the profile selector to display concrete
+  target text. macOS, both S10e devices, G960F, iPhone 12 Pro, and physical iPad
+  have current one-device smoke evidence. `videoCaptureTarget` now appears as
+  `1080p at 30 fps` or `1080p at 60 fps` in settings evidence. G960F now passes
+  baseline `standard1080p30`, superseding its earlier failure. S7 remains the
+  only connected physical mobile device failing before photo save; iOS metadata
+  remains unavailable; iOS simulator remains launch/UI-only because it exposes
+  no cameras. Keep this issue open.
+- 2026-06-07 parallel matrix note:
+  `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`
+  records a coordinated independent-capture matrix with a shared command
+  barrier. iPhone 12 Pro, iPad 5, macOS, both S10e devices, and G960F passed
+  their local lens/profile targets; iOS simulator remained launch-only; S7 was
+  classified from logcat as `s7_exynos_camera_timeout`. This is not a
+  master/slave discovery proof, so keep this issue open until a separate
+  one-master/many-slaves matrix passes or is explicitly scoped out.
+
+### 1. Validate iOS release/profile launch and capture readiness
 
 - Source: current repo status; related `FALLOS Y MEJORAS` rows 12, 13, 15, 16,
   17.
 - Labels: `hydracam`, `mobile`, `ios`, `release-blocker`.
 - Priority: High.
-- Body: The app installs and launches on physical iOS devices but shows a white
-  screen. Related sheet rows also describe iOS networking, disconnect, iPad save,
-  and role-selection issues.
-- Acceptance checks: physical iPhone reaches the expected first app screen,
-  logs show successful initialization or actionable errors, and simulator
-  behavior remains unchanged.
+- Body: The prior broad "physical iOS white screen" blocker is superseded by
+  newer evidence. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/`
+  shows iPhone 12 Pro debug launch, session creation, photo capture/upload, and
+  video start. `logs/verification-runs/20260606-2310-ipad-capture-failure-trace-and-repro/`
+  shows physical iPad photo/video capture passing after the no-flash camera fix.
+  Related sheet rows still describe iOS networking, disconnect, and
+  role-selection issues that need targeted validation if they remain
+  reproducible.
+- Acceptance checks: intended-team signed profile/release build reaches the
+  expected first app screen from the device icon, photo and video capture work
+  or produce actionable logs, simulator behavior remains unchanged, and at
+  least one two-device master/slave smoke run is recorded before production
+  claims.
 
 ### 2. Preserve session state across master reconnect
 
@@ -134,7 +226,48 @@ Default issue schema:
   player import/source is explicit, and app handles missing backend support
   gracefully.
 
-### 11. Desktop/webcam scope decision completed
+### 11. Make mobile Auth0 login recoverable and release-safe
+
+- Source: current repo audit, 2026-06-07; current `AuthService` uses
+  `flutter_appauth` and keeps access token, email, and profile picture in memory
+  only, while `UserService` keeps logged-in state and user GUID in memory only.
+- Labels: `hydracam`, `mobile`, `auth`, `android`, `ios`, `security`,
+  `release-blocker`.
+- Priority: High.
+- Body: The current login succeeds only for the live app process. Implement a
+  recoverable authentication session: request refresh-capable scopes if kept on
+  Auth0, persist credentials securely, restore valid credentials during app
+  startup, refresh expired access tokens, re-fetch the HydraCam user GUID after
+  restore, and clear both local app state and Auth0/browser session state on
+  logout.
+- Acceptance checks: after successful login, force-closing and reopening the app
+  restores the same HydraCam user without another browser prompt; expired tokens
+  refresh or fall back to a clear login-required state; logout prevents silent
+  reuse of the previous user; no token is stored in plain shared preferences;
+  `flutter analyze`, the relevant auth/unit tests, and Android plus iOS
+  real-device or simulator smoke evidence are attached.
+
+### 12. Decide and implement Android-native account-picker sign-in
+
+- Source: current Android UX gap, 2026-06-07; users expect the local Android
+  account/credential sheet seen in other apps, but the current `flutter_appauth`
+  path launches Auth0 Universal Login in a browser or Chrome Custom Tab.
+- Labels: `hydracam`, `mobile`, `auth`, `android`, `ux`, `external-backend`.
+- Priority: Medium.
+- Body: Decide whether HydraCam should keep Auth0 Universal Login only, migrate
+  mobile auth to `auth0_flutter` with its Credentials Manager, or add Android
+  Credential Manager / Sign in with Google for a native account-picker path. If
+  native Android sign-in is selected, define how the returned Google/credential
+  identity maps into Auth0 and the HydraCam backend user GUID.
+- Acceptance checks: decision record compares Auth0 Universal Login,
+  `auth0_flutter` Credentials Manager, and Android Credential Manager / Sign in
+  with Google; selected path is implemented behind a clear service interface;
+  Android shows the expected native credential/account sheet when applicable;
+  backend/Auth0 user linking is proven for an existing Android user's account;
+  logout and account switching are tested on a real Android device; privacy/data
+  safety notes are updated if additional identity data is collected.
+
+### 13. Desktop/webcam scope decision completed
 
 - Sources: `JAVI IMMEDIATE BACKLOG` rows 76, 83, 103.
 - Labels: `hydracam`, `mobile`, `desktop`, `webcam`.
@@ -144,7 +277,7 @@ Default issue schema:
   deferred. Do not create a live Linear issue for generic webcam capture unless
   the scope is reopened with a concrete workflow.
 
-### 12. Add mobile preview streams on master
+### 14. Add mobile preview streams on master
 
 - Sources: `SYSTEM FEATURES` F18; FR-045, FR-046; `Testing table` T-021, T-022.
 - Labels: `hydracam`, `mobile`, `preview`, `external-backend`.
@@ -173,9 +306,9 @@ work.
 | 26 | Fallo | iOS role-selection back arrow with nowhere to go | `hydracam`, `mobile`, `ios`, `ux` | Issue if still visible. |
 | 27 | Fallo | iOS client/network behavior as slave/master | `hydracam`, `mobile`, `ios`, `network` | Merge with iOS reliability. |
 | 30 | Fallo | iOS disconnects as slave in under 10 seconds | `hydracam`, `mobile`, `ios`, `websocket` | Merge with iOS reliability. |
-| 31 | Fallo | iPad camera does not save photos | `hydracam`, `mobile`, `ios`, `camera` | Merge with iOS reliability. |
+| 31 | Fallo | iPad camera does not save photos | `hydracam`, `mobile`, `ios`, `camera` | Fixed in `logs/verification-runs/20260606-2310-ipad-capture-failure-trace-and-repro/`; keep regression coverage. |
 | 32 | Mejora | Old media should not require a specific filter | `hydracam`, `mobile`, `gallery` | Merge with gallery session attachment. |
-| 33 | Fallo | iPhone/iPad auto-connect from mode selection but do not advance | `hydracam`, `mobile`, `ios`, `navigation` | Merge with iOS reliability. |
+| 33 | Fallo | iPhone/iPad auto-connect from mode selection but do not advance | `hydracam`, `mobile`, `ios`, `navigation` | Issue only if still reproducible after the 2026-06-06 iPhone/iPad working evidence. |
 | 34 | Mejora | Investigate Android 4.1.2 legacy support | `hydracam`, `mobile`, `android` | Defer unless product values legacy devices. |
 | 35 | Novedad | Add players mid session | `hydracam`, `mobile`, `users` | Merge with user/player assignment. |
 | 36 | Fallo | Null check error stopping recording on macOS/iPad | `hydracam`, `mobile`, `recording`, `desktop`, `ios` | Issue if still reproducible. |
@@ -228,7 +361,7 @@ the repo lacks all coverage.
 | T-019 | Time synchronization accuracy test | `hydracam`, `mobile`, `testing`, `sync` |
 | T-020 | Upload time estimate test | `hydracam`, `mobile`, `testing`, `upload` |
 | T-021, T-022 | Readiness and preview-stream tests | `hydracam`, `mobile`, `testing`, `preview`, `websocket` |
-| T-001 | Auth0 login regression test | `hydracam`, `mobile`, `testing`, `auth` |
+| T-001 | Auth0 login, startup restore, Android process-death recovery, logout, and account-switch regression tests | `hydracam`, `mobile`, `testing`, `auth`, `android`, `ios` |
 | T-016 | Photo/video upload API test with invalid files | `hydracam`, `mobile`, `testing`, `upload`, `external-backend` |
 
 Backend-only tests from T-002 through T-015 and T-023 should be moved to the

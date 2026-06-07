@@ -11,6 +11,7 @@ import "../services/camera_service_singleton.dart";
 import "../services/device_service.dart"; // Import for device ID service
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
+import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 
 /// SlaveClient - Handles the WebSocket client for slave devices.
@@ -125,11 +126,13 @@ class SlaveClient {
       _statusStreamController.add("Connected to master at $serverAddress.");
       _connectionStatusStreamController
           .add(true); // Notify UI of connection status
+      final networkPayload = await _currentNetworkPayload();
 
       // Send a JSON message containing the device ID after connecting
       _channel?.sink.add(jsonEncode({
         "type": "deviceId",
         "deviceId": _deviceId,
+        if (networkPayload != null) "network": networkPayload,
       }));
 
       // Also ask status of session
@@ -170,6 +173,11 @@ class SlaveClient {
                         deviceType: "Slave"); // Store the session
                     notifyReadyToTransmit(sessionGuid);
                   }
+                } else if (command == "networkMismatch") {
+                  final message = decodedMessage["message"] ??
+                      "This device is not on the same network as the master.";
+                  LogService.instance.registerLog("Network mismatch: $message");
+                  _statusStreamController.add(message.toString());
                 } else if (command == "sessionEnded") {
                   // End session
                   await SessionManager.instance.endSession();
@@ -313,7 +321,8 @@ class SlaveClient {
   void _executeCommand(String command) async {
     if (command == "takePhoto") {
       photoCaptureDate = DateTime.now();
-      _cameraService.takePhoto().then((photoPath) async {
+      try {
+        final photoPath = await _cameraService.takePhoto();
         final receivedDate = DateTime.now();
 
         // Get the device ID
@@ -336,14 +345,29 @@ class SlaveClient {
         // final file = File(photoPath);
         // final Uint8List photoData = await file.readAsBytes();
         // _channel?.sink.add(jsonEncode({...}));
-      });
+      } catch (error, stackTrace) {
+        LogService.instance
+            .registerLog("Slave photo capture failed: $error\n$stackTrace");
+        _statusStreamController.add("Photo capture failed: $error");
+      }
     } else if (command == "startRecordingVideo") {
-      LogService.instance.registerLog("Starting video recording");
-      videoStartRecordingDate = DateTime.now();
-      await _cameraService.startRecordingVideo();
-      isRecordingVideo = true;
-      onRecordingStarted?.call();
-      _statusStreamController.add("Recording video...");
+      try {
+        LogService.instance.registerLog("Starting video recording");
+        await _cameraService.startRecordingVideo();
+        videoStartRecordingDate = _cameraService.videoStartRecordingDate;
+        isRecordingVideo = _cameraService.isRecording;
+        if (!isRecordingVideo) {
+          throw StateError("Camera service did not enter recording state.");
+        }
+        onRecordingStarted?.call();
+        _statusStreamController.add("Recording video...");
+      } catch (error, stackTrace) {
+        LogService.instance.registerLog(
+            "Slave video recording start failed: $error\n$stackTrace");
+        isRecordingVideo = false;
+        onRecordingStopped?.call();
+        _statusStreamController.add("Recording start failed: $error");
+      }
     } else if (command == "stopRecordingVideo") {
       if (!isRecordingVideo) {
         LogService.instance
@@ -352,8 +376,15 @@ class SlaveClient {
       }
 
       LogService.instance.registerLog("Stopping video recording");
-      videoEndRecordingDate = DateTime.now();
-      _cameraService.stopRecordingVideo().then((videoPath) async {
+      try {
+        final videoPath = await _cameraService.stopRecordingVideo();
+        videoEndRecordingDate = _cameraService.videoEndRecordingDate;
+        final startRecordingDate = videoStartRecordingDate;
+        final endRecordingDate = videoEndRecordingDate;
+        if (startRecordingDate == null || endRecordingDate == null) {
+          throw StateError("Slave recording timestamps are missing after stop. "
+              "start=$startRecordingDate end=$endRecordingDate");
+        }
         final receivedDate = DateTime.now();
 
         // Get the device ID
@@ -364,8 +395,8 @@ class SlaveClient {
           videoData: null,
           videoPath: videoPath,
           slaveDeviceId: deviceId,
-          startRecordingDate: videoStartRecordingDate!,
-          endRecordingDate: videoEndRecordingDate!,
+          startRecordingDate: startRecordingDate,
+          endRecordingDate: endRecordingDate,
           receivedDate: receivedDate,
         );
         SessionManager.instance.addVideo(capturedVideo);
@@ -381,7 +412,13 @@ class SlaveClient {
         // final file = File(videoPath);
         // final Uint8List videoData = await file.readAsBytes();
         // _channel?.sink.add(jsonEncode({...}));
-      });
+      } catch (error, stackTrace) {
+        LogService.instance.registerLog(
+            "Slave video recording stop failed: $error\n$stackTrace");
+        isRecordingVideo = false;
+        onRecordingStopped?.call();
+        _statusStreamController.add("Recording stop failed: $error");
+      }
     } else if (command == "stopCamera") {
       // Stop the camera service when receiving 'stopCamera' command
       _cameraService.stopCamera();
@@ -433,12 +470,14 @@ class SlaveClient {
   /// Starts the periodic heartbeat to maintain the WebSocket connection.
   void _startHeartbeat() {
     _stopHeartbeat(); // Ensure no duplicate timers
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
       if (_isConnected) {
+        final networkPayload = await _currentNetworkPayload();
         _channel?.sink.add(jsonEncode({
           "type": "heartbeat",
           "deviceId": _deviceId,
           "timestamp": DateTime.now().toIso8601String(),
+          if (networkPayload != null) "network": networkPayload,
         }));
         //LogService.instance.registerLog("Sent heartbeat to master.");
       }
@@ -479,5 +518,14 @@ class SlaveClient {
         .add(false); // Notify UI of connection status
     _reconnectTimer?.cancel();
     _stopHeartbeat();
+  }
+
+  Future<Map<String, dynamic>?> _currentNetworkPayload() async {
+    try {
+      return (await NetworkInfoService.getCurrentSnapshot()).toJson();
+    } catch (e) {
+      LogService.instance.registerLog("Could not read slave network info: $e");
+      return null;
+    }
   }
 }

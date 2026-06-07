@@ -1,0 +1,657 @@
+# HydraCam evidence run command log
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 hostname && whoami && ver
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 powershell -NoProfile -ExecutionPolicy Bypass -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; hostname; whoami; cmd /c ver"
+DESKTOP-02NDERS
+desktop-02nders\jose
+
+Microsoft Windows [Versión 10.0.26200.8457]
+[exit-code] 0
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 powershell -NoProfile -ExecutionPolicy Bypass -File .\win11-inspect.ps1
+
+=== identity ===
+-- hostname
+DESKTOP-02NDERS
+-- whoami
+desktop-02nders\jose
+-- windows version
+
+Microsoft Windows [Versión 10.0.26200.8457]
+-- powershell version
+Microsoft.PowerShell.Commands.Internal.Format.FormatStartData
+Microsoft.PowerShell.Commands.Internal.Format.GroupStartData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.GroupEndData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEndData
+-- admin
+False
+-- computer info
+Microsoft.PowerShell.Commands.Internal.Format.FormatStartData
+Microsoft.PowerShell.Commands.Internal.Format.GroupStartData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.GroupEndData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEndData
+-- disk
+Microsoft.PowerShell.Commands.Internal.Format.FormatStartData
+Microsoft.PowerShell.Commands.Internal.Format.GroupStartData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.GroupEndData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEndData
+
+=== commands ===
+winget=C:\Users\jose\AppData\Local\Microsoft\WindowsApps\winget.exe
+git=C:\Program Files\Git\cmd\git.exe
+pwsh=C:\Program Files\PowerShell\7\pwsh.exe
+code=c:\Users\jose\AppData\Local\Programs\cursor\resources\app\bin\code.cmd
+flutter=C:\src\flutter\bin\flutter.bat
+dart=C:\src\flutter\bin\dart.bat
+java=C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\java.exe
+adb=C:\Users\jose\AppData\Local\Android\Sdk\platform-tools\adb.exe
+sdkmanager=<missing>
+avdmanager=<missing>
+cmake=<missing>
+ninja=<missing>
+cl=<missing>
+wsl=C:\Windows\system32\wsl.exe
+usbipd=<missing>
+ffmpeg=C:\ProgramData\chocolatey\bin\ffmpeg.exe
+python=C:\Python312\python.exe
+where=
+
+=== versions ===
+-- winget --version
+v1.28.240
+-- git --version
+git version 2.45.1.windows.1
+-- pwsh --version
+PowerShell 7.5.5
+-- code --version
+0.45.14
+906121b8c0bdf041c14a15dac228e66ab5505260
+x64
+-- flutter --version
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+│ To update to the latest version, run "flutter upgrade". │
+└─────────────────────────────────────────────────────────┘
+Flutter 3.7.5 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision c07f788888 (3 years, 3 months ago) • 2023-02-22 17:52:33 -0600
+Engine • revision 0f359063c4
+Tools • Dart 2.19.2 • DevTools 2.20.1
+-- flutter config --list
+-- java -version
+-- adb version
+Android Debug Bridge version 1.0.41
+Version 34.0.0-9570255
+Installed as C:\Users\jose\AppData\Local\Android\Sdk\platform-tools\adb.exe
+-- sdkmanager --version
+ERROR: El término 'sdkmanager' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+-- cmake --version
+ERROR: El término 'cmake' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+-- ninja --version
+ERROR: El término 'ninja' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+-- ffmpeg -version
+ffmpeg version 7.0.2-full_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg developers
+built with gcc 13.2.0 (Rev5, Built by MSYS2 project)
+configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-libsnappy --enable-zlib --enable-librist --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-libbluray --enable-libcaca --enable-sdl2 --enable-libaribb24 --enable-libaribcaption --enable-libdav1d --enable-libdavs2 --enable-libuavs3d --enable-libxevd --enable-libzvbi --enable-librav1e --enable-libsvtav1 --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxeve --enable-libxvid --enable-libaom --enable-libjxl --enable-libopenjpeg --enable-libvpx --enable-mediafoundation --enable-libass --enable-frei0r --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-liblensfun --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 --enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi --enable-libshaderc --enable-vulkan --enable-libplacebo --enable-opencl --enable-libcdio --enable-libgme --enable-libmodplug --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libshine --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libcodec2 --enable-libilbc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-ladspa --enable-libbs2b --enable-libflite --enable-libmysofa --enable-librubberband --enable-libsoxr --enable-chromaprint
+libavutil      59.  8.100 / 59.  8.100
+libavcodec     61.  3.100 / 61.  3.100
+libavformat    61.  1.100 / 61.  1.100
+libavdevice    61.  1.100 / 61.  1.100
+libavfilter    10.  1.100 / 10.  1.100
+libswscale      8.  1.100 /  8.  1.100
+libswresample   5.  1.100 /  5.  1.100
+libpostproc    58.  1.100 / 58.  1.100
+-- python --version
+Python 3.12.6
+
+=== visual studio ===
+-- vswhere
+ERROR: El término 'x86' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+-- vswhere json
+ERROR: El término 'x86' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+
+=== android sdk ===
+-- env android
+-- sdk dirs
+ERROR: En línea: 1 Carácter: 44
++ @($env:ANDROID_HOME, $env:ANDROID_SDK_ROOT, Join-Path $env:LOCALAPPDA ...
++                                            ~
+Falta una expresión después de ','.
+
+En línea: 1 Carácter: 45
++ @($env:ANDROID_HOME, $env:ANDROID_SDK_ROOT, Join-Path $env:LOCALAPPDA ...
++                                             ~~~~~~~~~
+Token 'Join-Path' inesperado en la expresión o la instrucción.
+
+=== wsl ===
+-- wsl status
+D i s t r i b u c i � n   p r e d e t e r m i n a d a :   U b u n t u - 2 0 . 0 4 
+ 
+ V e r s i � n   p r e d e t e r m i n a d a :   2 
+ 
+ 
+-- wsl list verbose
+    N A M E                             S T A T E                       V E R S I O N 
+ 
+ *   U b u n t u - 2 0 . 0 4             R u n n i n g                   1 
+ 
+     d o c k e r - d e s k t o p         S t o p p e d                   2 
+ 
+     U b u n t u - 2 2 . 0 4             R u n n i n g                   2 
+ 
+ 
+
+=== repo ===
+-- repo candidate
+C:\Users\jose\\src\\work\\hydracamv2
+C:\Users\jose\\src\\hydracamv2
+C:\Users\jose\\hydracamv2
+
+=== usb ===
+-- adb devices
+List of devices attached
+
+-- usbipd list
+ERROR: El término 'usbipd' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+-- camera pnp
+Microsoft.PowerShell.Commands.Internal.Format.FormatStartData
+Microsoft.PowerShell.Commands.Internal.Format.GroupStartData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData
+Microsoft.PowerShell.Commands.Internal.Format.GroupEndData
+Microsoft.PowerShell.Commands.Internal.Format.FormatEndData
+-- ffmpeg directshow devices
+[exit-code] 0
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 powershell -NoProfile -ExecutionPolicy Bypass -File .\win11-toolchain-check.ps1
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 powershell -NoProfile -ExecutionPolicy Bypass -File .\win11-toolchain-check.ps1
+
+$ bash -lc ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-toolchain-check.ps1" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE
+hostname=DESKTOP-02NDERS
+user=DESKTOP-02NDERS\jose
+admin_token=False
+=== local administrators ===
+Get-LocalGroupMember : No se encontr├│ el grupo Administrators.
+En C:\Users\jose\win11-toolchain-check.ps1: 16 Car├ícter: 3
++   Get-LocalGroupMember -Group "Administrators" | ForEach-Object {
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Administrators:String) [Get-LocalGroupMember], GroupNotFoundException
+    + FullyQualifiedErrorId : GroupNotFound,Microsoft.PowerShell.Commands.GetLocalGroupMemberCommand
+ 
+=== visual studio ===
+vswhere=C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe
+[
+  {
+    "instanceId": "d6eb332f",
+    "installDate": "2022-11-25T06:08:08Z",
+    "installationName": "VisualStudio/17.14.27+37012.4.-february.2026-",
+    "installationPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community",
+    "installationVersion": "17.14.37012.4",
+    "productId": "Microsoft.VisualStudio.Product.Community",
+    "productPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\devenv.exe",
+    "state": 4294967295,
+    "isComplete": true,
+    "isLaunchable": true,
+    "isPrerelease": false,
+    "isRebootRequired": false,
+    "displayName": "Visual Studio Community 2022",
+    "description": "IDE con un gran potencial, gratis para estudiantes, colaboradores de código abierto y personas",
+    "channelId": "VisualStudio.17.Release",
+    "channelUri": "https://aka.ms/vs/17/release/channel",
+    "enginePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\resources\\app\\ServiceHub\\Services\\Microsoft.VisualStudio.Setup.Service",
+    "installedChannelId": "VisualStudio.17.Release",
+    "installedChannelUri": "https://aka.ms/vs/17/release/channel",
+    "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.27",
+    "resolvedInstallationPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community",
+    "thirdPartyNotices": "https://go.microsoft.com/fwlink/?LinkId=661288",
+    "updateDate": "2026-02-26T17:03:46.7743859Z",
+    "catalog": {
+      "buildBranch": "d17.14",
+      "buildVersion": "17.14.37012.4",
+      "id": "VisualStudio/17.14.27+37012.4.-february.2026-",
+      "localBuild": "build-lab",
+      "manifestName": "VisualStudio",
+      "manifestType": "installer",
+      "productDisplayVersion": "17.14.27 (February 2026)",
+      "productLine": "Dev17",
+      "productLineVersion": "2022",
+      "productMilestone": "RTW",
+      "productMilestoneIsPreRelease": "False",
+      "productName": "Visual Studio",
+      "productPatchVersion": "27",
+      "productPreReleaseMilestoneSuffix": "1.0",
+      "productReleaseNameSuffix": "(February 2026)",
+      "productSemanticVersion": "17.14.27+37012.4.-february.2026-",
+      "requiredEngineVersion": "3.14.2086.54749"
+    },
+    "properties": {
+      "appLocalWPF": "false",
+      "campaignId": "2030:0b5d4048af914c19a72578e358588a4b",
+      "channelManifestId": "VisualStudio.17.Release/17.14.27+37012.4.-february.2026-",
+      "nickname": "",
+      "setupEngineFilePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\setup.exe"
+    }
+  },
+  {
+    "instanceId": "d76aa680",
+    "installDate": "2024-09-18T06:54:56Z",
+    "installationName": "VisualStudio/16.11.53+36631.11",
+    "installationPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools",
+    "installationVersion": "16.11.36631.11",
+    "productId": "Microsoft.VisualStudio.Product.BuildTools",
+    "productPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\Common7\\Tools\\LaunchDevCmd.bat",
+    "state": 4294967295,
+    "isComplete": true,
+    "isLaunchable": true,
+    "isPrerelease": false,
+    "isRebootRequired": false,
+    "displayName": "Visual Studio Build Tools 2019",
+    "description": "Visual Studio Build Tools permite compilar aplicaciones nativas y administradas basadas en MSBuild sin el IDE de Visual Studio. Hay opciones para instalar los compiladores y las bibliotecas de Visual C++, MFC, ATL y la compatibilidad con C++/CLI.",
+    "channelId": "VisualStudio.16.Release",
+    "channelUri": "https://aka.ms/vs/16/release/channel",
+    "enginePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\resources\\app\\ServiceHub\\Services\\Microsoft.VisualStudio.Setup.Service",
+    "installedChannelId": "VisualStudio.16.Release",
+    "installedChannelUri": "https://aka.ms/vs/16/release/channel",
+    "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2019/release-notes-v16.11#16.11.53",
+    "resolvedInstallationPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools",
+    "thirdPartyNotices": "https://go.microsoft.com/fwlink/?LinkId=660909",
+    "updateDate": "2026-02-27T03:14:42.1572178Z",
+    "catalog": {
+      "buildBranch": "d16.11",
+      "buildVersion": "16.11.36631.11",
+      "id": "VisualStudio/16.11.53+36631.11",
+      "localBuild": "build-lab",
+      "manifestName": "VisualStudio",
+      "manifestType": "installer",
+      "productDisplayVersion": "16.11.53",
+      "productLine": "Dev16",
+      "productLineVersion": "2019",
+      "productMilestone": "RTW",
+      "productMilestoneIsPreRelease": "False",
+      "productName": "Visual Studio",
+      "productPatchVersion": "53",
+      "productPreReleaseMilestoneSuffix": "1.0",
+      "productSemanticVersion": "16.11.53+36631.11",
+      "requiredEngineVersion": "2.11.72.18200"
+    },
+    "properties": {
+      "appLocalWPF": "false",
+      "campaignId": "",
+      "canceled": "0",
+      "channelManifestId": "VisualStudio.16.Release/16.11.53+36631.11",
+      "includeRecommended": "0",
+      "nickname": "",
+      "setupEngineFilePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\setup.exe"
+    }
+  }
+]
+=== native desktop workload ===
+C:\Program Files\Microsoft Visual Studio\2022\Community
+=== command lookup ===
+-- cl
+<missing>
+-- cmake
+<missing>
+-- ninja
+<missing>
+-- msbuild
+<missing>
+-- devenv
+<missing>
+-- vswhere
+<missing>
+=== paths ===
+PATH=C:\Python312\Scripts\;C:\Python312\;c:\Users\jose\AppData\Local\Programs\cursor\resources\app\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft Emulator Manager\1.0\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\ProgramData\chocolatey\bin;C:\Users\jose\AppData\Local\Microsoft\WindowsApps;C:\src\flutter\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2022.3.1\bin;C:\ProgramData\anaconda3\Scripts\;C:\ProgramData\anacond;C:\Program Files\Git\cmd;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\bin\Hostx86\x86\;C:\Program Files\nodejs\;C:\Program Files\Docker\Docker\resources\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PowerShell\7\;C:\Program Files\Tailscale\;C:\Program Files\PowerShell\7;C:\Python312\Scripts\;C:\Python312\;c:\Users\jose\AppData\Local\Programs\cursor\resources\app\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft Emulator Manager\1.0\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\ProgramData\chocolatey\bin;C:\Users\jose\AppData\Local\Microsoft\WindowsApps;C:\src\flutter\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2022.3.1\bin;C:\ProgramData\anaconda3\Scripts\;C:\ProgramData\anacond;C:\Program Files\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\bin\Hostx86\x86\;C:\Program Files\nodejs\;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\PowerShell\7\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\jose\AppData\Local\Microsoft\WindowsApps;C:\src\flutter\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2022.3.1\bin;;C:\Users\jose\AppData\Local\Programs\Microsoft VS Code\bin;C:\ProgramData\anaconda3\Scripts\;C:\ProgramData\anaconda3\;C:\Program Files\Azure Data Studio\bin;C:\Program Files\smartmontools\bin;C:\Users\jose\AppData\Local\GitHubDesktop\bin;C:\Users\jose\AppData\Local\Programs\Ollama;C:\Program Files\JetBrains\PyCharm 2024.2.0.1\bin;;C:\Users\jose\AppData\Local\Android\Sdk\platform-tools;C:\Users\jose\AppData\Roaming\npm;C:\Users\jose\.dotnet\tools;;C:\Users\jose\libimobiledevice;C:\Users\jose\.dotnet\tools;C:\Users\jose\AppData\Local\Programs\Antigravity\bin
+ANDROID_HOME=
+ANDROID_SDK_ROOT=
+JAVA_HOME=C:\Users\jose\AppData\Local\Programs\Android Studio Fixed\jbr
+[exit-code] 0
+
+$ bash -lc ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::OutputEncoding=[Text.Encoding]::UTF8; Write-Output \\\"JAVA_HOME=$env:JAVA_HOME\\\"; if (Test-Path \\\"$env:JAVA_HOME\\bin\\java.exe\\\") { & \\\"$env:JAVA_HOME\\bin\\java.exe\\\" -version }; Write-Output \\\"Csrc Flutter status\\\"; git -C C:\\src\\flutter rev-parse --short HEAD; git -C C:\\src\\flutter status -sb\"" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE
+JAVA_HOME=:JAVA_HOME
+Csrc Flutter status
+c07f7888888
+## stable...origin/stable [ahead 38, behind 56733]
+[exit-code] 0
+
+$ bash -lc ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-setup.ps1" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE
+
+=== identity ===
+host=DESKTOP-02NDERS
+user=DESKTOP-02NDERS\jose
+admin-token=False
+
+=== flutter 3.44.1 ===
+From https://github.com/flutter/flutter
+ - [deleted]                 (none)     -> origin/115574-android-selection-haptics-feedback-should-respect-android-settings
+ - [deleted]                 (none)     -> origin/3.3
+ - [deleted]                 (none)     -> origin/3.8.0-10.1
+ - [deleted]                 (none)     -> origin/CaseyHillers-patch-1
+ - [deleted]                 (none)     -> origin/Hixie-patch-1
+ - [deleted]                 (none)     -> origin/Hixie-patch-2
+ - [deleted]                 (none)     -> origin/Hixie-patch-3
+ - [deleted]                 (none)     -> origin/Hixie-patch-4
+ - [deleted]                 (none)     -> origin/Piinks-patch-1
+ - [deleted]                 (none)     -> origin/akbiggs-patch-1
+ - [deleted]                 (none)     -> origin/b123315
+ - [deleted]                 (none)     -> origin/bdero-patch-1
+ - [deleted]                 (none)     -> origin/bdero-patch-2
+ - [deleted]                 (none)     -> origin/cherry-pick-template
+ - [deleted]                 (none)     -> origin/cp-beta-126606f9f30fb589835797b205c38244d71efd53
+ - [deleted]                 (none)     -> origin/create-pull-request/patch
+ - [deleted]                 (none)     -> origin/d-flutter-embedding-warning
+ - [deleted]                 (none)     -> origin/dds_4.2.5+1
+ - [deleted]                 (none)     -> origin/dds_launcher_take2
+ - [deleted]                 (none)     -> origin/dependabot/docker/dev/ci/docker_linux/ubuntu-6fec506
+ - [deleted]                 (none)     -> origin/dependabot/github_actions/actions/checkout-3.2.0
+ - [deleted]                 (none)     -> origin/dependabot/github_actions/codecov/codecov-action-4.5.0
+ - [deleted]                 (none)     -> origin/dependabot/github_actions/github/codeql-action-2.1.36
+ - [deleted]                 (none)     -> origin/dependabot/github_actions/github/codeql-action-2.1.37
+ - [deleted]                 (none)     -> origin/dependabot/github_actions/github/codeql-action-2.2.4
+ - [deleted]                 (none)     -> origin/dependabot/github_actions/github/codeql-action-2.2.5
+ - [deleted]                 (none)     -> origin/disable_observatory
+ - [deleted]                 (none)     -> origin/drewroengoogle-patch-1
+ - [deleted]                 (none)     -> origin/enabled_by_default
+ - [deleted]                 (none)     -> origin/feat/resolve-dwarf-paths
+ - [deleted]                 (none)     -> origin/feature/dartdoc-6-1-3
+ - [deleted]                 (none)     -> origin/gh-readonly-queue/master/pr-174037-d8466f4fcf68307ee740431df5eb37047f62b7b1
+ - [deleted]                 (none)     -> origin/gh-readonly-queue/master/pr-184906-8aea1bf74c5c50ad4abe68396c3fb4b21e2b70fe
+ - [deleted]                 (none)     -> origin/godofredoc-patch-1
+ - [deleted]                 (none)     -> origin/guidezpl-patch-1
+ - [deleted]                 (none)     -> origin/hairlineBorder
+ - [deleted]                 (none)     -> origin/indexed-stack-fit
+ - [deleted]                 (none)     -> origin/matthew-carroll_renderbox-assertion-message-improvement
+ - [deleted]                 (none)     -> origin/nuritzi-patch-1
+ - [deleted]                 (none)     -> origin/platform_binaries_reland
+ - [deleted]                 (none)     -> origin/reland_remove_observatory_references
+ - [deleted]                 (none)     -> origin/remove_observatory_messaging
+ - [deleted]                 (none)     -> origin/repo-merge-experiment
+ - [deleted]                 (none)     -> origin/revert-102453-mouse_tracker_crash
+ - [deleted]                 (none)     -> origin/revert-103019-huan_platform_view_focus_in_framework
+ - [deleted]                 (none)     -> origin/revert-103456-shortcuts_registry
+ - [deleted]                 (none)     -> origin/revert-104215-remove_shortcut_manager_of
+ - [deleted]                 (none)     -> origin/revert-105247-revert-104274-handle-hide-toolbar
+ - [deleted]                 (none)     -> origin/revert-106752-flutter-shader-assets
+ - [deleted]                 (none)     -> origin/revert-107382-m3_button_variant
+ - [deleted]                 (none)     -> origin/revert-108234-drawers
+ - [deleted]                 (none)     -> origin/revert-108548-flutter-engine-flutter-autoroll-e63a8e89-d1f1-4784-a9b1-683a37300ef2-1659021237
+ - [deleted]                 (none)     -> origin/revert-109421-revert-109349-icon_button_on_appbar_fix
+ - [deleted]                 (none)     -> origin/revert-109900-remove_texture_restriction
+ - [deleted]                 (none)     -> origin/revert-110436-revert-109784-a11y
+ - [deleted]                 (none)     -> origin/revert-110502-issues/109465
+ - [deleted]                 (none)     -> origin/revert-111080-bottomappbarcolor
+ - [deleted]                 (none)     -> origin/revert-112651-cache_more_variants
+ - [deleted]                 (none)     -> origin/revert-113577-flutter-engine-flutter-autoroll-931da2c9-f20f-4d2a-a1f0-22d6b76828dc-1666045981
+ - [deleted]                 (none)     -> origin/revert-114114-simulator-q
+ - [deleted]                 (none)     -> origin/revert-114313-improve-asset-bundle-exceptions
+ - [deleted]                 (none)     -> origin/revert-114646-revert-105966-Pourqavam_text-field-label
+ - [deleted]                 (none)     -> origin/revert-115009-fix_linux_remapped_capslock_throws
+ - [deleted]                 (none)     -> origin/revert-115146-revert-114698-revert-114647-revert-104128-scribble-mixin
+ - [deleted]                 (none)     -> origin/revert-115187-tae/sentence-case
+ - [deleted]                 (none)     -> origin/revert-116743-scrimFocusImpl3
+ - [deleted]                 (none)     -> origin/revert-116798-run_log_spew
+ - [deleted]                 (none)     -> origin/revert-117503-scrollphysicsNoWindow
+ - [deleted]                 (none)     -> origin/revert-117547-issues/117479
+ - [deleted]                 (none)     -> origin/revert-119597-revert-119498-button_reland
+ - [deleted]                 (none)     -> origin/revert-120283-revert-120167-remove-recursive-asset-search
+ - [deleted]                 (none)     -> origin/revert-120366-update-gallery
+ - [deleted]                 (none)     -> origin/revert-120628-packages-autoroller-branch-75
+ - [deleted]                 (none)     -> origin/revert-121405-conductor-rm-cherrypicks
+ - [deleted]                 (none)     -> origin/revert-121521-fix_Ink_decoration_image_does_not_render
+ - [deleted]                 (none)     -> origin/revert-122233-issues/117481
+ - [deleted]                 (none)     -> origin/revert-123129-indexed-stack-hide-from-finder-v2
+ - [deleted]                 (none)     -> origin/revert-123425-default-gstatic-cdn
+ - [deleted]                 (none)     -> origin/revert-124558-add-version-json
+ - [deleted]                 (none)     -> origin/revert-126493-cherry-picks-flutter-3.11-candidate.3
+ - [deleted]                 (none)     -> origin/revert-127456-feat/buggy-network-image
+ - [deleted]                 (none)     -> origin/revert-127690-add-wildcard-labeler
+ - [deleted]                 (none)     -> origin/revert-128522-text-scale-factor-api-changes
+ - [deleted]                 (none)     -> origin/revert-128973-removeAbstractFromRender
+ - [deleted]                 (none)     -> origin/revert-129047-flutter-engine-flutter-autoroll-b22068c3-4fe3-428a-9164-d92c64bee9c6-1686956841
+ - [deleted]                 (none)     -> origin/revert-129400-revert-128901-dom_web
+ - [deleted]                 (none)     -> origin/revert-131292-update_material3_tests
+ - [deleted]                 (none)     -> origin/revert-132106-cherrypick_framework
+ - [deleted]                 (none)     -> origin/revert-132255-slowerreassemble
+ - [deleted]                 (none)     -> origin/revert-132573-flexible_space_bar_leading
+ - [deleted]                 (none)     -> origin/revert-132773-revert-132669-windows_update_hang
+ - [deleted]                 (none)     -> origin/revert-133806-leak-fix-fix
+ - [deleted]                 (none)     -> origin/revert-135279-frame_request_pending_metrics
+ - [deleted]                 (none)     -> origin/revert-136562-skip_bonjour_settings_for_disabled_port_publication
+ - [deleted]                 (none)     -> origin/revert-137550-remove_buttonbar_references
+ - [deleted]                 (none)     -> origin/revert_c21bf45b20e4723ecf9b4a57e90116b533e5d56f
+ - [deleted]                 (none)     -> origin/revert_dd341d4295416f559b971fa58583a8efacfd376c
+ - [deleted]                 (none)     -> origin/serve_observatory_option
+ - [deleted]                 (none)     -> origin/snackbar
+ - [deleted]                 (none)     -> origin/staleviewport
+ - [deleted]                 (none)     -> origin/test-plugin-ffi-run-ffigen
+ - [deleted]                 (none)     -> origin/timsneath-no-format-on-save
+ - [deleted]                 (none)     -> origin/tokens
+ - [deleted]                 (none)     -> origin/update-cherry-pick-process
+ - [deleted]                 (none)     -> origin/vm_service
+ - [deleted]                 (none)     -> origin/warptocurreind
+Note: switching to '924134a44c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 924134a44c1 Update CHANGELOG with Flutter 3.44 changes (#187258)
+HEAD is now at 924134a44c1 Update CHANGELOG with Flutter 3.44 changes (#187258)
+user-path-present=C:\src\flutter\bin
+Checking Dart SDK version... 
+Downloading Dart SDK from Flutter engine c416acfeb8126e097f758c664aaa3da929e27da0... 
+Expanding downloaded archive with PowerShell...
+Building flutter tool... 
+Running pub upgrade... 
+Resolving dependencies...
+Downloading packages...
+Got dependencies.
+Flutter 3.44.1 ÔÇó channel [user-branch] ÔÇó unknown source
+Framework ÔÇó revision 924134a44c (9 days ago) ÔÇó 2026-05-29 12:13:22 -0400
+Engine ÔÇó hash 39b1f7043775b9578bbb26a1676e79c4e31c8b5e (revision c416acfeb8) (10 days ago) ÔÇó 2026-05-27 20:19:31.000Z
+Tools ÔÇó Dart 3.12.1 ÔÇó DevTools 2.57.0
+
+=== java 17 ===
+added-user-path=C:\Users\jose\AppData\Local\Programs\Android Studio Fixed\jbr\bin
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment (build 21.0.10+-14961533-b1163.108)
+OpenJDK 64-Bit Server VM (build 21.0.10+-14961533-b1163.108, mixed mode)
+
+=== android command line tools ===
+user-path-present=C:\Users\jose\AppData\Local\Android\Sdk\platform-tools
+added-user-path=C:\Users\jose\AppData\Local\Android\Sdk\emulator
+added-user-path=C:\Users\jose\AppData\Local\Android\Sdk\cmdline-tools\latest\bin
+9.0
+
+
+=== android sdk packages ===
+Loading package information...                                                  
+Loading local repository...                                                     
+[                                       ] 3% Loading local repository...        
+[                                       ] 3% Fetch remote repository...         
+[=                                      ] 3% Fetch remote repository...         
+[=                                      ] 4% Fetch remote repository...         
+[=                                      ] 5% Fetch remote repository...         
+[==                                     ] 5% Fetch remote repository...         
+[==                                     ] 6% Fetch remote repository...         
+[==                                     ] 7% Fetch remote repository...         
+[==                                     ] 7% Computing updates...               
+[===                                    ] 8% Computing updates...               
+[===                                    ] 10% Computing updates...              
+[===                                    ] 10% Installing NDK (Side by side) 28.2
+[===                                    ] 10% Downloading android-ndk-r28c-windo
+[====                                   ] 10% Downloading android-ndk-r28c-windo
+[====                                   ] 11% Downloading android-ndk-r28c-windo
+[====                                   ] 12% Downloading android-ndk-r28c-windo
+Loading local repository...                                                     
+[=========                              ] 25% Loading local repository...       
+[=========                              ] 25% Fetch remote repository...        
+[==========                             ] 26% Fetch remote repository...        
+[============                           ] 31% Fetch remote repository...        
+[============                           ] 32% Fetch remote repository...        
+[=============                          ] 33% Fetch remote repository...        
+[=============                          ] 35% Fetch remote repository...        
+[==============                         ] 36% Fetch remote repository...        
+[==============                         ] 37% Fetch remote repository...        
+[===============                        ] 38% Fetch remote repository...        
+[===============                        ] 39% Fetch remote repository...        
+[================                       ] 40% Fetch remote repository...        
+[================                       ] 41% Fetch remote repository...        
+[================                       ] 42% Fetch remote repository...        
+[=================                      ] 44% Fetch remote repository...        
+[=================                      ] 45% Fetch remote repository...        
+[==================                     ] 46% Fetch remote repository...        
+[==================                     ] 47% Fetch remote repository...        
+[===================                    ] 48% Fetch remote repository...        
+[===================                    ] 49% Fetch remote repository...        
+[====================                   ] 50% Fetch remote repository...        
+[====================                   ] 51% Fetch remote repository...        
+[====================                   ] 53% Fetch remote repository...        
+[=====================                  ] 54% Fetch remote repository...        
+[=====================                  ] 55% Fetch remote repository...        
+[======================                 ] 56% Fetch remote repository...        
+[======================                 ] 57% Fetch remote repository...        
+[=======================                ] 58% Fetch remote repository...        
+[=======================                ] 59% Fetch remote repository...        
+[========================               ] 60% Fetch remote repository...        
+[========================               ] 61% Fetch remote repository...        
+[=========================              ] 63% Fetch remote repository...        
+[=========================              ] 64% Fetch remote repository...        
+[=========================              ] 65% Fetch remote repository...        
+[==========================             ] 66% Fetch remote repository...        
+[==========================             ] 67% Fetch remote repository...        
+[===========================            ] 68% Fetch remote repository...        
+[===========================            ] 69% Fetch remote repository...        
+[============================           ] 70% Fetch remote repository...        
+[============================           ] 72% Fetch remote repository...        
+[=============================          ] 73% Fetch remote repository...        
+[=============================          ] 74% Fetch remote repository...        
+[=============================          ] 75% Fetch remote repository...        
+[=============================          ] 75% Computing updates...              
+[=======================================] 100% Computing updates...             
+
+1 of 7 SDK package license not accepted.
+Review license that has not been accepted (y/N)? 
+
+=== flutter config ===
+Setting "enable-windows-desktop" value to "true".
+
+You may need to restart any open editors for them to read new settings.
+[1/7] Flutter SDK
+  Ôö£ÔöÇ [1/5] sky_engine                                              809ms
+  Ôö£ÔöÇ [2/5] flutter_gpu                                              46ms
+  Ôö£ÔöÇ [3/5] flutter_patched_sdk                                   1.747ms
+  Ôö£ÔöÇ [4/5] flutter_patched_sdk_product                           1.800ms
+  ÔööÔöÇ [5/5] windows-x64                                             14,6s
+[7/7] windows-x64/font-subset                                    1.607ms
+[!] Flutter (Channel [user-branch], 3.44.1, on Microsoft Windows [Versi┬ón 10.0.26200.8457], locale es-ES) [707ms]
+    ! Flutter version 3.44.1 on channel [user-branch] at C:\src\flutter
+      Currently on an unknown channel. Run `flutter channel` to switch to an official channel.
+      If that doesn't fix the issue, reinstall Flutter by following instructions at https://flutter.dev/setup.
+    ! Upstream repository unknown source is not a standard remote.
+      Set environment variable "FLUTTER_GIT_URL" to unknown source to dismiss this error.
+    ÔÇó Framework revision 924134a44c (9 days ago), 2026-05-29 12:13:22 -0400
+    ÔÇó Engine revision c416acfeb8
+    ÔÇó Dart version 3.12.1
+    ÔÇó DevTools version 2.57.0
+    ÔÇó Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration, enable-riscv64
+    ÔÇó If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[ÔêÜ] Windows Version (11 Pro 64-bit, 25H2, 2009) [2,5s]
+
+[!] Android toolchain - develop for Android devices (Android SDK version 33.0.1) [2,1s]
+    ÔÇó Android SDK at C:\Users\jose\AppData\Local\Android\Sdk
+    ÔÇó Emulator version 32.1.11.0 (build_id 9536276) (CL:N/A)
+    X Flutter requires Android SDK 36 and the Android BuildTools 28.0.3
+      To update the Android SDK visit https://flutter.dev/to/windows-android-setup for detailed instructions.
+    ! Some Android licenses not accepted. To resolve this, run: flutter doctor --android-licenses
+
+[ÔêÜ] Chrome - develop for the web [331ms]
+    ÔÇó Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[ÔêÜ] Visual Studio - develop Windows apps (Visual Studio Community 2022 17.14.27 (February 2026)) [330ms]
+    ÔÇó Visual Studio at C:\Program Files\Microsoft Visual Studio\2022\Community
+    ÔÇó Visual Studio Community 2022 version 17.14.37012.4
+    ÔÇó Windows 10 SDK version 10.0.26100.0
+
+[ÔêÜ] Connected device (3 available) [2,3s]
+    ÔÇó Windows (desktop) ÔÇó windows ÔÇó windows-x64    ÔÇó Microsoft Windows [Versi┬ón 10.0.26200.8457]
+    ÔÇó Chrome (web)      ÔÇó chrome  ÔÇó web-javascript ÔÇó Google Chrome 148.0.7778.179
+    ÔÇó Edge (web)        ÔÇó edge    ÔÇó web-javascript ÔÇó Microsoft Edge 137.0.3296.83
+
+[ÔêÜ] Network resources [608ms]
+    ÔÇó All expected network resources are available.
+
+! Doctor found issues in 2 categories.
+
+=== wsl setup ===
+[exit-code] 0
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 cmd /c chcp 65001 && powershell -NoProfile -Command "[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new(); Write-Output 'utf8-check'; hostname; whoami; ver"
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 powershell -NoProfile -Command "[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new(); Write-Output 'utf8-check'; hostname; whoami; (Get-CimInstance Win32_OperatingSystem).Version"
+utf8-check
+DESKTOP-02NDERS
+desktop-02nders\jose
+10.0.26200
+[exit-code] 0
+
+$ ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 powershell -NoProfile -ExecutionPolicy Bypass -File .\win11-repair.ps1

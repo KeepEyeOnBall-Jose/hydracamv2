@@ -44,7 +44,7 @@ Use the strongest available tier for the selected item:
 
 | Tier | Required for | Minimum evidence |
 | --- | --- | --- |
-| A: real hardware | iOS white screen, physical camera/gallery, battery/storage, local networking, release blockers | Device model/OS, launch or flow video, screenshots, device logs. |
+| A: real hardware | Physical camera/gallery, battery/storage, local networking, release/profile launch, and release blockers | Device model/OS, launch or flow video, screenshots, device logs. |
 | B: emulator/simulator e2e | UI, session, upload queue, navigation, settings, non-camera app behavior | Emulator/simulator screenshot, video for flows, device logs. |
 | C: multi-device emulated cluster | master/slave, reconnect, network identity, sync, autograbado, upload orchestration | Master plus slave screenshots/video, orchestrator output, device logs. |
 | D: integration/unit tests | pure service/model logic only | Focused tests and analyzer. Hardware evidence is optional only when no running app behavior changes. |
@@ -74,12 +74,12 @@ Create a run:
 
 ```bash
 python3 scripts/evidence_pack.py start \
-  --item "Fix iOS physical-device launch white screen" \
-  --slug ios-white-screen \
-  --source "docs/control/backlog-import.md#1" \
+  --item "Validate iOS release/profile physical-device launch and capture" \
+  --slug ios-release-profile-smoke \
+  --source "docs/control/status-and-roadmap.md#release-blockers" \
   --tier A \
-  --acceptance "Physical iPhone reaches the expected first app screen" \
-  --acceptance "Startup logs show successful initialization or actionable errors"
+  --acceptance "Physical iPhone or iPad reaches the expected first app screen" \
+  --acceptance "Photo and video capture work or produce actionable logs"
 ```
 
 Record commands into the pack:
@@ -127,9 +127,9 @@ python3 scripts/evidence_pack.py check logs/verification-runs/<run>
 
 ## Default Priority Queue
 
-1. iOS physical-device white screen.
+1. Release/profile real-device smoke readiness.
 2. Session and media data-loss risks.
-3. Real-device smoke readiness.
+3. Two-device master/slave capture readiness.
 4. Upload and capture reliability.
 5. Battery, storage, and network safety.
 6. Existing-flow regression coverage.

@@ -1,6 +1,7 @@
 import "package:flutter/foundation.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
+import "../models/camera_capture_settings.dart";
 import "log_service.dart";
 
 // ignore: avoid_classes_with_only_static_members
@@ -12,6 +13,9 @@ class SettingsService {
       "masterShouldRecord"; // Whether or not master should also take pics/videos
   static const String _cameraQualityKey =
       "cameraQuality"; // Use max, mid or minimum quality available for the camera
+  static const String _cameraLensPreferenceKey = "cameraLensPreference";
+  static const String _selectedCameraNameKey = "selectedCameraName";
+  static const String _videoCaptureProfileKey = "videoCaptureProfile";
   static const String _deleteLocalAfterUploadKey =
       "deleteLocalAfterUpload"; // Choose if delete or not the media after uploading
   static const String _autoUploadMaterialsKey =
@@ -74,6 +78,57 @@ class SettingsService {
     await prefs.setString(_cameraQualityKey, quality);
 
     LogService.instance.registerLog("Update Camera Quality value to $quality");
+  }
+
+  static Future<LensPreference> getCameraLensPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    return LensPreference.fromStorageValue(
+      prefs.getString(_cameraLensPreferenceKey),
+    );
+  }
+
+  static Future<void> setCameraLensPreference(LensPreference preference) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_cameraLensPreferenceKey, preference.storageValue);
+    LogService.instance.registerLog(
+        "Updated camera lens preference to ${preference.storageValue}");
+  }
+
+  static Future<String?> getSelectedCameraName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_selectedCameraNameKey);
+  }
+
+  static Future<void> setSelectedCameraName(String cameraName) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_selectedCameraNameKey, cameraName);
+    LogService.instance
+        .registerLog("Updated selected camera name to $cameraName");
+  }
+
+  static Future<void> clearSelectedCameraName() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_selectedCameraNameKey);
+    LogService.instance.registerLog("Cleared selected camera name");
+  }
+
+  static Future<VideoCaptureProfile> getVideoCaptureProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedProfile = prefs.getString(_videoCaptureProfileKey);
+    if (storedProfile != null) {
+      return VideoCaptureProfile.fromStorageValue(storedProfile);
+    }
+
+    final legacyQuality = prefs.getString(_cameraQualityKey);
+    return VideoCaptureProfile.fromLegacyCameraQuality(legacyQuality);
+  }
+
+  static Future<void> setVideoCaptureProfile(
+      VideoCaptureProfile profile) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_videoCaptureProfileKey, profile.storageValue);
+    LogService.instance.registerLog(
+        "Updated video capture profile to ${profile.storageValue}");
   }
 
   /// Retrieve the current value for "deleteLocalAfterUpload"

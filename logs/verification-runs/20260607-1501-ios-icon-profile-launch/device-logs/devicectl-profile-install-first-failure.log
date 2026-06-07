@@ -1,0 +1,13 @@
+First Profile install attempt failed after a successful build because the
+script passed `PRODUCT_BUNDLE_IDENTIFIER=com.vectorblanco.hydracam.dev` as a
+global xcodebuild override. That changed embedded plugin framework bundle IDs
+too, and iOS rejected the install with duplicate framework identifiers:
+
+`photo_manager.framework` and `disk_space_plus.framework` both appeared with
+bundle identifier `com.vectorblanco.hydracam.dev`.
+
+The fix was to set the Runner Profile build configuration bundle identifier in
+`ios/Runner.xcodeproj/project.pbxproj` and remove the global
+`PRODUCT_BUNDLE_IDENTIFIER` xcodebuild argument from
+`scripts/ios_icon_launch_dev.sh`. The later Profile build/install command
+passed and installed bundle ID `com.vectorblanco.hydracam.dev`.

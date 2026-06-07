@@ -50,7 +50,7 @@ work only where the gate maps to a concrete mobile task.
 | ---: | --- | --- | --- | --- | --- | --- |
 | 3 | NFR-001 | Security | HTTPS for all communications | High | cross-project | Mobile API endpoints must use HTTPS outside local network flows. |
 | 4 | NFR-002 | Security | Secure database connections | High | external-backend | Backend-owned; mobile should not hold DB credentials. |
-| 5 | NFR-003 | Security | Authentication token storage | High | mobile | Use secure storage or memory-only handling as appropriate for Auth0 tokens. |
+| 5 | NFR-003 | Security | Authentication token storage | High | mobile | If human login persists beyond the current process, use secure credential storage plus refresh/expiry handling; do not store Auth0 access or refresh tokens in plain shared preferences. |
 | 6 | NFR-004 | Performance | API response time under 1 second for 95% typical load | Medium | external-backend | Mobile should expose useful pending/error states for slow responses. |
 | 7 | NFR-005 | Performance | Real-time communication latency under 1 second | Medium | cross-project | Validate master/slave or SignalR control latency with tests. |
 | 8 | NFR-006 | Scalability | Azure Web App supports 10,000 concurrent users | High | external-backend | Backend-owned. |
@@ -73,7 +73,10 @@ tests, backend, or devices before relying on a completed state for release.
 
 Important completed mobile-facing themes included:
 
-- Auth0 setup and mobile authentication integration.
+- Auth0 setup and mobile authentication integration. Current repo evidence shows
+  this is only a baseline browser-backed login flow, not completed login restore,
+  secure persistent credentials, logout/end-session handling, Android
+  process-death recovery, or Android-native account-picker UX.
 - Flutter app creation, store upload prep, recording session start/end, local
   recording, upload recording, and readiness notification.
 - Basic raw-material view and GDPR compliance document creation.

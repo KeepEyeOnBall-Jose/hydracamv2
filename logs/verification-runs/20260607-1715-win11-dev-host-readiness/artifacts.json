@@ -1,0 +1,113 @@
+{
+  "acceptanceChecks": [
+    "Win11 is reachable over SSH and reports host identity",
+    "Windows native Flutter and Android build tooling is installed or has explicit blockers",
+    "HydraCam checkout exists on Win11 and Windows/Android validation gates are run",
+    "WSL/Linux lane is installed or has explicit blockers",
+    "Phone and USB camera inventory is captured without reopening desktop capture scope"
+  ],
+  "commands": [
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::OutputEncoding=[Text.Encoding]::UTF8; hostname; whoami; cmd /c ver\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:24.379189+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-inspect.ps1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:32.224569+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-toolchain-check.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:18:53.982437+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -Command \\\"[Console]::OutputEncoding=[Text.Encoding]::UTF8; Write-Output \\\\\\\"JAVA_HOME=$env:JAVA_HOME\\\\\\\"; if (Test-Path \\\\\\\"$env:JAVA_HOME\\\\bin\\\\java.exe\\\\\\\") { & \\\\\\\"$env:JAVA_HOME\\\\bin\\\\java.exe\\\\\\\" -version }; Write-Output \\\\\\\"Csrc Flutter status\\\\\\\"; git -C C:\\\\src\\\\flutter rev-parse --short HEAD; git -C C:\\\\src\\\\flutter status -sb\\\"\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:19:34.206564+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-setup.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:21:16.741541+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new(); Write-Output 'utf8-check'; hostname; whoami; (Get-CimInstance Win32_OperatingSystem).Version\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:33:13.887665+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "100.110.8.112 / 192.168.178.128",
+      "kind": "Windows 11 dev host",
+      "name": "DESKTOP-02NDERS",
+      "notes": [],
+      "os": "Windows 10.0.26200.8457",
+      "role": "build-debug-test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "win11-dev-host-readiness",
+    "source": "user-request: Win11 HydraCam Host Setup Execution Plan",
+    "title": "Prepare Win11 HydraCam development host"
+  },
+  "notes": [],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "prepared",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

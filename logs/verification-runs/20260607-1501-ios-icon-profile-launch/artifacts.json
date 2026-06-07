@@ -1,0 +1,253 @@
+{
+  "acceptanceChecks": [
+    "Debug launch remains available through flutter run or Xcode only",
+    "Profile build installs on the physical iPhone",
+    "App starts from the Home Screen icon or devicectl launch without Flutter tooling",
+    "HydraCam reaches the first functional app screen, not the Flutter debug tooling message",
+    "Startup evidence includes device model, OS, launch output, and device or app logs"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "ios/Runner/AppDelegate.swift",
+        "ios/Runner/Info.plist",
+        "ios/fastlane/Fastfile",
+        "lib/services/log_service.dart",
+        "scripts/ios_icon_launch_dev.sh",
+        "test/services/log_service_test.dart",
+        "DISTRIBUTION_RUNBOOK.md"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:02:18.656694+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:02:24.441703+00:00"
+    },
+    {
+      "command": [
+        "ruby",
+        "-c",
+        "ios/fastlane/Fastfile"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:02:24.486499+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:02:30.716977+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/log_service_test.dart",
+        "test/platform_setup_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:02:43.774488+00:00"
+    },
+    {
+      "command": [
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-07T13:02:58.865633+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "ios/Runner.xcodeproj/project.pbxproj",
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:05:05.758334+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:05:05.808009+00:00"
+    },
+    {
+      "command": [
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:05:11.124386+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--terminate-existing",
+        "--json-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-launch.json",
+        "--log-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-launch.log",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-07T13:05:55.147030+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--terminate-existing",
+        "--no-activate",
+        "--json-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-launch-no-activate.json",
+        "--log-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-launch-no-activate.log",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:06:34.264828+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--json-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-processes-after-profile-launch.json",
+        "--log-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-processes-after-profile-launch.log",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:07:04.120346+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "DISTRIBUTION_RUNBOOK.md",
+        "docs/control/status-and-roadmap.md",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/summary.md",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/screenshots/foreground-capture-blocked.txt",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/video/icon-launch-video-blocked.txt",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-install-first-failure.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:08:22.488240+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--terminate-existing",
+        "--json-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-launch-foreground-success.json",
+        "--log-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-profile-launch-foreground-success.log",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:10:49.399217+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--json-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-processes-after-foreground-success.json",
+        "--log-output",
+        "logs/verification-runs/20260607-1501-ios-icon-profile-launch/device-logs/devicectl-processes-after-foreground-success.log",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T13:10:50.139631+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS physical device",
+      "name": "Jose/Jose Ramon iPhone",
+      "notes": [
+        "CoreDevice ID AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A"
+      ],
+      "os": "iOS 26.5",
+      "role": "single app icon-launch device"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/foreground-capture-blocked.txt",
+    "video/icon-launch-video-blocked.txt",
+    "device-logs/devicectl-processes-after-profile-launch.json",
+    "device-logs/devicectl-processes-after-profile-launch.log",
+    "device-logs/devicectl-profile-install-first-failure.log",
+    "device-logs/devicectl-profile-launch-no-activate.json",
+    "device-logs/devicectl-profile-launch-no-activate.log",
+    "device-logs/devicectl-profile-launch.json",
+    "device-logs/devicectl-profile-launch.log"
+  ],
+  "item": {
+    "slug": "ios-icon-profile-launch",
+    "source": "docs/control/status-and-roadmap.md#release-blockers",
+    "title": "Verify iOS icon-launchable Profile build"
+  },
+  "notes": [
+    "Profile build and install passed for com.vectorblanco.hydracam.dev.",
+    "No-tooling devicectl --no-activate launch succeeded and started Runner process ID 1172.",
+    "Foreground activation and manual icon video remain pending because SpringBoard denied launch while the iPhone was locked."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

@@ -1,0 +1,18 @@
+# HydraCam evidence run command log
+
+$ scripts/android_wifi_preflight.py --check-only --expected-subnet 192.168.178.0/24
+Expected subnet: 192.168.178.0/24
+[NEEDS WIFI] RF8M90QE7LX SM-G970F Android 12 wlan0=none wifi_on=1
+  wifi: Wifi is enabled
+[OK] 192.168.178.132:5555 2201116PG Android 13 wlan0=192.168.178.132 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.132
+[OK] 192.168.178.64:5555 SM-G935F Android 8.0.0 wlan0=192.168.178.64 wifi_on=2
+  wifi: No shell command implementation.
+  routes:
+    192.168.178.0/24 dev wlan0  proto kernel  scope link  src 192.168.178.64
+
+Devices not ready for HydraCam LAN:
+  RF8M90QE7LX SM-G970F wlan0=none
+[exit-code] 2

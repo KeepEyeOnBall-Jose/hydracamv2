@@ -1,5 +1,6 @@
 import "dart:async";
 import "package:camera/camera.dart";
+import "package:connectivity_plus/connectivity_plus.dart";
 import "package:flutter/material.dart";
 import "../screens/role_selection_screen.dart";
 import "../globals.dart";
@@ -8,6 +9,7 @@ import "../models/captured_video.dart";
 import "../services/alert_utils.dart";
 import "../services/device_service.dart";
 import "../services/log_service.dart";
+import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
 import "slave_client.dart";
@@ -43,6 +45,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       _statusSubscription; // Subscription to listen to status updates
   StreamSubscription<bool>?
       _connectionStatusSubscription; // Subscription to listen to connection status
+  StreamSubscription<List<ConnectivityResult>>? _networkSubscription;
   String statusMessage = "Waiting for camera commands...";
   Timer? autoModeTimer; // Timer for auto mode logic
   bool isRecording = false;
@@ -52,6 +55,8 @@ class SlaveScreenState extends State<SlaveScreen> {
   Timer? dimTimer; // Timer for screen dimming
   int dimTime = 10; // Number of seconds before turning screen black
   bool isScreenDimmed = false; // To control the dimmed screen state
+  bool _isCheckingNetwork = false;
+  NetworkReadinessResult? _networkReadiness;
 
   // Getters for SessionManager photos and videos
   List<CapturedPhoto> get photos =>
@@ -69,25 +74,11 @@ class SlaveScreenState extends State<SlaveScreen> {
     // Master discovery and other initializations
     _masterDiscovery = MasterDiscovery(onMasterDiscovered: _connectToMaster);
 
-    if (widget.preferredMasterIp != null) {
-      _connectToMaster(widget.preferredMasterIp!);
-    } else {
-      _masterDiscovery?.startListening();
-    }
-
-    final bool shouldAutoPromote = widget.isAutoMode &&
-        !widget.forceSlaveMode &&
-        widget.preferredMasterIp == null;
-    if (shouldAutoPromote) {
-      // Automatically transition to MasterScreen if no master is found
-      autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
-        if (!_isConnected) {
-          LogService.instance
-              .registerLog("No master found, switching to Master mode.");
-          _transitionToMasterScreen();
-        }
-      });
-    }
+    _networkSubscription =
+        NetworkInfoService.connectivityChanges.listen((_) async {
+      await _startNetworkAwareDiscovery();
+    });
+    _startNetworkAwareDiscovery();
 
     // Add listener
     SessionManager.instance.addListener(_onSessionChanged);
@@ -97,7 +88,104 @@ class SlaveScreenState extends State<SlaveScreen> {
     setState(() {});
   }
 
-  void _connectToMaster(String masterIp) {
+  Future<void> _startNetworkAwareDiscovery() async {
+    if (_isCheckingNetwork) {
+      return;
+    }
+
+    _isCheckingNetwork = true;
+    if (mounted && !_isConnected) {
+      setState(() {
+        statusMessage = "Checking Wi-Fi and local network...";
+      });
+    }
+
+    try {
+      final snapshot = await NetworkInfoService.getCurrentSnapshot();
+      final readiness = NetworkInfoService.evaluateLocalControlReadiness(
+        snapshot,
+      );
+      _networkReadiness = readiness;
+
+      if (!readiness.canUseLocalControl) {
+        autoModeTimer?.cancel();
+        autoModeTimer = null;
+        _client?.disconnect();
+        _client = null;
+        await _masterDiscovery?.stopListening();
+        if (mounted) {
+          setState(() {
+            _isConnected = false;
+            statusMessage = readiness.message;
+          });
+        }
+        LogService.instance.registerLog(
+            "Slave network readiness blocked: ${readiness.message}");
+        return;
+      }
+
+      if (mounted && !_isConnected) {
+        setState(() {
+          statusMessage = "Network ready. Searching for master...";
+        });
+      }
+
+      if (_isConnected) {
+        return;
+      }
+
+      if (widget.preferredMasterIp != null) {
+        await _connectToMaster(widget.preferredMasterIp!);
+      } else {
+        await _masterDiscovery?.startListening();
+        _scheduleAutoPromoteIfNeeded();
+      }
+    } catch (e) {
+      LogService.instance.registerLog("Network readiness check failed: $e");
+      if (mounted && !_isConnected) {
+        setState(() {
+          statusMessage = "Unable to check Wi-Fi readiness: $e";
+        });
+      }
+    } finally {
+      _isCheckingNetwork = false;
+    }
+  }
+
+  void _scheduleAutoPromoteIfNeeded() {
+    final bool shouldAutoPromote = widget.isAutoMode &&
+        !widget.forceSlaveMode &&
+        widget.preferredMasterIp == null;
+    if (!shouldAutoPromote || autoModeTimer != null) {
+      return;
+    }
+
+    autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
+      if (!_isConnected && _networkReadiness?.canUseLocalControl == true) {
+        LogService.instance
+            .registerLog("No master found, switching to Master mode.");
+        _transitionToMasterScreen();
+      }
+    });
+  }
+
+  Future<void> _connectToMaster(String masterIp) async {
+    final snapshot = await NetworkInfoService.getCurrentSnapshot();
+    final readiness = NetworkInfoService.evaluateLocalControlReadiness(
+      snapshot,
+    );
+    _networkReadiness = readiness;
+    if (!readiness.canUseLocalControl) {
+      if (mounted) {
+        setState(() {
+          statusMessage = readiness.message;
+        });
+      }
+      LogService.instance.registerLog(
+          "Connection to master blocked by network readiness: ${readiness.message}");
+      return;
+    }
+
     LogService.instance.registerLog("Connecting to master at IP: $masterIp");
 
     _statusSubscription?.cancel();
@@ -155,7 +243,7 @@ class SlaveScreenState extends State<SlaveScreen> {
             .registerLog("Connection lost. Restarting discovery.");
         _client?.disconnect();
         _client = null;
-        _masterDiscovery?.startListening();
+        _startNetworkAwareDiscovery();
       }
     });
 
@@ -224,6 +312,7 @@ class SlaveScreenState extends State<SlaveScreen> {
 
   void _cleanUpSlaveMode() {
     _statusSubscription?.cancel(); // Cancel the stream subscription
+    _networkSubscription?.cancel();
     _client?.disconnect();
     _client = null;
     autoModeTimer?.cancel();
@@ -257,6 +346,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       _statusSubscription
           ?.cancel(); // Cancel the subscription to avoid memory leaks
       _connectionStatusSubscription?.cancel();
+      _networkSubscription?.cancel();
       _client?.disconnect();
       _client = null;
       autoModeTimer?.cancel();

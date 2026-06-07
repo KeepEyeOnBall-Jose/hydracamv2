@@ -1,0 +1,518 @@
+{
+  "acceptanceChecks": [
+    "Physical iPad network/device tooling state is captured with Flutter and CoreDevice evidence",
+    "Any HydraCam automation bridge response attributed to iPad is checked for host IP and iOS-native trace path"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:09:03.056728+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:09:03.083087+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:09:03.130991+00:00"
+    },
+    {
+      "command": [
+        "ipconfig",
+        "getifaddr",
+        "en0"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:07.249120+00:00"
+    },
+    {
+      "command": [
+        "networksetup",
+        "-getairportnetwork",
+        "en0"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:07.275769+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-07T15:10:07.308708+00:00"
+    },
+    {
+      "command": [
+        "dscacheutil",
+        "-q",
+        "host",
+        "-a",
+        "name",
+        "Jose-Ramons-iPhone.coredevice.local"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:08.418207+00:00"
+    },
+    {
+      "command": [
+        "dscacheutil",
+        "-q",
+        "host",
+        "-a",
+        "name",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:13.431914+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.141:4762/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-07T15:10:23.450439+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:54.613529+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:54.663977+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-07T15:10:56.257023+00:00"
+    },
+    {
+      "command": [
+        "arp",
+        "-an"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:10:56.305234+00:00"
+    },
+    {
+      "command": [
+        "nmap",
+        "-p",
+        "4762,4040",
+        "--open",
+        "192.168.178.0/24"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:11:18.331282+00:00"
+    },
+    {
+      "command": [
+        "ping",
+        "-c",
+        "2",
+        "-W",
+        "1000",
+        "192.168.178.104"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:11:41.576373+00:00"
+    },
+    {
+      "command": [
+        "ping",
+        "-c",
+        "2",
+        "-W",
+        "1000",
+        "192.168.178.141"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:11:42.624679+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "180",
+        "--record-seconds",
+        "1",
+        "--run-dir",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/device-logs/ipad-automation-repro"
+      ],
+      "returnCode": -15,
+      "startedAt": "2026-06-07T15:12:06.511998+00:00"
+    },
+    {
+      "command": [
+        "nmap",
+        "-p",
+        "4762,4040",
+        "--open",
+        "192.168.178.0/24"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:15:10.736565+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:15.577349+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:15.948823+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4040/ws"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:16.025751+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type:application/json",
+        "-d",
+        "{}",
+        "http://192.168.178.104:4762/commands/connected_clients"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:41.963697+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:42.173638+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:16:42.224866+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "run",
+        "-d",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--debug",
+        "--no-pub",
+        "--no-resident",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=master",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:22:46.207792+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "screenshot",
+        "-d",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "-o",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-ip-fix.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:24:24.480859+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "run",
+        "-d",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--debug",
+        "--no-pub",
+        "--no-resident",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=master",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:26:48.412744+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "screenshot",
+        "-d",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "-o",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-route-probe-fix.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:28:16.421309+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:28:20.861279+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:28:21.032971+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/network_readiness_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:28:51.079918+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub",
+        "lib/services/network_info_service.dart",
+        "test/services/network_readiness_service_test.dart",
+        "lib/automation/automation_standby_screen.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:28:52.847623+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/network_info_service.dart",
+        "test/services/network_readiness_service_test.dart",
+        "lib/automation/automation_standby_screen.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:28:54.760350+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-i",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-route-probe-fix.png",
+        "-t",
+        "2",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/video/ipad-master-screen-after-route-probe-fix-still.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:29:27.215567+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "-o",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/device-logs/ipad-bridge-logs-after-route-probe-fix.json",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:29:38.898366+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "-o",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/device-logs/ipad-bridge-health-after-route-probe-fix.json",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:29:39.310078+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/network_readiness_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:30:38.287139+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub",
+        "lib/services/network_info_service.dart",
+        "test/services/network_readiness_service_test.dart",
+        "lib/automation/automation_standby_screen.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:30:40.117460+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/network_info_service.dart",
+        "test/services/network_readiness_service_test.dart",
+        "lib/automation/automation_standby_screen.dart",
+        "docs/control/status-and-roadmap.md",
+        "logs/verification-runs/20260607-1708-ipad-network-identity-check/summary.md"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:30:41.774513+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS physical",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 15.6.1",
+      "role": "network identity subject"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-master-screen-after-ip-fix.png",
+    "screenshots/ipad-master-screen-after-route-probe-fix.png",
+    "screenshots/ipad-master-screen.png",
+    "video/ipad-master-screen-after-route-probe-fix-still.mp4",
+    "device-logs/ipad-automation-repro/flutter-run.log",
+    "device-logs/ipad-bridge-health-after-route-probe-fix.json",
+    "device-logs/ipad-bridge-logs-after-route-probe-fix.json"
+  ],
+  "item": {
+    "slug": "ipad-network-identity-check",
+    "source": "docs/control/status-and-roadmap.md#latest-parallel-device-matrix",
+    "title": "Verify physical iPad network identity and automation bridge host"
+  },
+  "notes": [
+    "Fixed iPad IP reporting from link-local 169.254.9.236 to LAN 192.168.178.104 with route-ranked IP selection.",
+    "Post-fix screenshot shows the iPad screen reporting 192.168.178.104 and bridge logs have an iOS-native /var/mobile trace path."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

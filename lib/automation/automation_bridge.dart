@@ -3,9 +3,11 @@ import "dart:convert";
 import "dart:io";
 
 import "automation_config.dart";
+import "../models/camera_capture_settings.dart";
 import "../services/log_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
+import "../services/camera_service_singleton.dart";
 import "../services/uploader_service.dart";
 
 typedef AutomationHandler = Future<Map<String, dynamic>> Function(
@@ -77,7 +79,11 @@ class AutomationBridge {
   Future<void> _handleRequest(HttpRequest request) async {
     try {
       if (request.method == "GET" && request.uri.path == "/healthz") {
-        await _respond(request, {"status": "ok", "automation": true});
+        await _respond(request, {
+          "status": "ok",
+          "automation": true,
+          "commands": _handlers.keys.toList()..sort(),
+        });
         return;
       }
 
@@ -86,8 +92,17 @@ class AutomationBridge {
         return;
       }
 
+      if (request.method == "GET" && request.uri.path == "/settings") {
+        await _respond(request, await _buildSettingsSnapshot());
+        return;
+      }
+
       if (request.method == "GET" && request.uri.path == "/logs") {
+        final persistedLogLines =
+            await LogService.instance.readPersistedLogLines();
         await _respond(request, {
+          "traceFilePath": LogService.instance.traceFilePath,
+          "persistedLogLines": persistedLogLines,
           "logs": LogService.instance.logs
               .map((entry) => {
                     "message": entry["message"],
@@ -104,7 +119,10 @@ class AutomationBridge {
       if (request.method == "POST" && request.uri.path == "/settings") {
         final payload = await _decodeBody(request);
         await _applySettings(payload);
-        await _respond(request, {"status": "ok"});
+        await _respond(request, {
+          "status": "ok",
+          "settings": await _buildSettingsSnapshot(),
+        });
         return;
       }
 
@@ -178,37 +196,107 @@ class AutomationBridge {
     await request.response.close();
   }
 
-  Future<void> _applySettings(Map<String, dynamic> payload) async {
-    final futures = <Future<void>>[];
+  Future<Map<String, dynamic>> _buildSettingsSnapshot() async {
+    final lensPreference = await SettingsService.getCameraLensPreference();
+    final selectedCameraName = await SettingsService.getSelectedCameraName();
+    final videoProfile = await SettingsService.getVideoCaptureProfile();
+    return {
+      "autoUploadMaterials": await SettingsService.getAutoUploadMaterials(),
+      "masterShouldRecord": await SettingsService.getMasterShouldRecord(),
+      "deleteLocalAfterUpload":
+          await SettingsService.getDeleteLocalAfterUpload(),
+      "autoplayVideoOnMaster": await SettingsService.getAutoplayVideoOnMaster(),
+      "flashForVideoAnnounce": await SettingsService.getFlashForVideoAnnounce(),
+      "timerDuration": await SettingsService.getTimerDuration(),
+      "cameraLensPreference": lensPreference.storageValue,
+      "selectedCameraName": selectedCameraName,
+      "videoCaptureProfile": videoProfile.storageValue,
+      "videoCaptureTarget": videoProfile.targetLabel,
+    };
+  }
 
-    payload.forEach((key, value) {
+  Future<void> _applySettings(Map<String, dynamic> payload) async {
+    LensPreference? lensPreference;
+    String? selectedCameraName;
+    bool clearSelectedCameraName = false;
+    bool selectedCameraNameProvided = false;
+    VideoCaptureProfile? videoProfile;
+
+    for (final entry in payload.entries) {
+      final key = entry.key;
+      final value = entry.value;
       switch (key) {
         case "autoUploadMaterials":
-          futures.add(SettingsService.setAutoUploadMaterials(_asBool(value)));
+          await SettingsService.setAutoUploadMaterials(_asBool(value));
           break;
         case "masterShouldRecord":
-          futures.add(SettingsService.setMasterShouldRecord(_asBool(value)));
+          await SettingsService.setMasterShouldRecord(_asBool(value));
           break;
         case "deleteLocalAfterUpload":
-          futures
-              .add(SettingsService.setDeleteLocalAfterUpload(_asBool(value)));
+          await SettingsService.setDeleteLocalAfterUpload(_asBool(value));
           break;
         case "autoplayVideoOnMaster":
-          futures.add(SettingsService.setAutoplayVideoOnMaster(_asBool(value)));
+          await SettingsService.setAutoplayVideoOnMaster(_asBool(value));
           break;
         case "flashForVideoAnnounce":
-          futures.add(SettingsService.setFlashForVideoAnnounce(_asBool(value)));
+          await SettingsService.setFlashForVideoAnnounce(_asBool(value));
           break;
         case "timerDuration":
-          futures.add(SettingsService.setTimerDuration(_asInt(value)));
+          await SettingsService.setTimerDuration(_asInt(value));
+          break;
+        case "cameraLensPreference":
+          lensPreference = LensPreference.fromStorageValue(_asString(value));
+          clearSelectedCameraName = true;
+          break;
+        case "selectedCameraName":
+          selectedCameraNameProvided = true;
+          if (value == null) {
+            clearSelectedCameraName = true;
+          } else {
+            selectedCameraName = _asString(value);
+            clearSelectedCameraName = false;
+          }
+          break;
+        case "videoCaptureProfile":
+          videoProfile = VideoCaptureProfile.fromStorageValue(_asString(value));
           break;
         default:
           LogService.instance
               .registerLog("Ignoring unknown automation setting: $key");
       }
-    });
+    }
 
-    await Future.wait(futures);
+    if (lensPreference != null ||
+        selectedCameraName != null ||
+        clearSelectedCameraName ||
+        videoProfile != null) {
+      final shouldClearSelectedCameraName = selectedCameraNameProvided
+          ? selectedCameraName == null
+          : clearSelectedCameraName;
+      if (CameraServiceSingleton.isInitialized) {
+        await CameraServiceSingleton.instance.applyCaptureSettings(
+          lensPreference: lensPreference,
+          selectedCameraName: selectedCameraName,
+          clearSelectedCameraName: shouldClearSelectedCameraName,
+          videoProfile: videoProfile,
+        );
+      } else {
+        if (lensPreference != null) {
+          await SettingsService.setCameraLensPreference(lensPreference);
+        }
+        if (shouldClearSelectedCameraName) {
+          await SettingsService.clearSelectedCameraName();
+        } else if (selectedCameraName != null) {
+          await SettingsService.setSelectedCameraName(selectedCameraName);
+        }
+        if (videoProfile != null) {
+          await SettingsService.setVideoCaptureProfile(videoProfile);
+        }
+      }
+    } else {
+      LogService.instance.registerLog(
+          "Automation settings request did not include camera settings.");
+    }
   }
 
   bool _asBool(dynamic value) {
@@ -235,5 +323,12 @@ class AutomationBridge {
       return int.parse(value);
     }
     throw ArgumentError("Cannot convert $value to int");
+  }
+
+  String _asString(dynamic value) {
+    if (value is String) {
+      return value;
+    }
+    throw ArgumentError("Cannot convert $value to String");
   }
 }

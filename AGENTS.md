@@ -81,8 +81,28 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
 
 **Current Platform Status:**
 - iOS simulator: Working
-- iOS physical device: Installs but shows white screen (active debugging issue)
-- Android: In development
+- iOS physical devices: Working in recent debug/capture evidence. A 2026-06-06
+  iPhone 12 Pro debug run launched, created a session, captured/uploaded a
+  photo, and started video recording; a 2026-06-06 physical iPad run captured
+  one photo and one video after the no-flash camera fix. A 2026-06-07 iPhone
+  12 Pro / iOS 26.5 automation rerun passed `ultraWide` capture at
+  `sport1080p60` and `detail4k30`; saved-video metadata still reported
+  unavailable. The prior broad "white screen" blocker is superseded; keep
+  validating release/profile builds, signing, two-device flows, and native
+  metadata before production claims.
+- Android: In development. Active Android support starts at API 24; Android
+  6.0/API 23 and older devices are deprecated for this repo unless the user
+  explicitly reopens legacy-device support. 2026-06-07 post-label evidence
+  shows Samsung S10e / Android 12 and SM-G960F / Android 10 baseline 1080p30
+  capture passing. A later 2026-06-07 parallel independent-capture matrix
+  confirmed S10e and G960F under a shared command barrier, while Samsung S7 edge
+  still fails before photo save and is classified as
+  `s7_exynos_camera_timeout`.
+- Multi-device synchronization evidence: the 2026-06-07 parallel matrix was an
+  independent local-capture matrix and intentionally launched every
+  capture-capable device as a local master. It is not a master/slave discovery
+  or broadcast-synchronization proof; run a separate one-master/many-slaves
+  matrix before production multi-device claims.
 - Desktop (Windows/macOS) and web: Planned for future support
 
 ## Development Commands
@@ -298,21 +318,24 @@ lib/
 - `locationTimeout = 5`: Max time for location service to get position
 - Court/sports center GUIDs: Hardcoded list in `groupedCourts` map
 
-## Debugging iOS White Screen Issue
+## iOS Physical-Device Verification
 
-Current status lives in `docs/control/status-and-roadmap.md`. Active
-investigation summary:
-- App installs and launches on physical iOS device
-- Shows only white screen (no errors in logs)
-- Works fine on iOS simulator
-- Recent changes: XCode suggested changes accepted, signature added
+Current status lives in `docs/control/status-and-roadmap.md`. Latest physical
+iOS evidence:
+- `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` launched
+  Debug on iPhone 12 Pro / iOS 26.4.2 through `flutter run`, received camera
+  and microphone permissions, reached master mode, created a session, captured
+  and uploaded a photo, and started video recording.
+- `logs/verification-runs/20260606-2310-ipad-capture-failure-trace-and-repro/`
+  fixed the iPad no-flash camera path and passed a physical iPad repro with one
+  photo and one video captured.
+- User follow-up on 2026-06-07 reports iPad and iPhone 12 testing is working
+  OK.
 
-**Debugging Steps:**
-1. Check iOS console logs: `flutter logs` while device connected
-2. Verify Info.plist camera/microphone usage descriptions
-3. Check main.dart initialization sequence (permissions, camera service)
-4. Verify all Flutter plugins have iOS platform implementation
-5. Test with minimal main.dart (remove services one by one)
+The old "installs but only shows white screen" status is no longer current.
+Future iOS debugging should focus on reproducible failing flows only: release
+or profile icon launch, signing/team differences, two-device capture, local
+network discovery, upload, and session lifecycle.
 
 ## Common Patterns
 
@@ -369,10 +392,12 @@ await cameraService.stopRecordingVideo();
 
 ## Dependencies of Note
 
-- `camera`: 0.10.5+5 - Camera functionality
-- `web_socket_channel`: 2.4.0 - WebSocket communication
-- `flutter_appauth`: 6.0.7 - Auth0 OAuth2
-- `gallery_saver`: 2.3.2 - Save media to device gallery
+- `camera`: ^0.11.4 - Camera functionality; current iOS evidence also uses
+  `camera_avfoundation` 0.9.23+2 from the lockfile.
+- `web_socket_channel`: ^3.0.3 - WebSocket communication
+- `flutter_appauth`: ^11.0.0 - Auth0 OAuth2
+- `photo_manager`: ^3.6.3 - Save/manage media; `gallery_saver` was removed for
+  current Android Gradle compatibility.
 - `path_provider`: 2.1.1 - Access app documents directory
 - `wakelock_plus`: 1.1.4 - Prevent screen sleep during recording
 - `provider`: 6.1.2 - State management
@@ -382,8 +407,8 @@ await cameraService.stopRecordingVideo();
 
 Current goals and roadmap live in `docs/control/status-and-roadmap.md`. Durable
 priority themes:
-1. Fix iOS physical device white screen issue
-2. Enable Android and iOS distribution
+1. Complete release-grade Android and iOS distribution readiness
+2. Validate repeated two-device iOS/Android master-slave capture flows
 3. Add Windows/macOS/web platform support
 4. Create platform compatibility matrix
 5. Abstract sessions into matches/sports/venues

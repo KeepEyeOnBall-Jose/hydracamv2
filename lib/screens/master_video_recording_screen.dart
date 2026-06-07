@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "../models/captured_video.dart";
 import "../services/camera_service.dart";
+import "../services/log_service.dart";
 import "../services/settings_service.dart";
 import "../widgets/camera_preview_widget.dart";
 import "../widgets/animated_countdown_timer.dart";
@@ -77,6 +78,24 @@ class MasterVideoRecordingScreenState
     });
   }
 
+  bool get _recordingActive {
+    return widget.cameraService.isRecording ||
+        (widget.cameraService.controller?.value.isRecordingVideo ?? false);
+  }
+
+  void _handleExitPreview() {
+    if (_isStopping) return;
+
+    if (_recordingActive) {
+      _handleStopRecording();
+      return;
+    }
+
+    LogService.instance.registerLog(
+        "Closing recording preview because no recording is active.");
+    Navigator.of(context).pop();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -97,8 +116,15 @@ class MasterVideoRecordingScreenState
 
   @override
   Widget build(BuildContext context) {
+    final controller = widget.cameraService.controller;
+
     return PopScope(
-      canPop: false, // Prevent back navigation
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _handleExitPreview();
+        }
+      },
       child: Scaffold(
         backgroundColor: Colors.black,
         body: GestureDetector(
@@ -108,8 +134,18 @@ class MasterVideoRecordingScreenState
             children: [
               // Full-screen camera preview
               Positioned.fill(
-                child: CameraPreviewWidget(
-                    controller: widget.cameraService.controller!),
+                child: controller == null
+                    ? const SizedBox.expand()
+                    : CameraPreviewWidget(controller: controller),
+              ),
+              Positioned(
+                top: 40,
+                left: 16,
+                child: IconButton(
+                  tooltip: "Exit recording preview",
+                  onPressed: _isStopping ? null : _handleExitPreview,
+                  icon: const Icon(Icons.close, color: Colors.white),
+                ),
               ),
               // Stop Recording button
               Positioned(

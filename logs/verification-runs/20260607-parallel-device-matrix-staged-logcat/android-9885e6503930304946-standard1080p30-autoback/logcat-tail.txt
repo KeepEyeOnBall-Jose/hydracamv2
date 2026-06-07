@@ -1,0 +1,426 @@
+--------- beginning of system
+06-07 16:06:37.116  4857  7905 D SSRM:t  : SIOP:: AP = 420, PST = 390 (W:6), BAT = 307, CHG = 396, CP = 326
+--------- beginning of main
+06-07 16:06:37.239  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue expire 38 lines
+06-07 16:06:37.244  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.244  4719 11410 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-07 16:06:37.249  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.251 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera receive onErrorCallback
+06-07 16:06:37.253 31179 31337 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-07 16:06:37.254 31179 31337 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-07 16:06:37.255  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.257 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-07 16:06:37.258 31179 31337 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-07 16:06:37.259 31179 31337 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-07 16:06:37.260  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.261 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Resetting Capture Session
+06-07 16:06:37.265 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-07 16:06:37.266  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.268 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Releasing session in state REOPENING
+06-07 16:06:37.270 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-07 16:06:37.271  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.272 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} closing camera
+06-07 16:06:37.274 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} CameraDevice.onClosed()
+06-07 16:06:37.276 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-07 16:06:37.276  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.278 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@141459a activeResuming = true
+06-07 16:06:37.281  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.595  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 59 lines
+06-07 16:06:37.600  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.601  4857  5582 D BatteryService: !@BatteryListener : batteryPropertiesChanged!
+06-07 16:06:37.602  4857  5582 D BatteryService: level:77, scale:100, status:2, health:2, present:true, voltage: 3970, temperature: 308, technology: Li-ion, AC powered:false, USB powered:true, POGO powered:false, Wireless powered:false, icon:17303851, invalid charger:0, maxChargingCurrent:0, maxChargingVoltage:0, chargeCounter:0
+06-07 16:06:37.602  4857  5582 D BatteryService: online:6, current avg:-300, charge type:2, power sharing:false, high voltage charger:false, capacity:280000, batterySWSelfDischarging:false, misc_event:65536, current_event:0, current_now:-343
+06-07 16:06:37.602  4857  4857 D BatteryService: Sending ACTION_BATTERY_CHANGED.
+06-07 16:06:37.604  4857  4857 I MotionRecognitionService: Plugged
+06-07 16:06:37.604  4857  4857 D MotionRecognitionService:   mCableConnection= 1
+06-07 16:06:37.604  4857  4857 D MotionRecognitionService: setPowerConnected : mGripEnabled = false
+06-07 16:06:37.604  4857  4857 D SamsungPhoneWindowManager: ACTION_BATTERY_CHANGED - Level :: 77, battStatus :: 2
+06-07 16:06:37.605  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.605  4857  4912 D UsbDeviceManager: handleMessage -> MSG_UPDATE_CHARGING_STATE = 1
+06-07 16:06:37.607  5429  5429 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-07 16:06:37.610  5429  5429 D BatteryController: onReceive-ACTION_BATTERY_CHANGED : mLevel=77, mBatteryStatus=2
+06-07 16:06:37.611  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.617  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.619  5429  5429 D PowerUI : priorPlugType = 2 mPlugType =  2
+06-07 16:06:37.621  5429  5429 D PowerUI.Notification: showChargingNotice oldChargingType : 1 currentChargingType : 1 oldChargingTime : 7164000 mChargingTime : 7164000
+06-07 16:06:37.621  5429  5429 D PowerUI.Notification: There is no change about charging status, so return!
+06-07 16:06:37.622  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:37.779  6142  6142 D io_stats: !@   8,0 r 1937757 101214436 w 773439 25228988 d 99321 25012340 f 350462 349753 iot 2476800 1864320 th 207408 0 0 pt 0 inp 3 0 161109.539
+06-07 16:06:38.047  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 79 lines
+06-07 16:06:38.053  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.057 22264 22264 E adbd    : recv: OPEN 00000640 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:38.057 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:38.058  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.059  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:38.064  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.252  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 35 lines
+06-07 16:06:38.257  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.260  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:38.263  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.279  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 3 lines
+06-07 16:06:38.284  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.284 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting to force open the camera.
+06-07 16:06:38.286 31179 31336 D CameraStateRegistry: tryOpenCamera(Camera@9828c30[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-07 16:06:38.289  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: Recalculating open cameras:
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: Camera                                       State                 
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: Camera@9828c30[id=0]                         OPENING               
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: Camera@47fb148[id=1]                         UNKNOWN               
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:38.292 31179 31336 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-07 16:06:38.295  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.296 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@141459a
+06-07 16:06:38.299 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Opening camera.
+06-07 16:06:38.300  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.301 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-07 16:06:38.301 31179 31336 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-07 16:06:38.301 31179 31336 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-07 16:06:38.305  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.305 31179 31336 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-f6f0a9c6-b59d-4ff3-bdc1-4dc65d9c6877154814527, androidx.camera.core.Preview-433db067-ace1-4d18-aa84-406b95676c06154763673, androidx.camera.core.ImageAnalysis-a5a38ff6-cec0-43a3-b1ca-7a5567e1dd6e17465450] for camera: 0
+06-07 16:06:38.306 31179 31336 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-07 16:06:38.311  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:38.311  4719 11410 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-07 16:06:38.316  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:39.078  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 142 lines
+06-07 16:06:39.083  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:39.086 22264 22264 E adbd    : recv: OPEN 00000641 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:39.087 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:39.088  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:39.088  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:40.110  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 190 lines
+06-07 16:06:40.115  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:40.116 22264 22264 E adbd    : recv: OPEN 00000642 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:40.116 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:40.117  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:40.120  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:40.254  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 25 lines
+06-07 16:06:40.259  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:40.261  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:40.265  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.137  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 162 lines
+06-07 16:06:41.142  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.145 22264 22264 E adbd    : recv: OPEN 00000643 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:41.145 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:41.146  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:41.148  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.305  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 29 lines
+06-07 16:06:41.310  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.312  4719 11410 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-07 16:06:41.315  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.318 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera receive onErrorCallback
+06-07 16:06:41.320 31179 31337 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-07 16:06:41.321  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.322 31179 31337 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-07 16:06:41.325 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-07 16:06:41.326 31179 31337 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-07 16:06:41.326 31179 31337 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-07 16:06:41.326  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.329 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Resetting Capture Session
+06-07 16:06:41.332  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.333 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-07 16:06:41.337  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.340 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Releasing session in state REOPENING
+06-07 16:06:41.342 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-07 16:06:41.343  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.344 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} closing camera
+06-07 16:06:41.346 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} CameraDevice.onClosed()
+06-07 16:06:41.348 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-07 16:06:41.348  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.349 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@833599f activeResuming = true
+06-07 16:06:41.353  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.700  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 65 lines
+06-07 16:06:41.705  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:41.707  4857  5359 D WifiConnectivityMonitor:  [|224] [] []
+06-07 16:06:41.711  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.173  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 86 lines
+06-07 16:06:42.179  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.181 22264 22264 E adbd    : recv: OPEN 00000644 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:42.182 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:42.183  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:42.184  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.254  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 13 lines
+06-07 16:06:42.259  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.261  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:42.265  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.306  4857  5582 W StorageManager: getStorageLowBytes lowPercent : 5, lowBytes : 1332166656, maxLowBytes : 524288000
+06-07 16:06:42.351  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 16 lines
+06-07 16:06:42.356  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.359 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting to force open the camera.
+06-07 16:06:42.361 31179 31336 D CameraStateRegistry: tryOpenCamera(Camera@9828c30[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-07 16:06:42.362  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: Recalculating open cameras:
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: Camera                                       State                 
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: Camera@9828c30[id=0]                         OPENING               
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: Camera@47fb148[id=1]                         UNKNOWN               
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:42.365 31179 31336 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-07 16:06:42.367  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.368 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@833599f
+06-07 16:06:42.370 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Opening camera.
+06-07 16:06:42.373 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-07 16:06:42.373  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.374 31179 31336 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-07 16:06:42.374 31179 31336 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-07 16:06:42.378  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.380 31179 31336 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-f6f0a9c6-b59d-4ff3-bdc1-4dc65d9c6877154814527, androidx.camera.core.Preview-433db067-ace1-4d18-aa84-406b95676c06154763673, androidx.camera.core.ImageAnalysis-a5a38ff6-cec0-43a3-b1ca-7a5567e1dd6e17465450] for camera: 0
+06-07 16:06:42.382 31179 31336 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-07 16:06:42.383  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.389  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.389  4719 11410 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-07 16:06:42.394  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.528  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 25 lines
+06-07 16:06:42.533  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.537 27482 27482 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.potokens.service.START dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsApiService }
+06-07 16:06:42.539  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:42.784  6142  6142 D io_stats: !@   8,0 r 1937811 101216708 w 773462 25229132 d 99321 25012340 f 350462 349753 iot 2476830 1864342 th 207064 0 0 pt 0 inp 0 0 161114.544
+06-07 16:06:43.201  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 123 lines
+06-07 16:06:43.207  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:43.208 22264 22264 E adbd    : recv: OPEN 00000645 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:43.208 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:43.210  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:43.212  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:44.227  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 189 lines
+06-07 16:06:44.233  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:44.237 22264 22264 E adbd    : recv: OPEN 00000646 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:44.237 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:44.238  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:44.239  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:44.243  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:44.254  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 2 lines
+06-07 16:06:44.259  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:44.261  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:44.265  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.261  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 185 lines
+06-07 16:06:45.266  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.267 22264 22264 E adbd    : recv: OPEN 00000647 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:45.267 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:45.269  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:45.272  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.334  4857  5582 W StorageManager: getStorageLowBytes lowPercent : 5, lowBytes : 1332166656, maxLowBytes : 524288000
+06-07 16:06:45.379  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 20 lines
+06-07 16:06:45.385  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.389  4719 11410 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-07 16:06:45.390  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.394 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera receive onErrorCallback
+06-07 16:06:45.395  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.396 31179 31337 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-07 16:06:45.397 31179 31337 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-07 16:06:45.399 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-07 16:06:45.400 31179 31337 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-07 16:06:45.400 31179 31337 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-07 16:06:45.401  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.402 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Resetting Capture Session
+06-07 16:06:45.404 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-07 16:06:45.406  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.406 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Releasing session in state REOPENING
+06-07 16:06:45.408 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-07 16:06:45.409 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} closing camera
+06-07 16:06:45.411  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:45.412 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} CameraDevice.onClosed()
+06-07 16:06:45.413 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-07 16:06:45.415 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@610dd97 activeResuming = true
+06-07 16:06:45.416  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.254  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 156 lines
+06-07 16:06:46.260  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.262  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:46.265  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.292  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 5 lines
+06-07 16:06:46.297  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.301 22264 22264 E adbd    : recv: OPEN 00000648 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:46.301 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:46.303  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:46.303  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.411  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 20 lines
+06-07 16:06:46.417  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.419 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting to force open the camera.
+06-07 16:06:46.420 31179 31336 D CameraStateRegistry: tryOpenCamera(Camera@9828c30[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-07 16:06:46.422  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: Recalculating open cameras:
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: Camera                                       State                 
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: Camera@9828c30[id=0]                         OPENING               
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: Camera@47fb148[id=1]                         UNKNOWN               
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:46.423 31179 31336 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-07 16:06:46.425 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@610dd97
+06-07 16:06:46.427 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Opening camera.
+06-07 16:06:46.427  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.428 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-07 16:06:46.429 31179 31336 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-07 16:06:46.430 31179 31336 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-07 16:06:46.433  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.434 31179 31336 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-f6f0a9c6-b59d-4ff3-bdc1-4dc65d9c6877154814527, androidx.camera.core.Preview-433db067-ace1-4d18-aa84-406b95676c06154763673, androidx.camera.core.ImageAnalysis-a5a38ff6-cec0-43a3-b1ca-7a5567e1dd6e17465450] for camera: 0
+06-07 16:06:46.435 31179 31336 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-07 16:06:46.438  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:46.440  4719 11410 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-07 16:06:46.443  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.136  4857  7905 D SSRM:t  : SIOP:: AP = 390, PST = 393 (W:6), BAT = 308, CHG = 388, CP = 321
+06-07 16:06:47.319  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 163 lines
+06-07 16:06:47.324  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.329 22264 22264 E adbd    : recv: OPEN 00000649 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:47.329 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:47.329  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.330  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:47.335  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.356  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 4 lines
+06-07 16:06:47.363  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.363  4857  5496 I ActivityManager: KPU : put [com.samsung.android.app.assistantmenu] : 6236 K
+06-07 16:06:47.363  4857  5496 I ActivityManager: Killing 29914:com.samsung.android.app.assistantmenu/1000 (adj 906): DHA:empty #25
+06-07 16:06:47.367  4857  4884 E memtrack: Couldn't load memtrack module
+06-07 16:06:47.367  4857  4884 W android.os.Debug: failed to get memory consumption info: -1
+06-07 16:06:47.368  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.395  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 5 lines
+06-07 16:06:47.400  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.404  5768  8125 D ForegroundUtils: could not check pending caller
+06-07 16:06:47.405  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.649  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 46 lines
+06-07 16:06:47.654  4857  5582 D BatteryService: !@BatteryListener : batteryPropertiesChanged!
+06-07 16:06:47.655  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.655  4857  5582 D BatteryService: level:77, scale:100, status:2, health:2, present:true, voltage: 3997, temperature: 308, technology: Li-ion, AC powered:false, USB powered:true, POGO powered:false, Wireless powered:false, icon:17303851, invalid charger:0, maxChargingCurrent:0, maxChargingVoltage:0, chargeCounter:0
+06-07 16:06:47.656  4857  5582 D BatteryService: online:6, current avg:-162, charge type:2, power sharing:false, high voltage charger:false, capacity:280000, batterySWSelfDischarging:false, misc_event:65536, current_event:0, current_now:-137
+06-07 16:06:47.656  4857  4857 D BatteryService: Sending ACTION_BATTERY_CHANGED.
+06-07 16:06:47.659  4857  4857 I MotionRecognitionService: Plugged
+06-07 16:06:47.659  4857  4857 D MotionRecognitionService:   mCableConnection= 1
+06-07 16:06:47.660  4857  4857 D MotionRecognitionService: setPowerConnected : mGripEnabled = false
+06-07 16:06:47.660  4857  4857 D SamsungPhoneWindowManager: ACTION_BATTERY_CHANGED - Level :: 77, battStatus :: 2
+06-07 16:06:47.660  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.662  4857  4912 D UsbDeviceManager: handleMessage -> MSG_UPDATE_CHARGING_STATE = 1
+06-07 16:06:47.664  5429  5429 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-07 16:06:47.665  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.669  5429  5429 D BatteryController: onReceive-ACTION_BATTERY_CHANGED : mLevel=77, mBatteryStatus=2
+06-07 16:06:47.671  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.677  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.678  5429  5429 D PowerUI : priorPlugType = 2 mPlugType =  2
+06-07 16:06:47.680  5429  5429 D PowerUI.Notification: showChargingNotice oldChargingType : 1 currentChargingType : 1 oldChargingTime : 7164000 mChargingTime : 7164000
+06-07 16:06:47.680  5429  5429 D PowerUI.Notification: There is no change about charging status, so return!
+06-07 16:06:47.682  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:47.788  6142  6142 D io_stats: !@   8,0 r 1937811 101216708 w 773472 25229280 d 99323 25012388 f 350464 349755 iot 2476860 1864369 th 207036 0 0 pt 0 inp 0 0 161119.548
+06-07 16:06:48.252  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 106 lines
+06-07 16:06:48.257  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:48.262  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:48.262  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:48.349  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 16 lines
+06-07 16:06:48.354  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:48.359 22264 22264 E adbd    : recv: OPEN 0000064a 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:48.359  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:48.359 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:48.361  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:48.365  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.376  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 188 lines
+06-07 16:06:49.382  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.385 22264 22264 E adbd    : recv: OPEN 0000064b 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:49.385 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:49.386  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:49.387  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.435  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 9 lines
+06-07 16:06:49.440  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.441  4719 11410 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-07 16:06:49.446  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.447 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera receive onErrorCallback
+06-07 16:06:49.449 31179 31337 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-07 16:06:49.450 31179 31337 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-07 16:06:49.451  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.452 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-07 16:06:49.453 31179 31337 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-07 16:06:49.454 31179 31337 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-07 16:06:49.456 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Resetting Capture Session
+06-07 16:06:49.457  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.461 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-07 16:06:49.462  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.463 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Releasing session in state REOPENING
+06-07 16:06:49.465 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-07 16:06:49.467 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} closing camera
+06-07 16:06:49.467  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.470 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} CameraDevice.onClosed()
+06-07 16:06:49.472 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-07 16:06:49.473  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:49.474 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@6e26ddd activeResuming = true
+06-07 16:06:49.478  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.253  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 144 lines
+06-07 16:06:50.259  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.263  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:50.264  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.409  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 27 lines
+06-07 16:06:50.415  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.415 22264 22264 E adbd    : recv: OPEN 0000064c 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:50.415 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:50.417  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:50.420  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.473  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 10 lines
+06-07 16:06:50.478  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.482 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting to force open the camera.
+06-07 16:06:50.483 31179 31336 D CameraStateRegistry: tryOpenCamera(Camera@9828c30[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-07 16:06:50.484  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: Recalculating open cameras:
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: Camera                                       State                 
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: Camera@9828c30[id=0]                         OPENING               
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: Camera@47fb148[id=1]                         UNKNOWN               
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: -------------------------------------------------------------------
+06-07 16:06:50.487 31179 31336 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-07 16:06:50.489  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.490 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@6e26ddd
+06-07 16:06:50.492 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Opening camera.
+06-07 16:06:50.494  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.495 31179 31336 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-07 16:06:50.496 31179 31336 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-07 16:06:50.496 31179 31336 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-07 16:06:50.500  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.502 31179 31336 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-f6f0a9c6-b59d-4ff3-bdc1-4dc65d9c6877154814527, androidx.camera.core.Preview-433db067-ace1-4d18-aa84-406b95676c06154763673, androidx.camera.core.ImageAnalysis-a5a38ff6-cec0-43a3-b1ca-7a5567e1dd6e17465450] for camera: 0
+06-07 16:06:50.503 31179 31336 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-07 16:06:50.505  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.510  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:50.511  4719 11410 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-07 16:06:50.516  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:51.435  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 171 lines
+06-07 16:06:51.441  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:51.443 22264 22264 E adbd    : recv: OPEN 0000064d 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:51.443 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:51.445  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:51.446  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:52.253  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 150 lines
+06-07 16:06:52.259  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:52.263  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-07 16:06:52.264  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:52.468  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 38 lines
+06-07 16:06:52.473  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:52.474 22264 22264 E adbd    : recv: OPEN 0000064e 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:52.474 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:52.476  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:52.478  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:52.792  6142  6142 D io_stats: !@   8,0 r 1937815 101217104 w 773482 25229356 d 99323 25012388 f 350465 349756 iot 2476860 1864382 th 206948 0 0 pt 0 inp 0 0 161124.552
+06-07 16:06:53.493  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 189 lines
+06-07 16:06:53.499  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.503 22264 22264 E adbd    : recv: OPEN 0000064f 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-07 16:06:53.503 22264 22264 E adbd    : service_to_fd: tcp:4762
+06-07 16:06:53.504  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-07 16:06:53.504  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.510  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.511  4719 11410 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-07 16:06:53.515  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.517 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera receive onErrorCallback
+06-07 16:06:53.519 31179 31337 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-07 16:06:53.520  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.520 31179 31337 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-07 16:06:53.523 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-07 16:06:53.524 31179 31337 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-07 16:06:53.524 31179 31337 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-07 16:06:53.526  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.527 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Resetting Capture Session
+06-07 16:06:53.531 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-07 16:06:53.531  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.532 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Releasing session in state REOPENING
+06-07 16:06:53.534 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-07 16:06:53.535 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} closing camera
+06-07 16:06:53.536  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.538 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} CameraDevice.onClosed()
+06-07 16:06:53.539 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-07 16:06:53.541 31179 31337 D Camera2CameraImpl: {Camera@9828c30[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@860f176 activeResuming = true
+06-07 16:06:53.541  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.674  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 25 lines
+06-07 16:06:53.680  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-07 16:06:53.684 22264 22264 E adbd    : recv: OPEN 00000652 00000000 004b:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 3A 65 78 70 6F 72 74 20 41 4E 44 52 4F 49 44 5F 4C 4F 47 5F 54 41 47 53 3D 27 27 3B 20 65 78 65 63 20 6C 6F 67 63 61 74 20 27 2D 64 27 20 27 2D 74 27 20 27 34 30 30 27 00 
+06-07 16:06:53.684 22264 22264 E adbd    : service_to_fd: shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '400'
+06-07 16:06:53.685  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream

@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 import "package:camera/camera.dart";
 import "package:flutter/cupertino.dart";
@@ -8,9 +9,11 @@ import "storage_service.dart";
 import "gallery_persistence_service.dart";
 import "package:path_provider/path_provider.dart";
 import "../constants.dart";
+import "../models/camera_capture_settings.dart";
 import "../models/captured_video.dart";
 import "device_service.dart";
 import "log_service.dart";
+import "video_metadata_service.dart";
 
 /// CameraService - Manages camera operations such as taking photos and recording videos.
 /// Singleton usage recommended via `CameraServiceSingleton`.
@@ -45,6 +48,10 @@ class CameraService {
   bool _isCameraInitialized = false; // Tracks camera initialization status
   bool? _flashAvailable;
   int _mockMediaSequence = 0;
+  bool _controllerUsesExplicitFps = true;
+
+  static const Duration _cameraOperationTimeout = Duration(seconds: 12);
+  static const Duration _cameraDisposeSettleDelay = Duration(milliseconds: 400);
 
   DateTime?
       videoStartRecordingDate; // Timestamp for when video recording starts
@@ -57,6 +64,7 @@ class CameraService {
 
   // Current camera quality setting (default: high)
   CameraQuality _currentQuality = CameraQuality.high;
+  VideoCaptureProfile _currentProfile = VideoCaptureProfile.standard1080p30;
 
   // Notify screens of critical events, e.g., forced stop
   ValueNotifier<bool> recordingInterrupted = ValueNotifier(false);
@@ -131,23 +139,15 @@ class CameraService {
       return;
     }
 
-    // Use a provided index if any, or the existing selectedCameraIndex
-    if (cameraIndex != null) {
-      _selectedCameraIndex = cameraIndex;
-    }
-
-    final quality = await _loadCameraQuality();
+    final cameraDescription = await _resolveCameraDescription(
+      _deviceCameras,
+      requestedIndex: cameraIndex,
+    );
+    final profile = await _loadVideoCaptureProfile();
 
     // Dispose any existing controller before creating a new one
-    await _controller?.dispose();
-
-    // Clamping to avoid out of range index
-    if (_selectedCameraIndex >= _deviceCameras.length) {
-      _selectedCameraIndex = 0;
-    }
-
-    final cameraDescription = _deviceCameras[_selectedCameraIndex];
-    _controller = CameraController(cameraDescription, quality);
+    await _disposeController("camera startup");
+    _controller = _createController(cameraDescription, profile);
     _flashAvailable = null;
 
     try {
@@ -161,24 +161,38 @@ class CameraService {
     }
   }
 
-  /// Loads stored camera setting if exists and applies it to camera.
-  ///
-  /// - Gets camera quality from settings service.
-  /// - Configures found setting or high if none.
-  Future<ResolutionPreset> _loadCameraQuality() async {
-    final quality = await SettingsService.getCameraQuality();
-    switch (quality) {
-      case "medium":
-        _currentQuality = CameraQuality.medium;
-        return ResolutionPreset.medium;
-      case "low":
-        _currentQuality = CameraQuality.low;
-        return ResolutionPreset.low;
-      case "high":
-      default:
-        _currentQuality = CameraQuality.high;
-        return ResolutionPreset.high;
-    }
+  Future<VideoCaptureProfile> _loadVideoCaptureProfile() async {
+    final profile = await SettingsService.getVideoCaptureProfile();
+    _currentProfile = profile;
+    _currentQuality = switch (profile.resolutionPreset) {
+      ResolutionPreset.medium => CameraQuality.low,
+      ResolutionPreset.high => CameraQuality.medium,
+      _ => CameraQuality.high,
+    };
+    return profile;
+  }
+
+  CameraController _createController(
+    CameraDescription cameraDescription,
+    VideoCaptureProfile profile,
+  ) {
+    _controllerUsesExplicitFps = true;
+    return CameraController(
+      cameraDescription,
+      profile.resolutionPreset,
+      fps: profile.framesPerSecond,
+    );
+  }
+
+  CameraController _createControllerUsingPresetDefaults(
+    CameraDescription cameraDescription,
+    VideoCaptureProfile profile,
+  ) {
+    _controllerUsesExplicitFps = false;
+    return CameraController(
+      cameraDescription,
+      profile.resolutionPreset,
+    );
   }
 
   /// Changes the currently selected camera to the specified index and restarts the camera.
@@ -190,6 +204,9 @@ class CameraService {
 
     LogService.instance.registerLog(
         "Switching camera from $_selectedCameraIndex to $newCameraIndex");
+    await SettingsService.setSelectedCameraName(
+      _deviceCameras[newCameraIndex].name,
+    );
     await startCamera(cameraIndex: newCameraIndex);
   }
 
@@ -216,12 +233,12 @@ class CameraService {
       throw Exception("No cameras available on this device.");
     }
 
-    if (_selectedCameraIndex >= cameras.length) {
-      _selectedCameraIndex = 0;
-    }
+    _deviceCameras = cameras;
+    final cameraDescription = await _resolveCameraDescription(cameras);
+    final profile = await _loadVideoCaptureProfile();
 
-    final quality = await _loadCameraQuality();
-    _controller = CameraController(cameras[_selectedCameraIndex], quality);
+    await _disposeController("camera readiness initialization");
+    _controller = _createController(cameraDescription, profile);
     _flashAvailable = null;
 
     try {
@@ -254,7 +271,7 @@ class CameraService {
         await _setFlashModeIfSupported(FlashMode.torch, "photo capture");
       }
 
-      final XFile photo = await _controller!.takePicture();
+      final XFile photo = await _takePictureWithFallback();
       final newPath = await _getSessionMediaPath(photo.name);
       await File(photo.path).copy(newPath); // Move to session directory
       LogService.instance.registerLog("Photo saved to session path: $newPath");
@@ -339,7 +356,7 @@ class CameraService {
       }
 
       final startTime = DateTime.now();
-      await _controller?.startVideoRecording();
+      await _startVideoRecordingWithFallback();
       videoStartRecordingDate = startTime;
       LogService.instance.registerLog(
           "Video recording started with flash ${enableFlash ? 'on' : 'off'}");
@@ -377,6 +394,7 @@ class CameraService {
 
       await File(video.path).copy(newPath); // Move to session directory
       LogService.instance.registerLog("Video saved to session path: $newPath");
+      await _logRecordedVideoMetadata(newPath);
 
       // Announce with flash after stopping (if setting is enabled)
       await announceRecordingWithFlash();
@@ -449,7 +467,7 @@ class CameraService {
       }
 
       await _setFlashModeIfSupported(FlashMode.off, "camera stop");
-      await _controller?.dispose();
+      await _disposeController("camera stop");
       LogService.instance.registerLog("Camera stopped");
     } catch (e) {
       LogService.instance.registerLog("Error stopping camera: $e");
@@ -462,49 +480,250 @@ class CameraService {
         "Changing camera quality to $quality (current: $_currentQuality)");
     _currentQuality = quality;
 
-    ResolutionPreset preset;
+    final profile = switch (quality) {
+      CameraQuality.high => VideoCaptureProfile.standard1080p30,
+      CameraQuality.medium => VideoCaptureProfile.compat720p30,
+      CameraQuality.low => VideoCaptureProfile.dataSaver480p30,
+    };
+    await setVideoCaptureProfile(profile);
+  }
 
-    switch (quality) {
-      case CameraQuality.high:
-        preset = ResolutionPreset.high;
-        break;
-      case CameraQuality.medium:
-        preset = ResolutionPreset.medium;
-        break;
-      case CameraQuality.low:
-        preset = ResolutionPreset.low;
-        break;
+  Future<void> setVideoCaptureProfile(VideoCaptureProfile profile) async {
+    LogService.instance.registerLog(
+        "Changing video capture profile to ${profile.storageValue} "
+        "(current: ${_currentProfile.storageValue})");
+    await applyCaptureSettings(videoProfile: profile);
+  }
+
+  Future<void> setLensPreference(LensPreference preference) async {
+    LogService.instance.registerLog(
+        "Changing camera lens preference to ${preference.storageValue}");
+    await applyCaptureSettings(
+      lensPreference: preference,
+      clearSelectedCameraName: true,
+    );
+  }
+
+  Future<void> applyCaptureSettings({
+    LensPreference? lensPreference,
+    String? selectedCameraName,
+    bool clearSelectedCameraName = false,
+    VideoCaptureProfile? videoProfile,
+  }) async {
+    if (lensPreference != null) {
+      await SettingsService.setCameraLensPreference(lensPreference);
+    }
+    if (clearSelectedCameraName) {
+      await SettingsService.clearSelectedCameraName();
+    } else if (selectedCameraName != null) {
+      await SettingsService.setSelectedCameraName(selectedCameraName);
+    }
+    if (videoProfile != null) {
+      _currentProfile = videoProfile;
+      await SettingsService.setVideoCaptureProfile(videoProfile);
     }
 
     if (_useMockCamera) {
       _isCameraInitialized = true;
-      LogService.instance
-          .registerLog("Mock camera quality set to $_currentQuality.");
+      LogService.instance.registerLog("Mock camera capture settings updated: "
+          "lens=${lensPreference?.storageValue ?? 'unchanged'}, "
+          "profile=${videoProfile?.storageValue ?? _currentProfile.storageValue}.");
       return;
     }
 
-    // Dispose of the current controller if initialized
-    if (_controller != null && _controller!.value.isInitialized) {
-      await _controller?.dispose();
+    final cameras = await availableCameras();
+    if (cameras.isEmpty) {
+      LogService.instance
+          .registerLog("No cameras found on device. Aborting settings change.");
+      return;
     }
 
-    final cameras = await availableCameras();
-    _controller = CameraController(cameras[0], preset);
+    _deviceCameras = cameras;
+    final cameraDescription = await _resolveCameraDescription(cameras);
+    final profile = await _loadVideoCaptureProfile();
+
+    await _disposeController("camera settings change");
+    _controller = _createController(cameraDescription, profile);
     _flashAvailable = null;
 
     try {
       await _controller?.initialize();
-      await _setFlashModeIfSupported(FlashMode.off, "camera quality change");
+      await _setFlashModeIfSupported(FlashMode.off, "camera lens change");
       _isCameraInitialized = true;
-      LogService.instance.registerLog(
-          "Camera quality set to $_currentQuality and reinitialized.");
+      LogService.instance
+          .registerLog("Camera capture settings applied and reinitialized: "
+              "camera=${cameraDescription.name}, "
+              "profile=${profile.storageValue}.");
     } catch (e) {
-      LogService.instance.registerLog("Error setting camera quality: $e");
+      LogService.instance.registerLog("Error applying camera settings: $e");
     }
   }
 
   /// Returns the current camera quality.
   CameraQuality get currentQuality => _currentQuality;
+  VideoCaptureProfile get currentProfile => _currentProfile;
+
+  Future<CameraDescription> _resolveCameraDescription(
+    List<CameraDescription> cameras, {
+    int? requestedIndex,
+  }) async {
+    if (requestedIndex != null) {
+      _selectedCameraIndex = requestedIndex.clamp(0, cameras.length - 1);
+      final selectedCamera = cameras[_selectedCameraIndex];
+      await SettingsService.setSelectedCameraName(selectedCamera.name);
+      return selectedCamera;
+    }
+
+    final storedCameraName = await SettingsService.getSelectedCameraName();
+    if (storedCameraName != null) {
+      final storedIndex = cameras.indexWhere(
+        (camera) => camera.name == storedCameraName,
+      );
+      if (storedIndex >= 0) {
+        _selectedCameraIndex = storedIndex;
+        return cameras[storedIndex];
+      }
+    }
+
+    final lensPreference = await SettingsService.getCameraLensPreference();
+    var resolvedIndex = cameras.indexWhere(lensPreference.matches);
+    if (resolvedIndex < 0 && lensPreference != LensPreference.autoBack) {
+      resolvedIndex = cameras.indexWhere(LensPreference.autoBack.matches);
+    }
+    if (resolvedIndex < 0) {
+      resolvedIndex = 0;
+    }
+
+    _selectedCameraIndex = resolvedIndex;
+    await SettingsService.setSelectedCameraName(cameras[resolvedIndex].name);
+    return cameras[resolvedIndex];
+  }
+
+  Future<void> _logRecordedVideoMetadata(String videoPath) async {
+    try {
+      final metadata = await VideoMetadataService.inspectVideo(videoPath);
+      if (metadata == null) {
+        LogService.instance
+            .registerLog("Recorded video metadata unavailable for $videoPath");
+        return;
+      }
+      LogService.instance.registerLog(
+          "Recorded video metadata: ${metadata.width}x${metadata.height}, "
+          "${metadata.framesPerSecondText} fps, "
+          "${metadata.durationMs ?? 'unknown'} ms");
+    } catch (e) {
+      LogService.instance
+          .registerLog("Error inspecting recorded video metadata: $e");
+    }
+  }
+
+  Future<XFile> _takePictureWithFallback() async {
+    try {
+      return await _controller!.takePicture().timeout(_cameraOperationTimeout);
+    } on TimeoutException catch (error, stackTrace) {
+      LogService.instance.registerLog("Camera photo capture timed out after "
+          "${_cameraOperationTimeout.inSeconds}s; leaving controller intact. "
+          "$error\n$stackTrace");
+      rethrow;
+    } catch (error, stackTrace) {
+      final didRecover = await _reinitializeWithoutExplicitFps(
+        "photo capture",
+        error,
+        stackTrace,
+      );
+      if (!didRecover) {
+        rethrow;
+      }
+      return await _controller!.takePicture().timeout(_cameraOperationTimeout);
+    }
+  }
+
+  Future<void> _startVideoRecordingWithFallback() async {
+    try {
+      await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
+    } on TimeoutException catch (error, stackTrace) {
+      LogService.instance.registerLog(
+          "Camera video recording start timed out after "
+          "${_cameraOperationTimeout.inSeconds}s; leaving controller intact. "
+          "$error\n$stackTrace");
+      rethrow;
+    } catch (error, stackTrace) {
+      final didRecover = await _reinitializeWithoutExplicitFps(
+        "video recording start",
+        error,
+        stackTrace,
+      );
+      if (!didRecover) {
+        rethrow;
+      }
+      await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
+    }
+  }
+
+  Future<bool> _reinitializeWithoutExplicitFps(
+    String operation,
+    Object error,
+    StackTrace stackTrace,
+  ) async {
+    if (!_controllerUsesExplicitFps) {
+      return false;
+    }
+
+    LogService.instance.registerLog(
+        "Camera $operation failed with explicit fps; retrying with "
+        "resolution preset defaults. Error: $error\n$stackTrace");
+
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        LogService.instance.registerLog(
+            "No cameras found while retrying $operation without explicit fps.");
+        return false;
+      }
+
+      _deviceCameras = cameras;
+      final cameraDescription = await _resolveCameraDescription(cameras);
+      final profile = await _loadVideoCaptureProfile();
+      await _disposeController("$operation retry");
+      _controller = _createControllerUsingPresetDefaults(
+        cameraDescription,
+        profile,
+      );
+      _flashAvailable = null;
+      await _controller?.initialize().timeout(_cameraOperationTimeout);
+      await _setFlashModeIfSupported(
+          FlashMode.off, "$operation retry initialization");
+      _isCameraInitialized = true;
+      LogService.instance.registerLog(
+          "Camera reinitialized for $operation without explicit fps: "
+          "camera=${cameraDescription.name}, profile=${profile.storageValue}.");
+      return true;
+    } catch (retryError, retryStackTrace) {
+      _isCameraInitialized = false;
+      LogService.instance
+          .registerLog("Camera $operation retry without explicit fps failed: "
+              "$retryError\n$retryStackTrace");
+      return false;
+    }
+  }
+
+  Future<void> _disposeController(String operation) async {
+    final controller = _controller;
+    if (controller == null) {
+      return;
+    }
+
+    _controller = null;
+    _isCameraInitialized = false;
+    _flashAvailable = null;
+    try {
+      await controller.dispose().timeout(const Duration(seconds: 5));
+    } catch (error) {
+      LogService.instance.registerLog(
+          "Error disposing camera controller during $operation: $error");
+    }
+    await Future.delayed(_cameraDisposeSettleDelay);
+  }
 
   Future<bool> _setFlashModeIfSupported(
       FlashMode mode, String operation) async {

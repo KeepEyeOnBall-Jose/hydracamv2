@@ -1,0 +1,523 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M .gitignore
+ M AGENTS.md
+ M DISTRIBUTION_RUNBOOK.md
+ M android/app/build.gradle
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M android/gradle.properties
+ M docs/control/architecture-and-testing.md
+ M docs/control/backlog-import.md
+ M docs/control/evidence-first-loop.md
+ M docs/control/requirements.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/wireless-device-debugging.md
+ M docs/superpowers/plans/2026-06-05-dependency-toolchain-upgrade.md
+ M ios/Runner.xcodeproj/project.pbxproj
+ M ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+ M ios/Runner/AppDelegate.swift
+ M ios/Runner/Info.plist
+ M ios/fastlane/Fastfile
+ M lib/automation/automation_bridge.dart
+ M lib/automation/automation_config.dart
+ M lib/main.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/screens/camera_selection_screen.dart
+ M lib/screens/master_video_recording_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/services/camera_service.dart
+ M lib/services/launch_config_service.dart
+ M lib/services/log_service.dart
+ M lib/services/network_info_service.dart
+ M lib/services/settings_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png
+ M macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png
+ M pubspec.lock
+ M pubspec.yaml
+ M scripts/multi_device_orchestrator.py
+ M test/services/camera_service_failure_test.dart
+ M test/services/settings_service_test.dart
+?? automation_scenarios/single_device_capture_profile.json
+?? docs/superpowers/plans/2026-06-06-ios-icon-launch-dev-build.md
+?? docs/superpowers/plans/2026-06-07-camera-lens-video-settings.md
+?? docs/superpowers/plans/2026-06-07-parallel-device-matrix-run.md
+?? ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+?? ios/Runner.xcworkspace/xcshareddata/swiftpm/
+?? lib/master/connected_client_automation_payload.dart
+?? lib/models/camera_capture_settings.dart
+?? lib/services/camera_hardware_metadata_service.dart
+?? lib/services/video_metadata_service.dart
+?? logs/verification-runs/2026-06-06-iphone-personal-team-debug/
+?? logs/verification-runs/20260606-2310-ipad-capture-failure-trace-and-repro/
+?? logs/verification-runs/20260607-0024-android-wifi-readiness-preflight/
+?? logs/verification-runs/20260607-1501-ios-icon-profile-launch/
+?? logs/verification-runs/20260607-1708-ipad-network-identity-check/
+?? logs/verification-runs/20260607-all-devices-one-by-one-rerun/
+?? logs/verification-runs/20260607-camera-settings-device-matrix-rerun/
+?? logs/verification-runs/20260607-camera-settings-device-matrix/
+?? logs/verification-runs/20260607-new-devices-rerun/
+?? logs/verification-runs/20260607-parallel-device-matrix-dry-run/
+?? logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/
+?? logs/verification-runs/20260607-parallel-device-matrix-staged/
+?? logs/verification-runs/20260607-post-label-device-matrix/
+?? logs/verification-runs/20260607-remaining-blockers-rerun/
+?? logs/verification-runs/20260607-rotating-master-slave-dry-run/
+?? logs/verification-runs/20260607-rotating-master-slave-matrix-detach/
+?? logs/verification-runs/20260607-rotating-master-slave-matrix-detach2/
+?? logs/verification-runs/20260607-rotating-master-slave-matrix-detach3/
+?? logs/verification-runs/20260607-rotating-master-slave-matrix-skipbuild/
+?? macos/Runner/Assets.xcassets/AppIconDebug.appiconset/
+?? scripts/android_screen_brightness.py
+?? scripts/android_wifi_preflight.py
+?? scripts/ios_capture_repro.py
+?? scripts/ios_icon_launch_dev.sh
+?? scripts/prepare_macos_dev_host.zsh
+?? scripts/run_android_capture_profile.py
+?? scripts/run_parallel_device_matrix.py
+?? scripts/run_rotating_master_slave_matrix.py
+?? scripts/test_android_screen_brightness.py
+?? scripts/test_ios_capture_repro.py
+?? scripts/test_run_parallel_device_matrix.py
+?? scripts/test_run_rotating_master_slave_matrix.py
+?? test/automation/
+?? test/master/
+?? test/screens/
+?? test/services/camera_capture_settings_test.dart
+?? test/services/camera_hardware_metadata_service_test.dart
+?? test/services/log_service_test.dart
+?? test/services/network_readiness_service_test.dart
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                                                Identifier                             State         Model                     
+-------------------   -----------------------------------------------------   ------------------------------------   -----------   --------------------------
+                      0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local   0A947DBD-A462-5BAA-AB84-17F143D41619   unavailable   iPad7,5                   
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local                     AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   connected     iPhone 12 Pro (iPhone13,3)
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 9 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 15.6.1 19G82
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ ipconfig getifaddr en0
+192.168.178.159
+[exit-code] 0
+
+$ networksetup -getairportnetwork en0
+You are not associated with an AirPort network.
+[exit-code] 0
+
+$ curl --max-time 3 -sS http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (7) Failed to connect to 192.168.178.104 port 4762 after 1094 ms: Couldn't connect to server
+[exit-code] 7
+
+$ dscacheutil -q host -a name Jose-Ramons-iPhone.coredevice.local
+name: jose-ramons-iphone.coredevice.local
+ipv6_address: fdcc:dcb2:22f::1
+ipv6_address: fdcc:dcb2:22f::1
+
+[exit-code] 0
+
+$ dscacheutil -q host -a name 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+[exit-code] 0
+
+$ curl --max-time 3 -sS http://192.168.178.141:4762/healthz
+
+[stderr]
+curl: (7) Failed to connect to 192.168.178.141 port 4762 after 1139 ms: Couldn't connect to server
+[exit-code] 7
+
+$ xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags: 
+▿ hardwareProperties:
+    • deviceType: iPad
+    • platform: iOS
+    • productType: iPad7,5
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: false
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+▿ connectionProperties:
+    • isMobileDeviceOnly: false
+    • potentialHostnames: • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+    • pairingState: unsupported
+    • tunnelState: unavailable
+▿ capabilities:
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+• visibilityClass: default
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+iPad (5) (15.6.1) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Devices Offline ==
+Unknown (0A947DBD-A462-5BAA-AB84-17F143D41619)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ xcrun devicectl device info details --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+
+[stderr]
+ERROR: The specified device was not found. (Name: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63) (com.apple.dt.CoreDeviceError error 1000 (0x3E8))
+       DeviceName = 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+[exit-code] 1
+
+$ arp -an
+? (169.254.8.197) at 96:5c:9a:e7:d3:a7 on en12 [ethernet]
+? (169.254.9.236) at b2:ca:68:c6:ee:51 on en11 [ethernet]
+? (169.254.169.254) at (incomplete) on en0 [ethernet]
+? (192.168.178.1) at 44:4e:6d:be:f3:dc on en0 ifscope [ethernet]
+? (192.168.178.104) at 56:82:7f:2a:d6:2d on en0 ifscope [ethernet]
+? (192.168.178.128) at 34:6f:24:ea:5d:17 on en0 ifscope [ethernet]
+? (192.168.178.138) at fe:41:44:f3:d:73 on en0 ifscope [ethernet]
+? (192.168.178.141) at a6:b2:62:9f:80:b3 on en0 ifscope [ethernet]
+? (192.168.178.149) at 2c:91:ab:8b:a3:5 on en0 ifscope [ethernet]
+? (192.168.178.153) at a:6a:8e:d3:5b:f0 on en0 ifscope [ethernet]
+? (192.168.178.159) at b6:d8:3d:db:11:70 on en0 ifscope permanent [ethernet]
+? (192.168.178.191) at 38:a:a:a1:e4:92 on en0 ifscope [ethernet]
+? (224.0.0.251) at 1:0:5e:0:0:fb on en0 ifscope permanent [ethernet]
+? (224.0.0.251) at 1:0:5e:0:0:fb on en11 ifscope permanent [ethernet]
+? (239.255.255.250) at 1:0:5e:7f:ff:fa on en0 ifscope permanent [ethernet]
+? (239.255.255.250) at 1:0:5e:7f:ff:fa on en12 ifscope permanent [ethernet]
+? (239.255.255.250) at 1:0:5e:7f:ff:fa on en11 ifscope permanent [ethernet]
+[exit-code] 0
+
+$ nmap -p 4762,4040 --open 192.168.178.0/24
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-06-07 17:11 +0200
+Nmap done: 256 IP addresses (3 hosts up) scanned in 23.21 seconds
+[exit-code] 0
+
+$ ping -c 2 -W 1000 192.168.178.104
+PING 192.168.178.104 (192.168.178.104): 56 data bytes
+64 bytes from 192.168.178.104: icmp_seq=0 ttl=64 time=101.755 ms
+64 bytes from 192.168.178.104: icmp_seq=1 ttl=64 time=36.705 ms
+
+--- 192.168.178.104 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 36.705/69.230/101.755/32.525 ms
+[exit-code] 0
+
+$ ping -c 2 -W 1000 192.168.178.141
+PING 192.168.178.141 (192.168.178.141): 56 data bytes
+64 bytes from 192.168.178.141: icmp_seq=0 ttl=64 time=98.778 ms
+64 bytes from 192.168.178.141: icmp_seq=1 ttl=64 time=143.056 ms
+
+--- 192.168.178.141 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 98.778/120.917/143.056/22.139 ms
+[exit-code] 0
+
+$ python3 scripts/ios_capture_repro.py --launch --device-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --host auto --scan-subnet 192.168.178.0/24 --timeout 180 --record-seconds 1 --run-dir logs/verification-runs/20260607-1708-ipad-network-identity-check/device-logs/ipad-automation-repro
+[exit-code] -15
+
+$ nmap -p 4762,4040 --open 192.168.178.0/24
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-06-07 17:15 +0200
+Nmap done: 256 IP addresses (4 hosts up) scanned in 64.81 seconds
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"commands":["connected_clients","end_session","start_local_session","start_recording","start_session","stop_recording","take_photo"]}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/logs
+{"traceFilePath":"/var/mobile/Containers/Data/Application/68A6113C-CDF9-4893-BDA8-93B9A9567D1B/Documents/logs/hydracam-trace-2026-06-07T17-14-25-532083.ndjson","persistedLogLines":["{\"message\":\"Automation bridge listening on port 4762\",\"timestamp\":\"2026-06-07T17:14:25.449322\",\"function\":null,\"file\":null}","{\"message\":\"Failed to load launch config from platform: MissingPluginException(No implementation found for method getLaunchConfig on channel hydracamv2/launch_config)\",\"timestamp\":\"2026-06-07T17:14:25.524556\",\"function\":null,\"file\":null}","{\"message\":\"Launch config from dart define: role=master, preferredMasterIp=\",\"timestamp\":\"2026-06-07T17:14:25.525802\",\"function\":null,\"file\":null}","{\"message\":\"Permission request completed.\\nGranted: [Permission.camera, Permission.microphone]\\nDenied: []\",\"timestamp\":\"2026-06-07T17:14:25.559611\",\"function\":\"requestAllPermissions\",\"file\":\"PermissionService\"}","{\"message\":\"Retrieved existing Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc\",\"timestamp\":\"2026-06-07T17:14:25.561381\",\"function\":null,\"file\":null}","{\"message\":\"Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc\",\"timestamp\":\"2026-06-07T17:14:25.562843\",\"function\":null,\"file\":null}","{\"message\":\"Location access will be requested on demand when the user opens the location view.\",\"timestamp\":\"2026-06-07T17:14:25.563089\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off\",\"timestamp\":\"2026-06-07T17:14:25.563259\",\"function\":null,\"file\":null}","{\"message\":\"CameraServiceSingleton initialized\",\"timestamp\":\"2026-06-07T17:14:25.568031\",\"function\":null,\"file\":null}","{\"message\":\"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=true, forceSlave=false\",\"timestamp\":\"2026-06-07T17:14:26.013047\",\"function\":null,\"file\":null}","{\"message\":\"Navigating to MasterScreen\",\"timestamp\":\"2026-06-07T17:14:26.013444\",\"function\":null,\"file\":null}","{\"message\":\"WebSocket Server successfully started on port 4040\",\"timestamp\":\"2026-06-07T17:14:26.799702\",\"function\":null,\"file\":null}"],"logs":[{"message":"Automation bridge listening on port 4762","timestamp":"2026-06-07T17:14:25.449322","function":null,"file":null},{"message":"Failed to load launch config from platform: MissingPluginException(No implementation found for method getLaunchConfig on channel hydracamv2/launch_config)","timestamp":"2026-06-07T17:14:25.524556","function":null,"file":null},{"message":"Launch config from dart define: role=master, preferredMasterIp=","timestamp":"2026-06-07T17:14:25.525802","function":null,"file":null},{"message":"Permission request completed.\nGranted: [Permission.camera, Permission.microphone]\nDenied: []","timestamp":"2026-06-07T17:14:25.559611","function":"requestAllPermissions","file":"PermissionService"},{"message":"Retrieved existing Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc","timestamp":"2026-06-07T17:14:25.561381","function":null,"file":null},{"message":"Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc","timestamp":"2026-06-07T17:14:25.562843","function":null,"file":null},{"message":"Location access will be requested on demand when the user opens the location view.","timestamp":"2026-06-07T17:14:25.563089","function":null,"file":null},{"message":"Prevent screen from turning off","timestamp":"2026-06-07T17:14:25.563259","function":null,"file":null},{"message":"CameraServiceSingleton initialized","timestamp":"2026-06-07T17:14:25.568031","function":null,"file":null},{"message":"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=true, forceSlave=false","timestamp":"2026-06-07T17:14:26.013047","function":null,"file":null},{"message":"Navigating to MasterScreen","timestamp":"2026-06-07T17:14:26.013444","function":null,"file":null},{"message":"WebSocket Server successfully started on port 4040","timestamp":"2026-06-07T17:14:26.799702","function":null,"file":null}]}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4040/ws
+[exit-code] 0
+
+$ curl --max-time 5 -sS -X POST -H Content-Type:application/json -d {} http://192.168.178.104:4762/commands/connected_clients
+{"status":"ok","command":"connected_clients","result":{"connectedClientCount":0,"connectedClientIds":[],"connectedClients":[],"session":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}}}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/session
+{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/settings
+{"autoUploadMaterials":false,"masterShouldRecord":true,"deleteLocalAfterUpload":false,"autoplayVideoOnMaster":false,"flashForVideoAnnounce":false,"timerDuration":0,"cameraLensPreference":"autoBack","selectedCameraName":"com.apple.avfoundation.avcapturedevice.built-in_video:0","videoCaptureProfile":"standard1080p30","videoCaptureTarget":"1080p at 30 fps"}
+[exit-code] 0
+
+$ flutter run -d 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --debug --no-pub --no-resident --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=master --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Launching lib/main.dart on iPad (5) in debug mode...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 8T78Y2X37H
+Running Xcode build...                                          
+Xcode build done.                                           11.4s
+Installing and launching...                                     
+(lldb) process interrupt
+[PreviewsAgentExecutorLibrary] Looking up debug dylib relative path
+[PreviewsAgentExecutorLibrary] Found debug dylib relative path string `Runner.debug.dylib`
+[PreviewsAgentExecutorLibrary] Looking up debug dylib entry point name
+[PreviewsAgentExecutorLibrary] No debug dylib entry point name defined.
+[PreviewsAgentExecutorLibrary] Looking up debug dylib install name
+[PreviewsAgentExecutorLibrary] Found debug dylib install name string `@rpath/Runner.debug.dylib`
+[PreviewsAgentExecutorLibrary] Looking for Previews JIT link entry point.
+[PreviewsAgentExecutorLibrary] No Previews JIT entry point found.
+[PreviewsAgentExecutorLibrary] Gave PreviewsInjection a chance to run and it returned, continuing with debug dylib.
+[PreviewsAgentExecutorLibrary] Looking for main entry point.
+[PreviewsAgentExecutorLibrary] Opening debug dylib with '@rpath/Runner.debug.dylib'
+[PreviewsAgentExecutorLibrary] Debug dylib handle: 0x201a05140
+[PreviewsAgentExecutorLibrary] No entry point found. Checking for alias.
+[PreviewsAgentExecutorLibrary] Calling provided entry point.
+Dart execution mode: JIT
+Plugin FlutterAppauthPlugin uses deprecated application lifecycle events. Please contact plugin maintainers and request UIScene lifecycle support. This will be required in a future version of Flutter. See https://docs.flutter.dev/release/breaking-changes/uiscenedelegate#migration-guide-for-flutter-plugins
+flutter: Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-06-07 17:23:34.532979, function: null, file: null}
+flutter: Log registered: {message: Failed to load launch config from platform: MissingPluginException(No implementation found for method getLaunchConfig on channel hydracamv2/launch_config), timestamp: 2026-06-07 17:23:34.584966, function: null, file: null}
+flutter: Log registered: {message: Launch config from dart define: role=master, preferredMasterIp=, timestamp: 2026-06-07 17:23:34.586276, function: null, file: null}
+flutter: Log registered: {message: Permission request completed.
+flutter: Granted: [Permission.camera, Permission.microphone]
+flutter: Denied: [], timestamp: 2026-06-07 17:23:34.620164, function: requestAllPermissions, file: PermissionService}
+flutter: Log registered: {message: Retrieved existing Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc, timestamp: 2026-06-07 17:23:34.621895, function: null, file: null}
+flutter: Log registered: {message: Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc, timestamp: 2026-06-07 17:23:34.624526, function: null, file: null}
+flutter: Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-07 17:23:34.625092, function: null, file: null}
+flutter: Log registered: {message: Prevent screen from turning off, timestamp: 2026-06-07 17:23:34.625239, function: null, file: null}
+flutter: Log registered: {message: CameraServiceSingleton initialized, timestamp: 2026-06-07 17:23:34.630663, function: null, file: null}
+flutter: Log registered: {message: Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=true, automationStandby=false, forceSlave=false, timestamp: 2026-06-07 17:23:35.078619, function: null, file: null}
+flutter: Log registered: {message: Navigating to MasterScreen, timestamp: 2026-06-07 17:23:35.078873, function: null, file: null}
+flutter: Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-07 17:23:35.841588, function: null, file: null}
+[] NEHotspotNetwork nehelper sent invalid result code [1] for Wi-Fi information request
+[] NEHotspotNetwork nehelper sent invalid result code [1] for Wi-Fi information request
+[] NEHotspotNetwork nehelper sent invalid result code [1] for Wi-Fi information request
+error: Failed to halt process: Process is not running.
+Installing and launching...                                        50.4s
+Syncing files to device iPad (5)...                                 35ms
+Lost connection to device.
+
+[stderr]
+The Dart VM Service was not discovered after 30 seconds. This is taking much longer than expected...
+[exit-code] 0
+
+$ flutter screenshot -d 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 -o logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-ip-fix.png
+Screenshot written to logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-ip-fix.png (137kB).
+[exit-code] 0
+
+$ flutter run -d 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --debug --no-pub --no-resident --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=master --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Launching lib/main.dart on iPad (5) in debug mode...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 8T78Y2X37H
+Running Xcode build...                                          
+Xcode build done.                                           11.2s
+Installing and launching...                                     
+(lldb) process interrupt
+[PreviewsAgentExecutorLibrary] Looking up debug dylib relative path
+[PreviewsAgentExecutorLibrary] Found debug dylib relative path string `Runner.debug.dylib`
+[PreviewsAgentExecutorLibrary] Looking up debug dylib entry point name
+[PreviewsAgentExecutorLibrary] No debug dylib entry point name defined.
+[PreviewsAgentExecutorLibrary] Looking up debug dylib install name
+[PreviewsAgentExecutorLibrary] Found debug dylib install name string `@rpath/Runner.debug.dylib`
+[PreviewsAgentExecutorLibrary] Looking for Previews JIT link entry point.
+[PreviewsAgentExecutorLibrary] No Previews JIT entry point found.
+[PreviewsAgentExecutorLibrary] Gave PreviewsInjection a chance to run and it returned, continuing with debug dylib.
+[PreviewsAgentExecutorLibrary] Looking for main entry point.
+[PreviewsAgentExecutorLibrary] Opening debug dylib with '@rpath/Runner.debug.dylib'
+[PreviewsAgentExecutorLibrary] Debug dylib handle: 0x20957d140
+[PreviewsAgentExecutorLibrary] No entry point found. Checking for alias.
+[PreviewsAgentExecutorLibrary] Calling provided entry point.
+Dart execution mode: JIT
+Plugin FlutterAppauthPlugin uses deprecated application lifecycle events. Please contact plugin maintainers and request UIScene lifecycle support. This will be required in a future version of Flutter. See https://docs.flutter.dev/release/breaking-changes/uiscenedelegate#migration-guide-for-flutter-plugins
+flutter: Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-06-07 17:27:36.445449, function: null, file: null}
+flutter: Log registered: {message: Failed to load launch config from platform: MissingPluginException(No implementation found for method getLaunchConfig on channel hydracamv2/launch_config), timestamp: 2026-06-07 17:27:36.496783, function: null, file: null}
+flutter: Log registered: {message: Launch config from dart define: role=master, preferredMasterIp=, timestamp: 2026-06-07 17:27:36.498017, function: null, file: null}
+flutter: Log registered: {message: Permission request completed.
+flutter: Granted: [Permission.camera, Permission.microphone]
+flutter: Denied: [], timestamp: 2026-06-07 17:27:36.530644, function: requestAllPermissions, file: PermissionService}
+flutter: Log registered: {message: Retrieved existing Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc, timestamp: 2026-06-07 17:27:36.532621, function: null, file: null}
+flutter: Log registered: {message: Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc, timestamp: 2026-06-07 17:27:36.535194, function: null, file: null}
+flutter: Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-07 17:27:36.535698, function: null, file: null}
+flutter: Log registered: {message: Prevent screen from turning off, timestamp: 2026-06-07 17:27:36.535809, function: null, file: null}
+flutter: Log registered: {message: CameraServiceSingleton initialized, timestamp: 2026-06-07 17:27:36.540878, function: null, file: null}
+flutter: Log registered: {message: Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=true, automationStandby=false, forceSlave=false, timestamp: 2026-06-07 17:27:36.982351, function: null, file: null}
+flutter: Log registered: {message: Navigating to MasterScreen, timestamp: 2026-06-07 17:27:36.982607, function: null, file: null}
+flutter: Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-07 17:27:37.746044, function: null, file: null}
+[] NEHotspotNetwork nehelper sent invalid result code [1] for Wi-Fi information request
+[] NEHotspotNetwork nehelper sent invalid result code [1] for Wi-Fi information request
+[] NEHotspotNetwork nehelper sent invalid result code [1] for Wi-Fi information request
+error: Failed to halt process: Process is not running.
+Installing and launching...                                        50.4s
+Syncing files to device iPad (5)...                                 41ms
+Lost connection to device.
+
+[stderr]
+The Dart VM Service was not discovered after 30 seconds. This is taking much longer than expected...
+[exit-code] 0
+
+$ flutter screenshot -d 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 -o logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-route-probe-fix.png
+Screenshot written to logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-route-probe-fix.png (138kB).
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"commands":["connected_clients","end_session","set_role","start_local_session","start_recording","start_session","stop_recording","take_photo"]}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/logs
+{"traceFilePath":"/var/mobile/Containers/Data/Application/827A5FDB-F383-48A4-893E-846A361D6A46/Documents/logs/hydracam-trace-2026-06-07T17-27-36-505146.ndjson","persistedLogLines":["{\"message\":\"Automation bridge listening on port 4762\",\"timestamp\":\"2026-06-07T17:27:36.445449\",\"function\":null,\"file\":null}","{\"message\":\"Failed to load launch config from platform: MissingPluginException(No implementation found for method getLaunchConfig on channel hydracamv2/launch_config)\",\"timestamp\":\"2026-06-07T17:27:36.496783\",\"function\":null,\"file\":null}","{\"message\":\"Launch config from dart define: role=master, preferredMasterIp=\",\"timestamp\":\"2026-06-07T17:27:36.498017\",\"function\":null,\"file\":null}","{\"message\":\"Permission request completed.\\nGranted: [Permission.camera, Permission.microphone]\\nDenied: []\",\"timestamp\":\"2026-06-07T17:27:36.530644\",\"function\":\"requestAllPermissions\",\"file\":\"PermissionService\"}","{\"message\":\"Retrieved existing Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc\",\"timestamp\":\"2026-06-07T17:27:36.532621\",\"function\":null,\"file\":null}","{\"message\":\"Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc\",\"timestamp\":\"2026-06-07T17:27:36.535194\",\"function\":null,\"file\":null}","{\"message\":\"Location access will be requested on demand when the user opens the location view.\",\"timestamp\":\"2026-06-07T17:27:36.535698\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off\",\"timestamp\":\"2026-06-07T17:27:36.535809\",\"function\":null,\"file\":null}","{\"message\":\"CameraServiceSingleton initialized\",\"timestamp\":\"2026-06-07T17:27:36.540878\",\"function\":null,\"file\":null}","{\"message\":\"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=true, automationStandby=false, forceSlave=false\",\"timestamp\":\"2026-06-07T17:27:36.982351\",\"function\":null,\"file\":null}","{\"message\":\"Navigating to MasterScreen\",\"timestamp\":\"2026-06-07T17:27:36.982607\",\"function\":null,\"file\":null}","{\"message\":\"WebSocket Server successfully started on port 4040\",\"timestamp\":\"2026-06-07T17:27:37.746044\",\"function\":null,\"file\":null}"],"logs":[{"message":"Automation bridge listening on port 4762","timestamp":"2026-06-07T17:27:36.445449","function":null,"file":null},{"message":"Failed to load launch config from platform: MissingPluginException(No implementation found for method getLaunchConfig on channel hydracamv2/launch_config)","timestamp":"2026-06-07T17:27:36.496783","function":null,"file":null},{"message":"Launch config from dart define: role=master, preferredMasterIp=","timestamp":"2026-06-07T17:27:36.498017","function":null,"file":null},{"message":"Permission request completed.\nGranted: [Permission.camera, Permission.microphone]\nDenied: []","timestamp":"2026-06-07T17:27:36.530644","function":"requestAllPermissions","file":"PermissionService"},{"message":"Retrieved existing Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc","timestamp":"2026-06-07T17:27:36.532621","function":null,"file":null},{"message":"Device ID: 244c8671-8c89-4b67-827a-45e9f3a8bdcc","timestamp":"2026-06-07T17:27:36.535194","function":null,"file":null},{"message":"Location access will be requested on demand when the user opens the location view.","timestamp":"2026-06-07T17:27:36.535698","function":null,"file":null},{"message":"Prevent screen from turning off","timestamp":"2026-06-07T17:27:36.535809","function":null,"file":null},{"message":"CameraServiceSingleton initialized","timestamp":"2026-06-07T17:27:36.540878","function":null,"file":null},{"message":"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=true, automationStandby=false, forceSlave=false","timestamp":"2026-06-07T17:27:36.982351","function":null,"file":null},{"message":"Navigating to MasterScreen","timestamp":"2026-06-07T17:27:36.982607","function":null,"file":null},{"message":"WebSocket Server successfully started on port 4040","timestamp":"2026-06-07T17:27:37.746044","function":null,"file":null}]}
+[exit-code] 0
+
+$ flutter test --no-pub test/services/network_readiness_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/network_readiness_service_test.dart
+00:00 +0: Network readiness Wi-Fi disabled with no route blocks local control
+00:00 +1: Network readiness Wi-Fi enabled but not connected blocks local control
+00:00 +2: Network readiness SSID unavailable with local route remains usable with warning
+00:00 +3: Network readiness local IPv4 can be usable for master checks without Wi-Fi radio gate
+00:00 +4: Network protocol comparison same BSSID, gateway, and subnet is ready
+00:00 +5: Network protocol comparison different subnet is wrong network
+00:00 +6: Network protocol comparison existing clients without network payload remain unknown
+00:00 +7: Network protocol comparison heartbeat network payload can refresh an unknown client to ready
+00:00 +8: IP address fallback selection prefers LAN IPv4 over USB link-local IPv4
+00:00 +9: IP address fallback selection prefers route-selected LAN IPv4 over link-local Wi-Fi candidate
+00:00 +10: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub lib/services/network_info_service.dart test/services/network_readiness_service_test.dart lib/automation/automation_standby_screen.dart
+Analyzing 3 items...                                            
+No issues found! (ran in 0.6s)
+[exit-code] 0
+
+$ git diff --check -- lib/services/network_info_service.dart test/services/network_readiness_service_test.dart lib/automation/automation_standby_screen.dart
+[exit-code] 0
+
+$ ffmpeg -y -loop 1 -i logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-route-probe-fix.png -t 2 -vf format=yuv420p -movflags +faststart logs/verification-runs/20260607-1708-ipad-network-identity-check/video/ipad-master-screen-after-route-probe-fix-still.mp4
+
+[stderr]
+ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.6.4.2)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60. 26.100 / 60. 26.100
+  libavcodec     62. 28.100 / 62. 28.100
+  libavformat    62. 12.100 / 62. 12.100
+  libavdevice    62.  3.100 / 62.  3.100
+  libavfilter    11. 14.100 / 11. 14.100
+  libswscale      9.  5.100 /  9.  5.100
+  libswresample   6.  3.100 /  6.  3.100
+Input #0, png_pipe, from 'logs/verification-runs/20260607-1708-ipad-network-identity-check/screenshots/ipad-master-screen-after-route-probe-fix.png':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/bt709/iec61966-2-1), 1536x2048, 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0xbb3058a80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0xbb3058a80] profile High, level 5.0, 4:2:0, 8-bit
+[libx264 @ 0xbb3058a80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=24 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260607-1708-ipad-network-identity-check/video/ipad-master-screen-after-route-probe-fix-still.mp4':
+  Metadata:
+    encoder         : Lavf62.12.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, unknown/bt709/iec61966-2-1, progressive), 1536x2048, q=2-31, 25 fps, 12800 tbn
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+    Side data:
+      EXIF metadata: (56 bytes)
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[mp4 @ 0xbb2c24280] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0xbb305c240] video:44KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 3.274728%
+frame=   50 fps=0.0 q=-1.0 Lsize=      45KiB time=00:00:01.92 bitrate= 192.4kbits/s speed=  11x elapsed=0:00:00.17    
+[libx264 @ 0xbb3058a80] frame I:1     Avg QP:15.02  size: 38415
+[libx264 @ 0xbb3058a80] frame P:13    Avg QP:11.36  size:   132
+[libx264 @ 0xbb3058a80] frame B:36    Avg QP:12.67  size:   108
+[libx264 @ 0xbb3058a80] consecutive B-frames:  4.0%  0.0%  0.0% 96.0%
+[libx264 @ 0xbb3058a80] mb I  I16..4: 29.4% 66.2%  4.3%
+[libx264 @ 0xbb3058a80] mb P  I16..4:  0.0%  0.0%  0.0%  P16..4:  0.0%  0.0%  0.0%  0.0%  0.0%    skip:100.0%
+[libx264 @ 0xbb3058a80] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.1%  0.0%  0.0%  direct: 0.0%  skip:99.9%  L0:62.4% L1:37.6% BI: 0.0%
+[libx264 @ 0xbb3058a80] 8x8 transform intra:66.2% inter:9.5%
+[libx264 @ 0xbb3058a80] coded y,uvDC,uvAC intra: 3.1% 3.1% 3.1% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0xbb3058a80] i16 v,h,dc,p: 97%  1%  3%  0%
+[libx264 @ 0xbb3058a80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 10%  9% 81%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0xbb3058a80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 31% 23% 20%  4%  5%  4%  5%  4%  4%
+[libx264 @ 0xbb3058a80] i8c dc,h,v,p: 91%  1%  8%  0%
+[libx264 @ 0xbb3058a80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0xbb3058a80] ref P L0: 87.3%  5.2%  1.9%  5.7%
+[libx264 @ 0xbb3058a80] ref B L0: 37.2% 62.8%
+[libx264 @ 0xbb3058a80] ref B L1: 99.4%  0.6%
+[libx264 @ 0xbb3058a80] kb/s:176.06
+[exit-code] 0
+
+$ curl --max-time 5 -sS -o logs/verification-runs/20260607-1708-ipad-network-identity-check/device-logs/ipad-bridge-logs-after-route-probe-fix.json http://192.168.178.104:4762/logs
+[exit-code] 0
+
+$ curl --max-time 5 -sS -o logs/verification-runs/20260607-1708-ipad-network-identity-check/device-logs/ipad-bridge-health-after-route-probe-fix.json http://192.168.178.104:4762/healthz
+[exit-code] 0
+
+$ flutter test --no-pub test/services/network_readiness_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/network_readiness_service_test.dart
+00:00 +0: Network readiness Wi-Fi disabled with no route blocks local control
+00:00 +1: Network readiness Wi-Fi enabled but not connected blocks local control
+00:00 +2: Network readiness SSID unavailable with local route remains usable with warning
+00:00 +3: Network readiness local IPv4 can be usable for master checks without Wi-Fi radio gate
+00:00 +4: Network protocol comparison same BSSID, gateway, and subnet is ready
+00:00 +5: Network protocol comparison different subnet is wrong network
+00:00 +6: Network protocol comparison existing clients without network payload remain unknown
+00:00 +7: Network protocol comparison heartbeat network payload can refresh an unknown client to ready
+00:00 +8: IP address fallback selection prefers LAN IPv4 over USB link-local IPv4
+00:00 +9: IP address fallback selection prefers route-selected LAN IPv4 over link-local Wi-Fi candidate
+00:00 +10: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub lib/services/network_info_service.dart test/services/network_readiness_service_test.dart lib/automation/automation_standby_screen.dart
+Analyzing 3 items...                                            
+No issues found! (ran in 0.6s)
+[exit-code] 0
+
+$ git diff --check -- lib/services/network_info_service.dart test/services/network_readiness_service_test.dart lib/automation/automation_standby_screen.dart docs/control/status-and-roadmap.md logs/verification-runs/20260607-1708-ipad-network-identity-check/summary.md
+[exit-code] 0

@@ -23,9 +23,9 @@ Do not submit a production build until all gates pass:
 - `flutter pub get`
 - `flutter analyze`
 - `flutter test`
-- Real iPhone smoke test passes. The current project notes say iOS physical
-  device launch still shows a white screen, so production iOS submission is
-  blocked until that is fixed.
+- Real iPhone smoke test passes on the intended release/profile lane. Debug
+  launches through Flutter tooling are useful development evidence, but they do
+  not prove that the app starts from the Home Screen icon.
 - iOS release build is produced with Xcode 26 or later and the iOS 26 SDK or
   later, matching Apple's current upload requirement.
 - Real Android smoke test passes on at least one physical phone.
@@ -71,6 +71,36 @@ Official references:
   https://developer.apple.com/news/upcoming-requirements/?id=02032026a
 - Flutter iOS release:
   https://docs.flutter.dev/deployment/ios
+
+## Physical iPhone Development Launch Modes
+
+Debug builds are for Flutter tooling or Xcode. If a Debug build is started
+directly from the Home Screen icon, iOS/Flutter can report that the debug
+Flutter engine cannot be created without Flutter tooling or Xcode. Treat that
+as expected Debug-mode behavior, not as a standalone app smoke pass.
+
+For Home Screen icon testing before TestFlight, install a Profile build:
+
+```bash
+IOS_XCODE_DESTINATION_ID=00008101-000A68811E43001E \
+IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A \
+IOS_DEVELOPMENT_TEAM=8T78Y2X37H \
+IOS_BUNDLE_ID=com.vectorblanco.hydracam.dev \
+scripts/ios_icon_launch_dev.sh
+```
+
+After install, start HydraCam by tapping the iOS icon. For repeatable command
+evidence without attaching Flutter tooling:
+
+```bash
+xcrun devicectl device process launch \
+  --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A \
+  --terminate-existing \
+  com.vectorblanco.hydracam.dev
+```
+
+Use `flutter run -d <ios-udid> --debug` only when hot reload, the Dart VM
+Service, or Flutter debugger attachment is required.
 
 ## One-Time Google Play Setup
 

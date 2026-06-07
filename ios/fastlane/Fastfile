@@ -82,15 +82,15 @@ platform :ios do
     )
   end
 
-  desc "Build for physical device"
+  desc "Build an icon-launchable Profile app for physical iPhone development"
   lane :device do
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
-      configuration: "Debug",
+      configuration: "Profile",
       sdk: "iphoneos",
       destination: "generic/platform=iOS",
-      skip_codesigning: true,
+      export_method: "development",
       skip_package_ipa: true
     )
   end

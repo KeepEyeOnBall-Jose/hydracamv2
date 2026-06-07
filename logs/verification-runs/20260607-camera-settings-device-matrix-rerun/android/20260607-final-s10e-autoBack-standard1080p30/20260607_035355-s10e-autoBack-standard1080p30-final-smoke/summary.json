@@ -1,0 +1,416 @@
+{
+  "scenario": "s10e-autoBack-standard1080p30-final-smoke",
+  "dryRun": false,
+  "startedAt": "2026-06-07T01:53:55.874036+00:00",
+  "finishedAt": "2026-06-07T01:54:04.239776+00:00",
+  "devices": [
+    {
+      "serial": "RF8M90QE7LX",
+      "role": "master",
+      "name": "master-0",
+      "localPort": 6100
+    }
+  ],
+  "scenarioResult": {
+    "manifest": {
+      "path": "/Users/jose/src/work/hydracamv2/automation_scenarios/single_device_capture_profile.json",
+      "name": "single_device_capture_profile",
+      "description": "Single-device capture smoke that applies local lens/profile settings first."
+    },
+    "steps": [
+      {
+        "index": 0,
+        "name": "apply-capture-settings",
+        "action": "settings",
+        "result": {
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payload": {
+            "autoUploadMaterials": false,
+            "masterShouldRecord": true,
+            "timerDuration": 0,
+            "autoplayVideoOnMaster": false,
+            "flashForVideoAnnounce": false,
+            "cameraLensPreference": "autoBack",
+            "videoCaptureProfile": "standard1080p30"
+          },
+          "responses": [
+            {
+              "serial": "RF8M90QE7LX",
+              "response": {
+                "status": "ok",
+                "settings": {
+                  "autoUploadMaterials": false,
+                  "masterShouldRecord": true,
+                  "deleteLocalAfterUpload": false,
+                  "autoplayVideoOnMaster": false,
+                  "flashForVideoAnnounce": false,
+                  "timerDuration": 0,
+                  "cameraLensPreference": "autoBack",
+                  "selectedCameraName": "0",
+                  "videoCaptureProfile": "standard1080p30",
+                  "videoCaptureTarget": "1080p at 30 fps"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 1,
+        "name": "snapshot-settings",
+        "action": "get",
+        "result": {
+          "path": "/settings",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payloads": [
+            {
+              "serial": "RF8M90QE7LX",
+              "payload": {
+                "autoUploadMaterials": false,
+                "masterShouldRecord": true,
+                "deleteLocalAfterUpload": false,
+                "autoplayVideoOnMaster": false,
+                "flashForVideoAnnounce": false,
+                "timerDuration": 0,
+                "cameraLensPreference": "autoBack",
+                "selectedCameraName": "0",
+                "videoCaptureProfile": "standard1080p30",
+                "videoCaptureTarget": "1080p at 30 fps"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 2,
+        "name": "start-local-session",
+        "action": "command",
+        "result": {
+          "command": "start_local_session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payload": {
+            "sessionId": "single-profile-1780797235"
+          },
+          "responses": [
+            {
+              "serial": "RF8M90QE7LX",
+              "response": {
+                "status": "ok",
+                "command": "start_local_session",
+                "result": {
+                  "sessionGuid": "local-single-profile-1780797235",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 0,
+                  "queueLength": 0,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 3,
+        "name": "session-live",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "timeoutSec": 20.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RF8M90QE7LX",
+              "payload": {
+                "sessionGuid": "local-single-profile-1780797235",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 0,
+                "queueLength": 0,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 4,
+        "name": "take-photo",
+        "action": "command",
+        "result": {
+          "command": "take_photo",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payload": {
+            "showCountdown": false
+          },
+          "responses": [
+            {
+              "serial": "RF8M90QE7LX",
+              "response": {
+                "status": "ok",
+                "command": "take_photo",
+                "result": {
+                  "sessionGuid": "local-single-profile-1780797235",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 1,
+                  "videoCount": 0,
+                  "queueLength": 1,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 5,
+        "name": "photo-saved",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "timeoutSec": 20.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RF8M90QE7LX",
+              "payload": {
+                "sessionGuid": "local-single-profile-1780797235",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 1,
+                "videoCount": 0,
+                "queueLength": 1,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 6,
+        "name": "start-recording",
+        "action": "command",
+        "result": {
+          "command": "start_recording",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RF8M90QE7LX",
+              "response": {
+                "status": "ok",
+                "command": "start_recording",
+                "result": {
+                  "sessionGuid": "local-single-profile-1780797235",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 1,
+                  "videoCount": 0,
+                  "queueLength": 1,
+                  "isUploading": false,
+                  "isRecording": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 7,
+        "name": "recording-started",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "timeoutSec": 40.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RF8M90QE7LX",
+              "payload": {
+                "sessionGuid": "local-single-profile-1780797235",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 1,
+                "videoCount": 0,
+                "queueLength": 1,
+                "isUploading": false,
+                "isRecording": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 8,
+        "name": "step_9",
+        "action": "sleep",
+        "result": {
+          "slept": 4.0
+        }
+      },
+      {
+        "index": 9,
+        "name": "stop-recording",
+        "action": "command",
+        "result": {
+          "command": "stop_recording",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RF8M90QE7LX",
+              "response": {
+                "status": "ok",
+                "command": "stop_recording",
+                "result": {
+                  "sessionGuid": "local-single-profile-1780797235",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 1,
+                  "videoCount": 1,
+                  "queueLength": 2,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 10,
+        "name": "video-saved",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "timeoutSec": 30.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RF8M90QE7LX",
+              "payload": {
+                "sessionGuid": "local-single-profile-1780797235",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 1,
+                "videoCount": 1,
+                "queueLength": 2,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 11,
+        "name": "end-session",
+        "action": "command",
+        "result": {
+          "command": "end_session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RF8M90QE7LX",
+              "response": {
+                "status": "ok",
+                "command": "end_session",
+                "result": {
+                  "sessionGuid": null,
+                  "deviceType": "Master",
+                  "isActive": false,
+                  "photoCount": 0,
+                  "videoCount": 0,
+                  "queueLength": 0,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 12,
+        "name": "session-complete",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RF8M90QE7LX"
+          ],
+          "timeoutSec": 20.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RF8M90QE7LX",
+              "payload": {
+                "sessionGuid": null,
+                "deviceType": "Master",
+                "isActive": false,
+                "photoCount": 0,
+                "videoCount": 0,
+                "queueLength": 0,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "sessionGuid": null
+  },
+  "deviceSnapshots": [
+    {
+      "serial": "RF8M90QE7LX",
+      "role": "master",
+      "session": {
+        "sessionGuid": null,
+        "deviceType": "Master",
+        "isActive": false,
+        "photoCount": 0,
+        "videoCount": 0,
+        "queueLength": 0,
+        "isUploading": false,
+        "isRecording": false
+      },
+      "logCount": 70
+    }
+  ],
+  "backendReport": null
+}

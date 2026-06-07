@@ -56,6 +56,13 @@ or QR flow. This is mostly future/cross-project work.
 | `HydraCamAPI` | API | Protected endpoints for web and device calls. |
 | `HydraCamDevices` | Machine-to-Machine Application | Device/API access without an interactive human user. |
 
+Current mobile human login uses `flutter_appauth` to launch Auth0 Universal
+Login in a browser or Chrome Custom Tab. That is different from Android's native
+Credential Manager/account-picker UI. Treat startup credential restore,
+refresh-token storage, logout/end-session behavior, Android process-death
+recovery, and Android-native account selection as incomplete until the backlog
+auth tasks are implemented and verified.
+
 ## Diagram Source
 
 The deprecated sheet linked an architecture diagram:
@@ -75,7 +82,7 @@ plan as the execution surface.
 
 | Candidate | Source IDs | Expected proof |
 | --- | --- | --- |
-| Auth0 login flow | T-001 | Login succeeds; invalid/expired token paths are handled cleanly. |
+| Auth0 login flow | T-001 | Login succeeds; startup restore, Android process-death recovery, invalid/expired token paths, logout, and account switching are handled cleanly. |
 | Mobile record start/stop | T-017 | Recording starts/stops, file is saved locally, low storage/battery paths do not corrupt state. |
 | Mobile upload path | T-018, T-016 | Upload succeeds for valid files, invalid files produce friendly errors, retries do not duplicate media. |
 | Time synchronization | T-019 | Devices maintain capture scheduling within the chosen accuracy target. |

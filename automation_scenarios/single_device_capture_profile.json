@@ -1,0 +1,132 @@
+{
+  "name": "single_device_capture_profile",
+  "description": "Single-device capture smoke that applies local lens/profile settings first.",
+  "context": {
+    "sessionId": "single-profile-{{timestamp}}",
+    "cameraLensPreference": "autoBack",
+    "videoCaptureProfile": "standard1080p30"
+  },
+  "steps": [
+    {
+      "action": "settings",
+      "name": "apply-capture-settings",
+      "targets": "all",
+      "payload": {
+        "autoUploadMaterials": false,
+        "masterShouldRecord": true,
+        "timerDuration": 0,
+        "autoplayVideoOnMaster": false,
+        "flashForVideoAnnounce": false,
+        "cameraLensPreference": "{{cameraLensPreference}}",
+        "videoCaptureProfile": "{{videoCaptureProfile}}"
+      }
+    },
+    {
+      "action": "get",
+      "name": "snapshot-settings",
+      "role": "master",
+      "path": "/settings"
+    },
+    {
+      "action": "command",
+      "name": "start-local-session",
+      "role": "master",
+      "command": "start_local_session",
+      "payload": {
+        "sessionId": "{{sessionId}}"
+      }
+    },
+    {
+      "action": "await",
+      "name": "session-live",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 20,
+      "expect": {
+        "path": "isActive",
+        "equals": true
+      }
+    },
+    {
+      "action": "command",
+      "name": "take-photo",
+      "role": "master",
+      "command": "take_photo",
+      "payload": {
+        "showCountdown": false
+      }
+    },
+    {
+      "action": "await",
+      "name": "photo-saved",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 20,
+      "intervalSec": 1,
+      "expect": {
+        "path": "photoCount",
+        "gte": 1
+      }
+    },
+    {
+      "action": "command",
+      "name": "start-recording",
+      "role": "master",
+      "command": "start_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "recording-started",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 40,
+      "intervalSec": 1,
+      "expect": {
+        "path": "isRecording",
+        "equals": true
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 4
+    },
+    {
+      "action": "command",
+      "name": "stop-recording",
+      "role": "master",
+      "command": "stop_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "video-saved",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "intervalSec": 1,
+      "expect": {
+        "path": "videoCount",
+        "gte": 1
+      }
+    },
+    {
+      "action": "command",
+      "name": "end-session",
+      "role": "master",
+      "command": "end_session",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "session-complete",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 20,
+      "expect": {
+        "path": "isActive",
+        "equals": false
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import "../services/camera_service_singleton.dart";
 import "../services/device_service.dart";
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
+import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
 import "../services/storage_service.dart";
@@ -26,6 +27,7 @@ import "../widgets/hydra_cam_app_bar.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
 import "master_announcer.dart";
+import "connected_client_automation_payload.dart";
 import "master_server.dart";
 import "dart:io";
 
@@ -66,6 +68,10 @@ class MasterScreenState extends State<MasterScreen> {
 
   List<String> getConnectedDevices() {
     return _server.getConnectedDeviceIds();
+  }
+
+  List<ConnectedDeviceInfo> getConnectedDeviceInfos() {
+    return _server.getConnectedDeviceInfos();
   }
 
   // Processing indicators to prevent user from spamming buttons
@@ -200,21 +206,38 @@ class MasterScreenState extends State<MasterScreen> {
 
     if (!mounted) return;
 
-    if (_recordingActive) {
-      if (await SettingsService.getMasterShouldRecord()) {
-        await _stopMasterRecordingVideo();
+    try {
+      if (_recordingActive) {
+        if (await SettingsService.getMasterShouldRecord()) {
+          await _stopMasterRecordingVideo();
+        } else {
+          setState(() {
+            isRecording = false;
+          });
+        }
       } else {
-        setState(() {
-          isRecording = false;
-        });
+        if (await SettingsService.getMasterShouldRecord()) {
+          final didStart =
+              await _startMasterRecordingVideo(showPreview: showPreview);
+          if (!didStart) {
+            LogService.instance.registerLog(
+                "Recording toggle did not start local master recording.");
+          }
+        } else {
+          setState(() {
+            isRecording = true;
+          });
+        }
       }
-    } else {
-      if (await SettingsService.getMasterShouldRecord()) {
-        await _startMasterRecordingVideo(showPreview: showPreview);
-      } else {
-        setState(() {
-          isRecording = true;
-        });
+    } catch (error, stackTrace) {
+      LogService.instance
+          .registerLog("Recording toggle failed: $error\n$stackTrace");
+      if (!suppressSnackbars && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Recording command failed: ${_describeError(error)}"),
+          ),
+        );
       }
     }
 
@@ -273,11 +296,31 @@ class MasterScreenState extends State<MasterScreen> {
         );
         return AutomationBridge.instance.buildSessionSnapshot();
       },
+      "start_local_session": (payload) async {
+        _startLocalAutomationSession(payload["sessionId"] as String?);
+        return AutomationBridge.instance.buildSessionSnapshot();
+      },
+      "connected_clients": (payload) async {
+        return {
+          ...buildConnectedClientAutomationPayload(
+            _server.getConnectedDeviceInfos(),
+          ),
+          "session": AutomationBridge.instance.buildSessionSnapshot(),
+        };
+      },
       "end_session": (payload) async {
-        await _endCurrentSession(
-          requireConfirmation: false,
-          suppressSnackbars: true,
-        );
+        if (SessionManager.instance.sessionGuid?.startsWith("local-") ??
+            false) {
+          await _server.endCurrentSession();
+          if (mounted) {
+            setState(() {});
+          }
+        } else {
+          await _endCurrentSession(
+            requireConfirmation: false,
+            suppressSnackbars: true,
+          );
+        }
         return AutomationBridge.instance.buildSessionSnapshot();
       },
       "take_photo": (payload) async {
@@ -301,17 +344,53 @@ class MasterScreenState extends State<MasterScreen> {
     _automationHandlers.addAll(handlers);
   }
 
-  Future<void> _startMasterRecordingVideo({bool showPreview = true}) async {
-    LogService.instance.registerLog("Will record from master and show preview");
-    await _server.cameraService.startRecordingVideo();
-    if (!mounted) {
-      return;
+  void _startLocalAutomationSession(String? sessionId) {
+    final effectiveSessionId =
+        sessionId ?? "automation-local-${DateTime.now().toIso8601String()}";
+    final sessionGuid = "local-$effectiveSessionId";
+    SessionManager.instance
+        .startSession(sessionGuid, effectiveSessionId, deviceType: "Master");
+    _server.startNewSession(sessionGuid);
+    LogService.instance.registerLog(
+        "Automation local session created with GUID: $sessionGuid");
+    if (mounted) {
+      setState(() {});
     }
-    setState(() {
-      isRecording = true;
-    });
-    if (showPreview) {
-      _showMasterVideoPreview();
+  }
+
+  String _describeError(Object error) {
+    return error.toString().replaceFirst("Exception: ", "");
+  }
+
+  Future<bool> _startMasterRecordingVideo({bool showPreview = true}) async {
+    LogService.instance.registerLog("Will record from master and show preview");
+    try {
+      await _server.cameraService.startRecordingVideo();
+      if (!mounted) {
+        return false;
+      }
+      setState(() {
+        isRecording = true;
+      });
+      if (showPreview) {
+        _showMasterVideoPreview();
+      }
+      return true;
+    } catch (error, stackTrace) {
+      LogService.instance
+          .registerLog("Master recording start failed: $error\n$stackTrace");
+      if (mounted) {
+        setState(() {
+          isRecording = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text("Could not start recording: ${_describeError(error)}"),
+          ),
+        );
+      }
+      return false;
     }
   }
 
@@ -325,13 +404,20 @@ class MasterScreenState extends State<MasterScreen> {
     final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
     // Add video to current session
+    final startRecordingDate = _server.cameraService.videoStartRecordingDate;
+    final endRecordingDate = _server.cameraService.videoEndRecordingDate;
+    if (startRecordingDate == null || endRecordingDate == null) {
+      throw StateError("Master recording timestamps are missing after stop. "
+          "start=$startRecordingDate end=$endRecordingDate");
+    }
+
     final receivedDate = DateTime.now();
     final capturedVideo = CapturedVideo(
       videoData: null,
       videoPath: videoPath,
       slaveDeviceId: deviceId,
-      startRecordingDate: _server.cameraService.videoStartRecordingDate!,
-      endRecordingDate: _server.cameraService.videoEndRecordingDate!,
+      startRecordingDate: startRecordingDate,
+      endRecordingDate: endRecordingDate,
       receivedDate: receivedDate,
     );
 
@@ -412,22 +498,34 @@ class MasterScreenState extends State<MasterScreen> {
       final bool shouldMasterRecord =
           await SettingsService.getMasterShouldRecord();
       if (shouldMasterRecord) {
-        final String photoPath = await _server.cameraService.takePhoto();
-        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+        try {
+          final String photoPath = await _server.cameraService.takePhoto();
+          final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
-        final capturedPhoto = CapturedPhoto(
-          photoData: null,
-          photoPath: photoPath,
-          captureDate: DateTime.now(),
-          receivedDate: DateTime.now(),
-          slaveDeviceId: deviceId,
-        );
+          final capturedPhoto = CapturedPhoto(
+            photoData: null,
+            photoPath: photoPath,
+            captureDate: DateTime.now(),
+            receivedDate: DateTime.now(),
+            slaveDeviceId: deviceId,
+          );
 
-        SessionManager.instance.addPhoto(capturedPhoto);
-        setState(() {});
+          SessionManager.instance.addPhoto(capturedPhoto);
+          setState(() {});
 
-        if (!suppressSnackbars) {
-          _showPhotoDialog(capturedPhoto, autoClose: true);
+          if (!suppressSnackbars) {
+            _showPhotoDialog(capturedPhoto, autoClose: true);
+          }
+        } catch (error, stackTrace) {
+          LogService.instance
+              .registerLog("Master photo capture failed: $error\n$stackTrace");
+          if (!suppressSnackbars && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Could not take photo: ${_describeError(error)}"),
+              ),
+            );
+          }
         }
       }
 
@@ -651,7 +749,7 @@ class MasterScreenState extends State<MasterScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        final List<String> devices = getConnectedDevices();
+        final List<ConnectedDeviceInfo> devices = getConnectedDeviceInfos();
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -661,8 +759,39 @@ class MasterScreenState extends State<MasterScreen> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               if (devices.isNotEmpty)
-                ...devices.map((deviceId) => ListTile(
+                ...devices.map((device) {
+                  final network = device.networkSnapshot;
+                  final ssid = network?.ssid ?? "SSID unavailable";
+                  final localIp = network?.ipAddress ?? "No reported IP";
+                  final subnet =
+                      network?.effectiveSubnetSignature ?? "Subnet unknown";
+                  final remoteIp = device.remoteIp ?? "Remote IP unknown";
+                  return ListTile(
+                    title: Text(
+                        "${device.shortDeviceId} · ${device.networkStatus.label}"),
+                    subtitle: Text(
+                      "Device ID: ${device.deviceId}\n"
+                      "SSID: $ssid\n"
+                      "Device IP: $localIp | Remote: $remoteIp\n"
+                      "Subnet: $subnet",
+                    ),
+                    isThreeLine: true,
+                    leading: Icon(
+                      device.networkStatus ==
+                              ConnectedDeviceNetworkStatus.wrongNetwork
+                          ? Icons.warning
+                          : Icons.wifi,
+                      color: device.networkStatus ==
+                              ConnectedDeviceNetworkStatus.wrongNetwork
+                          ? Colors.red
+                          : Colors.green,
+                    ),
+                  );
+                })
+              else if (getConnectedDevices().isNotEmpty)
+                ...getConnectedDevices().map((deviceId) => ListTile(
                       title: Text("Device ID: $deviceId"),
+                      subtitle: const Text("Network details unavailable"),
                     ))
               else
                 const Center(child: Text("No connected devices")),

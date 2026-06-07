@@ -1,0 +1,71 @@
+{
+  "acceptanceChecks": [
+    "ADB preflight reports each attached Android device wlan0 state without logging Wi-Fi secrets",
+    "Devices on 192.168.178.0/24 are marked OK and devices without wlan0 are marked not ready"
+  ],
+  "commands": [
+    {
+      "command": [
+        "scripts/android_wifi_preflight.py",
+        "--check-only",
+        "--expected-subnet",
+        "192.168.178.0/24"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-06T22:24:47.354507+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical device",
+      "name": "Samsung Galaxy S10e",
+      "notes": [
+        "ADB preflight reports Wi-Fi enabled but no wlan0 route."
+      ],
+      "os": "Android 12",
+      "role": "USB target needing Wi-Fi provisioning"
+    },
+    {
+      "identifier": "192.168.178.132:5555",
+      "kind": "Android physical device",
+      "name": "Xiaomi 2201116PG",
+      "notes": [
+        "ADB preflight reports wlan0 192.168.178.132 on 192.168.178.0/24."
+      ],
+      "os": "Android 13",
+      "role": "Wi-Fi ADB ready control"
+    },
+    {
+      "identifier": "192.168.178.64:5555",
+      "kind": "Android physical device",
+      "name": "Samsung Galaxy S7 edge",
+      "notes": [
+        "ADB preflight reports wlan0 192.168.178.64 on 192.168.178.0/24; cmd wifi is unavailable."
+      ],
+      "os": "Android 8.0.0",
+      "role": "legacy Wi-Fi ADB ready control"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/s10e-network-preflight.png",
+    "video/s10e-network-preflight.mp4",
+    "device-logs/s10e-logcat.txt"
+  ],
+  "item": {
+    "slug": "android-wifi-readiness-preflight",
+    "source": "docs/control/status-and-roadmap.md#real-device-smoke-tests",
+    "title": "HydraCam Android Wi-Fi readiness preflight"
+  },
+  "notes": [
+    "Read-only ADB preflight verified current Android network state. S10e RF8M90QE7LX remains not ready with no wlan0 route; password-bearing provisioning was not executed in this transcript to avoid logging the secret.",
+    "Added S10e screenshot, short screen video, and logcat evidence for the read-only network preflight state."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}
