@@ -1,0 +1,201 @@
+{
+  "acceptanceChecks": [
+    "Retake or strengthen remaining camera setup evidence: physical iPhone availability, S7 edge visible preview if possible, and short recording metadata proof on reachable devices."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:17:39.575671+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:17:51.855709+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=s7-retake",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4776"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:18:25.695715+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:19:06.423326+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:19:33.338168+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:19:34.738685+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/com.amaia23.hydracam.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:19:56.646448+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-d",
+        "-t",
+        "500"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:20:59.939975+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--terminate-existing",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:22:23.203154+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T13:25:13.056600+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:25:13.989886+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android",
+      "name": "SM G935F",
+      "notes": [
+        "Retake target for black preview from prior setup screenshot."
+      ],
+      "os": "Android 8.0.0 API 26",
+      "role": "android-s7-retake"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS",
+      "name": "iPhone 12 Pro",
+      "notes": [
+        "CoreDevice sees device as unavailable; Flutter reports unlock/cable/Developer Mode blocker."
+      ],
+      "os": "iOS 26.5 unavailable",
+      "role": "ios-iphone-physical-blocker"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS",
+      "name": "iPad (5)",
+      "notes": [
+        "Reachable physical iOS target for recording metadata proof."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "ios-ipad-metadata"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/android-sm-g935f-setup-retake.png",
+    "video/ipad-video-not-copied.txt",
+    "device-logs/android-sm-g935f-setup-retake-logs.json",
+    "device-logs/ipad-after-metadata-recording-logs.json",
+    "device-logs/ipad-after-metadata-recording-session.json",
+    "device-logs/ipad-metadata-proof-metadata.json"
+  ],
+  "item": {
+    "slug": "camera-leveling-remaining-device-gaps",
+    "source": "codex",
+    "title": "HCMETA-002"
+  },
+  "notes": [
+    "S7 retake still black despite current-code setup APK and successful app-side camera initialization; physical iPhone unavailable/offline; physical iPad recording metadata proves captureContext persistence."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}
