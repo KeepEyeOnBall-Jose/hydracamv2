@@ -258,6 +258,44 @@ void main() {
     expect(fakePlatform.lastMediaSettings?.fps, 30);
   });
 
+  test("setup preview uses preset defaults without explicit fps", () async {
+    final fakePlatform = _FakeCameraPlatform();
+    CameraPlatform.instance = fakePlatform;
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: false,
+    );
+
+    await cameraService.prepareCameraPreview();
+
+    expect(fakePlatform.lastMediaSettings?.resolutionPreset,
+        ResolutionPreset.veryHigh);
+    expect(fakePlatform.lastMediaSettings?.fps, isNull);
+  });
+
+  test("recording after setup preview rebuilds the explicit fps controller",
+      () async {
+    final fakePlatform = _FakeCameraPlatform();
+    CameraPlatform.instance = fakePlatform;
+    SharedPreferences.setMockInitialValues({
+      "videoCaptureProfile": VideoCaptureProfile.sport1080p60.storageValue,
+    });
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: false,
+    );
+
+    await cameraService.prepareCameraPreview();
+    expect(fakePlatform.lastMediaSettings?.fps, isNull);
+
+    await cameraService.startRecordingVideo();
+
+    expect(fakePlatform.lastMediaSettings?.resolutionPreset,
+        ResolutionPreset.veryHigh);
+    expect(fakePlatform.lastMediaSettings?.fps, 60);
+    expect(cameraService.isRecording, isTrue);
+  });
+
   test("macOS runtime uses the real camera backend unless mock is explicit",
       () async {
     final cameraService = CameraService(storageService: storageService);

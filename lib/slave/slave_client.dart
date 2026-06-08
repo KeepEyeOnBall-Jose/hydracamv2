@@ -90,7 +90,7 @@ class SlaveClient implements SlaveConnectionClient {
   @override
   Future<void> prepareCameraPreview() async {
     try {
-      await _cameraService.ensureCameraIsReady();
+      await _cameraService.prepareCameraPreview();
     } catch (error, stackTrace) {
       LogService.instance.registerLog(
           "Slave camera preview preparation failed: $error\n$stackTrace");

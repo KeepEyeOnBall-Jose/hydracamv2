@@ -1,0 +1,655 @@
+{
+  "acceptanceChecks": [
+    "S7 setup preview either renders live camera video or records a concrete camera/runtime blocker with logs",
+    "Physical iPhone setup proof is retried against current CoreDevice state",
+    "Reachable device screenshots and logs are refreshed for the active camera-leveling objective"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:33:54.102970+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:34:06.320595+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:34:06.419991+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:34:06.471754+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:34:06.549234+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=s7-preview-default-fps",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4778"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:36:14.046598+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:37:00.965148+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:37:01.060538+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:37:09.194735+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:37:52.480529+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:37:53.783998+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:37:54.369846+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/com.amaia23.hydracam.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:38:07.832220+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "15"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:38:18.118007+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/screenshots/android-sm-g935f-default-fps-preview.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:38:47.610986+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 logcat -d > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:38:48.299427+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "forward",
+        "tcp:4778",
+        "tcp:4778"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:39:22.376748+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 shell dumpsys media.camera > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-dumpsys-camera.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:39:22.391327+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "curl --max-time 5 -sS http://127.0.0.1:4778/healthz > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-health.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:39:35.396378+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "curl --max-time 5 -sS http://127.0.0.1:4778/logs > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-app-logs.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:39:35.771947+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:39:35.836168+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:40:05.272712+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "reboot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:40:09.289480+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "wait-for-device"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:40:15.197690+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "getprop",
+        "sys.boot_completed"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:41:14.831938+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "dumpsys",
+        "media.camera"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:41:14.913508+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:41:33.800637+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:41:33.919609+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/com.amaia23.hydracam.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:41:43.467444+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "15"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:41:51.347531+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 logcat -d > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-default-fps-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:42:21.668839+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/screenshots/android-sm-g935f-post-reboot-default-fps-preview.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:42:27.568350+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 shell dumpsys media.camera > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-default-fps-dumpsys-camera.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:42:28.390740+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "input",
+        "keyevent",
+        "66"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:42:47.420024+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "2"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:02.943248+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 logcat -d > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-clean-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:15.675899+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/screenshots/android-sm-g935f-post-reboot-clean-preview.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:18.268557+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "adb -s 9885e6503930304946 shell dumpsys media.camera > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-clean-dumpsys-camera.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:19.441624+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "forward",
+        "tcp:4778",
+        "tcp:4778"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:44.943896+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:44.980752+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "curl --max-time 5 -sS http://127.0.0.1:4778/healthz > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-health.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:45.075532+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "curl --max-time 5 -sS http://127.0.0.1:4778/logs > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-app-logs.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:45.406943+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:43:45.521885+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T13:43:56.607131+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-s7-post-reboot-preview.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:44:12.642472+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "ls",
+        "-l",
+        "/sdcard/hydracam-s7-post-reboot-preview.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:45:47.464972+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-s7-post-reboot-preview.mp4",
+        "logs/verification-runs/20260608-1533-camera-leveling-device-continuation/video/android-sm-g935f-post-reboot-preview.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:45:47.770654+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:47:25.794172+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/camera_service_failure_test.dart",
+        "test/widgets/camera_setup_preview_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:47:40.716550+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/settings_service_test.dart",
+        "test/services/session_manager_test.dart",
+        "test/platform/multi_device_orchestration_test.dart",
+        "test/screens/master_video_recording_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:48:14.806896+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:48:28.091522+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:48:28.683345+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android physical",
+      "name": "Samsung SM-G935F",
+      "notes": [
+        "Landscape and tilted per user placement; prior setup UI showed red level overlay with black camera preview."
+      ],
+      "os": "Android 8.0.0 API 26",
+      "role": "S7 setup preview blocker retest"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS physical",
+      "name": "iPad (5)",
+      "notes": [
+        "Reachable physical iPad, also landscape and tilted per user placement."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "reachable physical iOS comparison"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS physical",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "Currently unavailable/offline in CoreDevice/xctrace."
+      ],
+      "os": "iOS 26.5",
+      "role": "physical iPhone setup proof retry"
+    },
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android physical",
+      "name": "Samsung SM-G960F",
+      "notes": [],
+      "os": "Android 10 API 29",
+      "role": "reachable Android comparison"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical",
+      "name": "Samsung SM-G970F",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "reachable Android comparison"
+    },
+    {
+      "identifier": "macos",
+      "kind": "macOS desktop",
+      "name": "macOS",
+      "notes": [],
+      "os": "macOS 26.4.1",
+      "role": "reachable desktop setup UI comparison"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/android-sm-g935f-default-fps-preview.png",
+    "screenshots/android-sm-g935f-post-reboot-clean-preview.png",
+    "screenshots/android-sm-g935f-post-reboot-default-fps-preview.png",
+    "video/android-sm-g935f-post-reboot-preview.mp4",
+    "device-logs/android-sm-g935f-default-fps-app-logs.json",
+    "device-logs/android-sm-g935f-default-fps-dumpsys-camera.txt",
+    "device-logs/android-sm-g935f-default-fps-health.json",
+    "device-logs/android-sm-g935f-default-fps-logcat.txt",
+    "device-logs/android-sm-g935f-post-reboot-app-logs.json",
+    "device-logs/android-sm-g935f-post-reboot-clean-dumpsys-camera.txt",
+    "device-logs/android-sm-g935f-post-reboot-clean-logcat.txt",
+    "device-logs/android-sm-g935f-post-reboot-default-fps-dumpsys-camera.txt",
+    "device-logs/android-sm-g935f-post-reboot-default-fps-logcat.txt",
+    "device-logs/android-sm-g935f-post-reboot-health.json"
+  ],
+  "item": {
+    "slug": "camera-leveling-device-continuation",
+    "source": "docs/control/status-and-roadmap.md#current-mobile-status",
+    "title": "Camera setup preview and leveling matrix continuation"
+  },
+  "notes": [
+    "S7 setup preview renders live camera after default-FPS setup preview path plus S7 reboot; physical iPhone remains unavailable/offline to CoreDevice."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

@@ -404,7 +404,7 @@ class MasterScreenState extends State<MasterScreen> {
 
   Future<bool> _showMasterCameraSetupPreview() async {
     try {
-      await _server.cameraService.ensureCameraIsReady();
+      await _server.cameraService.prepareCameraPreview();
     } catch (error, stackTrace) {
       LogService.instance.registerLog(
           "Master setup preview camera init failed: $error\n$stackTrace");

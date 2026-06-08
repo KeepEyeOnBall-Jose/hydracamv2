@@ -224,19 +224,23 @@ class CameraService {
   /// - Initializes the camera if it has not been initialized already.
   /// - Configures the flash to be off by default.
   /// - Throws an exception if initialization fails.
-  Future<void> ensureCameraIsReady() async {
+  Future<void> ensureCameraIsReady({bool requireExplicitFps = true}) async {
     if (_useMockCamera) {
       await _ensureMockCameraReady();
       return;
     }
 
-    if (_isCameraInitialized && _controller?.value.isInitialized == true) {
+    if (_isCameraInitialized &&
+        _controller?.value.isInitialized == true &&
+        (!requireExplicitFps || _controllerUsesExplicitFps)) {
       LogService.instance
           .registerLog("Camera is already initialized and ready.");
       return; // Camera is already ready
     }
 
-    LogService.instance.registerLog("Initializing camera...");
+    LogService.instance.registerLog(requireExplicitFps
+        ? "Initializing camera..."
+        : "Initializing camera preview...");
     final cameras = await availableCameras();
     if (cameras.isEmpty) {
       throw Exception("No cameras available on this device.");
@@ -247,7 +251,9 @@ class CameraService {
     final profile = await _loadVideoCaptureProfile();
 
     await _disposeController("camera readiness initialization");
-    _controller = _createController(cameraDescription, profile);
+    _controller = requireExplicitFps
+        ? _createController(cameraDescription, profile)
+        : _createControllerUsingPresetDefaults(cameraDescription, profile);
     _flashAvailable = null;
 
     try {
@@ -255,13 +261,26 @@ class CameraService {
       await _setFlashModeIfSupported(
           FlashMode.off, "camera readiness initialization");
       _isCameraInitialized = true;
-      LogService.instance.registerLog("Camera successfully initialized.");
+      LogService.instance.registerLog(requireExplicitFps
+          ? "Camera successfully initialized."
+          : "Camera preview successfully initialized without explicit fps.");
     } catch (e, stackTrace) {
       LogService.instance
           .registerLog("Error initializing camera: $e\n$stackTrace");
       _isCameraInitialized = false;
       throw Exception("Failed to initialize camera: $e");
     }
+  }
+
+  /// Prepares a local setup preview without pinning an explicit FPS.
+  ///
+  /// Older Android camera stacks can report successful initialization and then
+  /// fail asynchronously when CameraX reopens a constrained stream. Setup
+  /// preview only needs a live placement surface, so it uses the selected
+  /// resolution preset with platform-default frame timing. Photo/video capture
+  /// still calls [ensureCameraIsReady] with explicit FPS before recording.
+  Future<void> prepareCameraPreview() async {
+    await ensureCameraIsReady(requireExplicitFps: false);
   }
 
   /// Captures a photo and saves it to the gallery.

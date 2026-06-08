@@ -185,7 +185,7 @@ class _CameraSetupStandaloneScreenState
     });
 
     try {
-      await _cameraService.ensureCameraIsReady();
+      await _cameraService.prepareCameraPreview();
     } catch (error, stackTrace) {
       LogService.instance.registerError(
         "Failed to prepare standalone setup camera preview",

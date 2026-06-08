@@ -1,0 +1,2192 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 7 connected devices:
+  SM G960F (mobile)       • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)       • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)       • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/win11-dev-host.md
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1533-camera-leveling-device-continuation/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State         Model                                        
+-------------------   -----------------------------------   ------------------------------------   -----------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   unavailable   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected     iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:10
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M90QE7LX            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:6
+
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+iPad (5) (17.7.11) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Devices Offline ==
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=s7-preview-default-fps --dart-define=HYDRACAM_AUTOMATION_PORT=4778
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             28.3s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 logcat -c
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ sleep 15
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/screenshots/android-sm-g935f-default-fps-preview.png
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 logcat -d > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-logcat.txt
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 forward tcp:4778 tcp:4778
+4778
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 shell dumpsys media.camera > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-dumpsys-camera.txt
+[exit-code] 0
+
+$ sh -c curl --max-time 5 -sS http://127.0.0.1:4778/healthz > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-health.json
+[exit-code] 0
+
+$ sh -c curl --max-time 5 -sS http://127.0.0.1:4778/logs > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-default-fps-app-logs.json
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam
+18491
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 reboot
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 wait-for-device
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell getprop sys.boot_completed
+1
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell dumpsys media.camera
+
+== Service global info: ==
+
+Number of camera devices: 2
+Number of normal camera devices: 2
+Active Camera Clients:
+[]
+Allowed user IDs: 0
+
+== Camera service events log (most recent at top): ==
+  06-08 15:41:01 : USER_SWITCH previous allowed user IDs: <None>, current allowed user IDs: 0
+
+== Camera device 0 status 1 dynamic info: ==
+  Device 0 is closed, no client instance
+== Camera device 1 status 1 dynamic info: ==
+  Device 1 is closed, no client instance
+== Camera Provider HAL legacy/0 (v2.4, passthrough) static info: 4 devices: ==
+== Camera HAL device device@1.0/legacy/0 (v1.0) static information: ==
+  Resource cost: 51
+  Conflicting devices: None
+  API1 info:
+    Has a flash unit: true
+    Facing: Back
+    Orientation: 90
+  API2 not directly supported
+== Camera HAL device device@3.2/legacy/0 (v3.2) static information: ==
+  Resource cost: 51
+  Conflicting devices: None
+  API1 info:
+    Has a flash unit: true
+    Facing: Back
+    Orientation: 90
+  API2 camera characteristics:
+    Dumping camera metadata array: 90 / 90 entries, 6528 / 6528 bytes of extra data.
+      Version: 1, Flags: 00000000
+      android.colorCorrection.availableAberrationModes (00004): byte[1]
+        [0 ]
+      android.control.aeAvailableAntibandingModes (10012): byte[2]
+        [0 3 ]
+      android.control.aeAvailableModes (10013): byte[4]
+        [0 1 2 3 ]
+      android.control.aeAvailableTargetFpsRanges (10014): int32[10]
+        [15 15 24 24 ]
+        [10 30 15 30 ]
+        [30 30 ]
+      android.control.aeCompensationRange (10015): int32[2]
+        [-20 20 ]
+      android.control.aeCompensationStep (10016): rational[1]
+        [(10 / 100) ]
+      android.control.afAvailableModes (10017): byte[5]
+        [0 1 2 3 4 ]
+      android.control.availableEffects (10018): byte[6]
+        [0 1 2 4 5 8 ]
+      android.control.availableSceneModes (10019): byte[2]
+        [0 1 ]
+      android.control.availableVideoStabilizationModes (1001a): byte[1]
+        [0 ]
+      android.control.awbAvailableModes (1001b): byte[6]
+        [0 1 2 3 5 6 ]
+      android.control.maxRegions (1001c): int32[3]
+        [1 1 1 ]
+      android.control.sceneModeOverrides (1001d): byte[6]
+        [1 1 1 1 1 1 ]
+      android.control.availableHighSpeedVideoConfigurations (10023): int32[20]
+        [1280 720 30 120 ]
+        [1 1280 720 120 ]
+        [120 1 1280 720 ]
+        [30 240 1 1280 ]
+        [720 240 240 1 ]
+      android.control.aeLockAvailable (10024): byte[1]
+        [TRUE ]
+      android.control.awbLockAvailable (10025): byte[1]
+        [TRUE ]
+      android.control.availableModes (10026): byte[3]
+        [0 1 2 ]
+      android.control.postRawSensitivityBoostRange (10027): int32[2]
+        [100 100 ]
+      android.edge.availableEdgeModes (30002): byte[3]
+        [0 1 2 ]
+      android.flash.info.available (50000): byte[1]
+        [TRUE ]
+      android.flash.info.chargeDuration (50001): int64[1]
+        [0 ]
+      android.flash.colorTemperature (40003): byte[1]
+        [0 ]
+      android.flash.maxEnergy (40004): byte[1]
+        [0 ]
+      android.hotPixel.availableHotPixelModes (60001): byte[3]
+        [0 1 2 ]
+      android.jpeg.availableThumbnailSizes (70007): int32[8]
+        [0 0 496 280 ]
+        [376 376 504 376 ]
+      android.jpeg.maxSize (70008): int32[1]
+        [24385536 ]
+      android.lens.info.availableApertures (90000): float[1]
+        [1.70000005 ]
+      android.lens.info.availableFilterDensities (90001): float[1]
+        [0.00000000 ]
+      android.lens.info.availableFocalLengths (90002): float[1]
+        [4.19999981 ]
+      android.lens.info.availableOpticalStabilization (90003): byte[2]
+        [0 1 ]
+      android.lens.info.hyperfocalDistance (90004): float[1]
+        [0.27777779 ]
+      android.lens.info.minimumFocusDistance (90005): float[1]
+        [10.00000000 ]
+      android.lens.info.shadingMapSize (90006): int32[2]
+        [1 1 ]
+      android.lens.info.focusDistanceCalibration (90007): byte[1]
+        [CALIBRATED ]
+      android.lens.facing (80005): byte[1]
+        [BACK ]
+      android.noiseReduction.availableNoiseReductionModes (a0002): byte[3]
+        [0 1 2 ]
+      android.request.maxNumOutputStreams (c0006): int32[3]
+        [1 3 1 ]
+      android.request.maxNumInputStreams (c0008): int32[1]
+        [0 ]
+      android.request.pipelineMaxDepth (c000a): byte[1]
+        [8 ]
+      android.request.partialResultCount (c000b): int32[1]
+        [1 ]
+      android.request.availableCapabilities (c000c): byte[7]
+        [BACKWARD_COMPATIBLE MANUAL_SENSOR MANUAL_POST_PROCESSING RAW READ_SENSOR_SETTINGS BURST_CAPTURE CONSTRAINED_HIGH_SPEED_VIDEO ]
+      android.request.availableRequestKeys (c000d): int32[54]
+        [65536 65537 65538 65539 ]
+        [65542 65541 65543 65545 ]
+        [65546 65547 65549 65550 ]
+        [65551 65552 65553 262146 ]
+        [458752 458753 458754 458755 ]
+        [458756 458757 458758 851968 ]
+        [1114112 65540 65548 65544 ]
+        [917505 917504 917506 524288 ]
+        [524289 524290 524291 524292 ]
+        [1441792 1245184 1245185 1245186 ]
+        [1245187 0 2 1 ]
+        [1048576 1114128 3 65576 ]
+        [393216 1114115 196608 655360 ]
+        [917528 786433 ]
+      android.request.availableResultKeys (c000e): int32[62]
+        [65536 65537 65538 65539 ]
+        [65542 65541 65543 65545 ]
+        [65546 65547 65549 65550 ]
+        [65551 65552 65553 262146 ]
+        [262149 458752 458753 458754 ]
+        [458755 458756 458757 458758 ]
+        [851968 1114112 1114116 1114117 ]
+        [1114118 1114119 65540 65548 ]
+        [65544 917505 917504 917506 ]
+        [524288 524289 524290 524291 ]
+        [524292 524297 1441792 1245184 ]
+        [1245185 1245186 1245187 2 ]
+        [1 1048576 1114128 3 ]
+        [65576 393216 1114115 917522 ]
+        [917526 917523 196608 655360 ]
+        [1114126 917528 ]
+      android.request.availableCharacteristicsKeys (c000f): int32[67]
+        [4 65554 65555 65556 ]
+        [65557 65558 65559 65560 ]
+        [65561 65562 65563 65564 ]
+        [65572 65573 65574 65575 ]
+        [196610 327680 393217 1376256 ]
+        [458759 524293 589824 589825 ]
+        [589826 589827 589831 589828 ]
+        [589829 655362 786444 786438 ]
+        [786443 786442 851972 851978 ]
+        [851981 917529 917516 917509 ]
+        [917510 917511 917512 917513 ]
+        [917514 983040 983042 983043 ]
+        [983044 983045 983046 983041 ]
+        [983047 983048 917517 917518 ]
+        [917507 917508 1048578 1179648 ]
+        [1179654 1179655 1179650 1507329 ]
+        [1245189 1245188 983050 ]
+      android.scaler.availableMaxDigitalZoom (d0004): float[1]
+        [8.00000000 ]
+      android.scaler.availableStreamConfigurations (d000a): int32[412]
+        [34 4032 3024 OUTPUT ]
+        [34 4032 2268 OUTPUT ]
+        [34 3024 3024 OUTPUT ]
+        [34 3984 2988 OUTPUT ]
+        [34 3264 2448 OUTPUT ]
+        [34 3264 1836 OUTPUT ]
+        [34 2976 2976 OUTPUT ]
+        [34 2880 2160 OUTPUT ]
+        [34 2560 1440 OUTPUT ]
+        [34 2160 2160 OUTPUT ]
+        [34 2048 1152 OUTPUT ]
+        [34 1920 1080 OUTPUT ]
+        [34 1440 1080 OUTPUT ]
+        [34 1088 1088 OUTPUT ]
+        [34 1280 720 OUTPUT ]
+        [34 1056 704 OUTPUT ]
+        [34 1024 768 OUTPUT ]
+        [34 960 720 OUTPUT ]
+        [34 800 450 OUTPUT ]
+        [34 720 720 OUTPUT ]
+        [34 720 480 OUTPUT ]
+        [34 640 480 OUTPUT ]
+        [34 352 288 OUTPUT ]
+        [34 320 240 OUTPUT ]
+        [34 256 144 OUTPUT ]
+        [34 176 144 OUTPUT ]
+        [INPUT 4032 3024 OUTPUT ]
+        [INPUT 4032 2268 OUTPUT ]
+        [INPUT 3024 3024 OUTPUT ]
+        [INPUT 3984 2988 OUTPUT ]
+        [INPUT 3264 2448 OUTPUT ]
+        [INPUT 3264 1836 OUTPUT ]
+        [INPUT 2976 2976 OUTPUT ]
+        [INPUT 2880 2160 OUTPUT ]
+        [INPUT 2560 1440 OUTPUT ]
+        [INPUT 2160 2160 OUTPUT ]
+        [INPUT 2048 1152 OUTPUT ]
+        [INPUT 1920 1080 OUTPUT ]
+        [INPUT 1440 1080 OUTPUT ]
+        [INPUT 1088 1088 OUTPUT ]
+        [INPUT 1280 720 OUTPUT ]
+        [INPUT 1056 704 OUTPUT ]
+        [INPUT 1024 768 OUTPUT ]
+        [INPUT 960 720 OUTPUT ]
+        [INPUT 800 450 OUTPUT ]
+        [INPUT 720 720 OUTPUT ]
+        [INPUT 720 480 OUTPUT ]
+        [INPUT 640 480 OUTPUT ]
+        [INPUT 352 288 OUTPUT ]
+        [INPUT 320 240 OUTPUT ]
+        [INPUT 256 144 OUTPUT ]
+        [INPUT 176 144 OUTPUT ]
+        [35 4032 3024 OUTPUT ]
+        [35 4032 2268 OUTPUT ]
+        [35 3024 3024 OUTPUT ]
+        [35 3984 2988 OUTPUT ]
+        [35 3264 2448 OUTPUT ]
+        [35 3264 1836 OUTPUT ]
+        [35 2976 2976 OUTPUT ]
+        [35 2880 2160 OUTPUT ]
+        [35 2560 1440 OUTPUT ]
+        [35 2160 2160 OUTPUT ]
+        [35 2048 1152 OUTPUT ]
+        [35 1920 1080 OUTPUT ]
+        [35 1440 1080 OUTPUT ]
+        [35 1088 1088 OUTPUT ]
+        [35 1280 720 OUTPUT ]
+        [35 1056 704 OUTPUT ]
+        [35 1024 768 OUTPUT ]
+        [35 960 720 OUTPUT ]
+        [35 800 450 OUTPUT ]
+        [35 720 720 OUTPUT ]
+        [35 720 480 OUTPUT ]
+        [35 640 480 OUTPUT ]
+        [35 352 288 OUTPUT ]
+        [35 320 240 OUTPUT ]
+        [35 256 144 OUTPUT ]
+        [35 176 144 OUTPUT ]
+        [33 4032 3024 OUTPUT ]
+        [33 4032 2268 OUTPUT ]
+        [33 3024 3024 OUTPUT ]
+        [33 3984 2988 OUTPUT ]
+        [33 3264 2448 OUTPUT ]
+        [33 3264 1836 OUTPUT ]
+        [33 2976 2976 OUTPUT ]
+        [33 2880 2160 OUTPUT ]
+        [33 2560 1440 OUTPUT ]
+        [33 2160 2160 OUTPUT ]
+        [33 2048 1152 OUTPUT ]
+        [33 1920 1080 OUTPUT ]
+        [33 1440 1080 OUTPUT ]
+        [33 1088 1088 OUTPUT ]
+        [33 1280 720 OUTPUT ]
+        [33 1056 704 OUTPUT ]
+        [33 1024 768 OUTPUT ]
+        [33 960 720 OUTPUT ]
+        [33 800 450 OUTPUT ]
+        [33 720 720 OUTPUT ]
+        [33 720 480 OUTPUT ]
+        [33 640 480 OUTPUT ]
+        [33 352 288 OUTPUT ]
+        [33 320 240 OUTPUT ]
+        [32 4032 3024 OUTPUT ]
+      android.scaler.availableMinFrameDurations (d000b): int64[412]
+        [34 4032 ]
+        [3024 33331760 ]
+        [34 4032 ]
+        [2268 33331760 ]
+        [34 3024 ]
+        [3024 33331760 ]
+        [34 3984 ]
+        [2988 33331760 ]
+        [34 3264 ]
+        [2448 33331760 ]
+        [34 3264 ]
+        [1836 33331760 ]
+        [34 2976 ]
+        [2976 33331760 ]
+        [34 2880 ]
+        [2160 33331760 ]
+        [34 2560 ]
+        [1440 33331760 ]
+        [34 2160 ]
+        [2160 33331760 ]
+        [34 2048 ]
+        [1152 33331760 ]
+        [34 1920 ]
+        [1080 33331760 ]
+        [34 1440 ]
+        [1080 33331760 ]
+        [34 1088 ]
+        [1088 33331760 ]
+        [34 1280 ]
+        [720 33331760 ]
+        [34 1056 ]
+        [704 33331760 ]
+        [34 1024 ]
+        [768 33331760 ]
+        [34 960 ]
+        [720 33331760 ]
+        [34 800 ]
+        [450 33331760 ]
+        [34 720 ]
+        [720 33331760 ]
+        [34 720 ]
+        [480 33331760 ]
+        [34 640 ]
+        [480 33331760 ]
+        [34 352 ]
+        [288 33331760 ]
+        [34 320 ]
+        [240 33331760 ]
+        [34 256 ]
+        [144 33331760 ]
+        [34 176 ]
+        [144 33331760 ]
+        [1 4032 ]
+        [3024 33331760 ]
+        [1 4032 ]
+        [2268 33331760 ]
+        [1 3024 ]
+        [3024 33331760 ]
+        [1 3984 ]
+        [2988 33331760 ]
+        [1 3264 ]
+        [2448 33331760 ]
+        [1 3264 ]
+        [1836 33331760 ]
+        [1 2976 ]
+        [2976 33331760 ]
+        [1 2880 ]
+        [2160 33331760 ]
+        [1 2560 ]
+        [1440 33331760 ]
+        [1 2160 ]
+        [2160 33331760 ]
+        [1 2048 ]
+        [1152 33331760 ]
+        [1 1920 ]
+        [1080 33331760 ]
+        [1 1440 ]
+        [1080 33331760 ]
+        [1 1088 ]
+        [1088 33331760 ]
+        [1 1280 ]
+        [720 33331760 ]
+        [1 1056 ]
+        [704 33331760 ]
+        [1 1024 ]
+        [768 33331760 ]
+        [1 960 ]
+        [720 33331760 ]
+        [1 800 ]
+        [450 33331760 ]
+        [1 720 ]
+        [720 33331760 ]
+        [1 720 ]
+        [480 33331760 ]
+        [1 640 ]
+        [480 33331760 ]
+        [1 352 ]
+        [288 33331760 ]
+        [1 320 ]
+        [240 33331760 ]
+        [1 256 ]
+        [144 33331760 ]
+        [1 176 ]
+        [144 33331760 ]
+        [35 4032 ]
+        [3024 33331760 ]
+        [35 4032 ]
+        [2268 33331760 ]
+        [35 3024 ]
+        [3024 33331760 ]
+        [35 3984 ]
+        [2988 33331760 ]
+        [35 3264 ]
+        [2448 33331760 ]
+        [35 3264 ]
+        [1836 33331760 ]
+        [35 2976 ]
+        [2976 33331760 ]
+        [35 2880 ]
+        [2160 33331760 ]
+        [35 2560 ]
+        [1440 33331760 ]
+        [35 2160 ]
+        [2160 33331760 ]
+        [35 2048 ]
+        [1152 33331760 ]
+        [35 1920 ]
+        [1080 33331760 ]
+        [35 1440 ]
+        [1080 33331760 ]
+        [35 1088 ]
+        [1088 33331760 ]
+        [35 1280 ]
+        [720 33331760 ]
+        [35 1056 ]
+        [704 33331760 ]
+        [35 1024 ]
+        [768 33331760 ]
+        [35 960 ]
+        [720 33331760 ]
+        [35 800 ]
+        [450 33331760 ]
+        [35 720 ]
+        [720 33331760 ]
+        [35 720 ]
+        [480 33331760 ]
+        [35 640 ]
+        [480 33331760 ]
+        [35 352 ]
+        [288 33331760 ]
+        [35 320 ]
+        [240 33331760 ]
+        [35 256 ]
+        [144 33331760 ]
+        [35 176 ]
+        [144 33331760 ]
+        [33 4032 ]
+        [3024 50000000 ]
+        [33 4032 ]
+        [2268 50000000 ]
+        [33 3024 ]
+        [3024 50000000 ]
+        [33 3984 ]
+        [2988 50000000 ]
+        [33 3264 ]
+        [2448 50000000 ]
+        [33 3264 ]
+        [1836 50000000 ]
+        [33 2976 ]
+        [2976 50000000 ]
+        [33 2880 ]
+        [2160 50000000 ]
+        [33 2560 ]
+        [1440 50000000 ]
+        [33 2160 ]
+        [2160 50000000 ]
+        [33 2048 ]
+        [1152 50000000 ]
+        [33 1920 ]
+        [1080 33331760 ]
+        [33 1440 ]
+        [1080 33331760 ]
+        [33 1088 ]
+        [1088 33331760 ]
+        [33 1280 ]
+        [720 33331760 ]
+        [33 1056 ]
+        [704 33331760 ]
+        [33 1024 ]
+        [768 33331760 ]
+        [33 960 ]
+        [720 33331760 ]
+        [33 800 ]
+        [450 33331760 ]
+        [33 720 ]
+        [720 33331760 ]
+        [33 720 ]
+        [480 33331760 ]
+        [33 640 ]
+        [480 33331760 ]
+        [33 352 ]
+        [288 33331760 ]
+        [33 320 ]
+        [240 33331760 ]
+        [32 4032 ]
+        [3024 33331760 ]
+      android.scaler.availableStallDurations (d000c): int64[0]
+      android.scaler.croppingType (d000d): byte[1]
+        [FREEFORM ]
+      android.sensor.info.activeArraySize (f0000): int32[4]
+        [0 0 4032 3024 ]
+      android.sensor.info.sensitivityRange (f0001): int32[2]
+        [64 1600 ]
+      android.sensor.info.colorFilterArrangement (f0002): byte[1]
+        [GRBG ]
+      android.sensor.info.exposureTimeRange (f0003): int64[2]
+        [22000 100000000 ]
+      android.sensor.info.maxFrameDuration (f0004): int64[1]
+        [125000000 ]
+      android.sensor.info.physicalSize (f0005): float[2]
+        [5.64499998 4.43499994 ]
+      android.sensor.info.pixelArraySize (f0006): int32[2]
+        [4032 3024 ]
+      android.sensor.info.whiteLevel (f0007): int32[1]
+        [1023 ]
+      android.sensor.info.timestampSource (f0008): byte[1]
+        [REALTIME ]
+      android.sensor.referenceIlluminant1 (e0003): byte[1]
+        [D65 ]
+      android.sensor.referenceIlluminant2 (e0004): byte[1]
+        [17 ]
+      android.sensor.calibrationTransform1 (e0005): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.calibrationTransform2 (e0006): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.colorTransform1 (e0007): rational[9]
+        [(735 / 1024) (-149 / 1024) ]
+        [(-125 / 1024) (-624 / 1024) ]
+        [(1580 / 1024) (34 / 1024) ]
+        [(-134 / 1024) (296 / 1024) ]
+        [(442 / 1024) ]
+      android.sensor.colorTransform2 (e0008): rational[9]
+        [(1294 / 1024) (-603 / 1024) ]
+        [(-115 / 1024) (-550 / 1024) ]
+        [(1571 / 1024) (160 / 1024) ]
+        [(-67 / 1024) (191 / 1024) ]
+        [(642 / 1024) ]
+      android.sensor.forwardMatrix1 (e0009): rational[9]
+        [(665 / 1024) (107 / 1024) ]
+        [(216 / 1024) (264 / 1024) ]
+        [(702 / 1024) (58 / 1024) ]
+        [(16 / 1024) (-328 / 1024) ]
+        [(1157 / 1024) ]
+      android.sensor.forwardMatrix2 (e000a): rational[9]
+        [(622 / 1024) (191 / 1024) ]
+        [(175 / 1024) (199 / 1024) ]
+        [(832 / 1024) (-7 / 1024) ]
+        [(15 / 1024) (-540 / 1024) ]
+        [(1370 / 1024) ]
+      android.sensor.blackLevelPattern (e000c): int32[4]
+        [0 0 0 0 ]
+      android.sensor.maxAnalogSensitivity (e000d): int32[1]
+        [640 ]
+      android.sensor.orientation (e000e): int32[1]
+        [90 ]
+      android.sensor.profileHueSatMapDimensions (e000f): int32[3]
+        [1 2 1 ]
+      android.sensor.availableTestPatternModes (e0019): int32[1]
+        [0 ]
+      android.statistics.info.availableFaceDetectModes (120000): byte[2]
+        [0 1 ]
+      android.statistics.info.histogramBucketCount (120001): int32[1]
+        [64 ]
+      android.statistics.info.maxFaceCount (120002): int32[1]
+        [16 ]
+      android.statistics.info.maxHistogramCount (120003): int32[1]
+        [1000 ]
+      android.statistics.info.maxSharpnessMapValue (120004): int32[1]
+        [1000 ]
+      android.statistics.info.sharpnessMapSize (120005): int32[2]
+        [64 64 ]
+      android.statistics.info.availableHotPixelMapModes (120006): byte[1]
+        [0 ]
+      android.statistics.info.availableLensShadingMapModes (120007): byte[2]
+        [0 1 ]
+      android.shading.availableModes (100002): byte[3]
+        [0 1 2 ]
+      android.tonemap.maxCurvePoints (130004): int32[1]
+        [128 ]
+      android.tonemap.availableToneMapModes (130005): byte[3]
+        [0 1 2 ]
+      android.led.availableLeds (140001): byte[0]
+      samsung.android.control.liveHdrLevelRange (80000001): int32[2]
+        [0 1 ]
+      samsung.android.control.pafAvailableMode (80000005): byte[1]
+        [1 ]
+      samsung.android.control.meteringAvailableMode (80000003): int32[4]
+        [0 1 2 3 ]
+      samsung.android.lens.info.availableOpticalStabilizationOperationMode (80020000): int32[2]
+        [0 1 ]
+      android.info.supportedHardwareLevel (150000): byte[1]
+        [FULL ]
+      android.sync.maxLatency (170001): int32[1]
+        [PER_FRAME_CONTROL ]
+      android.sensor.info.preCorrectionActiveArraySize (f000a): int32[4]
+        [0 0 4032 3024 ]
+== Camera HAL device device@1.0/legacy/1 (v1.0) static information: ==
+  Resource cost: 51
+  Conflicting devices: None
+  API1 info:
+    Has a flash unit: false
+    Facing: Front
+    Orientation: 270
+  API2 not directly supported
+== Camera HAL device device@3.2/legacy/1 (v3.2) static information: ==
+  Resource cost: 51
+  Conflicting devices: None
+  API1 info:
+    Has a flash unit: false
+    Facing: Front
+    Orientation: 270
+  API2 camera characteristics:
+    Dumping camera metadata array: 87 / 87 entries, 5216 / 5216 bytes of extra data.
+      Version: 1, Flags: 00000000
+      android.colorCorrection.availableAberrationModes (00004): byte[1]
+        [0 ]
+      android.control.aeAvailableAntibandingModes (10012): byte[2]
+        [0 3 ]
+      android.control.aeAvailableModes (10013): byte[2]
+        [0 1 ]
+      android.control.aeAvailableTargetFpsRanges (10014): int32[10]
+        [15 15 24 24 ]
+        [10 30 15 30 ]
+        [30 30 ]
+      android.control.aeCompensationRange (10015): int32[2]
+        [-20 20 ]
+      android.control.aeCompensationStep (10016): rational[1]
+        [(10 / 100) ]
+      android.control.afAvailableModes (10017): byte[1]
+        [0 ]
+      android.control.availableEffects (10018): byte[6]
+        [0 1 2 4 5 8 ]
+      android.control.availableSceneModes (10019): byte[2]
+        [0 1 ]
+      android.control.availableVideoStabilizationModes (1001a): byte[1]
+        [0 ]
+      android.control.awbAvailableModes (1001b): byte[6]
+        [0 1 2 3 5 6 ]
+      android.control.maxRegions (1001c): int32[3]
+        [0 0 0 ]
+      android.control.sceneModeOverrides (1001d): byte[6]
+        [1 1 1 1 1 1 ]
+      android.control.aeLockAvailable (10024): byte[1]
+        [TRUE ]
+      android.control.awbLockAvailable (10025): byte[1]
+        [TRUE ]
+      android.control.availableModes (10026): byte[3]
+        [0 1 2 ]
+      android.control.postRawSensitivityBoostRange (10027): int32[2]
+        [100 100 ]
+      android.edge.availableEdgeModes (30002): byte[3]
+        [0 1 2 ]
+      android.flash.info.available (50000): byte[1]
+        [FALSE ]
+      android.flash.info.chargeDuration (50001): int64[1]
+        [0 ]
+      android.flash.colorTemperature (40003): byte[1]
+        [0 ]
+      android.flash.maxEnergy (40004): byte[1]
+        [0 ]
+      android.hotPixel.availableHotPixelModes (60001): byte[3]
+        [0 1 2 ]
+      android.jpeg.availableThumbnailSizes (70007): int32[10]
+        [0 0 320 240 ]
+        [384 384 512 288 ]
+        [512 384 ]
+      android.jpeg.maxSize (70008): int32[1]
+        [10108800 ]
+      android.lens.info.availableApertures (90000): float[1]
+        [1.70000005 ]
+      android.lens.info.availableFilterDensities (90001): float[1]
+        [0.00000000 ]
+      android.lens.info.availableFocalLengths (90002): float[1]
+        [2.09999990 ]
+      android.lens.info.availableOpticalStabilization (90003): byte[1]
+        [0 ]
+      android.lens.info.hyperfocalDistance (90004): float[1]
+        [0.00000000 ]
+      android.lens.info.minimumFocusDistance (90005): float[1]
+        [0.00000000 ]
+      android.lens.info.shadingMapSize (90006): int32[2]
+        [1 1 ]
+      android.lens.info.focusDistanceCalibration (90007): byte[1]
+        [UNCALIBRATED ]
+      android.lens.facing (80005): byte[1]
+        [FRONT ]
+      android.noiseReduction.availableNoiseReductionModes (a0002): byte[3]
+        [0 1 2 ]
+      android.request.maxNumOutputStreams (c0006): int32[3]
+        [1 3 1 ]
+      android.request.maxNumInputStreams (c0008): int32[1]
+        [0 ]
+      android.request.pipelineMaxDepth (c000a): byte[1]
+        [8 ]
+      android.request.partialResultCount (c000b): int32[1]
+        [1 ]
+      android.request.availableCapabilities (c000c): byte[2]
+        [BACKWARD_COMPATIBLE BURST_CAPTURE ]
+      android.request.availableRequestKeys (c000d): int32[29]
+        [65536 65537 65538 65539 ]
+        [65541 65543 65545 65546 ]
+        [65547 65549 65550 65551 ]
+        [65552 65553 262146 458752 ]
+        [458753 458754 458755 458756 ]
+        [458757 458758 851968 1114112 ]
+        [524292 655360 3 65576 ]
+        [786433 ]
+      android.request.availableResultKeys (c000e): int32[29]
+        [65536 65537 65538 65539 ]
+        [65541 65543 65545 65546 ]
+        [65547 65549 65550 65551 ]
+        [65552 65553 262146 262149 ]
+        [458752 458753 458754 458755 ]
+        [458756 458757 458758 851968 ]
+        [1114112 524292 655360 3 ]
+        [65576 ]
+      android.request.availableCharacteristicsKeys (c000f): int32[63]
+        [4 65554 65555 65556 ]
+        [65557 65558 65559 65560 ]
+        [65561 65562 65563 65564 ]
+        [65572 65573 65574 65575 ]
+        [327680 393217 1376256 458759 ]
+        [524293 589826 589827 589831 ]
+        [589828 589829 655362 786444 ]
+        [786438 786443 786442 851972 ]
+        [851978 851981 917529 917516 ]
+        [917509 917510 917511 917512 ]
+        [917513 917514 983040 983042 ]
+        [983043 983044 983045 983046 ]
+        [983041 983047 983048 917517 ]
+        [917518 917507 917508 1048578 ]
+        [1179648 1179654 1179655 1179650 ]
+        [1507329 1245188 983050 ]
+      android.scaler.availableMaxDigitalZoom (d0004): float[1]
+        [4.00000000 ]
+      android.scaler.availableStreamConfigurations (d000a): int32[332]
+        [34 2592 1944 OUTPUT ]
+        [34 2592 1458 OUTPUT ]
+        [34 2560 1440 OUTPUT ]
+        [34 2048 1536 OUTPUT ]
+        [34 1936 1936 OUTPUT ]
+        [34 1920 1440 OUTPUT ]
+        [34 1920 1080 OUTPUT ]
+        [34 1440 1080 OUTPUT ]
+        [34 1088 1088 OUTPUT ]
+        [34 1072 1072 OUTPUT ]
+        [34 1280 720 OUTPUT ]
+        [34 1056 704 OUTPUT ]
+        [34 960 720 OUTPUT ]
+        [34 800 450 OUTPUT ]
+        [34 736 736 OUTPUT ]
+        [34 720 480 OUTPUT ]
+        [34 640 480 OUTPUT ]
+        [34 352 288 OUTPUT ]
+        [34 320 240 OUTPUT ]
+        [34 256 144 OUTPUT ]
+        [34 176 144 OUTPUT ]
+        [INPUT 2592 1944 OUTPUT ]
+        [INPUT 2592 1458 OUTPUT ]
+        [INPUT 2560 1440 OUTPUT ]
+        [INPUT 2048 1536 OUTPUT ]
+        [INPUT 1936 1936 OUTPUT ]
+        [INPUT 1920 1440 OUTPUT ]
+        [INPUT 1920 1080 OUTPUT ]
+        [INPUT 1440 1080 OUTPUT ]
+        [INPUT 1088 1088 OUTPUT ]
+        [INPUT 1072 1072 OUTPUT ]
+        [INPUT 1280 720 OUTPUT ]
+        [INPUT 1056 704 OUTPUT ]
+        [INPUT 960 720 OUTPUT ]
+        [INPUT 800 450 OUTPUT ]
+        [INPUT 736 736 OUTPUT ]
+        [INPUT 720 480 OUTPUT ]
+        [INPUT 640 480 OUTPUT ]
+        [INPUT 352 288 OUTPUT ]
+        [INPUT 320 240 OUTPUT ]
+        [INPUT 256 144 OUTPUT ]
+        [INPUT 176 144 OUTPUT ]
+        [35 2592 1944 OUTPUT ]
+        [35 2592 1458 OUTPUT ]
+        [35 2560 1440 OUTPUT ]
+        [35 2048 1536 OUTPUT ]
+        [35 1936 1936 OUTPUT ]
+        [35 1920 1440 OUTPUT ]
+        [35 1920 1080 OUTPUT ]
+        [35 1440 1080 OUTPUT ]
+        [35 1088 1088 OUTPUT ]
+        [35 1072 1072 OUTPUT ]
+        [35 1280 720 OUTPUT ]
+        [35 1056 704 OUTPUT ]
+        [35 960 720 OUTPUT ]
+        [35 800 450 OUTPUT ]
+        [35 736 736 OUTPUT ]
+        [35 720 480 OUTPUT ]
+        [35 640 480 OUTPUT ]
+        [35 352 288 OUTPUT ]
+        [35 320 240 OUTPUT ]
+        [35 256 144 OUTPUT ]
+        [35 176 144 OUTPUT ]
+        [33 2592 1944 OUTPUT ]
+        [33 2592 1458 OUTPUT ]
+        [33 2560 1440 OUTPUT ]
+        [33 2048 1536 OUTPUT ]
+        [33 1936 1936 OUTPUT ]
+        [33 1920 1440 OUTPUT ]
+        [33 1920 1080 OUTPUT ]
+        [33 1440 1080 OUTPUT ]
+        [33 1088 1088 OUTPUT ]
+        [33 1072 1072 OUTPUT ]
+        [33 1280 720 OUTPUT ]
+        [33 1056 704 OUTPUT ]
+        [33 960 720 OUTPUT ]
+        [33 800 450 OUTPUT ]
+        [33 736 736 OUTPUT ]
+        [33 720 480 OUTPUT ]
+        [33 640 480 OUTPUT ]
+        [33 352 288 OUTPUT ]
+        [33 320 240 OUTPUT ]
+        [32 2608 1960 OUTPUT ]
+      android.scaler.availableMinFrameDurations (d000b): int64[332]
+        [34 2592 ]
+        [1944 33331760 ]
+        [34 2592 ]
+        [1458 33331760 ]
+        [34 2560 ]
+        [1440 33331760 ]
+        [34 2048 ]
+        [1536 33331760 ]
+        [34 1936 ]
+        [1936 33331760 ]
+        [34 1920 ]
+        [1440 33331760 ]
+        [34 1920 ]
+        [1080 33331760 ]
+        [34 1440 ]
+        [1080 33331760 ]
+        [34 1088 ]
+        [1088 33331760 ]
+        [34 1072 ]
+        [1072 33331760 ]
+        [34 1280 ]
+        [720 33331760 ]
+        [34 1056 ]
+        [704 33331760 ]
+        [34 960 ]
+        [720 33331760 ]
+        [34 800 ]
+        [450 33331760 ]
+        [34 736 ]
+        [736 33331760 ]
+        [34 720 ]
+        [480 33331760 ]
+        [34 640 ]
+        [480 33331760 ]
+        [34 352 ]
+        [288 33331760 ]
+        [34 320 ]
+        [240 33331760 ]
+        [34 256 ]
+        [144 33331760 ]
+        [34 176 ]
+        [144 33331760 ]
+        [1 2592 ]
+        [1944 33331760 ]
+        [1 2592 ]
+        [1458 33331760 ]
+        [1 2560 ]
+        [1440 33331760 ]
+        [1 2048 ]
+        [1536 33331760 ]
+        [1 1936 ]
+        [1936 33331760 ]
+        [1 1920 ]
+        [1440 33331760 ]
+        [1 1920 ]
+        [1080 33331760 ]
+        [1 1440 ]
+        [1080 33331760 ]
+        [1 1088 ]
+        [1088 33331760 ]
+        [1 1072 ]
+        [1072 33331760 ]
+        [1 1280 ]
+        [720 33331760 ]
+        [1 1056 ]
+        [704 33331760 ]
+        [1 960 ]
+        [720 33331760 ]
+        [1 800 ]
+        [450 33331760 ]
+        [1 736 ]
+        [736 33331760 ]
+        [1 720 ]
+        [480 33331760 ]
+        [1 640 ]
+        [480 33331760 ]
+        [1 352 ]
+        [288 33331760 ]
+        [1 320 ]
+        [240 33331760 ]
+        [1 256 ]
+        [144 33331760 ]
+        [1 176 ]
+        [144 33331760 ]
+        [35 2592 ]
+        [1944 33331760 ]
+        [35 2592 ]
+        [1458 33331760 ]
+        [35 2560 ]
+        [1440 33331760 ]
+        [35 2048 ]
+        [1536 33331760 ]
+        [35 1936 ]
+        [1936 33331760 ]
+        [35 1920 ]
+        [1440 33331760 ]
+        [35 1920 ]
+        [1080 33331760 ]
+        [35 1440 ]
+        [1080 33331760 ]
+        [35 1088 ]
+        [1088 33331760 ]
+        [35 1072 ]
+        [1072 33331760 ]
+        [35 1280 ]
+        [720 33331760 ]
+        [35 1056 ]
+        [704 33331760 ]
+        [35 960 ]
+        [720 33331760 ]
+        [35 800 ]
+        [450 33331760 ]
+        [35 736 ]
+        [736 33331760 ]
+        [35 720 ]
+        [480 33331760 ]
+        [35 640 ]
+        [480 33331760 ]
+        [35 352 ]
+        [288 33331760 ]
+        [35 320 ]
+        [240 33331760 ]
+        [35 256 ]
+        [144 33331760 ]
+        [35 176 ]
+        [144 33331760 ]
+        [33 2592 ]
+        [1944 50000000 ]
+        [33 2592 ]
+        [1458 50000000 ]
+        [33 2560 ]
+        [1440 50000000 ]
+        [33 2048 ]
+        [1536 50000000 ]
+        [33 1936 ]
+        [1936 50000000 ]
+        [33 1920 ]
+        [1440 50000000 ]
+        [33 1920 ]
+        [1080 33331760 ]
+        [33 1440 ]
+        [1080 33331760 ]
+        [33 1088 ]
+        [1088 33331760 ]
+        [33 1072 ]
+        [1072 33331760 ]
+        [33 1280 ]
+        [720 33331760 ]
+        [33 1056 ]
+        [704 33331760 ]
+        [33 960 ]
+        [720 33331760 ]
+        [33 800 ]
+        [450 33331760 ]
+        [33 736 ]
+        [736 33331760 ]
+        [33 720 ]
+        [480 33331760 ]
+        [33 640 ]
+        [480 33331760 ]
+        [33 352 ]
+        [288 33331760 ]
+        [33 320 ]
+        [240 33331760 ]
+        [32 2608 ]
+        [1960 33331760 ]
+      android.scaler.availableStallDurations (d000c): int64[0]
+      android.scaler.croppingType (d000d): byte[1]
+        [FREEFORM ]
+      android.sensor.info.activeArraySize (f0000): int32[4]
+        [0 0 2608 1960 ]
+      android.sensor.info.sensitivityRange (f0001): int32[2]
+        [100 1600 ]
+      android.sensor.info.colorFilterArrangement (f0002): byte[1]
+        [RGGB ]
+      android.sensor.info.exposureTimeRange (f0003): int64[2]
+        [14000 125000000 ]
+      android.sensor.info.maxFrameDuration (f0004): int64[1]
+        [125000000 ]
+      android.sensor.info.physicalSize (f0005): float[2]
+        [3.49499989 2.62599993 ]
+      android.sensor.info.pixelArraySize (f0006): int32[2]
+        [2608 1960 ]
+      android.sensor.info.whiteLevel (f0007): int32[1]
+        [4000 ]
+      android.sensor.info.timestampSource (f0008): byte[1]
+        [REALTIME ]
+      android.sensor.referenceIlluminant1 (e0003): byte[1]
+        [DAYLIGHT ]
+      android.sensor.referenceIlluminant2 (e0004): byte[1]
+        [1 ]
+      android.sensor.calibrationTransform1 (e0005): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.calibrationTransform2 (e0006): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.colorTransform1 (e0007): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.colorTransform2 (e0008): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.forwardMatrix1 (e0009): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.forwardMatrix2 (e000a): rational[9]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) (0 / 128) ]
+        [(0 / 128) (0 / 128) ]
+        [(128 / 128) ]
+      android.sensor.blackLevelPattern (e000c): int32[4]
+        [1000 1000 1000 1000 ]
+      android.sensor.maxAnalogSensitivity (e000d): int32[1]
+        [800 ]
+      android.sensor.orientation (e000e): int32[1]
+        [270 ]
+      android.sensor.profileHueSatMapDimensions (e000f): int32[3]
+        [1 2 1 ]
+      android.sensor.availableTestPatternModes (e0019): int32[1]
+        [0 ]
+      android.statistics.info.availableFaceDetectModes (120000): byte[2]
+        [0 1 ]
+      android.statistics.info.histogramBucketCount (120001): int32[1]
+        [64 ]
+      android.statistics.info.maxFaceCount (120002): int32[1]
+        [16 ]
+      android.statistics.info.maxHistogramCount (120003): int32[1]
+        [1000 ]
+      android.statistics.info.maxSharpnessMapValue (120004): int32[1]
+        [1000 ]
+      android.statistics.info.sharpnessMapSize (120005): int32[2]
+        [64 64 ]
+      android.statistics.info.availableHotPixelMapModes (120006): byte[1]
+        [0 ]
+      android.statistics.info.availableLensShadingMapModes (120007): byte[2]
+        [0 1 ]
+      android.shading.availableModes (100002): byte[3]
+        [0 1 2 ]
+      android.tonemap.maxCurvePoints (130004): int32[1]
+        [128 ]
+      android.tonemap.availableToneMapModes (130005): byte[3]
+        [0 1 2 ]
+      android.led.availableLeds (140001): byte[0]
+      samsung.android.control.liveHdrLevelRange (80000001): int32[2]
+        [0 0 ]
+      samsung.android.control.pafAvailableMode (80000005): byte[1]
+        [0 ]
+      android.info.supportedHardwareLevel (150000): byte[1]
+        [LIMITED ]
+      android.sync.maxLatency (170001): int32[1]
+        [PER_FRAME_CONTROL ]
+      android.sensor.info.preCorrectionActiveArraySize (f000a): int32[4]
+        [0 0 2608 1960 ]
+
+== Vendor tags: ==
+
+  Dumping vendor tag descriptors for vendor with id 3854507339 
+  Dumping configured vendor tag descriptors: 9 entries
+    0x80000000 (controlbase) with type 1 (int32) defined in section samsung.android.control
+    0x80000001 (liveHdrLevelRange) with type 1 (int32) defined in section samsung.android.control
+    0x80000002 (liveHdrLevel) with type 1 (int32) defined in section samsung.android.control
+    0x80000003 (meteringAvailableMode) with type 1 (int32) defined in section samsung.android.control
+    0x80000004 (meteringMode) with type 1 (int32) defined in section samsung.android.control
+    0x80000005 (pafAvailableMode) with type 0 (byte) defined in section samsung.android.control
+    0x80000006 (pafMode) with type 1 (int32) defined in section samsung.android.control
+    0x80010000 (opticalStabilizationOperationMode) with type 1 (int32) defined in section samsung.android.lens
+    0x80020000 (availableOpticalStabilizationOperationMode) with type 1 (int32) defined in section samsung.android.lens.info
+
+== Camera error traces (0): ==
+  No camera traces collected.
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 logcat -c
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ sleep 15
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 logcat -d > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-default-fps-logcat.txt
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/screenshots/android-sm-g935f-post-reboot-default-fps-preview.png
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 shell dumpsys media.camera > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-default-fps-dumpsys-camera.txt
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell input keyevent 66
+[exit-code] 0
+
+$ sleep 2
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 logcat -d > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-clean-logcat.txt
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/screenshots/android-sm-g935f-post-reboot-clean-preview.png
+[exit-code] 0
+
+$ sh -c adb -s 9885e6503930304946 shell dumpsys media.camera > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-clean-dumpsys-camera.txt
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 forward tcp:4778 tcp:4778
+4778
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State         Model                                        
+-------------------   -----------------------------------   ------------------------------------   -----------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   unavailable   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected     iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ sh -c curl --max-time 5 -sS http://127.0.0.1:4778/healthz > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-health.json
+[exit-code] 0
+
+$ sh -c curl --max-time 5 -sS http://127.0.0.1:4778/logs > logs/verification-runs/20260608-1533-camera-leveling-device-continuation/device-logs/android-sm-g935f-post-reboot-app-logs.json
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+iPad (5) (17.7.11) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Devices Offline ==
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ xcrun devicectl device info lockState --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A
+
+[stderr]
+ERROR: CoreDeviceService was unable to locate a device matching the requested device identifier. (DeviceIdentifier: ecid_2929653534883870) (com.apple.dt.CoreDeviceError error 1011 (0x3F3))
+       DeviceIdentifier = ecid_2929653534883870
+[exit-code] 1
+
+$ adb -s 9885e6503930304946 shell screenrecord --time-limit 5 /sdcard/hydracam-s7-post-reboot-preview.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell ls -l /sdcard/hydracam-s7-post-reboot-preview.mp4
+-rw-rw---- 1 root sdcard_rw 553015 2026-06-08 15:44 /sdcard/hydracam-s7-post-reboot-preview.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-s7-post-reboot-preview.mp4 logs/verification-runs/20260608-1533-camera-leveling-device-continuation/video/android-sm-g935f-post-reboot-preview.mp4
+
+[stderr]
+/sdcard/hydracam-s7-post-reboot-preview.mp4: 1 file pulled, 0 skipped. 14.7 MB/s (553015 bytes in 0.036s)
+[exit-code] 0
+
+$ flutter analyze
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing hydracamv2...                                         
+No issues found! (ran in 5.1s)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter test test/services/camera_service_failure_test.dart test/widgets/camera_setup_preview_screen_test.dart
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: (setUpAll)
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: takePhoto surfaces camera failures instead of returning a fake path
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.470353, function: null, file: null}
+Log registered: {message: Error taking photo: Exception: No cameras available on this device.
+#0      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:246:7)
+<asynchronous suspension>
+#1      CameraService.takePhoto (package:hydracam/services/camera_service.dart:296:7)
+<asynchronous suspension>
+#2      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#4      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:55:5)
+<asynchronous suspension>
+#7      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#9      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 15:48:01.479382, function: null, file: null}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.489913, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 15:48:01.491797, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 15:48:01.495670, function: null, file: null}
+Log registered: {message: Generated new Device ID: 4b5f62e0-1017-47cd-94e8-5fe7cee9ca4d, timestamp: 2026-06-08 15:48:01.497939, function: null, file: null}
+Log registered: {message: Camera video recording start failed with explicit fps; retrying with resolution preset defaults. Error: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:676:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:80:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 15:48:01.500815, function: null, file: null}
+Log registered: {message: Camera reinitialized for video recording start without explicit fps: camera=fake-back-camera, profile=standard1080p30., timestamp: 2026-06-08 15:48:01.905088, function: null, file: null}
+Log registered: {message: Error starting video recording: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:692:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:80:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 15:48:01.905633, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo works when the iPad has no flash capability
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.908146, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 15:48:01.908400, function: null, file: null}
+Log registered: {message: Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities), timestamp: 2026-06-08 15:48:01.908873, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 15:48:01.908985, function: null, file: null}
+Log registered: {message: Generated new Device ID: 91e9edc5-9161-4dcd-a354-f9c56e8f59fd, timestamp: 2026-06-08 15:48:01.909173, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 15:48:01.909504, function: null, file: null}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: non-flash initialization failures still surface
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.911559, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 15:48:01.911876, function: null, file: null}
+Log registered: {message: Error initializing camera: CameraException(setFlashModeFailed, Camera session is unavailable)
+#0      CameraController.setFlashMode (package:camera/src/camera_controller.dart:729:7)
+<asynchronous suspension>
+#1      CameraService._setFlashModeIfSupported (package:hydracam/services/camera_service.dart:769:7)
+<asynchronous suspension>
+#2      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:261:7)
+<asynchronous suspension>
+#3      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#4      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#5      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#6      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#7      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:129:5)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#10     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 15:48:01.912363, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: stopRecordingVideo surfaces the camera plugin no-recording error
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.913994, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 15:48:01.914213, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 15:48:01.914536, function: null, file: null}
+Log registered: {message: Error stopping video recording: Exception: stopVideoRecording was called when no video is recording.
+#0      CameraService.stopRecordingVideo (package:hydracam/services/camera_service.dart:416:9)
+#1      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:152:21)
+<asynchronous suspension>
+#2      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#3      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#4      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 15:48:01.914939, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: mock camera writes placeholder media without a platform camera
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 15:48:01.916725, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 15:48:01.917039, function: null, file: null}
+Log registered: {message: Generated new Device ID: 08244eb0-39ab-4e27-8380-c833f5d19c86, timestamp: 2026-06-08 15:48:01.917286, function: null, file: null}
+Log registered: {message: Mock photo saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsM8pFCV/session_null/mock_1_2026-06-08T15-48-01-917549.jpg, timestamp: 2026-06-08 15:48:01.919027, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 15:48:01.919253, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 08244eb0-39ab-4e27-8380-c833f5d19c86, timestamp: 2026-06-08 15:48:01.919504, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 15:48:01.919633, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsM8pFCV/session_null/mock_2_2026-06-08T15-48-01-919850.mp4, timestamp: 2026-06-08 15:48:01.920719, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: warn-only flow allows recording while red tilted
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: selected ultra-wide lens uses sport 1080p60 controller settings
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.923172, function: null, file: null}
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 15:48:01.923564, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 15:48:01.924018, function: null, file: null}
+Log registered: {message: Generated new Device ID: ea5f87ca-90fc-4516-a461-be1af1acbec2, timestamp: 2026-06-08 15:48:01.924178, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 15:48:01.924339, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: warn-only flow allows recording while red tilted
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:01.925842, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 15:48:01.926227, function: null, file: null}
+Log registered: {message: Changing video capture profile to detail4k30 (current: standard1080p30), timestamp: 2026-06-08 15:48:01.926387, function: null, file: null}
+Log registered: {message: Updated video capture profile to detail4k30, timestamp: 2026-06-08 15:48:01.926812, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+Log registered: {message: Camera capture settings applied and reinitialized: camera=iphone-telephoto, profile=detail4k30., timestamp: 2026-06-08 15:48:02.329062, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: setup preview uses preset defaults without explicit fps
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 15:48:02.333653, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 15:48:02.334248, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 15:48:02.335117, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: recording after setup preview rebuilds the explicit fps controller
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 15:48:02.339214, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 15:48:02.340070, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 15:48:02.340558, function: null, file: null}
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 15:48:02.340697, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 15:48:02.743816, function: null, file: null}
+Log registered: {message: Generated new Device ID: ec3bd2e3-5ecf-4ada-a30e-27f746e1db5d, timestamp: 2026-06-08 15:48:02.745110, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 15:48:02.745872, function: null, file: null}
+00:01 +12: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: macOS runtime uses the real camera backend unless mock is explicit
+00:01 +13: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: (tearDownAll)
+00:01 +13: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter test test/services/settings_service_test.dart test/services/session_manager_test.dart test/platform/multi_device_orchestration_test.dart test/screens/master_video_recording_screen_test.dart
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: master recording defaults off on macOS controller builds
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stored master recording preference overrides macOS default
+00:00 +2: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: (setUpAll)
+00:00 +3: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: (setUpAll)
+00:00 +4: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: (setUpAll)
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Log registered: {message: Updated camera lens preference to ultraWide, timestamp: 2026-06-08 15:48:18.477529, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.483917, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.486271, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.488722, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.489191, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p1 on device type: Master, timestamp: 2026-06-08 15:48:18.489798, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 15:48:18.491352, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediakf6y8z/p1-0.jpg, timestamp: 2026-06-08 15:48:18.493059, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera perspective by canonical id
+Log registered: {message: Updated camera perspective to right_backglass_diagonal, timestamp: 2026-06-08 15:48:18.493517, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediakf6y8z/p1-0.jpg, timestamp: 2026-06-08 15:48:18.493619, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediakf6y8z/p1-1.jpg, timestamp: 2026-06-08 15:48:18.494795, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediakf6y8z/p1-1.jpg, timestamp: 2026-06-08 15:48:18.497413, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediakf6y8z/p1-2.jpg, timestamp: 2026-06-08 15:48:18.499477, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediakf6y8z/p1-2.jpg, timestamp: 2026-06-08 15:48:18.499751, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.503031, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.503174, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.503240, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docscnVcfv/session_session_p1/metadata.json, timestamp: 2026-06-08 15:48:18.506592, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docscnVcfv/session_session_p1/metadata.json, timestamp: 2026-06-08 15:48:18.506772, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docscnVcfv/session_session_p1/metadata.json, timestamp: 2026-06-08 15:48:18.506992, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.504768, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.507846, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 15:48:18.508132, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.518216, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.518482, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.518578, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.518646, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.521282, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.521389, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 15:48:18.521463, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.522202, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.522277, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.522348, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.522407, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.523841, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.523995, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 15:48:18.524126, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediamar0kj/test_photo.jpg, timestamp: 2026-06-08 15:48:18.525780, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediamar0kj/test_photo.jpg, timestamp: 2026-06-08 15:48:18.526332, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.526828, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.527102, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.527859, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docscnVcfv/session_session_p1/metadata.json, timestamp: 2026-06-08 15:48:18.528198, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.528303, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.528369, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.528434, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.528863, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.528986, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.529085, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.529166, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.529221, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.530443, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.530515, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.530594, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 15:48:18.530659, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.530548, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.530973, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.531045, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p2 on device type: Master, timestamp: 2026-06-08 15:48:18.531108, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediahUmypE/test_video.mp4, timestamp: 2026-06-08 15:48:18.531344, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaUsStK4/p2-a.jpg, timestamp: 2026-06-08 15:48:18.531449, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediahUmypE/test_video.mp4, timestamp: 2026-06-08 15:48:18.531481, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaUsStK4/p2-a.jpg, timestamp: 2026-06-08 15:48:18.531597, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.531864, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaUsStK4/p2-b.jpg, timestamp: 2026-06-08 15:48:18.531921, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaUsStK4/p2-b.jpg, timestamp: 2026-06-08 15:48:18.532023, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.532425, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.532652, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.532879, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.532997, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.533066, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.533143, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.533195, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsbtOePa/session_session_p2/metadata.json, timestamp: 2026-06-08 15:48:18.533355, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsbtOePa/session_session_p2/metadata.json, timestamp: 2026-06-08 15:48:18.533542, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.534782, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.534914, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 15:48:18.534981, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaEdQsZG/context_video.mp4, timestamp: 2026-06-08 15:48:18.536399, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaEdQsZG/context_video.mp4, timestamp: 2026-06-08 15:48:18.536563, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.537633, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.538532, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.538678, function: null, file: null}
+Log registered: {message: Generated new Device ID: 33b28bbd-50ef-4545-b086-93ca0ab6838b, timestamp: 2026-06-08 15:48:18.543024, function: null, file: null}
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 15:48:18.544648, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.545978, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.546086, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.546162, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.546221, function: null, file: null}
+00:00 +13: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.547833, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.547956, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 15:48:18.548031, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media4tGHFx/test_photo_1.jpg, timestamp: 2026-06-08 15:48:18.548744, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media4tGHFx/test_photo_1.jpg, timestamp: 2026-06-08 15:48:18.548915, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media4tGHFx/test_photo_2.jpg, timestamp: 2026-06-08 15:48:18.549048, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media4tGHFx/test_photo_2.jpg, timestamp: 2026-06-08 15:48:18.549267, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.549508, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.549663, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.551109, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.551297, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsmzJ1qt/session_test-guid/metadata.json, timestamp: 2026-06-08 15:48:18.551386, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.551445, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.551505, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.551558, function: null, file: null}
+00:00 +14: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.555962, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.556159, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsbtOePa/session_session_p2/metadata.json, timestamp: 2026-06-08 15:48:18.557146, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.557288, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.557422, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.557472, function: null, file: null}
+00:00 +15: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P3: round-robin commands respect device order
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.560860, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.560981, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.561351, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.561421, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p3 on device type: Master, timestamp: 2026-06-08 15:48:18.561489, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-A.jpg, timestamp: 2026-06-08 15:48:18.561917, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-A.jpg, timestamp: 2026-06-08 15:48:18.562065, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-B.jpg, timestamp: 2026-06-08 15:48:18.562379, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-B.jpg, timestamp: 2026-06-08 15:48:18.562475, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-C.jpg, timestamp: 2026-06-08 15:48:18.562731, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-C.jpg, timestamp: 2026-06-08 15:48:18.562823, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-D.jpg, timestamp: 2026-06-08 15:48:18.563067, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaWrudpx/slave-D.jpg, timestamp: 2026-06-08 15:48:18.563154, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.563492, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.563628, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.563750, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.563885, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHXrGYA/session_session_p3/metadata.json, timestamp: 2026-06-08 15:48:18.564811, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHXrGYA/session_session_p3/metadata.json, timestamp: 2026-06-08 15:48:18.564928, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHXrGYA/session_session_p3/metadata.json, timestamp: 2026-06-08 15:48:18.565077, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHXrGYA/session_session_p3/metadata.json, timestamp: 2026-06-08 15:48:18.565921, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.585560, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.585761, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHXrGYA/session_session_p3/metadata.json, timestamp: 2026-06-08 15:48:18.586742, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.586826, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.586879, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.586926, function: null, file: null}
+00:00 +16: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +16: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P4: master rotation resets session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.588889, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.589041, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.589499, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.589594, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p4_a on device type: Master, timestamp: 2026-06-08 15:48:18.589663, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediatrOHcH/p4.jpg, timestamp: 2026-06-08 15:48:18.590031, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediatrOHcH/p4.jpg, timestamp: 2026-06-08 15:48:18.590160, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.590492, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs3Yq8rb/session_session_p4_a/metadata.json, timestamp: 2026-06-08 15:48:18.591309, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs3Yq8rb/session_session_p4_a/metadata.json, timestamp: 2026-06-08 15:48:18.613390, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.613544, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.613607, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.613661, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.613741, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.613788, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.613830, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.613871, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p4_b on device type: Master, timestamp: 2026-06-08 15:48:18.613916, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.614225, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.614293, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs3Yq8rb/session_session_p4_b/metadata.json, timestamp: 2026-06-08 15:48:18.615107, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.615185, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.615309, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.615385, function: null, file: null}
+00:00 +17: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +17: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V1: single slave video stored in session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.618096, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.618225, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.618555, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.618615, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v1 on device type: Master, timestamp: 2026-06-08 15:48:18.618664, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaM1r44S/v1.mp4, timestamp: 2026-06-08 15:48:18.619547, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaM1r44S/v1.mp4, timestamp: 2026-06-08 15:48:18.619744, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.620293, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSx79gr/session_session_v1/metadata.json, timestamp: 2026-06-08 15:48:18.620875, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.641363, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.641551, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSx79gr/session_session_v1/metadata.json, timestamp: 2026-06-08 15:48:18.642332, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.642419, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.642491, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.642554, function: null, file: null}
+00:00 +18: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +18: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V2: multiple slave videos persist metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.644134, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.644207, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.644540, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.644596, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v2 on device type: Master, timestamp: 2026-06-08 15:48:18.644641, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaxurUZY/v2-a.mp4, timestamp: 2026-06-08 15:48:18.644932, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaxurUZY/v2-a.mp4, timestamp: 2026-06-08 15:48:18.645011, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaxurUZY/v2-b.mp4, timestamp: 2026-06-08 15:48:18.645242, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaxurUZY/v2-b.mp4, timestamp: 2026-06-08 15:48:18.645313, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.645550, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.645704, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7rxx0L/session_session_v2/metadata.json, timestamp: 2026-06-08 15:48:18.646282, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7rxx0L/session_session_v2/metadata.json, timestamp: 2026-06-08 15:48:18.646364, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.668301, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.668467, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7rxx0L/session_session_v2/metadata.json, timestamp: 2026-06-08 15:48:18.669242, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.669356, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.669422, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.669471, function: null, file: null}
+00:00 +19: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +19: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V3: scheduled starts preserve offsets
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.671039, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.671114, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.671606, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.671681, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v3 on device type: Master, timestamp: 2026-06-08 15:48:18.671736, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaRnc608/v3-a.mp4, timestamp: 2026-06-08 15:48:18.672052, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaRnc608/v3-a.mp4, timestamp: 2026-06-08 15:48:18.672142, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaRnc608/v3-b.mp4, timestamp: 2026-06-08 15:48:18.672406, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaRnc608/v3-b.mp4, timestamp: 2026-06-08 15:48:18.672510, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaRnc608/v3-c.mp4, timestamp: 2026-06-08 15:48:18.672784, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaRnc608/v3-c.mp4, timestamp: 2026-06-08 15:48:18.672871, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.673197, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.673320, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 15:48:18.673429, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsG92B5Z/session_session_v3/metadata.json, timestamp: 2026-06-08 15:48:18.674329, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsG92B5Z/session_session_v3/metadata.json, timestamp: 2026-06-08 15:48:18.674426, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsG92B5Z/session_session_v3/metadata.json, timestamp: 2026-06-08 15:48:18.674494, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.696059, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.696294, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsG92B5Z/session_session_v3/metadata.json, timestamp: 2026-06-08 15:48:18.697365, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 15:48:18.697476, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 15:48:18.697537, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 15:48:18.697588, function: null, file: null}
+00:00 +20: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+Log registered: {message: Closing recording preview because no recording is active., timestamp: 2026-06-08 15:48:18.997733, function: null, file: null}
+00:00 +21: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/win11-dev-host.md
+ M lib/master/master_screen.dart
+ M lib/screens/camera_setup_preview_screen.dart
+ M lib/services/camera_service.dart
+ M lib/slave/slave_client.dart
+ M test/services/camera_service_failure_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1533-camera-leveling-device-continuation/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+[exit-code] 0
