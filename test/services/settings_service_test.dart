@@ -58,7 +58,8 @@ void main() {
     );
   });
 
-  test("stores selected camera name independently from lens preference", () async {
+  test("stores selected camera name independently from lens preference",
+      () async {
     SharedPreferences.setMockInitialValues({});
 
     await SettingsService.setCameraLensPreference(LensPreference.ultraWide);
@@ -69,5 +70,23 @@ void main() {
       LensPreference.ultraWide,
     );
     expect(await SettingsService.getSelectedCameraName(), "iphone-ultra-wide");
+  });
+
+  test("stores selected camera perspective by canonical id", () async {
+    SharedPreferences.setMockInitialValues({});
+
+    expect(
+      (await SettingsService.getCameraPerspective()).cameraPerspectiveId,
+      "unknown",
+    );
+
+    await SettingsService.setCameraPerspectiveId("right_backglass_diagonal");
+
+    final perspective = await SettingsService.getCameraPerspective();
+    expect(perspective.cameraPerspectiveId, "right_backglass_diagonal");
+    expect(
+      perspective.cameraPerspectiveLabel,
+      "Right corner, behind glass, diagonal to front-left",
+    );
   });
 }

@@ -3,6 +3,7 @@ import "package:camera/camera.dart";
 import "package:connectivity_plus/connectivity_plus.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "../screens/camera_setup_preview_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../globals.dart";
 import "../models/captured_photo.dart";
@@ -17,6 +18,7 @@ import "slave_client.dart";
 import "master_discovery.dart";
 import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
+import "../widgets/camera_preview_widget.dart";
 import "../widgets/hydra_cam_app_bar.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
@@ -73,6 +75,7 @@ class SlaveScreenState extends State<SlaveScreen> {
   int dimTime = 10; // Number of seconds before turning screen black
   bool isScreenDimmed = false; // To control the dimmed screen state
   bool _isCheckingNetwork = false;
+  bool _isPreparingPreview = false;
   NetworkReadinessResult? _networkReadiness;
 
   // Getters for SessionManager photos and videos
@@ -325,6 +328,10 @@ class SlaveScreenState extends State<SlaveScreen> {
         });
       }
 
+      if (isConnected && !isRecording) {
+        unawaited(_prepareCameraPreview());
+      }
+
       if (!isConnected) {
         if (!mounted) {
           return;
@@ -345,6 +352,26 @@ class SlaveScreenState extends State<SlaveScreen> {
     }
   }
 
+  Future<void> _prepareCameraPreview() async {
+    if (_isPreparingPreview) {
+      return;
+    }
+    final client = _client;
+    if (client == null) {
+      return;
+    }
+
+    _isPreparingPreview = true;
+    try {
+      await client.prepareCameraPreview();
+      if (mounted) {
+        setState(() {});
+      }
+    } finally {
+      _isPreparingPreview = false;
+    }
+  }
+
   void _handleRecordingStarted() {
     if (mounted) {
       setState(() {
@@ -362,6 +389,7 @@ class SlaveScreenState extends State<SlaveScreen> {
         statusMessage = "Recording stopped.";
       });
       dimTimer?.cancel();
+      unawaited(_prepareCameraPreview());
     }
   }
 
@@ -475,6 +503,64 @@ class SlaveScreenState extends State<SlaveScreen> {
     );
   }
 
+  Widget _buildCameraPreviewArea() {
+    final controller = _client?.cameraController;
+
+    if (controller == null) {
+      if (_isConnected && !isRecording) {
+        return const CameraSetupPreviewPanel(
+          title: "Prepare Camera",
+        );
+      }
+      return Stack(
+        children: [
+          _buildStatusMessage(),
+          if (isRecording) _recordingLabel(),
+        ],
+      );
+    }
+
+    return ValueListenableBuilder<CameraValue>(
+      valueListenable: controller,
+      builder: (context, cameraValue, child) {
+        if (_isConnected && !isRecording) {
+          return CameraSetupPreviewPanel(
+            title: "Prepare Camera",
+            preview: cameraValue.isInitialized
+                ? CameraPreviewWidget(controller: controller)
+                : null,
+          );
+        }
+
+        return Stack(
+          children: [
+            if (isRecording && cameraValue.isInitialized)
+              Positioned.fill(
+                child: CameraPreviewWidget(controller: controller),
+              )
+            else
+              _buildStatusMessage(),
+            if (isRecording) _recordingLabel(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _recordingLabel() {
+    return const Positioned(
+      bottom: 20,
+      left: 0,
+      right: 0,
+      child: Center(
+        child: Text(
+          "Recording...",
+          style: TextStyle(color: Colors.red, fontSize: 24),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Media list widget with placeholder enabled
@@ -499,71 +585,7 @@ class SlaveScreenState extends State<SlaveScreen> {
         AddGalleryMediaButton(enabled: !isRecording),
         const SizedBox(height: 10),
         Expanded(
-          child: _client?.cameraController != null
-              ? ValueListenableBuilder<CameraValue>(
-                  valueListenable: _client!.cameraController!,
-                  builder: (context, cameraValue, child) {
-                    return Stack(
-                      children: [
-                        if (isRecording &&
-                            _client?.cameraController != null &&
-                            _client!.cameraController!.value.isInitialized)
-                          Positioned.fill(
-                            child: CameraPreview(_client!.cameraController!),
-                          )
-                        else
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  statusMessage,
-                                  style: const TextStyle(fontSize: 18),
-                                  textAlign: TextAlign.center,
-                                ),
-                                if (!statusMessage.contains("stop") &&
-                                    (statusMessage.contains("Taking") ||
-                                        statusMessage.contains("Recording")))
-                                  const Padding(
-                                    padding: EdgeInsets.only(top: 20),
-                                    child: CircularProgressIndicator(),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        if (isRecording)
-                          const Positioned(
-                            bottom: 20,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: Text(
-                                "Recording...",
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 24),
-                              ),
-                            ),
-                          ),
-                      ],
-                    );
-                  })
-              : Stack(
-                  children: [
-                    _buildStatusMessage(),
-                    if (isRecording)
-                      const Positioned(
-                        bottom: 20,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Text(
-                            "Recording...",
-                            style: TextStyle(color: Colors.red, fontSize: 24),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+          child: _buildCameraPreviewArea(),
         ),
       ],
     );

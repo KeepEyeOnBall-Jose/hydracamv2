@@ -31,6 +31,9 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
   CameraController? get cameraController => null;
 
   @override
+  Future<void> prepareCameraPreview() async {}
+
+  @override
   void connect() {
     connected = true;
   }
@@ -68,7 +71,8 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets("forced preferred master connects without network readiness probe",
+  testWidgets(
+      "forced preferred master connects without network readiness probe",
       (tester) async {
     var readinessCalls = 0;
     final clients = <FakeSlaveConnectionClient>[];
@@ -119,7 +123,8 @@ void main() {
     }
   });
 
-  testWidgets("connectivity stream errors are logged without uncaught exception",
+  testWidgets(
+      "connectivity stream errors are logged without uncaught exception",
       (tester) async {
     final connectivityController =
         StreamController<List<ConnectivityResult>>.broadcast();

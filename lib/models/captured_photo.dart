@@ -1,6 +1,8 @@
 import "dart:io";
 import "dart:typed_data";
 
+import "capture_context_metadata.dart";
+
 /// CapturedPhoto - Represents a photo captured by a slave device.
 /// This class holds the binary data of the photo (temporarily), the file path where it's stored,
 /// the device ID that took the photo, and the timestamps for when it was captured
@@ -22,6 +24,9 @@ class CapturedPhoto {
   /// The date and time when the photo was received by the master device.
   final DateTime receivedDate;
 
+  /// Setup metadata captured from the local device before the media was saved.
+  final MediaCaptureContext? captureContext;
+
   /// Flag to track upload status
   bool isUploaded;
 
@@ -31,7 +36,6 @@ class CapturedPhoto {
 
   /// File size metadata
   final int fileSizeInBytes;
-
 
   /// Constructor for creating a new CapturedPhoto.
   ///
@@ -46,6 +50,7 @@ class CapturedPhoto {
     required this.slaveDeviceId,
     required this.captureDate,
     required this.receivedDate,
+    this.captureContext,
     this.isUploaded = false,
     this.uploadDuration,
     this.uploadStartTime,
