@@ -1,0 +1,607 @@
+{
+  "acceptanceChecks": [
+    "Physical iPhone becomes reachable through Flutter, CoreDevice, xctrace, or identity-matched HydraCam automation bridge",
+    "If still unreachable, current recovery probes are recorded with commands and blocker evidence"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:44:31.086850+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:44:31.172523+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:44:44.040936+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:44:44.094863+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-08T15:44:45.714875+00:00"
+    },
+    {
+      "command": [
+        "ps",
+        "-axo",
+        "pid,command"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:45:03.852129+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "dns-sd -G v4v6 Jose-Ramons-iPhone.coredevice.local & pid=$!; sleep 6; kill $pid 2>/dev/null; wait $pid 2>/dev/null || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:45:18.847104+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "dns-sd -B _remotepairing._tcp local & pid=$!; sleep 6; kill $pid 2>/dev/null; wait $pid 2>/dev/null || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:45:24.858389+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "dns-sd -B _apple-mobdev2._tcp local & pid=$!; sleep 6; kill $pid 2>/dev/null; wait $pid 2>/dev/null || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:45:30.869166+00:00"
+    },
+    {
+      "command": [
+        "arp",
+        "-an"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:45:36.884945+00:00"
+    },
+    {
+      "command": [
+        "id",
+        "-u"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:47:42.938763+00:00"
+    },
+    {
+      "command": [
+        "launchctl",
+        "print",
+        "gui/501/com.apple.CoreDevice.CoreDeviceService"
+      ],
+      "returnCode": 113,
+      "startedAt": "2026-06-08T15:47:42.964345+00:00"
+    },
+    {
+      "command": [
+        "launchctl",
+        "print",
+        "gui/501/com.apple.CoreDevice.remotepairingd"
+      ],
+      "returnCode": 113,
+      "startedAt": "2026-06-08T15:47:42.977204+00:00"
+    },
+    {
+      "command": [
+        "launchctl",
+        "kickstart",
+        "-k",
+        "gui/501/com.apple.CoreDevice.CoreDeviceService"
+      ],
+      "returnCode": 113,
+      "startedAt": "2026-06-08T15:48:00.595619+00:00"
+    },
+    {
+      "command": [
+        "launchctl",
+        "kickstart",
+        "-k",
+        "gui/501/com.apple.CoreDevice.remotepairingd"
+      ],
+      "returnCode": 113,
+      "startedAt": "2026-06-08T15:48:00.609009+00:00"
+    },
+    {
+      "command": [
+        "launchctl",
+        "procinfo",
+        "70416"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:48:09.603137+00:00"
+    },
+    {
+      "command": [
+        "launchctl",
+        "procinfo",
+        "70585"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:48:09.614818+00:00"
+    },
+    {
+      "command": [
+        "kill",
+        "70416"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:33.970356+00:00"
+    },
+    {
+      "command": [
+        "kill",
+        "70585"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:38.029947+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "5"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:42.015716+00:00"
+    },
+    {
+      "command": [
+        "pgrep",
+        "-fl",
+        "remotepairingd"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:58.643958+00:00"
+    },
+    {
+      "command": [
+        "pgrep",
+        "-fl",
+        "CoreDeviceService"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:58.678499+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:04.749519+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:09.550968+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:18.485008+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-08T15:49:41.775583+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "manage",
+        "pair",
+        "--device",
+        "Jose-Ramons-iPhone.coredevice.local",
+        "--timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:42.890280+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "manage",
+        "pair",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:42.983533+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "00008101-000A68811E43001E",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"setup\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"00008101-000A68811E43001E\"}",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:50:52.812890+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "8"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:51:39.314710+00:00"
+    },
+    {
+      "command": [
+        "dscacheutil",
+        "-q",
+        "host",
+        "-a",
+        "name",
+        "Jose-Ramons-iPhone.coredevice.local"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:51:47.322668+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:52:21.506819+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "25",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:52:21.546320+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:53:13.767476+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "00008101-000A68811E43001E",
+        "build/ios/iphoneos/Runner.app",
+        "--json-output",
+        "logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/device-logs/iphone-devicectl-install-current-profile.json"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:54:06.493687+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "build/ios/iphoneos/Runner.app",
+        "--json-output",
+        "logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/device-logs/iphone-devicectl-install-current-profile-coredevice.json"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:54:20.704767+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:54:39.950245+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:54:39.998283+00:00"
+    },
+    {
+      "command": [
+        "pgrep",
+        "-fl",
+        "CoreDeviceService"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:16.155813+00:00"
+    },
+    {
+      "command": [
+        "pgrep",
+        "-fl",
+        "remotepairingd"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:16.190179+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-08T15:55:16.223254+00:00"
+    },
+    {
+      "command": [
+        "kill",
+        "76173"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:29.070591+00:00"
+    },
+    {
+      "command": [
+        "kill",
+        "76190"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:34.044526+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "5"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:39.632604+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:48.645097+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "manage",
+        "pair",
+        "--device",
+        "Jose-Ramons-iPhone.coredevice.local",
+        "--timeout",
+        "10"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:56:05.364792+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:56:05.424695+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "15"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:56:17.429760+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.153:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:56:31.025902+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "6",
+        "-sS",
+        "http://192.168.178.153:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:06.742917+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.153:4762/session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:06.994631+00:00"
+    },
+    {
+      "command": [
+        "arp",
+        "-an",
+        "192.168.178.153"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:57:07.154071+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "dns-sd -B _remotepairing._tcp local & pid=$!; sleep 6; kill $pid 2>/dev/null; wait $pid 2>/dev/null || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:27.966524+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "dns-sd -B _apple-mobdev2._tcp local & pid=$!; sleep 6; kill $pid 2>/dev/null; wait $pid 2>/dev/null || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:33.993391+00:00"
+    },
+    {
+      "command": [
+        "arp",
+        "-an"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:40.024499+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A / 00008101-000A68811E43001E",
+      "kind": "iOS physical",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "Remaining unmet all-device screenshot/proof target."
+      ],
+      "os": "iOS 26.5",
+      "role": "resumed physical iPhone setup-proof recovery"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/physical-iphone-setup-screenshot-blocked.txt",
+    "video/physical-iphone-setup-video-blocked.txt",
+    "device-logs/iphone-devicectl-install-current-profile-coredevice.json",
+    "device-logs/iphone-devicectl-install-current-profile.json"
+  ],
+  "item": {
+    "slug": "physical-iphone-resumed-recovery",
+    "source": "docs/control/status-and-roadmap.md#camera-setup-and-leveling",
+    "title": "Physical iPhone resumed setup proof recovery"
+  },
+  "notes": [
+    "Scoped CoreDevice/remotepairing restart briefly recovered the iPhone to available paired and Flutter wireless visibility.",
+    "Current Profile build passed, but install failed after the iPhone returned to CoreDevice unavailable / Flutter code -27.",
+    "No physical iPhone screenshot/video captured; placeholder evidence files document the blocker."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}
