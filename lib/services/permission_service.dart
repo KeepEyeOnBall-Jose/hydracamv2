@@ -4,8 +4,13 @@ import "package:permission_handler/permission_handler.dart"
     as permission_handler;
 import "log_service.dart";
 
+typedef PermissionRequester = Future<Map<Permission, PermissionStatus>>
+    Function(List<Permission> permissions);
+
 // ignore: avoid_classes_with_only_static_members
 class PermissionService {
+  static PermissionRequester _requestPermissions = _defaultRequestPermissions;
+
   /// Requests the permissions required for initial app use.
   static Future<bool> requestAllPermissions() async {
     if (_usesNativeResourcePrompts) {
@@ -18,12 +23,9 @@ class PermissionService {
       return true;
     }
 
-    final permissions = <Permission>[
-      Permission.camera,
-      Permission.microphone,
-    ];
+    final permissions = _startupPermissionsFor(defaultTargetPlatform);
 
-    final statuses = await permissions.request();
+    final statuses = await _requestPermissions(permissions);
     final grantedPermissions = statuses.entries
         .where((entry) => entry.value.isGranted)
         .map((entry) => entry.key.toString())
@@ -45,6 +47,32 @@ class PermissionService {
     );
 
     return statuses.values.every((status) => status.isGranted);
+  }
+
+  static List<Permission> _startupPermissionsFor(TargetPlatform platform) {
+    return [
+      Permission.camera,
+      Permission.microphone,
+      if (platform == TargetPlatform.android) Permission.locationWhenInUse,
+    ];
+  }
+
+  static Future<Map<Permission, PermissionStatus>> _defaultRequestPermissions(
+    List<Permission> permissions,
+  ) {
+    return permissions.request();
+  }
+
+  @visibleForTesting
+  static void configurePermissionRequesterForTesting(
+    PermissionRequester requester,
+  ) {
+    _requestPermissions = requester;
+  }
+
+  @visibleForTesting
+  static void resetPermissionRequesterForTesting() {
+    _requestPermissions = _defaultRequestPermissions;
   }
 
   static bool get _usesNativeResourcePrompts =>

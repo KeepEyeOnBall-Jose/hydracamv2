@@ -14,6 +14,14 @@ import "../services/log_service.dart";
 import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 
+abstract class SlaveConnectionClient {
+  Stream<String> get statusStream;
+  Stream<bool> get connectionStatusStream;
+  CameraController? get cameraController;
+  void connect();
+  void disconnect();
+}
+
 /// SlaveClient - Handles the WebSocket client for slave devices.
 /// This class manages communication with the master device, sending captured media
 /// and receiving commands such as "take photo" or "start recording video".
@@ -26,7 +34,7 @@ import "../services/session_manager.dart";
 /// - Sends periodic heartbeats to maintain an active connection.
 /// - Automatically reconnects in case of a disconnection.
 
-class SlaveClient {
+class SlaveClient implements SlaveConnectionClient {
   /// The address of the WebSocket server (master device).
   final String serverAddress;
 
@@ -56,6 +64,7 @@ class SlaveClient {
       StreamController.broadcast();
 
   /// Stream of status messages for the UI to listen to.
+  @override
   Stream<String> get statusStream => _statusStreamController.stream;
 
   /// StreamController for broadcasting connection status updates to the UI.
@@ -63,6 +72,7 @@ class SlaveClient {
       StreamController.broadcast();
 
   /// Stream of connection status updates.
+  @override
   Stream<bool> get connectionStatusStream =>
       _connectionStatusStreamController.stream;
 
@@ -72,6 +82,7 @@ class SlaveClient {
   DateTime? videoEndRecordingDate;
 
   /// CameraController getter for direct access to the camera.
+  @override
   CameraController? get cameraController => _cameraService.controller;
 
   /// Callbacks for recording events.
@@ -80,6 +91,7 @@ class SlaveClient {
 
   /// Callback for scheduled tasks that typically notifies UI to show countdown.
   final Function(String command, DateTime scheduledTime)? onScheduledCommand;
+  final Future<Map<String, dynamic>?> Function()? _networkPayloadLoader;
 
   /// Constructor for `SlaveClient`.
   ///
@@ -94,7 +106,10 @@ class SlaveClient {
     Function(String)? onPhotoTaken,
     this.onRecordingStarted,
     this.onRecordingStopped,
-  }) : _cameraService = CameraServiceSingleton.instance {
+    @visibleForTesting Future<Map<String, dynamic>?> Function()?
+        networkPayloadLoader,
+  })  : _networkPayloadLoader = networkPayloadLoader,
+        _cameraService = CameraServiceSingleton.instance {
     // Reassign callback after the colon:
     _cameraService.onPhotoTaken = onPhotoTaken;
     // Listener for forced stop:
@@ -103,6 +118,7 @@ class SlaveClient {
   }
 
   /// Connects the client to the WebSocket server and initializes communication.
+  @override
   Future<void> connect() async {
     if (_isConnected) {
       LogService.instance
@@ -126,13 +142,12 @@ class SlaveClient {
       _statusStreamController.add("Connected to master at $serverAddress.");
       _connectionStatusStreamController
           .add(true); // Notify UI of connection status
-      final networkPayload = await _currentNetworkPayload();
 
-      // Send a JSON message containing the device ID after connecting
+      // Register immediately; the network snapshot follows asynchronously so
+      // role switches are not blocked by platform network probes.
       _channel?.sink.add(jsonEncode({
         "type": "deviceId",
         "deviceId": _deviceId,
-        if (networkPayload != null) "network": networkPayload,
       }));
 
       // Also ask status of session
@@ -140,6 +155,7 @@ class SlaveClient {
         "type": "getSessionStatus",
         "deviceId": _deviceId,
       }));
+      unawaited(_sendNetworkHeartbeat());
 
       LogService.instance
           .registerLog("Connected to WebSocket at $serverAddress");
@@ -472,13 +488,7 @@ class SlaveClient {
     _stopHeartbeat(); // Ensure no duplicate timers
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
       if (_isConnected) {
-        final networkPayload = await _currentNetworkPayload();
-        _channel?.sink.add(jsonEncode({
-          "type": "heartbeat",
-          "deviceId": _deviceId,
-          "timestamp": DateTime.now().toIso8601String(),
-          if (networkPayload != null) "network": networkPayload,
-        }));
+        await _sendNetworkHeartbeat();
         //LogService.instance.registerLog("Sent heartbeat to master.");
       }
     });
@@ -509,6 +519,7 @@ class SlaveClient {
     });
   }
 
+  @override
   void disconnect() {
     _channel?.sink.close();
     _channel =
@@ -522,10 +533,27 @@ class SlaveClient {
 
   Future<Map<String, dynamic>?> _currentNetworkPayload() async {
     try {
+      final loader = _networkPayloadLoader;
+      if (loader != null) {
+        return await loader();
+      }
       return (await NetworkInfoService.getCurrentSnapshot()).toJson();
     } catch (e) {
       LogService.instance.registerLog("Could not read slave network info: $e");
       return null;
     }
+  }
+
+  Future<void> _sendNetworkHeartbeat() async {
+    final networkPayload = await _currentNetworkPayload();
+    if (!_isConnected || _deviceId == null) {
+      return;
+    }
+    _channel?.sink.add(jsonEncode({
+      "type": "heartbeat",
+      "deviceId": _deviceId,
+      "timestamp": DateTime.now().toIso8601String(),
+      if (networkPayload != null) "network": networkPayload,
+    }));
   }
 }

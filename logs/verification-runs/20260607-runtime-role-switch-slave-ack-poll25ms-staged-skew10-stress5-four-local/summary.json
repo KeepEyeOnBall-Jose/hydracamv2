@@ -1,0 +1,5459 @@
+{
+  "captureTargetCount": 4,
+  "connectedClientRegistrationTimingStats": {
+    "latestClientRegistrationLagMs": {
+      "avgMs": 249.123,
+      "count": 20,
+      "maxMs": 681.012,
+      "minMs": -58.972
+    },
+    "masterServerStartLagMs": {
+      "avgMs": -18.641,
+      "count": 20,
+      "maxMs": 345.179,
+      "minMs": -336.969
+    },
+    "maxClientRegistrationAfterServerStartMs": {
+      "avgMs": 267.765,
+      "count": 20,
+      "maxMs": 357.194,
+      "minMs": 184.264
+    }
+  },
+  "elapsedSeconds": 8.118,
+  "masterHosts": {
+    "29d816ac550b7ece": "192.168.178.153",
+    "9885e6503930304946": "192.168.178.64",
+    "RF8M90QE7LX": "192.168.178.160",
+    "macos": "192.168.178.159"
+  },
+  "phaseTimingStats": {
+    "connected_clients": {
+      "avgMs": 239.845,
+      "count": 20,
+      "maxMs": 337.251,
+      "minMs": 163.162
+    },
+    "set_role": {
+      "avgMs": 161.328,
+      "count": 20,
+      "maxMs": 267.853,
+      "minMs": 63.37
+    }
+  },
+  "repeatRoleSwitchCycles": 5,
+  "roleSwitchOnly": true,
+  "rotationCount": 20,
+  "rotations": [
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:16.005952",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:16.004296",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:16.002250",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:15.825314",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:15.960830",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:15.959091",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:15.693310",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 273.289,
+          "endedAt": "2026-06-07T23:17:16.263348",
+          "startedAt": "2026-06-07T23:17:15.989294"
+        },
+        "set_role": {
+          "durationMs": 233.714,
+          "endedAt": "2026-06-07T23:17:15.988996",
+          "startedAt": "2026-06-07T23:17:15.755271"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 233.714,
+        "maxRequestDurationMs": 176.961,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.526,
+        "requestEndSkewMs": 56.593,
+        "requestStartSkewMs": 196.481,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 176.961,
+            "endOffsetMs": 176.965,
+            "endedAt": "2026-06-07T23:17:15.932270",
+            "startOffsetMs": 0.004,
+            "startedAt": "2026-06-07T23:17:15.755290"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 37.598,
+            "endOffsetMs": 233.558,
+            "endedAt": "2026-06-07T23:17:15.988847",
+            "startOffsetMs": 195.959,
+            "startedAt": "2026-06-07T23:17:15.951235"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 28.245,
+            "endOffsetMs": 224.529,
+            "endedAt": "2026-06-07T23:17:15.979820",
+            "startOffsetMs": 196.284,
+            "startedAt": "2026-06-07T23:17:15.951566"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 3.39,
+            "endOffsetMs": 199.875,
+            "endedAt": "2026-06-07T23:17:15.955166",
+            "startOffsetMs": 196.485,
+            "startedAt": "2026-06-07T23:17:15.951767"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:15.755271"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:16.905199",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:16.902950",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:16.914352",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:16.702904",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:16.915762",
+            "network": {
+              "bssid": "02:00:00:00:00:00",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.160",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:16.823169",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:16.612414",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 233.679,
+          "endedAt": "2026-06-07T23:17:16.769203",
+          "startedAt": "2026-06-07T23:17:16.535517"
+        },
+        "set_role": {
+          "durationMs": 267.853,
+          "endedAt": "2026-06-07T23:17:16.535103",
+          "startedAt": "2026-06-07T23:17:16.267235"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 267.853,
+        "maxRequestDurationMs": 188.168,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 1.006,
+        "requestEndSkewMs": 79.49,
+        "requestStartSkewMs": 209.827,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 58.837,
+            "endOffsetMs": 267.664,
+            "endedAt": "2026-06-07T23:17:16.534931",
+            "startOffsetMs": 208.827,
+            "startedAt": "2026-06-07T23:17:16.476077"
+          },
+          "9885e6503930304946": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 188.168,
+            "endOffsetMs": 188.174,
+            "endedAt": "2026-06-07T23:17:16.455448",
+            "startOffsetMs": 0.006,
+            "startedAt": "2026-06-07T23:17:16.267268"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 29.978,
+            "endOffsetMs": 239.288,
+            "endedAt": "2026-06-07T23:17:16.506558",
+            "startOffsetMs": 209.31,
+            "startedAt": "2026-06-07T23:17:16.476566"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 7.537,
+            "endOffsetMs": 217.37,
+            "endedAt": "2026-06-07T23:17:16.484637",
+            "startOffsetMs": 209.833,
+            "startedAt": "2026-06-07T23:17:16.477087"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:16.267235"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:16.735082",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:16.735082",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:16.714125",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:16.702266",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:16.718861",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:16.571955",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:16.467697",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 252.872,
+          "endedAt": "2026-06-07T23:17:17.225892",
+          "startedAt": "2026-06-07T23:17:16.973005"
+        },
+        "set_role": {
+          "durationMs": 201.983,
+          "endedAt": "2026-06-07T23:17:16.972588",
+          "startedAt": "2026-06-07T23:17:16.770593"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 201.983,
+        "maxRequestDurationMs": 131.583,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.512,
+        "requestEndSkewMs": 70.203,
+        "requestStartSkewMs": 147.449,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 29.659,
+            "endOffsetMs": 176.6,
+            "endedAt": "2026-06-07T23:17:16.947205",
+            "startOffsetMs": 146.941,
+            "startedAt": "2026-06-07T23:17:16.917532"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 54.54,
+            "endOffsetMs": 201.79,
+            "endedAt": "2026-06-07T23:17:16.972394",
+            "startOffsetMs": 147.25,
+            "startedAt": "2026-06-07T23:17:16.917849"
+          },
+          "RF8M90QE7LX": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 131.583,
+            "endOffsetMs": 131.587,
+            "endedAt": "2026-06-07T23:17:16.902210",
+            "startOffsetMs": 0.004,
+            "startedAt": "2026-06-07T23:17:16.770604"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 6.907,
+            "endOffsetMs": 154.36,
+            "endedAt": "2026-06-07T23:17:16.924964",
+            "startOffsetMs": 147.453,
+            "startedAt": "2026-06-07T23:17:16.918049"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:16.770593"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:17.517623",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:17.517623",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:17.502730",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:17.501971",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:17.529607",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:17.529607",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:17.261878",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 243.401,
+          "endedAt": "2026-06-07T23:17:17.549629",
+          "startedAt": "2026-06-07T23:17:17.306222"
+        },
+        "set_role": {
+          "durationMs": 75.639,
+          "endedAt": "2026-06-07T23:17:17.305587",
+          "startedAt": "2026-06-07T23:17:17.229931"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 75.639,
+        "maxRequestDurationMs": 40.529,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.355,
+        "requestEndSkewMs": 43.642,
+        "requestStartSkewMs": 34.914,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 15.452,
+            "endOffsetMs": 50.017,
+            "endedAt": "2026-06-07T23:17:17.279986",
+            "startOffsetMs": 34.565,
+            "startedAt": "2026-06-07T23:17:17.264525"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 16.607,
+            "endOffsetMs": 51.386,
+            "endedAt": "2026-06-07T23:17:17.281354",
+            "startOffsetMs": 34.78,
+            "startedAt": "2026-06-07T23:17:17.264744"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 40.529,
+            "endOffsetMs": 75.449,
+            "endedAt": "2026-06-07T23:17:17.305417",
+            "startOffsetMs": 34.92,
+            "startedAt": "2026-06-07T23:17:17.264883"
+          },
+          "macos": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 31.801,
+            "endOffsetMs": 31.807,
+            "endedAt": "2026-06-07T23:17:17.261777",
+            "startOffsetMs": 0.006,
+            "startedAt": "2026-06-07T23:17:17.229971"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:17.229931"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:17.673623",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:17.673623",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:17.558915",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:17.558915",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:17.627649",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:17.627649",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:17.444286",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 192.236,
+          "endedAt": "2026-06-07T23:17:17.926015",
+          "startedAt": "2026-06-07T23:17:17.733772"
+        },
+        "set_role": {
+          "durationMs": 182.46,
+          "endedAt": "2026-06-07T23:17:17.733141",
+          "startedAt": "2026-06-07T23:17:17.550676"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 182.46,
+        "maxRequestDurationMs": 131.296,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.384,
+        "requestEndSkewMs": 50.95,
+        "requestStartSkewMs": 158.825,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 131.296,
+            "endOffsetMs": 131.298,
+            "endedAt": "2026-06-07T23:17:17.681986",
+            "startOffsetMs": 0.002,
+            "startedAt": "2026-06-07T23:17:17.550683"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 16.615,
+            "endOffsetMs": 175.058,
+            "endedAt": "2026-06-07T23:17:17.725742",
+            "startOffsetMs": 158.443,
+            "startedAt": "2026-06-07T23:17:17.709114"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 23.571,
+            "endOffsetMs": 182.248,
+            "endedAt": "2026-06-07T23:17:17.732933",
+            "startOffsetMs": 158.677,
+            "startedAt": "2026-06-07T23:17:17.709357"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 2.436,
+            "endOffsetMs": 161.263,
+            "endedAt": "2026-06-07T23:17:17.711947",
+            "startOffsetMs": 158.827,
+            "startedAt": "2026-06-07T23:17:17.709508"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:17.550676"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:18.611349",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:18.608711",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:18.564849",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:18.351497",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:18.556931",
+            "network": {
+              "bssid": "02:00:00:00:00:00",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.160",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:18.470471",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:18.251517",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 337.251,
+          "endedAt": "2026-06-07T23:17:18.471216",
+          "startedAt": "2026-06-07T23:17:18.133950"
+        },
+        "set_role": {
+          "durationMs": 205.437,
+          "endedAt": "2026-06-07T23:17:18.133143",
+          "startedAt": "2026-06-07T23:17:17.927699"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 205.437,
+        "maxRequestDurationMs": 163.378,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.855,
+        "requestEndSkewMs": 41.721,
+        "requestStartSkewMs": 179.093,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 22.237,
+            "endOffsetMs": 200.479,
+            "endedAt": "2026-06-07T23:17:18.128197",
+            "startOffsetMs": 178.242,
+            "startedAt": "2026-06-07T23:17:18.105932"
+          },
+          "9885e6503930304946": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 163.378,
+            "endOffsetMs": 163.382,
+            "endedAt": "2026-06-07T23:17:18.091100",
+            "startOffsetMs": 0.004,
+            "startedAt": "2026-06-07T23:17:17.927712"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 26.306,
+            "endOffsetMs": 205.103,
+            "endedAt": "2026-06-07T23:17:18.132816",
+            "startOffsetMs": 178.797,
+            "startedAt": "2026-06-07T23:17:18.106500"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 5.961,
+            "endOffsetMs": 185.058,
+            "endedAt": "2026-06-07T23:17:18.112771",
+            "startOffsetMs": 179.097,
+            "startedAt": "2026-06-07T23:17:18.106801"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:17.927699"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:18.472680",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:18.471732",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:18.392375",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:18.389576",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:18.473532",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:18.284527",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:18.182259",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 221.563,
+          "endedAt": "2026-06-07T23:17:18.916765",
+          "startedAt": "2026-06-07T23:17:18.695176"
+        },
+        "set_role": {
+          "durationMs": 218.763,
+          "endedAt": "2026-06-07T23:17:18.694815",
+          "startedAt": "2026-06-07T23:17:18.476038"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 218.763,
+        "maxRequestDurationMs": 138.771,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 1.928,
+        "requestEndSkewMs": 79.78,
+        "requestStartSkewMs": 160.343,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 24.247,
+            "endOffsetMs": 182.669,
+            "endedAt": "2026-06-07T23:17:18.658739",
+            "startOffsetMs": 158.422,
+            "startedAt": "2026-06-07T23:17:18.634473"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 58.588,
+            "endOffsetMs": 218.558,
+            "endedAt": "2026-06-07T23:17:18.694625",
+            "startOffsetMs": 159.97,
+            "startedAt": "2026-06-07T23:17:18.636022"
+          },
+          "RF8M90QE7LX": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 138.771,
+            "endOffsetMs": 138.778,
+            "endedAt": "2026-06-07T23:17:18.614854",
+            "startOffsetMs": 0.007,
+            "startedAt": "2026-06-07T23:17:18.476069"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 8.52,
+            "endOffsetMs": 168.87,
+            "endedAt": "2026-06-07T23:17:18.644940",
+            "startOffsetMs": 160.35,
+            "startedAt": "2026-06-07T23:17:18.636407"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:18.476038"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:19.122010",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.122010",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:19.148522",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.148522",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:19.135556",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.135556",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:18.964258",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 163.162,
+          "endedAt": "2026-06-07T23:17:19.164700",
+          "startedAt": "2026-06-07T23:17:19.001532"
+        },
+        "set_role": {
+          "durationMs": 80.67,
+          "endedAt": "2026-06-07T23:17:19.001030",
+          "startedAt": "2026-06-07T23:17:18.920347"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 80.67,
+        "maxRequestDurationMs": 43.722,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.379,
+        "requestEndSkewMs": 36.737,
+        "requestStartSkewMs": 46.738,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 22.315,
+            "endOffsetMs": 68.68,
+            "endedAt": "2026-06-07T23:17:18.989052",
+            "startOffsetMs": 46.365,
+            "startedAt": "2026-06-07T23:17:18.966730"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 12.45,
+            "endOffsetMs": 59.018,
+            "endedAt": "2026-06-07T23:17:18.979391",
+            "startOffsetMs": 46.568,
+            "startedAt": "2026-06-07T23:17:18.966936"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 33.721,
+            "endOffsetMs": 80.465,
+            "endedAt": "2026-06-07T23:17:19.000837",
+            "startOffsetMs": 46.744,
+            "startedAt": "2026-06-07T23:17:18.967111"
+          },
+          "macos": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 43.722,
+            "endOffsetMs": 43.728,
+            "endedAt": "2026-06-07T23:17:18.964102",
+            "startOffsetMs": 0.006,
+            "startedAt": "2026-06-07T23:17:18.920375"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:18.920347"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:19.296723",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.64",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.273882",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:19.160490",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.160490",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:19.288033",
+            "network": {
+              "bssid": "02:00:00:00:00:00",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.160",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.283705",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:19.021862",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 237.349,
+          "endedAt": "2026-06-07T23:17:19.549825",
+          "startedAt": "2026-06-07T23:17:19.312467"
+        },
+        "set_role": {
+          "durationMs": 146.189,
+          "endedAt": "2026-06-07T23:17:19.311926",
+          "startedAt": "2026-06-07T23:17:19.165733"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 146.189,
+        "maxRequestDurationMs": 94.078,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.364,
+        "requestEndSkewMs": 51.859,
+        "requestStartSkewMs": 124.895,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 94.078,
+            "endOffsetMs": 94.08,
+            "endedAt": "2026-06-07T23:17:19.259825",
+            "startOffsetMs": 0.002,
+            "startedAt": "2026-06-07T23:17:19.165741"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 21.406,
+            "endOffsetMs": 145.939,
+            "endedAt": "2026-06-07T23:17:19.311680",
+            "startOffsetMs": 124.533,
+            "startedAt": "2026-06-07T23:17:19.290263"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 16.283,
+            "endOffsetMs": 141.033,
+            "endedAt": "2026-06-07T23:17:19.306777",
+            "startOffsetMs": 124.75,
+            "startedAt": "2026-06-07T23:17:19.290487"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 2.2,
+            "endOffsetMs": 127.098,
+            "endedAt": "2026-06-07T23:17:19.292838",
+            "startOffsetMs": 124.897,
+            "startedAt": "2026-06-07T23:17:19.290635"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:19.165733"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:20.205622",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:20.137169",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:20.150603",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:19.976428",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:20.204126",
+            "network": {
+              "bssid": "02:00:00:00:00:00",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.160",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:20.201122",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:19.894441",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 281.877,
+          "endedAt": "2026-06-07T23:17:20.059888",
+          "startedAt": "2026-06-07T23:17:19.777996"
+        },
+        "set_role": {
+          "durationMs": 225.32,
+          "endedAt": "2026-06-07T23:17:19.777390",
+          "startedAt": "2026-06-07T23:17:19.552057"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 225.32,
+        "maxRequestDurationMs": 183.065,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 1.067,
+        "requestEndSkewMs": 42.044,
+        "requestStartSkewMs": 197.114,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 27.468,
+            "endOffsetMs": 223.52,
+            "endedAt": "2026-06-07T23:17:19.775602",
+            "startOffsetMs": 196.052,
+            "startedAt": "2026-06-07T23:17:19.748115"
+          },
+          "9885e6503930304946": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 183.065,
+            "endOffsetMs": 183.07,
+            "endedAt": "2026-06-07T23:17:19.735153",
+            "startOffsetMs": 0.005,
+            "startedAt": "2026-06-07T23:17:19.552081"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 28.649,
+            "endOffsetMs": 225.114,
+            "endedAt": "2026-06-07T23:17:19.777193",
+            "startOffsetMs": 196.465,
+            "startedAt": "2026-06-07T23:17:19.748532"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 3.861,
+            "endOffsetMs": 200.981,
+            "endedAt": "2026-06-07T23:17:19.753061",
+            "startOffsetMs": 197.119,
+            "startedAt": "2026-06-07T23:17:19.749186"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:19.552057"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:20.076093",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.076093",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:20.046756",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:19.965969",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:20.079153",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:19.859188",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:19.750765",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 254.875,
+          "endedAt": "2026-06-07T23:17:20.518702",
+          "startedAt": "2026-06-07T23:17:20.263821"
+        },
+        "set_role": {
+          "durationMs": 199.167,
+          "endedAt": "2026-06-07T23:17:20.263453",
+          "startedAt": "2026-06-07T23:17:20.064270"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 199.167,
+        "maxRequestDurationMs": 117.473,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.785,
+        "requestEndSkewMs": 81.519,
+        "requestStartSkewMs": 143.778,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 24.62,
+            "endOffsetMs": 167.619,
+            "endedAt": "2026-06-07T23:17:20.231923",
+            "startOffsetMs": 142.999,
+            "startedAt": "2026-06-07T23:17:20.207283"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 55.564,
+            "endOffsetMs": 198.999,
+            "endedAt": "2026-06-07T23:17:20.263302",
+            "startOffsetMs": 143.435,
+            "startedAt": "2026-06-07T23:17:20.207726"
+          },
+          "RF8M90QE7LX": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 117.473,
+            "endOffsetMs": 117.48,
+            "endedAt": "2026-06-07T23:17:20.181789",
+            "startOffsetMs": 0.006,
+            "startedAt": "2026-06-07T23:17:20.064304"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 8.557,
+            "endOffsetMs": 152.341,
+            "endedAt": "2026-06-07T23:17:20.216645",
+            "startOffsetMs": 143.784,
+            "startedAt": "2026-06-07T23:17:20.208074"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:20.064270"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:20.838457",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.64",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.738941",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:20.795321",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.723270",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:20.826730",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.826730",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:20.546267",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 268.373,
+          "endedAt": "2026-06-07T23:17:20.853094",
+          "startedAt": "2026-06-07T23:17:20.584713"
+        },
+        "set_role": {
+          "durationMs": 63.37,
+          "endedAt": "2026-06-07T23:17:20.584083",
+          "startedAt": "2026-06-07T23:17:20.520698"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 63.37,
+        "maxRequestDurationMs": 34.926,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.388,
+        "requestEndSkewMs": 37.793,
+        "requestStartSkewMs": 28.404,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 19.374,
+            "endOffsetMs": 47.399,
+            "endedAt": "2026-06-07T23:17:20.568124",
+            "startOffsetMs": 28.025,
+            "startedAt": "2026-06-07T23:17:20.548742"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 34.926,
+            "endOffsetMs": 63.162,
+            "endedAt": "2026-06-07T23:17:20.583886",
+            "startOffsetMs": 28.236,
+            "startedAt": "2026-06-07T23:17:20.548953"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 20.26,
+            "endOffsetMs": 48.673,
+            "endedAt": "2026-06-07T23:17:20.569397",
+            "startOffsetMs": 28.413,
+            "startedAt": "2026-06-07T23:17:20.549132"
+          },
+          "macos": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 25.36,
+            "endOffsetMs": 25.369,
+            "endedAt": "2026-06-07T23:17:20.546096",
+            "startOffsetMs": 0.009,
+            "startedAt": "2026-06-07T23:17:20.520727"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:20.520698"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:20.948419",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.948419",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:20.966751",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.966751",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:20.956806",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:20.956806",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:20.717890",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 247.9,
+          "endedAt": "2026-06-07T23:17:21.259074",
+          "startedAt": "2026-06-07T23:17:21.011166"
+        },
+        "set_role": {
+          "durationMs": 156.192,
+          "endedAt": "2026-06-07T23:17:21.010656",
+          "startedAt": "2026-06-07T23:17:20.854459"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 156.192,
+        "maxRequestDurationMs": 99.21,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.33,
+        "requestEndSkewMs": 56.808,
+        "requestStartSkewMs": 137.788,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 99.21,
+            "endOffsetMs": 99.213,
+            "endedAt": "2026-06-07T23:17:20.953683",
+            "startOffsetMs": 0.003,
+            "startedAt": "2026-06-07T23:17:20.854470"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 18.56,
+            "endOffsetMs": 156.021,
+            "endedAt": "2026-06-07T23:17:21.010489",
+            "startOffsetMs": 137.461,
+            "startedAt": "2026-06-07T23:17:20.991920"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 15.42,
+            "endOffsetMs": 153.057,
+            "endedAt": "2026-06-07T23:17:21.007526",
+            "startOffsetMs": 137.637,
+            "startedAt": "2026-06-07T23:17:20.992102"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 1.781,
+            "endOffsetMs": 139.572,
+            "endedAt": "2026-06-07T23:17:20.994041",
+            "startOffsetMs": 137.791,
+            "startedAt": "2026-06-07T23:17:20.992257"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:20.854459"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:21.789190",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:21.787379",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:21.776184",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:21.636520",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:21.760020",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:21.760020",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:21.549863",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 215.282,
+          "endedAt": "2026-06-07T23:17:21.647417",
+          "startedAt": "2026-06-07T23:17:21.432122"
+        },
+        "set_role": {
+          "durationMs": 170.594,
+          "endedAt": "2026-06-07T23:17:21.431443",
+          "startedAt": "2026-06-07T23:17:21.260841"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 170.594,
+        "maxRequestDurationMs": 130.13,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.85,
+        "requestEndSkewMs": 40.234,
+        "requestStartSkewMs": 146.164,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 21.225,
+            "endOffsetMs": 166.544,
+            "endedAt": "2026-06-07T23:17:21.427402",
+            "startOffsetMs": 145.318,
+            "startedAt": "2026-06-07T23:17:21.406153"
+          },
+          "9885e6503930304946": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 130.13,
+            "endOffsetMs": 130.134,
+            "endedAt": "2026-06-07T23:17:21.390997",
+            "startOffsetMs": 0.004,
+            "startedAt": "2026-06-07T23:17:21.260856"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 24.565,
+            "endOffsetMs": 170.368,
+            "endedAt": "2026-06-07T23:17:21.431225",
+            "startOffsetMs": 145.803,
+            "startedAt": "2026-06-07T23:17:21.406648"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 6.917,
+            "endOffsetMs": 153.085,
+            "endedAt": "2026-06-07T23:17:21.413943",
+            "startOffsetMs": 146.168,
+            "startedAt": "2026-06-07T23:17:21.407016"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:21.260841"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:21.592393",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:21.590949",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:21.498955",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:21.495252",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:21.569009",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:21.390173",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:21.312952",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 292.985,
+          "endedAt": "2026-06-07T23:17:22.087572",
+          "startedAt": "2026-06-07T23:17:21.794573"
+        },
+        "set_role": {
+          "durationMs": 144.154,
+          "endedAt": "2026-06-07T23:17:21.794088",
+          "startedAt": "2026-06-07T23:17:21.649921"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 144.154,
+        "maxRequestDurationMs": 96.615,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.571,
+        "requestEndSkewMs": 47.303,
+        "requestStartSkewMs": 116.148,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 15.936,
+            "endOffsetMs": 131.519,
+            "endedAt": "2026-06-07T23:17:21.781468",
+            "startOffsetMs": 115.582,
+            "startedAt": "2026-06-07T23:17:21.765511"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 28.0,
+            "endOffsetMs": 143.923,
+            "endedAt": "2026-06-07T23:17:21.793872",
+            "startOffsetMs": 115.923,
+            "startedAt": "2026-06-07T23:17:21.765862"
+          },
+          "RF8M90QE7LX": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 96.615,
+            "endOffsetMs": 96.62,
+            "endedAt": "2026-06-07T23:17:21.746572",
+            "startOffsetMs": 0.005,
+            "startedAt": "2026-06-07T23:17:21.649949"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 4.242,
+            "endOffsetMs": 120.395,
+            "endedAt": "2026-06-07T23:17:21.770345",
+            "startOffsetMs": 116.153,
+            "startedAt": "2026-06-07T23:17:21.766093"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:21.649921"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:22.288410",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:22.288410",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:22.338943",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:22.330281",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:22.292022",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:22.292022",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:22.133224",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 184.804,
+          "endedAt": "2026-06-07T23:17:22.353553",
+          "startedAt": "2026-06-07T23:17:22.168742"
+        },
+        "set_role": {
+          "durationMs": 77.295,
+          "endedAt": "2026-06-07T23:17:22.168279",
+          "startedAt": "2026-06-07T23:17:22.090972"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 77.295,
+        "maxRequestDurationMs": 41.888,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.347,
+        "requestEndSkewMs": 35.24,
+        "requestStartSkewMs": 44.255,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 30.82,
+            "endOffsetMs": 74.733,
+            "endedAt": "2026-06-07T23:17:22.165730",
+            "startOffsetMs": 43.913,
+            "startedAt": "2026-06-07T23:17:22.134902"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 15.103,
+            "endOffsetMs": 59.182,
+            "endedAt": "2026-06-07T23:17:22.150179",
+            "startOffsetMs": 44.079,
+            "startedAt": "2026-06-07T23:17:22.135069"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 32.874,
+            "endOffsetMs": 77.133,
+            "endedAt": "2026-06-07T23:17:22.168129",
+            "startOffsetMs": 44.26,
+            "startedAt": "2026-06-07T23:17:22.135250"
+          },
+          "macos": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 41.888,
+            "endOffsetMs": 41.893,
+            "endedAt": "2026-06-07T23:17:22.132894",
+            "startOffsetMs": 0.005,
+            "startedAt": "2026-06-07T23:17:22.090999"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:22.090972"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:22.446698",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:22.445235",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:22.326024",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:22.326024",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:22.402745",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:22.400923",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:22.223925",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 187.139,
+          "endedAt": "2026-06-07T23:17:22.695460",
+          "startedAt": "2026-06-07T23:17:22.508311"
+        },
+        "set_role": {
+          "durationMs": 152.921,
+          "endedAt": "2026-06-07T23:17:22.507934",
+          "startedAt": "2026-06-07T23:17:22.355008"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 152.921,
+        "maxRequestDurationMs": 106.363,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.415,
+        "requestEndSkewMs": 46.404,
+        "requestStartSkewMs": 132.564,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 106.363,
+            "endOffsetMs": 106.366,
+            "endedAt": "2026-06-07T23:17:22.461387",
+            "startOffsetMs": 0.003,
+            "startedAt": "2026-06-07T23:17:22.355019"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 20.618,
+            "endOffsetMs": 152.77,
+            "endedAt": "2026-06-07T23:17:22.507788",
+            "startOffsetMs": 132.152,
+            "startedAt": "2026-06-07T23:17:22.487161"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 19.243,
+            "endOffsetMs": 151.614,
+            "endedAt": "2026-06-07T23:17:22.506634",
+            "startOffsetMs": 132.371,
+            "startedAt": "2026-06-07T23:17:22.487383"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 1.871,
+            "endOffsetMs": 134.438,
+            "endedAt": "2026-06-07T23:17:22.489456",
+            "startOffsetMs": 132.567,
+            "startedAt": "2026-06-07T23:17:22.487581"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:22.355008"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:23.199893",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:23.198307",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:23.245696",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:23.073185",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:23.248631",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:23.246979",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:22.990492",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 226.704,
+          "endedAt": "2026-06-07T23:17:23.103174",
+          "startedAt": "2026-06-07T23:17:22.876455"
+        },
+        "set_role": {
+          "durationMs": 178.036,
+          "endedAt": "2026-06-07T23:17:22.875736",
+          "startedAt": "2026-06-07T23:17:22.697686"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 178.036,
+        "maxRequestDurationMs": 130.717,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.486,
+        "requestEndSkewMs": 47.074,
+        "requestStartSkewMs": 149.97,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 28.306,
+            "endOffsetMs": 177.796,
+            "endedAt": "2026-06-07T23:17:22.875505",
+            "startOffsetMs": 149.489,
+            "startedAt": "2026-06-07T23:17:22.847185"
+          },
+          "9885e6503930304946": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 130.717,
+            "endOffsetMs": 130.722,
+            "endedAt": "2026-06-07T23:17:22.828434",
+            "startOffsetMs": 0.005,
+            "startedAt": "2026-06-07T23:17:22.697711"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 25.871,
+            "endOffsetMs": 175.678,
+            "endedAt": "2026-06-07T23:17:22.873390",
+            "startOffsetMs": 149.807,
+            "startedAt": "2026-06-07T23:17:22.847510"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 2.977,
+            "endOffsetMs": 152.952,
+            "endedAt": "2026-06-07T23:17:22.850662",
+            "startOffsetMs": 149.975,
+            "startedAt": "2026-06-07T23:17:22.847681"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:22.697686"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "a69a6f5c-c397-4072-9faf-4502d9608be6"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:23.120508",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.64",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:23.119032",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:23.124572",
+            "network": {
+              "bssid": "2c:91:ab:8b:a3:07",
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.153",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": "FRITZ!Box 6591 Cable TZ",
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": []
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:23.068215",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "a69a6f5c-c397-4072-9faf-4502d9608be6",
+            "lastSeen": "2026-06-07T23:17:23.121156",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.159",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable on this platform or permission state."
+              ]
+            },
+            "networkStatus": "ready",
+            "networkStatusLabel": "Ready",
+            "registeredAt": "2026-06-07T23:17:22.889609",
+            "remoteIp": "192.168.178.159",
+            "shortDeviceId": "a69a6f5c"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:22.794049",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 279.825,
+          "endedAt": "2026-06-07T23:17:23.566263",
+          "startedAt": "2026-06-07T23:17:23.286425"
+        },
+        "set_role": {
+          "durationMs": 179.187,
+          "endedAt": "2026-06-07T23:17:23.286013",
+          "startedAt": "2026-06-07T23:17:23.106810"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 179.187,
+        "maxRequestDurationMs": 121.692,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.865,
+        "requestEndSkewMs": 57.257,
+        "requestStartSkewMs": 134.967,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 28.58,
+            "endOffsetMs": 162.691,
+            "endedAt": "2026-06-07T23:17:23.269564",
+            "startOffsetMs": 134.111,
+            "startedAt": "2026-06-07T23:17:23.240964"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 44.379,
+            "endOffsetMs": 178.959,
+            "endedAt": "2026-06-07T23:17:23.285831",
+            "startOffsetMs": 134.581,
+            "startedAt": "2026-06-07T23:17:23.241439"
+          },
+          "RF8M90QE7LX": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 121.692,
+            "endOffsetMs": 121.702,
+            "endedAt": "2026-06-07T23:17:23.228580",
+            "startOffsetMs": 0.009,
+            "startedAt": "2026-06-07T23:17:23.106873"
+          },
+          "macos": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 7.683,
+            "endOffsetMs": 142.659,
+            "endedAt": "2026-06-07T23:17:23.249532",
+            "startOffsetMs": 134.976,
+            "startedAt": "2026-06-07T23:17:23.241836"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:23.106810"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 3,
+        "connectedClientIds": [
+          "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+          "87df7992-736e-403b-b803-d80b10efd0b1",
+          "b59b5fe8-6a61-4387-8617-181f3a5111cd"
+        ],
+        "connectedClients": [
+          {
+            "deviceId": "27e50aac-36e8-44d0-91f7-970bdbc526b5",
+            "lastSeen": "2026-06-07T23:17:23.819631",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:23.819631",
+            "remoteIp": "192.168.178.64",
+            "shortDeviceId": "27e50aac"
+          },
+          {
+            "deviceId": "87df7992-736e-403b-b803-d80b10efd0b1",
+            "lastSeen": "2026-06-07T23:17:23.805263",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:23.805263",
+            "remoteIp": "192.168.178.153",
+            "shortDeviceId": "87df7992"
+          },
+          {
+            "deviceId": "b59b5fe8-6a61-4387-8617-181f3a5111cd",
+            "lastSeen": "2026-06-07T23:17:23.810754",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network unknown",
+            "registeredAt": "2026-06-07T23:17:23.810754",
+            "remoteIp": "192.168.178.160",
+            "shortDeviceId": "b59b5fe8"
+          }
+        ],
+        "masterServerStartedAt": "2026-06-07T23:17:23.599766",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 202.328,
+          "endedAt": "2026-06-07T23:17:23.840226",
+          "startedAt": "2026-06-07T23:17:23.637887"
+        },
+        "set_role": {
+          "durationMs": 67.621,
+          "endedAt": "2026-06-07T23:17:23.637335",
+          "startedAt": "2026-06-07T23:17:23.569698"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 67.621,
+        "maxRequestDurationMs": 35.625,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.407,
+        "requestEndSkewMs": 37.646,
+        "requestStartSkewMs": 31.988,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 17.459,
+            "endOffsetMs": 49.046,
+            "endedAt": "2026-06-07T23:17:23.618774",
+            "startOffsetMs": 31.587,
+            "startedAt": "2026-06-07T23:17:23.601307"
+          },
+          "9885e6503930304946": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 35.625,
+            "endOffsetMs": 67.422,
+            "endedAt": "2026-06-07T23:17:23.637150",
+            "startOffsetMs": 31.796,
+            "startedAt": "2026-06-07T23:17:23.601519"
+          },
+          "RF8M90QE7LX": {
+            "batch": "slaves",
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 16.846,
+            "endOffsetMs": 48.84,
+            "endedAt": "2026-06-07T23:17:23.618568",
+            "startOffsetMs": 31.994,
+            "startedAt": "2026-06-07T23:17:23.601717"
+          },
+          "macos": {
+            "batch": "master",
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "durationMs": 29.77,
+            "endOffsetMs": 29.776,
+            "endedAt": "2026-06-07T23:17:23.599508",
+            "startOffsetMs": 0.006,
+            "startedAt": "2026-06-07T23:17:23.569730"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T23:17:23.569698"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4762",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "runtimeRoleSwitchTimingStats": {
+    "maxRequestDurationMs": {
+      "avgMs": 110.309,
+      "count": 20,
+      "maxMs": 188.168,
+      "minMs": 34.926
+    },
+    "parallelRequestStartSkewMs": {
+      "avgMs": 0.641,
+      "count": 20,
+      "maxMs": 1.928,
+      "minMs": 0.33
+    },
+    "requestEndSkewMs": {
+      "avgMs": 52.015,
+      "count": 20,
+      "maxMs": 81.519,
+      "minMs": 35.24
+    },
+    "requestStartSkewMs": {
+      "avgMs": 126.085,
+      "count": 20,
+      "maxMs": 209.827,
+      "minMs": 28.404
+    }
+  },
+  "sharedBarrierPerRotation": true,
+  "stageSlavesAfterMasterReady": true,
+  "startedAt": "2026-06-07T23:17:15.723010",
+  "status": "passed",
+  "targetCount": 4,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6400",
+      "captureEnabled": true,
+      "deviceId": "29d816ac550b7ece",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G960F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 10 (API 29)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6401",
+      "captureEnabled": true,
+      "deviceId": "9885e6503930304946",
+      "expectedResult": "capture",
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "label": "SM G935F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 8.0.0 (API 26)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6402",
+      "captureEnabled": true,
+      "deviceId": "RF8M90QE7LX",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G970F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12 (API 31)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "captureEnabled": true,
+      "deviceId": "macos",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "macOS (desktop)",
+      "lens": "autoBack",
+      "platform": "macos",
+      "profile": "standard1080p30",
+      "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+    }
+  ]
+}

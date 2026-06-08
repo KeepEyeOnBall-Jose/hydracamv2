@@ -1,0 +1,61 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "00008101-000A68811E43001E",
+      "--terminate-existing",
+      "--environment-variables",
+      "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"00008101-000A68811E43001E\"}",
+      "com.vectorblanco.hydracam.dev",
+      "--json-output",
+      "logs/verification-runs/20260607-runtime-role-switch-iphone-profile-launch-config-retry-scan/launch.json"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.31"
+  },
+  "result" : {
+    "deviceIdentifier" : "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+    "launchOptions" : {
+      "activatedWhenStarted" : true,
+      "arguments" : [
+
+      ],
+      "environmentVariables" : {
+        "HYDRACAM_AUTOMATION_ROLE" : "standby",
+        "HYDRACAM_AUTOMATION_TARGET_ID" : "00008101-000A68811E43001E",
+        "TERM" : "dumb"
+      },
+      "platformSpecificOptions" : {
+
+      },
+      "startStopped" : false,
+      "terminateExistingInstances" : true,
+      "user" : {
+        "active" : true
+      }
+    },
+    "process" : {
+      "auditToken" : [
+        4294967295,
+        501,
+        501,
+        501,
+        501,
+        4764,
+        0,
+        13800
+      ],
+      "executable" : "file:///private/var/containers/Bundle/Application/5FDA1DAB-3229-4B55-89C4-8966A063EFF3/Runner.app/Runner",
+      "processIdentifier" : 4764
+    }
+  }
+}

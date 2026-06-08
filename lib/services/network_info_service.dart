@@ -21,7 +21,7 @@ extension ConnectedDeviceNetworkStatusLabel on ConnectedDeviceNetworkStatus {
       case ConnectedDeviceNetworkStatus.ready:
         return "Ready";
       case ConnectedDeviceNetworkStatus.unknown:
-        return "Network unknown";
+        return "Network details pending";
       case ConnectedDeviceNetworkStatus.wrongNetwork:
         return "Wrong network";
     }
@@ -271,22 +271,48 @@ class NetworkInfoService {
   static Future<String> getNetworkType() async {
     try {
       final connectivityResults = await _connectivity.checkConnectivity();
-      // connectivity_plus now returns List<ConnectivityResult>
       if (connectivityResults.contains(ConnectivityResult.wifi)) {
         final ssid = await getSSID();
-        return ssid != null ? "Wi-Fi ($ssid)" : "Wi-Fi (Unknown)";
-      } else if (connectivityResults.contains(ConnectivityResult.mobile)) {
-        return "Mobile Data";
-      } else if (connectivityResults.contains(ConnectivityResult.none) ||
-          connectivityResults.isEmpty) {
-        return "No Connection";
-      } else {
-        return "Connected";
+        return formatNetworkType(connectivityResults, ssid: ssid);
       }
+      return formatNetworkType(connectivityResults);
     } catch (e) {
       LogService.instance.registerLog("Error determining network type: $e");
       return "Unknown";
     }
+  }
+
+  static String formatNetworkType(
+    Iterable<ConnectivityResult> connectivityResults, {
+    String? ssid,
+  }) {
+    final results = connectivityResults.toList();
+    if (results.contains(ConnectivityResult.wifi)) {
+      final normalizedSsid = _normalizeBlank(ssid);
+      return normalizedSsid != null
+          ? "Wi-Fi ($normalizedSsid)"
+          : "Wi-Fi (enable location for SSID)";
+    } else if (results.contains(ConnectivityResult.mobile)) {
+      return "Mobile Data";
+    } else if (results.contains(ConnectivityResult.none) || results.isEmpty) {
+      return "No Connection";
+    } else {
+      return "Connected";
+    }
+  }
+
+  static String formatSsidLabel(NetworkSnapshot? snapshot) {
+    if (snapshot == null) {
+      return "No network payload yet";
+    }
+    final ssid = _normalizeBlank(snapshot.ssid);
+    if (ssid != null) {
+      return ssid;
+    }
+    if (snapshot.isWifiActive) {
+      return "Enable location for SSID";
+    }
+    return "Not on Wi-Fi";
   }
 
   static Stream<List<ConnectivityResult>> get connectivityChanges =>
@@ -303,7 +329,9 @@ class NetworkInfoService {
     final warnings = <String>[];
 
     if (isWifiActive && ssid == null) {
-      warnings.add("SSID unavailable on this platform or permission state.");
+      warnings.add(
+        "SSID unavailable; grant location permission and enable Location Services.",
+      );
     }
 
     final snapshot = NetworkSnapshot(
@@ -356,7 +384,8 @@ class NetworkInfoService {
     final warnings = <String>[
       ...snapshot.warnings,
       if (requireWifi && _normalizeBlank(snapshot.ssid) == null)
-        "SSID unavailable; using local IP/subnet checks.",
+        "SSID unavailable; grant location permission and enable Location Services. "
+            "Using local IP/subnet checks.",
     ];
     final message = warnings.isEmpty
         ? "Local network ready."

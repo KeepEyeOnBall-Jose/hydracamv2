@@ -1,0 +1,93 @@
+{
+  "elapsedMs": 390.719,
+  "maxRequestDurationMs": 45.829,
+  "mode": "master_ready_then_parallel_slaves",
+  "parallelRequestStartSkewMs": 1.416,
+  "requestEndSkewMs": 358.934,
+  "requestStartSkewMs": 346.146,
+  "requestTimings": {
+    "29d816ac550b7ece": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6400",
+      "durationMs": 45.829,
+      "endOffsetMs": 390.564,
+      "endedAt": "2026-06-07T23:14:46.690096",
+      "startOffsetMs": 344.735,
+      "startedAt": "2026-06-07T23:14:46.644188"
+    },
+    "9885e6503930304946": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6401",
+      "durationMs": 40.037,
+      "endOffsetMs": 385.734,
+      "endedAt": "2026-06-07T23:14:46.685268",
+      "startOffsetMs": 345.697,
+      "startedAt": "2026-06-07T23:14:46.645217"
+    },
+    "RF8M90QE7LX": {
+      "batch": "master",
+      "bridgeUrl": "http://127.0.0.1:6402",
+      "durationMs": 31.625,
+      "endOffsetMs": 31.63,
+      "endedAt": "2026-06-07T23:14:46.331168",
+      "startOffsetMs": 0.005,
+      "startedAt": "2026-06-07T23:14:46.299535"
+    },
+    "macos": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "durationMs": 7.283,
+      "endOffsetMs": 353.434,
+      "endedAt": "2026-06-07T23:14:46.652971",
+      "startOffsetMs": 346.151,
+      "startedAt": "2026-06-07T23:14:46.645670"
+    }
+  },
+  "responses": {
+    "29d816ac550b7ece": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.160",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    },
+    "9885e6503930304946": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.160",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    },
+    "RF8M90QE7LX": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": false,
+        "preferredMasterIp": null,
+        "role": "master",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    },
+    "macos": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.160",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    }
+  },
+  "startedAt": "2026-06-07T23:14:46.299510"
+}

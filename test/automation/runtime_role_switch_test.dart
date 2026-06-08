@@ -30,10 +30,11 @@ void main() {
   });
 
   test("launch config recognizes standby role", () {
-    const config = LaunchConfig(role: "standby");
+    const config = LaunchConfig(role: "standby", targetId: "ipad");
 
     expect(config.wantsStandby, isTrue);
     expect(config.wantsMaster, isFalse);
     expect(config.wantsSlave, isFalse);
+    expect(config.targetId, "ipad");
   });
 }

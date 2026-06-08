@@ -21,18 +21,32 @@ import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
 import "../master/master_screen.dart";
 
+typedef NetworkReadinessLoader = Future<NetworkReadinessResult> Function();
+
+typedef SlaveConnectionClientFactory = SlaveConnectionClient Function(
+  String serverAddress, {
+  Function(String command, DateTime scheduledTime)? onScheduledCommand,
+  Function(String path)? onPhotoTaken,
+  VoidCallback? onRecordingStarted,
+  VoidCallback? onRecordingStopped,
+});
+
 class SlaveScreen extends StatefulWidget {
   // Mode that controls if we entered here manually or on app init.
   // If is auto mode, after some time without finding master will move automatically to master screen
   final bool isAutoMode;
   final String? preferredMasterIp;
   final bool forceSlaveMode;
+  final NetworkReadinessLoader? networkReadinessLoader;
+  final SlaveConnectionClientFactory? slaveClientFactory;
 
   const SlaveScreen({
     super.key,
     this.isAutoMode = false,
     this.preferredMasterIp,
     this.forceSlaveMode = false,
+    @visibleForTesting this.networkReadinessLoader,
+    @visibleForTesting this.slaveClientFactory,
   }); // Default is manual mode
 
   @override
@@ -40,7 +54,7 @@ class SlaveScreen extends StatefulWidget {
 }
 
 class SlaveScreenState extends State<SlaveScreen> {
-  SlaveClient? _client;
+  SlaveConnectionClient? _client;
   StreamSubscription<String>?
       _statusSubscription; // Subscription to listen to status updates
   StreamSubscription<bool>?
@@ -89,11 +103,26 @@ class SlaveScreenState extends State<SlaveScreen> {
   }
 
   Future<void> _startNetworkAwareDiscovery() async {
+    if (!mounted) {
+      return;
+    }
     if (_isCheckingNetwork) {
       return;
     }
 
     _isCheckingNetwork = true;
+    if (_shouldFastConnectToPreferredMaster) {
+      try {
+        await _connectToMaster(
+          widget.preferredMasterIp!,
+          skipNetworkReadiness: true,
+        );
+      } finally {
+        _isCheckingNetwork = false;
+      }
+      return;
+    }
+
     if (mounted && !_isConnected) {
       setState(() {
         statusMessage = "Checking Wi-Fi and local network...";
@@ -101,10 +130,7 @@ class SlaveScreenState extends State<SlaveScreen> {
     }
 
     try {
-      final snapshot = await NetworkInfoService.getCurrentSnapshot();
-      final readiness = NetworkInfoService.evaluateLocalControlReadiness(
-        snapshot,
-      );
+      final readiness = await _loadNetworkReadiness();
       _networkReadiness = readiness;
 
       if (!readiness.canUseLocalControl) {
@@ -152,6 +178,36 @@ class SlaveScreenState extends State<SlaveScreen> {
     }
   }
 
+  bool get _shouldFastConnectToPreferredMaster =>
+      widget.forceSlaveMode && widget.preferredMasterIp != null;
+
+  Future<NetworkReadinessResult> _loadNetworkReadiness() async {
+    final loader = widget.networkReadinessLoader;
+    if (loader != null) {
+      return loader();
+    }
+    final snapshot = await NetworkInfoService.getCurrentSnapshot();
+    return NetworkInfoService.evaluateLocalControlReadiness(
+      snapshot,
+    );
+  }
+
+  SlaveConnectionClient _createSlaveClient(
+    String serverAddress, {
+    Function(String command, DateTime scheduledTime)? onScheduledCommand,
+    Function(String path)? onPhotoTaken,
+    VoidCallback? onRecordingStarted,
+    VoidCallback? onRecordingStopped,
+  }) {
+    return SlaveClient(
+      serverAddress,
+      onScheduledCommand: onScheduledCommand,
+      onPhotoTaken: onPhotoTaken,
+      onRecordingStarted: onRecordingStarted,
+      onRecordingStopped: onRecordingStopped,
+    );
+  }
+
   void _scheduleAutoPromoteIfNeeded() {
     final bool shouldAutoPromote = widget.isAutoMode &&
         !widget.forceSlaveMode &&
@@ -169,21 +225,29 @@ class SlaveScreenState extends State<SlaveScreen> {
     });
   }
 
-  Future<void> _connectToMaster(String masterIp) async {
-    final snapshot = await NetworkInfoService.getCurrentSnapshot();
-    final readiness = NetworkInfoService.evaluateLocalControlReadiness(
-      snapshot,
-    );
-    _networkReadiness = readiness;
-    if (!readiness.canUseLocalControl) {
-      if (mounted) {
-        setState(() {
-          statusMessage = readiness.message;
-        });
-      }
-      LogService.instance.registerLog(
-          "Connection to master blocked by network readiness: ${readiness.message}");
+  Future<void> _connectToMaster(
+    String masterIp, {
+    bool skipNetworkReadiness = false,
+  }) async {
+    if (!mounted) {
       return;
+    }
+    if (!skipNetworkReadiness) {
+      final readiness = await _loadNetworkReadiness();
+      _networkReadiness = readiness;
+      if (!readiness.canUseLocalControl) {
+        if (mounted) {
+          setState(() {
+            statusMessage = readiness.message;
+          });
+        }
+        LogService.instance.registerLog(
+            "Connection to master blocked by network readiness: ${readiness.message}");
+        return;
+      }
+    } else {
+      LogService.instance.registerLog(
+          "Skipping slave network readiness for forced preferred master $masterIp.");
     }
 
     LogService.instance.registerLog("Connecting to master at IP: $masterIp");
@@ -192,7 +256,8 @@ class SlaveScreenState extends State<SlaveScreen> {
     _connectionStatusSubscription?.cancel();
     _client?.disconnect();
 
-    _client = SlaveClient(
+    final clientFactory = widget.slaveClientFactory ?? _createSlaveClient;
+    _client = clientFactory(
       "ws://$masterIp:4040/ws",
       onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
       onPhotoTaken: (path) async {
@@ -239,6 +304,9 @@ class SlaveScreenState extends State<SlaveScreen> {
       }
 
       if (!isConnected) {
+        if (!mounted) {
+          return;
+        }
         LogService.instance
             .registerLog("Connection lost. Restarting discovery.");
         _client?.disconnect();

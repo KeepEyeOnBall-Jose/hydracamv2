@@ -8,6 +8,7 @@ import concurrent.futures
 import dataclasses
 import datetime as dt
 import json
+import os
 import re
 import socket
 import subprocess
@@ -39,14 +40,17 @@ S7_SERIAL = "9885e6503930304946"
 IPHONE_12_PRO_ID = "00008101-000A68811E43001E"
 IPAD_5_ID = "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
 
-ANDROID_PERMISSIONS = (
+BASE_ANDROID_PERMISSIONS = (
     "android.permission.CAMERA",
     "android.permission.RECORD_AUDIO",
     "android.permission.ACCESS_FINE_LOCATION",
     "android.permission.ACCESS_COARSE_LOCATION",
-    "android.permission.WRITE_EXTERNAL_STORAGE",
-    "android.permission.READ_EXTERNAL_STORAGE",
-    "android.permission.ACCESS_MEDIA_LOCATION",
+)
+ANDROID_WRITE_EXTERNAL_STORAGE_PERMISSION = "android.permission.WRITE_EXTERNAL_STORAGE"
+ANDROID_READ_EXTERNAL_STORAGE_PERMISSION = "android.permission.READ_EXTERNAL_STORAGE"
+ANDROID_READ_MEDIA_PERMISSIONS = (
+    "android.permission.READ_MEDIA_IMAGES",
+    "android.permission.READ_MEDIA_VIDEO",
 )
 
 
@@ -315,14 +319,42 @@ def target_to_json(target: MatrixTarget) -> dict[str, Any]:
     }
 
 
+def parse_android_api_level(runtime: str) -> int | None:
+    match = re.search(r"\bAPI\s+(\d+)\b", runtime)
+    if not match:
+        return None
+    return int(match.group(1))
+
+
+def android_permissions_for_target(target: MatrixTarget) -> tuple[str, ...]:
+    api_level = parse_android_api_level(target.runtime)
+    permissions = list(BASE_ANDROID_PERMISSIONS)
+    if api_level is None:
+        return tuple(permissions)
+    if api_level <= 28:
+        permissions.append(ANDROID_WRITE_EXTERNAL_STORAGE_PERMISSION)
+    if api_level <= 32:
+        permissions.append(ANDROID_READ_EXTERNAL_STORAGE_PERMISSION)
+    else:
+        permissions.extend(ANDROID_READ_MEDIA_PERMISSIONS)
+    return tuple(permissions)
+
+
 def run_command(
     command: Sequence[str],
     *,
     check: bool = True,
     capture_output: bool = False,
     timeout: float | None = None,
+    env_overrides: Mapping[str, str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     print("+ " + " ".join(command), flush=True)
+    env = None
+    if env_overrides:
+        env = {
+            **os.environ,
+            **env_overrides,
+        }
     return subprocess.run(
         list(command),
         cwd=REPO_ROOT,
@@ -330,6 +362,7 @@ def run_command(
         text=True,
         capture_output=capture_output,
         timeout=timeout,
+        env=env,
     )
 
 
@@ -409,7 +442,12 @@ def ensure_local_ports_free(targets: Sequence[MatrixTarget]) -> None:
         raise MatrixRunError(f"Local automation port(s) already occupied: {ports}")
 
 
-def build_android_apk() -> None:
+def build_android_apk(*, ndk_version: str | None = None) -> None:
+    env_overrides = None
+    if ndk_version:
+        env_overrides = {
+            "ORG_GRADLE_PROJECT_hydracamNdkVersion": ndk_version,
+        }
     run_command(
         [
             "flutter",
@@ -417,7 +455,8 @@ def build_android_apk() -> None:
             "apk",
             "--debug",
             "--dart-define=HYDRACAM_AUTOMATION=true",
-        ]
+        ],
+        env_overrides=env_overrides,
     )
 
 
@@ -434,7 +473,7 @@ def remove_android_forwards(targets: Sequence[MatrixTarget]) -> None:
 def setup_android_target(target: MatrixTarget, apk: Path, *, skip_install: bool) -> None:
     if not skip_install:
         run_command(["adb", "-s", target.device_id, "install", "-r", str(apk)])
-    for permission in ANDROID_PERMISSIONS:
+    for permission in android_permissions_for_target(target):
         run_command(
             ["adb", "-s", target.device_id, "shell", "pm", "grant", PACKAGE_NAME, permission],
             check=False,
@@ -453,6 +492,9 @@ def setup_android_target(target: MatrixTarget, apk: Path, *, skip_install: bool)
             "--es",
             "role",
             "master",
+            "--es",
+            "automationTargetId",
+            target.device_id,
         ]
     )
     run_command(

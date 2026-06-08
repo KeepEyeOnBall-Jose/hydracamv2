@@ -8,24 +8,20 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    let didLaunch = super.application(application, didFinishLaunchingWithOptions: launchOptions)
-    registerLaunchConfigChannel()
-    registerVideoMetadataChannel()
-    return didLaunch
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    let messenger = engineBridge.applicationRegistrar.messenger()
+    registerLaunchConfigChannel(binaryMessenger: messenger)
+    registerVideoMetadataChannel(binaryMessenger: messenger)
   }
 
-  private func registerLaunchConfigChannel() {
-    guard let controller = window?.rootViewController as? FlutterViewController else {
-      return
-    }
-
+  private func registerLaunchConfigChannel(binaryMessenger: FlutterBinaryMessenger) {
     let channel = FlutterMethodChannel(
       name: "hydracamv2/launch_config",
-      binaryMessenger: controller.binaryMessenger
+      binaryMessenger: binaryMessenger
     )
     channel.setMethodCallHandler { call, result in
       guard call.method == "getLaunchConfig" else {
@@ -47,6 +43,10 @@ import UIKit
        !preferredMasterIp.isEmpty {
       payload["preferredMasterIp"] = preferredMasterIp
     }
+    if let targetId = environment["HYDRACAM_AUTOMATION_TARGET_ID"],
+       !targetId.isEmpty {
+      payload["automationTargetId"] = targetId
+    }
     if let forceSlaveMode = environment["HYDRACAM_AUTOMATION_FORCE_SLAVE"],
        !forceSlaveMode.isEmpty {
       payload["forceSlaveMode"] = ["1", "true", "yes"].contains(forceSlaveMode.lowercased())
@@ -55,14 +55,10 @@ import UIKit
     return payload
   }
 
-  private func registerVideoMetadataChannel() {
-    guard let controller = window?.rootViewController as? FlutterViewController else {
-      return
-    }
-
+  private func registerVideoMetadataChannel(binaryMessenger: FlutterBinaryMessenger) {
     let channel = FlutterMethodChannel(
       name: "hydracamv2/video_metadata",
-      binaryMessenger: controller.binaryMessenger
+      binaryMessenger: binaryMessenger
     )
     channel.setMethodCallHandler { call, result in
       guard call.method == "inspectVideo" else {

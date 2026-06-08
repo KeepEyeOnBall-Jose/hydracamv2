@@ -1,0 +1,89 @@
+{
+  "elapsedMs": 346.673,
+  "maxRequestDurationMs": 162.805,
+  "mode": "master_ready_then_parallel_slaves",
+  "parallelRequestStartSkewMs": 0.576,
+  "requestEndSkewMs": 186.61,
+  "requestStartSkewMs": 184.184,
+  "requestTimings": {
+    "29d816ac550b7ece": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6400",
+      "durationMs": 162.805,
+      "endOffsetMs": 346.416,
+      "endedAt": "2026-06-07T22:59:12.548452",
+      "startOffsetMs": 183.611,
+      "startedAt": "2026-06-07T22:59:12.385632"
+    },
+    "9885e6503930304946": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6401",
+      "durationMs": 135.139,
+      "endOffsetMs": 319.042,
+      "endedAt": "2026-06-07T22:59:12.521079",
+      "startOffsetMs": 183.903,
+      "startedAt": "2026-06-07T22:59:12.385932"
+    },
+    "RF8M90QE7LX": {
+      "batch": "master",
+      "bridgeUrl": "http://127.0.0.1:6402",
+      "durationMs": 159.803,
+      "endOffsetMs": 159.806,
+      "endedAt": "2026-06-07T22:59:12.361843",
+      "startOffsetMs": 0.003,
+      "startedAt": "2026-06-07T22:59:12.202035"
+    },
+    "macos": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:4770",
+      "durationMs": 24.49,
+      "endOffsetMs": 208.677,
+      "endedAt": "2026-06-07T22:59:12.410714",
+      "startOffsetMs": 184.187,
+      "startedAt": "2026-06-07T22:59:12.386213"
+    }
+  },
+  "responses": {
+    "29d816ac550b7ece": {
+      "command": "set_role",
+      "result": {
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.160",
+        "role": "slave",
+        "status": "role_set"
+      },
+      "status": "ok"
+    },
+    "9885e6503930304946": {
+      "command": "set_role",
+      "result": {
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.160",
+        "role": "slave",
+        "status": "role_set"
+      },
+      "status": "ok"
+    },
+    "RF8M90QE7LX": {
+      "command": "set_role",
+      "result": {
+        "forceSlaveMode": false,
+        "preferredMasterIp": null,
+        "role": "master",
+        "status": "role_set"
+      },
+      "status": "ok"
+    },
+    "macos": {
+      "command": "set_role",
+      "result": {
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.160",
+        "role": "slave",
+        "status": "role_set"
+      },
+      "status": "ok"
+    }
+  },
+  "startedAt": "2026-06-07T22:59:12.202020"
+}

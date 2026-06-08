@@ -1,7 +1,7 @@
 # HydraCam Status and Roadmap
 
 Last control-plane migration: 2026-06-05.
-Last status refresh: 2026-06-07.
+Last status refresh: 2026-06-08.
 
 This document is scoped to `/Users/jose/src/work/hydracamv2`, the Flutter mobile
 repo. Backend, web, Azure, and AI/product work is recorded only when it blocks
@@ -12,13 +12,26 @@ or informs the mobile app.
 | Area | Status | Notes |
 | --- | --- | --- |
 | iOS simulator | Runs, but no camera | 2026-06-07 simulator run applied camera settings after camera/mic privacy grants, but Flutter `camera` reported no available cameras. Use simulator for launch/UI checks only, not capture proof. Latest parallel matrix kept it launch-only on bridge port `4771`. Evidence: `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`. |
-| iOS physical device | Working in debug automation; profile install/launch partial | The prior broad white-screen blocker is superseded. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` shows iPhone 12 Pro debug launch, permissions, session creation, photo capture/upload, and video start. `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md` shows iPhone 12 Pro / iOS 26.5 passing the coordinated independent-capture matrix at `ultraWide` + `sport1080p60`, and iPad 5 passing `autoBack` + `standard1080p30`. `logs/verification-runs/20260607-1501-ios-icon-profile-launch/` shows Profile build/install passed and no-tooling `--no-activate` launch started `Runner.app/Runner`; foreground icon-equivalent activation still needs the iPhone unlocked. Limitation: saved-video metadata remains unavailable on iOS. |
+| iOS physical device | Working in debug automation; iPhone Profile automation bridge working | The prior broad white-screen blocker is superseded. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` shows iPhone 12 Pro debug launch, permissions, session creation, photo capture/upload, and video start. `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md` shows iPhone 12 Pro / iOS 26.5 passing the coordinated independent-capture matrix at `ultraWide` + `sport1080p60`, and iPad 5 passing `autoBack` + `standard1080p30`. `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/` shows the no-tooling iPhone Profile bridge can now be found by identity-based LAN scan without passing a manual `--ios-host`. Debug `Runner.app` still cannot be fast-launched by `devicectl` without Flutter tooling. The physical iPad Profile install fallback now succeeds through `flutter install --use-application-binary`, but xctrace launch is blocked by `ios_profile_not_trusted` until the developer profile is trusted on the device. Limitation: saved-video metadata remains unavailable on iOS. |
 | Android | In development; current camera evidence mixed | 2026-06-07 parallel matrix: both Samsung S10e devices and Samsung SM-G960F captured one photo and one video at `standard1080p30` under a shared capture barrier. Samsung S7 edge still fails at `standard1080p30` with bounded photo timeout plus Exynos/Camera2 reopen errors, now classified as `s7_exynos_camera_timeout`. Xiaomi 2201116PG install is still blocked by `INSTALL_FAILED_USER_RESTRICTED`. Evidence: `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`. |
 | Camera lens/profile settings | Implemented; device proof partial | 2026-06-07 added local lens preference and target video profiles from 480p30 through 4K60. The video profile selector now shows concrete target text (`1080p at 30 fps`, `1080p at 60 fps`) instead of arbitrary names; the latest parallel matrix confirms `/settings.videoCaptureTarget` on macOS, Android, iPhone, and iPad. iPhone 12 Pro 0.5x debug automation passes 1080p60 and 4K30 targets, but iOS metadata extraction is still unavailable and S7 rear-wide 1080p60/4K30 remains blocked by basic capture failure. ASAP item 0 remains open. |
 | Mobile login/auth | Imperfect | Current Auth0 login uses a browser-backed OAuth flow and stores user state only in memory. Login restore, secure credential persistence, logout/end-session behavior, Android process-death recovery, and Android-native account-picker UX are not complete. |
 | Desktop and web | macOS controller debug path working; capture deferred | macOS debug `.app` builds and launches for controller/monitoring use with a mock local camera. Windows, Linux, web, and real desktop webcam capture remain future support. |
-| Multi-device capture | Runtime role switching smoke passed; full physical matrix pending | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-local-smoke-timed/summary.json` proves a filtered macOS + iOS simulator run can launch once in standby, switch roles through automation, and connect one slave without relaunching. Full physical master/slave capture matrix still needs fresh evidence. |
+| Multi-device capture | Runtime role switching works; five-device hot loop including iPhone passed | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/summary.json` proves Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, physical iPad 5, and macOS can launch once, rotate which device is master, and connect the other four devices as slaves without relaunching. Current split-ack cold proof `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/summary.json` passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, and macOS across two cycles / 8 rotations, but build/install/launch made it take `63.919s`. The fastest four-local proof is `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/summary.json`: the same four targets passed explicit `--expect-target-id` selection across five hot cycles / 20 master rotations in `8.118s` runner elapsed, with no build/install/standby launch after warm preflight, `--stage-slaves-after-master-ready`, synchronous master acknowledgement, async accepted acknowledgement for slaves, 25 ms connected-client polling, and `--max-set-role-request-start-skew-ms 10` enforced. `logs/verification-runs/20260608-warm-summary-prime-five-repeat/summary.json` is the current fastest cold-iPhone repeat proof: using `--warm-summary` skipped `flutter devices`, `adb devices`, and master-host probing, launched only the missing iPhone Profile bridge, then passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 rotations in `9.167s`. Parallel request-start skew stayed below `0.686 ms`, `set_role` averaged `162.803 ms`, and connected-client verification averaged `201.572 ms`. A separate pure-immediate warm-summary rerun, `logs/verification-runs/20260608-warm-summary-hot-five-repeat/summary.json`, passed the same 25 rotations in `8.806s` with no discovery, build, install, or launch; warm preflight had no missing bridges. `logs/verification-runs/20260608-ipad-profile-install-fallback-warm-prime/` confirms the six-target blocker is now iPad device trust: the runner packaged a Profile IPA, installed it through `flutter install --use-application-binary`, then xctrace failed with `ios_profile_not_trusted`. |
 | Store distribution | Prepared, not submitted | Distribution runbook and scaffolding exist; real submission depends on signing, credentials, privacy review, and device smoke tests. |
+
+Latest acceleration proof: `logs/verification-runs/20260608-latest-cache-shortest-default-staged-five-hot/summary.json`
+passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12
+Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 master
+rotations in `7.844s` using the automatically persisted latest warm-summary
+cache, no manual `--warm-summary`, no target list, no explicit
+`--stage-slaves-after-master-ready`, no missing warm bridges, and max parallel
+slave request-start skew `1.349 ms`. The runner now makes the staged-master /
+parallel-slaves path the default for immediate hot runs. A fully parallel
+diagnostic probe,
+`logs/verification-runs/20260608-latest-cache-short-command-five-hot-fully-parallel-probe/summary.json`,
+also passed but took `22.344s` because slave registration lag rose sharply when
+clients raced the promoted master's WebSocket server startup.
 
 ## Latest One-by-One Device Rerun
 
@@ -135,13 +148,539 @@ master/slave discovery or synchronized broadcast proof.
 - iOS simulator launched with automation port `4771`, but remains launch-only
   because no camera is exposed.
 
-Next multi-device confidence gap: run the runtime-switch matrix on physical
-targets. The local proof in
-`logs/verification-runs/20260607-runtime-role-switch-local-smoke-timed/`
-launched macOS and the iOS simulator once in standby, switched macOS to master
-and the simulator to slave in `119.533 ms`, and confirmed one connected slave.
-That proves the automation path for near-instant role changes, but it is not
-yet physical-device capture proof.
+## Latest Runtime Role-Switch Matrix
+
+Evidence roots:
+
+- `logs/verification-runs/20260607-runtime-role-switch-local-smoke-timed/`
+- `logs/verification-runs/20260607-runtime-role-switch-ipad-macos-currentbuild/`
+- `logs/verification-runs/20260607-runtime-role-switch-ipad-macos-reuse/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-skipinstall/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-currentapk-expected-ip/`
+- `logs/verification-runs/20260607-runtime-role-switch-ipad-android-macos/`
+- `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/`
+- `logs/verification-runs/20260607-runtime-role-switch-warm-prime-direct-macos/`
+- `logs/verification-runs/20260607-runtime-role-switch-warm-immediate-second/`
+- `logs/verification-runs/20260607-runtime-role-switch-warm-no-success-logs/`
+- `logs/verification-runs/20260607-runtime-role-switch-warm-summary-fastpath/`
+- `logs/verification-runs/20260607-runtime-role-switch-warm-summary-subsecond-poll/`
+- `logs/verification-runs/20260607-runtime-role-switch-warm-summary-no-adb-forward/`
+- `logs/verification-runs/20260607-runtime-role-switch-mobile-warm-summary-fastpath/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-current-cache-proof/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-current-cache-warm-rerun/`
+- `logs/verification-runs/20260607-runtime-role-switch-mobile-current-cache-warm-fastpath/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-handler-race-fix/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-handler-race-fix-warm-prime/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-handler-race-fix-warm-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-single-master-g960f-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-health-identity-proof/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-health-identity-warm-prime/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-health-identity-warm-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-health-identity-single-g960f/`
+- `logs/verification-runs/20260607-macos-standby-persistence-experiment/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-shared-bind-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-shared-bind-warm-prime/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-detached-warm-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-detached-warm-immediate-repeat/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-detached-runner-warm-prime/`
+- `logs/verification-runs/20260607-runtime-role-switch-android-macos-detached-runner-warm-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-four-local-adopted-warm-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-visible-set-adopted-fast-ipad-timeout/`
+- `logs/verification-runs/20260607-runtime-role-switch-visible-set-warm-only-fast-fail/`
+- `logs/verification-runs/20260607-runtime-role-switch-four-local-warm-only-immediate/`
+- `logs/verification-runs/20260607-runtime-role-switch-immediate-flag-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-immediate-flag-visible-fast-fail/`
+- `logs/verification-runs/20260607-runtime-role-switch-immediate-flag-parallel-timings-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-immediate-flag-parallel-timings-visible-fast-fail/`
+- `logs/verification-runs/20260607-runtime-role-switch-ipad-warm-prime-only-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-visible-warm-prime-only-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-immediate-after-warm-prime-change-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-prime-then-immediate-visible-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-prime-then-immediate-four-local-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-prime-then-immediate-visible-action-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-prime-then-immediate-action-four-local-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-expected-iphone-guard-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-expected-visible-five-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-expected-four-local-current/`
+- `logs/verification-runs/20260607-runtime-role-switch-phase-baseline-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-master-command-poll-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-phase-timings-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-slave-registration-cold-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-direct-macos-warm-prime-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-slave-registration-warm-immediate-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-slave-registration-warm-immediate-repeat-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-forced-slave-connect-cold-four-local-rerun/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-forced-slave-connect-warm-prime-chainable-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-forced-slave-connect-warm-immediate-repeat-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-master-client-registration-cold-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-fast-master-client-registration-warm-immediate-repeat-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-zero-route-stale-slave-cold-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-zero-route-stale-slave-warm-prime-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-zero-route-stale-slave-warm-immediate-repeat-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-zero-route-stale-slave-warm-immediate-repeat2-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-zero-route-stale-slave-warm-immediate-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-registration-lag-instrumented-cold2-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-registration-lag-instrumented-warm-prime-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-registration-lag-instrumented-skew10-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-current-code-cold-parallel-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-current-code-warm-prime-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-current-code-parallel-skew10-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-current-code-staged-skew10-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/`
+- `logs/verification-runs/20260607-runtime-role-switch-async-ack-warm-prime-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-async-ack-staged-skew10-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-slave-ack-staged-skew10-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/`
+- `logs/verification-runs/20260607-runtime-role-switch-visible-physical-warm-prime-after-iphone-visible/`
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-fast-warm-prime-after-visible/`
+- `logs/verification-runs/20260607-ipad-xctrace-launch-live-poll/`
+- `logs/verification-runs/20260607-ipad-explicit-automation-ipa-xctrace/`
+- `logs/verification-runs/20260607-runtime-role-switch-ipad-xctrace-trust-fail/`
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-console-launch/`
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-current-profile-install-fast-launch-scan/`
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-profile-launch-config-retry-scan/`
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-engine-registrar-profile-scan/`
+- `logs/verification-runs/20260607-runtime-role-switch-five-with-iphone-profile-hot/`
+- `logs/verification-runs/20260608-auto-ios-host-fast-launch-five-hot/`
+- `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/`
+- `logs/verification-runs/20260608-ipad-xctrace-trust-rerun/`
+- `logs/verification-runs/20260608-all-selected-auto-iphone-ipad-xctrace-rerun/`
+- `logs/verification-runs/20260608-ipad-profile-install-fallback-warm-prime/`
+- `logs/verification-runs/20260608-current-hot-five-after-ios-install-fallback/`
+- `logs/verification-runs/20260608-all-selected-trust-retry-short/`
+- `logs/verification-runs/20260608-prime-five-after-trust-retry-code/`
+- `logs/verification-runs/20260608-hot-five-after-trust-retry-code-rerun/`
+- `logs/verification-runs/20260608-prime-five-stress5-after-trust-retry-code/`
+- `logs/verification-runs/20260608-hot-five-after-stress5-immediate/`
+- `logs/verification-runs/20260608-warm-summary-prime-five-repeat/`
+- `logs/verification-runs/20260608-warm-summary-hot-five-repeat/`
+- `logs/verification-runs/20260608-latest-cache-seed-five-hot/`
+- `logs/verification-runs/20260608-latest-cache-auto-five-hot/`
+- `logs/verification-runs/20260608-latest-cache-reseed-five-hot-after-cache-fix/`
+- `logs/verification-runs/20260608-latest-cache-short-command-five-hot-after-cache-fix/`
+- `logs/verification-runs/20260608-latest-cache-short-command-five-hot-fully-parallel-probe/`
+- `logs/verification-runs/20260608-latest-cache-shortest-default-staged-five-hot/`
+- `logs/verification-runs/20260608-ipad-warm-prime-after-default-staged-with-host/`
+
+Current runtime-switch result:
+
+- macOS + iOS simulator launched once in standby, switched macOS to master and
+  simulator to slave in `119.533 ms`, and confirmed one connected slave. This
+  remains launch/UI proof only because the simulator has no camera.
+- Physical iPad 5 + macOS passed both master rotations on the current build.
+  iPad-as-master switched both targets in `181.19 ms` and saw macOS as one
+  connected slave from `192.168.178.159`; macOS-as-master switched both targets
+  in `143.527 ms` and saw iPad as one connected slave from `192.168.178.104`.
+- Samsung S10e `RF8M90QE7LX` + macOS passed after building/installing a current
+  automation APK using local NDK override `27.0.12077973`. The stricter rerun
+  `20260607-runtime-role-switch-android-macos-currentapk-expected-ip` validates
+  expected client remote IPs so an unrelated iPad connection cannot satisfy the
+  proof. Android-as-master switched both targets in `517.921 ms`; macOS-as-master
+  switched both targets in `224.823 ms`.
+- Samsung S10e `RF8M90QE7LX` + physical iPad 5 + macOS passed all three master
+  rotations in `20260607-runtime-role-switch-ipad-android-macos`. Android,
+  iPad, and macOS each became master once; the other two devices connected as
+  slaves with expected remote IPs. Parallel `set_role` elapsed times were
+  `530.195 ms`, `188.846 ms`, and `155.552 ms`.
+- The visible physical set passed in
+  `20260607-runtime-role-switch-visible-physical-set`: Samsung G960F
+  `29d816ac550b7ece`, Samsung S7 edge `9885e6503930304946`, Samsung S10e
+  `RF8M90QE7LX`, physical iPad 5, and macOS each became master once. Every
+  rotation saw four expected slave remote IPs. Parallel `set_role` elapsed times
+  were `878.015 ms`, `503.621 ms`, `308.356 ms`, `234.084 ms`, and `223.33 ms`.
+- Warm reuse acceleration now avoids the slowest repeat-run costs for role-only
+  matrices. The runner preserves Android ADB forwards in reuse mode, skips
+  Android permission grants when an existing bridge exposes `set_role`, launches
+  macOS standby from the already-built debug app instead of `flutter run`, and
+  skips per-device logcat/log collection on successful role-only rotations
+  unless `--collect-role-switch-logs` is requested. The latest timed run
+  `20260607-runtime-role-switch-warm-no-success-logs` passed four master
+  rotations in `15.31s` wall time; the individual runtime `set_role` calls were
+  `120.19 ms`, `149.504 ms`, `156.199 ms`, and `120.034 ms`.
+- Warm-summary acceleration removes the remaining repeat discovery path by
+  loading targets and master hosts from a previous summary instead of calling
+  `flutter devices`, `adb devices`, and Android Wi-Fi host probes. With
+  subsecond connected-client polling and no unnecessary Android forward refresh,
+  `20260607-runtime-role-switch-warm-summary-no-adb-forward` passed four master
+  rotations in `4.34s` wall time; `set_role` calls were `164.229 ms`,
+  `128.043 ms`, `180.563 ms`, and `101.627 ms`. The mobile-only warm-summary
+  run `20260607-runtime-role-switch-mobile-warm-summary-fastpath` passed
+  Samsung G960F, Samsung S10e `RF8M90QE7LX`, and physical iPad as master in
+  `2.59s` wall time; `set_role` calls were `122.068 ms`, `136.183 ms`, and
+  `116.361 ms`, and every rotation saw the expected slave remote IPs. Use
+  `--warm-summary` only with a current warm bridge map; stale summaries can
+  intentionally fail if ports now point at different devices.
+- App-side master registration now caches the master network snapshot for a
+  short registration burst, avoiding duplicate platform/network probes while
+  several slaves reconnect to a newly promoted master. After rebuilding and
+  reinstalling the current Android APK with the local NDK override, the warm
+  Android-only rerun `20260607-runtime-role-switch-android-current-cache-warm-rerun`
+  passed both Android master rotations in `1.54s` wall time (`263.432 ms` and
+  `119.812 ms` `set_role` calls). The current mobile warm run
+  `20260607-runtime-role-switch-mobile-current-cache-warm-fastpath` passed
+  Samsung G960F, Samsung S10e `RF8M90QE7LX`, and physical iPad as master in
+  `2.06s` wall time with expected slave remote IPs; `set_role` calls were
+  `221.557 ms`, `167.678 ms`, and `141.746 ms`.
+- Runtime automation handler cleanup is now identity-safe, so an old
+  `MasterScreen` dispose cannot unregister commands from a newer promoted
+  `MasterScreen` during rapid route replacement. The failing symptom was a warm
+  bridge that still exposed `set_role` but lost `connected_clients`, causing a
+  role-only proof to wait for the timeout and fail. After the fix, the cold
+  Android proof `20260607-runtime-role-switch-android-handler-race-fix` passed
+  two Android master rotations after a `22.5s` debug APK build; the first fresh
+  post-install switch took `3721.383 ms`, while the second took `296.065 ms`.
+  The warm prime run took `10.13s` wall time with app launch/permission setup;
+  the warm immediate rerun took `1.50s` wall time for both Android master
+  rotations, with `set_role` calls of `241.26 ms` and `182.072 ms`. The
+  single-master immediate proof
+  `20260607-runtime-role-switch-android-single-master-g960f-immediate` completed
+  in `0.64s` wall time with a `233.4 ms` `set_role` call. These Android-only
+  filtered runs also saw an already-running iPad as an extra slave IP; they
+  prove expected-client presence, not isolation from unselected LAN devices.
+- Android automation setup now grants only manifest/API-appropriate runtime
+  permissions, avoiding repeated `pm grant` failures for storage/media
+  permissions that are not declared on newer API levels. This reduces setup
+  noise and removes avoidable ADB commands from non-warm runs.
+- Automation `/healthz` now reports `automationTargetId`, and warm bridge reuse
+  requires that value to match the selected runner target before setup is
+  skipped. Launch paths stamp this identity through Android intent extras,
+  Flutter dart defines, physical iOS/macOS environment variables, and direct
+  macOS debug-app environment variables. The cold Android identity proof
+  `20260607-runtime-role-switch-android-health-identity-proof` passed both
+  Android master rotations after a `32.5s` debug APK build, with `set_role`
+  calls of `886.204 ms` and `314.953 ms`. The warm-prime run showed
+  `/healthz` target identity on both ports and passed in `9.87s` with app
+  launch/setup. The identity-gated warm-immediate run
+  `20260607-runtime-role-switch-android-health-identity-warm-immediate` skipped
+  ADB setup entirely and passed both Android master rotations in `1.42s` wall
+  time, with `set_role` calls of `267.148 ms` and `161.244 ms`. The single
+  promoted-master proof
+  `20260607-runtime-role-switch-android-health-identity-single-g960f` completed
+  in `0.93s` wall time with a `210.256 ms` `set_role` call.
+- Warm bridge reuse now adopts already-running local ports by
+  `automationTargetId` instead of trusting stale static port order. This keeps a
+  subset run from forcing relaunch when the next run adds S7 or macOS back into
+  the matrix. After reinstalling the current debug APK on S7, the adopted
+  four-local warm run
+  `20260607-runtime-role-switch-four-local-adopted-warm-immediate` passed G960F,
+  S7, S10e `RF8M90QE7LX`, and macOS as master in `4.50s` wall time.
+- For true immediate runs, use `--require-warm-bridges` with
+  `--reuse-running-bridges`. That mode does not build, install, or launch; it
+  fails before setup if any selected bridge is missing or stale. The all-visible
+  warm-only preflight
+  `20260607-runtime-role-switch-visible-set-warm-only-fast-fail` failed in
+  `0.81s` and wrote `warm-bridge-preflight.json` naming the missing physical
+  iPad bridge at `http://192.168.178.104:4762`. The four-local warm-only proof
+  `20260607-runtime-role-switch-four-local-warm-only-immediate` then passed all
+  four master rotations in `3.42s` wall time; `set_role` calls were
+  `244.483 ms`, `208.747 ms`, `161.403 ms`, and `223.04 ms`.
+  `--immediate-role-switch` now wraps the same fast recipe: runtime role
+  switching, role-switch-only verification, bridge reuse, required warm bridge
+  preflight, skip build, and skip install. Use it with a current
+  `--warm-summary` and selected `--target-id` filters for the lowest-latency
+  loop; a cold or stale selected device writes `warm-bridge-preflight.json` and
+  exits before expensive work.
+  `20260607-runtime-role-switch-immediate-flag-four-local` verifies the one-flag
+  path on G960F, S7 edge, S10e `RF8M90QE7LX`, and macOS in `3.85s` wall time
+  with `set_role` calls of `191.316 ms`, `163.988 ms`, `148.818 ms`, and
+  `133.595 ms`. The all-visible one-flag preflight
+  `20260607-runtime-role-switch-immediate-flag-visible-fast-fail` fails in
+  `0.74s` and names only the missing iPad bridge; no build, install, or launch
+  is attempted.
+  `20260607-runtime-role-switch-immediate-flag-parallel-timings-four-local`
+  adds per-target request timing evidence and passed the same four warm local
+  targets in `3.68s` wall time. `set_role` elapsed times were `141.074 ms`,
+  `149.802 ms`, `544.174 ms`, and `185.929 ms`; request start skew was
+  `0.332 ms`, `0.555 ms`, `0.836 ms`, and `0.892 ms`, proving the role-change
+  POSTs are dispatched in parallel even when one device responds slower.
+  The current-code all-visible preflight
+  `20260607-runtime-role-switch-immediate-flag-parallel-timings-visible-fast-fail`
+  fails in `0.86s` with only the missing iPad bridge in
+  `warm-bridge-preflight.json`; no rotation summary is written because no
+  build, install, or launch is attempted.
+  `--warm-prime-only` is the companion setup command: it reuses existing warm
+  bridges, skips build/install, tries to launch only missing selected bridges,
+  writes `warm-bridge-prime.json`, and exits without running rotations. The
+  current all-visible warm-prime run
+  `20260607-runtime-role-switch-visible-warm-prime-only-current` attempted only
+  the missing iPad bridge and failed in `3.91s` with
+  `ios_profile_not_trusted`; Android and macOS bridges remained warm. The
+  current post-change immediate proof
+  `20260607-runtime-role-switch-immediate-after-warm-prime-change-four-local`
+  passed G960F, S7 edge, S10e `RF8M90QE7LX`, and macOS in `3.97s` wall time
+  with request start skew below `1 ms` on every rotation.
+  `--prime-then-immediate-role-switch` is now the preferred single command for
+  the final fast loop: it writes `warm-bridge-prime.json`, stops immediately if
+  any selected bridge remains cold, and otherwise continues into the required
+  warm preflight plus immediate role-switch proof. The all-visible current run
+  `20260607-runtime-role-switch-prime-then-immediate-visible-current` stopped in
+  `3.86s` after the iPad xctrace launch reported `ios_profile_not_trusted`; no
+  `warm-bridge-preflight.json` or rotation artifacts were written. The warm
+  four-device run
+  `20260607-runtime-role-switch-prime-then-immediate-four-local-current` passed
+  in `3.79s`; `warm-bridge-prime.json` and `warm-bridge-preflight.json` both
+  passed, `set_role` calls were `138.101 ms`, `183.703 ms`, `124.045 ms`, and
+  `160.24 ms`, and request start skew stayed at about `1.2 ms` or less.
+  The action-enhanced rerun
+  `20260607-runtime-role-switch-prime-then-immediate-visible-action-current`
+  fails in `4.28s` and adds `deviceActions[0].code=ios_profile_not_trusted`
+  with the exact iPad trust step: Settings > General > VPN & Device Management.
+  The matching warm-four proof
+  `20260607-runtime-role-switch-prime-then-immediate-action-four-local-current`
+  passes in `3.75s`; `set_role` calls were `187.26 ms`, `221.56 ms`,
+  `132.994 ms`, and `158.825 ms`, with request start skew below `3 ms`.
+- Complete-set claims now require explicit selected-target verification. Use
+  repeated `--expect-target-id` flags for every intended device; the runner
+  writes `expected-targets.json` before any dry-run, build, install, launch,
+  warm-prime, or rotation work. The current all-device guard run
+  `20260607-runtime-role-switch-expected-iphone-guard-current` failed in
+  `0.01s` because expected iPhone `00008101-000A68811E43001E` was absent from
+  the selected targets, while the selected set only contained the three
+  Androids, physical iPad 5, and macOS. The scoped visible-five rerun
+  `20260607-runtime-role-switch-expected-visible-five-current` passed
+  `expected-targets.json`, then stopped in `3.81s` at the current iPad
+  `ios_profile_not_trusted` warm-prime blocker. The scoped warm-four rerun
+  `20260607-runtime-role-switch-expected-four-local-current` passed explicit
+  expected-target selection and all four master rotations in `3.93s`; the first
+  rotation posted `set_role` to all four targets with request start offsets from
+  `0.256 ms` to `1.038 ms`.
+- The runner now writes per-rotation `phase-timings.json` and includes the same
+  `phaseTimings` in rotation summaries. `20260607-runtime-role-switch-phase-timings-four-local`
+  passed the guarded warm four-target matrix in `3.21s` and showed the real
+  split: `set_role` took `145.694-239.867 ms`, promoted-master command
+  readiness took `3.438-22.127 ms`, and connected-client verification dominated
+  at `378.953-674.85 ms`.
+- Slave registration no longer waits for a platform network snapshot before
+  sending the first `deviceId` WebSocket message. The network payload is sent as
+  an immediate deferred heartbeat, preserving network-status refresh without
+  blocking master registration. The isolated proof is
+  `test/slave/slave_client_registration_test.dart`; the rebuilt cold four-target
+  proof `20260607-runtime-role-switch-fast-slave-registration-cold-four-local`
+  passed after Android rebuild/install and macOS rebuild. First fresh rotations
+  still pay app startup and route replacement churn, but the steady-state repeat
+  `20260607-runtime-role-switch-fast-slave-registration-warm-immediate-repeat-four-local`
+  passed all four guarded master rotations in `3.20s`: `set_role` was
+  `157.024-243.046 ms`, request start skew stayed below `1.018 ms`,
+  master-command readiness was `2.39-115.699 ms`, and connected-client
+  verification was `294.225-564.773 ms`.
+- Forced automation slaves now skip the duplicate network-readiness gate when a
+  preferred master IP is supplied, master registration records the client before
+  the asynchronous master network snapshot refresh, stale same-device socket
+  closes cannot remove a newer client socket, and runtime role changes use
+  zero-duration automation routes so old route transitions cannot dispose the
+  newly promoted master. The chainable warm-prime artifact
+  `20260607-runtime-role-switch-fast-forced-slave-connect-warm-prime-chainable-four-local`
+  can be passed directly as `--warm-summary`. The hot-loop runner now supports
+  `--repeat-role-switch-cycles` and skips the standby launcher entirely when
+  `--require-warm-bridges` preflight has passed. Current-code cold proof
+  `20260607-runtime-role-switch-async-ack-cold-four-local-fixed` passed two
+  four-target cycles / 8 master rotations, but build/install/launch made it
+  take `63.919s`; this is why repeat cold runs feel slow. That run also fixed a
+  macOS direct-launch port bug: the debug app had been compiled for automation
+  port `4762`, while the runner waited on `4770`. Cold direct-macOS targets are
+  now normalized to the compiled default unless an already-running
+  identity-matched bridge is adopted. The hot proof used
+  `20260607-runtime-role-switch-async-ack-warm-prime-four-local` as the bridge
+  source. Fully parallel
+  `20260607-runtime-role-switch-current-code-parallel-skew10-stress5-four-local`
+  passed five cycles / 20 rotations in `13.023s`; request-start skew was
+  `0.238-3.058 ms` (avg `0.591 ms`), but connected-client verification had a
+  `1914.965 ms` tail. Staged master-ready
+  `20260607-runtime-role-switch-current-code-staged-skew10-stress5-four-local`
+  passed the same 20 rotations in `9.746s` with
+  `--stage-slaves-after-master-ready`: `set_role` averaged `304.915 ms`, and
+  connected-client verification averaged `148.307 ms`. Async acknowledgement
+  for both master and slaves
+  `20260607-runtime-role-switch-async-ack-staged-skew10-stress5-four-local`
+  was rejected as the default because it pushed master readiness later and took
+  `13.279s`. The accepted split is synchronous acknowledgement for the promoted
+  master plus async accepted acknowledgement for the parallel slave batch:
+  `20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local`
+  passed five cycles / 20 rotations in `8.118s` with 25 ms connected-client
+  polling. Across all 20 rotations, `set_role` was `63.37-267.853 ms` (avg
+  `161.328 ms`), slave-batch request-start skew was `0.33-1.928 ms` (avg
+  `0.641 ms`), connected-client verification was `163.162-337.251 ms` (avg
+  `239.845 ms`), and `set_role + connected_clients` was `243.832-542.688 ms`
+  (avg `401.173 ms`). New connected-client instrumentation adds `registeredAt`
+  and `masterServerStartedAt` to the automation payload; this evidence shows
+  dispatch is already sub-millisecond and the remaining speed work is promoted
+  master server startup plus client registration after server start.
+- Physical iPhone hot role switching now has no-tooling Profile proof. Debug
+  `Runner.app` cannot be fast-launched by `devicectl` because iOS logs
+  "Cannot create a FlutterEngine instance in debug mode without Flutter tooling
+  or Xcode" before Dart starts
+  (`20260607-runtime-role-switch-iphone-console-launch`). The first current
+  Profile install exposed the bridge at `192.168.178.168:4762`, proving the old
+  `192.168.178.141` host was stale, but `automationTargetId` stayed blank
+  because the native launch-config channel was not registered on the implicit
+  Flutter engine. Retrying the Dart channel lookup alone did not fix that. After
+  registering launch config and video metadata channels from
+  `didInitializeImplicitFlutterEngine`, the profile build/install/launch proof
+  `20260607-runtime-role-switch-iphone-engine-registrar-profile-scan` found an
+  identity-matched iPhone bridge on attempt 1 with
+  `automationTargetId=00008101-000A68811E43001E`. The iPhone-inclusive hot proof
+  `20260607-runtime-role-switch-five-with-iphone-profile-hot` then passed
+  Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro, and
+  macOS through two cycles / 10 master rotations in `4.382s` runner elapsed.
+  Every selected device became master twice; request-start skew stayed below
+  `3.373 ms`, `set_role` averaged `195.555 ms`, connected-client verification
+  averaged `237.223 ms`, and the iPhone-as-master rotations verified the four
+  expected slaves. The runner now has `--auto-ios-bridge-hosts`, enabled by the
+  immediate role-switch shortcuts, which scans likely LAN hosts and accepts only
+  `/healthz` responses with a matching `automationTargetId`. The cold iPhone
+  rerun `20260608-auto-ios-host-fast-launch-five-hot` used
+  `--prime-then-immediate-role-switch --fast-ios-launch` with no iPhone
+  `--ios-host`: it launched the installed Profile app by device ID, discovered
+  `http://192.168.178.168:4762`, and passed the five-device / 10-rotation matrix
+  in `9.302s`. After adding the iPad trust-retry runner path,
+  `20260608-prime-five-stress5-after-trust-retry-code` passed the same selected
+  iPhone-inclusive set across five cycles / 25 rotations in `10.303s` after
+  warm-prime; parallel request-start skew stayed below `2.51 ms`, `set_role`
+  averaged `185.714 ms`, and connected-client verification averaged
+  `222.491 ms`. A separate pure-immediate rerun,
+  `20260608-hot-five-after-stress5-immediate`, passed two cycles / 10 rotations
+  in `3.695s` once `/healthz` proved the iPhone bridge was warm. Treat
+  `--prime-then-immediate-role-switch --fast-ios-launch` as the reliable
+  one-command iPhone path when the iPhone bridge may be cold; use pure
+  `--immediate-role-switch` only after verifying the iPhone bridge is currently
+  warm. Successful warm role-switch runs now update
+  `logs/verification-runs/latest-rotating-master-slave-warm-summary.json`, so
+  normal `--immediate-role-switch` reruns can skip Flutter/ADB discovery and
+  master-host probing without manually passing the previous run path. When that
+  latest cache is used automatically, the runner also skips the default
+  physical-iOS LAN scan unless `--auto-ios-bridge-hosts` is passed explicitly;
+  stale cached iOS hosts fail in the identity-matched warm-bridge preflight. For
+  a pinned prior run, add `--warm-summary
+  logs/verification-runs/<last-good-run>/summary.json`: the current
+  `20260608-warm-summary-prime-five-repeat` skipped Flutter/ADB discovery and
+  master-host probing, launched only the cold iPhone bridge, and passed five
+  cycles / 25 rotations in `9.167s`; the immediate warm-summary repeat
+  `20260608-warm-summary-hot-five-repeat` passed the same 25 rotations in
+  `8.806s` with no discovery, build, install, or launch. The latest-cache
+  seed run `20260608-latest-cache-seed-five-hot` passed one full five-device
+  rotation in `1.886s` and updated
+  `latest-rotating-master-slave-warm-summary.json`; the follow-up
+  `20260608-latest-cache-auto-five-hot` used that cache automatically, passed
+  five cycles / 25 rotations in `8.482s`, and recorded `auto_latest` in
+  `warm-summary-source.json`. After fixing the cache update guard so
+  manually-constructed unit-test args cannot overwrite the durable latest cache,
+  `20260608-latest-cache-reseed-five-hot-after-cache-fix` restored the cached
+  five-device target set, and
+  `20260608-latest-cache-short-command-five-hot-after-cache-fix` proved the
+  short command with no `--warm-summary` and no `--target-id` list: five cycles
+  / 25 rotations in `7.598s`, `auto_latest` source, warm preflight passed,
+  `set_role` averaged `138.639 ms`, connected-client verification averaged
+  `162.755 ms`, and max parallel slave request-start skew was `0.91 ms`.
+  The runner now makes that staged-master / parallel-slaves path the immediate
+  default, so `20260608-latest-cache-shortest-default-staged-five-hot` passed
+  the same five-device / 25-rotation proof in `7.844s` without requiring
+  `--stage-slaves-after-master-ready`. The explicit
+  `--fully-parallel-role-switch` diagnostic probe
+  `20260608-latest-cache-short-command-five-hot-fully-parallel-probe` also
+  passed, proving all devices can receive `set_role` in one parallel batch, but
+  it took `22.344s`; connected-client verification averaged `786.034 ms`
+  because slaves raced the promoted master before its WebSocket server was
+  ready. Use the fully parallel flag only for comparison/debugging.
+- macOS standby uses the detached direct debug-app launcher for persistence
+  across runner exits, but the direct app cannot change
+  `HYDRACAM_AUTOMATION_PORT` at runtime because that value is a compile-time
+  Dart define. Use port `4762` for cold direct-macOS standby unless an
+  already-running identity-matched bridge is adopted. The older corrected
+  warm-prime proof `20260607-runtime-role-switch-direct-macos-warm-prime-four-local`
+  completed in `1.45s` and left matching Android/macOS warm bridge identities.
+- The remaining Android + macOS warm-run delay was macOS process persistence,
+  not compile/deploy. `20260607-macos-standby-persistence-experiment` showed a
+  direct macOS app launched as a child of the Python runner disappeared as soon
+  as the parent process exited. Launching direct macOS standby in a detached
+  process group keeps the automation bridge alive for later runs while still
+  preserving explicit cleanup for non-reuse runs. After that fix, the current
+  Android + macOS proof
+  `20260607-runtime-role-switch-android-macos-shared-bind-current` passed all
+  three master rotations in `87.22s` including Android build/install and macOS
+  launch. The patched-runner warm prime
+  `20260607-runtime-role-switch-android-macos-detached-runner-warm-prime`
+  relaunched macOS, reused both Android bridges, passed all three rotations in
+  `3.98s`, and left macOS `/healthz` alive after the Python runner exited. The
+  immediate repeat
+  `20260607-runtime-role-switch-android-macos-detached-runner-warm-immediate`
+  then passed the same three rotations in `2.10s` wall time. Its parallel
+  `set_role` calls were `132.486 ms`, `118.891 ms`, and `117.939 ms`, and macOS
+  `/healthz` remained alive with `automationTargetId=macos` after completion.
+- Capture-enabled runtime-switch automation is faster but not yet passing as a
+  full matrix. `20260607-runtime-role-switch-capture-accelerated` adds
+  per-stage `progress.ndjson`, concurrent stage waits, configurable capture
+  timeouts, and a short recording-ready cap so failed slaves no longer inflate a
+  `--record-seconds 2` run into multi-minute video. That run still failed
+  because macOS did not produce slave media and one Android slave missed
+  `isRecording`; treat it as acceleration/debug evidence, not capture proof.
+- Reusing an already-running stale iPad bridge proved the parallel `set_role`
+  calls work (`456.621 ms` and `284.267 ms`), but iPad-as-master failed because
+  the stale app exposed only `set_role` and not `connected_clients`. Relaunching
+  the current build fixed that.
+- Android skip-install proof against Samsung S10e `RF8M90QE7LX` failed because
+  the installed APK does not expose `set_role`. A current automation APK must be
+  built and installed before Android can participate in runtime role switching;
+  this was fixed for `RF8M90QE7LX` by building with
+  `--android-ndk-version 27.0.12077973`.
+- iPhone 12 Pro runtime-switch proof is no longer pending for Profile
+  automation. Prefer the identity-based auto host scan in immediate and
+  prime-then-immediate role-switch runs; it writes
+  `ios-bridge-host-prefill.json` and `ios-bridge-host-adoption.json`, and fails
+  unless the discovered bridge reports
+  `automationTargetId=00008101-000A68811E43001E`. Do not reuse the stale
+  `192.168.178.141` host from older capture evidence.
+- Physical iPad current warm-prime is blocked by device-side Profile trust, not
+  by compile speed. The bounded retry
+  `20260607-runtime-role-switch-visible-set-adopted-fast-ipad-timeout` cut the
+  failed five-target attempt from `187.41s` to `46.85s` using
+  `--standby-launch-timeout 30`, but `flutter-run.log` still stopped after Xcode
+  build at `Installing and launching...` with no bridge. The xctrace path avoids
+  that Flutter retry entirely. The 2026-06-08 fallback proof
+  `20260608-ipad-profile-install-fallback-warm-prime` ran in `22.7s`, showed
+  `devicectl` cannot see the old iPad ID, packaged `Runner.app` into an IPA,
+  installed it through `flutter install --use-application-binary`, then xctrace
+  failed before bridge health with classified `ios_profile_not_trusted`. The
+  latest scoped retry,
+  `20260608-ipad-warm-prime-after-default-staged-with-host`, kept discovery
+  enabled with explicit `--ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104`,
+  disabled latest-cache updates so the one-device attempt could not overwrite
+  the five-device hot cache, built and installed the Profile app through the
+  same IPA fallback, retried launch twice with
+  `--ios-profile-trust-retry-timeout 20`, and again failed with
+  `deviceActions[0].code=ios_profile_not_trusted`. The
+  all-selected retry proof `20260608-all-selected-trust-retry-short` selected
+  all six expected targets, prefilled/adopted the iPhone bridge, and retried the
+  iPad xctrace launch twice using `--ios-profile-trust-retry-timeout 10`; the
+  iPad still reported `ios_profile_not_trusted`, so no rotations ran. The
+  required operator step is on the iPad: Settings > General > VPN & Device
+  Management, trust the developer profile for the installed HydraCam build, keep
+  the device unlocked, then rerun `--prime-then-immediate-role-switch
+  --xctrace-ios-launch`. For one-command trust recovery, keep the process open
+  with `--ios-profile-trust-retry-timeout <seconds>` while trusting the profile.
+- For older physical iOS devices that are visible to `xcdevice` but not usable
+  through `devicectl`, the runner now has an explicit `--xctrace-ios-launch`
+  path. `20260607-ipad-xctrace-launch-live-poll` proved xctrace can launch the
+  installed iPad app and pass `HYDRACAM_AUTOMATION_*` environment values, but
+  the installed app produced no bridge. After an explicit automation debug iOS
+  build and IPA install, `20260607-ipad-explicit-automation-ipa-xctrace` proved
+  the install path works but xctrace reports the current iPad will not launch
+  the app because the signing profile is not explicitly trusted. The runner
+  evidence `20260608-ipad-profile-install-fallback-warm-prime` now automates
+  that path with `--ios-profile-build-install`: it falls back from `devicectl`
+  to IPA packaging plus `flutter install --use-application-binary`, then reports
+  `ios_profile_not_trusted` from xctrace instead of hanging in `flutter run`.
+  `devicectl device info details` for the CoreDevice iPad record still reports
+  `pairingState: unsupported`, `tunnelState: unavailable`, and
+  `ddiServicesAvailable: false`, so `devicectl` remains unavailable for this
+  iOS 15.6.1 iPad.
+
+Next multi-device confidence gaps: keep the warm bridge map current, rerun with
+capture enabled where cameras are expected to work, investigate macOS-as-slave
+media capture, fix the physical iPad xctrace-launch/no-bridge path, and keep
+the iPhone Profile app installed for fast no-tooling launch. Use warm-only mode
+for immediate iteration, warm-prime mode only when intentionally launching or
+refreshing a missing device, and repeated `--expect-target-id` flags whenever
+the run is meant to prove a complete selected-device set.
 
 ## Android Device Support Floor
 
@@ -289,6 +828,34 @@ pulled into active mobile work:
   was denied because the iPhone was locked, but a no-tooling `--no-activate`
   launch succeeded and started `Runner.app/Runner` process ID `1172`. Manual
   Home Screen icon video remains pending until the iPhone is unlocked.
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-console-launch/`:
+  fast-launching a debug iPhone `Runner.app` through `devicectl` started a
+  process, but iOS logged that a debug Flutter engine cannot be created without
+  Flutter tooling or Xcode. Use Profile for no-tooling iPhone automation runs.
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-current-profile-install-fast-launch-scan/`
+  and
+  `logs/verification-runs/20260607-runtime-role-switch-iphone-profile-launch-config-retry-scan/`:
+  current Profile builds exposed an iPhone bridge at `192.168.178.168:4762`, but
+  `automationTargetId` was blank because the native launch-config channel was
+  not registered on the implicit Flutter engine. Dart-side retrying alone was
+  insufficient.
+- `logs/verification-runs/20260607-runtime-role-switch-iphone-engine-registrar-profile-scan/`:
+  after registering native channels from `didInitializeImplicitFlutterEngine`,
+  Profile build/install/launch produced an identity-matched iPhone bridge at
+  `192.168.178.168:4762` on attempt 1.
+- `logs/verification-runs/20260608-auto-ios-host-fast-launch-five-hot/`:
+  no manual iPhone host was supplied. The runner fast-launched the installed
+  iPhone Profile app by device ID, scanned likely LAN hosts, matched
+  `automationTargetId=00008101-000A68811E43001E` at
+  `192.168.178.168:4762`, and passed the five-target role-switch matrix in
+  `9.302s`.
+- `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/`:
+  warm immediate repeat passed the same five selected targets with no manual
+  iPhone host and no iPhone launch in `3.781s`.
+- `logs/verification-runs/20260608-all-selected-auto-iphone-ipad-xctrace-rerun/`:
+  all six selected targets passed expected-target validation and iPhone host
+  adoption, then stopped before rotations because the iPad xctrace launch did
+  not expose an automation bridge at `192.168.178.104:4762`.
 
 ## Recent Android Evidence
 
@@ -350,17 +917,17 @@ pulled into active mobile work:
 
 - iOS production submission still needs a foreground signed release/profile
   smoke run on target hardware, using the intended Apple team/certificates. The
-  2026-06-07 Profile dev build installs and launches as a background process
-  without Flutter tooling, but foreground icon proof is still pending because
-  the iPhone was locked during activation.
+  2026-06-07 Profile dev build now installs, launches without Flutter tooling,
+  and exposes an identity-matched automation bridge on iPhone; foreground
+  icon/user-lane proof remains separate from automation launch proof.
 - Store privacy answers must be reviewed against current code and backend
   behavior before submission.
 - Android and iOS real-device smoke tests must pass on the exact release lane.
 - Camera lens/profile claims still need production-grade proof. iPhone 12 Pro
-  ultra-wide 1080p60 and 4K30 now pass in debug automation, but iOS saved-video
-  metadata remains unavailable and release/profile launch proof is still needed.
-  Samsung S7 rear-wide 1080p60/4K30 remains unproven because the device fails
-  before photo save even at `dataSaver480p30`.
+  ultra-wide 1080p60 and 4K30 now pass in debug automation, and iPhone Profile
+  automation launch is proven for role switching, but iOS saved-video metadata
+  remains unavailable. Samsung S7 rear-wide 1080p60/4K30 remains unproven
+  because the device fails before photo save even at `dataSaver480p30`.
 - Human-user login must survive app restart and Android process-death during
   browser authentication, and logout/account switching must be validated before
   release claims depend on user identity.

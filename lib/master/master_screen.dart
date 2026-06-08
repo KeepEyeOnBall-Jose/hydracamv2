@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:video_player/video_player.dart"; // Add video_player dependency in pubspec.yaml
 
@@ -29,7 +31,6 @@ import "../widgets/session_info_widget.dart";
 import "master_announcer.dart";
 import "connected_client_automation_payload.dart";
 import "master_server.dart";
-import "dart:io";
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
@@ -118,7 +119,9 @@ class MasterScreenState extends State<MasterScreen> {
   @override
   void dispose() {
     if (automationEnabled && _automationHandlers.isNotEmpty) {
-      AutomationBridge.instance.unregisterCommands(_automationHandlers.keys);
+      AutomationBridge.instance.unregisterCommandsIfCurrent(
+        _automationHandlers,
+      );
       _automationHandlers.clear();
     }
     try {
@@ -311,6 +314,7 @@ class MasterScreenState extends State<MasterScreen> {
         return {
           ...buildConnectedClientAutomationPayload(
             _server.getConnectedDeviceInfos(),
+            serverStartedAt: _server.serverStartedAt,
           ),
           "session": AutomationBridge.instance.buildSessionSnapshot(),
         };
@@ -783,7 +787,7 @@ class MasterScreenState extends State<MasterScreen> {
               if (devices.isNotEmpty)
                 ...devices.map((device) {
                   final network = device.networkSnapshot;
-                  final ssid = network?.ssid ?? "SSID unavailable";
+                  final ssid = NetworkInfoService.formatSsidLabel(network);
                   final localIp = network?.ipAddress ?? "No reported IP";
                   final subnet =
                       network?.effectiveSubnetSignature ?? "Subnet unknown";

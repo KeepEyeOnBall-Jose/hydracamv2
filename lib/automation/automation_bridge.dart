@@ -23,6 +23,7 @@ class AutomationBridge {
   final Map<String, AutomationHandler> _handlers = {};
   HttpServer? _server;
   bool _initialized = false;
+  String _automationTargetId = automationTargetId;
 
   // Callback to get current recording state from master screen
   bool Function()? getRecordingState;
@@ -40,6 +41,33 @@ class AutomationBridge {
 
   void registerCommand(String command, AutomationHandler handler) {
     _handlers[command] = handler;
+  }
+
+  void setAutomationTargetId(String? targetId) {
+    if (targetId != null && targetId.isNotEmpty) {
+      _automationTargetId = targetId;
+    }
+  }
+
+  Map<String, dynamic> buildHealthSnapshot() {
+    return {
+      "status": "ok",
+      "automation": true,
+      "automationTargetId": _automationTargetId,
+      "commands": _handlers.keys.toList()..sort(),
+    };
+  }
+
+  bool isCommandRegistered(String command) {
+    return _handlers.containsKey(command);
+  }
+
+  void unregisterCommandsIfCurrent(Map<String, AutomationHandler> handlers) {
+    for (final entry in handlers.entries) {
+      if (identical(_handlers[entry.key], entry.value)) {
+        _handlers.remove(entry.key);
+      }
+    }
   }
 
   void unregisterCommands(Iterable<String> commands) {
@@ -79,11 +107,7 @@ class AutomationBridge {
   Future<void> _handleRequest(HttpRequest request) async {
     try {
       if (request.method == "GET" && request.uri.path == "/healthz") {
-        await _respond(request, {
-          "status": "ok",
-          "automation": true,
-          "commands": _handlers.keys.toList()..sort(),
-        });
+        await _respond(request, buildHealthSnapshot());
         return;
       }
 

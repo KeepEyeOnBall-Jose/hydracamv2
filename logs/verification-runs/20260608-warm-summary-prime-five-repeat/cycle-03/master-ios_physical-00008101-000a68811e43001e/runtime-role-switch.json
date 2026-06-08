@@ -1,0 +1,112 @@
+{
+  "elapsedMs": 102.086,
+  "maxRequestDurationMs": 45.052,
+  "mode": "master_ready_then_parallel_slaves",
+  "parallelRequestStartSkewMs": 0.529,
+  "requestEndSkewMs": 56.89,
+  "requestStartSkewMs": 74.784,
+  "requestTimings": {
+    "00008101-000A68811E43001E": {
+      "batch": "master",
+      "bridgeUrl": "http://192.168.178.168:4762",
+      "durationMs": 45.052,
+      "endOffsetMs": 45.055,
+      "endedAt": "2026-06-08T00:48:56.000589",
+      "startOffsetMs": 0.002,
+      "startedAt": "2026-06-08T00:48:55.955533"
+    },
+    "29d816ac550b7ece": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6400",
+      "durationMs": 23.226,
+      "endOffsetMs": 97.483,
+      "endedAt": "2026-06-08T00:48:56.053016",
+      "startOffsetMs": 74.257,
+      "startedAt": "2026-06-08T00:48:56.029780"
+    },
+    "9885e6503930304946": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6401",
+      "durationMs": 27.502,
+      "endOffsetMs": 101.945,
+      "endedAt": "2026-06-08T00:48:56.057478",
+      "startOffsetMs": 74.443,
+      "startedAt": "2026-06-08T00:48:56.029964"
+    },
+    "RF8M90QE7LX": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:6402",
+      "durationMs": 21.736,
+      "endOffsetMs": 96.393,
+      "endedAt": "2026-06-08T00:48:56.051928",
+      "startOffsetMs": 74.657,
+      "startedAt": "2026-06-08T00:48:56.030185"
+    },
+    "macos": {
+      "batch": "slaves",
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "durationMs": 1.325,
+      "endOffsetMs": 76.111,
+      "endedAt": "2026-06-08T00:48:56.031643",
+      "startOffsetMs": 74.786,
+      "startedAt": "2026-06-08T00:48:56.030316"
+    }
+  },
+  "responses": {
+    "00008101-000A68811E43001E": {
+      "command": "set_role",
+      "result": {
+        "forceSlaveMode": false,
+        "preferredMasterIp": null,
+        "role": "master",
+        "status": "role_set"
+      },
+      "status": "ok"
+    },
+    "29d816ac550b7ece": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.168",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    },
+    "9885e6503930304946": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.168",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    },
+    "RF8M90QE7LX": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.168",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    },
+    "macos": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "192.168.178.168",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    }
+  },
+  "startedAt": "2026-06-08T00:48:55.955526"
+}

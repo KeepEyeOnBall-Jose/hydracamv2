@@ -1,0 +1,61 @@
+
+### identity
+2026-06-08T02:50:19+02:00
+DESKTOP-02NDERS
+root
+PRETTY_NAME="Ubuntu 22.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.1 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+
+### process-precheck
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root        10  0.0  0.0   3172  2048 hvc0     Sl+  02:50   0:00 plan9 --control-socket 6 --log-level 4 --server-fd 7 --pipe-fd 9 --log-truncate
+root        22  0.0  0.0   8236  3084 pts/0    D+   02:50   0:00 awk NR == 1 || tolower($0) ~ /pip|mamba|conda|keob|queue-poller|python|node|worker/
+
+### df-before
+Filesystem     Type  Size  Used Avail Use% Mounted on
+/dev/sdd       ext4  251G   21G  218G   9% /
+/dev/sdd       ext4  251G   21G  218G   9% /
+/dev/sdd       ext4  251G   21G  218G   9% /
+
+### sizes-before
+4.5G	/home/jose/borrame
+3.2G	/home/jose/.cache/pip
+788M	/home/jose/.local/share/mamba/pkgs/cache
+2.1G	/home/jose/keob-nodes
+
+### delete-authorized-targets
+deleting	/home/jose/borrame
+deleting	/home/jose/.cache/pip
+deleting	/home/jose/.local/share/mamba/pkgs/cache
+
+### sizes-after
+MISSING	/home/jose/borrame
+MISSING	/home/jose/.cache/pip
+MISSING	/home/jose/.local/share/mamba/pkgs/cache
+2.1G	/home/jose/keob-nodes
+
+### df-after
+Filesystem     Type  Size  Used Avail Use% Mounted on
+/dev/sdd       ext4  251G   13G  226G   6% /
+/dev/sdd       ext4  251G   13G  226G   6% /
+/dev/sdd       ext4  251G   13G  226G   6% /
+
+### keob-nodes-integrity
+PRESENT	/home/jose/keob-nodes
+2.1G	/home/jose/keob-nodes
+/home/jose/keob-nodes/.git
+/home/jose/keob-nodes/credentials
+/home/jose/keob-nodes/queue-poller
+
+### done
+Authorized cleanup complete. No keob-nodes deletion performed.

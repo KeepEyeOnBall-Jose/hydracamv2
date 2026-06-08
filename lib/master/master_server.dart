@@ -31,11 +31,13 @@ class ConnectedDeviceInfo {
   final NetworkSnapshot? networkSnapshot;
   final ConnectedDeviceNetworkStatus networkStatus;
   final DateTime lastSeen;
+  final DateTime registeredAt;
 
   const ConnectedDeviceInfo({
     required this.deviceId,
     required this.networkStatus,
     required this.lastSeen,
+    required this.registeredAt,
     this.remoteIp,
     this.networkSnapshot,
   });
@@ -52,6 +54,7 @@ class ConnectedDeviceInfo {
     NetworkSnapshot? networkSnapshot,
     ConnectedDeviceNetworkStatus? networkStatus,
     DateTime? lastSeen,
+    DateTime? registeredAt,
   }) {
     return ConnectedDeviceInfo(
       deviceId: deviceId,
@@ -59,7 +62,39 @@ class ConnectedDeviceInfo {
       networkSnapshot: networkSnapshot ?? this.networkSnapshot,
       networkStatus: networkStatus ?? this.networkStatus,
       lastSeen: lastSeen ?? this.lastSeen,
+      registeredAt: registeredAt ?? this.registeredAt,
     );
+  }
+}
+
+class MasterNetworkSnapshotCache {
+  MasterNetworkSnapshotCache({
+    required this.loadSnapshot,
+    this.ttl = const Duration(seconds: 2),
+    DateTime Function()? now,
+  }) : _now = now ?? DateTime.now;
+
+  final Future<NetworkSnapshot> Function() loadSnapshot;
+  final Duration ttl;
+  final DateTime Function() _now;
+
+  NetworkSnapshot? _snapshot;
+  DateTime? _loadedAt;
+
+  Future<NetworkSnapshot> current() async {
+    final cached = _snapshot;
+    final loadedAt = _loadedAt;
+    final currentTime = _now();
+    if (cached != null &&
+        loadedAt != null &&
+        currentTime.difference(loadedAt) <= ttl) {
+      return cached;
+    }
+
+    final fresh = await loadSnapshot();
+    _snapshot = fresh;
+    _loadedAt = currentTime;
+    return fresh;
   }
 }
 
@@ -70,7 +105,9 @@ class MasterServer {
   final Map<String, DateTime> _lastHeartbeat =
       {}; // Track last heartbeat per client
   final Map<String, ConnectedDeviceInfo> _clientInfo = {};
+  DateTime? _serverStartedAt;
   NetworkSnapshot? _masterNetworkSnapshot;
+  late final MasterNetworkSnapshotCache _masterNetworkSnapshotCache;
   Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
   // CaptureSession? currentSession; // Current Capture Session is now used in Session Manager Singleton
   List<CaptureSession> sessionHistory =
@@ -86,20 +123,36 @@ class MasterServer {
   /// Optional constructor for MasterServer. Probably will be deleted
   ///
   /// - `cameraService`: The service to handle camera-related operations.
-  MasterServer(this.cameraService);
+  MasterServer(
+    this.cameraService, {
+    MasterNetworkSnapshotCache? masterNetworkSnapshotCache,
+  }) {
+    _masterNetworkSnapshotCache = masterNetworkSnapshotCache ??
+        MasterNetworkSnapshotCache(
+          loadSnapshot: NetworkInfoService.getCurrentSnapshot,
+        );
+  }
 
   /// Starts the WebSocket server on the master device and initializes the heartbeat check mechanism.
   /// This method binds to a specific port and listens for incoming connections.
+  static Future<HttpServer> bindMasterSocket({
+    Object address = "0.0.0.0",
+    int port = 4040,
+  }) {
+    return HttpServer.bind(address, port, shared: true);
+  }
+
   Future<void> startServer() async {
     try {
-      _server = await HttpServer.bind("0.0.0.0", 4040);
+      _server = await bindMasterSocket();
+      _serverStartedAt = DateTime.now();
       LogService.instance
           .registerLog("WebSocket Server successfully started on port 4040");
 
       // Init check to verify inactive clients
       _startHeartbeatCheck();
 
-      await for (HttpRequest request in _server!) {
+      _server!.listen((HttpRequest request) async {
         if (request.uri.path == "/ws") {
           final remoteIp = request.connectionInfo?.remoteAddress.address;
           final socket = await WebSocketTransformer.upgrade(request);
@@ -281,22 +334,22 @@ class MasterServer {
           }, onDone: () {
             // Manage client disconnection
             if (deviceId != null) {
-              _clients.remove(deviceId);
-              _lastHeartbeat.remove(deviceId); // Clean heartbeat data
-              _clientInfo.remove(deviceId);
-              _notifyClientCount();
-              LogService.instance.registerLog(
-                  "Client $deviceId disconnected. Total clients: ${_clients.length}");
+              _removeClientIfCurrent(
+                deviceId: deviceId!,
+                socket: socket,
+                logMessage:
+                    "Client $deviceId disconnected. Total clients: {count}",
+              );
             }
           }, onError: (error) {
             // Manage error in connection
             if (deviceId != null) {
-              _clients.remove(deviceId);
-              _lastHeartbeat.remove(deviceId); // Clean heartbeat data
-              _clientInfo.remove(deviceId);
-              _notifyClientCount();
-              LogService.instance.registerLog(
-                  "Error with client $deviceId: $error. Removed from clients.");
+              _removeClientIfCurrent(
+                deviceId: deviceId!,
+                socket: socket,
+                logMessage:
+                    "Error with client $deviceId: $error. Removed from clients.",
+              );
             }
           });
         } else {
@@ -304,7 +357,10 @@ class MasterServer {
             ..statusCode = HttpStatus.forbidden
             ..close();
         }
-      }
+      }, onError: (Object error) {
+        LogService.instance
+            .registerLog("WebSocket Server request error: $error");
+      });
     } catch (e) {
       LogService.instance.registerLog("Failed to start WebSocket Server: $e");
     }
@@ -317,13 +373,48 @@ class MasterServer {
     required WebSocket socket,
     required String? remoteIp,
     required NetworkSnapshot? networkSnapshot,
-  }) async {
-    _clients[deviceId] = socket;
-    _lastHeartbeat[deviceId] = DateTime.now();
-
-    final masterSnapshot = await _getMasterNetworkSnapshot();
+  }) {
     final previousInfo = _clientInfo[deviceId];
     final effectiveSnapshot = networkSnapshot ?? previousInfo?.networkSnapshot;
+    final now = DateTime.now();
+
+    _clients[deviceId] = socket;
+    _lastHeartbeat[deviceId] = now;
+    _clientInfo[deviceId] = ConnectedDeviceInfo(
+      deviceId: deviceId,
+      remoteIp: remoteIp ?? previousInfo?.remoteIp,
+      networkSnapshot: effectiveSnapshot,
+      networkStatus:
+          previousInfo?.networkStatus ?? ConnectedDeviceNetworkStatus.unknown,
+      lastSeen: now,
+      registeredAt: previousInfo?.registeredAt ?? now,
+    );
+
+    _notifyClientCount();
+
+    unawaited(_refreshRegisteredClientNetworkStatus(
+      deviceId: deviceId,
+      socket: socket,
+      remoteIp: remoteIp,
+      networkSnapshot: effectiveSnapshot,
+    ));
+    return Future<void>.value();
+  }
+
+  Future<void> _refreshRegisteredClientNetworkStatus({
+    required String deviceId,
+    required WebSocket socket,
+    required String? remoteIp,
+    required NetworkSnapshot? networkSnapshot,
+  }) async {
+    final masterSnapshot = await _getMasterNetworkSnapshot();
+    if (!identical(_clients[deviceId], socket)) {
+      return;
+    }
+
+    final previousInfo = _clientInfo[deviceId];
+    final effectiveSnapshot = networkSnapshot ?? previousInfo?.networkSnapshot;
+    final now = DateTime.now();
     final networkStatus = NetworkInfoService.compareDeviceNetwork(
       masterSnapshot: masterSnapshot,
       deviceSnapshot: effectiveSnapshot,
@@ -335,7 +426,8 @@ class MasterServer {
       remoteIp: remoteIp ?? previousInfo?.remoteIp,
       networkSnapshot: effectiveSnapshot,
       networkStatus: networkStatus,
-      lastSeen: DateTime.now(),
+      lastSeen: now,
+      registeredAt: previousInfo?.registeredAt ?? now,
     );
 
     if (networkStatus == ConnectedDeviceNetworkStatus.wrongNetwork) {
@@ -353,9 +445,53 @@ class MasterServer {
     _notifyClientCount();
   }
 
+  void _removeClientIfCurrent({
+    required String deviceId,
+    required WebSocket socket,
+    required String logMessage,
+  }) {
+    if (!identical(_clients[deviceId], socket)) {
+      return;
+    }
+
+    _clients.remove(deviceId);
+    _lastHeartbeat.remove(deviceId);
+    _clientInfo.remove(deviceId);
+    _notifyClientCount();
+    LogService.instance
+        .registerLog(logMessage.replaceAll("{count}", "${_clients.length}"));
+  }
+
+  @visibleForTesting
+  Future<void> registerOrUpdateClientForTest({
+    required String deviceId,
+    required WebSocket socket,
+    required String? remoteIp,
+    required NetworkSnapshot? networkSnapshot,
+  }) {
+    return _registerOrUpdateClient(
+      deviceId: deviceId,
+      socket: socket,
+      remoteIp: remoteIp,
+      networkSnapshot: networkSnapshot,
+    );
+  }
+
+  @visibleForTesting
+  void removeClientIfCurrentForTest({
+    required String deviceId,
+    required WebSocket socket,
+  }) {
+    _removeClientIfCurrent(
+      deviceId: deviceId,
+      socket: socket,
+      logMessage: "Client $deviceId disconnected. Total clients: {count}",
+    );
+  }
+
   Future<NetworkSnapshot> _getMasterNetworkSnapshot() async {
     try {
-      _masterNetworkSnapshot = await NetworkInfoService.getCurrentSnapshot();
+      _masterNetworkSnapshot = await _masterNetworkSnapshotCache.current();
     } catch (e) {
       LogService.instance.registerLog("Could not refresh master network: $e");
     }
@@ -414,6 +550,8 @@ class MasterServer {
     return _clientInfo.values.toList()
       ..sort((a, b) => a.deviceId.compareTo(b.deviceId));
   }
+
+  DateTime? get serverStartedAt => _serverStartedAt;
 
   /// Saves media data locally, either as a photo or video.
   ///
@@ -561,13 +699,15 @@ class MasterServer {
   /// Stops the WebSocket server and cleans up all connections.
   void stopServer() {
     // TODO: Here end active session before stopping server??
+    final server = _server;
+    _server = null;
 
     // Clean any client just in case
     for (var client in _clients.values) {
       client.close(WebSocketStatus.normalClosure, "Server shutting down");
     }
 
-    _server?.close();
+    unawaited(server?.close(force: true));
     _clients.clear();
     _lastHeartbeat.clear(); // Clean heartbeat registry
     _clientInfo.clear();

@@ -38,6 +38,10 @@ class MainFlutterWindow: NSWindow {
        !preferredMasterIp.isEmpty {
       payload["preferredMasterIp"] = preferredMasterIp
     }
+    if let targetId = environment["HYDRACAM_AUTOMATION_TARGET_ID"],
+       !targetId.isEmpty {
+      payload["automationTargetId"] = targetId
+    }
     if let forceSlaveMode = environment["HYDRACAM_AUTOMATION_FORCE_SLAVE"],
        !forceSlaveMode.isEmpty {
       payload["forceSlaveMode"] = ["1", "true", "yes"].contains(forceSlaveMode.lowercased())

@@ -1,0 +1,36 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "terminate",
+      "--device",
+      "00008101-000A68811E43001E",
+      "--pid",
+      "4622",
+      "--kill",
+      "--json-output",
+      "logs/verification-runs/20260607-runtime-role-switch-iphone-console-launch/terminate-4622.json"
+    ],
+    "commandType" : "devicectl.device.process.terminate",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.31"
+  },
+  "result" : {
+    "deviceIdentifier" : "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+    "deviceTimestamp" : "2026-06-07T21:36:58.079Z",
+    "process" : {
+      "executable" : "file:///private/var/containers/Bundle/Application/24989CC8-D285-4724-932B-659367743E5A/Runner.app/Runner",
+      "processIdentifier" : 4622
+    },
+    "signal" : {
+      "name" : "SIGKILL",
+      "value" : 9
+    }
+  }
+}

@@ -10,6 +10,7 @@ void main() {
         deviceId: "slave-device-a",
         remoteIp: "192.168.178.62",
         networkStatus: ConnectedDeviceNetworkStatus.ready,
+        registeredAt: DateTime.utc(2026, 6, 7, 11, 59, 59, 500),
         lastSeen: DateTime.utc(2026, 6, 7, 12, 0),
         networkSnapshot: const NetworkSnapshot(
           isWifiActive: true,
@@ -17,7 +18,7 @@ void main() {
           source: "test",
         ),
       ),
-    ]);
+    ], serverStartedAt: DateTime.utc(2026, 6, 7, 11, 59, 59));
 
     expect(payload["connectedClientCount"], 1);
     expect(payload["connectedClientIds"], ["slave-device-a"]);
@@ -28,6 +29,7 @@ void main() {
         "remoteIp": "192.168.178.62",
         "networkStatus": "ready",
         "networkStatusLabel": "Ready",
+        "registeredAt": "2026-06-07T11:59:59.500Z",
         "lastSeen": "2026-06-07T12:00:00.000Z",
         "network": {
           "isWifiActive": true,
@@ -42,5 +44,6 @@ void main() {
         },
       },
     ]);
+    expect(payload["masterServerStartedAt"], "2026-06-07T11:59:59.000Z");
   });
 }

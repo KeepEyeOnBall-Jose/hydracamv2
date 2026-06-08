@@ -38,12 +38,13 @@ void main() {
       return false;
     };
 
-    if (automationEnabled) {
-      await AutomationBridge.instance.ensureInitialized();
-    }
-
     final LaunchConfig? launchConfig =
         await LaunchConfigService.instance.load();
+    await _enableScreenWakeLock("startup");
+    if (automationEnabled) {
+      AutomationBridge.instance.setAutomationTargetId(launchConfig?.targetId);
+      await AutomationBridge.instance.ensureInitialized();
+    }
 
     final bool permissionsGranted =
         await PermissionService.requestAllPermissions();
@@ -58,9 +59,6 @@ void main() {
 
     LogService.instance.registerLog(
         "Location access will be requested on demand when the user opens the location view.");
-
-    LogService.instance.registerLog("Prevent screen from turning off");
-    WakelockPlus.enable();
 
     // Initialize CameraServiceSingleton early (before runApp)
     // with a temporary StorageService until we have the messenger
@@ -95,6 +93,20 @@ void main() {
   });
 }
 
+Future<void> _enableScreenWakeLock(String reason) async {
+  try {
+    await WakelockPlus.enable();
+    LogService.instance.registerLog(
+        "Prevent screen from turning off: wakelock enabled ($reason)");
+  } catch (error, stackTrace) {
+    LogService.instance.registerError(
+      "Failed to enable wakelock ($reason)",
+      error,
+      stackTrace,
+    );
+  }
+}
+
 class HydraCamApp extends StatefulWidget {
   const HydraCamApp({super.key, this.launchConfig});
 
@@ -107,31 +119,62 @@ class HydraCamApp extends StatefulWidget {
   State<HydraCamApp> createState() => _HydraCamAppState();
 }
 
-class _HydraCamAppState extends State<HydraCamApp> {
+class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  late final AutomationHandler _setRoleAutomationHandler =
+      _handleSetRuntimeRole;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    unawaited(_enableScreenWakeLock("app init"));
     if (automationEnabled) {
       AutomationBridge.instance.registerCommand(
         "set_role",
-        _handleSetRuntimeRole,
+        _setRoleAutomationHandler,
       );
     }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     if (automationEnabled) {
-      AutomationBridge.instance.unregisterCommands(["set_role"]);
+      AutomationBridge.instance.unregisterCommandsIfCurrent({
+        "set_role": _setRoleAutomationHandler,
+      });
     }
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(_enableScreenWakeLock("app resumed"));
+    }
   }
 
   Future<Map<String, dynamic>> _handleSetRuntimeRole(
       Map<String, dynamic> payload) async {
     final request = RuntimeRoleSwitchRequest.fromPayload(payload);
+    final shouldAcknowledgeAccepted = payload["ackMode"] == "accepted";
+    if (shouldAcknowledgeAccepted) {
+      _ensureNavigatorReady();
+      unawaited(_switchRuntimeRole(request)
+          .catchError((Object error, StackTrace stackTrace) {
+        LogService.instance.registerError(
+          "Async runtime role switch failed",
+          error,
+          stackTrace,
+        );
+      }));
+      return {
+        ...request.toJson(),
+        "status": "role_switch_accepted",
+        "ackMode": "accepted",
+      };
+    }
     await _switchRuntimeRole(request);
     return {
       ...request.toJson(),
@@ -139,21 +182,29 @@ class _HydraCamAppState extends State<HydraCamApp> {
     };
   }
 
-  Future<void> _switchRuntimeRole(RuntimeRoleSwitchRequest request) async {
+  NavigatorState _ensureNavigatorReady() {
     final navigator = _navigatorKey.currentState;
     if (navigator == null) {
       throw StateError("Navigator is not ready for runtime role switch.");
     }
+    return navigator;
+  }
+
+  Future<void> _switchRuntimeRole(RuntimeRoleSwitchRequest request) async {
+    final navigator = _ensureNavigatorReady();
 
     LogService.instance
         .registerLog("Runtime role switch requested: ${request.toJson()}");
-    unawaited(navigator.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => _screenForRuntimeRole(request),
+    unawaited(_enableScreenWakeLock("runtime role switch"));
+    navigator.pushAndRemoveUntil(
+      PageRouteBuilder<void>(
+        pageBuilder: (_, __, ___) => _screenForRuntimeRole(request),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
       ),
       (_) => false,
-    ));
-    await Future<void>.delayed(const Duration(milliseconds: 50));
+    );
+    await WidgetsBinding.instance.endOfFrame;
   }
 
   Widget _screenForRuntimeRole(RuntimeRoleSwitchRequest request) {

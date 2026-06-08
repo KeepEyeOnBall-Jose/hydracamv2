@@ -243,6 +243,95 @@ class ParallelDeviceMatrixTests(unittest.TestCase):
             [["adb", "-s", "android-a", "forward", "--remove-all"]],
         )
 
+    def test_build_android_apk_can_use_ndk_version_override(self) -> None:
+        module = load_module()
+        calls: list[tuple[list[str], dict]] = []
+
+        def fake_run_command(command, **kwargs):
+            calls.append((list(command), dict(kwargs)))
+
+        module.run_command = fake_run_command
+
+        module.build_android_apk(ndk_version="27.0.12077973")
+
+        self.assertEqual(calls[0][0][:3], ["flutter", "build", "apk"])
+        self.assertEqual(
+            calls[0][1]["env_overrides"],
+            {"ORG_GRADLE_PROJECT_hydracamNdkVersion": "27.0.12077973"},
+        )
+
+    def test_android_permissions_match_target_api_level(self) -> None:
+        module = load_module()
+        api_26 = module.MatrixTarget(
+            device_id="s7",
+            label="S7",
+            platform="android",
+            runtime="Android 8.0.0 (API 26)",
+            lens="autoBack",
+            profile="standard1080p30",
+            host="127.0.0.1",
+            bridge_port=6400,
+            capture_enabled=True,
+            expected_result="capture",
+        )
+        api_31 = module.dataclasses.replace(api_26, runtime="Android 12 (API 31)")
+        api_33 = module.dataclasses.replace(api_26, runtime="Android 13 (API 33)")
+
+        self.assertIn(
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            module.android_permissions_for_target(api_26),
+        )
+        self.assertIn(
+            "android.permission.READ_EXTERNAL_STORAGE",
+            module.android_permissions_for_target(api_31),
+        )
+        self.assertNotIn(
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            module.android_permissions_for_target(api_31),
+        )
+        self.assertNotIn(
+            "android.permission.ACCESS_MEDIA_LOCATION",
+            module.android_permissions_for_target(api_33),
+        )
+        self.assertEqual(
+            [
+                permission
+                for permission in module.android_permissions_for_target(api_33)
+                if permission.startswith("android.permission.READ_MEDIA_")
+            ],
+            [
+                "android.permission.READ_MEDIA_IMAGES",
+                "android.permission.READ_MEDIA_VIDEO",
+            ],
+        )
+
+    def test_android_setup_stamps_launch_with_automation_target_id(self) -> None:
+        module = load_module()
+        target = module.MatrixTarget(
+            device_id="android-a",
+            label="Android A",
+            platform="android",
+            runtime="Android 12 (API 31)",
+            lens="autoBack",
+            profile="standard1080p30",
+            host="127.0.0.1",
+            bridge_port=6400,
+            capture_enabled=True,
+            expected_result="capture",
+        )
+        commands: list[list[str]] = []
+
+        def fake_run_command(command, **_kwargs):
+            commands.append(list(command))
+
+        module.run_command = fake_run_command
+
+        module.setup_android_target(target, Path("/tmp/app.apk"), skip_install=True)
+
+        start_command = next(command for command in commands if "start" in command)
+        self.assertIn("automationTargetId", start_command)
+        self.assertIn("android-a", start_command)
+
     def test_android_logcat_collection_writes_failure_artifact(self) -> None:
         module = load_module()
         commands: list[list[str]] = []

@@ -1,13 +1,42 @@
 import "package:flutter/material.dart";
 import "../services/network_info_service.dart";
 
-class SessionInfoWidget extends StatelessWidget {
+typedef NetworkInfoLoader = Future<Map<String, String?>> Function();
+
+class SessionInfoWidget extends StatefulWidget {
   final String sessionDisplay;
+  final NetworkInfoLoader? networkInfoLoader;
 
   const SessionInfoWidget({
     super.key,
     required this.sessionDisplay,
+    this.networkInfoLoader,
   });
+
+  @override
+  State<SessionInfoWidget> createState() => _SessionInfoWidgetState();
+}
+
+class _SessionInfoWidgetState extends State<SessionInfoWidget> {
+  late Future<Map<String, String?>> _networkInfoFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _networkInfoFuture = _loadNetworkInfo();
+  }
+
+  @override
+  void didUpdateWidget(SessionInfoWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.networkInfoLoader != oldWidget.networkInfoLoader) {
+      _networkInfoFuture = _loadNetworkInfo();
+    }
+  }
+
+  Future<Map<String, String?>> _loadNetworkInfo() {
+    return (widget.networkInfoLoader ?? NetworkInfoService.getNetworkInfo)();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +44,7 @@ class SessionInfoWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Session: $sessionDisplay",
+          "Session: ${widget.sessionDisplay}",
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -23,7 +52,7 @@ class SessionInfoWidget extends StatelessWidget {
           ),
         ),
         FutureBuilder<Map<String, String?>>(
-          future: NetworkInfoService.getNetworkInfo(),
+          future: _networkInfoFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Text(

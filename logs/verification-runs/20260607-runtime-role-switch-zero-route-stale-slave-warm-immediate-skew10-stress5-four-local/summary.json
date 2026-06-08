@@ -1,0 +1,4050 @@
+{
+  "captureTargetCount": 4,
+  "elapsedSeconds": 10.43,
+  "masterHosts": {
+    "29d816ac550b7ece": "192.168.178.153",
+    "9885e6503930304946": "192.168.178.64",
+    "RF8M90QE7LX": "192.168.178.160",
+    "macos": "192.168.178.159"
+  },
+  "phaseTimingStats": {
+    "connected_clients": {
+      "avgMs": 350.721,
+      "count": 20,
+      "maxMs": 1229.395,
+      "minMs": 50.936
+    },
+    "master_commands": {
+      "avgMs": 23.798,
+      "count": 20,
+      "maxMs": 63.043,
+      "minMs": 0.569
+    },
+    "set_role": {
+      "avgMs": 143.386,
+      "count": 20,
+      "maxMs": 207.023,
+      "minMs": 82.095
+    }
+  },
+  "repeatRoleSwitchCycles": 5,
+  "roleSwitchOnly": true,
+  "rotationCount": 20,
+  "rotations": [
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 50.936,
+          "endedAt": "2026-06-07T22:25:55.313520",
+          "startedAt": "2026-06-07T22:25:55.262580"
+        },
+        "master_commands": {
+          "durationMs": 63.043,
+          "endedAt": "2026-06-07T22:25:55.262546",
+          "startedAt": "2026-06-07T22:25:55.199495"
+        },
+        "set_role": {
+          "durationMs": 191.131,
+          "endedAt": "2026-06-07T22:25:55.198964",
+          "startedAt": "2026-06-07T22:25:55.007824"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 191.131,
+        "maxRequestDurationMs": 190.619,
+        "requestEndSkewMs": 177.82,
+        "requestStartSkewMs": 0.483,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 144.093,
+            "endOffsetMs": 144.163,
+            "endedAt": "2026-06-07T22:25:55.151999",
+            "startOffsetMs": 0.069,
+            "startedAt": "2026-06-07T22:25:55.007903"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 190.619,
+            "endOffsetMs": 190.864,
+            "endedAt": "2026-06-07T22:25:55.198703",
+            "startOffsetMs": 0.245,
+            "startedAt": "2026-06-07T22:25:55.008077"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 137.343,
+            "endOffsetMs": 137.763,
+            "endedAt": "2026-06-07T22:25:55.145603",
+            "startOffsetMs": 0.42,
+            "startedAt": "2026-06-07T22:25:55.008251"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 12.492,
+            "endOffsetMs": 13.044,
+            "endedAt": "2026-06-07T22:25:55.020882",
+            "startOffsetMs": 0.552,
+            "startedAt": "2026-06-07T22:25:55.008385"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:55.007824"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 1066.074,
+          "endedAt": "2026-06-07T22:25:56.551423",
+          "startedAt": "2026-06-07T22:25:55.485330"
+        },
+        "master_commands": {
+          "durationMs": 20.755,
+          "endedAt": "2026-06-07T22:25:55.485287",
+          "startedAt": "2026-06-07T22:25:55.464520"
+        },
+        "set_role": {
+          "durationMs": 149.726,
+          "endedAt": "2026-06-07T22:25:55.463931",
+          "startedAt": "2026-06-07T22:25:55.314200"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 149.726,
+        "maxRequestDurationMs": 149.377,
+        "requestEndSkewMs": 127.01,
+        "requestStartSkewMs": 0.513,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 131.466,
+            "endOffsetMs": 131.712,
+            "endedAt": "2026-06-07T22:25:55.445920",
+            "startOffsetMs": 0.246,
+            "startedAt": "2026-06-07T22:25:55.314447"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 149.377,
+            "endOffsetMs": 149.456,
+            "endedAt": "2026-06-07T22:25:55.463664",
+            "startOffsetMs": 0.079,
+            "startedAt": "2026-06-07T22:25:55.314283"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 103.287,
+            "endOffsetMs": 103.687,
+            "endedAt": "2026-06-07T22:25:55.417896",
+            "startOffsetMs": 0.401,
+            "startedAt": "2026-06-07T22:25:55.314605"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 21.854,
+            "endOffsetMs": 22.446,
+            "endedAt": "2026-06-07T22:25:55.336654",
+            "startOffsetMs": 0.592,
+            "startedAt": "2026-06-07T22:25:55.314793"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:55.314200"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 143.197,
+          "endedAt": "2026-06-07T22:25:56.946440",
+          "startedAt": "2026-06-07T22:25:56.803232"
+        },
+        "master_commands": {
+          "durationMs": 50.492,
+          "endedAt": "2026-06-07T22:25:56.803201",
+          "startedAt": "2026-06-07T22:25:56.752700"
+        },
+        "set_role": {
+          "durationMs": 198.548,
+          "endedAt": "2026-06-07T22:25:56.752047",
+          "startedAt": "2026-06-07T22:25:56.553484"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 198.548,
+        "maxRequestDurationMs": 197.688,
+        "requestEndSkewMs": 171.113,
+        "requestStartSkewMs": 0.718,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 197.688,
+            "endOffsetMs": 198.242,
+            "endedAt": "2026-06-07T22:25:56.751752",
+            "startOffsetMs": 0.554,
+            "startedAt": "2026-06-07T22:25:56.554056"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 128.48,
+            "endOffsetMs": 129.241,
+            "endedAt": "2026-06-07T22:25:56.682751",
+            "startOffsetMs": 0.761,
+            "startedAt": "2026-06-07T22:25:56.554263"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 150.585,
+            "endOffsetMs": 150.833,
+            "endedAt": "2026-06-07T22:25:56.704343",
+            "startOffsetMs": 0.249,
+            "startedAt": "2026-06-07T22:25:56.553749"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 26.161,
+            "endOffsetMs": 27.129,
+            "endedAt": "2026-06-07T22:25:56.580641",
+            "startOffsetMs": 0.967,
+            "startedAt": "2026-06-07T22:25:56.554469"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:56.553484"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "cycleIndex": 0,
+      "cycleNumber": 1,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 102.576,
+          "endedAt": "2026-06-07T22:25:57.136095",
+          "startedAt": "2026-06-07T22:25:57.033514"
+        },
+        "master_commands": {
+          "durationMs": 1.192,
+          "endedAt": "2026-06-07T22:25:57.033502",
+          "startedAt": "2026-06-07T22:25:57.032306"
+        },
+        "set_role": {
+          "durationMs": 82.095,
+          "endedAt": "2026-06-07T22:25:57.031857",
+          "startedAt": "2026-06-07T22:25:56.949744"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 82.095,
+        "maxRequestDurationMs": 80.823,
+        "requestEndSkewMs": 54.551,
+        "requestStartSkewMs": 3.683,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 80.823,
+            "endOffsetMs": 81.902,
+            "endedAt": "2026-06-07T22:25:57.031674",
+            "startOffsetMs": 1.079,
+            "startedAt": "2026-06-07T22:25:56.950839"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 69.73,
+            "endOffsetMs": 72.018,
+            "endedAt": "2026-06-07T22:25:57.021791",
+            "startOffsetMs": 2.288,
+            "startedAt": "2026-06-07T22:25:56.952045"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 63.045,
+            "endOffsetMs": 67.156,
+            "endedAt": "2026-06-07T22:25:57.016929",
+            "startOffsetMs": 4.11,
+            "startedAt": "2026-06-07T22:25:56.953828"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 26.925,
+            "endOffsetMs": 27.351,
+            "endedAt": "2026-06-07T22:25:56.977126",
+            "startOffsetMs": 0.427,
+            "startedAt": "2026-06-07T22:25:56.950187"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:56.949744"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 146.052,
+          "endedAt": "2026-06-07T22:25:57.406836",
+          "startedAt": "2026-06-07T22:25:57.260773"
+        },
+        "master_commands": {
+          "durationMs": 17.741,
+          "endedAt": "2026-06-07T22:25:57.260746",
+          "startedAt": "2026-06-07T22:25:57.243000"
+        },
+        "set_role": {
+          "durationMs": 105.542,
+          "endedAt": "2026-06-07T22:25:57.242553",
+          "startedAt": "2026-06-07T22:25:57.137006"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 105.542,
+        "maxRequestDurationMs": 105.0,
+        "requestEndSkewMs": 84.576,
+        "requestStartSkewMs": 0.481,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 90.67,
+            "endOffsetMs": 90.798,
+            "endedAt": "2026-06-07T22:25:57.227813",
+            "startOffsetMs": 0.128,
+            "startedAt": "2026-06-07T22:25:57.137137"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 105.0,
+            "endOffsetMs": 105.294,
+            "endedAt": "2026-06-07T22:25:57.242311",
+            "startOffsetMs": 0.294,
+            "startedAt": "2026-06-07T22:25:57.137305"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 76.098,
+            "endOffsetMs": 76.55,
+            "endedAt": "2026-06-07T22:25:57.213566",
+            "startOffsetMs": 0.452,
+            "startedAt": "2026-06-07T22:25:57.137463"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 20.11,
+            "endOffsetMs": 20.718,
+            "endedAt": "2026-06-07T22:25:57.157735",
+            "startOffsetMs": 0.609,
+            "startedAt": "2026-06-07T22:25:57.137620"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:57.137006"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 1047.513,
+          "endedAt": "2026-06-07T22:25:58.586793",
+          "startedAt": "2026-06-07T22:25:57.539275"
+        },
+        "master_commands": {
+          "durationMs": 20.1,
+          "endedAt": "2026-06-07T22:25:57.539208",
+          "startedAt": "2026-06-07T22:25:57.519101"
+        },
+        "set_role": {
+          "durationMs": 109.066,
+          "endedAt": "2026-06-07T22:25:57.518468",
+          "startedAt": "2026-06-07T22:25:57.409387"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 109.066,
+        "maxRequestDurationMs": 108.542,
+        "requestEndSkewMs": 91.167,
+        "requestStartSkewMs": 0.98,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 101.116,
+            "endOffsetMs": 101.636,
+            "endedAt": "2026-06-07T22:25:57.511050",
+            "startOffsetMs": 0.52,
+            "startedAt": "2026-06-07T22:25:57.409924"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 108.542,
+            "endOffsetMs": 108.761,
+            "endedAt": "2026-06-07T22:25:57.518173",
+            "startOffsetMs": 0.219,
+            "startedAt": "2026-06-07T22:25:57.409626"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 106.208,
+            "endOffsetMs": 106.905,
+            "endedAt": "2026-06-07T22:25:57.516317",
+            "startOffsetMs": 0.697,
+            "startedAt": "2026-06-07T22:25:57.410103"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 16.395,
+            "endOffsetMs": 17.594,
+            "endedAt": "2026-06-07T22:25:57.427009",
+            "startOffsetMs": 1.199,
+            "startedAt": "2026-06-07T22:25:57.410599"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:57.409387"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 187.489,
+          "endedAt": "2026-06-07T22:25:59.014885",
+          "startedAt": "2026-06-07T22:25:58.827393"
+        },
+        "master_commands": {
+          "durationMs": 52.942,
+          "endedAt": "2026-06-07T22:25:58.827376",
+          "startedAt": "2026-06-07T22:25:58.774430"
+        },
+        "set_role": {
+          "durationMs": 186.707,
+          "endedAt": "2026-06-07T22:25:58.774133",
+          "startedAt": "2026-06-07T22:25:58.587423"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 186.707,
+        "maxRequestDurationMs": 186.31,
+        "requestEndSkewMs": 167.805,
+        "requestStartSkewMs": 0.375,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 186.31,
+            "endOffsetMs": 186.517,
+            "endedAt": "2026-06-07T22:25:58.773948",
+            "startOffsetMs": 0.207,
+            "startedAt": "2026-06-07T22:25:58.587633"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 102.137,
+            "endOffsetMs": 102.497,
+            "endedAt": "2026-06-07T22:25:58.689928",
+            "startOffsetMs": 0.359,
+            "startedAt": "2026-06-07T22:25:58.587787"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 147.275,
+            "endOffsetMs": 147.352,
+            "endedAt": "2026-06-07T22:25:58.734783",
+            "startOffsetMs": 0.077,
+            "startedAt": "2026-06-07T22:25:58.587505"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 18.26,
+            "endOffsetMs": 18.712,
+            "endedAt": "2026-06-07T22:25:58.606143",
+            "startOffsetMs": 0.452,
+            "startedAt": "2026-06-07T22:25:58.587877"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:58.587423"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "cycleIndex": 1,
+      "cycleNumber": 2,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 212.659,
+          "endedAt": "2026-06-07T22:25:59.360392",
+          "startedAt": "2026-06-07T22:25:59.147730"
+        },
+        "master_commands": {
+          "durationMs": 0.57,
+          "endedAt": "2026-06-07T22:25:59.147722",
+          "startedAt": "2026-06-07T22:25:59.147150"
+        },
+        "set_role": {
+          "durationMs": 131.332,
+          "endedAt": "2026-06-07T22:25:59.146842",
+          "startedAt": "2026-06-07T22:25:59.015506"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 131.332,
+        "maxRequestDurationMs": 130.988,
+        "requestEndSkewMs": 104.778,
+        "requestStartSkewMs": 0.403,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 130.988,
+            "endOffsetMs": 131.193,
+            "endedAt": "2026-06-07T22:25:59.146707",
+            "startOffsetMs": 0.205,
+            "startedAt": "2026-06-07T22:25:59.015716"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 86.664,
+            "endOffsetMs": 87.013,
+            "endedAt": "2026-06-07T22:25:59.102529",
+            "startOffsetMs": 0.349,
+            "startedAt": "2026-06-07T22:25:59.015859"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 112.962,
+            "endOffsetMs": 113.454,
+            "endedAt": "2026-06-07T22:25:59.128968",
+            "startOffsetMs": 0.491,
+            "startedAt": "2026-06-07T22:25:59.016003"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 26.327,
+            "endOffsetMs": 26.415,
+            "endedAt": "2026-06-07T22:25:59.041930",
+            "startOffsetMs": 0.088,
+            "startedAt": "2026-06-07T22:25:59.015598"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:59.015506"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 145.951,
+          "endedAt": "2026-06-07T22:25:59.665613",
+          "startedAt": "2026-06-07T22:25:59.519658"
+        },
+        "master_commands": {
+          "durationMs": 36.634,
+          "endedAt": "2026-06-07T22:25:59.519640",
+          "startedAt": "2026-06-07T22:25:59.483002"
+        },
+        "set_role": {
+          "durationMs": 121.637,
+          "endedAt": "2026-06-07T22:25:59.482713",
+          "startedAt": "2026-06-07T22:25:59.361072"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 121.637,
+        "maxRequestDurationMs": 121.413,
+        "requestEndSkewMs": 109.659,
+        "requestStartSkewMs": 0.386,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 121.413,
+            "endOffsetMs": 121.493,
+            "endedAt": "2026-06-07T22:25:59.482571",
+            "startOffsetMs": 0.08,
+            "startedAt": "2026-06-07T22:25:59.361156"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 119.149,
+            "endOffsetMs": 119.355,
+            "endedAt": "2026-06-07T22:25:59.480435",
+            "startOffsetMs": 0.205,
+            "startedAt": "2026-06-07T22:25:59.361280"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 95.729,
+            "endOffsetMs": 96.068,
+            "endedAt": "2026-06-07T22:25:59.457148",
+            "startOffsetMs": 0.339,
+            "startedAt": "2026-06-07T22:25:59.361415"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 11.368,
+            "endOffsetMs": 11.834,
+            "endedAt": "2026-06-07T22:25:59.372914",
+            "startOffsetMs": 0.466,
+            "startedAt": "2026-06-07T22:25:59.361540"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:59.361072"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 1229.395,
+          "endedAt": "2026-06-07T22:26:01.024510",
+          "startedAt": "2026-06-07T22:25:59.795113"
+        },
+        "master_commands": {
+          "durationMs": 20.247,
+          "endedAt": "2026-06-07T22:25:59.795100",
+          "startedAt": "2026-06-07T22:25:59.774849"
+        },
+        "set_role": {
+          "durationMs": 108.405,
+          "endedAt": "2026-06-07T22:25:59.774600",
+          "startedAt": "2026-06-07T22:25:59.666191"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 108.405,
+        "maxRequestDurationMs": 108.174,
+        "requestEndSkewMs": 84.723,
+        "requestStartSkewMs": 0.335,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 76.419,
+            "endOffsetMs": 76.616,
+            "endedAt": "2026-06-07T22:25:59.742815",
+            "startOffsetMs": 0.197,
+            "startedAt": "2026-06-07T22:25:59.666390"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 108.174,
+            "endOffsetMs": 108.25,
+            "endedAt": "2026-06-07T22:25:59.774449",
+            "startOffsetMs": 0.077,
+            "startedAt": "2026-06-07T22:25:59.666272"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 88.041,
+            "endOffsetMs": 88.343,
+            "endedAt": "2026-06-07T22:25:59.754540",
+            "startOffsetMs": 0.301,
+            "startedAt": "2026-06-07T22:25:59.666497"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 23.116,
+            "endOffsetMs": 23.527,
+            "endedAt": "2026-06-07T22:25:59.689727",
+            "startOffsetMs": 0.412,
+            "startedAt": "2026-06-07T22:25:59.666607"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:25:59.666191"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 158.757,
+          "endedAt": "2026-06-07T22:26:01.440987",
+          "startedAt": "2026-06-07T22:26:01.282226"
+        },
+        "master_commands": {
+          "durationMs": 58.403,
+          "endedAt": "2026-06-07T22:26:01.282210",
+          "startedAt": "2026-06-07T22:26:01.223802"
+        },
+        "set_role": {
+          "durationMs": 198.42,
+          "endedAt": "2026-06-07T22:26:01.223503",
+          "startedAt": "2026-06-07T22:26:01.025080"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 198.42,
+        "maxRequestDurationMs": 198.0,
+        "requestEndSkewMs": 182.359,
+        "requestStartSkewMs": 0.406,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 198.0,
+            "endOffsetMs": 198.25,
+            "endedAt": "2026-06-07T22:26:01.223338",
+            "startOffsetMs": 0.25,
+            "startedAt": "2026-06-07T22:26:01.025333"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 112.852,
+            "endOffsetMs": 113.224,
+            "endedAt": "2026-06-07T22:26:01.138312",
+            "startOffsetMs": 0.371,
+            "startedAt": "2026-06-07T22:26:01.025456"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 150.966,
+            "endOffsetMs": 151.053,
+            "endedAt": "2026-06-07T22:26:01.176141",
+            "startOffsetMs": 0.087,
+            "startedAt": "2026-06-07T22:26:01.025171"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 15.398,
+            "endOffsetMs": 15.891,
+            "endedAt": "2026-06-07T22:26:01.040979",
+            "startOffsetMs": 0.493,
+            "startedAt": "2026-06-07T22:26:01.025575"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:01.025080"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "cycleIndex": 2,
+      "cycleNumber": 3,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 106.362,
+          "endedAt": "2026-06-07T22:26:01.679613",
+          "startedAt": "2026-06-07T22:26:01.573248"
+        },
+        "master_commands": {
+          "durationMs": 0.58,
+          "endedAt": "2026-06-07T22:26:01.573240",
+          "startedAt": "2026-06-07T22:26:01.572657"
+        },
+        "set_role": {
+          "durationMs": 130.84,
+          "endedAt": "2026-06-07T22:26:01.572416",
+          "startedAt": "2026-06-07T22:26:01.441574"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 130.84,
+        "maxRequestDurationMs": 130.294,
+        "requestEndSkewMs": 113.543,
+        "requestStartSkewMs": 0.319,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 91.727,
+            "endOffsetMs": 91.925,
+            "endedAt": "2026-06-07T22:26:01.533505",
+            "startOffsetMs": 0.198,
+            "startedAt": "2026-06-07T22:26:01.441774"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 104.194,
+            "endOffsetMs": 104.49,
+            "endedAt": "2026-06-07T22:26:01.546070",
+            "startOffsetMs": 0.296,
+            "startedAt": "2026-06-07T22:26:01.441872"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 130.294,
+            "endOffsetMs": 130.696,
+            "endedAt": "2026-06-07T22:26:01.572276",
+            "startOffsetMs": 0.402,
+            "startedAt": "2026-06-07T22:26:01.441978"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 17.07,
+            "endOffsetMs": 17.153,
+            "endedAt": "2026-06-07T22:26:01.458732",
+            "startOffsetMs": 0.083,
+            "startedAt": "2026-06-07T22:26:01.441657"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:01.441574"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 260.054,
+          "endedAt": "2026-06-07T22:26:02.067365",
+          "startedAt": "2026-06-07T22:26:01.807309"
+        },
+        "master_commands": {
+          "durationMs": 18.956,
+          "endedAt": "2026-06-07T22:26:01.807296",
+          "startedAt": "2026-06-07T22:26:01.788335"
+        },
+        "set_role": {
+          "durationMs": 107.768,
+          "endedAt": "2026-06-07T22:26:01.788053",
+          "startedAt": "2026-06-07T22:26:01.680281"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 107.768,
+        "maxRequestDurationMs": 107.53,
+        "requestEndSkewMs": 96.483,
+        "requestStartSkewMs": 0.42,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 107.53,
+            "endOffsetMs": 107.619,
+            "endedAt": "2026-06-07T22:26:01.787907",
+            "startOffsetMs": 0.089,
+            "startedAt": "2026-06-07T22:26:01.680375"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 91.851,
+            "endOffsetMs": 92.083,
+            "endedAt": "2026-06-07T22:26:01.772372",
+            "startOffsetMs": 0.232,
+            "startedAt": "2026-06-07T22:26:01.680516"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 71.337,
+            "endOffsetMs": 71.698,
+            "endedAt": "2026-06-07T22:26:01.751987",
+            "startOffsetMs": 0.361,
+            "startedAt": "2026-06-07T22:26:01.680644"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 10.627,
+            "endOffsetMs": 11.136,
+            "endedAt": "2026-06-07T22:26:01.691425",
+            "startOffsetMs": 0.509,
+            "startedAt": "2026-06-07T22:26:01.680793"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:01.680281"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 1109.962,
+          "endedAt": "2026-06-07T22:26:03.306814",
+          "startedAt": "2026-06-07T22:26:02.196851"
+        },
+        "master_commands": {
+          "durationMs": 18.297,
+          "endedAt": "2026-06-07T22:26:02.196837",
+          "startedAt": "2026-06-07T22:26:02.178537"
+        },
+        "set_role": {
+          "durationMs": 110.193,
+          "endedAt": "2026-06-07T22:26:02.178197",
+          "startedAt": "2026-06-07T22:26:02.068000"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 110.193,
+        "maxRequestDurationMs": 109.847,
+        "requestEndSkewMs": 86.342,
+        "requestStartSkewMs": 0.393,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 109.847,
+            "endOffsetMs": 110.054,
+            "endedAt": "2026-06-07T22:26:02.178060",
+            "startOffsetMs": 0.207,
+            "startedAt": "2026-06-07T22:26:02.068208"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 109.03,
+            "endOffsetMs": 109.103,
+            "endedAt": "2026-06-07T22:26:02.177109",
+            "startOffsetMs": 0.073,
+            "startedAt": "2026-06-07T22:26:02.068077"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 104.878,
+            "endOffsetMs": 105.189,
+            "endedAt": "2026-06-07T22:26:02.173196",
+            "startOffsetMs": 0.311,
+            "startedAt": "2026-06-07T22:26:02.068314"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 23.245,
+            "endOffsetMs": 23.712,
+            "endedAt": "2026-06-07T22:26:02.091719",
+            "startOffsetMs": 0.466,
+            "startedAt": "2026-06-07T22:26:02.068469"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:02.068000"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 134.299,
+          "endedAt": "2026-06-07T22:26:03.642687",
+          "startedAt": "2026-06-07T22:26:03.508385"
+        },
+        "master_commands": {
+          "durationMs": 10.816,
+          "endedAt": "2026-06-07T22:26:03.508371",
+          "startedAt": "2026-06-07T22:26:03.497552"
+        },
+        "set_role": {
+          "durationMs": 189.869,
+          "endedAt": "2026-06-07T22:26:03.497313",
+          "startedAt": "2026-06-07T22:26:03.307440"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 189.869,
+        "maxRequestDurationMs": 189.505,
+        "requestEndSkewMs": 170.881,
+        "requestStartSkewMs": 0.354,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 189.505,
+            "endOffsetMs": 189.714,
+            "endedAt": "2026-06-07T22:26:03.497163",
+            "startOffsetMs": 0.209,
+            "startedAt": "2026-06-07T22:26:03.307655"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 109.16,
+            "endOffsetMs": 109.479,
+            "endedAt": "2026-06-07T22:26:03.416929",
+            "startOffsetMs": 0.32,
+            "startedAt": "2026-06-07T22:26:03.307764"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 154.336,
+            "endOffsetMs": 154.416,
+            "endedAt": "2026-06-07T22:26:03.461866",
+            "startOffsetMs": 0.08,
+            "startedAt": "2026-06-07T22:26:03.307524"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 18.398,
+            "endOffsetMs": 18.833,
+            "endedAt": "2026-06-07T22:26:03.326281",
+            "startOffsetMs": 0.434,
+            "startedAt": "2026-06-07T22:26:03.307878"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:03.307440"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "cycleIndex": 3,
+      "cycleNumber": 4,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 212.51,
+          "endedAt": "2026-06-07T22:26:03.995474",
+          "startedAt": "2026-06-07T22:26:03.782961"
+        },
+        "master_commands": {
+          "durationMs": 0.801,
+          "endedAt": "2026-06-07T22:26:03.782953",
+          "startedAt": "2026-06-07T22:26:03.782149"
+        },
+        "set_role": {
+          "durationMs": 138.546,
+          "endedAt": "2026-06-07T22:26:03.781837",
+          "startedAt": "2026-06-07T22:26:03.643287"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 138.546,
+        "maxRequestDurationMs": 137.89,
+        "requestEndSkewMs": 120.967,
+        "requestStartSkewMs": 0.403,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 79.287,
+            "endOffsetMs": 79.518,
+            "endedAt": "2026-06-07T22:26:03.722813",
+            "startOffsetMs": 0.232,
+            "startedAt": "2026-06-07T22:26:03.643516"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 108.824,
+            "endOffsetMs": 109.224,
+            "endedAt": "2026-06-07T22:26:03.752519",
+            "startOffsetMs": 0.401,
+            "startedAt": "2026-06-07T22:26:03.643692"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 137.89,
+            "endOffsetMs": 138.385,
+            "endedAt": "2026-06-07T22:26:03.781680",
+            "startOffsetMs": 0.495,
+            "startedAt": "2026-06-07T22:26:03.643787"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 17.326,
+            "endOffsetMs": 17.418,
+            "endedAt": "2026-06-07T22:26:03.660712",
+            "startOffsetMs": 0.092,
+            "startedAt": "2026-06-07T22:26:03.643379"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:03.643287"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      },
+      "masterDeviceId": "29d816ac550b7ece",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 160.635,
+          "endedAt": "2026-06-07T22:26:04.393694",
+          "startedAt": "2026-06-07T22:26:04.233055"
+        },
+        "master_commands": {
+          "durationMs": 29.542,
+          "endedAt": "2026-06-07T22:26:04.233040",
+          "startedAt": "2026-06-07T22:26:04.203494"
+        },
+        "set_role": {
+          "durationMs": 207.023,
+          "endedAt": "2026-06-07T22:26:04.203237",
+          "startedAt": "2026-06-07T22:26:03.996211"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 207.023,
+        "maxRequestDurationMs": 206.795,
+        "requestEndSkewMs": 193.272,
+        "requestStartSkewMs": 0.229,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 206.795,
+            "endOffsetMs": 206.877,
+            "endedAt": "2026-06-07T22:26:04.203095",
+            "startOffsetMs": 0.082,
+            "startedAt": "2026-06-07T22:26:03.996296"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 126.527,
+            "endOffsetMs": 126.703,
+            "endedAt": "2026-06-07T22:26:04.122921",
+            "startOffsetMs": 0.176,
+            "startedAt": "2026-06-07T22:26:03.996390"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 104.52,
+            "endOffsetMs": 104.767,
+            "endedAt": "2026-06-07T22:26:04.100987",
+            "startOffsetMs": 0.247,
+            "startedAt": "2026-06-07T22:26:03.996462"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 13.294,
+            "endOffsetMs": 13.605,
+            "endedAt": "2026-06-07T22:26:04.009824",
+            "startOffsetMs": 0.311,
+            "startedAt": "2026-06-07T22:26:03.996526"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.153",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:03.996211"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "RF8M90QE7LX",
+        "macos"
+      ],
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "9885e6503930304946",
+        "expectedResult": "capture",
+        "knownBlocker": "s7_exynos_camera_timeout",
+        "label": "SM G935F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 8.0.0 (API 26)"
+      },
+      "masterDeviceId": "9885e6503930304946",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 180.181,
+          "endedAt": "2026-06-07T22:26:04.724555",
+          "startedAt": "2026-06-07T22:26:04.544371"
+        },
+        "master_commands": {
+          "durationMs": 15.716,
+          "endedAt": "2026-06-07T22:26:04.544356",
+          "startedAt": "2026-06-07T22:26:04.528636"
+        },
+        "set_role": {
+          "durationMs": 134.11,
+          "endedAt": "2026-06-07T22:26:04.528355",
+          "startedAt": "2026-06-07T22:26:04.394242"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 134.11,
+        "maxRequestDurationMs": 133.849,
+        "requestEndSkewMs": 118.264,
+        "requestStartSkewMs": 0.378,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 97.526,
+            "endOffsetMs": 97.736,
+            "endedAt": "2026-06-07T22:26:04.491984",
+            "startOffsetMs": 0.211,
+            "startedAt": "2026-06-07T22:26:04.394454"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 133.849,
+            "endOffsetMs": 133.927,
+            "endedAt": "2026-06-07T22:26:04.528175",
+            "startOffsetMs": 0.078,
+            "startedAt": "2026-06-07T22:26:04.394323"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 87.996,
+            "endOffsetMs": 88.302,
+            "endedAt": "2026-06-07T22:26:04.482552",
+            "startOffsetMs": 0.306,
+            "startedAt": "2026-06-07T22:26:04.394551"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 15.207,
+            "endOffsetMs": 15.663,
+            "endedAt": "2026-06-07T22:26:04.409911",
+            "startOffsetMs": 0.456,
+            "startedAt": "2026-06-07T22:26:04.394701"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.64",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:04.394242"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "macos"
+      ],
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6402",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 253.354,
+          "endedAt": "2026-06-07T22:26:05.170619",
+          "startedAt": "2026-06-07T22:26:04.917261"
+        },
+        "master_commands": {
+          "durationMs": 38.57,
+          "endedAt": "2026-06-07T22:26:04.917244",
+          "startedAt": "2026-06-07T22:26:04.878669"
+        },
+        "set_role": {
+          "durationMs": 153.188,
+          "endedAt": "2026-06-07T22:26:04.878369",
+          "startedAt": "2026-06-07T22:26:04.725178"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 153.188,
+        "maxRequestDurationMs": 152.689,
+        "requestEndSkewMs": 133.01,
+        "requestStartSkewMs": 0.392,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 64.736,
+            "endOffsetMs": 64.955,
+            "endedAt": "2026-06-07T22:26:04.790142",
+            "startOffsetMs": 0.219,
+            "startedAt": "2026-06-07T22:26:04.725400"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 152.689,
+            "endOffsetMs": 153.023,
+            "endedAt": "2026-06-07T22:26:04.878209",
+            "startOffsetMs": 0.334,
+            "startedAt": "2026-06-07T22:26:04.725517"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 112.863,
+            "endOffsetMs": 112.933,
+            "endedAt": "2026-06-07T22:26:04.838120",
+            "startOffsetMs": 0.07,
+            "startedAt": "2026-06-07T22:26:04.725253"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 19.551,
+            "endOffsetMs": 20.013,
+            "endedAt": "2026-06-07T22:26:04.745200",
+            "startOffsetMs": 0.462,
+            "startedAt": "2026-06-07T22:26:04.725644"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.160",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:04.725178"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 3,
+      "clientDeviceIds": [
+        "29d816ac550b7ece",
+        "9885e6503930304946",
+        "RF8M90QE7LX"
+      ],
+      "cycleIndex": 4,
+      "cycleNumber": 5,
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      },
+      "masterDeviceId": "macos",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 106.457,
+          "endedAt": "2026-06-07T22:26:05.392062",
+          "startedAt": "2026-06-07T22:26:05.285602"
+        },
+        "master_commands": {
+          "durationMs": 0.569,
+          "endedAt": "2026-06-07T22:26:05.285595",
+          "startedAt": "2026-06-07T22:26:05.285023"
+        },
+        "set_role": {
+          "durationMs": 113.568,
+          "endedAt": "2026-06-07T22:26:05.284780",
+          "startedAt": "2026-06-07T22:26:05.171208"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 113.568,
+        "maxRequestDurationMs": 113.215,
+        "requestEndSkewMs": 88.883,
+        "requestStartSkewMs": 0.329,
+        "requestTimings": {
+          "29d816ac550b7ece": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "durationMs": 113.215,
+            "endOffsetMs": 113.414,
+            "endedAt": "2026-06-07T22:26:05.284630",
+            "startOffsetMs": 0.199,
+            "startedAt": "2026-06-07T22:26:05.171409"
+          },
+          "9885e6503930304946": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "durationMs": 81.342,
+            "endOffsetMs": 81.644,
+            "endedAt": "2026-06-07T22:26:05.252860",
+            "startOffsetMs": 0.303,
+            "startedAt": "2026-06-07T22:26:05.171515"
+          },
+          "RF8M90QE7LX": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "durationMs": 52.845,
+            "endOffsetMs": 53.248,
+            "endedAt": "2026-06-07T22:26:05.224464",
+            "startOffsetMs": 0.404,
+            "startedAt": "2026-06-07T22:26:05.171616"
+          },
+          "macos": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "durationMs": 24.456,
+            "endOffsetMs": 24.531,
+            "endedAt": "2026-06-07T22:26:05.195746",
+            "startOffsetMs": 0.075,
+            "startedAt": "2026-06-07T22:26:05.171287"
+          }
+        },
+        "responses": {
+          "29d816ac550b7ece": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "9885e6503930304946": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "RF8M90QE7LX": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.159",
+              "role": "slave",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "macos": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-07T22:26:05.171208"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6400",
+            "captureEnabled": true,
+            "deviceId": "29d816ac550b7ece",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G960F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 10 (API 29)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": "s7_exynos_camera_timeout",
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6401",
+            "captureEnabled": true,
+            "deviceId": "9885e6503930304946",
+            "expectedResult": "capture",
+            "knownBlocker": "s7_exynos_camera_timeout",
+            "label": "SM G935F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 8.0.0 (API 26)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:6402",
+            "captureEnabled": true,
+            "deviceId": "RF8M90QE7LX",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "SM G970F (mobile)",
+            "lens": "autoBack",
+            "platform": "android",
+            "profile": "standard1080p30",
+            "runtime": "Android 12 (API 31)"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://127.0.0.1:4770",
+            "captureEnabled": true,
+            "deviceId": "macos",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "macOS (desktop)",
+            "lens": "autoBack",
+            "platform": "macos",
+            "profile": "standard1080p30",
+            "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+          }
+        }
+      ]
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "runtimeRoleSwitchTimingStats": {
+    "maxRequestDurationMs": {
+      "avgMs": 142.927,
+      "count": 20,
+      "maxMs": 206.795,
+      "minMs": 80.823
+    },
+    "requestEndSkewMs": {
+      "avgMs": 123.86,
+      "count": 20,
+      "maxMs": 193.272,
+      "minMs": 54.551
+    },
+    "requestStartSkewMs": {
+      "avgMs": 0.599,
+      "count": 20,
+      "maxMs": 3.683,
+      "minMs": 0.229
+    }
+  },
+  "sharedBarrierPerRotation": true,
+  "startedAt": "2026-06-07T22:25:54.962938",
+  "status": "passed",
+  "targetCount": 4,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6400",
+      "captureEnabled": true,
+      "deviceId": "29d816ac550b7ece",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G960F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 10 (API 29)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6401",
+      "captureEnabled": true,
+      "deviceId": "9885e6503930304946",
+      "expectedResult": "capture",
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "label": "SM G935F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 8.0.0 (API 26)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6402",
+      "captureEnabled": true,
+      "deviceId": "RF8M90QE7LX",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G970F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12 (API 31)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4770",
+      "captureEnabled": true,
+      "deviceId": "macos",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "macOS (desktop)",
+      "lens": "autoBack",
+      "platform": "macos",
+      "profile": "standard1080p30",
+      "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+    }
+  ]
+}

@@ -28,6 +28,10 @@ class IosCaptureReproTests(unittest.TestCase):
         self.assertIn("--dart-define=HYDRACAM_AUTOMATION_PORT=4771", command)
         self.assertIn("--dart-define=HYDRACAM_AUTOMATION=true", command)
         self.assertIn("--dart-define=HYDRACAM_AUTOMATION_ROLE=master", command)
+        self.assertIn(
+            "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=macos",
+            command,
+        )
 
     def test_flutter_launch_command_can_force_slave_to_master_ip(self) -> None:
         module = load_module()

@@ -65,6 +65,9 @@ class MainActivity: FlutterActivity() {
 		extras.getString("preferredMasterIp")?.let {
 			payload["preferredMasterIp"] = it
 		}
+		extras.getString("automationTargetId")?.let {
+			payload["automationTargetId"] = it
+		}
 		if (extras.containsKey("forceSlaveMode")) {
 			payload["forceSlaveMode"] = extras.getBoolean("forceSlaveMode")
 		}

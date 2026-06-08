@@ -17,11 +17,13 @@ def hasReleaseKeystore =
     keystorePropertiesFile.exists() &&
     keystoreProperties["storeFile"] &&
     file(keystoreProperties["storeFile"]).exists()
+def hydracamNdkVersion =
+    (project.findProperty("hydracamNdkVersion") ?: "28.2.13676358").toString()
 
 android {
     namespace = "com.amaia23.hydracam"
     compileSdk = 36
-    ndkVersion = "28.2.13676358"
+    ndkVersion = hydracamNdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

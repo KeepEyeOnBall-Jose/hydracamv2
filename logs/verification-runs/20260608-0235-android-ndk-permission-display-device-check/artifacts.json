@@ -1,0 +1,83 @@
+{
+  "acceptanceChecks": [
+    "Default Android debug build uses the repaired NDK without hydracamNdkVersion override",
+    "Rebuilt debug APK installs on every visible supported Android device or records an explicit blocker",
+    "HydraCam launches on each installed Android device and evidence captures permission/display state"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:36:02.667220+00:00"
+    },
+    {
+      "command": [
+        "find",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358",
+        "-maxdepth",
+        "2",
+        "-type",
+        "f",
+        "-print"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:36:02.699115+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:36:02.817234+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:36:15.348002+00:00"
+    },
+    {
+      "command": [
+        "mv",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358.incomplete-20260608-0235"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:36:30.608358+00:00"
+    },
+    {
+      "command": [
+        "mv",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358.incomplete-20260608-0235-retry1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:42:14.035932+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "android-ndk-permission-display-device-check",
+    "source": "user request 2026-06-08",
+    "title": "Fix Android NDK and verify HydraCam Android permission/display build on devices"
+  },
+  "notes": [],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "prepared",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

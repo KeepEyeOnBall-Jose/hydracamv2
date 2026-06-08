@@ -1,0 +1,81 @@
+{
+  "clientCount": 2,
+  "clientDeviceIds": [
+    "RF8M90QE7LX",
+    "macos"
+  ],
+  "failures": [
+    "role_switch: Timed out waiting for expected connected slave client remote IPs on 29d816ac550b7ece: expected=['192.168.178.159', '192.168.178.160'], seen=[], last={'connectedClientCount': 0, 'connectedClientIds': [], 'connectedClients': [], 'session': {'sessionGuid': None, 'deviceType': 'Unknown', 'isActive': False, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}}"
+  ],
+  "knownBlocker": null,
+  "master": {
+    "bridgeUrl": "http://127.0.0.1:6400",
+    "captureEnabled": true,
+    "deviceId": "29d816ac550b7ece",
+    "expectedResult": "capture",
+    "knownBlocker": null,
+    "label": "SM G960F (mobile)",
+    "lens": "autoBack",
+    "platform": "android",
+    "profile": "standard1080p30",
+    "runtime": "Android 10 (API 29)"
+  },
+  "masterDeviceId": "29d816ac550b7ece",
+  "roleSwitchOnly": true,
+  "status": "failed",
+  "targetResults": [
+    {
+      "failures": [
+        "role_switch: Timed out waiting for expected connected slave client remote IPs on 29d816ac550b7ece: expected=['192.168.178.159', '192.168.178.160'], seen=[], last={'connectedClientCount': 0, 'connectedClientIds': [], 'connectedClients': [], 'session': {'sessionGuid': None, 'deviceType': 'Unknown', 'isActive': False, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}}"
+      ],
+      "knownBlocker": null,
+      "status": "failed",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      }
+    },
+    {
+      "failures": [],
+      "knownBlocker": null,
+      "status": "role_switched",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      }
+    },
+    {
+      "failures": [],
+      "knownBlocker": null,
+      "status": "role_switched",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      }
+    }
+  ]
+}

@@ -11,6 +11,7 @@ RUN_VALIDATION=1
 SETUP_ANDROID=1
 SETUP_IOS=1
 SETUP_MACOS=1
+DOWNLOAD_IOS_PLATFORM=1
 FLUTTER_DIR="$HOME/development/flutter"
 EXPECTED_FLUTTER_VERSION="3.44.1"
 
@@ -30,6 +31,8 @@ Options:
   --skip-validation         Install/check tooling only; do not run Flutter gates.
   --skip-android            Skip Android SDK setup and Android build validation.
   --skip-ios                Skip Xcode/CocoaPods setup and iOS build validation.
+  --skip-ios-platform-download
+                            Do not download the Xcode iOS platform when missing.
   --skip-macos              Skip macOS desktop enablement/build validation.
   --flutter-dir <dir>       Flutter SDK path to use or create.
   -h, --help                Show this help.
@@ -100,6 +103,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --skip-ios)
       SETUP_IOS=0
+      shift
+      ;;
+    --skip-ios-platform-download)
+      DOWNLOAD_IOS_PLATFORM=0
       shift
       ;;
     --skip-macos)
@@ -216,7 +223,8 @@ if [[ "$SETUP_ANDROID" -eq 1 ]]; then
     "platforms;android-36" \
     "build-tools;28.0.3" \
     "build-tools;35.0.0" \
-    "ndk;28.2.13676358"
+    "ndk;28.2.13676358" \
+    "cmake;3.22.1"
   set +o pipefail
   yes | "$sdkmanager_path" --sdk_root="$ANDROID_HOME" --licenses
   license_status=$?
@@ -241,6 +249,14 @@ if [[ "$SETUP_IOS" -eq 1 ]]; then
       warn "Xcode license is not accepted. Run: sudo xcodebuild -license"
     fi
     run sudo xcodebuild -runFirstLaunch
+    if [[ "$DOWNLOAD_IOS_PLATFORM" -eq 1 ]]; then
+      sdk_listing="$(xcodebuild -showsdks 2>&1 || true)"
+      if [[ "$sdk_listing" == *iphoneos* ]]; then
+        log "Xcode iOS platform SDK is already available."
+      else
+        run sudo xcodebuild -downloadPlatform iOS
+      fi
+    fi
   fi
 
   if ! command -v pod >/dev/null 2>&1; then
@@ -294,7 +310,7 @@ if [[ "$RUN_VALIDATION" -eq 1 ]]; then
   fi
 
   if [[ "$SETUP_IOS" -eq 1 ]]; then
-    run flutter build ios --debug --simulator
+    run flutter build ios --debug --no-codesign
   fi
 fi
 

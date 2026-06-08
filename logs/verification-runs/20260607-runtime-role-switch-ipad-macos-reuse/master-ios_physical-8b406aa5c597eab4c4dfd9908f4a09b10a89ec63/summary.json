@@ -1,0 +1,63 @@
+{
+  "clientCount": 1,
+  "clientDeviceIds": [
+    "macos"
+  ],
+  "failures": [
+    "role_switch: Command connected_clients was not registered: POST /commands/connected_clients failed: HTTP 404: {\"error\":\"unknown_command\",\"command\":\"connected_clients\"}"
+  ],
+  "knownBlocker": null,
+  "master": {
+    "bridgeUrl": "http://192.168.178.104:4762",
+    "captureEnabled": true,
+    "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+    "expectedResult": "capture",
+    "knownBlocker": null,
+    "label": "iPad (5) (mobile)",
+    "lens": "autoBack",
+    "platform": "ios_physical",
+    "profile": "standard1080p30",
+    "runtime": "iOS 15.6.1 19G82"
+  },
+  "masterDeviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+  "roleSwitchOnly": true,
+  "status": "failed",
+  "targetResults": [
+    {
+      "failures": [
+        "role_switch: Command connected_clients was not registered: POST /commands/connected_clients failed: HTTP 404: {\"error\":\"unknown_command\",\"command\":\"connected_clients\"}"
+      ],
+      "knownBlocker": null,
+      "status": "failed",
+      "target": {
+        "bridgeUrl": "http://192.168.178.104:4762",
+        "captureEnabled": true,
+        "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "iPad (5) (mobile)",
+        "lens": "autoBack",
+        "platform": "ios_physical",
+        "profile": "standard1080p30",
+        "runtime": "iOS 15.6.1 19G82"
+      }
+    },
+    {
+      "failures": [],
+      "knownBlocker": null,
+      "status": "role_switched",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+## master-jose-2025...github/master-jose-2025
+ M android/app/build.gradle
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M docs/control/README.md
+ M docs/control/status-and-roadmap.md
+ M ios/Runner/AppDelegate.swift
+ M lib/automation/automation_bridge.dart
+ M lib/automation/automation_config.dart
+ M lib/main.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/services/launch_config_service.dart
+ M logs/verification-runs/20260607-1715-win11-dev-host-readiness/artifacts.json
+ M logs/verification-runs/20260607-1715-win11-dev-host-readiness/commands.log
+ M logs/verification-runs/20260607-1715-win11-dev-host-readiness/summary.md
+ M macos/Runner/MainFlutterWindow.swift
+ M scripts/ios_capture_repro.py
+ M scripts/run_parallel_device_matrix.py
+ M scripts/run_rotating_master_slave_matrix.py
+ M scripts/test_ios_capture_repro.py
+ M scripts/test_run_parallel_device_matrix.py
+ M scripts/test_run_rotating_master_slave_matrix.py
+ M test/automation/automation_config_test.dart
+ M test/automation/runtime_role_switch_test.dart
+?? docs/control/win11-dev-host.md
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/device-logs/
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/git-status-after.txt
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/screenshots/
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/video/
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-accept-android-licenses.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-build-apk.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-build-windows.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-d-drive-android-build-from-tar.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-d-drive-android-build.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-fix-checkout.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-install-jdk17.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-windows-symlink-diagnostic.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-wsl-doctor-capture.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-wsl-flutter-smoke.ps1
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-wsl-install-camera-deps.sh
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-wsl-linux-build.sh
+?? logs/verification-runs/20260607-1715-win11-dev-host-readiness/win11-wsl-resume.ps1
+?? logs/verification-runs/20260607-runtime-role-switch-android-current-cache-proof/
+?? logs/verification-runs/20260607-runtime-role-switch-android-current-cache-warm-rerun/
+?? logs/verification-runs/20260607-runtime-role-switch-android-handler-race-fix-warm-immediate/
+?? logs/verification-runs/20260607-runtime-role-switch-android-handler-race-fix-warm-prime/
+?? logs/verification-runs/20260607-runtime-role-switch-android-handler-race-fix/
+?? logs/verification-runs/20260607-runtime-role-switch-android-health-identity-proof/
+?? logs/verification-runs/20260607-runtime-role-switch-android-health-identity-single-g960f/
+?? logs/verification-runs/20260607-runtime-role-switch-android-health-identity-warm-immediate/
+?? logs/verification-runs/20260607-runtime-role-switch-android-health-identity-warm-prime/
+?? logs/verification-runs/20260607-runtime-role-switch-android-macos-currentapk-expected-ip/
+?? logs/verification-runs/20260607-runtime-role-switch-android-macos-currentapk/
+?? logs/verification-runs/20260607-runtime-role-switch-android-macos-skipinstall/
+?? logs/verification-runs/20260607-runtime-role-switch-android-single-master-g960f-immediate/
+?? logs/verification-runs/20260607-runtime-role-switch-capture-accelerated/
+?? logs/verification-runs/20260607-runtime-role-switch-capture-pass-capable-settings-fastpath/
+?? logs/verification-runs/20260607-runtime-role-switch-capture-pass-capable/
+?? logs/verification-runs/20260607-runtime-role-switch-ipad-android-macos/
+?? logs/verification-runs/20260607-runtime-role-switch-ipad-macos-currentbuild/
+?? logs/verification-runs/20260607-runtime-role-switch-ipad-macos-reuse/
+?? logs/verification-runs/20260607-runtime-role-switch-iphone-macos/
+?? logs/verification-runs/20260607-runtime-role-switch-mixed-identity-warm-prime-ported/
+?? logs/verification-runs/20260607-runtime-role-switch-mixed-identity-warm-prime/
+?? logs/verification-runs/20260607-runtime-role-switch-mobile-current-cache-warm-fastpath/
+?? logs/verification-runs/20260607-runtime-role-switch-mobile-warm-summary-fastpath/
+?? logs/verification-runs/20260607-runtime-role-switch-single-master-rf8m90qe7lx/
+?? logs/verification-runs/20260607-runtime-role-switch-single-master-s10e-fastpath/
+?? logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-immediate-second/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-no-success-logs/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-prime-direct-macos/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-prime/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-summary-fastpath/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-summary-no-adb-forward/
+?? logs/verification-runs/20260607-runtime-role-switch-warm-summary-subsecond-poll/
+?? test/automation/automation_bridge_test.dart
+?? test/master/master_network_snapshot_cache_test.dart

@@ -87,8 +87,18 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   one photo and one video after the no-flash camera fix. A 2026-06-07 iPhone
   12 Pro / iOS 26.5 automation rerun passed `ultraWide` capture at
   `sport1080p60` and `detail4k30`; saved-video metadata still reported
-  unavailable. The prior broad "white screen" blocker is superseded; keep
-  validating release/profile builds, signing, two-device flows, and native
+  unavailable. A later 2026-06-07 iPhone Profile automation build installed and
+  launched without Flutter tooling, exposing an identity-matched bridge at
+  `192.168.178.168:4762` for hot role-switch runs. The latest 2026-06-08 iPad
+  Profile warm-prime attempt
+  `20260608-ipad-warm-prime-after-default-staged-with-host` packaged the
+  Profile `Runner.app` into an IPA, installed it with
+  `flutter install --use-application-binary`, retried launch twice, then
+  xctrace classified the remaining blocker as `ios_profile_not_trusted`; trust
+  the developer profile on the iPad before expecting it to join no-tooling hot
+  role-switch runs. The
+  prior broad "white screen" blocker is superseded; keep validating the
+  foreground release/user lane, signing, two-device capture flows, and native
   metadata before production claims.
 - Android: In development. Active Android support starts at API 24; Android
   6.0/API 23 and older devices are deprecated for this repo unless the user
@@ -101,8 +111,109 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
 - Multi-device synchronization evidence: the 2026-06-07 parallel matrix was an
   independent local-capture matrix and intentionally launched every
   capture-capable device as a local master. It is not a master/slave discovery
-  or broadcast-synchronization proof; run a separate one-master/many-slaves
-  matrix before production multi-device claims.
+  or broadcast-synchronization proof. Later 2026-06-07 runtime role-switch
+  evidence proves one-master/many-slaves role rotation without relaunching on
+  the visible physical set, and warm-only mode passes repeated master rotations
+  across Samsung G960F, Samsung S7 edge, Samsung S10e, iPhone 12 Pro, and macOS.
+  The four-local 2026-06-07 stress proof
+  `20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local`
+  passes five hot cycles / 20 master rotations in `8.118s` after bridges are
+  warm when using `--stage-slaves-after-master-ready`, synchronous
+  acknowledgement for the promoted master, async accepted acknowledgement for
+  the parallel slave batch, and 25 ms connected-client polling. The current
+  iPhone-inclusive repeat proof
+  `20260608-warm-summary-prime-five-repeat` uses `--warm-summary` to skip
+  Flutter/ADB discovery and master-host probing, launches only the cold iPhone
+  Profile bridge, and passes five hot cycles / 25 master rotations in `9.167s`
+  across Samsung G960F, Samsung S7 edge, Samsung S10e, iPhone 12 Pro, and macOS.
+  Parallel request-start skew was capped below `0.686 ms`, `set_role` averaged
+  `162.803 ms`, connected-client verification averaged `201.572 ms`, and every
+  selected device became master five times. A separate pure-immediate
+  warm-summary rerun `20260608-warm-summary-hot-five-repeat` passes the same
+  25 rotations in `8.806s` when every selected bridge is already warm, with no
+  discovery, build, install, or launch. The current fastest repeat proof is
+  `20260608-latest-cache-shortest-default-staged-five-hot`, which uses the
+  automatically persisted latest warm-summary cache with no manual
+  `--warm-summary`, no target list, no explicit staged-slave flag, no
+  Flutter/ADB discovery, no master-host probing, no build/install/launch, and
+  passes the full cached five-device set across five cycles / 25 rotations in
+  `7.844s`; warm preflight found no missing bridges and parallel slave
+  request-start skew stayed below `1.349 ms`. A fully parallel diagnostic probe
+  `20260608-latest-cache-short-command-five-hot-fully-parallel-probe` also
+  passed, but took `22.344s` because clients raced the promoted master's server
+  startup. The same current code path also has a cold proof, but
+  build/install/launch made two cycles / 8 rotations take `63.919s`; do not use
+  cold proof as a speed benchmark. Successful warm role-switch runs now update
+  `logs/verification-runs/latest-rotating-master-slave-warm-summary.json`.
+  Only parsed CLI args with a configured latest-cache path should update that
+  durable cache; manually constructed test namespaces must skip cache writes so
+  unit tests cannot poison the hot-run target set.
+  For the fastest normal repeat loop, run
+  `scripts/run_rotating_master_slave_matrix.py` with `--immediate-role-switch`;
+  if the latest cache exists, the
+  immediate shortcut uses the full cached target set automatically and skips
+  Flutter/ADB discovery plus master-host probing. It stages the promoted master
+  first, then dispatches all slave role changes in parallel because current
+  evidence shows that is faster end-to-end than sending all devices at once.
+  Use `--fully-parallel-role-switch` only as a diagnostic comparison. Use
+  selected `--target-id` filters only when intentionally narrowing the run.
+  Cached immediate reruns
+  also skip the default physical-iOS LAN host scan unless
+  `--auto-ios-bridge-hosts` is passed explicitly; stale cached iOS hosts are
+  caught by the identity-matched warm-bridge preflight. To pin a specific prior
+  run instead, pass `--warm-summary
+  logs/verification-runs/<last-good-run>/summary.json`. Add repeated
+  `--expect-target-id` flags for every device intended to be in the run before
+  claiming an all-device or complete selected-set result. That writes
+  `expected-targets.json` and fails before build/install/launch when a warm
+  summary or filter omits an expected device. This mode must also fail before
+  build/install/standby-launch if any selected automation bridge is missing or
+  stale. Physical iPhone no-tooling fast launch requires a Profile automation
+  build; debug `Runner.app` launched with `devicectl` exits before Dart with
+  "Cannot create a FlutterEngine instance in debug mode without Flutter tooling
+  or Xcode." Use the runner's `--ios-profile-build-install` path; on older
+  physical iOS devices where `devicectl install` cannot see the device, the
+  runner falls back to IPA packaging plus `flutter install --use-application-binary`.
+  If xctrace reports `ios_profile_not_trusted`, the remaining step is on the
+  device: Settings > General > VPN & Device Management, trust the developer
+  profile, keep the device unlocked, and rerun the warm-prime/immediate command.
+  To avoid restarting the command while doing that device-side step, add
+  `--ios-profile-trust-retry-timeout <seconds>` to a warm-prime or
+  prime-then-immediate run; the runner will retry the missing physical iOS
+  bridge and record `iosProfileTrustRetryAttempts` in `warm-bridge-prime.json`.
+  Keep the identity-based auto host scan enabled for immediate loops, and do not
+  hard-code the prior stale `192.168.178.141` host. If the iPhone Profile
+  bridge may be cold, use `--prime-then-immediate-role-switch --fast-ios-launch`
+  as the one-command path; pure `--immediate-role-switch` is intentionally a
+  no-launch fast path and should be used only after `/healthz` proves the iPhone
+  bridge is currently warm.
+  Use `--warm-prime-only` first when selected bridges are cold; it reuses
+  running bridges, skips build/install, attempts only missing standby launches,
+  writes `warm-bridge-prime.json`, and does not run rotations. Current combined
+  runs should prefer `--prime-then-immediate-role-switch`, which primes missing
+  bridges and then runs the immediate role-switch proof only when every selected
+  bridge is warm. Failed warm-prime artifacts should include `deviceActions`
+  with the concrete operator step for each still-missing bridge. Current
+  role-switch artifacts should include `requestStartSkewMs` in each
+  `runtime-role-switch.json`, per-rotation `phase-timings.json`, and connected
+  client `registeredAt` / `masterServerStartedAt` timestamps so parallel
+  dispatch, master-command readiness, and connected-client verification are
+  measured directly, not inferred from elapsed time. Current timing evidence
+  shows dispatch is already sub-millisecond; remaining latency is promoted
+  master server startup and client registration after server start. In current
+  evidence, staging the master before the slave batch reduces that tail enough
+  to beat fully parallel role switching. For macOS standby, prefer the direct
+  detached debug-app launcher, but remember that `HYDRACAM_AUTOMATION_PORT` is
+  a compile-time Dart define; the direct debug app normally listens on the
+  compiled default port `4762`, and the runner normalizes cold direct-macOS
+  targets to that port unless an already-running identity-matched bridge is
+  adopted. Flutter-launched macOS standby processes have not been reliable warm
+  bridges across runner exits. Runtime role switching should keep zero-duration
+  automation routes and identity-safe client/socket cleanup; otherwise rapid
+  back-to-back rotations can leave stale slave screens or stale sockets that
+  dispose or hide the newly promoted master. Use
+  `docs/control/status-and-roadmap.md` for the current evidence paths and keep
+  capture-enabled master/slave proof separate from role-only proof.
 - Desktop (Windows/macOS) and web: Planned for future support
 
 ## Development Commands

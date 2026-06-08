@@ -18,6 +18,11 @@ const String automationPreferredMasterIp = String.fromEnvironment(
   defaultValue: "",
 );
 
+const String automationTargetId = String.fromEnvironment(
+  "HYDRACAM_AUTOMATION_TARGET_ID",
+  defaultValue: "",
+);
+
 const bool automationForceSlaveMode = bool.fromEnvironment(
   "HYDRACAM_AUTOMATION_FORCE_SLAVE",
   defaultValue: false,

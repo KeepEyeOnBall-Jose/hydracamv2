@@ -84,6 +84,449 @@
       ],
       "returnCode": 0,
       "startedAt": "2026-06-07T15:33:13.887665+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-repair.ps1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:35:27.413155+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-fix-checkout.ps1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:55:50.363950+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-fix-checkout.ps1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:56:38.206362+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"git -C $env:USERPROFILE\\src\\work\\hydracamv2 reset --hard HEAD; git -C $env:USERPROFILE\\src\\work\\hydracamv2 status -sb; if (Test-Path $env:USERPROFILE\\src\\work\\hydracamv2\\pubspec.yaml) { Write-Output pubspec-present } else { Write-Output pubspec-missing }; if (Test-Path $env:USERPROFILE\\src\\work\\hydracamv2\\lib\\main.dart) { Write-Output main-present } else { Write-Output main-missing }\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:57:40.690070+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"git -C $env:USERPROFILE\\src\\work\\hydracamv2 checkout HEAD -- pubspec.yaml pubspec.lock analysis_options.yaml android lib test windows linux web macos integration_test docs automation_scenarios; if (Test-Path $env:USERPROFILE\\src\\work\\hydracamv2\\pubspec.yaml) { Write-Output pubspec-present } else { Write-Output pubspec-missing }; if (Test-Path $env:USERPROFILE\\src\\work\\hydracamv2\\lib\\main.dart) { Write-Output main-present } else { Write-Output main-missing }; Get-ChildItem $env:USERPROFILE\\src\\work\\hydracamv2 | Select-Object Name,Mode | ConvertTo-Csv -NoTypeInformation\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:58:17.941541+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"$repo=Join-Path $env:USERPROFILE src\\work\\hydracamv2; Remove-Item -Recurse -Force $repo -ErrorAction SilentlyContinue; New-Item -ItemType Directory -Force -Path $repo | Out-Null; tar -xzf $env:USERPROFILE\\hydracamv2-win11-sparse.tgz -C $repo; git -C $repo status -sb; git -C $repo rev-parse HEAD; git -C $repo sparse-checkout list; if (Test-Path $repo\\pubspec.yaml) { Write-Output pubspec-present } else { Write-Output pubspec-missing }; if (Test-Path $repo\\lib\\main.dart) { Write-Output main-present } else { Write-Output main-missing }\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T15:59:18.450118+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 'powershell -NoProfile -Command \"$repo=Join-Path $env:USERPROFILE ''src\\\\work\\\\hydracamv2''; Remove-Item -Force $repo\\\\._. -ErrorAction SilentlyContinue; git -C $repo status -sb --untracked-files=no; git -C $repo rev-parse HEAD; if (Test-Path $repo\\\\pubspec.yaml) { Write-Output pubspec-present }; if (Test-Path $repo\\\\lib\\\\main.dart) { Write-Output main-present }; (Get-ChildItem $repo -Recurse -Force -Filter ''._*'\\ | Measure-Object).Count\"' 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-07T16:00:17.863743+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"$repo=Join-Path $env:USERPROFILE src\\work\\hydracamv2; Remove-Item -Force $repo\\._. -ErrorAction SilentlyContinue; git -C $repo status -sb --untracked-files=no; git -C $repo rev-parse HEAD; if (Test-Path $repo\\pubspec.yaml) { Write-Output pubspec-present }; if (Test-Path $repo\\lib\\main.dart) { Write-Output main-present }; (Get-ChildItem $repo -Recurse -Force -Filter ._* | Measure-Object).Count\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:00:26.484773+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File .\\win11-validate.ps1"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-07T16:00:34.115122+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-build-windows.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:32:07.152844+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-build-windows.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:33:48.162810+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -Command \\\"$repo=Join-Path $env:USERPROFILE 'src\\\\work\\\\hydracamv2'; Remove-Item -Recurse -Force $repo\\\\windows\\\\flutter\\\\ephemeral\\\\.plugin_symlinks -ErrorAction SilentlyContinue; Push-Location $repo; C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat build windows --debug; Write-Output step_exit_code_$LASTEXITCODE; Pop-Location\\\"\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:34:51.550209+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-accept-android-licenses.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:37:46.713800+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-inventory.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:38:16.147868+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-wsl-validate.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:38:51.587178+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-wsl-resume.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:43:18.492157+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-wsl-flutter-smoke.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:44:58.273478+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-wsl-doctor-capture.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:46:15.888227+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-wsl-doctor-capture.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:54:33.716838+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -- /home/jose/development/flutter/bin/flutter --version"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:54:54.743186+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -- /home/jose/development/flutter/bin/flutter doctor -v"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:55:08.844133+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -- bash /mnt/c/Users/jose/win11-wsl-linux-build.sh"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-07T16:56:16.167619+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -u root -- bash -lc 'export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev mesa-utils ripgrep'"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-07T16:57:41.243160+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -u root -- bash /mnt/c/Users/jose/win11-wsl-install-camera-deps.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:58:11.331910+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -- bash /mnt/c/Users/jose/win11-wsl-linux-build.sh"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-07T16:58:38.851142+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "wsl -d Ubuntu-22.04 -- bash -lc 'set -euo pipefail; export PATH=\"/home/jose/development/flutter/bin:$PATH\"; cd /mnt/c/Users/jose/src/work/hydracamv2; rm -rf build/linux linux/flutter/ephemeral; /home/jose/development/flutter/bin/flutter build linux --debug'"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T16:59:26.668856+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-windows-symlink-diagnostic.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:00:35.123672+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -Command \\\"[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new(); Write-Output \\\\\\\"=== vscode-java-tool-check ===\\\\\\\"; if (Get-Command code -ErrorAction SilentlyContinue) { Write-Output \\\\\\\"code-path=$((Get-Command code).Source)\\\\\\\"; code --version } else { Write-Output \\\\\\\"code-missing\\\\\\\" }; if (Get-Command winget -ErrorAction SilentlyContinue) { winget list --id Microsoft.VisualStudioCode --exact; winget list --id EclipseAdoptium.Temurin.17.JDK --exact }; if (Test-Path \\\\\\\"$env:LOCALAPPDATA\\\\Programs\\\\Android Studio Fixed\\\\jbr\\\\bin\\\\java.exe\\\\\\\") { & \\\\\\\"$env:LOCALAPPDATA\\\\Programs\\\\Android Studio Fixed\\\\jbr\\\\bin\\\\java.exe\\\\\\\" -version }\\\"\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:01:00.251587+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-install-jdk17.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:01:57.564174+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-build-apk.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:06:11.208618+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"Get-PSDrive -PSProvider FileSystem | Select-Object Name,Used,Free,Root | ConvertTo-Csv -NoTypeInformation\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:16:28.083488+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-d-drive-android-build.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:17:24.892254+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-d-drive-android-build.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:18:35.727429+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-d-drive-android-build.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:19:24.572525+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "ssh -i /Users/jose/Downloads/codex_ssh_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new jose@100.110.8.112 \"powershell -NoProfile -ExecutionPolicy Bypass -File .\\\\win11-d-drive-android-build-from-tar.ps1\" 2>&1 | iconv -f CP850 -t UTF-8//IGNORE"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-07T17:20:52.101390+00:00"
     }
   ],
   "devices": [
@@ -96,18 +539,24 @@
       "role": "build-debug-test host"
     }
   ],
-  "evidenceFiles": [],
+  "evidenceFiles": [
+    "screenshots/not-applicable.txt",
+    "video/not-applicable.txt",
+    "device-logs/win11-host-inventory.txt"
+  ],
   "item": {
     "slug": "win11-dev-host-readiness",
     "source": "user-request: Win11 HydraCam Host Setup Execution Plan",
     "title": "Prepare Win11 HydraCam development host"
   },
-  "notes": [],
+  "notes": [
+    "Win11 host reachable with toolchains installed; WSL Linux debug build passed; Windows native build blocked by symlink privilege, Android APK blocked by C: disk/full plus stalled D-drive workaround, phones not attached, usbipd-win missing."
+  ],
   "requiresDeviceLogs": true,
   "requiresScreenshots": true,
   "requiresVideo": true,
   "schemaVersion": 1,
-  "status": "prepared",
+  "status": "partial",
   "verificationTier": "A",
   "verificationTierName": "real-hardware"
 }

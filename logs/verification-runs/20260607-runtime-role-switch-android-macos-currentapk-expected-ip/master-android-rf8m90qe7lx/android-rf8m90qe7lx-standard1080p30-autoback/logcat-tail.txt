@@ -1,0 +1,431 @@
+--------- beginning of main
+06-07 18:16:47.879   515   515 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-07 18:16:47.885   597   597 D SurfaceFlinger: Display 0 HWC layers:
+06-07 18:16:47.885   597   597 D SurfaceFlinger:  SOLID_COLOR |              | 0000 |  Unknown  |    0.0    0.0    0.0    0.0 |    0    0 1080  116 | Letterbox - left#1
+06-07 18:16:47.885   597   597 D SurfaceFlinger:      DEVICE | 0x76de537190 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2020.0 |    0  116 1080 2136 | SurfaceView - com.amaia23.hydracam/c[...]acam.MainActivity@11efd6a@0(BLAST)#0
+06-07 18:16:47.885   597   597 D SurfaceFlinger:      DEVICE | 0x76de5442d0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2164.0 |    0  116 1080 2280 | com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_515#0
+06-07 18:16:47.885   597   597 D SurfaceFlinger:      DEVICE | 0x76de52a3b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2164.0 |    0  116 1080 2280 | Splash Screen com.amaia23.hydracam$_1349#0
+06-07 18:16:47.885   597   597 D SurfaceFlinger:      DEVICE | 0x76de545830 | 0100 | RGBA_8888    |    0.0    0.0   72.0 2280.0 | 1008    0 1080 2280 | StatusBar$_1349#0
+06-07 18:16:47.885   597   597 D SurfaceFlinger:      DEVICE | 0x76de540bb0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1349#0
+06-07 18:16:47.885   597   597 D SurfaceFlinger: 
+06-07 18:16:47.886   515   571 I OpenGLRenderer: Davey! duration=936ms; Flags=1, FrameTimelineVsyncId=1480462, IntendedVsync=57402617545597, Vsync=57403517545561, InputEventId=0, HandleInputStart=57403529047442, AnimationStart=57403529049749, PerformTraversalsStart=57403529053788, DrawStart=57403535821095, FrameDeadline=57402634212263, FrameInterval=57403528970672, FrameStartTime=16666666, SyncQueued=57403538242557, SyncStart=57403538301903, IssueDrawCommandsStart=57403538954403, SwapBuffers=57403553187865, FrameCompleted=57403554288057, DequeueBufferDuration=665231, QueueBufferDuration=788500, GpuCompleted=57403553976518, SwapBuffersCompleted=57403554288057, DisplayPresentTime=0, 
+--------- beginning of system
+06-07 18:16:47.891   982  1043 W BroadcastQueue: Permission Denial: broadcasting Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) } from null (pid=-1, uid=-1) requires com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION due to registered receiver BroadcastFilter{1cbdbf6 10325/u0 ReceiverList{d964091 515 com.amaia23.hydracam/10325/u0 remote:ccd3ab8}}
+06-07 18:16:47.893   982  3130 D SyncManager: userId - 0 auto - true
+06-07 18:16:47.895  1349  2074 I ViewRootImpl@8362c59[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@98a1bb8 fN = 3 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-07 18:16:47.895  1349  2074 I ViewRootImpl@8362c59[hydracam]: mWNT: merge t to BBQ
+06-07 18:16:47.901   982  1727 E WindowManager: win=Window{9fec466 u0 com.google.android.gm/com.google.android.gm.ui.MailActivityGmail} destroySurfaces: appStopped=true win.mWindowRemovalAllowed=false win.mRemoveOnExit=false win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.notifyAppStopped:5912 com.android.server.wm.ActivityRecord.activityStopped:6554 com.android.server.wm.ActivityClientController.activityStopped:254 android.app.IActivityClientController$Stub.onTransact:596 com.android.server.wm.ActivityClientController.onTransact:130 
+06-07 18:16:47.901   982  1727 I WindowManager: Destroying surface Surface(name=com.google.android.gm/com.google.android.gm.ui.MailActivityGmail$_29487)/@0x715cbf7 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4246 com.android.server.wm.WindowState.destroySurface:4220 com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.notifyAppStopped:5912 com.android.server.wm.ActivityRecord.activityStopped:6554 
+06-07 18:16:47.906   982  1727 I ActivityManager: Changes in 99011 3 to 15, 8 to 0
+06-07 18:16:47.906   982  1727 I ActivityManager: Changes in 10178 2 to 15, 15 to 0
+06-07 18:16:47.906   982  1727 I AppOps  : updateUidProcState uid: 10075 procState: 5 capability:15
+06-07 18:16:47.907   982  1032 D NetworkPolicy: onUidStateChanged() uid: 99011, isForeground(false, 15)
+06-07 18:16:47.907   708  3685 I CameraService: onUidStateChanged: uid=10178, procState is changed. (2 -> 15)
+06-07 18:16:47.907   982  1032 D NetworkPolicy: onUidStateChanged() uid: 10178, isForeground(false, 15)
+06-07 18:16:47.911   597   597 I Layer   : id=1515 removeFromCurrentState com.google.android.gm/com.google.android.gm.ui.MailActivityGmail$_29487#0 (117)
+06-07 18:16:47.911   597   597 I SurfaceFlinger: id=1515 Removed com.google.android.gm/com.google.android.gm.ui.MailActivityGmail$_29487#0 (117)
+06-07 18:16:47.911   597   597 I Layer   : id=1515 Destroyed com.google.android.gm/com.google.android.gm.ui.MailActivityGmail$_29487#0
+06-07 18:16:47.913  1349  2073 I ViewRootImpl@8362c59[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@c900d91 fN = 4 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-07 18:16:47.913  1349  2073 I ViewRootImpl@8362c59[hydracam]: mWNT: merge t to BBQ
+06-07 18:16:47.913   515   515 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-07 18:16:47.915   982  3206 V WindowManager: Relayout Window{f70013b u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=0 req=2164x1080 d0
+06-07 18:16:47.915  1349  1349 D NavigationBar: onSystemBarAttributesChanged() -  displayId:0, appearance:24 (APPEARANCE_LIGHT_STATUS_BARS APPEARANCE_LIGHT_NAVIGATION_BARS ), navbarColorManagedByIme:false
+06-07 18:16:47.916   982  3206 V WindowManager: Relayout hash=f70013b, pid=515: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-07 18:16:47.916   982  3206 V WindowManager:   fl=81810180
+06-07 18:16:47.916   982  3206 V WindowManager:   pfl=16020040
+06-07 18:16:47.916   982  3206 V WindowManager:   vsysui=2500
+06-07 18:16:47.916   982  3206 V WindowManager:   apr=LIGHT_STATUS_BARS
+06-07 18:16:47.916   982  3206 V WindowManager:   bhv=DEFAULT
+06-07 18:16:47.916   982  3206 V WindowManager:   fitSides= naviIconColor=0}
+06-07 18:16:47.918   515   515 I ViewRootImpl@e4ac1d3[MainActivity]: Relayout returned: old=(116,0,2280,1080) new=(116,0,2280,1080) req=(2164,1080)0 dur=3 res=0x1 s={true 479867305072} ch=false fn=2
+06-07 18:16:47.919   515   515 D FlutterJNI: Sending viewport metrics to the engine.
+06-07 18:16:47.919   515   515 I ViewRootImpl@e4ac1d3[MainActivity]: updateBoundsLayer: t = android.view.SurfaceControl$Transaction@ed03ced sc = Surface(name=Bounds for - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@0)/@0xd885722 frame = 2
+06-07 18:16:47.920   515   515 I ViewRootImpl@e4ac1d3[MainActivity]: mWNT: t = android.view.SurfaceControl$Transaction@ed03ced fN = 2 android.view.ViewRootImpl.prepareSurfaces:2783 android.view.ViewRootImpl.performTraversals:4029 android.view.ViewRootImpl.doTraversal:2924 
+06-07 18:16:47.920   515   515 I ViewRootImpl@e4ac1d3[MainActivity]: mWNT: merge t to BBQ
+06-07 18:16:47.921   515   515 I ViewRootImpl@e4ac1d3[MainActivity]: MSG_WINDOW_FOCUS_CHANGED 1 1
+06-07 18:16:47.922   515   515 D InputMethodManager: startInputInner - Id : 0
+06-07 18:16:47.922   515   515 I InputMethodManager: startInputInner - mService.startInputOrWindowGainedFocus
+06-07 18:16:47.923   982  3206 D InputMethodManagerService: mSecureKeypadEnabled = false
+06-07 18:16:47.923   982  3206 V InputMethodManagerService: Unspecified window will hide input
+06-07 18:16:47.923   982  3206 V InputMethodManagerService: hideCurrentInputLocked : shouldHideSoftInput is false
+06-07 18:16:47.923   982  3206 D InputMethodManagerService: DESKTOP MODE! : 2
+06-07 18:16:47.923   982  3206 D InputMethodManagerService: NOT IN KNOX DESKTOP MODE!
+06-07 18:16:47.923   982  3206 V InputMethodManagerService: getDisplayIdOfInputMethodWindowToBeAdded : 0
+06-07 18:16:47.923   982  3206 V InputMethodManagerService: Creating new session for client ClientState{2d1c182 uid=10325 pid=515 displayId=0}
+06-07 18:16:47.923   982  3206 D InputTransport: Input channel constructed: 'ClientS', fd=878
+06-07 18:16:47.923   982  3206 D InputTransport: Input channel constructed: 'ClientS', fd=879
+06-07 18:16:47.924   982  3206 D InputTransport: Input channel destroyed: 'ClientS', fd=879
+06-07 18:16:47.925   982  3206 W InputMethodManagerService: onSessionCreated
+06-07 18:16:47.925   982  3206 D InputMethodManagerService: checkDisplayOfStartInputAndUpdateKeyboard display Id 0last 0
+06-07 18:16:47.925 29487 29487 D InputTransport: Input channel destroyed: 'ClientS', fd=241
+06-07 18:16:47.925   982  3206 D InputTransport: Input channel constructed: 'ClientS', fd=879
+06-07 18:16:47.925   982  3206 D InputTransport: Input channel destroyed: 'ClientS', fd=879
+06-07 18:16:47.926  3676  3676 I HBD     : HoneyBoardService onFinishInput 
+06-07 18:16:47.926   982  3206 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-07 18:16:47.926   982  3206 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xd55d4a9
+06-07 18:16:47.926   982  3206 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{e33862c android.os.Binder@c1f9df})/@0xf2ad55, destroy=false, surface=Surface(name=e0975e0 InputMethod)/@0x9c0100c
+06-07 18:16:47.926   982  3206 I WindowManager: Reparenting to leash, surface=Surface(name=e0975e0 InputMethod)/@0x9c0100c, leashParent=Surface(name=WindowToken{e33862c android.os.Binder@c1f9df})/@0xf2ad55
+06-07 18:16:47.926  3676  3676 I HBD     : a IC have been unbinding,  InputConnectionWrapper{idHash=#3efadcb mMissingMethods=}
+06-07 18:16:47.926  3676  3676 I HBD     : HoneyBoardService [PF_CL][onFinishInput]  405731 ns 
+06-07 18:16:47.927  3676  3676 I HBD     : HoneyBoardService [IMI] onStartInput - caller pid : 515 , caller uid : 10325 
+06-07 18:16:47.927  3676  3676 I HBD     : j updateConfigs 
+06-07 18:16:47.927  3676  3676 I HBD     : j isEnabledNightMode : false 
+06-07 18:16:47.927   515   515 D InputMethodManager: startInputInner - Id : 0
+06-07 18:16:47.927   597   645 I SurfaceFlinger: id=1541 createSurf (0x0),-1 flag=24004, Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation#0
+06-07 18:16:47.927  3676  3676 I HBD     : a IC have been binding, InputConnectionWrapper{idHash=#2c7cc1 mMissingMethods=} 
+06-07 18:16:47.927  3676  3676 I HBD     : h [EditorInputType]setPrivateImeOptionsToTable privateImeOptions ( null )
+06-07 18:16:47.927  3676  3676 I HBD     : b incognitoMode : false 
+06-07 18:16:47.927  3676  3676 I HBD     : a needOff = true , isForceOff = false, isNullInputClass : true 
+06-07 18:16:47.927  3676  3676 I HBD     : h getDefaultInputRange : UNKNOWN 
+06-07 18:16:47.927  3676  3676 I HBD     : h getDefaultInputRange : UNKNOWN 
+06-07 18:16:47.927  3676  3676 I HBD     : h getDefaultInputRange : UNKNOWN 
+06-07 18:16:47.927   982  3206 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xbe770c9
+06-07 18:16:47.927   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:16:47.928   982  1727 D DARUtil : Device owner status not updated yet...
+06-07 18:16:47.928   982  1727 D DARUtil : Not an enterprise user : 0
+06-07 18:16:47.928   982  1727 D DARUtil : Device owner status not updated yet...
+06-07 18:16:47.928   982  1727 D DARUtil : Not an enterprise user : 0
+06-07 18:16:47.929  1349  1580 D OpenGLRenderer: setSurface called with nullptr
+06-07 18:16:47.929  1349  1580 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-07 18:16:47.929  1349  1580 D OpenGLRenderer: destroyEglSurface
+06-07 18:16:47.930  3676  3676 I HBD     : a needOff = true , isForceOff = false, isNullInputClass : true 
+06-07 18:16:47.930  3676  3676 I HBD     : a update cached prediction status : false 
+06-07 18:16:47.930  3676  3676 I HBD     : h getDefaultInputRange : UNKNOWN 
+06-07 18:16:47.930  3676  3676 I HBD     : a currentState : 0 
+06-07 18:16:47.932  3676  3676 I HBD     : h load selected json path : /data/user/0/com.samsung.android.honeyboard/files/selected.json 
+06-07 18:16:47.932  3676  3676 I HBD     : h load selected json info : {"version":"4.1","currentLanguageOrder":0,"selected":[{"activeOptionList":["auto_replace","auto_spacing","writing_assistant"],"engName":"English","id":65538,"inputType":"qwerty","isUsed":true}]} 
+06-07 18:16:47.933  3676  3676 I HBD     : a [UpdatePolicy] [post] a: 0 cl: 65538 kit: [0/0] vt: 4 ir: 1 
+06-07 18:16:47.933   982  3206 V WindowManager: Relayout Window{957b07c u0 Splash Screen com.amaia23.hydracam}: viewVisibility=8 req=2164x1080 d0
+06-07 18:16:47.934  3676  3676 I HBD     : HoneyBoardService [PF_OP][onStartInput]  7312346 ns 
+06-07 18:16:47.934   982  3206 I WindowManager: Reparenting to leash, surface=Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc, leashParent=Surface(name=ActivityRecord{5668113 u0 com.amaia23.hydracam/.MainActivity t254})/@0x6281307
+06-07 18:16:47.934   597   897 I SurfaceFlinger: id=1542 createSurf (0x0),-1 flag=24000, Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc - animation-leash of window_animation#0
+06-07 18:16:47.935   982  3206 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc - animation-leash of window_animation)/@0x46d5085
+06-07 18:16:47.936   982  3206 V WindowManager: Relayout hash=957b07c, pid=1349: mAttrs={(0,0)(fillxfill) sim={adjust=pan} ty=APPLICATION_STARTING fmt=TRANSLUCENT wanim=0x1030001
+06-07 18:16:47.936   982  3206 V WindowManager:   fl=81030118
+06-07 18:16:47.936   982  3206 V WindowManager:   pfl=36000010
+06-07 18:16:47.936   982  3206 V WindowManager:   apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+06-07 18:16:47.936   982  3206 V WindowManager:   bhv=DEFAULT
+06-07 18:16:47.936   982  3206 V WindowManager:   fitSides= naviIconColor=0}
+06-07 18:16:47.937   982  3206 D InputMethodManagerServicePhysicalKey: isConnectedDexOnPC false
+06-07 18:16:47.937  1349  1546 I ViewRootImpl@8362c59[hydracam]: Relayout returned: old=(116,0,2280,1080) new=(116,0,2280,1080) req=(2164,1080)8 dur=3 res=0x5 s={false 0} ch=true fn=5
+06-07 18:16:47.937  1349  1546 I ViewRootImpl@8362c59[hydracam]: dispatchDetachedFromWindow
+06-07 18:16:47.937   982  3206 D InputMethodManagerService: isImeSwitcherDisabledPackage : false
+06-07 18:16:47.937   982  1727 I WindowManager: Cancelling animation restarting=false, leash=Surface(name=Surface(name=f70013b com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5cd9546 - animation-leash of starting_reveal)/@0x3466c34
+06-07 18:16:47.937   982  1727 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{5668113 u0 com.amaia23.hydracam/.MainActivity t254})/@0x6281307, destroy=false, surface=Surface(name=f70013b com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5cd9546
+06-07 18:16:47.937   982  1727 D InputTransport: Input channel destroyed: '957b07c', fd=743
+06-07 18:16:47.937   982  1727 W InputManager-JNI: Input channel object '957b07c Splash Screen com.amaia23.hydracam (client)' was disposed without first being removed with the input manager!
+06-07 18:16:47.937   982  1727 D InputTransport: Input channel destroyed: '957b07c', fd=762
+06-07 18:16:47.939  1349  1546 D InputTransport: Input channel destroyed: '957b07c', fd=163
+06-07 18:16:47.944   597   597 I Layer   : id=1519 removeFromCurrentState Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation#1 (118)
+06-07 18:16:47.944   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:16:47.944   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:16:47.944   597   597 I Layer   : id=1540 removeFromCurrentState Surface(name=f70013b com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5cd9546 - animation-leash of starting_reveal#0 (118)
+06-07 18:16:47.945   597   597 I SurfaceFlinger: id=1519 Removed Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation#1 (118)
+06-07 18:16:47.945   597   597 I Layer   : id=1519 Destroyed Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation#1
+06-07 18:16:47.946   515   515 D FlutterJNI: Sending viewport metrics to the engine.
+06-07 18:16:47.978   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:16:47.995   982  1035 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{5668113 u0 com.amaia23.hydracam/.MainActivity t254})/@0x6281307, destroy=true, surface=Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc
+06-07 18:16:47.996   982  1035 E WindowManager: win=Window{957b07c u0 Splash Screen com.amaia23.hydracam EXITING} destroySurfaces: appStopped=false win.mWindowRemovalAllowed=true win.mRemoveOnExit=true win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.WindowState.onExitAnimationDone:5992 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 com.android.server.wm.WindowState.onAnimationFinished:6245 com.android.server.wm.WindowContainer$$ExternalSyntheticLambda0.onAnimationFinished:2 com.android.server.wm.SurfaceAnimator.lambda$getFinishedCallback$0$SurfaceAnimator:113 
+06-07 18:16:47.997   982  1035 I WindowManager: Destroying surface Surface(name=Splash Screen com.amaia23.hydracam$_1349)/@0x5b77001 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4246 com.android.server.wm.WindowState.destroySurface:4220 com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.WindowState.onExitAnimationDone:5992 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 
+06-07 18:16:47.999  1349  1349 D NavigationBar: onSystemBarAttributesChanged() -  displayId:0, appearance:8 (APPEARANCE_LIGHT_STATUS_BARS ), navbarColorManagedByIme:false
+06-07 18:16:48.000  1349  1349 V Navbar.Store: handleEvent [EventType] GET_BOOL_REGION_SAMPLING_ENABLED [Module] LightBarController  KEYS_DEFAULT=false
+06-07 18:16:48.000  1349  1349 V Navbar.Store: --[Band]COLOR_PACK_GET_REGION_SAMPLING_ENABLED
+06-07 18:16:48.000  1349  1349 V Navbar.Store: ----getValue(BOOL_REGION_SAMPLING_ENABLED)=false
+06-07 18:16:48.011   597   597 I Layer   : id=1523 removeFromCurrentState Splash Screen com.amaia23.hydracam$_1349#0 (117)
+06-07 18:16:48.011   597   597 I Layer   : id=1522 removeFromCurrentState 957b07c Splash Screen com.amaia23.hydracam#0 (117)
+06-07 18:16:48.011   597   597 I Layer   : id=1542 removeFromCurrentState Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc - animation-leash of window_animation#0 (117)
+06-07 18:16:48.011   597   597 I SurfaceFlinger: id=1522 Removed 957b07c Splash Screen com.amaia23.hydracam#0 (117)
+06-07 18:16:48.012   597   597 I SurfaceFlinger: id=1523 Removed Splash Screen com.amaia23.hydracam$_1349#0 (117)
+06-07 18:16:48.012   597   597 I SurfaceFlinger: id=1542 Removed Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc - animation-leash of window_animation#0 (117)
+06-07 18:16:48.012   597   597 I Layer   : id=1542 Destroyed Surface(name=957b07c Splash Screen com.amaia23.hydracam)/@0xa9f81fc - animation-leash of window_animation#0
+06-07 18:16:48.012   597   597 I Layer   : id=1522 Destroyed 957b07c Splash Screen com.amaia23.hydracam#0
+06-07 18:16:48.015   597   597 I Layer   : id=1523 Destroyed Splash Screen com.amaia23.hydracam$_1349#0
+06-07 18:16:48.017   597   597 D SurfaceFlinger: Display 0 HWC layers:
+06-07 18:16:48.017   597   597 D SurfaceFlinger:  SOLID_COLOR |              | 0000 |  Unknown  |    0.0    0.0    0.0    0.0 |    0    0 1080  116 | Letterbox - left#1
+06-07 18:16:48.017   597   597 D SurfaceFlinger:      DEVICE | 0x76de537190 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2020.0 |    0  116 1080 2136 | SurfaceView - com.amaia23.hydracam/c[...]acam.MainActivity@11efd6a@0(BLAST)#0
+06-07 18:16:48.017   597   597 D SurfaceFlinger:      DEVICE | 0x76de53fad0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2164.0 |    0  116 1080 2280 | com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_515#0
+06-07 18:16:48.017   597   597 D SurfaceFlinger:      DEVICE | 0x76de545830 | 0100 | RGBA_8888    |    0.0    0.0   72.0 2280.0 | 1008    0 1080 2280 | StatusBar$_1349#0
+06-07 18:16:48.017   597   597 D SurfaceFlinger:      DEVICE | 0x76de540bb0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1349#0
+06-07 18:16:48.017   597   597 D SurfaceFlinger: 
+06-07 18:16:48.034   982  1395 D MdnieScenarioControlService:  packageName : com.amaia23.hydracam    className : com.amaia23.hydracam.MainActivity
+06-07 18:16:48.034   982  1395 V MdnieScenarioControlService: setUIMode from UI function(3)
+06-07 18:16:48.135   982  1395 V MdnieScenarioControlService: mAclOffEnabled : false mAclPreviewState : false mAclCompensationState : false
+06-07 18:16:48.172   564   777 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 501520
+06-07 18:16:48.379   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.047442872]
+06-07 18:16:48.380   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.5054699]
+06-07 18:16:48.381   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.61256754]
+06-07 18:16:48.381   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.676846 msecs
+06-07 18:16:48.383   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.347038 msecs
+06-07 18:16:48.385   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.889846 msecs
+06-07 18:16:48.429   982  1034 D SGM:GameManager: identifyForegroundApp. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0
+06-07 18:16:48.429   982  1034 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-07 18:16:48.429   982  1034 D SGM:SemGameManager: isForegroundGame(), ret=false
+06-07 18:16:48.572  1349  1349 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+06-07 18:16:48.889   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.030794073]
+06-07 18:16:48.890   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.49206546]
+06-07 18:16:48.890   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.5828035]
+06-07 18:16:48.891   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.497077 msecs
+06-07 18:16:48.893   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.614038 msecs
+06-07 18:16:48.895   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.783384 msecs
+06-07 18:16:48.915   554   587 D BatteryDump: wait_for_battery_event : occurred : change@/devices/platform/battery/power_supply/battery 
+06-07 18:16:48.923   460   460 D io_stats: !@   8,0 r 501916 19519840 w 349870 127032556 d 0 0 f 0 0 iot 276212 0 th 0 0 0 pt 0 inp 0 0 57404.613
+06-07 18:16:48.931   554   554 I android.hardware.health@2.1-service-samsung: updateLrpSysfs: write: 291
+06-07 18:16:48.933   982  1249 D BatteryService: Sending ACTION_BATTERY_CHANGED. scale:100, info:{.chargerAcOnline = false, .chargerUsbOnline = true, .chargerWirelessOnline = false, .maxChargingCurrent = 0, .maxChargingVoltage = 0, .batteryStatus = CHARGING, .batteryHealth = GOOD, .batteryPresent = true, .batteryLevel = 90, .batteryVoltage = 4108, .batteryTemperature = 287, .batteryCurrent = 81, .batteryCycleCount = 0, .batteryFullCharge = 3000000, .batteryChargeCounter = 2700000, .batteryTechnology = Li-ion}
+06-07 18:16:48.933   982  1249 D BatteryService: online:5, current avg:-82, charge type:2, POGO powered:false, power sharing:false, high voltage charger:false, charger_type:0, capacity:280000, misc_event:0x10000, current_event:0x8000, current_now:81
+06-07 18:16:48.935   982  1168 D MotionRecognitionService: [SAR]  onReceive : ACTION_BATTERY_CHANGED, Plugged: 2
+06-07 18:16:48.935   982  1168 I MotionRecognitionService: [TA] In/out: true, curr state: 1
+06-07 18:16:48.936   982   982 D SemWifiApBroadcastReceiver: Received : android.intent.action.BATTERY_CHANGED
+06-07 18:16:48.936   982   982 D AdaptiveBrightnessLongtermModelBuilder: Received android.intent.action.BATTERY_CHANGED
+06-07 18:16:48.938  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-07 18:16:48.938  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-07 18:16:48.942  1349  1349 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-07 18:16:48.942  1349  1349 I PowerUI : mBootCompleted = true |  mFullyConnected = true
+06-07 18:16:48.942  1349  1349 I PowerUI : BATTERY_HEALTH_CHECK extraHealth=2 mBatteryMiscEvent=65536
+06-07 18:16:48.945  1349  1349 D PowerUI : priorPlugType = 2 mPlugType = 2 priorBatteryStatus = 2 mBatteryStatus = 2
+06-07 18:16:48.945  1349  1349 I PowerUI : oldMisalign : false, curMisalign : false
+06-07 18:16:48.949  1349  1349 D PowerUI.Notification: showChargingNotice oldChargingType : 8 currentChargingType : 8 oldChargingTime : 3300000 mChargingTime : 3300000
+06-07 18:16:48.950  1349  1349 D PowerUI.Notification: There is no change about charging status, so return!
+06-07 18:16:48.950  1349  1349 D PowerUI : Battery swelling mode - priorBatterySwellingMode = 0 mBatterySwellingMode = 0 mBatteryStatus = 2
+06-07 18:16:48.950  1349  1349 I PowerUI : mBatteryMiscEvent = 65536
+06-07 18:16:48.950  1349 11685 D PowerUI.Notification: 1. restoreScreenTimeOut - saved_value : :
+06-07 18:16:48.950  1349 11685 E PowerUI.Notification: no saved value, so we do nothing !!
+06-07 18:16:48.956  1349  1349 D KeyguardUpdateMonitor: handleBatteryUpdate
+06-07 18:16:48.959  1349  1349 I AODBatteryManager: updateBatteryData: ACTION_BATTERY_CHANGED
+06-07 18:16:48.962  1349  1349 I AODBatteryManager: saveBatteryData : AOD BatteryData [mBatteryLevel=90, mBatteryStatus=CHARGING, mBatteryPlugType=USB, mBatteryPlugged=true, mRemainingChargeTime=3300000, mBatteryChargingType=1, mBatteryChargerType=NORMAL, mBatteryOnline=NOT_DEFINED, mBatterySwellingMode=NONE, mBatteryProtectMode=false]
+06-07 18:16:48.967  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:16:48.970  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:16:48.970  1349  1349 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+06-07 18:16:48.971  1349  1349 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-07 18:16:48.971  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:16:48.974  1349  1349 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-07 18:16:48.974  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-07 18:16:48.974  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-07 18:16:48.974  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-07 18:16:49.400   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.037426576]
+06-07 18:16:49.401   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9836067]
+06-07 18:16:49.401   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.376647]
+06-07 18:16:49.401   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.806192 msecs
+06-07 18:16:49.404   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.425347 msecs
+06-07 18:16:49.408   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 3.630462 msecs
+06-07 18:16:49.639   564   507 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 5124815
+06-07 18:16:49.911   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.007956279]
+06-07 18:16:49.911   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9690424]
+06-07 18:16:49.911   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.10066181]
+06-07 18:16:49.912   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.071462 msecs
+06-07 18:16:49.914   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.204077 msecs
+06-07 18:16:49.916   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.675923 msecs
+06-07 18:16:49.916   982  1276 I SemWifiServiceDetector: NSD results: [1, 1, 1, 0, 1, 1, 0, 1] Traff. type 1 Thr 1
+06-07 18:16:49.918   982  1279 D SemWifiOptimizer: enable=1 state=0x10 prev=0x00 new=0x10 force=0
+06-07 18:16:50.179 29487 29599 I cn_CronetUrlRequestContext: destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@2eb7f5b
+06-07 18:16:50.421   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0032885282]
+06-07 18:16:50.422   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.99243975]
+06-07 18:16:50.422   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.035193548]
+06-07 18:16:50.422   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.410577 msecs
+06-07 18:16:50.425   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.412039 msecs
+06-07 18:16:50.426   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.765615 msecs
+06-07 18:16:50.427   982  1276 I SemWifiServiceDetector: NSD results: [0, 1, 1, 0, 1, 0, 0, 1] Traff. type 1 Thr 1
+06-07 18:16:50.429   982  1279 D SemWifiOptimizer: enable=1 state=0x10 prev=0x10 new=0x10 force=0
+06-07 18:16:50.877   982  1325 I Pageboost: Launcher App Execution
+06-07 18:16:50.925   460   460 D io_stats: !@   8,0 r 501916 19519840 w 349875 127032712 d 0 0 f 0 0 iot 276216 0 th 0 0 0 pt 0 inp 0 0 57406.615
+06-07 18:16:50.931   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0025702028]
+06-07 18:16:50.931   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9942707]
+06-07 18:16:50.932   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.01559518]
+06-07 18:16:50.932   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.398 msecs
+06-07 18:16:50.935   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.989038 msecs
+06-07 18:16:50.937   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.928962 msecs
+06-07 18:16:51.441   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0030573488]
+06-07 18:16:51.442   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9775529]
+06-07 18:16:51.442   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.02368876]
+06-07 18:16:51.442   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.350769 msecs
+06-07 18:16:51.445   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.498654 msecs
+06-07 18:16:51.447   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.690615 msecs
+06-07 18:16:51.762   982  6105 D SGM:GameManager: identifyGamePackage. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.SortingMachine.isGame(SortingMachine.java:162)
+06-07 18:16:51.762   982  6105 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-07 18:16:51.950   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0041226977]
+06-07 18:16:51.951   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9814388]
+06-07 18:16:51.952   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.048778646]
+06-07 18:16:51.952   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.612538 msecs
+06-07 18:16:51.954   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.477923 msecs
+06-07 18:16:51.956   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.685077 msecs
+06-07 18:16:52.108   515   806 D ProfileInstaller: Installing profile for com.amaia23.hydracam
+06-07 18:16:52.460   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.004597085]
+06-07 18:16:52.461   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.97318256]
+06-07 18:16:52.461   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.0357104]
+06-07 18:16:52.461   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.743616 msecs
+06-07 18:16:52.464   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.144039 msecs
+06-07 18:16:52.465   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.786269 msecs
+06-07 18:16:52.888 25793 25793 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.people.service.START pkg=com.google.android.gms }
+06-07 18:16:52.898 25793 25793 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService pkg=com.google.android.gms }
+06-07 18:16:52.927   460   460 D io_stats: !@   8,0 r 501916 19519840 w 349944 127033376 d 0 0 f 0 0 iot 276224 0 th 0 0 0 pt 0 inp 0 0 57408.617
+06-07 18:16:52.968   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.007934698]
+06-07 18:16:52.969   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9371447]
+06-07 18:16:52.969   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.19316001]
+06-07 18:16:52.969   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.186269 msecs
+06-07 18:16:52.971   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.928847 msecs
+06-07 18:16:52.973   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.608885 msecs
+06-07 18:16:53.476   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0076820916]
+06-07 18:16:53.477   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.9502202]
+06-07 18:16:53.477   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.1377452]
+06-07 18:16:53.477   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.747692 msecs
+06-07 18:16:53.480   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.420346 msecs
+06-07 18:16:53.482   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.88323 msecs
+06-07 18:16:53.728   982  1727 D SGM:GameManager: identifyForegroundApp. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0
+06-07 18:16:53.728   982  1727 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-07 18:16:53.729  5655  5893 I a       : [#CMH#] Is foreground game app: false
+06-07 18:16:53.986   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0153483115]
+06-07 18:16:53.987   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.79496634]
+06-07 18:16:53.987   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.40192556]
+06-07 18:16:53.987   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.540539 msecs
+06-07 18:16:53.990   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.387423 msecs
+06-07 18:16:53.992   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.8045 msecs
+06-07 18:16:54.248  1427  1427 I wpa_supplicant: Heartbeat 5738
+06-07 18:16:54.496   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.018218942]
+06-07 18:16:54.496   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.6203437]
+06-07 18:16:54.497   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.60296583]
+06-07 18:16:54.497   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.472577 msecs
+06-07 18:16:54.500   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.542423 msecs
+06-07 18:16:54.502   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.01427 msecs
+06-07 18:16:55.006   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.013888815]
+06-07 18:16:55.006   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.8143696]
+06-07 18:16:55.007   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.53103864]
+06-07 18:16:55.007   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.359154 msecs
+06-07 18:16:55.009   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.617807 msecs
+06-07 18:16:55.011   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.742076 msecs
+06-07 18:16:55.515   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.04295646]
+06-07 18:16:55.516   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.50147015]
+06-07 18:16:55.517   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.71614903]
+06-07 18:16:55.517   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.568654 msecs
+06-07 18:16:55.519   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.618807 msecs
+06-07 18:16:55.521   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.690846 msecs
+06-07 18:16:56.024   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.018578133]
+06-07 18:16:56.025   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.45569745]
+06-07 18:16:56.025   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.72329414]
+06-07 18:16:56.026   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.620615 msecs
+06-07 18:16:56.028   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.487154 msecs
+06-07 18:16:56.031   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.946462 msecs
+06-07 18:16:56.534   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.033707708]
+06-07 18:16:56.535   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.5455974]
+06-07 18:16:56.536   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.88156974]
+06-07 18:16:56.536   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.575461 msecs
+06-07 18:16:56.538   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.471346 msecs
+06-07 18:16:56.540   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.699384 msecs
+06-07 18:16:56.540   982  1276 I SemWifiServiceDetector: NSD results: [1, 1, 1, 0, 1, 1, 1, 1] Traff. type 1 Thr 0
+06-07 18:16:56.542   982  1279 D SemWifiOptimizer: enable=1 state=0x10 prev=0x10 new=0x10 force=0
+06-07 18:16:56.931   460   460 D io_stats: !@   8,0 r 501916 19519840 w 349951 127033732 d 0 0 f 0 0 iot 276232 0 th 0 0 0 pt 0 inp 0 0 57412.621
+06-07 18:16:57.046   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.03917325]
+06-07 18:16:57.047   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.19660309]
+06-07 18:16:57.047   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.8386866]
+06-07 18:16:57.047   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.438846 msecs
+06-07 18:16:57.050   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.406769 msecs
+06-07 18:16:57.052   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.881539 msecs
+06-07 18:16:57.556   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.029571025]
+06-07 18:16:57.557   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.1858642]
+06-07 18:16:57.557   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.8510472]
+06-07 18:16:57.557   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.600115 msecs
+06-07 18:16:57.560   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.089961 msecs
+06-07 18:16:57.561   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.631192 msecs
+06-07 18:16:58.064   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.04415229]
+06-07 18:16:58.065   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.10864212]
+06-07 18:16:58.065   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.915227]
+06-07 18:16:58.065   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.539577 msecs
+06-07 18:16:58.068   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.461231 msecs
+06-07 18:16:58.070   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.936192 msecs
+06-07 18:16:58.574   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.040230975]
+06-07 18:16:58.574   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.14200921]
+06-07 18:16:58.575   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.83683777]
+06-07 18:16:58.575   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.188731 msecs
+06-07 18:16:58.577   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.354423 msecs
+06-07 18:16:58.579   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.645576 msecs
+06-07 18:16:58.579   982  1276 I SemWifiServiceDetector: NSD results: [0, 1, 2, 0, 0, 1, 0, 3] Traff. type 1 Thr 0
+06-07 18:16:58.581   982  1279 D SemWifiOptimizer: enable=0 state=0x10 prev=0x10 new=0x00 force=0
+06-07 18:16:59.083   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.043552592]
+06-07 18:16:59.084   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.35900307]
+06-07 18:16:59.085   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.82267064]
+06-07 18:16:59.085   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.614424 msecs
+06-07 18:16:59.087   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.349923 msecs
+06-07 18:16:59.089   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.878308 msecs
+06-07 18:16:59.132   554   587 D BatteryDump: wait_for_battery_event : occurred : change@/devices/platform/battery/power_supply/battery 
+06-07 18:16:59.148   554   554 I android.hardware.health@2.1-service-samsung: updateLrpSysfs: write: 293
+06-07 18:16:59.149   982  1249 D BatteryService: Sending ACTION_BATTERY_CHANGED. scale:100, info:{.chargerAcOnline = false, .chargerUsbOnline = true, .chargerWirelessOnline = false, .maxChargingCurrent = 0, .maxChargingVoltage = 0, .batteryStatus = CHARGING, .batteryHealth = GOOD, .batteryPresent = true, .batteryLevel = 90, .batteryVoltage = 4147, .batteryTemperature = 288, .batteryCurrent = 132, .batteryCycleCount = 0, .batteryFullCharge = 3000000, .batteryChargeCounter = 2700000, .batteryTechnology = Li-ion}
+06-07 18:16:59.149   982  1249 D BatteryService: online:5, current avg:26, charge type:2, POGO powered:false, power sharing:false, high voltage charger:false, charger_type:0, capacity:280000, misc_event:0x10000, current_event:0x8000, current_now:132
+06-07 18:16:59.151   982  1168 D MotionRecognitionService: [SAR]  onReceive : ACTION_BATTERY_CHANGED, Plugged: 2
+06-07 18:16:59.151   982  1168 I MotionRecognitionService: [TA] In/out: true, curr state: 1
+06-07 18:16:59.155  1349  1349 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-07 18:16:59.156  1349  1349 I PowerUI : mBootCompleted = true |  mFullyConnected = true
+06-07 18:16:59.156  1349  1349 I PowerUI : BATTERY_HEALTH_CHECK extraHealth=2 mBatteryMiscEvent=65536
+06-07 18:16:59.156  1349  1349 D PowerUI : priorPlugType = 2 mPlugType = 2 priorBatteryStatus = 2 mBatteryStatus = 2
+06-07 18:16:59.156  1349  1349 I PowerUI : oldMisalign : false, curMisalign : false
+06-07 18:16:59.158   982   982 D SemWifiApBroadcastReceiver: Received : android.intent.action.BATTERY_CHANGED
+06-07 18:16:59.159   982   982 D AdaptiveBrightnessLongtermModelBuilder: Received android.intent.action.BATTERY_CHANGED
+06-07 18:16:59.159  1349  1349 D PowerUI.Notification: showChargingNotice oldChargingType : 8 currentChargingType : 8 oldChargingTime : 3300000 mChargingTime : 3300000
+06-07 18:16:59.159  1349  1349 D PowerUI.Notification: There is no change about charging status, so return!
+06-07 18:16:59.159  1349  1349 D PowerUI : Battery swelling mode - priorBatterySwellingMode = 0 mBatterySwellingMode = 0 mBatteryStatus = 2
+06-07 18:16:59.159  1349  1349 I PowerUI : mBatteryMiscEvent = 65536
+06-07 18:16:59.161  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-07 18:16:59.162  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-07 18:16:59.168  1349 11717 D PowerUI.Notification: 1. restoreScreenTimeOut - saved_value : :
+06-07 18:16:59.168  1349 11717 E PowerUI.Notification: no saved value, so we do nothing !!
+06-07 18:16:59.170  1349  1349 I AODBatteryManager: updateBatteryData: ACTION_BATTERY_CHANGED
+06-07 18:16:59.171  1349  1349 I AODBatteryManager: saveBatteryData : AOD BatteryData [mBatteryLevel=90, mBatteryStatus=CHARGING, mBatteryPlugType=USB, mBatteryPlugged=true, mRemainingChargeTime=3300000, mBatteryChargingType=1, mBatteryChargerType=NORMAL, mBatteryOnline=NOT_DEFINED, mBatterySwellingMode=NONE, mBatteryProtectMode=false]
+06-07 18:16:59.174  1349  1349 D KeyguardUpdateMonitor: handleBatteryUpdate
+06-07 18:16:59.182  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:16:59.185  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:16:59.185  1349  1349 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+06-07 18:16:59.185  1349  1349 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-07 18:16:59.186  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:16:59.190  1349  1349 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-07 18:16:59.190  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-07 18:16:59.190  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-07 18:16:59.190  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-07 18:16:59.207   597   597 I SurfaceFlinger: SFWD update time=57414898962010
+06-07 18:16:59.401   982  1276 I SemWifiServiceDetector: Traff. tracking suspended
+06-07 18:16:59.460   515   515 I flutter : Log registered: {message: Runtime role switch requested: {role: master, preferredMasterIp: null, forceSlaveMode: false}, timestamp: 2026-06-07 18:16:59.459247, function: null, file: null}
+06-07 18:16:59.686  3959  4374 I ContactsProvider_EventLog: contents_sample_state: [CONTACT contacts(22) data(163) accounts({com.google (3)=22, com.google.android.apps.tachyon (6)=7}) accounts deleted({}) in_trash(in_trash(0), in_trash_for_sync(0)) calls([logtype:300 cnt:2]) countryIso(DE) userId(0)  ]
+06-07 18:16:59.686  3959  4374 I ContactsProvider_EventLog: contents_sample_state: [ agr({[3]=15, [3 ,6]=7})  ]
+06-07 18:16:59.686  3959  4374 I ContactsProvider_EventLog: contents_sample_state: [ actCnt({android.process.acore(3959)=1})  ]
+06-07 18:16:59.686  3959  4374 I ContactsProvider_EventLog: contents_sample_state: [PROFILE contacts(0) data(0) accounts({})  ] [SAPROFILE contacts(0) data(0) accounts({})  ]
+06-07 18:16:59.686  3959  4374 I ContactsProvider_EventLog: contents_sample_state: [STORAGE Contacts(CE) Profile(CE) SAProfile(CE) CallLog(CE)  ]
+06-07 18:16:59.686  3959  4374 I ContactsProvider_EventLog: contents_sample_state: [STATE R(F) ]
+06-07 18:16:59.912   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:16:59.922   515   515 I flutter : Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-07 18:16:59.922651, function: null, file: null}
+06-07 18:17:00.000   982  1147 D SamsungAlarmManager: Expired : 8
+06-07 18:17:00.001   982  1147 V SamsungAlarmManager: Sending to uid : 1000 L=f7ee41c:TIME_TICK alarm=Alarm{2a08e92 type 3 origWhen 65726084 whenElapsed 65726084 android}
+06-07 18:17:00.002   982  1147 D SamsungAlarmManager: setExact (T:3/F:9/AC:false) 20260607T181800 now=65726085 - CU:1000/CP:982/L:f7ee41c:TIME_TICK
+06-07 18:17:00.003   982  1147 V SamsungAlarmManager: setLocked to kernel - W:65891525 / NW:65728315, now=65726087
+06-07 18:17:00.004   982  1147 V SamsungAlarmManager: setLocked to kernel - W:65891525 / NW:65728315, now=65726087
+06-07 18:17:00.004   982   982 I EyeComfortSolutionService: action  :  android.intent.action.TIME_TICK
+06-07 18:17:00.005  1349  1871 D QSClockBellTower: onReceive(android.intent.action.TIME_TICK) mTimeZoneString:null
+06-07 18:17:00.011   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:17:00.022  1349  1349 D KeyguardUpdateMonitor: received broadcast android.intent.action.TIME_TICK
+06-07 18:17:00.023  1349  1349 D QSClockBellTower: He is ready to ring the bell. (((QSClockBellSound - TimeText:18:17, TimeContentDescription:18:17, DateText:Sun, 7 June, ShortDateText:Sun, 7 Jun, Demofalse)))
+06-07 18:17:00.024  1349  1349 D QSClockHomeIndicatorView: Home Indicator status_bar_clock notifyTimeChanged(QSClockBellSound - TimeText:18:17, TimeContentDescription:18:17, DateText:Sun, 7 June, ShortDateText:Sun, 7 Jun, Demofalse) ClockVisibleByPolicy:true, ClockVisibleByUser:true, visible?true, parent:android.widget.LinearLayout{1012604 V.E...... ......ID 0,0-111,72 #7f0b0472 app:id/left_clock_container}
+06-07 18:17:00.024  1349  1349 D QSClockBellTower: Everyone heard the bell. run(currentTime:1780849020022,   getTime():Sun Jun 07 18:17:00 GMT+02:00 2026,   getTimeZone():libcore.util.ZoneInfo[mDstSavings=3600000,mUseDst=true,mDelegate=[id="Europe/Berlin",mRawOffset=3600000,mEarliestRawOffset=3208000,transitions=145]])
+06-07 18:17:00.031  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:17:00.034  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:17:00.034  1349  1349 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+06-07 18:17:00.034  1349  1349 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-07 18:17:00.034  1349  1349 D QS      : setQSExpansion 0.0 -104.125
+06-07 18:17:00.038  1349  1349 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-07 18:17:00.038  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-07 18:17:00.038  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-07 18:17:00.038  1349  1349 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-07 18:17:00.040  1349  1349 D KeyguardUpdateMonitor: handleTimeUpdate
+06-07 18:17:00.042  1349  1349 D FaceWidgetPagesController: onTimeChanged()
+06-07 18:17:00.043  1349  1349 V QsExpandAnimator: updateAnimators
+06-07 18:17:00.043  1349  1349 V QsExpandAnimator: clearAnimationState 
+06-07 18:17:00.043  1349  1349 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-07 18:17:00.060   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:17:00.285   515   515 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-07 18:17:00.284778, function: null, file: null}
+06-07 18:17:00.359   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:17:00.406   516   516 E audit   : type=1400 audit(1780849020.401:4463): avc:  denied  { write } for  pid=25673 comm="ThreadPoolForeg" name="traced_producer" dev="tmpfs" ino=26145 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock_file permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-07 18:17:00.406   516   516 E audit   : type=1300 audit(1780849020.401:4463): arch=c00000b7 syscall=203 success=no exit=-13 a0=af a1=6e5a60b200 a2=1e a3=ffffffff95db46cb items=0 ppid=536 pid=25673 auid=4294967295 uid=10075 gid=10075 euid=10075 suid=10075 fsuid=10075 egid=10075 sgid=10075 fsgid=10075 tty=(none) ses=4294967295 comm="ThreadPoolForeg" exe="/system/bin/app_process64" subj=u:r:gmscore_app:s0:c512,c768 key=(null)
+06-07 18:17:00.406   516   516 E audit   : type=1327 audit(1780849020.401:4463): proctitle="com.google.android.gms.persistent"
+06-07 18:17:00.460   515   515 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: a69a6f5c-c397-4072-9faf-4502d9608be6, network: {isWifiActive: true, ipAddress: 192.168.178.159, ssid: null, bssid: null, gatewayIp: 192.168.178.1, subnetMask: 255.255.255.0, subnetSignature: 192.168.178.0/24, source: device, warnings: [SSID unavailable on this platform or permission state.]}}, timestamp: 2026-06-07 18:17:00.459993, function: null, file: null}
+06-07 18:17:00.467   515   515 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: a69a6f5c-c397-4072-9faf-4502d9608be6}, timestamp: 2026-06-07 18:17:00.467597, function: null, file: null}
+06-07 18:17:00.468   515   515 I flutter : Log registered: {message: Received getSessionStatus from a69a6f5c-c397-4072-9faf-4502d9608be6, timestamp: 2026-06-07 18:17:00.468110, function: null, file: null}
+06-07 18:17:00.488   515   515 I flutter : Log registered: {message: Sent noSession to a69a6f5c-c397-4072-9faf-4502d9608be6, timestamp: 2026-06-07 18:17:00.487397, function: null, file: null}
+06-07 18:17:00.609   515   515 I flutter : Log registered: {message: Registered new slave with deviceId: a69a6f5c-c397-4072-9faf-4502d9608be6, timestamp: 2026-06-07 18:17:00.608498, function: null, file: null}
+06-07 18:17:00.610   515   515 I flutter : Log registered: {message: Sent noSession to a69a6f5c-c397-4072-9faf-4502d9608be6, timestamp: 2026-06-07 18:17:00.610471, function: null, file: null}
+06-07 18:17:00.794   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-07 18:17:00.935   460   460 D io_stats: !@   8,0 r 501916 19519840 w 349983 127034232 d 0 0 f 0 0 iot 276260 0 th 0 0 0 pt 0 inp 0 0 57416.625
+06-07 18:17:00.944   597   597 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER

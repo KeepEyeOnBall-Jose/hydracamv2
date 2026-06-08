@@ -158,6 +158,7 @@ def build_flutter_launch_command(
         "--dart-define=HYDRACAM_AUTOMATION=true",
         f"--dart-define=HYDRACAM_AUTOMATION_ROLE={role}",
         f"--dart-define=HYDRACAM_AUTOMATION_PORT={port}",
+        f"--dart-define=HYDRACAM_AUTOMATION_TARGET_ID={device_id}",
         "-t",
         "lib/main.dart",
     ]

@@ -1,0 +1,116 @@
+{
+  "barrierReleasedAt": "2026-06-07T18:32:22.541150",
+  "clientCount": 3,
+  "clientDeviceIds": [
+    "RF8M90QE7LX",
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+    "macos"
+  ],
+  "commandTimes": {
+    "end_session": "2026-06-07T18:36:11.745135",
+    "start_local_session": "2026-06-07T18:32:22.541150",
+    "start_recording": "2026-06-07T18:33:12.127350",
+    "stop_recording": "2026-06-07T18:35:06.465236",
+    "take_photo": "2026-06-07T18:32:23.726843"
+  },
+  "failures": [
+    "rotation: Command end_session was not registered: None",
+    "start_recording: Timed out waiting for session state on RF8M90QE7LX: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 1, 'videoCount': 0, 'queueLength': 1, 'isUploading': False, 'isRecording': False}",
+    "take_photo: Timed out waiting for session state on macos: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}",
+    "start_recording: Timed out waiting for session state on macos: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}",
+    "stop_recording: Timed out waiting for session state on macos: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}"
+  ],
+  "knownBlocker": null,
+  "master": {
+    "bridgeUrl": "http://127.0.0.1:6400",
+    "captureEnabled": true,
+    "deviceId": "29d816ac550b7ece",
+    "expectedResult": "capture",
+    "knownBlocker": null,
+    "label": "SM G960F (mobile)",
+    "lens": "autoBack",
+    "platform": "android",
+    "profile": "standard1080p30",
+    "runtime": "Android 10 (API 29)"
+  },
+  "masterDeviceId": "29d816ac550b7ece",
+  "status": "failed",
+  "targetResults": [
+    {
+      "failures": [
+        "rotation: Command end_session was not registered: None"
+      ],
+      "knownBlocker": null,
+      "status": "failed",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "29d816ac550b7ece",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G960F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 10 (API 29)"
+      }
+    },
+    {
+      "failures": [],
+      "knownBlocker": null,
+      "status": "passed",
+      "target": {
+        "bridgeUrl": "http://192.168.178.104:4762",
+        "captureEnabled": true,
+        "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "iPad (5) (mobile)",
+        "lens": "autoBack",
+        "platform": "ios_physical",
+        "profile": "standard1080p30",
+        "runtime": "iOS 15.6.1 19G82"
+      }
+    },
+    {
+      "failures": [
+        "start_recording: Timed out waiting for session state on RF8M90QE7LX: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 1, 'videoCount': 0, 'queueLength': 1, 'isUploading': False, 'isRecording': False}"
+      ],
+      "knownBlocker": null,
+      "status": "failed",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:6401",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      }
+    },
+    {
+      "failures": [
+        "take_photo: Timed out waiting for session state on macos: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}",
+        "start_recording: Timed out waiting for session state on macos: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}",
+        "stop_recording: Timed out waiting for session state on macos: {'sessionGuid': 'local-rotation-29d816ac550b7ece-1780849942', 'deviceType': 'Slave', 'isActive': True, 'photoCount': 0, 'videoCount': 0, 'queueLength': 0, 'isUploading': False, 'isRecording': False}"
+      ],
+      "knownBlocker": null,
+      "status": "failed",
+      "target": {
+        "bridgeUrl": "http://127.0.0.1:4770",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS (desktop)",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+      }
+    }
+  ]
+}

@@ -65,6 +65,14 @@ spreadsheet sprint rows.
   pack contract for hardware/emulator-backed verification.
 - `wireless-device-debugging.md`: Android ADB-over-WiFi and iPhone
   Xcode/CoreDevice setup for cable-free real-device debugging.
+- `macos-dev-host.md`: one-command deployment and validation for a new Mac
+  development host over SSH/Tailscale.
+- `win11-dev-host.md`: current Win11 host identity, installed toolchains,
+  Windows/Android/WSL validation results, USB camera inventory, and remaining
+  host-readiness gaps.
+- `../superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`: executable
+  Win11 C: cleanup and dev-environment moveout plan backed by SSH disk
+  inventory.
 
 ## Historical Status Files
 

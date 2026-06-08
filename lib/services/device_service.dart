@@ -52,6 +52,24 @@ class DeviceIdService {
         "isPhysicalDevice": iosInfo.isPhysicalDevice,
         "identifierForVendor": iosInfo.identifierForVendor,
       };
+    } else if (Platform.isMacOS) {
+      final MacOsDeviceInfo macosInfo = await deviceInfoPlugin.macOsInfo;
+      return {
+        "deviceId": await getOrCreateDeviceId(),
+        "platform": "macOS",
+        "computerName": macosInfo.computerName,
+        "hostName": macosInfo.hostName,
+        "model": macosInfo.model,
+        "modelName": macosInfo.modelName,
+        "arch": macosInfo.arch,
+        "osRelease": macosInfo.osRelease,
+        "version":
+            "${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion}",
+        "activeCPUs": macosInfo.activeCPUs,
+        "memorySize": macosInfo.memorySize,
+        "cpuFrequency": macosInfo.cpuFrequency,
+        "systemGUID": macosInfo.systemGUID,
+      };
     } else {
       return {
         "deviceId": await getOrCreateDeviceId(),
