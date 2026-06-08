@@ -1,0 +1,121 @@
+{
+  "acceptanceChecks": [
+    "Physical iPhone appears in Flutter/CoreDevice or an identity-matched automation bridge is reachable",
+    "If unreachable, blocker evidence records Flutter, CoreDevice, xctrace, and bridge-host probes"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:53:04.211491+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:53:04.289590+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:53:04.339148+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:53:05.857601+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "3",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-08T13:53:18.017379+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--device-id",
+        "00008101-000A68811E43001E",
+        "--run-dir",
+        "logs/verification-runs/20260608-1552-physical-iphone-setup-blocker-current/device-logs/ios-capture-repro-scan",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T13:53:36.823755+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T13:54:29.344741+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A / 00008101-000A68811E43001E",
+      "kind": "iOS physical",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "Objective still needs a physical iPhone setup screenshot; current device state is being rechecked."
+      ],
+      "os": "iOS 26.5",
+      "role": "physical iPhone setup proof blocker retry"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/physical-iphone-screenshot-blocked.txt",
+    "video/physical-iphone-video-blocked.txt",
+    "device-logs/physical-iphone-current-blocker.txt"
+  ],
+  "item": {
+    "slug": "physical-iphone-setup-blocker-current",
+    "source": "docs/control/status-and-roadmap.md#camera-setup-and-leveling",
+    "title": "Physical iPhone camera setup proof retry"
+  },
+  "notes": [
+    "Physical iPhone remains unavailable/offline to Flutter, CoreDevice, xctrace, and LAN automation bridge scan."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

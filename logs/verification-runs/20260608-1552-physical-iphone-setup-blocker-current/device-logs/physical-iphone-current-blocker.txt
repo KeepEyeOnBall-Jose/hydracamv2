@@ -1,0 +1,10 @@
+Physical iPhone current blocker, 2026-06-08:
+
+- Flutter sees the iPhone only as a browsing target and reports code -27.
+- CoreDevice lists the iPhone as unavailable.
+- xctrace lists the iPhone under Devices Offline.
+- CoreDevice lock-state lookup cannot locate the requested device identifier.
+- The last known iPhone automation bridge host, 192.168.178.168:4762, times out.
+- `scripts/ios_capture_repro.py --host auto --scan-subnet 192.168.178.0/24 --device-id 00008101-000A68811E43001E` failed to discover the automation bridge on port 4762.
+
+This blocks the remaining physical iPhone screenshot/proof requirement for the active all-device setup-preview objective.

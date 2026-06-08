@@ -1,0 +1,10 @@
+No physical iPhone screenshot was captured in this run.
+
+Current blocker:
+- `flutter devices --device-timeout 10` does not list the physical iPhone as a connected target and reports local-network browsing error code -27.
+- `xcrun devicectl list devices` lists Jose Ramon’s iPhone as `unavailable`.
+- `xcrun xctrace list devices` lists Jose Ramon’s iPhone under `Devices Offline`.
+- `xcrun devicectl device info lockState --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A` fails because CoreDevice cannot locate the device.
+- The last known automation bridge host `192.168.178.168:4762` times out, and the repo iOS bridge scan did not discover an identity-matched bridge on `192.168.178.0/24`.
+
+Therefore a physical iPhone setup screenshot is blocked by external device availability, not by an observed HydraCam app-screen failure.
