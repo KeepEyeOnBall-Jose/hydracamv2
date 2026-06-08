@@ -1,0 +1,606 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 7 connected devices:
+  SM G960F (mobile)       • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)       • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)       • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Found 1 wirelessly connected device:
+  José Ramón’s iPhone (wireless) (mobile) • 00008101-000A68811E43001E • ios • iOS 26.5 23F77
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:9
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:8
+RF8M90QE7LX            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:6
+
+[exit-code] 0
+
+$ python3 scripts/android_screen_brightness.py status
+29d816ac550b7ece: screen_brightness=0 manual
+9885e6503930304946: screen_brightness=0 manual
+RF8M90QE7LX: screen_brightness=0 manual
+[exit-code] 0
+
+$ python3 scripts/android_screen_brightness.py dim
+29d816ac550b7ece: screen_brightness=0
+9885e6503930304946: screen_brightness=0
+RF8M90QE7LX: screen_brightness=0
+[exit-code] 0
+
+$ python3 scripts/android_power_monitor.py --duration 60 --interval 10 --output logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-samples.jsonl --summary-output logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-summary.json
+29d816ac550b7ece level=46 usb=True status=2 voltage=3968 temp=383 current_now_raw=1240 brightness=0 pids=[12205] app_cpu_core=n/a
+9885e6503930304946 level=8 usb=True status=2 voltage=3697 temp=382 current_now_raw=323 brightness=0 pids=[21252] app_cpu_core=n/a
+RF8M90QE7LX level=37 usb=True status=2 voltage=3788 temp=357 current_now_raw=148 brightness=0 pids=[32433] app_cpu_core=n/a
+29d816ac550b7ece level=46 usb=True status=2 voltage=3895 temp=382 current_now_raw=1075 brightness=0 pids=[12205] app_cpu_core=2.18%
+9885e6503930304946 level=8 usb=True status=2 voltage=3695 temp=382 current_now_raw=269 brightness=0 pids=[21252] app_cpu_core=2.10%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3787 temp=356 current_now_raw=128 brightness=0 pids=[32433] app_cpu_core=13.68%
+29d816ac550b7ece level=46 usb=True status=2 voltage=3964 temp=381 current_now_raw=1126 brightness=0 pids=[12205] app_cpu_core=1.98%
+9885e6503930304946 level=8 usb=True status=2 voltage=3702 temp=380 current_now_raw=261 brightness=0 pids=[21252] app_cpu_core=1.55%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3784 temp=355 current_now_raw=125 brightness=0 pids=[32433] app_cpu_core=10.70%
+29d816ac550b7ece level=46 usb=True status=2 voltage=3969 temp=380 current_now_raw=1228 brightness=0 pids=[12205] app_cpu_core=1.62%
+9885e6503930304946 level=8 usb=True status=2 voltage=3676 temp=380 current_now_raw=84 brightness=0 pids=[21252] app_cpu_core=1.55%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3789 temp=354 current_now_raw=91 brightness=0 pids=[32433] app_cpu_core=9.79%
+29d816ac550b7ece level=47 usb=True status=2 voltage=3976 temp=378 current_now_raw=1223 brightness=0 pids=[12205] app_cpu_core=1.91%
+9885e6503930304946 level=8 usb=True status=2 voltage=3677 temp=379 current_now_raw=121 brightness=0 pids=[21252] app_cpu_core=1.64%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3788 temp=352 current_now_raw=141 brightness=0 pids=[32433] app_cpu_core=10.94%
+29d816ac550b7ece level=47 usb=True status=2 voltage=3978 temp=377 current_now_raw=1205 brightness=0 pids=[12205] app_cpu_core=2.67%
+9885e6503930304946 level=8 usb=True status=2 voltage=3706 temp=378 current_now_raw=294 brightness=0 pids=[21252] app_cpu_core=2.05%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3789 temp=351 current_now_raw=32 brightness=0 pids=[32433] app_cpu_core=9.35%
+29d816ac550b7ece level=47 usb=True status=2 voltage=3977 temp=376 current_now_raw=1214 brightness=0 pids=[12205] app_cpu_core=2.03%
+9885e6503930304946 level=8 usb=True status=2 voltage=3701 temp=377 current_now_raw=296 brightness=0 pids=[21252] app_cpu_core=1.79%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3785 temp=350 current_now_raw=140 brightness=0 pids=[32433] app_cpu_core=10.33%
+{
+  "devices": {
+    "29d816ac550b7ece": {
+      "appCpuCorePctMax": 2.674897119341564,
+      "appCpuCorePctMean": 2.0657645485245153,
+      "currentNowRawMax": 1240,
+      "currentNowRawMean": 1187.2857142857142,
+      "currentNowRawMin": 1075,
+      "latestBattery": {
+        "ac_powered": false,
+        "adaptive_fast_charging_settings": true,
+        "batterycurrentevent": 32768,
+        "batterymiscevent": 196608,
+        "charge_counter": 1397457,
+        "current_battery_service_state": "",
+        "current_now": 1214,
+        "feature_hiccup_control": true,
+        "feature_save_battery_cycle": true,
+        "feature_supported_daily_board": false,
+        "feature_wireless_fast_charger_control": true,
+        "health": 2,
+        "led_charging": false,
+        "led_low_battery": false,
+        "level": 47,
+        "llb_cal": 20181107,
+        "llb_current": "YEAR2026M6D7",
+        "llb_diff": 394,
+        "llb_man": "",
+        "max_charging_current": 0,
+        "max_charging_voltage": 0,
+        "msavedbatteryasoc": 78,
+        "msavedbatterymaxcurrent": 2229,
+        "msavedbatterymaxtemp": 661,
+        "msavedbatteryusage": 123991,
+        "msecplugtypesummary": 2,
+        "mwasusedwirelessfastchargerpreviously": true,
+        "mwirelessfastchargingsettingsenable": true,
+        "present": true,
+        "scale": 100,
+        "sec_feature_prevent_swelling": false,
+        "sec_feature_use_wireless_power_sharing": false,
+        "status": 2,
+        "super_fast_charging_settings": false,
+        "technology": "Li-ion",
+        "temperature": 376,
+        "usb_powered": true,
+        "use_fake_battery": false,
+        "voltage": 3977,
+        "wireless_powered": false
+      },
+      "latestBrightness": {
+        "screen_brightness": 0,
+        "screen_brightness_mode": 0
+      },
+      "latestPids": [
+        12205
+      ],
+      "levelMax": 47,
+      "levelMin": 46,
+      "samples": 7,
+      "temperatureTenthsCMax": 383,
+      "temperatureTenthsCMean": 379.57142857142856
+    },
+    "9885e6503930304946": {
+      "appCpuCorePctMax": 2.102803738317757,
+      "appCpuCorePctMean": 1.779697656305906,
+      "currentNowRawMax": 323,
+      "currentNowRawMean": 235.42857142857142,
+      "currentNowRawMin": 84,
+      "latestBattery": {
+        "ac_powered": false,
+        "adaptive_fast_charging_settings": true,
+        "batterycurrentevent": 0,
+        "batterymiscevent": 65536,
+        "batteryswselfdischarging": false,
+        "charge_counter": 0,
+        "current_battery_service_state": "",
+        "current_now": 296,
+        "feature_save_battery_cycle": true,
+        "feature_wireless_fast_charger_control": true,
+        "health": 2,
+        "led_charging": true,
+        "led_low_battery": true,
+        "level": 8,
+        "llb_cal": 20160217,
+        "llb_current": "YEAR2026M4D28",
+        "llb_diff": 531,
+        "llb_man": "",
+        "max_charging_current": 0,
+        "max_charging_voltage": 0,
+        "mbootcompleted": true,
+        "msavedbatteryasoc": 80,
+        "msavedbatterymaxcurrent": 2849,
+        "msavedbatterymaxtemp": 625,
+        "msavedbatteryusage": 61063,
+        "msecplugtypesummary": 2,
+        "mwasusedwirelessfastchargerpreviously": false,
+        "mwirelessfastchargingsettingsenable": true,
+        "present": true,
+        "scale": 100,
+        "sec_feature_battery_simulation": false,
+        "status": 2,
+        "technology": "Li-ion",
+        "temperature": 377,
+        "usb_powered": true,
+        "use_fake_battery": false,
+        "voltage": 3701,
+        "wireless_powered": false
+      },
+      "latestBrightness": {
+        "screen_brightness": 0,
+        "screen_brightness_mode": 0
+      },
+      "latestPids": [
+        21252
+      ],
+      "levelMax": 8,
+      "levelMin": 8,
+      "samples": 7,
+      "temperatureTenthsCMax": 382,
+      "temperatureTenthsCMean": 379.7142857142857
+    },
+    "RF8M90QE7LX": {
+      "appCpuCorePctMax": 13.676079523869825,
+      "appCpuCorePctMean": 10.79874362492769,
+      "currentNowRawMax": 148,
+      "currentNowRawMean": 115.0,
+      "currentNowRawMin": 32,
+      "latestBattery": {
+        "ac_powered": false,
+        "adaptive_fast_charging_settings": true,
+        "batterycurrentevent": 32768,
+        "batterymiscevent": 65536,
+        "charge_counter": 1116000,
+        "current_battery_service_state": "",
+        "current_now": 140,
+        "feature_hiccup_control": true,
+        "feature_save_battery_cycle": true,
+        "feature_supported_daily_board": false,
+        "feature_wireless_fast_charger_control": true,
+        "health": "vendor.samsung.hardware.health@2.0::ISehHealth@Proxy",
+        "led_charging": true,
+        "led_low_battery": true,
+        "level": 37,
+        "llb_cal": 20190907,
+        "llb_current": "YEAR2026M6D7",
+        "llb_diff": 350,
+        "llb_man": "",
+        "max_charging_current": 0,
+        "max_charging_voltage": 0,
+        "mfullcapacityenable": false,
+        "msavedbatteryasoc": 84,
+        "msavedbatterybeginningdate": 0,
+        "msavedbatterymaxcurrent": 3118,
+        "msavedbatterymaxtemp": 628,
+        "msavedbatteryusage": 76020,
+        "msecplugtypesummary": 2,
+        "mwasusedwirelessfastchargerpreviously": false,
+        "mwirelessfastchargingsettingsenable": true,
+        "present": true,
+        "scale": 100,
+        "sec_feature_battery_full_capacity": true,
+        "sec_feature_battery_life_extender": false,
+        "sec_feature_prevent_swelling": false,
+        "sec_feature_use_wireless_power_sharing": true,
+        "status": 2,
+        "super_fast_charging_settings": false,
+        "technology": "Li-ion",
+        "temperature": 350,
+        "usb_powered": true,
+        "use_fake_battery": false,
+        "voltage": 3785,
+        "wireless_powered": false
+      },
+      "latestBrightness": {
+        "screen_brightness": 0,
+        "screen_brightness_mode": 0
+      },
+      "latestPids": [
+        32433
+      ],
+      "levelMax": 37,
+      "levelMin": 37,
+      "samples": 7,
+      "temperatureTenthsCMax": 357,
+      "temperatureTenthsCMean": 353.57142857142856
+    }
+  },
+  "sampleCount": 21
+}
+[exit-code] 0
+
+$ zsh -c adb -s 29d816ac550b7ece exec-out screencap -p > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/screenshots/29d816ac550b7ece.png
+[exit-code] 0
+
+$ zsh -c adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/screenshots/9885e6503930304946.png
+[exit-code] 0
+
+$ zsh -c adb -s 29d816ac550b7ece shell dumpsys battery > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-dumpsys-battery.txt
+[exit-code] 0
+
+$ zsh -c adb -s 29d816ac550b7ece shell dumpsys power > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-dumpsys-power.txt
+[exit-code] 0
+
+$ zsh -c adb -s 9885e6503930304946 shell dumpsys power > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-dumpsys-power.txt
+[exit-code] 0
+
+$ zsh -c adb -s RF8M90QE7LX exec-out screencap -p > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/screenshots/RF8M90QE7LX.png
+[exit-code] 0
+
+$ zsh -c adb -s 29d816ac550b7ece shell top -H -b -n 1 -p 12205 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-top-threads.txt
+[exit-code] 0
+
+$ zsh -c adb -s 9885e6503930304946 shell top -H -b -n 1 -p 21252 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-top-threads.txt
+[exit-code] 0
+
+$ zsh -c adb -s RF8M90QE7LX shell dumpsys power > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-dumpsys-power.txt
+[exit-code] 0
+
+$ zsh -c adb -s 9885e6503930304946 shell dumpsys battery > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-dumpsys-battery.txt
+[exit-code] 0
+
+$ zsh -c adb -s RF8M90QE7LX shell dumpsys battery > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-dumpsys-battery.txt
+[exit-code] 0
+
+$ zsh -c adb -s RF8M90QE7LX shell top -H -b -n 1 -p 32433 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-top-threads.txt
+[exit-code] 0
+
+$ zsh -c adb -s 29d816ac550b7ece logcat -d -t 1200 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-logcat-tail.txt
+[exit-code] 0
+
+$ zsh -c adb -s 9885e6503930304946 logcat -d -t 1200 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-logcat-tail.txt
+[exit-code] 0
+
+$ zsh -c adb -s RF8M90QE7LX logcat -d -t 1200 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-logcat-tail.txt
+[exit-code] 0
+
+$ python3 scripts/android_power_monitor.py --duration 30 --interval 10 --output logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-cameraserver-samples.jsonl --summary-output logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-cameraserver-summary.json
+29d816ac550b7ece level=51 usb=True status=2 voltage=4012 temp=349 current_now_raw=1201 brightness=0 pids=[12205] app_cpu_core=n/a cameraserver_cpu_core=n/a
+9885e6503930304946 level=9 usb=True status=2 voltage=3724 temp=358 current_now_raw=214 brightness=0 pids=[21252] app_cpu_core=n/a cameraserver_cpu_core=n/a
+RF8M90QE7LX level=37 usb=True status=2 voltage=3790 temp=328 current_now_raw=136 brightness=0 pids=[32433] app_cpu_core=n/a cameraserver_cpu_core=n/a
+29d816ac550b7ece level=51 usb=True status=2 voltage=4017 temp=348 current_now_raw=1191 brightness=0 pids=[12205] app_cpu_core=2.54% cameraserver_cpu_core=0.00%
+9885e6503930304946 level=9 usb=True status=2 voltage=3735 temp=358 current_now_raw=289 brightness=0 pids=[21252] app_cpu_core=1.54% cameraserver_cpu_core=13.78%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3796 temp=328 current_now_raw=35 brightness=0 pids=[32433] app_cpu_core=10.55% cameraserver_cpu_core=0.00%
+29d816ac550b7ece level=51 usb=True status=2 voltage=4018 temp=348 current_now_raw=1218 brightness=0 pids=[12205] app_cpu_core=1.97% cameraserver_cpu_core=0.00%
+9885e6503930304946 level=9 usb=True status=2 voltage=3739 temp=357 current_now_raw=291 brightness=0 pids=[21252] app_cpu_core=1.99% cameraserver_cpu_core=13.83%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3794 temp=327 current_now_raw=141 brightness=0 pids=[32433] app_cpu_core=10.71% cameraserver_cpu_core=0.00%
+29d816ac550b7ece level=51 usb=True status=2 voltage=4014 temp=347 current_now_raw=1153 brightness=0 pids=[12205] app_cpu_core=1.54% cameraserver_cpu_core=0.00%
+9885e6503930304946 level=9 usb=True status=2 voltage=3735 temp=357 current_now_raw=299 brightness=0 pids=[21252] app_cpu_core=1.56% cameraserver_cpu_core=13.87%
+RF8M90QE7LX level=37 usb=True status=2 voltage=3795 temp=327 current_now_raw=158 brightness=0 pids=[32433] app_cpu_core=7.91% cameraserver_cpu_core=0.00%
+{
+  "devices": {
+    "29d816ac550b7ece": {
+      "appCpuCorePctMax": 2.5396825396825395,
+      "appCpuCorePctMean": 2.0178110193270022,
+      "currentNowRawMax": 1218,
+      "currentNowRawMean": 1190.75,
+      "currentNowRawMin": 1153,
+      "latestBattery": {
+        "ac_powered": false,
+        "adaptive_fast_charging_settings": true,
+        "batterycurrentevent": 32768,
+        "batterymiscevent": 196608,
+        "charge_counter": 1525038,
+        "current_battery_service_state": "",
+        "current_now": 1153,
+        "feature_hiccup_control": true,
+        "feature_save_battery_cycle": true,
+        "feature_supported_daily_board": false,
+        "feature_wireless_fast_charger_control": true,
+        "health": 2,
+        "led_charging": false,
+        "led_low_battery": false,
+        "level": 51,
+        "llb_cal": 20181107,
+        "llb_current": "YEAR2026M6D7",
+        "llb_diff": 394,
+        "llb_man": "",
+        "max_charging_current": 0,
+        "max_charging_voltage": 0,
+        "msavedbatteryasoc": 78,
+        "msavedbatterymaxcurrent": 2229,
+        "msavedbatterymaxtemp": 661,
+        "msavedbatteryusage": 123991,
+        "msecplugtypesummary": 2,
+        "mwasusedwirelessfastchargerpreviously": true,
+        "mwirelessfastchargingsettingsenable": true,
+        "present": true,
+        "scale": 100,
+        "sec_feature_prevent_swelling": false,
+        "sec_feature_use_wireless_power_sharing": false,
+        "status": 2,
+        "super_fast_charging_settings": false,
+        "technology": "Li-ion",
+        "temperature": 347,
+        "usb_powered": true,
+        "use_fake_battery": false,
+        "voltage": 4014,
+        "wireless_powered": false
+      },
+      "latestBrightness": {
+        "screen_brightness": 0,
+        "screen_brightness_mode": 0
+      },
+      "latestPids": [
+        12205
+      ],
+      "levelMax": 51,
+      "levelMin": 51,
+      "monitoredProcesses": {
+        "cameraserver": {
+          "cpuCorePctMax": 0.0,
+          "cpuCorePctMean": 0.0,
+          "latestPids": [
+            2417
+          ],
+          "latestProcessTicks": 160247
+        }
+      },
+      "samples": 4,
+      "temperatureTenthsCMax": 349,
+      "temperatureTenthsCMean": 348.0
+    },
+    "9885e6503930304946": {
+      "appCpuCorePctMax": 1.9891816436922003,
+      "appCpuCorePctMean": 1.6960478507877372,
+      "currentNowRawMax": 299,
+      "currentNowRawMean": 273.25,
+      "currentNowRawMin": 214,
+      "latestBattery": {
+        "ac_powered": false,
+        "adaptive_fast_charging_settings": true,
+        "batterycurrentevent": 0,
+        "batterymiscevent": 65536,
+        "batteryswselfdischarging": false,
+        "charge_counter": 0,
+        "current_battery_service_state": "",
+        "current_now": 299,
+        "feature_save_battery_cycle": true,
+        "feature_wireless_fast_charger_control": true,
+        "health": 2,
+        "led_charging": true,
+        "led_low_battery": true,
+        "level": 9,
+        "llb_cal": 20160217,
+        "llb_current": "YEAR2026M4D28",
+        "llb_diff": 531,
+        "llb_man": "",
+        "max_charging_current": 0,
+        "max_charging_voltage": 0,
+        "mbootcompleted": true,
+        "msavedbatteryasoc": 80,
+        "msavedbatterymaxcurrent": 2849,
+        "msavedbatterymaxtemp": 625,
+        "msavedbatteryusage": 61063,
+        "msecplugtypesummary": 2,
+        "mwasusedwirelessfastchargerpreviously": false,
+        "mwirelessfastchargingsettingsenable": true,
+        "present": true,
+        "scale": 100,
+        "sec_feature_battery_simulation": false,
+        "status": 2,
+        "technology": "Li-ion",
+        "temperature": 357,
+        "usb_powered": true,
+        "use_fake_battery": false,
+        "voltage": 3735,
+        "wireless_powered": false
+      },
+      "latestBrightness": {
+        "screen_brightness": 0,
+        "screen_brightness_mode": 0
+      },
+      "latestPids": [
+        21252
+      ],
+      "levelMax": 9,
+      "levelMin": 9,
+      "monitoredProcesses": {
+        "cameraserver": {
+          "cpuCorePctMax": 13.869242711747455,
+          "cpuCorePctMean": 13.828982875606778,
+          "latestPids": [
+            4719
+          ],
+          "latestProcessTicks": 1696098
+        }
+      },
+      "samples": 4,
+      "temperatureTenthsCMax": 358,
+      "temperatureTenthsCMean": 357.5
+    },
+    "RF8M90QE7LX": {
+      "appCpuCorePctMax": 10.713821349629438,
+      "appCpuCorePctMean": 9.72269645679352,
+      "currentNowRawMax": 158,
+      "currentNowRawMean": 117.5,
+      "currentNowRawMin": 35,
+      "latestBattery": {
+        "ac_powered": false,
+        "adaptive_fast_charging_settings": true,
+        "batterycurrentevent": 32768,
+        "batterymiscevent": 65536,
+        "charge_counter": 1125000,
+        "current_battery_service_state": "",
+        "current_now": 158,
+        "feature_hiccup_control": true,
+        "feature_save_battery_cycle": true,
+        "feature_supported_daily_board": false,
+        "feature_wireless_fast_charger_control": true,
+        "health": "vendor.samsung.hardware.health@2.0::ISehHealth@Proxy",
+        "led_charging": true,
+        "led_low_battery": true,
+        "level": 37,
+        "llb_cal": 20190907,
+        "llb_current": "YEAR2026M6D7",
+        "llb_diff": 350,
+        "llb_man": "",
+        "max_charging_current": 0,
+        "max_charging_voltage": 0,
+        "mfullcapacityenable": false,
+        "msavedbatteryasoc": 84,
+        "msavedbatterybeginningdate": 0,
+        "msavedbatterymaxcurrent": 3118,
+        "msavedbatterymaxtemp": 628,
+        "msavedbatteryusage": 76020,
+        "msecplugtypesummary": 2,
+        "mwasusedwirelessfastchargerpreviously": false,
+        "mwirelessfastchargingsettingsenable": true,
+        "present": true,
+        "scale": 100,
+        "sec_feature_battery_full_capacity": true,
+        "sec_feature_battery_life_extender": false,
+        "sec_feature_prevent_swelling": false,
+        "sec_feature_use_wireless_power_sharing": true,
+        "status": 2,
+        "super_fast_charging_settings": false,
+        "technology": "Li-ion",
+        "temperature": 327,
+        "usb_powered": true,
+        "use_fake_battery": false,
+        "voltage": 3795,
+        "wireless_powered": false
+      },
+      "latestBrightness": {
+        "screen_brightness": 0,
+        "screen_brightness_mode": 0
+      },
+      "latestPids": [
+        32433
+      ],
+      "levelMax": 37,
+      "levelMin": 37,
+      "monitoredProcesses": {
+        "cameraserver": {
+          "cpuCorePctMax": 0.0,
+          "cpuCorePctMean": 0.0,
+          "latestPids": [
+            708
+          ],
+          "latestProcessTicks": 275213
+        }
+      },
+      "samples": 4,
+      "temperatureTenthsCMax": 328,
+      "temperatureTenthsCMean": 327.5
+    }
+  },
+  "sampleCount": 12
+}
+[exit-code] 0
+
+$ python3 -m unittest scripts/test_android_power_monitor.py
+
+[stderr]
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+[exit-code] 0
+
+$ git diff --check
+logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log:285: trailing whitespace.
++Running Gradle task 'assembleDebug'...                          
+logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log:301: trailing whitespace.
++Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log:307: trailing whitespace.
++Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log:313: trailing whitespace.
++Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log:317: trailing whitespace.
++applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log:324: trailing whitespace.
++If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+[exit-code] 2
+
+$ adb -s 29d816ac550b7ece shell screenrecord --time-limit 5 /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screenrecord --time-limit 5 /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell screenrecord --time-limit 5 /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece pull /sdcard/hydracam-power-dim.mp4 logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/29d816ac550b7ece.mp4
+
+[stderr]
+/sdcard/hydracam-power-dim.mp4: 1 file pulled, 0 skipped. 10.6 MB/s (92195 bytes in 0.008s)
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell rm /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell rm /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-power-dim.mp4 logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/9885e6503930304946.mp4
+
+[stderr]
+adb: error: failed to stat remote object '/sdcard/hydracam-power-dim.mp4': No such file or directory
+[exit-code] 1
+
+$ adb -s RF8M90QE7LX pull /sdcard/hydracam-power-dim.mp4 logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/RF8M90QE7LX.mp4
+
+[stderr]
+/sdcard/hydracam-power-dim.mp4: 1 file pulled, 0 skipped. 17.9 MB/s (183587 bytes in 0.010s)
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell rm /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screenrecord --time-limit 5 /sdcard/hydracam-power-dim.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-power-dim.mp4 logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/9885e6503930304946.mp4
+
+[stderr]
+/sdcard/hydracam-power-dim.mp4: 1 file pulled, 0 skipped. 3.6 MB/s (58166 bytes in 0.015s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell rm /sdcard/hydracam-power-dim.mp4
+[exit-code] 0

@@ -1,6 +1,9 @@
 import "dart:async";
+import "dart:io";
 
 import "package:camera/camera.dart";
+import "package:connectivity_plus/connectivity_plus.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
@@ -61,6 +64,10 @@ void main() {
     }
   });
 
+  tearDown(() {
+    debugDefaultTargetPlatformOverride = null;
+  });
+
   testWidgets("forced preferred master connects without network readiness probe",
       (tester) async {
     var readinessCalls = 0;
@@ -110,5 +117,85 @@ void main() {
     for (final client in clients) {
       await client.dispose();
     }
+  });
+
+  testWidgets("connectivity stream errors are logged without uncaught exception",
+      (tester) async {
+    final connectivityController =
+        StreamController<List<ConnectivityResult>>.broadcast();
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          connectivityChanges: connectivityController.stream,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+
+    connectivityController.addError(
+      const SocketException("dbus unavailable"),
+      StackTrace.current,
+    );
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await connectivityController.close();
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("linux skips default connectivity stream subscription",
+      (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(clients, hasLength(1));
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+    debugDefaultTargetPlatformOverride = null;
   });
 }

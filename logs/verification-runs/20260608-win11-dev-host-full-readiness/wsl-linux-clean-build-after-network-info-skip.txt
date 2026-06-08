@@ -1,0 +1,262 @@
+timestamp=2026-06-08T13:51:51.7192620+02:00
+script=/mnt/c/Users/jose/codex-win11-dev-host-full-readiness/win11-wsl-linux-clean-build.sh
+
+=== context ===
+2026-06-08T13:51:53+02:00
+DESKTOP-02NDERS
+jose
+repo=/mnt/d/src/work/hydracamv2
+## master-jose-2025...origin/master-jose-2025
+ M android/app/build.gradle
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M lib/automation/automation_bridge.dart
+ M lib/automation/automation_config.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/services/device_service.dart
+ M lib/services/launch_config_service.dart
+ M lib/services/network_info_service.dart
+ M lib/services/permission_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/session_info_widget.dart
+ M test/automation/automation_config_test.dart
+ M test/automation/runtime_role_switch_test.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/services/permission_service_test.dart
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd        251G   13G  226G   6% /
+Filesystem      Size  Used Avail Use% Mounted on
+C:\             389G  331G   59G  86% /mnt/c
+D:\             9.1T  7.4T  1.8T  82% /mnt/d
+
+=== flutter clean ===
+Deleting build...                                                  241ms
+Deleting .dart_tool...                                              52ms
+Deleting ephemeral...                                               27ms
+Deleting Generated.xcconfig...                                       3ms
+Deleting flutter_export_environment.sh...                            3ms
+Deleting ephemeral...                                               67ms
+Deleting ephemeral...                                               27ms
+Deleting ephemeral...                                               23ms
+Deleting .flutter-plugins-dependencies...                            1ms
+
+=== flutter pub get ===
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+59 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+=== flutter build linux debug ===
+Building Linux application...                                   
+✓ Built build/linux/x64/debug/bundle/sport_cam_sync
+
+=== linux binary smoke ===
+-rwxrwxrwx 1 jose jose 45K Jun  8 13:52 /mnt/d/src/work/hydracamv2/build/linux/x64/debug/bundle/sport_cam_sync
+DISPLAY=:0
+WAYLAND_DISPLAY=wayland-0
+The Dart VM service is listening on http://127.0.0.1:43027/yfJK6xG4lds=/
+Log registered: {message: Failed to enable wakelock (startup): SocketException: Connection failed (OS Error: No such file or directory, errno = 2), address = /run/user/1000/bus, port = 0
+#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:817:35)
+#1      _NativeSocket.connect (dart:io-patch/socket_patch.dart:1142:12)
+#2      _RawSocket.connect (dart:io-patch/socket_patch.dart:2256:26)
+#3      RawSocket.connect (dart:io-patch/socket_patch.dart:31:23)
+#4      DBusClient._openSocket (package:dbus/src/dbus_client.dart:784:31)
+#5      DBusClient._connect (package:dbus/src/dbus_client.dart:804:11)
+#6      DBusClient.callMethod (package:dbus/src/dbus_client.dart:624:11)
+#7      DBusRemoteObject.callMethod (package:dbus/src/dbus_remote_object.dart:188:19)
+#8      WakelockPlusLinuxPlugin.toggle (package:wakelock_plus/src/wakelock_plus_linux_plugin.dart:41:12)
+<asynchronous suspension>
+#9      _enableScreenWakeLock (package:hydracam/main.dart:98:5)
+<asynchronous suspension>
+#10     main.<anonymous closure> (package:hydracam/main.dart:43:5)
+<asynchronous suspension>
+, timestamp: 2026-06-08 13:52:53.956251, function: null, file: null}
+Log registered: {message: Skipping permission_handler startup request on linux; native platform APIs will request resource access on demand., timestamp: 2026-06-08 13:52:53.962554, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 8dff7d95-c299-47a6-93d7-7affafa3f1a5, timestamp: 2026-06-08 13:52:53.990048, function: null, file: null}
+Log registered: {message: Device ID: 8dff7d95-c299-47a6-93d7-7affafa3f1a5, timestamp: 2026-06-08 13:52:53.990355, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-08 13:52:53.990464, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-08 13:52:53.993005, function: null, file: null}
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, forceSlave=false, timestamp: 2026-06-08 13:52:54.316929, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-08 13:52:54.317174, function: null, file: null}
+Log registered: {message: Skipping connectivity change listener on linux; network readiness will be checked on demand., timestamp: 2026-06-08 13:52:54.318839, function: null, file: null}
+Log registered: {message: Skipping connectivity plugin on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 13:52:54.320537, function: null, file: null}
+Log registered: {message: Uncaught zone error: SocketException: Connection failed (OS Error: No such file or directory, errno = 2), address = /var/run/dbus/system_bus_socket, port = 0
+#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:817:35)
+#1      _NativeSocket.connect (dart:io-patch/socket_patch.dart:1142:12)
+#2      _RawSocket.connect (dart:io-patch/socket_patch.dart:2256:26)
+#3      RawSocket.connect (dart:io-patch/socket_patch.dart:31:23)
+#4      DBusClient._openSocket (package:dbus/src/dbus_client.dart:784:31)
+#5      DBusClient._connect (package:dbus/src/dbus_client.dart:804:11)
+#6      DBusClient.callMethod (package:dbus/src/dbus_client.dart:624:11)
+#7      DBusClient.getNameOwner (package:dbus/src/dbus_client.dart:465:22)
+#8      DBusClient._findUniqueName (package:dbus/src/dbus_client.dart:641:28)
+#9      DBusSignalStream._onListen (package:dbus/src/dbus_client.dart:132:17)
+#10     _runGuarded (dart:async/stream_controller.dart:838:24)
+#11     _BroadcastStreamController._subscribe (dart:async/broadcast_stream_controller.dart:220:7)
+#12     _ControllerStream._createSubscription (dart:async/stream_controller.dart:854:20)
+#13     _StreamImpl.listen (dart:async/stream_impl.dart:516:42)
+#14     DBusSignalStream.listen (package:dbus/src/dbus_client.dart:124:31)
+#15     new _ForwardingStreamSubscription (dart:async/stream_pipe.dart:141:37)
+#16     _ForwardingStream._createSubscription (dart:async/stream_pipe.dart:105:16)
+#17     _ForwardingStream.listen (dart:async/stream_pipe.dart:96:12)
+#18     NetworkManagerClient.connect (package:nm/src/network_manager_client.dart:2303:48)
+#19     ConnectivityPlusLinuxPlugin.checkConnectivity (package:connectivity_plus/src/connectivity_plus_linux.dart:24:18)
+#20     Connectivity.checkConnectivity (package:connectivity_plus/connectivity_plus.dart:64:22)
+#21     NetworkInfoService.getNetworkType (package:hydracam/services/network_info_service.dart:276:55)
+#22     NetworkInfoService.getNetworkInfo (package:hydracam/services/network_info_service.dart:452:31)
+#23     _SessionInfoWidgetState._loadNetworkInfo (package:hydracam/widgets/session_info_widget.dart:38:75)
+#24     _SessionInfoWidgetState.initState (package:hydracam/widgets/session_info_widget.dart:26:26)
+#25     StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5950:55)
+#26     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#27     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#28     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#29     SingleChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7115:14)
+#30     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#31     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7264:36)
+#32     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7279:32)
+#33     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#34     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#35     SingleChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7115:14)
+#36     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#37     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#38     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#39     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#40     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#41     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#42     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#43     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7264:36)
+#44     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7279:32)
+#45     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#46     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#47     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#48     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#49     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#50     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#51     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#52     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#53     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#54     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#55     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#56     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#57     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#58     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#59     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#60     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#61     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#62     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#63     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#64     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#65     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#66     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#67     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#68     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#69     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#70     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7264:36)
+#71     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7279:32)
+#72     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#73     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#74     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#75     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#76     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#77     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#78     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#79     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#80     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#81     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#82     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#83     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#84     StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5973:11)
+#85     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#86     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#87     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#88     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#89     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#90     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#91     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#92     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#93     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#94     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#95     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#96     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#97     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#98     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#99     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#100    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#101    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#102    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#103    ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5799:5)
+#104    StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5973:11)
+#105    ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+#106    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#107    Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#108    SingleChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7115:14)
+#109    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#110    Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+binary_run_exit=124
+
+=== done ===
+wsl_linux_clean_build_exit_code=0

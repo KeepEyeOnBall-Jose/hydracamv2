@@ -1,0 +1,519 @@
+
+=== context ===
+timestamp=2026-06-08T14:18:06.0277750+02:00
+repo=D:\src\work\hydracamv2
+android_sdk=C:\Users\jose\AppData\Local\Android\Sdk
+android_avd_home=D:\android-avd
+android_sdk_home=D:\android-home
+avd_name=HydraCam_API33_x86_64
+## master-jose-2025...origin/master-jose-2025
+ M android/app/build.gradle
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M lib/automation/automation_bridge.dart
+ M lib/automation/automation_config.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/services/battery_service.dart
+ M lib/services/device_service.dart
+ M lib/services/launch_config_service.dart
+ M lib/services/network_info_service.dart
+ M lib/services/permission_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/session_info_widget.dart
+ M linux/flutter/generated_plugin_registrant.cc
+ M linux/flutter/generated_plugins.cmake
+ M macos/Flutter/GeneratedPluginRegistrant.swift
+ M test/automation/automation_config_test.dart
+ M test/automation/runtime_role_switch_test.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/permission_service_test.dart
+ M windows/flutter/generated_plugin_registrant.cc
+ M windows/flutter/generated_plugins.cmake
+29e05995df040df5904f3c18bc25c7776cc38733
+
+=== sdkmanager list_installed ===
+Loading package information...                                                  Loading local repository...                                                     [=========                              ] 25% Loading local repository...       [=========                              ] 25% Fetch remote repository...        [=======================================] 100% Fetch remote repository...       
+Installed packages:
+  Path                                                  | Version       | Description                                     | Location                                             
+  -------                                               | -------       | -------                                         | -------                                              
+  build-tools;30.0.3                                    | 30.0.3        | Android SDK Build-Tools 30.0.3                  | build-tools\30.0.3                                   
+  build-tools;33.0.1                                    | 33.0.1        | Android SDK Build-Tools 33.0.1                  | build-tools\33.0.1                                   
+  build-tools;34.0.0                                    | 34.0.0        | Android SDK Build-Tools 34                      | build-tools\34.0.0                                   
+  build-tools;35.0.0                                    | 35.0.0        | Android SDK Build-Tools 35                      | build-tools\35.0.0                                   
+  cmake;3.22.1                                          | 3.22.1        | CMake 3.22.1                                    | cmake\3.22.1                                         
+  cmdline-tools;latest                                  | 9.0           | Android SDK Command-line Tools (latest)         | cmdline-tools\latest                                 
+  emulator                                              | 36.6.11       | Android Emulator                                | emulator                                             
+  extras;intel;Hardware_Accelerated_Execution_Manager   | 7.6.5         | Intel x86 Emulator Accelerator (HAXM installer) | extras\intel\Hardware_Accelerated_Execution_Manager  
+  ndk;28.2.13676358                                     | 28.2.13676358 | NDK (Side by side) 28.2.13676358                | ndk\28.2.13676358                                    
+  patcher;v4                                            | 1             | SDK Patch Applier v4                            | patcher\v4                                           
+  platform-tools                                        | 37.0.0        | Android SDK Platform-Tools                      | platform-tools                                       
+  platforms;android-28                                  | 6             | Android SDK Platform 28                         | platforms\android-28                                 
+  platforms;android-29                                  | 5             | Android SDK Platform 29                         | platforms\android-29                                 
+  platforms;android-30                                  | 3             | Android SDK Platform 30                         | platforms\android-30                                 
+  platforms;android-31                                  | 1             | Android SDK Platform 31                         | platforms\android-31                                 
+  platforms;android-32                                  | 1             | Android SDK Platform 32                         | platforms\android-32                                 
+  platforms;android-33                                  | 2             | Android SDK Platform 33                         | platforms\android-33                                 
+  platforms;android-34                                  | 3             | Android SDK Platform 34                         | platforms\android-34                                 
+  platforms;android-35                                  | 2             | Android SDK Platform 35                         | platforms\android-35                                 
+  platforms;android-36                                  | 2             | Android SDK Platform 36                         | platforms\android-36                                 
+  sources;android-33                                    | 1             | Sources for Android 33                          | sources\android-33                                   
+  system-images;android-25;google_apis;armeabi-v7a      | 18            | Google APIs ARM EABI v7a System Image           | system-images\android-25\google_apis\armeabi-v7a     
+  system-images;android-31;google_apis;x86_64           | 12            | Google APIs Intel x86 Atom_64 System Image      | system-images\android-31\google_apis\x86_64          
+  system-images;android-33;google_apis;x86_64           | 9             | Google APIs Intel x86 Atom_64 System Image      | system-images\android-33\google_apis\x86_64          
+  system-images;android-33;google_apis_playstore;x86_64 | 7             | Google Play Intel x86 Atom_64 System Image      | system-images\android-33\google_apis_playstore\x86_64
+
+[step-exit-code] 0
+
+=== create avd ===
+avd_exists=HydraCam_API33_x86_64
+[step-exit-code] 0
+
+=== emulator accel-check ===
+accel:
+0
+WHPX(10.0.26200) is installed and usable.
+accel
+[step-exit-code] 0
+
+=== start emulator ===
+List of devices attached
+
+emulator_pid=9296
+
+=== wait for boot ===
+boot_poll=0 waiting_for_device
+boot_poll=13 boot=
+boot_poll=14 boot=
+boot_poll=15 boot=
+boot_poll=16 boot=
+boot_poll=17 boot=
+boot_poll=18 boot=
+boot_poll=19 boot=
+boot_poll=20 boot=1
+List of devices attached
+emulator-5554          device product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 device:emu64x transport_id:1
+
+
+=== flutter devices with emulator ===
+Found 3 connected devices:
+  sdk gphone64 x86 64 (mobile) • emulator-5554 • android-x64    • Android 13 (API 33) (emulator)
+  Windows (desktop)            • windows       • windows-x64    • Microsoft Windows [Versi¢n 10.0.26200.8457]
+  Chrome (web)                 • chrome        • web-javascript • Google Chrome 149.0.7827.53
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[step-exit-code] 0
+
+=== flutter clean windows metadata ===
+Deleting build...                                                1.149ms
+Deleting .dart_tool...                                             167ms
+Deleting ephemeral...                                               35ms
+Deleting Generated.xcconfig...                                       0ms
+Deleting flutter_export_environment.sh...                            0ms
+Deleting ephemeral...                                              240ms
+Deleting ephemeral...                                              157ms
+Deleting ephemeral...                                               30ms
+[step-exit-code] 0
+
+=== flutter pub get windows metadata ===
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+59 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+[step-exit-code] 0
+
+=== flutter build apk debug android-x64 ===
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                            260,1s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+[step-exit-code] 0
+
+=== install apk ===
+Performing Streamed Install
+Success
+[step-exit-code] 0
+
+=== launch app package ===
+  bash arg: -p
+  bash arg: com.amaia23.hydracam
+  bash arg: -c
+  bash arg: android.intent.category.LAUNCHER
+  bash arg: 1
+Events injected: 1
+## Network stats: elapsed time=228ms (0ms mobile, 0ms wifi, 228ms not connected)
+[step-exit-code] 0
+
+=== capture emulator state ===
+x86_64
+13
+--------- beginning of main
+06-08 12:22:56.769   608   734 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=147, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10102 RequestorUid: 10102 RequestorPkg: com.google.android.dialer UnderlyingNetworks: Null] ]
+06-08 12:22:56.769   608   734 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=147, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10102 RequestorUid: 10102 RequestorPkg: com.google.android.dialer UnderlyingNetworks: Null] ]
+06-08 12:22:56.769   608   734 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=147, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10102 RequestorUid: 10102 RequestorPkg: com.google.android.dialer UnderlyingNetworks: Null] ]
+06-08 12:22:56.769   608   734 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=147, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10102 RequestorUid: 10102 RequestorPkg: com.google.android.dialer UnderlyingNetworks: Null] ]
+06-08 12:22:56.769   608   742 D ConnectivityService: NetReassign [147 : null → 100] [c 0] [a 1] [i 1]
+06-08 12:22:56.813  1342  1342 I DialerConstellationSyncWorker: com.android.dialer.businessvoice.control.worker.ConstellationSyncWorker.startWork:66 starting work
+06-08 12:22:56.813  1342  1374 I DialerCountryCodeProvider: com.android.dialer.businessvoice.verifiedcall.impl.i18n.CountryCodeProvider.getSimCountryCodeInternal:83 returning Redacted-2-chars
+06-08 12:22:56.814  1342  1375 I DialerCachedVerifiedNumberProvider: com.android.dialer.businessvoice.verifiedcall.impl.constellation.CachedVerifiedNumberProvider.refreshConstellationInfo:189 Retrieving constellation info and refreshing the cache.
+--------- beginning of system
+06-08 12:22:56.816   608   622 D OomAdjuster: Not killing cached processes
+06-08 12:22:56.824  1714  1714 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-08 12:22:56.824  1714  1714 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-08 12:22:56.825  1714  1714 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-08 12:22:56.825  1714  2674 E constellation: [api_verify_phone_operation] Failed to generate Client Signature
+06-08 12:22:56.825  1714  2674 E constellation: abdu: Stored private key deleted
+06-08 12:22:56.825  1714  2674 E constellation: 	at aavz.e(:com.google.android.gms@225014047@22.50.14 (190800-499278674):4)
+06-08 12:22:56.825  1714  2674 E constellation: 	at aavz.d(:com.google.android.gms@225014047@22.50.14 (190800-499278674):1)
+06-08 12:22:56.825  1714  2674 E constellation: 	at aavi.b(:com.google.android.gms@225014047@22.50.14 (190800-499278674):22)
+06-08 12:22:56.825  1714  2674 E constellation: 	at aavi.f(:com.google.android.gms@225014047@22.50.14 (190800-499278674):12)
+06-08 12:22:56.825  1714  2674 E constellation: 	at ason.er(:com.google.android.gms@225014047@22.50.14 (190800-499278674):1)
+06-08 12:22:56.825  1714  2674 E constellation: 	at asou.run(:com.google.android.gms@225014047@22.50.14 (190800-499278674):12)
+06-08 12:22:56.825  1714  2674 E constellation: 	at cxit.run(:com.google.android.gms@225014047@22.50.14 (190800-499278674):2)
+06-08 12:22:56.825  1714  2674 E constellation: 	at aalr.c(:com.google.android.gms@225014047@22.50.14 (190800-499278674):6)
+06-08 12:22:56.825  1714  2674 E constellation: 	at aalr.run(:com.google.android.gms@225014047@22.50.14 (190800-499278674):7)
+06-08 12:22:56.825  1714  2674 E constellation: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1137)
+06-08 12:22:56.825  1714  2674 E constellation: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:637)
+06-08 12:22:56.825  1714  2674 E constellation: 	at aaqv.run(:com.google.android.gms@225014047@22.50.14 (190800-499278674):0)
+06-08 12:22:56.825  1714  2674 E constellation: 	at java.lang.Thread.run(Thread.java:1012)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: com.android.dialer.businessvoice.verifiedcall.impl.constellation.VerifiedNumberProvider.lambda$getConstellationResponse$1:154 Failed to get constellation token.
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: mlp: 5004: 
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at mpl.d(PG:1)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at mpl.j(PG:2)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at mqp.a(Unknown Source:2)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at mrd.dq(PG:9)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at mee.onTransact(PG:4)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1285)
+06-08 12:22:56.826  1342  1375 W DialerVerifiedNumberProvider: 	at android.os.Binder.execTransact(Binder.java:1244)
+06-08 12:22:56.828  1342  1374 W DialerConstellationSyncWorker: com.android.dialer.businessvoice.control.worker.ConstellationSyncWorker.lambda$syncConstellation$2:110 Constellation api request failed, status code: 5004
+06-08 12:22:56.829  1342  1376 I WM-WorkerWrapper: Worker result RETRY for Work [ id=e9cb0e65-a853-4b65-9bd0-4953b49a3854, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.android.dialer.businessvoice.control.worker.ConstellationSyncWorker } ]
+06-08 12:23:00.005   608   950 W ActivityManager: Unable to start service Intent { act=android.service.smartspace.SmartspaceService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiSmartspaceService } U=0: not found
+06-08 12:23:00.005   608   950 W RemoteSmartspaceService: could not bind to Intent { act=android.service.smartspace.SmartspaceService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiSmartspaceService } using flags 67112961
+06-08 12:23:00.005   608   608 W ActivityManager: Unbind failed: could not find connection for android.app.LoadedApk$ServiceDispatcher$InnerConnection@18ec93f
+06-08 12:23:00.021   798   961 D EGL_emulation: app_time_stats: avg=38305.60ms min=38305.60ms max=38305.60ms count=1
+06-08 12:23:01.305   794   794 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+06-08 12:23:09.497   794   794 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+06-08 12:23:11.832   608   950 D OomAdjuster: Not killing cached processes
+06-08 12:23:17.433   794   794 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+06-08 12:23:20.954  1714  2396 I GMS_MM_Logger: Memory Metric Logging not allowed. Stopping.
+06-08 12:23:23.757  4110  4110 I abb     : StartCommandInProcess(73657474696e67730067657400676c6f settings.get.glo [truncated])
+06-08 12:23:23.759   608   608 W binder:608_6: type=1400 audit(0.0:20): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:23.759   608   608 W binder:608_6: type=1400 audit(0.0:21): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:23.770  4110  4110 I abb     : StartCommandInProcess(7061636b61676500696e7374616c6c00 package.install. [truncated])
+06-08 12:23:23.759   608   608 W binder:608_6: type=1400 audit(0.0:22): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:24.303   608   608 W binder:608_6: type=1400 audit(0.0:23): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:25.368   794   794 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+06-08 12:23:25.455   608   640 D OomAdjuster: Not killing cached processes
+06-08 12:23:25.558   608   668 I PackageManager: Integrity check passed for file:///data/app/vmdl1496852736.tmp
+06-08 12:23:25.577   608   668 D CompatibilityChangeReporter: Compat change id reported: 133396946; UID -1; state: ENABLED
+06-08 12:23:25.602   608   668 I PackageManager: Permission ownership changed. Updating all permissions.
+--------- beginning of kernel
+06-08 12:23:25.613     0     0 I logd    : start watching /data/system/packages.list ...
+06-08 12:23:25.615     0     0 I logd    : ReadPackageList, total packages: 167
+06-08 12:23:25.636   608   668 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+06-08 12:23:25.636   608   668 D PackageManager: Clear ephemeral installer activity
+06-08 12:23:26.093  1342  2661 I DialerOmtpVvmCarrierConfigHelper: com.android.voicemail.impl.OmtpVvmCarrierConfigHelper.handleEvent:525 OmtpEvent:CONFIG_STATUS_SMS_TIME_OUT PhoneAccountHandle: [ComponentName: com.android.phone/com.android.services.telephony.TelephonyConnectionService subId: 1] [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.093  1342  1342 I DialerRetryPolicy: com.android.voicemail.impl.scheduling.RetryPolicy.onCompleted:118 discarding deferred status [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.094  1342  1342 I DialerTaskExecutor: com.android.voicemail.impl.scheduling.TaskExecutor.prepareStop:371 no more tasks, stopping service if no task are added in 5000 millis [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.095  1342  1342 I DialerLogcatLoggingBindings: com.android.dialer.logging.logcat.LogcatLoggingBindings.logImpression:41 Impression: VVM_AUTO_RETRY_ACTIVATION
+06-08 12:23:26.095  1342  1342 I DialerTaskReceiver: com.android.voicemail.impl.scheduling.TaskReceiver.onReceive:68 task received [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.095  1342  1342 I DialerTaskReceiver: com.android.voicemail.impl.scheduling.TaskReceiver.onReceive:73 TaskExecutor already running [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.096  1342  1342 I DialerTasks: com.android.voicemail.impl.scheduling.Tasks.createTask:59 Task.createTask create task:com.android.voicemail.impl.ActivationTask [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.096  1342  1342 I DialerRetryPolicy: com.android.voicemail.impl.scheduling.RetryPolicy.onCreate:81 retry #4 for com.android.voicemail.impl.ActivationTask@73c08d5 queued, executing in 5000 [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.100  1342  1342 I DialerTaskExecutor: com.android.voicemail.impl.scheduling.TaskExecutor.addTask:299 com.android.voicemail.impl.ActivationTask@73c08d5 added [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.101  1342  1342 I DialerTaskExecutor: com.android.voicemail.impl.scheduling.TaskExecutor.runNextTask:345 minimal wait time:4996 [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.101  1342  1342 I DialerTaskExecutor: com.android.voicemail.impl.scheduling.TaskExecutor.sleep:355 sleep for 4996 millis [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:26.201   608   668 V BackupManagerService: [UserID:0] restoreAtInstall pkg=com.amaia23.hydracam token=1 restoreSet=0
+06-08 12:23:26.203   608   668 V BackupManagerService: [UserID:0] Finishing install immediately
+06-08 12:23:26.210   608   668 D PackageInstallerSession: Marking session 1496852736 as applied
+06-08 12:23:26.210   527   527 E installd: Couldn't opendir /data/app/vmdl1496852736.tmp: No such file or directory
+06-08 12:23:26.210   527   527 E installd: Failed to delete /data/app/vmdl1496852736.tmp: No such file or directory
+06-08 12:23:26.211   608   608 W binder:608_6: type=1400 audit(0.0:24): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:26.211   608   608 W binder:608_6: type=1400 audit(0.0:25): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:26.211   608   608 W binder:608_6: type=1400 audit(0.0:26): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+06-08 12:23:26.229   608   668 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10159; state: DISABLED
+06-08 12:23:26.250   608   697 I RoleService: Granting default roles...
+06-08 12:23:26.272  1848  1908 I Bugle   : BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of aorm@151cfdd
+06-08 12:23:26.289   608   689 D CompatibilityChangeReporter: Compat change id reported: 218533173; UID 10159; state: ENABLED
+06-08 12:23:26.298   866   866 V MediaPlayerList: mPackageChangedBroadcastReceiver: action: android.intent.action.PACKAGE_ADDED
+06-08 12:23:26.299   866   866 D MediaPlayerList: Name of package changed: com.amaia23.hydracam
+06-08 12:23:26.304   919   919 D CarrierSvcBindHelper: onPackageAdded: com.amaia23.hydracam
+06-08 12:23:26.304   919   919 D CarrierSvcBindHelper: No carrier app for: 0
+06-08 12:23:26.305  1442  4074 I PermissionControllerServiceImpl: Updating user sensitive for uid 10159
+06-08 12:23:26.312   919   919 D ImsResolver: maybeAddedImsService, packageName: com.amaia23.hydracam
+06-08 12:23:26.315  1482  1482 I GsaVoiceInteractionSrv: O received Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) }
+06-08 12:23:26.362   608   623 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) } to com.google.android.packageinstaller/com.android.packageinstaller.PackageInstalledReceiver
+06-08 12:23:26.362   608   640 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) } to com.google.android.gms/.games.chimera.GamesSystemBroadcastReceiverProxy
+06-08 12:23:26.362   608   640 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) } to com.google.android.gms/.gass.chimera.PackageChangeBroadcastReceiver
+06-08 12:23:26.363   608   640 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+06-08 12:23:26.363   608   640 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) } to com.google.android.googlequicksearchbox/com.google.android.apps.gsa.googlequicksearchbox.GelStubAppWatcher
+06-08 12:23:26.364   608   640 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10061; state: DISABLED
+06-08 12:23:26.366  3614  3614 V ActivityThread: getPackageInfo() caused update to cached ApplicationInfo for package com.google.android.packageinstaller
+06-08 12:23:26.495  1438  1509 I MediaProvider: Invalidating LocalCallingIdentity cache for package com.amaia23.hydracam. Reason: op android:read_external_storage
+06-08 12:23:26.497  1438  1509 I MediaProvider: Invalidating LocalCallingIdentity cache for package com.amaia23.hydracam. Reason: op android:read_external_storage
+06-08 12:23:26.497  1438  1438 I MediaProvider: Invalidating LocalCallingIdentity cache for package com.amaia23.hydracam. Reason: package android.intent.action.PACKAGE_ADDED
+06-08 12:23:26.512  1197  4132 W GCM     : Unexpected forwarded intent: Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) }
+06-08 12:23:26.519  1197  4130 W GCM     : Unexpected forwarded intent: Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) }
+06-08 12:23:26.622   608   705 I InputReader: Reconfiguring input devices, changes=KEYBOARD_LAYOUTS | 
+06-08 12:23:26.629   608   665 E VerityUtils: Failed to measure fs-verity, errno 1: /data/app/~~ug-QEWcegSa0qkQ4AvmJJQ==/com.amaia23.hydracam-r7pzEp3Nb_2F3N_ZGP-PIg==/base.apk
+06-08 12:23:26.754  1714  4135 I Auth    : [SupervisedAccountIntentOperation] onHandleIntent(): android.intent.action.PACKAGE_ADDED
+06-08 12:23:26.755  1714  1714 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-08 12:23:26.755  1714  1714 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-08 12:23:26.760  1714  1714 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-08 12:23:26.765  1714  4134 I Dck     : doesDeviceHaveSupportedWirelessCapabilities: wccSysProp:0, wccMendel:1, deviceWccOverride:false [CONTEXT service_id=289 ]
+06-08 12:23:26.765  1714  4134 I Dck     : isDckModuleEligible: isAtLeastR:true, hasWccSupport:false, downloadAllowed:false [CONTEXT service_id=289 ]
+06-08 12:23:26.765  1714  4134 W Dck     : Dck module not eligible for asynchronous downloading [CONTEXT service_id=289 ]
+06-08 12:23:26.777   608   622 D CompatibilityChangeReporter: Compat change id reported: 161252188; UID 10159; state: ENABLED
+06-08 12:23:26.780  1197  1197 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.nearby.exposurenotification.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-08 12:23:26.780  1197  1197 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.nearby.exposurenotification.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-08 12:23:26.805  1197  1303 W ChimeraUtils: Module com.google.android.gms.nearby_en has empty metadata display_name_string_id
+06-08 12:23:26.809  1197  1303 W ChimeraUtils: Module com.google.android.gms.nearby_en has empty metadata display_name_string_id
+06-08 12:23:26.995   608   623 E AppOps  : Bad call made by uid 10099. Package "com.google.android.gms" does not belong to uid 10099.
+06-08 12:23:26.996   608   623 E AppOps  : Bad call made by uid 10099. Package "com.google.android.gms" does not belong to uid 10099.
+06-08 12:23:26.996   608   623 E AppOps  : Bad call made by uid 10099. Package "com.google.android.gms" does not belong to uid 10099.
+06-08 12:23:26.999   608   623 E AppOps  : Bad call made by uid 10099. Package "com.google.android.gms" does not belong to uid 10099.
+06-08 12:23:26.999   608   623 E AppOps  : Bad call made by uid 10099. Package "com.google.android.gms" does not belong to uid 10099.
+06-08 12:23:27.001   608   608 W Looper  : Slow dispatch took 701ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@21fecf4 m=0
+06-08 12:23:27.004   608   608 W Looper  : Slow delivery took 751ms main h=com.android.server.alarm.AlarmManagerService$AlarmHandler c=null m=11
+06-08 12:23:27.035  1342  1376 D SharedPreferencesImpl: Time required to fsync /data/user/0/com.google.android.dialer/shared_prefs/com.google.android.dialer_preferences.xml: [<1: 0, <2: 0, <4: 0, <8: 0, <16: 0, <32: 0, <64: 0, <128: 0, <256: 1, <512: 1, <1024: 0, <2048: 0, <4096: 0, <8192: 0, <16384: 0, >=16384: 0]
+06-08 12:23:27.036   608   950 W system_server: Long monitor contention with owner PackageInstaller (676) at java.lang.Boolean com.android.server.pm.PackageInstallerService.lambda$new$0()(PackageInstallerService.java:248) waiters=0 in android.content.pm.ParceledListSlice com.android.server.pm.PackageInstallerService.getAllSessions(int) for 792ms
+06-08 12:23:27.165   608   608 W Looper  : Slow dispatch took 161ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@a826c1d m=0
+06-08 12:23:27.217  1000  1176 W .apps.wellbeing: Long monitor contention with owner BG Thread #3 (1179) at java.io.File android.app.ContextImpl.getFilesDir()(ContextImpl.java:795) waiters=0 in java.io.File android.app.ContextImpl.getDatabasesDir() for 164ms
+06-08 12:23:27.557   239   239 I lowmemorykiller: Kill 'com.android.printspooler' (2164), uid 10080, oom_score_adj 999 to free 57660kB rss, 24336kB swap; reason: device is not responding
+06-08 12:23:27.564   393   393 I Zygote  : Process 2164 exited due to signal 9 (Killed)
+06-08 12:23:27.680  1714  1750 I gle.android.gms: Background young concurrent copying GC freed 52863(2367KB) AllocSpace objects, 13(568KB) LOS objects, 11% free, 17MB/20MB, paused 404.149ms,10us total 458.099ms
+06-08 12:23:27.680  1000  1010 I .apps.wellbeing: Background young concurrent copying GC freed 14023(928KB) AllocSpace objects, 0(0B) LOS objects, 45% free, 4563KB/8415KB, paused 2.141ms,34us total 520.375ms
+06-08 12:23:27.899  1714  2674 D SharedPreferencesImpl: Time required to fsync /data/user/0/com.google.android.gms/shared_prefs/proxy-apps-corpus.xml: [<1: 0, <2: 0, <4: 0, <8: 0, <16: 0, <32: 0, <64: 1, <128: 0, <256: 0, <512: 1, <1024: 0, <2048: 0, <4096: 0, <8192: 0, <16384: 0, >=16384: 0]
+06-08 12:23:27.904   608   622 I ActivityManager: Process com.android.printspooler (pid 2164) has died: cch+99 CEM 
+06-08 12:23:27.905   608   642 I libprocessgroup: Successfully killed process cgroup uid 10080 pid 2164 in 0ms
+06-08 12:23:27.911  1714  4135 I PackageIntentOperation: Feature flags not enabled, skipping. [CONTEXT service_id=258 ]
+06-08 12:23:27.912   608   608 I Telecom : DefaultDialerCache: Refreshing default dialer for user 0: now com.google.android.dialer: DDC.oR@AL0
+06-08 12:23:27.912   608   608 W Looper  : Slow dispatch took 745ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@d47e68c m=0
+06-08 12:23:27.919   608   608 V BackupManagerConstants: getFullBackupIntervalMilliseconds(...) returns 86400000
+06-08 12:23:27.923   608   608 V BackupManagerConstants: getFullBackupRequiredNetworkType(...) returns 2
+06-08 12:23:27.923   608   608 V BackupManagerConstants: getFullBackupRequireCharging(...) returns true
+06-08 12:23:27.923   608   608 D CompatibilityChangeReporter: Compat change id reported: 194532703; UID 1000; state: ENABLED
+06-08 12:23:27.937  1714  2830 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=AppsCorpus serviceId=36
+06-08 12:23:27.943   391  4146 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10105 0}
+06-08 12:23:27.944   391  4147 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+06-08 12:23:27.946   391  4148 I resolv  : res_nmkquery: (QUERY, IN, A)
+06-08 12:23:27.962   608   618 I system_server: Background concurrent copying GC freed 374226(17MB) AllocSpace objects, 9(292KB) LOS objects, 49% free, 19MB/39MB, paused 733.148ms,40us total 1.751s
+06-08 12:23:28.062   608   623 I ActivityManager: Background started FGS: Allowed [callingPackage: com.google.android.apps.wellbeing; callingUid: 10099; uidState: BTOP; intent: Intent { cmp=com.google.android.apps.wellbeing/com.google.apps.tiktok.concurrent.InternalForegroundService (has extras) }; code:BACKGROUND_ACTIVITY_PERMISSION; tempAllowListReason:<null>; targetSdkVersion:31; callerTargetSdkVersion:31; startForegroundCount:0; bindFromPackage:null]
+06-08 12:23:28.192   391  4148 I resolv  : res_nsend: used send_dg 144 terrno: 0
+06-08 12:23:28.192   391  4147 I resolv  : res_nsend: used send_dg 160 terrno: 0
+06-08 12:23:28.192   391  4148 I resolv  : doQuery: rcode=0, ancount=6, return value=144
+06-08 12:23:28.192   391  4147 I resolv  : doQuery: rcode=0, ancount=4, return value=160
+06-08 12:23:28.346  1714  4142 D TrafficStats: tagSocket(121) with statsTag=0x30004901, statsUid=10105
+06-08 12:23:28.381   608   608 W system_server: Long monitor contention with owner backup-0 (1439) at void com.android.server.backup.UserBackupManagerService$1.run()(UserBackupManagerService.java:1116) waiters=0 in void com.android.server.backup.UserBackupManagerService.dataChangedImpl(java.lang.String, java.util.HashSet) for 454ms
+06-08 12:23:28.578   608   608 W Looper  : Slow dispatch took 667ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@82b4c43 m=0
+06-08 12:23:28.589   608   608 W Looper  : Drained
+06-08 12:23:28.590   608   608 I Telecom : DefaultDialerCache: Refreshing default dialer for user 0: now com.google.android.dialer: DDC.oR@AL4
+06-08 12:23:28.591   608  1439 W BackupTransportManager: Package com.amaia23.hydracam enabled setting: 0
+06-08 12:23:28.591   866   866 V MediaPlayerList: mPackageChangedBroadcastReceiver: action: android.intent.action.PACKAGE_CHANGED
+06-08 12:23:28.592   866   866 D MediaPlayerList: Name of package changed: com.amaia23.hydracam
+06-08 12:23:28.593  1442  4074 I PermissionControllerServiceImpl: Updating user sensitive for uid 10159
+06-08 12:23:28.593   608   697 I RoleService: Granting default roles...
+06-08 12:23:28.595  1848  1909 I Bugle   : BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of aorm@151cfdd
+06-08 12:23:28.612  1197  4131 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+06-08 12:23:28.629   919   919 D CarrierSvcBindHelper: onPackageModified: com.amaia23.hydracam
+06-08 12:23:28.631   919   919 D CarrierSvcBindHelper: No carrier app for: 0
+06-08 12:23:28.632  1197  3110 W ChimeraUtils: Module com.google.android.gms.nearby_en has empty metadata display_name_string_id
+06-08 12:23:28.634   919   919 D ImsResolver: maybeAddedImsService, packageName: com.amaia23.hydracam
+06-08 12:23:28.635  1197  3110 W ChimeraUtils: Module com.google.android.gms.nearby_en has empty metadata display_name_string_id
+06-08 12:23:28.645  1197  4129 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+06-08 12:23:28.649  1197  4130 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+06-08 12:23:28.656   608   705 I InputReader: Reconfiguring input devices, changes=KEYBOARD_LAYOUTS | 
+06-08 12:23:28.662  1197  4129 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+06-08 12:23:28.672  1442  4152 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
+06-08 12:23:28.672  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.680  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.odad
+06-08 12:23:28.687  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.688  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.708  1442  4153 E BackupHelper: Could not parse delayed permissions
+06-08 12:23:28.708  1442  4153 E BackupHelper: java.io.FileNotFoundException: /data/user_de/0/com.google.android.permissioncontroller/files/delayed_restore_permissions.xml: open failed: ENOENT (No such file or directory)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at java.io.FileInputStream.<init>(FileInputStream.java:160)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at android.app.ContextImpl.openFileInput(ContextImpl.java:714)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at com.android.permissioncontroller.permission.service.BackupHelper.restoreDelayedState(BackupHelper.java:339)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl.onRestoreDelayedRuntimePermissionsBackup(PermissionControllerServiceImpl.java:421)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl.lambda$onApplyStagedRuntimePermissionBackup$4(PermissionControllerServiceImpl.java:415)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl.$r8$lambda$d0Nn-xRapZQvoyXU4vSZgmIHAHQ(Unknown Source:0)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl$$ExternalSyntheticLambda10.run(Unknown Source:8)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:305)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1137)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:637)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at java.lang.Thread.run(Thread.java:1012)
+06-08 12:23:28.708  1442  4153 E BackupHelper: Caused by: android.system.ErrnoException: open failed: ENOENT (No such file or directory)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at libcore.io.Linux.open(Native Method)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:7758)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+06-08 12:23:28.708  1442  4153 E BackupHelper: 	... 11 more
+06-08 12:23:28.763  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.777  1197  1303 W ChimeraUtils: Module com.google.android.gms.nearby_en has empty metadata display_name_string_id
+06-08 12:23:28.785  1197  1303 W ChimeraUtils: Module com.google.android.gms.nearby_en has empty metadata display_name_string_id
+06-08 12:23:28.797  1714  2828 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=30
+06-08 12:23:28.823  1714  1750 W gle.android.gms: Cleared Reference was only reachable from finalizer (only reported once)
+06-08 12:23:28.825  1714  4139 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+06-08 12:23:28.826  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.832  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.862  1442  4152 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
+06-08 12:23:28.866  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.888  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.odad
+06-08 12:23:28.894  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.895  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.905  1714  4139 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+06-08 12:23:28.915  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.928  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.930  1442  4152 W Role    : Cannot get ApplicationInfo for default holder: com.google.android.as
+06-08 12:23:28.970  1714  4139 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+06-08 12:23:29.001  1714  4139 I Icing   : Indexing done com.google.android.gms-apps
+06-08 12:23:29.003  1714  4139 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+06-08 12:23:29.005  1714  4139 I Icing   : Indexing done com.google.android.gms-apps
+06-08 12:23:29.014  4118  4118 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+06-08 12:23:29.058   608   639 W PackageManager: Failed registering loading progress callback. Package is fully loaded.
+06-08 12:23:29.105   608   631 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+06-08 12:23:29.393  1128  1600 D EGL_emulation: app_time_stats: avg=241133.77ms min=241133.77ms max=241133.77ms count=1
+06-08 12:23:29.459  4118  4118 I AndroidRuntime: Using default boot image
+06-08 12:23:29.459  4118  4118 I AndroidRuntime: Leaving lock profiling enabled
+06-08 12:23:29.508  4118  4118 I app_process: Core platform API reporting enabled, enforcing=false
+06-08 12:23:31.023  4118  4118 D app_process: Time zone APEX ICU file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+06-08 12:23:31.025  4118  4118 D app_process: I18n APEX ICU file found: /apex/com.android.i18n/etc/icu/icudt70l.dat
+06-08 12:23:31.104  1342  2661 I DialerTaskExecutor: com.android.voicemail.impl.scheduling.TaskExecutor$WorkerThreadHandler.handleMessage:221 executing task com.android.voicemail.impl.ActivationTask@73c08d5 [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:31.105  1342  1342 I DialerLogcatLoggingBindings: com.android.dialer.logging.logcat.LogcatLoggingBindings.logImpression:41 Impression: VVM_ACTIVATION_STARTED
+06-08 12:23:31.108  1342  2661 I DialerPreOMigrationHandler: com.android.voicemail.impl.PreOMigrationHandler.migrate:76 ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} already migrated [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:31.109   608   640 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+06-08 12:23:31.109   608   640 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+06-08 12:23:31.110   608  1559 D OomAdjuster: Not killing cached processes
+06-08 12:23:31.117  1342  2661 I DialerVoicemailStatus: com.android.voicemail.impl.VoicemailStatus$Editor.apply:106 enter
+06-08 12:23:31.121  1342  2661 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.insertVoicemailStatus:151 enter
+06-08 12:23:31.138  1342  1376 I DialerVvmServiceEnabledFn: com.android.dialer.voicemail.service.impl.VvmServiceEnabledFn.isEnabled:29 disabled by flag [CONTEXT ratelimit_period="1 MINUTES [skipped: 3]" ]
+06-08 12:23:31.141  1342  1376 W Settings: Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+06-08 12:23:31.141  1342  1376 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.lambda$insertVoicemailStatus$3:168 merged status: # jem@6600c263
+06-08 12:23:31.144  1342  2661 I DialerActivationTask: com.android.voicemail.impl.ActivationTask.onExecuteInBackgroundThread:282 VVM content provider configured - vvm_type_cvvm PhoneAccountHandle: [ComponentName: com.android.phone/com.android.services.telephony.TelephonyConnectionService subId: 1] [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:31.145  1342  2661 I DialerActivationTask: com.android.voicemail.impl.ActivationTask.updateVoicemailsWithIccId:457 conversion disabled [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:31.146  1342  2661 I DialerOmtpVvmCarrierConfigHelper: com.android.voicemail.impl.OmtpVvmCarrierConfigHelper.handleEvent:525 OmtpEvent:CONFIG_ACTIVATING PhoneAccountHandle: [ComponentName: com.android.phone/com.android.services.telephony.TelephonyConnectionService subId: 1] [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:31.146  1342  2661 I DialerVoicemailStatus: com.android.voicemail.impl.VoicemailStatus$Editor.apply:106 enter
+06-08 12:23:31.148  1342  2661 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.insertVoicemailStatus:151 enter
+06-08 12:23:31.153  1342  1376 W Settings: Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+06-08 12:23:31.153  1342  1376 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.lambda$insertVoicemailStatus$3:168 merged status: # jem@6600c263
+06-08 12:23:31.165   919  1331 D SmsNumberUtils: enter filterDestAddr. destAddr="[BajqU4K5_YhSYbs-7QUn0dOwcmI]"
+06-08 12:23:31.166   919  1331 D SmsNumberUtils: destAddr is not formatted.
+06-08 12:23:31.166   919  1331 D SmsNumberUtils: leave filterDestAddr, new destAddr="[BajqU4K5_YhSYbs-7QUn0dOwcmI]"
+06-08 12:23:31.193  1342  1342 I DialerStatusSmsFetcher: com.android.voicemail.impl.sms.StatusSmsFetcher.onReceive:106 Request SMS successfully sent [CONTEXT enable_persistent_logger=true ]
+06-08 12:23:31.659  4118  4118 W app_process: Unexpected CPU variant for x86: x86_64.
+06-08 12:23:31.659  4118  4118 W app_process: Known variants: atom, sandybridge, silvermont, kabylake, default
+06-08 12:23:32.019  4118  4118 D AndroidRuntime: Calling main entry com.android.commands.monkey.Monkey
+06-08 12:23:32.021  4118  4118 W Monkey  : args: [-p, com.amaia23.hydracam, -c, android.intent.category.LAUNCHER, 1]
+06-08 12:23:32.021  4118  4118 W Monkey  :  arg: "-p"
+06-08 12:23:32.022  4118  4118 W Monkey  :  arg: "com.amaia23.hydracam"
+06-08 12:23:32.022  4118  4118 W Monkey  :  arg: "-c"
+06-08 12:23:32.022  4118  4118 W Monkey  :  arg: "android.intent.category.LAUNCHER"
+06-08 12:23:32.023  4118  4118 W Monkey  :  arg: "1"
+06-08 12:23:32.023  4118  4118 W Monkey  : data="com.amaia23.hydracam"
+06-08 12:23:32.024  4118  4118 W Monkey  : data="android.intent.category.LAUNCHER"
+06-08 12:23:32.090   608  1559 D CompatibilityChangeReporter: Compat change id reported: 161145287; UID 2000; state: DISABLED
+06-08 12:23:32.092   608   640 W BroadcastQueue: Skipping deliver [background] BroadcastRecord{c69eef2 u-1 android.net.conn.CONNECTIVITY_CHANGE} to ReceiverList{114a943 4118 (unknown name)/2000/u-1 remote:27fe54}: process gone or crashing
+06-08 12:23:32.112   608  1559 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.amaia23.hydracam/.MainActivity} from uid 2000
+06-08 12:23:32.151   608  1559 D CompatibilityChangeReporter: Compat change id reported: 194480991; UID 10159; state: ENABLED
+06-08 12:23:32.190   608  1559 D CompatibilityChangeReporter: Compat change id reported: 174042980; UID 10159; state: DISABLED
+06-08 12:23:32.190   608  1559 D CompatibilityChangeReporter: Compat change id reported: 184838306; UID 10159; state: DISABLED
+06-08 12:23:32.190   608  1559 D CompatibilityChangeReporter: Compat change id reported: 185004937; UID 10159; state: DISABLED
+06-08 12:23:32.190   608  1559 D CompatibilityChangeReporter: Compat change id reported: 181136395; UID 10159; state: DISABLED
+06-08 12:23:32.190   608  1559 D CompatibilityChangeReporter: Compat change id reported: 174042936; UID 10159; state: DISABLED
+06-08 12:23:32.204   608  1559 D CompatibilityChangeReporter: Compat change id reported: 197654537; UID 10159; state: ENABLED
+06-08 12:23:32.223   608  1559 D CompatibilityChangeReporter: Compat change id reported: 205907456; UID 10159; state: ENABLED
+06-08 12:23:32.255   608  1559 D CompatibilityChangeReporter: Compat change id reported: 194833441; UID 10159; state: ENABLED
+06-08 12:23:32.256  4118  4118 I Monkey  : Events injected: 1
+06-08 12:23:32.276   608   632 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10159; state: DISABLED
+06-08 12:23:32.282   608   641 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10159; state: ENABLED
+06-08 12:23:32.298   393   393 D Zygote  : Forked child process 4171
+06-08 12:23:32.305   608   641 I ActivityManager: Start proc 4171:com.amaia23.hydracam/u0a159 for next-top-activity {com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+06-08 12:23:32.328   608   641 W ActivityManager: Slow operation: 56ms so far, now at startProcess: done updating pids map
+06-08 12:23:32.331  1128  1128 D CompatibilityChangeReporter: Compat change id reported: 150939131; UID 10137; state: ENABLED
+06-08 12:23:32.345  4171  4171 I maia23.hydracam: Late-enabling -Xcheck:jni
+06-08 12:23:32.346  4118  4118 I Monkey  : ## Network stats: elapsed time=228ms (0ms mobile, 0ms wifi, 228ms not connected)
+06-08 12:23:32.352   608   912 D CoreBackPreview: Window{500fcee u0 Splash Screen com.amaia23.hydracam}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@aabc425, mPriority=0}
+06-08 12:23:32.352  4118  4118 I app_process: System.exit called, status: 0
+06-08 12:23:32.352  4118  4118 I AndroidRuntime: VM exiting with result code 0.
+06-08 12:23:32.389  1128  1600 D EGL_emulation: app_time_stats: avg=1498.24ms min=112.20ms max=2884.28ms count=2
+06-08 12:23:32.413   798   893 D SplashScreenView: Build android.window.SplashScreenView{fdef264 V.E...... ......ID 0,0-0,0}
+06-08 12:23:32.413   798   893 D SplashScreenView: Icon: view: android.widget.ImageView{d1fdccd V.ED..... ......I. 0,0-0,0 #10204dc android:id/splashscreen_icon_view} drawable: com.android.wm.shell.startingsurface.SplashscreenIconDrawableFactory$ImmobileIconDrawable@f65a982 size: 440
+06-08 12:23:32.413   798   893 D SplashScreenView: Branding: view: android.view.View{47af893 G.ED..... ......I. 0,0-0,0 #10204db android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+06-08 12:23:32.464   415   439 D goldfish-address-space: claimShared: Ask to claim region [0x3f6dc4000 0x3f7768000]
+06-08 12:23:32.471   415   439 D goldfish-address-space: claimShared: Ask to claim region [0x3faa14000 0x3fb3b8000]
+06-08 12:23:32.475   415   439 D goldfish-address-space: claimShared: Ask to claim region [0x3fb3b8000 0x3fbd5c000]
+06-08 12:23:32.560   798   961 W Parcel  : Expecting binder but got null!
+[step-exit-code] 0
+
+=== summary ===
+result=passed

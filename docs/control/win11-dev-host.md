@@ -1,9 +1,11 @@
 # Win11 Development Host
 
-Last refreshed: 2026-06-07.
+Last refreshed: 2026-06-08.
 
 This document records the current Windows host prepared for HydraCam
-build/debug/test work. The evidence root for this pass is
+build/debug/test work. The latest evidence root is
+`logs/verification-runs/20260608-win11-dev-host-full-readiness/`. The original
+setup evidence root is
 `logs/verification-runs/20260607-1715-win11-dev-host-readiness/`.
 
 ## Host Identity
@@ -25,23 +27,22 @@ SSH key auth works on port 22. Password auth was not needed for this setup run.
 Current cleanup/moveout plan:
 `docs/superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`.
 
-2026-06-07 live SSH storage inventory:
+2026-06-08 live SSH storage inventory after the WSL cleanup and readiness
+rerun:
 
 | Drive | Volume | Filesystem | Free | Size | Notes |
 | --- | --- | --- | ---: | ---: | --- |
-| `C:` | | NTFS | 0.14 GiB | 388.76 GiB | Effectively full; blocks Android/Gradle work. |
-| `D:` | `Elements` | NTFS | 1755.69 GiB | 9313.97 GiB | Preferred moveout target for dev roots, caches, WSL, and Docker data. |
-| `E:` | `80GB-workenv` | NTFS | 26.25 GiB | 86.84 GiB | Small workenv partition; not preferred for large SDKs. |
+| `C:` | | NTFS | 57.10 GiB | 388.76 GiB | No longer the immediate Android/Gradle blocker, but keep WSL/Docker/SDK moveouts on the plan to avoid recurrence. |
+| `D:` | `Elements` | NTFS | 1748.16 GiB | 9313.97 GiB | Preferred moveout target for dev roots, caches, WSL, Docker data, and the Android AVD home. |
+| `E:` | `80GB-workenv` | NTFS | 25.53 GiB | 86.84 GiB | Small workenv partition; not preferred for large SDKs. |
 | `F:` | `Maxtor` | NTFS | 1552.36 GiB | 3725.90 GiB | Archive-capable partition. |
 | `G:` | `Elements SE` | NTFS | 2018.60 GiB | 3725.99 GiB | Archive-capable partition. |
 | `I:` | `SEAGATE4TB` | exFAT | 3580.99 GiB | 3725.82 GiB | Archive-capable removable/exFAT target. |
 
-High-value C: moveout candidates from the same inventory include the WSL Ubuntu
-22.04 VHD (`22.18 GiB`), Android SDK system images (`13.81 GiB`), Docker WSL
-data (`7.82 GiB`), `C:\src` (`6.93 GiB`), Downloads (`3.98 GiB`), a PyCharm
-heap dump (`3.21 GiB`), Gradle/Pub caches, and the sparse C: HydraCam checkout
-(`1.05 GiB`). Move WSL and Docker through their supported tools/settings; do
-not manually move raw VHD files.
+High-value long-term C: moveout candidates still include the WSL Ubuntu 22.04
+VHD, Android SDK system images, Docker WSL data, `C:\src`, Downloads, Gradle/Pub
+caches, and the sparse C: HydraCam checkout. Move WSL and Docker through their
+supported tools/settings; do not manually move raw VHD files.
 
 ## Installed Toolchain
 
@@ -55,6 +56,7 @@ not manually move raw VHD files.
 | Visual Studio | Visual Studio Community 2022 `17.14.27` with Windows desktop workload; Flutter doctor sees Windows SDK `10.0.26100.0`. |
 | Java | Android Studio JBR `21.0.10` is used by Flutter/Android Studio. A user-local Temurin JDK 17 is also installed at `C:\src\jdk-17`, with `JAVA17_HOME=C:\src\jdk-17`, version `17.0.19`. |
 | Android SDK | `C:\Users\jose\AppData\Local\Android\Sdk`; platform `android-36`, build-tools `35.0.0`, NDK `28.2.13676358`, platform-tools `37.0.0`, emulator `36.6.11`. The build also installed platform/build tools for Android 34/35 and CMake `3.22.1`. |
+| Android AVD | `HydraCam_API33_x86_64` created under `D:\android-avd`; target Google APIs Android 13 / API 33, ABI `x86_64`, device `pixel_5`. WHPX acceleration is usable. |
 | Android licenses | Accepted after the setup run. |
 | FFmpeg | Present and can list DirectShow devices. |
 | WSL | `Ubuntu-22.04` is WSL2 and is now the default distro. Linux desktop deps, GStreamer dev packages, `usbutils`, `v4l-utils`, `ripgrep`, and `mesa-utils` are installed. |
@@ -103,6 +105,20 @@ and [Microsoft WSL USB/IP](https://learn.microsoft.com/en-us/windows/wsl/connect
   `ext4.vhdx` still reported `22.18 GiB`. Both Ubuntu distros and
   `docker-desktop` were left stopped.
 
+2026-06-08 readiness rerun:
+`logs/verification-runs/20260608-win11-dev-host-full-readiness/`.
+
+- No additional WSL deletion was performed during the readiness rerun.
+- `Ubuntu-22.04` still has the safest obvious trim candidate in stale
+  `/tmp` pip-unpack content from the earlier inventory. Treat
+  `/home/jose/keob-nodes` as protected.
+- `Ubuntu-20.04` remains an old-worker candidate. The large non-cache areas are
+  `/opt`, `/home/ubuntu/venv`, and `/home/vectorblanco`; keep
+  `/home/ubuntu/bin/keob-nodes` protected until the old worker crontab,
+  credentials, and project material are explicitly retired or archived.
+- The readiness rerun ended with `Ubuntu-22.04`, `Ubuntu-20.04`, and
+  `docker-desktop` stopped.
+
 ## Checkouts
 
 Primary Windows checkout:
@@ -117,8 +133,9 @@ Primary Windows checkout:
 D-drive workaround checkout:
 
 - `D:\src\work\hydracamv2`
-- Extracted from the same sparse tarball because C: has no free space and
-  Windows Git still touches invalid colon-named paths during sparse checkout.
+- Originally extracted from the same sparse tarball when C: had no free space;
+  it remains the preferred working checkout because Windows Git still touches
+  invalid colon-named paths during sparse checkout.
 - `flutter pub get` passed there with `GRADLE_USER_HOME`, `PUB_CACHE`, `TEMP`,
   and `TMP` redirected to D:.
 
@@ -127,15 +144,17 @@ D-drive workaround checkout:
 | Check | Result |
 | --- | --- |
 | SSH identity | Passed: `hostname`, `whoami`, and Windows version returned over SSH. |
-| `flutter doctor -v` on Windows | Partial: Windows, Android toolchain, Chrome, Visual Studio, connected desktop/web devices, and network resources are green after license acceptance. Only Flutter's pinned `[user-branch]`/unknown-source warning remains. |
+| `flutter doctor -v` on Windows | Partial: Windows, Android toolchain, Chrome, Visual Studio, connected desktop/web devices, and network resources are green. Only Flutter's pinned `[user-branch]`/unknown-source warning remains. |
 | `flutter pub get` on Windows C: checkout | Passed. |
-| `flutter analyze` on Windows C: checkout | Passed: no issues found. |
+| `flutter analyze` on Windows D: checkout | Passed: no issues found on 2026-06-08. |
 | `flutter test` on Windows C: checkout | Failed: `+87 ~1 -3`; failing tests were `test/platform/multi_device_orchestration_test.dart` scenario P1, plus `tearDownAll` failures in `permission_service_test.dart` and `session_manager_test.dart`. |
-| `flutter build windows --debug` | Blocked by Windows symlink privilege. A generic symlink test requires administrator privileges, and Flutter plugin symlinks under `windows\flutter\ephemeral\.plugin_symlinks` exist but their `windows` child directories are not accessible, so CMake cannot add plugin subdirectories. |
+| `flutter build windows --debug` | Normal Flutter path still blocked: plugin symlink entries under `windows\flutter\ephemeral\.plugin_symlinks` exist, but their `windows` child directories are not usable, so CMake cannot add plugin subdirectories. A corrected generic PowerShell symlink test still requires administrator privileges from the SSH session even though Developer Mode registry flags are set. |
+| Windows native binary | Passed with a workaround on 2026-06-08: after materializing plugin folders and invoking CMake/MSBuild directly, `sport_cam_sync.exe` built under `D:\src\work\hydracamv2\build\windows\x64\runner\Debug` and smoke-started for 12 seconds before being stopped. This proves the host can compile and launch the native binary, but the normal Flutter build workflow is not green. |
 | `flutter build apk --debug` on C: checkout | Failed after about 10 minutes because C: is full: Gradle reported `Espacio en disco insuficiente` while extracting Flutter JNI artifacts. |
 | `flutter build apk --debug` on D: checkout | Not passed. The D: tarball checkout and `pub get` passed, but the Gradle build did not produce an APK before the stalled attempt was stopped. |
 | `flutter doctor -v` in WSL | Partial: Linux desktop toolchain is green and Flutter is `3.44.1`; Android SDK and Chrome are not configured inside WSL. |
-| `flutter build linux --debug` in WSL | Passed after installing GStreamer development packages and cleaning stale Linux CMake artifacts. Output: `build/linux/x64/debug/bundle/sport_cam_sync`. |
+| `flutter build linux --debug` in WSL | Passed again on 2026-06-08 from `/mnt/d/src/work/hydracamv2`. Output: `build/linux/x64/debug/bundle/sport_cam_sync`. The binary launched under WSLg and exposed a Dart VM service, then logged a `MissingPluginException` for `permission_handler` / `requestPermissions` during startup before the timed smoke run ended. |
+| Android x86_64 emulator | Partial: `HydraCam_API33_x86_64` was created on D:, booted with WHPX, and `flutter devices` saw it as `android-x64` / Android 13 API 33. `flutter build apk --debug` stayed CPU-active but did not produce an APK inside the validation window; the Gradle/emulator process tree was stopped and verified absent. |
 | `adb devices -l` | No Android phones attached during inventory. |
 | `flutter devices` on Windows | Windows desktop, Chrome, and Edge only; no phone was visible. |
 | Windows camera inventory | DirectShow sees `USB2.0 HD UVC WebCam`, `DroidCam Video`, and `OBS Virtual Camera`; PnP also reports `Camera DFU Device`. |
@@ -143,19 +162,23 @@ D-drive workaround checkout:
 
 ## Remaining Gaps
 
-1. Free C: disk space. A later cleanup inventory reported only `0.14 GiB` free.
-   This blocks normal Android/Gradle work and likely future SDK updates. Use
-   `docs/superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`.
-2. Enable Windows symlink privilege, either through Developer Mode or an
-   elevated/admin build session. Native Windows Flutter plugin symlinks are not
-   usable from the current SSH session.
-3. Install `usbipd-win` from an elevated/admin Windows session before WSL USB
+1. Keep C: from regressing. It is no longer full, but WSL, Docker, Android SDK,
+   and cache moveouts should still be completed through supported tools.
+2. Fix Windows symlink privilege or Flutter plugin-link handling. The direct
+   CMake workaround can build a binary, but normal `flutter build windows` is
+   still not a ready daily workflow from SSH.
+3. Finish the Android emulator lane. The x86_64 AVD boots and is detected; the
+   remaining gap is `assembleDebug`/install/launch completion with deeper Gradle
+   diagnostics or a longer controlled build window.
+4. Add or guard Linux permission handling. The Linux binary launches, but app
+   startup currently logs `MissingPluginException` for `requestPermissions`.
+5. Install `usbipd-win` from an elevated/admin Windows session before WSL USB
    camera attach tests can run.
-4. Remove or rename colon-containing evidence paths in Git if normal Windows
+6. Remove or rename colon-containing evidence paths in Git if normal Windows
    clones are expected.
-5. Attach supported Android API 24+ phones and rerun `adb devices -l`,
+7. Attach supported Android API 24+ phones and rerun `adb devices -l`,
    `flutter devices`, and one `flutter run -d <serial>` smoke.
-6. Resolve the three failing Flutter tests before treating the Win11 host as a
+8. Resolve the three failing Flutter tests before treating the Win11 host as a
    green CI-grade validator.
-7. Decide whether the PATH `code` command should point to Microsoft VS Code or
+9. Decide whether the PATH `code` command should point to Microsoft VS Code or
    whether the current Cursor-style command is acceptable.

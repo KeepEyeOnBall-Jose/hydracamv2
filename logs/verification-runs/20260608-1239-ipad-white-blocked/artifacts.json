@@ -1,0 +1,208 @@
+{
+  "acceptanceChecks": [
+    "Physical iPad white screen/block state is classified with live bridge/device evidence"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:40:02.834127+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:40:02.910558+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:40:03.002009+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "3",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:40:15.537688+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--filter",
+        "executableName CONTAINS 'Runner' OR name CONTAINS 'Runner' OR executableName CONTAINS 'hydracam' OR name CONTAINS 'Hydra'",
+        "--columns",
+        "*"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T10:41:08.915808+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "displays",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--json-output",
+        "logs/verification-runs/20260608-1239-ipad-white-blocked/ipad-displays.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:41:09.211341+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "5",
+        "http://192.168.178.104:4762/session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:41:31.087041+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "20",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:41:31.202395+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "5",
+        "http://192.168.178.104:4762/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:41:31.260475+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "10",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "-d",
+        "{\"role\":\"master\"}",
+        "http://192.168.178.104:4762/commands/set_role"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:41:59.338840+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "5",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:42:07.754028+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "20",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:42:07.864965+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--max-time",
+        "5",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "-d",
+        "{}",
+        "http://192.168.178.104:4762/commands/connected_clients"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T10:42:23.962205+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "ios",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11 21H461",
+      "role": "suspect-white-screen"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/visual-capture-unavailable.txt",
+    "video/video-capture-unavailable.txt",
+    "device-logs/ipad-bridge-logs-after-master-switch.json"
+  ],
+  "item": {
+    "slug": "ipad-white-blocked",
+    "source": "operator-report-2026-06-08",
+    "title": "ipad-white-blocked"
+  },
+  "notes": [
+    "iPad bridge stayed healthy at 192.168.178.104:4762 with expected automationTargetId; white state mapped to AutomationStandbyScreen empty body.",
+    "Recovered by POST /commands/set_role role=master; post-switch health exposed master commands and logs showed WebSocket server port 4040.",
+    "Direct physical-iOS screenshot/video capture unavailable in this shell; run includes explicit marker files and bridge/display evidence."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

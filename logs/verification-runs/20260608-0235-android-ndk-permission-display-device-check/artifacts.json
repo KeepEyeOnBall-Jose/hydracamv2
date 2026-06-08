@@ -63,21 +63,522 @@
       ],
       "returnCode": 0,
       "startedAt": "2026-06-08T00:42:14.035932+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager",
+        "--install",
+        "ndk;28.2.13676358"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T00:42:40.321849+00:00"
+    },
+    {
+      "command": [
+        "test",
+        "-f",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358/source.properties"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:15:36.208106+00:00"
+    },
+    {
+      "command": [
+        "cat",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358/source.properties"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:15:36.220718+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:15:44.335643+00:00"
+    },
+    {
+      "command": [
+        "ls",
+        "-lh",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:16:38.390805+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:16:46.366219+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:17:17.973175+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:05.155407+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:34.913658+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:35.129678+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:35.412908+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "monkey",
+        "-p",
+        "com.amaia23.hydracam",
+        "1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:44.368958+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "monkey",
+        "-p",
+        "com.amaia23.hydracam",
+        "1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:45.627224+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "monkey",
+        "-p",
+        "com.amaia23.hydracam",
+        "1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:47.094769+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "cmd",
+        "location",
+        "is-location-enabled"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:13.094029+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "cmd",
+        "location",
+        "is-location-enabled"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:13.215973+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "cmd",
+        "location",
+        "is-location-enabled"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:13.291125+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "appops",
+        "get",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:13.606641+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "rm",
+        "-f",
+        "/sdcard/hydracam-ndk-check.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:43.514621+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "rm",
+        "-f",
+        "/sdcard/hydracam-ndk-check.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:43.583998+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "rm",
+        "-f",
+        "/sdcard/hydracam-ndk-check.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:44.082517+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-ndk-check.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:53.559977+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-ndk-check.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:20:59.392900+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-ndk-check.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:05.702086+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-ndk-check.mp4",
+        "logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/9885e6503930304946-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:24.884971+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "pull",
+        "/sdcard/hydracam-ndk-check.mp4",
+        "logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/29d816ac550b7ece-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:24.917252+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "pull",
+        "/sdcard/hydracam-ndk-check.mp4",
+        "logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/RF8M90QE7LX-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:24.966388+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/hydracam-window.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:33.680977+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/hydracam-window.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:36.186984+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/hydracam-window.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:40.614253+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "pull",
+        "/sdcard/hydracam-window.xml",
+        "logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/29d816ac550b7ece-window.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:54.967308+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-window.xml",
+        "logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/9885e6503930304946-window.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:54.990672+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "pull",
+        "/sdcard/hydracam-window.xml",
+        "logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/RF8M90QE7LX-window.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:21:55.043694+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s 29d816ac550b7ece logcat -d -v time > logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/29d816ac550b7ece-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:22:07.067370+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s 9885e6503930304946 logcat -d -v time > logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/9885e6503930304946-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:22:07.366007+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s RF8M90QE7LX logcat -d -v time > logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/RF8M90QE7LX-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:22:07.767633+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:22:51.498038+00:00"
+    },
+    {
+      "command": [
+        "rm",
+        "-rf",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358.incomplete-20260608-0235"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:23:17.292406+00:00"
+    },
+    {
+      "command": [
+        "rm",
+        "-rf",
+        "/Users/jose/Library/Android/sdk/ndk/28.2.13676358.incomplete-20260608-0235-retry1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:23:17.474114+00:00"
     }
   ],
-  "devices": [],
-  "evidenceFiles": [],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "android-phone",
+      "name": "Samsung SM-G960F",
+      "notes": [
+        "Visible over adb; supported API floor"
+      ],
+      "os": "Android 10 API 29",
+      "role": "deploy-check"
+    },
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "android-phone",
+      "name": "Samsung SM-G935F",
+      "notes": [
+        "Visible over adb; supported API floor; historically S7 capture has separate camera timeout risk"
+      ],
+      "os": "Android 8.0 API 26",
+      "role": "deploy-check"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "android-phone",
+      "name": "Samsung SM-G970F",
+      "notes": [
+        "Visible over adb; supported API floor"
+      ],
+      "os": "Android 12 API 31",
+      "role": "deploy-check"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/29d816ac550b7ece-launch.png",
+    "screenshots/9885e6503930304946-launch.png",
+    "screenshots/RF8M90QE7LX-launch.png",
+    "video/29d816ac550b7ece-launch.mp4",
+    "video/9885e6503930304946-launch.mp4",
+    "video/RF8M90QE7LX-launch.mp4",
+    "device-logs/29d816ac550b7ece-logcat.txt",
+    "device-logs/29d816ac550b7ece-window.xml",
+    "device-logs/9885e6503930304946-logcat.txt",
+    "device-logs/9885e6503930304946-window.xml",
+    "device-logs/RF8M90QE7LX-logcat.txt",
+    "device-logs/RF8M90QE7LX-window.xml"
+  ],
   "item": {
     "slug": "android-ndk-permission-display-device-check",
     "source": "user request 2026-06-08",
     "title": "Fix Android NDK and verify HydraCam Android permission/display build on devices"
   },
-  "notes": [],
+  "notes": [
+    "Repaired default Android NDK 28.2.13676358 install, rebuilt debug APK without hydracamNdkVersion override, installed and launched on G960F API 29, G935F API 26, and G970F API 31. G960F and G935F show SSID plus IP; G970F shows the intended Wi-Fi fallback with IP because Android Location Services is disabled while app location appops are allowed.",
+    "Final cleanup removed quarantined incomplete NDK directories after successful reinstall. Default debug APK built with NDK 28.2.13676358, installed and launched on all three visible supported Android devices; S10e SSID fallback is expected because Location Services is disabled while location appops are allowed."
+  ],
   "requiresDeviceLogs": true,
   "requiresScreenshots": true,
   "requiresVideo": true,
   "schemaVersion": 1,
-  "status": "prepared",
+  "status": "passed",
   "verificationTier": "A",
   "verificationTierName": "real-hardware"
 }

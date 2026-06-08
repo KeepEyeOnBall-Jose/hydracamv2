@@ -1,6 +1,7 @@
 import "dart:async";
 import "package:camera/camera.dart";
 import "package:connectivity_plus/connectivity_plus.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "../screens/role_selection_screen.dart";
 import "../globals.dart";
@@ -39,6 +40,7 @@ class SlaveScreen extends StatefulWidget {
   final bool forceSlaveMode;
   final NetworkReadinessLoader? networkReadinessLoader;
   final SlaveConnectionClientFactory? slaveClientFactory;
+  final Stream<List<ConnectivityResult>>? connectivityChanges;
 
   const SlaveScreen({
     super.key,
@@ -47,6 +49,7 @@ class SlaveScreen extends StatefulWidget {
     this.forceSlaveMode = false,
     @visibleForTesting this.networkReadinessLoader,
     @visibleForTesting this.slaveClientFactory,
+    @visibleForTesting this.connectivityChanges,
   }); // Default is manual mode
 
   @override
@@ -88,10 +91,29 @@ class SlaveScreenState extends State<SlaveScreen> {
     // Master discovery and other initializations
     _masterDiscovery = MasterDiscovery(onMasterDiscovered: _connectToMaster);
 
-    _networkSubscription =
-        NetworkInfoService.connectivityChanges.listen((_) async {
-      await _startNetworkAwareDiscovery();
-    });
+    final connectivityChanges = widget.connectivityChanges;
+    if (connectivityChanges != null ||
+        defaultTargetPlatform != TargetPlatform.linux) {
+      _networkSubscription =
+          (connectivityChanges ?? NetworkInfoService.connectivityChanges)
+              .listen(
+        (_) async {
+          await _startNetworkAwareDiscovery();
+        },
+        onError: (Object error, StackTrace stackTrace) {
+          LogService.instance.registerError(
+            "Connectivity change listener failed",
+            error,
+            stackTrace,
+          );
+        },
+      );
+    } else {
+      LogService.instance.registerLog(
+        "Skipping connectivity change listener on linux; "
+        "network readiness will be checked on demand.",
+      );
+    }
     _startNetworkAwareDiscovery();
 
     // Add listener

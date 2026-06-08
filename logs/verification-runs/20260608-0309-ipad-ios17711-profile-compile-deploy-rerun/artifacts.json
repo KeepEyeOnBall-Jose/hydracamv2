@@ -1,0 +1,204 @@
+{
+  "acceptanceChecks": [
+    "Profile iOS build compiles with HydraCam automation enabled",
+    "Fresh iPad install/deploy attempt either reaches the physical iPad or records the current pairing/deployment blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:09:33.012691+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:09:45.201458+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:09:46.710514+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "manage",
+        "pair",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "60"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T01:09:55.472561+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:10:02.009861+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--warm-summary",
+        "logs/verification-runs/20260608-ipad-warm-prime-after-default-staged-with-host/warm-bridge-prime.json",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--ios-host",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104",
+        "--warm-prime-only",
+        "--ios-profile-build-install",
+        "--xctrace-ios-launch",
+        "--ios-profile-trust-retry-timeout",
+        "20",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary",
+        "--run-dir",
+        "logs/verification-runs/20260608-ipad-ios17711-profile-build-install-warm-prime"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T01:11:50.811618+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:13:34.497960+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--warm-summary",
+        "logs/verification-runs/20260608-ipad-warm-prime-after-default-staged-with-host/warm-bridge-prime.json",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--ios-host",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104",
+        "--warm-prime-only",
+        "--xctrace-ios-launch",
+        "--standby-launch-timeout",
+        "20",
+        "--no-update-latest-warm-summary",
+        "--run-dir",
+        "logs/verification-runs/20260608-ipad-ios17711-warm-bridge-confirmed"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:13:59.294549+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:14:26.463708+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:14:38.821244+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:14:40.330552+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "ios_physical",
+      "name": "iPad (5)",
+      "notes": [
+        "CoreDevice identifier 0A947DBD-A462-5BAA-AB84-17F143D41619; pairing state unpaired after iPad update"
+      ],
+      "os": "iOS 17.7.11 21H461",
+      "role": "deploy-target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/not-captured.txt",
+    "video/not-captured.txt",
+    "device-logs/bridge-health.json",
+    "device-logs/commands.log",
+    "device-logs/devicectl-install.json",
+    "device-logs/first-warm-prime-after-install.json",
+    "device-logs/ipad-processes.json",
+    "device-logs/warm-bridge-confirmed.json"
+  ],
+  "item": {
+    "slug": "ipad-ios17711-profile-compile-deploy-rerun",
+    "source": "user request 2026-06-08: ipad updated; do another run of compile and deployment",
+    "title": "iPad iOS 17.7.11 Profile compile and deployment rerun"
+  },
+  "notes": [
+    "Profile compile succeeded twice; runner build produced build/ios/iphoneos/Runner.app (29.3MB).",
+    "devicectl install succeeded for com.vectorblanco.hydracam.dev on iPad iOS 17.7.11.",
+    "Initial warm-prime missed the bridge, but curl /healthz and follow-up warm-prime confirmed the iPad automation bridge at 192.168.178.104:4762.",
+    "Visual screenshot/video were not captured for this deployment-only lane; placeholders document the omission."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

@@ -1,0 +1,15 @@
+No local physical-iOS screenshot capture command was available in this shell.
+
+Checked tools:
+- idevicescreenshot: not installed
+- ios-deploy: not installed
+- tidevice: not installed
+- pymobiledevice3: not installed
+- xcrun xcdevice: no screenshot subcommand exposed
+- xcrun devicectl: no screenshot subcommand exposed by this build
+
+Substitute visual state evidence:
+- `xcrun devicectl device info displays` reported the iPad main display
+  backlight active and orientation landscapeLeft.
+- App bridge `/logs` reported an intentional navigation to
+  `AutomationStandbyScreen`, whose body is empty.

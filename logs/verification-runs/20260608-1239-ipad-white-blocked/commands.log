@@ -1,0 +1,171 @@
+# HydraCam evidence run command log
+
+$ --label git-status -- git status -sb
+
+$ --label ipad-healthz-192-168-178-104 -- curl --fail --show-error --max-time 3 http://192.168.178.104:4762/healthz
+
+$ --label flutter-devices -- flutter devices --device-timeout 10
+
+$ --label devicectl-list-devices -- xcrun devicectl list devices
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/status-and-roadmap.md
+ M logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/artifacts.json
+ M logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/commands.log
+ M logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/summary.md
+?? logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/
+?? logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/git-status-after.txt
+?? logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/screenshots/
+?? logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/
+?? logs/verification-runs/20260608-0309-ipad-ios17711-profile-compile-deploy-rerun/
+?? logs/verification-runs/20260608-0317-android-usb-power-screen-dim/
+?? logs/verification-runs/20260608-1239-ipad-white-blocked/
+?? logs/verification-runs/20260608-ipad-ios17711-profile-build-install-warm-prime/
+?? logs/verification-runs/20260608-ipad-ios17711-warm-bridge-confirmed/
+?? scripts/android_power_monitor.py
+?? scripts/test_android_power_monitor.py
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State       Model                                        
+-------------------   -----------------------------------   ------------------------------------   ---------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   connected   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 7 connected devices:
+  SM G960F (mobile)       • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)       • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)       • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Found 1 wirelessly connected device:
+  José Ramón’s iPhone (wireless) (mobile) • 00008101-000A68811E43001E • ios • iOS 26.5 23F77
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 3 http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["set_role"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   121    0   121    0     0    555      0 --:--:-- --:--:-- --:--:--   557
+[exit-code] 0
+
+$ xcrun devicectl device info processes --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --filter executableName CONTAINS 'Runner' OR name CONTAINS 'Runner' OR executableName CONTAINS 'hydracam' OR name CONTAINS 'Hydra' --columns *
+12:41:08  Acquired tunnel connection to device.
+12:41:08  Enabling developer disk image services.
+12:41:09  Acquired usage assertion.
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 1
+
+$ xcrun devicectl device info displays --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --json-output logs/verification-runs/20260608-1239-ipad-white-blocked/ipad-displays.json
+12:41:09  Acquired tunnel connection to device.
+12:41:09  Enabling developer disk image services.
+12:41:09  Acquired usage assertion.
+Current Displays:
+▿ 1: LCD (primary):
+    • bounds: (0.0, 0.0, 1536.0, 2048.0)
+    • currentOrientation: rot270
+    • displayId: 1
+    • name: LCD
+    • nativeOrientation: rot0
+    • pointScale: 2
+    • nativeSize: (1536.0, 2048.0)
+    • primary: true
+Main display backlight state: backlight is on and active
+Main display orientation: landscapeLeft, non-flat orientation: landscapeLeft, orientation not locked
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 5 http://192.168.178.104:4762/session
+{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   146    0   146    0     0   2221      0 --:--:-- --:--:-- --:--:--  2246
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 20 http://192.168.178.104:4762/logs
+{"traceFilePath":"/var/mobile/Containers/Data/Application/F9EE9677-A977-411C-9300-5921DB428124/Documents/logs/hydracam-trace-2026-06-08T03-12-34-229970.ndjson","persistedLogLines":["{\"message\":\"Launch config from intent: role=standby, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null\",\"timestamp\":\"2026-06-08T03:12:34.125663\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (startup)\",\"timestamp\":\"2026-06-08T03:12:34.133416\",\"function\":null,\"file\":null}","{\"message\":\"Automation bridge listening on port 4762\",\"timestamp\":\"2026-06-08T03:12:34.134315\",\"function\":null,\"file\":null}","{\"message\":\"Permission request completed.\\nGranted: [Permission.microphone, Permission.camera]\\nDenied: []\",\"timestamp\":\"2026-06-08T03:12:42.521980\",\"function\":\"requestAllPermissions\",\"file\":\"PermissionService\"}","{\"message\":\"Generated new Device ID: ad6dc880-f685-4983-8d11-278980f78592\",\"timestamp\":\"2026-06-08T03:12:42.524460\",\"function\":null,\"file\":null}","{\"message\":\"Device ID: ad6dc880-f685-4983-8d11-278980f78592\",\"timestamp\":\"2026-06-08T03:12:42.524478\",\"function\":null,\"file\":null}","{\"message\":\"Location access will be requested on demand when the user opens the location view.\",\"timestamp\":\"2026-06-08T03:12:42.524479\",\"function\":null,\"file\":null}","{\"message\":\"CameraServiceSingleton initialized; mockCamera=false\",\"timestamp\":\"2026-06-08T03:12:42.524850\",\"function\":null,\"file\":null}","{\"message\":\"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, forceSlave=false\",\"timestamp\":\"2026-06-08T03:12:42.539816\",\"function\":null,\"file\":null}","{\"message\":\"Navigating to AutomationStandbyScreen\",\"timestamp\":\"2026-06-08T03:12:42.539821\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app init)\",\"timestamp\":\"2026-06-08T03:12:42.585935\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app resumed)\",\"timestamp\":\"2026-06-08T03:12:42.939681\",\"function\":null,\"file\":null}"],"logs":[{"message":"Launch config from intent: role=standby, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null","timestamp":"2026-06-08T03:12:34.125663","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (startup)","timestamp":"2026-06-08T03:12:34.133416","function":null,"file":null},{"message":"Automation bridge listening on port 4762","timestamp":"2026-06-08T03:12:34.134315","function":null,"file":null},{"message":"Permission request completed.\nGranted: [Permission.microphone, Permission.camera]\nDenied: []","timestamp":"2026-06-08T03:12:42.521980","function":"requestAllPermissions","file":"PermissionService"},{"message":"Generated new Device ID: ad6dc880-f685-4983-8d11-278980f78592","timestamp":"2026-06-08T03:12:42.524460","function":null,"file":null},{"message":"Device ID: ad6dc880-f685-4983-8d11-278980f78592","timestamp":"2026-06-08T03:12:42.524478","function":null,"file":null},{"message":"Location access will be requested on demand when the user opens the location view.","timestamp":"2026-06-08T03:12:42.524479","function":null,"file":null},{"message":"CameraServiceSingleton initialized; mockCamera=false","timestamp":"2026-06-08T03:12:42.524850","function":null,"file":null},{"message":"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, forceSlave=false","timestamp":"2026-06-08T03:12:42.539816","function":null,"file":null},{"message":"Navigating to AutomationStandbyScreen","timestamp":"2026-06-08T03:12:42.539821","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app init)","timestamp":"2026-06-08T03:12:42.585935","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app resumed)","timestamp":"2026-06-08T03:12:42.939681","function":null,"file":null}]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  4197    0  4197    0     0  88146      0 --:--:-- --:--:-- --:--:-- 89297
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 5 http://192.168.178.104:4762/settings
+{"autoUploadMaterials":true,"masterShouldRecord":true,"deleteLocalAfterUpload":false,"autoplayVideoOnMaster":false,"flashForVideoAnnounce":false,"timerDuration":3,"cameraLensPreference":"autoBack","selectedCameraName":null,"videoCaptureProfile":"standard1080p30","videoCaptureTarget":"1080p at 30 fps"}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   302    0   302    0     0  16176      0 --:--:-- --:--:-- --:--:-- 16777
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 10 -H Content-Type: application/json -X POST -d {"role":"master"} http://192.168.178.104:4762/commands/set_role
+{"status":"ok","command":"set_role","result":{"role":"master","preferredMasterIp":null,"forceSlaveMode":false,"status":"role_set"}}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   148    0   131  100    17    591     76 --:--:-- --:--:-- --:--:--   666
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 5 http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["connected_clients","end_session","list_cameras","set_role","start_local_session","start_recording","start_session","stop_recording","take_photo"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   256    0   256    0     0   2546      0 --:--:-- --:--:-- --:--:--  2560
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 20 http://192.168.178.104:4762/logs
+{"traceFilePath":"/var/mobile/Containers/Data/Application/F9EE9677-A977-411C-9300-5921DB428124/Documents/logs/hydracam-trace-2026-06-08T03-12-34-229970.ndjson","persistedLogLines":["{\"message\":\"Launch config from intent: role=standby, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null\",\"timestamp\":\"2026-06-08T03:12:34.125663\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (startup)\",\"timestamp\":\"2026-06-08T03:12:34.133416\",\"function\":null,\"file\":null}","{\"message\":\"Automation bridge listening on port 4762\",\"timestamp\":\"2026-06-08T03:12:34.134315\",\"function\":null,\"file\":null}","{\"message\":\"Permission request completed.\\nGranted: [Permission.microphone, Permission.camera]\\nDenied: []\",\"timestamp\":\"2026-06-08T03:12:42.521980\",\"function\":\"requestAllPermissions\",\"file\":\"PermissionService\"}","{\"message\":\"Generated new Device ID: ad6dc880-f685-4983-8d11-278980f78592\",\"timestamp\":\"2026-06-08T03:12:42.524460\",\"function\":null,\"file\":null}","{\"message\":\"Device ID: ad6dc880-f685-4983-8d11-278980f78592\",\"timestamp\":\"2026-06-08T03:12:42.524478\",\"function\":null,\"file\":null}","{\"message\":\"Location access will be requested on demand when the user opens the location view.\",\"timestamp\":\"2026-06-08T03:12:42.524479\",\"function\":null,\"file\":null}","{\"message\":\"CameraServiceSingleton initialized; mockCamera=false\",\"timestamp\":\"2026-06-08T03:12:42.524850\",\"function\":null,\"file\":null}","{\"message\":\"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, forceSlave=false\",\"timestamp\":\"2026-06-08T03:12:42.539816\",\"function\":null,\"file\":null}","{\"message\":\"Navigating to AutomationStandbyScreen\",\"timestamp\":\"2026-06-08T03:12:42.539821\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app init)\",\"timestamp\":\"2026-06-08T03:12:42.585935\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app resumed)\",\"timestamp\":\"2026-06-08T03:12:42.939681\",\"function\":null,\"file\":null}","{\"message\":\"Runtime role switch requested: {role: master, preferredMasterIp: null, forceSlaveMode: false}\",\"timestamp\":\"2026-06-08T12:41:59.828481\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (runtime role switch)\",\"timestamp\":\"2026-06-08T12:41:59.846516\",\"function\":null,\"file\":null}","{\"message\":\"WebSocket Server successfully started on port 4040\",\"timestamp\":\"2026-06-08T12:41:59.926703\",\"function\":null,\"file\":null}"],"logs":[{"message":"Launch config from intent: role=standby, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null","timestamp":"2026-06-08T03:12:34.125663","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (startup)","timestamp":"2026-06-08T03:12:34.133416","function":null,"file":null},{"message":"Automation bridge listening on port 4762","timestamp":"2026-06-08T03:12:34.134315","function":null,"file":null},{"message":"Permission request completed.\nGranted: [Permission.microphone, Permission.camera]\nDenied: []","timestamp":"2026-06-08T03:12:42.521980","function":"requestAllPermissions","file":"PermissionService"},{"message":"Generated new Device ID: ad6dc880-f685-4983-8d11-278980f78592","timestamp":"2026-06-08T03:12:42.524460","function":null,"file":null},{"message":"Device ID: ad6dc880-f685-4983-8d11-278980f78592","timestamp":"2026-06-08T03:12:42.524478","function":null,"file":null},{"message":"Location access will be requested on demand when the user opens the location view.","timestamp":"2026-06-08T03:12:42.524479","function":null,"file":null},{"message":"CameraServiceSingleton initialized; mockCamera=false","timestamp":"2026-06-08T03:12:42.524850","function":null,"file":null},{"message":"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, forceSlave=false","timestamp":"2026-06-08T03:12:42.539816","function":null,"file":null},{"message":"Navigating to AutomationStandbyScreen","timestamp":"2026-06-08T03:12:42.539821","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app init)","timestamp":"2026-06-08T03:12:42.585935","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app resumed)","timestamp":"2026-06-08T03:12:42.939681","function":null,"file":null},{"message":"Runtime role switch requested: {role: master, preferredMasterIp: null, forceSlaveMode: false}","timestamp":"2026-06-08T12:41:59.828481","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (runtime role switch)","timestamp":"2026-06-08T12:41:59.846516","function":null,"file":null},{"message":"WebSocket Server successfully started on port 4040","timestamp":"2026-06-08T12:41:59.926703","function":null,"file":null}]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  5171    0  5171    0     0   171k      0 --:--:-- --:--:-- --:--:--  174k
+[exit-code] 0
+
+$ curl --fail --show-error --max-time 5 -H Content-Type: application/json -X POST -d {} http://192.168.178.104:4762/commands/connected_clients
+{"status":"ok","command":"connected_clients","result":{"connectedClientCount":0,"connectedClientIds":[],"masterServerStartedAt":"2026-06-08T12:41:59.926702","connectedClients":[],"session":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}}}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   339    0   337  100     2   2574     15 --:--:-- --:--:-- --:--:--  2607
+[exit-code] 0

@@ -12,12 +12,12 @@ or informs the mobile app.
 | Area | Status | Notes |
 | --- | --- | --- |
 | iOS simulator | Runs, but no camera | 2026-06-07 simulator run applied camera settings after camera/mic privacy grants, but Flutter `camera` reported no available cameras. Use simulator for launch/UI checks only, not capture proof. Latest parallel matrix kept it launch-only on bridge port `4771`. Evidence: `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`. |
-| iOS physical device | Working in debug automation; iPhone Profile automation bridge working | The prior broad white-screen blocker is superseded. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` shows iPhone 12 Pro debug launch, permissions, session creation, photo capture/upload, and video start. `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md` shows iPhone 12 Pro / iOS 26.5 passing the coordinated independent-capture matrix at `ultraWide` + `sport1080p60`, and iPad 5 passing `autoBack` + `standard1080p30`. `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/` shows the no-tooling iPhone Profile bridge can now be found by identity-based LAN scan without passing a manual `--ios-host`. Debug `Runner.app` still cannot be fast-launched by `devicectl` without Flutter tooling. The physical iPad Profile install fallback now succeeds through `flutter install --use-application-binary`, but xctrace launch is blocked by `ios_profile_not_trusted` until the developer profile is trusted on the device. Limitation: saved-video metadata remains unavailable on iOS. |
+| iOS physical device | Working in debug automation; iPhone and iPad Profile automation bridges working | The prior broad white-screen blocker is superseded. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` shows iPhone 12 Pro debug launch, permissions, session creation, photo capture/upload, and video start. `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md` shows iPhone 12 Pro / iOS 26.5 passing the coordinated independent-capture matrix at `ultraWide` + `sport1080p60`, and iPad 5 passing `autoBack` + `standard1080p30`. `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/` shows the no-tooling iPhone Profile bridge can now be found by identity-based LAN scan without passing a manual `--ios-host`. Debug `Runner.app` still cannot be fast-launched by `devicectl` without Flutter tooling. After the iPad update to iOS 17.7.11, `logs/verification-runs/20260608-0309-ipad-ios17711-profile-compile-deploy-rerun/` shows Profile compile passing, `devicectl install app` installing `com.vectorblanco.hydracam.dev`, Flutter/xctrace/CoreDevice seeing the iPad online and paired, and `http://192.168.178.104:4762/healthz` returning the expected iPad `automationTargetId`. Limitation: saved-video metadata remains unavailable on iOS. |
 | Android | In development; current camera evidence mixed | 2026-06-07 parallel matrix: both Samsung S10e devices and Samsung SM-G960F captured one photo and one video at `standard1080p30` under a shared capture barrier. Samsung S7 edge still fails at `standard1080p30` with bounded photo timeout plus Exynos/Camera2 reopen errors, now classified as `s7_exynos_camera_timeout`. Xiaomi 2201116PG install is still blocked by `INSTALL_FAILED_USER_RESTRICTED`. Evidence: `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`. |
 | Camera lens/profile settings | Implemented; device proof partial | 2026-06-07 added local lens preference and target video profiles from 480p30 through 4K60. The video profile selector now shows concrete target text (`1080p at 30 fps`, `1080p at 60 fps`) instead of arbitrary names; the latest parallel matrix confirms `/settings.videoCaptureTarget` on macOS, Android, iPhone, and iPad. iPhone 12 Pro 0.5x debug automation passes 1080p60 and 4K30 targets, but iOS metadata extraction is still unavailable and S7 rear-wide 1080p60/4K30 remains blocked by basic capture failure. ASAP item 0 remains open. |
 | Mobile login/auth | Imperfect | Current Auth0 login uses a browser-backed OAuth flow and stores user state only in memory. Login restore, secure credential persistence, logout/end-session behavior, Android process-death recovery, and Android-native account-picker UX are not complete. |
 | Desktop and web | macOS controller debug path working; capture deferred | macOS debug `.app` builds and launches for controller/monitoring use with a mock local camera. Windows, Linux, web, and real desktop webcam capture remain future support. |
-| Multi-device capture | Runtime role switching works; five-device hot loop including iPhone passed | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/summary.json` proves Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, physical iPad 5, and macOS can launch once, rotate which device is master, and connect the other four devices as slaves without relaunching. Current split-ack cold proof `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/summary.json` passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, and macOS across two cycles / 8 rotations, but build/install/launch made it take `63.919s`. The fastest four-local proof is `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/summary.json`: the same four targets passed explicit `--expect-target-id` selection across five hot cycles / 20 master rotations in `8.118s` runner elapsed, with no build/install/standby launch after warm preflight, `--stage-slaves-after-master-ready`, synchronous master acknowledgement, async accepted acknowledgement for slaves, 25 ms connected-client polling, and `--max-set-role-request-start-skew-ms 10` enforced. `logs/verification-runs/20260608-warm-summary-prime-five-repeat/summary.json` is the current fastest cold-iPhone repeat proof: using `--warm-summary` skipped `flutter devices`, `adb devices`, and master-host probing, launched only the missing iPhone Profile bridge, then passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 rotations in `9.167s`. Parallel request-start skew stayed below `0.686 ms`, `set_role` averaged `162.803 ms`, and connected-client verification averaged `201.572 ms`. A separate pure-immediate warm-summary rerun, `logs/verification-runs/20260608-warm-summary-hot-five-repeat/summary.json`, passed the same 25 rotations in `8.806s` with no discovery, build, install, or launch; warm preflight had no missing bridges. `logs/verification-runs/20260608-ipad-profile-install-fallback-warm-prime/` confirms the six-target blocker is now iPad device trust: the runner packaged a Profile IPA, installed it through `flutter install --use-application-binary`, then xctrace failed with `ios_profile_not_trusted`. |
+| Multi-device capture | Runtime role switching works; five-device hot loop including iPhone passed; iPad Profile bridge refreshed | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/summary.json` proves Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, physical iPad 5, and macOS can launch once, rotate which device is master, and connect the other four devices as slaves without relaunching. Current split-ack cold proof `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/summary.json` passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, and macOS across two cycles / 8 rotations, but build/install/launch made it take `63.919s`. The fastest four-local proof is `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/summary.json`: the same four targets passed explicit `--expect-target-id` selection across five hot cycles / 20 master rotations in `8.118s` runner elapsed, with no build/install/standby launch after warm preflight, `--stage-slaves-after-master-ready`, synchronous master acknowledgement, async accepted acknowledgement for slaves, 25 ms connected-client polling, and `--max-set-role-request-start-skew-ms 10` enforced. `logs/verification-runs/20260608-warm-summary-prime-five-repeat/summary.json` is the current fastest cold-iPhone repeat proof: using `--warm-summary` skipped `flutter devices`, `adb devices`, and master-host probing, launched only the missing iPhone Profile bridge, then passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 rotations in `9.167s`. Parallel request-start skew stayed below `0.686 ms`, `set_role` averaged `162.803 ms`, and connected-client verification averaged `201.572 ms`. A separate pure-immediate warm-summary rerun, `logs/verification-runs/20260608-warm-summary-hot-five-repeat/summary.json`, passed the same 25 rotations in `8.806s` with no discovery, build, install, or launch; warm preflight had no missing bridges. `logs/verification-runs/20260608-ipad-ios17711-warm-bridge-confirmed/warm-bridge-prime.json` confirms the refreshed iPad iOS 17.7.11 Profile bridge is warm at `192.168.178.104:4762`; rerun the full selected-set loop before claiming a new six-target rotation benchmark. |
 | Store distribution | Prepared, not submitted | Distribution runbook and scaffolding exist; real submission depends on signing, credentials, privacy review, and device smoke tests. |
 
 Latest acceleration proof: `logs/verification-runs/20260608-latest-cache-shortest-default-staged-five-hot/summary.json`
@@ -401,18 +401,19 @@ Current runtime-switch result:
   `--warm-prime-only` is the companion setup command: it reuses existing warm
   bridges, skips build/install, tries to launch only missing selected bridges,
   writes `warm-bridge-prime.json`, and exits without running rotations. The
-  current all-visible warm-prime run
+  then-current all-visible warm-prime run
   `20260607-runtime-role-switch-visible-warm-prime-only-current` attempted only
   the missing iPad bridge and failed in `3.91s` with
   `ios_profile_not_trusted`; Android and macOS bridges remained warm. The
-  current post-change immediate proof
+  then-current post-change immediate proof
   `20260607-runtime-role-switch-immediate-after-warm-prime-change-four-local`
   passed G960F, S7 edge, S10e `RF8M90QE7LX`, and macOS in `3.97s` wall time
   with request start skew below `1 ms` on every rotation.
   `--prime-then-immediate-role-switch` is now the preferred single command for
   the final fast loop: it writes `warm-bridge-prime.json`, stops immediately if
   any selected bridge remains cold, and otherwise continues into the required
-  warm preflight plus immediate role-switch proof. The all-visible current run
+  warm preflight plus immediate role-switch proof. The all-visible then-current
+  run
   `20260607-runtime-role-switch-prime-then-immediate-visible-current` stopped in
   `3.86s` after the iPad xctrace launch reported `ios_profile_not_trusted`; no
   `warm-bridge-preflight.json` or rotation artifacts were written. The warm
@@ -438,7 +439,7 @@ Current runtime-switch result:
   the selected targets, while the selected set only contained the three
   Androids, physical iPad 5, and macOS. The scoped visible-five rerun
   `20260607-runtime-role-switch-expected-visible-five-current` passed
-  `expected-targets.json`, then stopped in `3.81s` at the current iPad
+  `expected-targets.json`, then stopped in `3.81s` at the then-current iPad
   `ios_profile_not_trusted` warm-prime blocker. The scoped warm-four rerun
   `20260607-runtime-role-switch-expected-four-local-current` passed explicit
   expected-target selection and all four master rotations in `3.93s`; the first
@@ -629,57 +630,47 @@ Current runtime-switch result:
   unless the discovered bridge reports
   `automationTargetId=00008101-000A68811E43001E`. Do not reuse the stale
   `192.168.178.141` host from older capture evidence.
-- Physical iPad current warm-prime is blocked by device-side Profile trust, not
-  by compile speed. The bounded retry
-  `20260607-runtime-role-switch-visible-set-adopted-fast-ipad-timeout` cut the
-  failed five-target attempt from `187.41s` to `46.85s` using
-  `--standby-launch-timeout 30`, but `flutter-run.log` still stopped after Xcode
-  build at `Installing and launching...` with no bridge. The xctrace path avoids
-  that Flutter retry entirely. The 2026-06-08 fallback proof
-  `20260608-ipad-profile-install-fallback-warm-prime` ran in `22.7s`, showed
-  `devicectl` cannot see the old iPad ID, packaged `Runner.app` into an IPA,
-  installed it through `flutter install --use-application-binary`, then xctrace
-  failed before bridge health with classified `ios_profile_not_trusted`. The
-  latest scoped retry,
-  `20260608-ipad-warm-prime-after-default-staged-with-host`, kept discovery
-  enabled with explicit `--ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104`,
-  disabled latest-cache updates so the one-device attempt could not overwrite
-  the five-device hot cache, built and installed the Profile app through the
-  same IPA fallback, retried launch twice with
-  `--ios-profile-trust-retry-timeout 20`, and again failed with
-  `deviceActions[0].code=ios_profile_not_trusted`. The
-  all-selected retry proof `20260608-all-selected-trust-retry-short` selected
-  all six expected targets, prefilled/adopted the iPhone bridge, and retried the
-  iPad xctrace launch twice using `--ios-profile-trust-retry-timeout 10`; the
-  iPad still reported `ios_profile_not_trusted`, so no rotations ran. The
-  required operator step is on the iPad: Settings > General > VPN & Device
-  Management, trust the developer profile for the installed HydraCam build, keep
-  the device unlocked, then rerun `--prime-then-immediate-role-switch
-  --xctrace-ios-launch`. For one-command trust recovery, keep the process open
-  with `--ios-profile-trust-retry-timeout <seconds>` while trusting the profile.
-- For older physical iOS devices that are visible to `xcdevice` but not usable
-  through `devicectl`, the runner now has an explicit `--xctrace-ios-launch`
-  path. `20260607-ipad-xctrace-launch-live-poll` proved xctrace can launch the
+- Physical iPad Profile deployment is now unblocked after the iPad update to
+  iOS 17.7.11. Earlier 2026-06-08 runs
+  `20260608-ipad-profile-install-fallback-warm-prime`,
+  `20260608-ipad-warm-prime-after-default-staged-with-host`, and
+  `20260608-all-selected-trust-retry-short` correctly classified the old blocker
+  as `ios_profile_not_trusted`. The current evidence pack
+  `20260608-0309-ipad-ios17711-profile-compile-deploy-rerun` shows a fresh
+  automation Profile compile passing, `devicectl install app` succeeding for
+  `com.vectorblanco.hydracam.dev`, the installed app exposing
+  `automationTargetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63` at
+  `http://192.168.178.104:4762/healthz`, and post-install Flutter, xctrace, and
+  CoreDevice all seeing the iPad paired/online. The first post-install
+  warm-prime runner returned `ios_warm_bridge_missing` before the bridge was
+  reachable; the follow-up run
+  `20260608-ipad-ios17711-warm-bridge-confirmed` passed with zero missing warm
+  bridges. Do not update the durable latest warm-summary cache from scoped
+  one-device iPad runs; rerun the full selected-set loop before claiming a new
+  six-target rotation benchmark.
+- Historical pre-update iPad notes: when this iPad was still on iOS 15.6.1 and
+  visible to `xcdevice` but not usable through `devicectl`, the runner added an
+  explicit `--xctrace-ios-launch` path.
+  `20260607-ipad-xctrace-launch-live-poll` proved xctrace could launch the
   installed iPad app and pass `HYDRACAM_AUTOMATION_*` environment values, but
   the installed app produced no bridge. After an explicit automation debug iOS
   build and IPA install, `20260607-ipad-explicit-automation-ipa-xctrace` proved
-  the install path works but xctrace reports the current iPad will not launch
-  the app because the signing profile is not explicitly trusted. The runner
-  evidence `20260608-ipad-profile-install-fallback-warm-prime` now automates
-  that path with `--ios-profile-build-install`: it falls back from `devicectl`
-  to IPA packaging plus `flutter install --use-application-binary`, then reports
+  the install path worked but xctrace reported the iOS 15.6.1 app could not
+  launch because the signing profile was not explicitly trusted. The runner
+  evidence `20260608-ipad-profile-install-fallback-warm-prime` automated that
+  path with `--ios-profile-build-install`, falling back from `devicectl` to IPA
+  packaging plus `flutter install --use-application-binary`, then reporting
   `ios_profile_not_trusted` from xctrace instead of hanging in `flutter run`.
-  `devicectl device info details` for the CoreDevice iPad record still reports
-  `pairingState: unsupported`, `tunnelState: unavailable`, and
-  `ddiServicesAvailable: false`, so `devicectl` remains unavailable for this
-  iOS 15.6.1 iPad.
+  Those `devicectl` limitations are no longer current after the iOS 17.7.11
+  deployment rerun.
 
-Next multi-device confidence gaps: keep the warm bridge map current, rerun with
+Next multi-device confidence gaps: keep the warm bridge map current, rerun the
+full selected-set loop now that the iPad iOS 17.7.11 bridge is warm, rerun with
 capture enabled where cameras are expected to work, investigate macOS-as-slave
-media capture, fix the physical iPad xctrace-launch/no-bridge path, and keep
-the iPhone Profile app installed for fast no-tooling launch. Use warm-only mode
-for immediate iteration, warm-prime mode only when intentionally launching or
-refreshing a missing device, and repeated `--expect-target-id` flags whenever
+media capture, and keep the iPhone Profile app installed for fast no-tooling
+launch. Use warm-only mode for immediate iteration, warm-prime mode only when
+intentionally launching or refreshing a missing device, and repeated
+`--expect-target-id` flags whenever
 the run is meant to prove a complete selected-device set.
 
 ## Android Device Support Floor

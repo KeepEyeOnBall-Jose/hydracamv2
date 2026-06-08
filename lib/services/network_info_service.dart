@@ -1,6 +1,8 @@
 import "dart:io";
 import "package:connectivity_plus/connectivity_plus.dart";
+import "package:flutter/foundation.dart";
 import "package:network_info_plus/network_info_plus.dart";
+import "linux_dbus_availability.dart";
 import "log_service.dart";
 
 enum NetworkReadinessBlockingReason {
@@ -143,22 +145,18 @@ class NetworkInfoService {
 
   /// Get the SSID (Wi-Fi network name).
   static Future<String?> getSSID() async {
-    try {
-      final ssid = await _networkInfo.getWifiName();
-      return _normalizeBlank(ssid?.replaceAll("\"", ""));
-    } catch (e) {
-      LogService.instance.registerLog("Error getting SSID: $e");
-      return null; // Return null if unable to get SSID
-    }
+    final ssid = await _safeNetworkInfoPluginCall(
+      "SSID",
+      _networkInfo.getWifiName,
+    );
+    return _normalizeBlank(ssid?.replaceAll("\"", ""));
   }
 
   static Future<String?> getBSSID() async {
-    try {
-      return _normalizeBlank(await _networkInfo.getWifiBSSID());
-    } catch (e) {
-      LogService.instance.registerLog("Error getting BSSID: $e");
-      return null;
-    }
+    return _normalizeBlank(await _safeNetworkInfoPluginCall(
+      "BSSID",
+      _networkInfo.getWifiBSSID,
+    ));
   }
 
   /// Get the IP address of the device.
@@ -168,7 +166,10 @@ class NetworkInfoService {
 
       // Try to get the Wi-Fi IP. On iOS this can be a USB/link-local address,
       // so keep it as a candidate instead of returning it immediately.
-      final wifiIP = await _networkInfo.getWifiIP();
+      final wifiIP = await _safeNetworkInfoPluginCall(
+        "Wi-Fi IP",
+        _networkInfo.getWifiIP,
+      );
       final normalizedWifiIp = _normalizeBlank(wifiIP);
       if (normalizedWifiIp != null && _isUsableIpv4(normalizedWifiIp)) {
         addresses.add(InternetAddress(normalizedWifiIp));
@@ -250,27 +251,23 @@ class NetworkInfoService {
   }
 
   static Future<String?> getSubnetMask() async {
-    try {
-      return _normalizeBlank(await _networkInfo.getWifiSubmask());
-    } catch (e) {
-      LogService.instance.registerLog("Error getting subnet mask: $e");
-      return null;
-    }
+    return _normalizeBlank(await _safeNetworkInfoPluginCall(
+      "subnet mask",
+      _networkInfo.getWifiSubmask,
+    ));
   }
 
   static Future<String?> getGatewayIp() async {
-    try {
-      return _normalizeBlank(await _networkInfo.getWifiGatewayIP());
-    } catch (e) {
-      LogService.instance.registerLog("Error getting gateway IP: $e");
-      return null;
-    }
+    return _normalizeBlank(await _safeNetworkInfoPluginCall(
+      "gateway IP",
+      _networkInfo.getWifiGatewayIP,
+    ));
   }
 
   /// Get the current network type (Wi-Fi or Mobile Data).
   static Future<String> getNetworkType() async {
     try {
-      final connectivityResults = await _connectivity.checkConnectivity();
+      final connectivityResults = await _safeConnectivityResults();
       if (connectivityResults.contains(ConnectivityResult.wifi)) {
         final ssid = await getSSID();
         return formatNetworkType(connectivityResults, ssid: ssid);
@@ -456,11 +453,50 @@ class NetworkInfoService {
   }
 
   static Future<List<ConnectivityResult>> _safeConnectivityResults() async {
+    if (LinuxDbusAvailability.shouldSkipSystemBusPlugins) {
+      LogService.instance.registerLog(
+        "Skipping connectivity plugin on linux because "
+        "${LinuxDbusAvailability.systemBusSocketPath} is unavailable.",
+      );
+      return const [ConnectivityResult.none];
+    }
+
     try {
       return await _connectivity.checkConnectivity();
     } catch (e) {
       LogService.instance.registerLog("Error checking connectivity: $e");
       return const [ConnectivityResult.none];
+    }
+  }
+
+  @visibleForTesting
+  static bool shouldSkipConnectivityPluginForTesting({
+    required bool isLinux,
+    required bool hasSystemBusSocket,
+  }) {
+    return LinuxDbusAvailability.shouldSkipSystemBusPluginsFor(
+      isLinux: isLinux,
+      hasSystemBusSocket: hasSystemBusSocket,
+    );
+  }
+
+  static Future<String?> _safeNetworkInfoPluginCall(
+    String label,
+    Future<String?> Function() load,
+  ) async {
+    if (LinuxDbusAvailability.shouldSkipSystemBusPlugins) {
+      LogService.instance.registerLog(
+        "Skipping network info plugin for $label on linux because "
+        "${LinuxDbusAvailability.systemBusSocketPath} is unavailable.",
+      );
+      return null;
+    }
+
+    try {
+      return await load();
+    } catch (e) {
+      LogService.instance.registerLog("Error getting $label: $e");
+      return null;
     }
   }
 }

@@ -1,0 +1,299 @@
+timestamp=2026-06-08T12:56:55.8061401+02:00
+script=C:\Users\jose\codex-win11-dev-host-full-readiness\win11-wsl-linux-build.sh
+
+=== context ===
+2026-06-08T12:56:58+02:00
+DESKTOP-02NDERS
+jose
+repo=/mnt/d/src/work/hydracamv2
+## master-jose-2025...origin/master-jose-2025
+ M windows/flutter/CMakeLists.txt
+ M windows/runner/flutter_window.cpp
+29e05995df040df5904f3c18bc25c7776cc38733
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd        251G   13G  226G   6% /
+Filesystem      Size  Used Avail Use% Mounted on
+C:\             389G  332G   58G  86% /mnt/c
+D:\             9.1T  7.4T  1.8T  82% /mnt/d
+
+=== flutter doctor ===
+[✓] Flutter (Channel stable, 3.44.1, on Ubuntu 22.04.1 LTS 6.6.114.1-microsoft-standard-WSL2, locale C.UTF-8) [264ms]
+    • Flutter version 3.44.1 on channel stable at /home/jose/development/flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 924134a44c (10 days ago), 2026-05-29 12:13:22 -0400
+    • Engine revision c416acfeb8
+    • Dart version 3.12.1
+    • DevTools version 2.57.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+
+[✗] Android toolchain - develop for Android devices [252ms]
+    ✗ Unable to locate Android SDK.
+      Install Android Studio from: https://developer.android.com/studio/index.html
+      On first launch it will assist you in installing the Android SDK components.
+      (or visit https://flutter.dev/to/linux-android-setup for detailed instructions).
+      If the Android SDK has been installed to a custom location, please use
+      `flutter config --android-sdk` to update to that location.
+
+
+[✗] Chrome - develop for the web (Cannot find Chrome executable at google-chrome) [239ms]
+    ! Cannot find Chrome. Try setting CHROME_EXECUTABLE to a Chrome executable.
+
+[✓] Linux toolchain - develop for Linux desktop [2.5s]
+    • Ubuntu clang version 14.0.0-1ubuntu1.1
+    • cmake version 3.22.1
+    • ninja version 1.10.1
+    • pkg-config version 0.29.2
+    • GL_EXT_framebuffer_blit: no
+    • GL_EXT_texture_format_BGRA8888: no
+
+[✓] Connected device (1 available) [145ms]
+    • Linux (desktop) • linux • linux-x64 • Ubuntu 22.04.1 LTS 6.6.114.1-microsoft-standard-WSL2
+
+[✓] Network resources [283ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 2 categories.
+
+=== enable linux desktop ===
+Setting "enable-linux-desktop" value to "true".
+
+You may need to restart any open editors for them to read new settings.
+
+=== flutter pub get ===
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+59 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+=== flutter build linux debug ===
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+59 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building Linux application...                                   
+✓ Built build/linux/x64/debug/bundle/sport_cam_sync
+
+=== linux binary ===
+-rwxrwxrwx 1 jose jose 45K Jun  8 12:58 /mnt/d/src/work/hydracamv2/build/linux/x64/debug/bundle/sport_cam_sync
+	linux-vdso.so.1 (0x00007ffe4a2f8000)
+	libcamera_desktop_plugin.so => /mnt/d/src/work/hydracamv2/build/linux/x64/debug/bundle/lib/libcamera_desktop_plugin.so (0x000077d7b3499000)
+	libflutter_linux_gtk.so => /mnt/d/src/work/hydracamv2/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so (0x000077d7b0c47000)
+	libgtk-3.so.0 => /lib/x86_64-linux-gnu/libgtk-3.so.0 (0x000077d7b0400000)
+	libgdk-3.so.0 => /lib/x86_64-linux-gnu/libgdk-3.so.0 (0x000077d7b02f9000)
+	libpangocairo-1.0.so.0 => /lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 (0x000077d7b02e7000)
+	libpango-1.0.so.0 => /lib/x86_64-linux-gnu/libpango-1.0.so.0 (0x000077d7b0280000)
+	libharfbuzz.so.0 => /lib/x86_64-linux-gnu/libharfbuzz.so.0 (0x000077d7b01b1000)
+	libatk-1.0.so.0 => /lib/x86_64-linux-gnu/libatk-1.0.so.0 (0x000077d7b0187000)
+	libcairo-gobject.so.2 => /lib/x86_64-linux-gnu/libcairo-gobject.so.2 (0x000077d7b0c2e000)
+	libcairo.so.2 => /lib/x86_64-linux-gnu/libcairo.so.2 (0x000077d7b005f000)
+	libgdk_pixbuf-2.0.so.0 => /lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0 (0x000077d7b002f000)
+	libgio-2.0.so.0 => /lib/x86_64-linux-gnu/libgio-2.0.so.0 (0x000077d7afe54000)
+	libgobject-2.0.so.0 => /lib/x86_64-linux-gnu/libgobject-2.0.so.0 (0x000077d7afdf4000)
+	libglib-2.0.so.0 => /lib/x86_64-linux-gnu/libglib-2.0.so.0 (0x000077d7afcb9000)
+	libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000077d7afa00000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000077d7af919000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000077d7afc99000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000077d7af600000)
+	libgstapp-1.0.so.0 => /lib/x86_64-linux-gnu/libgstapp-1.0.so.0 (0x000077d7afc83000)
+	libgstvideo-1.0.so.0 => /lib/x86_64-linux-gnu/libgstvideo-1.0.so.0 (0x000077d7af854000)
+	libgstbase-1.0.so.0 => /lib/x86_64-linux-gnu/libgstbase-1.0.so.0 (0x000077d7af57b000)
+	libgstreamer-1.0.so.0 => /lib/x86_64-linux-gnu/libgstreamer-1.0.so.0 (0x000077d7af42a000)
+	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x000077d7afc7c000)
+	libepoxy.so.0 => /lib/x86_64-linux-gnu/libepoxy.so.0 (0x000077d7af2f5000)
+	libfontconfig.so.1 => /lib/x86_64-linux-gnu/libfontconfig.so.1 (0x000077d7afc32000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x000077d7afc2d000)
+	/lib64/ld-linux-x86-64.so.2 (0x000077d7b34d7000)
+	libgmodule-2.0.so.0 => /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 (0x000077d7af84d000)
+	libX11.so.6 => /lib/x86_64-linux-gnu/libX11.so.6 (0x000077d7af1b5000)
+	libXi.so.6 => /lib/x86_64-linux-gnu/libXi.so.6 (0x000077d7af837000)
+	libXfixes.so.3 => /lib/x86_64-linux-gnu/libXfixes.so.3 (0x000077d7af82f000)
+	libatk-bridge-2.0.so.0 => /lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0 (0x000077d7af17d000)
+	libfribidi.so.0 => /lib/x86_64-linux-gnu/libfribidi.so.0 (0x000077d7af161000)
+	libpangoft2-1.0.so.0 => /lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 (0x000077d7af146000)
+	libXinerama.so.1 => /lib/x86_64-linux-gnu/libXinerama.so.1 (0x000077d7af141000)
+	libXrandr.so.2 => /lib/x86_64-linux-gnu/libXrandr.so.2 (0x000077d7af134000)
+	libXcursor.so.1 => /lib/x86_64-linux-gnu/libXcursor.so.1 (0x000077d7af128000)
+	libXcomposite.so.1 => /lib/x86_64-linux-gnu/libXcomposite.so.1 (0x000077d7af123000)
+	libXdamage.so.1 => /lib/x86_64-linux-gnu/libXdamage.so.1 (0x000077d7af11e000)
+	libxkbcommon.so.0 => /lib/x86_64-linux-gnu/libxkbcommon.so.0 (0x000077d7af0d7000)
+	libwayland-cursor.so.0 => /lib/x86_64-linux-gnu/libwayland-cursor.so.0 (0x000077d7af0cd000)
+	libwayland-egl.so.1 => /lib/x86_64-linux-gnu/libwayland-egl.so.1 (0x000077d7af0c8000)
+	libwayland-client.so.0 => /lib/x86_64-linux-gnu/libwayland-client.so.0 (0x000077d7af0b7000)
+	libXext.so.6 => /lib/x86_64-linux-gnu/libXext.so.6 (0x000077d7af0a2000)
+	libthai.so.0 => /lib/x86_64-linux-gnu/libthai.so.0 (0x000077d7af097000)
+	libfreetype.so.6 => /lib/x86_64-linux-gnu/libfreetype.so.6 (0x000077d7aefcf000)
+	libgraphite2.so.3 => /lib/x86_64-linux-gnu/libgraphite2.so.3 (0x000077d7aefa8000)
+	libpixman-1.so.0 => /lib/x86_64-linux-gnu/libpixman-1.so.0 (0x000077d7aeefd000)
+	libpng16.so.16 => /lib/x86_64-linux-gnu/libpng16.so.16 (0x000077d7aeec2000)
+	libxcb-shm.so.0 => /lib/x86_64-linux-gnu/libxcb-shm.so.0 (0x000077d7aeebb000)
+	libxcb.so.1 => /lib/x86_64-linux-gnu/libxcb.so.1 (0x000077d7aee91000)
+	libxcb-render.so.0 => /lib/x86_64-linux-gnu/libxcb-render.so.0 (0x000077d7aee82000)
+	libXrender.so.1 => /lib/x86_64-linux-gnu/libXrender.so.1 (0x000077d7aee75000)
+	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000077d7aee59000)
+	libjpeg.so.8 => /lib/x86_64-linux-gnu/libjpeg.so.8 (0x000077d7aedd8000)
+	libmount.so.1 => /lib/x86_64-linux-gnu/libmount.so.1 (0x000077d7aed92000)
+	libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x000077d7aed66000)
+	libffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0x000077d7aed59000)
+	libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x000077d7aece3000)
+	liborc-0.4.so.0 => /lib/x86_64-linux-gnu/liborc-0.4.so.0 (0x000077d7aec5e000)
+	libunwind.so.8 => /lib/x86_64-linux-gnu/libunwind.so.8 (0x000077d7aec41000)
+	libdw.so.1 => /lib/x86_64-linux-gnu/libdw.so.1 (0x000077d7aeb95000)
+	libexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0x000077d7aeb64000)
+	libuuid.so.1 => /lib/x86_64-linux-gnu/libuuid.so.1 (0x000077d7aeb5b000)
+	libdbus-1.so.3 => /lib/x86_64-linux-gnu/libdbus-1.so.3 (0x000077d7aeb0d000)
+	libatspi.so.0 => /lib/x86_64-linux-gnu/libatspi.so.0 (0x000077d7aead1000)
+	libdatrie.so.1 => /lib/x86_64-linux-gnu/libdatrie.so.1 (0x000077d7aeac8000)
+	libbrotlidec.so.1 => /lib/x86_64-linux-gnu/libbrotlidec.so.1 (0x000077d7aeaba000)
+	libXau.so.6 => /lib/x86_64-linux-gnu/libXau.so.6 (0x000077d7aeab4000)
+	libXdmcp.so.6 => /lib/x86_64-linux-gnu/libXdmcp.so.6 (0x000077d7aeaac000)
+	libblkid.so.1 => /lib/x86_64-linux-gnu/libblkid.so.1 (0x000077d7aea73000)
+	libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x000077d7ae9dc000)
+	liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x000077d7ae9b1000)
+	libelf.so.1 => /lib/x86_64-linux-gnu/libelf.so.1 (0x000077d7ae993000)
+	libbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x000077d7ae980000)
+	libsystemd.so.0 => /lib/x86_64-linux-gnu/libsystemd.so.0 (0x000077d7ae8b7000)
+	libbrotlicommon.so.1 => /lib/x86_64-linux-gnu/libbrotlicommon.so.1 (0x000077d7ae894000)
+	libbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0x000077d7ae87c000)
+	libzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x000077d7ae7ad000)
+	liblz4.so.1 => /lib/x86_64-linux-gnu/liblz4.so.1 (0x000077d7ae78d000)
+	libcap.so.2 => /lib/x86_64-linux-gnu/libcap.so.2 (0x000077d7ae780000)
+	libgcrypt.so.20 => /lib/x86_64-linux-gnu/libgcrypt.so.20 (0x000077d7ae642000)
+	libmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0x000077d7ae635000)
+	libgpg-error.so.0 => /lib/x86_64-linux-gnu/libgpg-error.so.0 (0x000077d7ae60f000)
+DISPLAY=:0
+WAYLAND_DISPLAY=wayland-0
+The Dart VM service is listening on http://127.0.0.1:37769/SGCOLheJ1NE=/
+Log registered: {message: Uncaught zone error: MissingPluginException(No implementation found for method requestPermissions on channel flutter.baseflow.com/permissions/methods)
+#0      MethodChannel._invokeMethod (package:flutter/src/services/platform_channel.dart:364:7)
+<asynchronous suspension>
+#1      MethodChannelPermissionHandler.requestPermissions (package:permission_handler_platform_interface/src/method_channel/method_channel_permission_handler.dart:80:9)
+<asynchronous suspension>
+#2      PermissionService.requestAllPermissions (package:hydracam/services/permission_service.dart:26:22)
+<asynchronous suspension>
+#3      main.<anonymous closure> (package:hydracam/main.dart:49:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 12:58:33.319636, function: null, file: null}
+binary_run_exit=124
+
+=== done ===
+wsl_linux_build_exit_code=0

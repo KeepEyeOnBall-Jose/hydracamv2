@@ -1,0 +1,350 @@
+diff --git a/lib/services/permission_service.dart b/lib/services/permission_service.dart
+index d7f3b08..cadd487 100755
+--- a/lib/services/permission_service.dart
++++ b/lib/services/permission_service.dart
+@@ -4,8 +4,13 @@ import "package:permission_handler/permission_handler.dart"
+     as permission_handler;
+ import "log_service.dart";
+ 
++typedef PermissionRequester = Future<Map<Permission, PermissionStatus>>
++    Function(List<Permission> permissions);
++
+ // ignore: avoid_classes_with_only_static_members
+ class PermissionService {
++  static PermissionRequester _requestPermissions = _defaultRequestPermissions;
++
+   /// Requests the permissions required for initial app use.
+   static Future<bool> requestAllPermissions() async {
+     if (_usesNativeResourcePrompts) {
+@@ -18,12 +23,9 @@ class PermissionService {
+       return true;
+     }
+ 
+-    final permissions = <Permission>[
+-      Permission.camera,
+-      Permission.microphone,
+-    ];
++    final permissions = _startupPermissionsFor(defaultTargetPlatform);
+ 
+-    final statuses = await permissions.request();
++    final statuses = await _requestPermissions(permissions);
+     final grantedPermissions = statuses.entries
+         .where((entry) => entry.value.isGranted)
+         .map((entry) => entry.key.toString())
+@@ -47,7 +49,34 @@ class PermissionService {
+     return statuses.values.every((status) => status.isGranted);
+   }
+ 
++  static List<Permission> _startupPermissionsFor(TargetPlatform platform) {
++    return [
++      Permission.camera,
++      Permission.microphone,
++      if (platform == TargetPlatform.android) Permission.locationWhenInUse,
++    ];
++  }
++
++  static Future<Map<Permission, PermissionStatus>> _defaultRequestPermissions(
++    List<Permission> permissions,
++  ) {
++    return permissions.request();
++  }
++
++  @visibleForTesting
++  static void configurePermissionRequesterForTesting(
++    PermissionRequester requester,
++  ) {
++    _requestPermissions = requester;
++  }
++
++  @visibleForTesting
++  static void resetPermissionRequesterForTesting() {
++    _requestPermissions = _defaultRequestPermissions;
++  }
++
+   static bool get _usesNativeResourcePrompts =>
++      defaultTargetPlatform == TargetPlatform.linux ||
+       defaultTargetPlatform == TargetPlatform.macOS;
+ 
+   /// Opens the app settings page.
+diff --git a/lib/slave/slave_screen.dart b/lib/slave/slave_screen.dart
+index 79f8bc0..2f0df14 100755
+--- a/lib/slave/slave_screen.dart
++++ b/lib/slave/slave_screen.dart
+@@ -21,18 +21,34 @@ import "../widgets/media_list_widget.dart";
+ import "../widgets/session_info_widget.dart";
+ import "../master/master_screen.dart";
+ 
++typedef NetworkReadinessLoader = Future<NetworkReadinessResult> Function();
++
++typedef SlaveConnectionClientFactory = SlaveConnectionClient Function(
++  String serverAddress, {
++  Function(String command, DateTime scheduledTime)? onScheduledCommand,
++  Function(String path)? onPhotoTaken,
++  VoidCallback? onRecordingStarted,
++  VoidCallback? onRecordingStopped,
++});
++
+ class SlaveScreen extends StatefulWidget {
+   // Mode that controls if we entered here manually or on app init.
+   // If is auto mode, after some time without finding master will move automatically to master screen
+   final bool isAutoMode;
+   final String? preferredMasterIp;
+   final bool forceSlaveMode;
++  final NetworkReadinessLoader? networkReadinessLoader;
++  final SlaveConnectionClientFactory? slaveClientFactory;
++  final Stream<List<ConnectivityResult>>? connectivityChanges;
+ 
+   const SlaveScreen({
+     super.key,
+     this.isAutoMode = false,
+     this.preferredMasterIp,
+     this.forceSlaveMode = false,
++    @visibleForTesting this.networkReadinessLoader,
++    @visibleForTesting this.slaveClientFactory,
++    @visibleForTesting this.connectivityChanges,
+   }); // Default is manual mode
+ 
+   @override
+@@ -40,7 +56,7 @@ class SlaveScreen extends StatefulWidget {
+ }
+ 
+ class SlaveScreenState extends State<SlaveScreen> {
+-  SlaveClient? _client;
++  SlaveConnectionClient? _client;
+   StreamSubscription<String>?
+       _statusSubscription; // Subscription to listen to status updates
+   StreamSubscription<bool>?
+@@ -75,9 +91,19 @@ class SlaveScreenState extends State<SlaveScreen> {
+     _masterDiscovery = MasterDiscovery(onMasterDiscovered: _connectToMaster);
+ 
+     _networkSubscription =
+-        NetworkInfoService.connectivityChanges.listen((_) async {
+-      await _startNetworkAwareDiscovery();
+-    });
++        (widget.connectivityChanges ?? NetworkInfoService.connectivityChanges)
++            .listen(
++      (_) async {
++        await _startNetworkAwareDiscovery();
++      },
++      onError: (Object error, StackTrace stackTrace) {
++        LogService.instance.registerError(
++          "Connectivity change listener failed",
++          error,
++          stackTrace,
++        );
++      },
++    );
+     _startNetworkAwareDiscovery();
+ 
+     // Add listener
+@@ -89,11 +115,26 @@ class SlaveScreenState extends State<SlaveScreen> {
+   }
+ 
+   Future<void> _startNetworkAwareDiscovery() async {
++    if (!mounted) {
++      return;
++    }
+     if (_isCheckingNetwork) {
+       return;
+     }
+ 
+     _isCheckingNetwork = true;
++    if (_shouldFastConnectToPreferredMaster) {
++      try {
++        await _connectToMaster(
++          widget.preferredMasterIp!,
++          skipNetworkReadiness: true,
++        );
++      } finally {
++        _isCheckingNetwork = false;
++      }
++      return;
++    }
++
+     if (mounted && !_isConnected) {
+       setState(() {
+         statusMessage = "Checking Wi-Fi and local network...";
+@@ -101,10 +142,7 @@ class SlaveScreenState extends State<SlaveScreen> {
+     }
+ 
+     try {
+-      final snapshot = await NetworkInfoService.getCurrentSnapshot();
+-      final readiness = NetworkInfoService.evaluateLocalControlReadiness(
+-        snapshot,
+-      );
++      final readiness = await _loadNetworkReadiness();
+       _networkReadiness = readiness;
+ 
+       if (!readiness.canUseLocalControl) {
+@@ -152,6 +190,36 @@ class SlaveScreenState extends State<SlaveScreen> {
+     }
+   }
+ 
++  bool get _shouldFastConnectToPreferredMaster =>
++      widget.forceSlaveMode && widget.preferredMasterIp != null;
++
++  Future<NetworkReadinessResult> _loadNetworkReadiness() async {
++    final loader = widget.networkReadinessLoader;
++    if (loader != null) {
++      return loader();
++    }
++    final snapshot = await NetworkInfoService.getCurrentSnapshot();
++    return NetworkInfoService.evaluateLocalControlReadiness(
++      snapshot,
++    );
++  }
++
++  SlaveConnectionClient _createSlaveClient(
++    String serverAddress, {
++    Function(String command, DateTime scheduledTime)? onScheduledCommand,
++    Function(String path)? onPhotoTaken,
++    VoidCallback? onRecordingStarted,
++    VoidCallback? onRecordingStopped,
++  }) {
++    return SlaveClient(
++      serverAddress,
++      onScheduledCommand: onScheduledCommand,
++      onPhotoTaken: onPhotoTaken,
++      onRecordingStarted: onRecordingStarted,
++      onRecordingStopped: onRecordingStopped,
++    );
++  }
++
+   void _scheduleAutoPromoteIfNeeded() {
+     final bool shouldAutoPromote = widget.isAutoMode &&
+         !widget.forceSlaveMode &&
+@@ -169,21 +237,29 @@ class SlaveScreenState extends State<SlaveScreen> {
+     });
+   }
+ 
+-  Future<void> _connectToMaster(String masterIp) async {
+-    final snapshot = await NetworkInfoService.getCurrentSnapshot();
+-    final readiness = NetworkInfoService.evaluateLocalControlReadiness(
+-      snapshot,
+-    );
+-    _networkReadiness = readiness;
+-    if (!readiness.canUseLocalControl) {
+-      if (mounted) {
+-        setState(() {
+-          statusMessage = readiness.message;
+-        });
++  Future<void> _connectToMaster(
++    String masterIp, {
++    bool skipNetworkReadiness = false,
++  }) async {
++    if (!mounted) {
++      return;
++    }
++    if (!skipNetworkReadiness) {
++      final readiness = await _loadNetworkReadiness();
++      _networkReadiness = readiness;
++      if (!readiness.canUseLocalControl) {
++        if (mounted) {
++          setState(() {
++            statusMessage = readiness.message;
++          });
++        }
++        LogService.instance.registerLog(
++            "Connection to master blocked by network readiness: ${readiness.message}");
++        return;
+       }
++    } else {
+       LogService.instance.registerLog(
+-          "Connection to master blocked by network readiness: ${readiness.message}");
+-      return;
++          "Skipping slave network readiness for forced preferred master $masterIp.");
+     }
+ 
+     LogService.instance.registerLog("Connecting to master at IP: $masterIp");
+@@ -192,7 +268,8 @@ class SlaveScreenState extends State<SlaveScreen> {
+     _connectionStatusSubscription?.cancel();
+     _client?.disconnect();
+ 
+-    _client = SlaveClient(
++    final clientFactory = widget.slaveClientFactory ?? _createSlaveClient;
++    _client = clientFactory(
+       "ws://$masterIp:4040/ws",
+       onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
+       onPhotoTaken: (path) async {
+@@ -239,6 +316,9 @@ class SlaveScreenState extends State<SlaveScreen> {
+       }
+ 
+       if (!isConnected) {
++        if (!mounted) {
++          return;
++        }
+         LogService.instance
+             .registerLog("Connection lost. Restarting discovery.");
+         _client?.disconnect();
+diff --git a/test/services/permission_service_test.dart b/test/services/permission_service_test.dart
+index 3fc96b5..630c334 100644
+--- a/test/services/permission_service_test.dart
++++ b/test/services/permission_service_test.dart
+@@ -3,6 +3,7 @@ import "dart:io";
+ import "package:flutter/foundation.dart";
+ import "package:flutter_test/flutter_test.dart";
+ import "package:hydracam/services/permission_service.dart";
++import "package:permission_handler/permission_handler.dart";
+ // ignore: depend_on_referenced_packages
+ import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
+ 
+@@ -17,6 +18,7 @@ void main() {
+ 
+   tearDown(() {
+     debugDefaultTargetPlatformOverride = null;
++    PermissionService.resetPermissionRequesterForTesting();
+   });
+ 
+   tearDownAll(() {
+@@ -32,11 +34,51 @@ void main() {
+     expect(granted, isTrue);
+   });
+ 
++  test("requestAllPermissions skips unsupported Linux permission handler",
++      () async {
++    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
++
++    final bool granted = await PermissionService.requestAllPermissions();
++
++    expect(granted, isTrue);
++  });
++
++  test("requestAllPermissions requests location immediately on Android",
++      () async {
++    debugDefaultTargetPlatformOverride = TargetPlatform.android;
++    final requestedPermissions = <Permission>[];
++    PermissionService.configurePermissionRequesterForTesting((permissions) {
++      requestedPermissions.addAll(permissions);
++      return Future.value({
++        for (final permission in permissions)
++          permission: PermissionStatus.granted,
++      });
++    });
++
++    final bool granted = await PermissionService.requestAllPermissions();
++
++    expect(granted, isTrue);
++    expect(
++      requestedPermissions,
++      containsAll([
++        Permission.camera,
++        Permission.microphone,
++        Permission.locationWhenInUse,
++      ]),
++    );
++  });
++
+   test("openAppSettings skips unsupported macOS permission handler", () async {
+     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+ 
+     await expectLater(PermissionService.openAppSettings(), completes);
+   });
++
++  test("openAppSettings skips unsupported Linux permission handler", () async {
++    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
++
++    await expectLater(PermissionService.openAppSettings(), completes);
++  });
+ }
+ 
+ class _TestPathProviderPlatform extends PathProviderPlatform {

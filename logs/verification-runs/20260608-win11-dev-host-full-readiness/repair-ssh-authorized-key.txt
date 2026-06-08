@@ -1,0 +1,38 @@
+
+=== identity ===
+whoami=desktop-02nders\jose
+sid=*S-1-5-21-2260010141-1027787345-428171064-1001
+
+=== user-authorized-keys ===
+archivo procesado: C:\Users\jose\.ssh
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+archivo procesado: C:\Users\jose\.ssh
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+archivo procesado: C:\Users\jose\.ssh\authorized_keys
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+archivo procesado: C:\Users\jose\.ssh\authorized_keys
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+user_auth=C:\Users\jose\.ssh\authorized_keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJyaZaM3VqO349vKpcy6kQx9P83wvxKoa76GfSzQ3b0R codex-client-2026-06-07
+
+=== administrators-authorized-keys ===
+archivo procesado: C:\ProgramData\ssh\administrators_authorized_keys
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+archivo procesado: C:\ProgramData\ssh\administrators_authorized_keys
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+admin_auth=C:\ProgramData\ssh\administrators_authorized_keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJyaZaM3VqO349vKpcy6kQx9P83wvxKoa76GfSzQ3b0R codex-client-2026-06-07
+
+=== sshd-config-relevant ===
+
+#PubkeyAuthentication yes
+AuthorizedKeysFile	.ssh/authorized_keys
+#Match User anoncvs
+Match Group administrators
+       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+
+=== restart ===
+"Status","Name","StartType"
+"Running","sshd","Automatic"
+
+

@@ -3,6 +3,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/widgets/session_info_widget.dart";
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   testWidgets("does not reload network info during parent rebuilds",
       (WidgetTester tester) async {
     var loadCount = 0;
@@ -46,5 +48,37 @@ void main() {
       findsOneWidget,
     );
     expect(loadCount, 1);
+  });
+
+  testWidgets("long session and network labels fit narrow desktop panes",
+      (WidgetTester tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+    await tester.binding.setSurfaceSize(const Size(260, 220));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 180,
+            child: SessionInfoWidget(
+              sessionDisplay:
+                  "session-20260608-wsl-linux-clean-build-after-dbus-guards",
+              networkInfoLoader: () async => {
+                "networkType":
+                    "Wi-Fi (enable location for SSID and DBus system bus)",
+                "ip": "172.23.68.143",
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
   });
 }

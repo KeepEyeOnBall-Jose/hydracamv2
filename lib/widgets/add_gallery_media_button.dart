@@ -228,12 +228,21 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
   Widget build(BuildContext context) {
     final bool sessionActive = SessionManager.instance.isSessionActive;
     final bool isButtonEnabled = widget.enabled && sessionActive;
-    return ElevatedButton(
-      onPressed: isButtonEnabled ? _onPressed : null,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isButtonEnabled ? null : AppTheme.disabledButtonColor,
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: isButtonEnabled ? _onPressed : null,
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              isButtonEnabled ? null : AppTheme.disabledButtonColor,
+        ),
+        child: const Text(
+          "Add Media from Gallery",
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+        ),
       ),
-      child: const Text("Add Media from Gallery"),
     );
   }
 }

@@ -76,6 +76,7 @@ class PermissionService {
   }
 
   static bool get _usesNativeResourcePrompts =>
+      defaultTargetPlatform == TargetPlatform.linux ||
       defaultTargetPlatform == TargetPlatform.macOS;
 
   /// Opens the app settings page.

@@ -34,6 +34,15 @@ void main() {
     expect(granted, isTrue);
   });
 
+  test("requestAllPermissions skips unsupported Linux permission handler",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+
+    final bool granted = await PermissionService.requestAllPermissions();
+
+    expect(granted, isTrue);
+  });
+
   test("requestAllPermissions requests location immediately on Android",
       () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
@@ -61,6 +70,12 @@ void main() {
 
   test("openAppSettings skips unsupported macOS permission handler", () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+
+    await expectLater(PermissionService.openAppSettings(), completes);
+  });
+
+  test("openAppSettings skips unsupported Linux permission handler", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
 
     await expectLater(PermissionService.openAppSettings(), completes);
   });

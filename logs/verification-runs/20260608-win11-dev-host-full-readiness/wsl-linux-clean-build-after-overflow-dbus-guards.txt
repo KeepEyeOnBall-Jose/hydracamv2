@@ -1,0 +1,154 @@
+timestamp=2026-06-08T14:05:35.9909525+02:00
+script=/mnt/c/Users/jose/codex-win11-dev-host-full-readiness/win11-wsl-linux-clean-build.sh
+
+=== context ===
+2026-06-08T14:05:38+02:00
+DESKTOP-02NDERS
+jose
+repo=/mnt/d/src/work/hydracamv2
+## master-jose-2025...origin/master-jose-2025
+ M android/app/build.gradle
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M lib/automation/automation_bridge.dart
+ M lib/automation/automation_config.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/services/battery_service.dart
+ M lib/services/device_service.dart
+ M lib/services/launch_config_service.dart
+ M lib/services/network_info_service.dart
+ M lib/services/permission_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/session_info_widget.dart
+ M test/automation/automation_config_test.dart
+ M test/automation/runtime_role_switch_test.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/permission_service_test.dart
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd        251G   13G  226G   6% /
+Filesystem      Size  Used Avail Use% Mounted on
+C:\             389G  331G   58G  86% /mnt/c
+D:\             9.1T  7.4T  1.8T  82% /mnt/d
+
+=== flutter clean ===
+Deleting build...                                                  237ms
+Deleting .dart_tool...                                              56ms
+Deleting ephemeral...                                               31ms
+Deleting Generated.xcconfig...                                       4ms
+Deleting flutter_export_environment.sh...                            3ms
+Deleting ephemeral...                                               72ms
+Deleting ephemeral...                                               31ms
+Deleting ephemeral...                                               24ms
+Deleting .flutter-plugins-dependencies...                            2ms
+
+=== flutter pub get ===
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+59 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+=== flutter build linux debug ===
+Building Linux application...                                   
+✓ Built build/linux/x64/debug/bundle/sport_cam_sync
+
+=== linux binary smoke ===
+-rwxrwxrwx 1 jose jose 45K Jun  8 14:06 /mnt/d/src/work/hydracamv2/build/linux/x64/debug/bundle/sport_cam_sync
+DISPLAY=:0
+WAYLAND_DISPLAY=wayland-0
+The Dart VM service is listening on http://127.0.0.1:39457/E5sB2-eZIm4=/
+Log registered: {message: Skipping wakelock on linux because no DBus session bus is available (startup)., timestamp: 2026-06-08 14:06:35.964415, function: null, file: null}
+Log registered: {message: Skipping permission_handler startup request on linux; native platform APIs will request resource access on demand., timestamp: 2026-06-08 14:06:36.002567, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 8dff7d95-c299-47a6-93d7-7affafa3f1a5, timestamp: 2026-06-08 14:06:36.035042, function: null, file: null}
+Log registered: {message: Device ID: 8dff7d95-c299-47a6-93d7-7affafa3f1a5, timestamp: 2026-06-08 14:06:36.035283, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-08 14:06:36.037639, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-08 14:06:36.041721, function: null, file: null}
+Log registered: {message: Skipping wakelock on linux because no DBus session bus is available (app init)., timestamp: 2026-06-08 14:06:36.112707, function: null, file: null}
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, forceSlave=false, timestamp: 2026-06-08 14:06:36.380774, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-08 14:06:36.381069, function: null, file: null}
+Log registered: {message: Skipping connectivity change listener on linux; network readiness will be checked on demand., timestamp: 2026-06-08 14:06:36.382824, function: null, file: null}
+Log registered: {message: Skipping connectivity plugin on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:36.384574, function: null, file: null}
+Log registered: {message: Skipping connectivity plugin on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:36.441474, function: null, file: null}
+Log registered: {message: Skipping network info plugin for SSID on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:36.676469, function: null, file: null}
+Log registered: {message: Skipping network info plugin for Wi-Fi IP on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:36.677588, function: null, file: null}
+Log registered: {message: Skipping network info plugin for BSSID on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:36.681127, function: null, file: null}
+Log registered: {message: Skipping network info plugin for Wi-Fi IP on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:36.681831, function: null, file: null}
+Log registered: {message: Flutter framework error: A RenderFlex overflowed by 39 pixels on the right.
+null, timestamp: 2026-06-08 14:06:36.924414, function: null, file: null}
+Log registered: {message: BatteryService monitoring skipped on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:37.020449, function: null, file: null}
+Log registered: {message: Skipping network info plugin for subnet mask on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:37.143687, function: null, file: null}
+Log registered: {message: Skipping network info plugin for gateway IP on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:37.144059, function: null, file: null}
+Log registered: {message: Slave network readiness blocked: Wi-Fi is not ready. Enable Wi-Fi and join the HydraCam LAN., timestamp: 2026-06-08 14:06:37.145993, function: null, file: null}
+Log registered: {message: Skipping wakelock on linux because no DBus session bus is available (app resumed)., timestamp: 2026-06-08 14:06:37.150298, function: null, file: null}
+Log registered: {message: Skipping connectivity plugin on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:37.180848, function: null, file: null}
+Log registered: {message: Skipping network info plugin for Wi-Fi IP on linux because /var/run/dbus/system_bus_socket is unavailable., timestamp: 2026-06-08 14:06:37.254998, function: null, file: null}
+binary_run_exit=124
+
+=== done ===
+wsl_linux_clean_build_exit_code=0

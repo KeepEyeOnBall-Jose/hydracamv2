@@ -16,6 +16,7 @@ import "services/camera_service_singleton.dart";
 import "services/device_id_provider.dart";
 import "services/device_service.dart";
 import "services/launch_config_service.dart";
+import "services/linux_dbus_availability.dart";
 import "services/log_service.dart";
 import "services/permission_service.dart";
 import "services/storage_service.dart";
@@ -27,9 +28,8 @@ void main() {
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);
-      LogService.instance.registerLog(
-          "Flutter framework error: ${details.exceptionAsString()}\n"
-          "${details.stack}");
+      LogService.instance
+          .registerLog("Flutter framework error: ${details.toString()}");
     };
 
     PlatformDispatcher.instance.onError = (error, stackTrace) {
@@ -94,6 +94,14 @@ void main() {
 }
 
 Future<void> _enableScreenWakeLock(String reason) async {
+  if (LinuxDbusAvailability.shouldSkipSessionBusPlugins) {
+    LogService.instance.registerLog(
+      "Skipping wakelock on linux because no DBus session bus is available "
+      "($reason).",
+    );
+    return;
+  }
+
   try {
     await WakelockPlus.enable();
     LogService.instance.registerLog(

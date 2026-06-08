@@ -90,13 +90,16 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   unavailable. A later 2026-06-07 iPhone Profile automation build installed and
   launched without Flutter tooling, exposing an identity-matched bridge at
   `192.168.178.168:4762` for hot role-switch runs. The latest 2026-06-08 iPad
-  Profile warm-prime attempt
-  `20260608-ipad-warm-prime-after-default-staged-with-host` packaged the
-  Profile `Runner.app` into an IPA, installed it with
-  `flutter install --use-application-binary`, retried launch twice, then
-  xctrace classified the remaining blocker as `ios_profile_not_trusted`; trust
-  the developer profile on the iPad before expecting it to join no-tooling hot
-  role-switch runs. The
+  iOS 17.7.11 Profile deployment rerun
+  `20260608-0309-ipad-ios17711-profile-compile-deploy-rerun` compiled the
+  automation Profile app, installed `com.vectorblanco.hydracam.dev` through
+  `devicectl install app`, restored Flutter/xctrace/CoreDevice visibility with
+  the iPad paired and online, and confirmed the iPad automation bridge at
+  `192.168.178.104:4762` with the expected
+  `automationTargetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63`. The follow-up
+  warm-prime confirmation `20260608-ipad-ios17711-warm-bridge-confirmed`
+  passed with zero missing warm bridges; rerun the full selected-set loop before
+  claiming a new six-target role-switch benchmark. The
   prior broad "white screen" blocker is superseded; keep validating the
   foreground release/user lane, signing, two-device capture flows, and native
   metadata before production claims.
@@ -177,6 +180,9 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   If xctrace reports `ios_profile_not_trusted`, the remaining step is on the
   device: Settings > General > VPN & Device Management, trust the developer
   profile, keep the device unlocked, and rerun the warm-prime/immediate command.
+  The current iPad iOS 17.7.11 evidence is past that blocker; if `/healthz`
+  still reports the expected iPad `automationTargetId`, prefer an immediate
+  selected-set rerun over another scoped trust-retry run.
   To avoid restarting the command while doing that device-side step, add
   `--ios-profile-trust-retry-timeout <seconds>` to a warm-prime or
   prime-then-immediate run; the runner will retry the missing physical iOS

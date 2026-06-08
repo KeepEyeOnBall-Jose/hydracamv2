@@ -1,0 +1,309 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 7 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                     • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)            • 9885e6503930304946                   • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M90QE7LX                          • android-arm64  • Android 12 (API 31)
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E            • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                               • web-javascript • Google Chrome 148.0.7778.216
+
+Error: iPad (5) is not available because it is unpaired. Pair with the device in the Xcode Devices Window, and respond to any pairing prompts on the device. (code -29)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+
+== Devices Offline ==
+iPad (5) (17.7.11) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619
+Gathering device information…
+WARNING: Unable to retrieve complete information for this device. The best available information will be returned.
+         Error: The device must be paired before it can be connected.
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags: 
+▿ hardwareProperties:
+    • cpuType: arm64 (type: 16777228, subtype: 0)
+    • deviceType: iPad
+    • ecid: 4003463842304166
+    • hardwareModel: J71bAP
+    • platform: iOS
+    • productType: iPad7,5
+    ▿ supportedCPUTypes:
+        • arm64 (type: 16777228, subtype: 0)
+        • unknown-12-13 (type: 12, subtype: 13)
+    • supportedDeviceFamilies: [1, 2]
+    • udid: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: false
+    • name: iPad (5)
+    • osBuildUpdate: 21H461
+    • osVersionNumber: 17.7.11
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+▿ connectionProperties:
+    • isMobileDeviceOnly: false
+    ▿ potentialHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    • pairingState: unpaired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelState: disconnected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Initiate Pairing (com.apple.coredevice.feature.inititatepairing)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+• visibilityClass: default
+[exit-code] 0
+
+$ xcrun devicectl manage pair --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 60
+
+[stderr]
+ERROR: The user chose not to pair with this device. (com.apple.dt.CoreDeviceError error 4003 (0xFA3))
+       ----------------------------------------
+           The device rejected the request to pair. (com.apple.dt.RemotePairingError error 1003 (0x3EB))
+[exit-code] 1
+
+$ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Building com.vectorblanco.hydracam.dev for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 8T78Y2X37H
+Running Xcode build...                                          
+Xcode build done.                                           33.8s
+✓ Built build/ios/iphoneos/Runner.app (29.3MB)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-summary logs/verification-runs/20260608-ipad-warm-prime-after-default-staged-with-host/warm-bridge-prime.json --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104 --warm-prime-only --ios-profile-build-install --xctrace-ios-launch --ios-profile-trust-retry-timeout 20 --ios-profile-trust-retry-interval 5 --no-update-latest-warm-summary --run-dir logs/verification-runs/20260608-ipad-ios17711-profile-build-install-warm-prime
++ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Building com.vectorblanco.hydracam.dev for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 8T78Y2X37H
+Running Xcode build...                                          
+Xcode build done.                                            8.1s
+✓ Built build/ios/iphoneos/Runner.app (29.3MB)
++ xcrun devicectl device install app --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 /Users/jose/src/work/hydracamv2/build/ios/iphoneos/Runner.app --json-output logs/verification-runs/20260608-ipad-ios17711-profile-build-install-warm-prime/ios-profile-install/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/devicectl-install.json
+logs/verification-runs/20260608-ipad-ios17711-profile-build-install-warm-prime
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 1
+
+$ curl --connect-timeout 2 --max-time 5 -sS http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["set_role"]}
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-summary logs/verification-runs/20260608-ipad-warm-prime-after-default-staged-with-host/warm-bridge-prime.json --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104 --warm-prime-only --xctrace-ios-launch --standby-launch-timeout 20 --no-update-latest-warm-summary --run-dir logs/verification-runs/20260608-ipad-ios17711-warm-bridge-confirmed
+logs/verification-runs/20260608-ipad-ios17711-warm-bridge-confirmed
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 8 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+iPad (5) (17.7.11) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619
+Gathering device information…
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags: 
+▿ hardwareProperties:
+    • cpuType: arm64 (type: 16777228, subtype: 0)
+    • deviceType: iPad
+    • ecid: 4003463842304166
+    • hardwareModel: J71bAP
+    • internalStorageCapacity: 32000000000
+    • isProductionFused: true
+    • marketingName: iPad (6th generation) (Model A1893)
+    • platform: iOS
+    • productType: iPad7,5
+    • reality: physical
+    • serialNumber: DMPW528HJF8K
+    ▿ supportedCPUTypes:
+        • arm64 (type: 16777228, subtype: 0)
+        • unknown-12-13 (type: 12, subtype: 13)
+    • supportedDeviceFamilies: [1, 2]
+    • thinningProductType: iPad7,5
+    • udid: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: true
+    • developerModeStatus: enabled
+    • hasInternalOSBuild: false
+    • name: iPad (5)
+    • osBuildUpdate: 21H461
+    • osVersionNumber: 17.7.11
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+    • rootFileSystemIsWritable: false
+    • bootedFromSnapshot: true
+    • bootedSnapshotName: com.apple.os.update-87253FEA1A5E1C6202739DA5112B7F7F03A085FE06EEA031E7CF9B829F4E11AE
+    • supportsCheckedAllocations: false
+▿ connectionProperties:
+    • authenticationType: manualPairing
+    • isMobileDeviceOnly: false
+    • lastConnectionDate: 2026-06-08 01:14:00 +0000
+    ▿ localHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    ▿ potentialHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    • pairingState: paired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelIPAddress: fd44:6b25:5738::1
+    • tunnelState: connected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Application Control (com.apple.coredevice.feature.applicationcontrol)
+    • Capture Sysdiagnose (com.apple.coredevice.feature.capturesysdiagnose)
+    • Create Service Connection (com.apple.dt.serviceconnection.create)
+    • Create Service Socket (com.apple.dt.servicesocket.create)
+    • Disable Developer Disk Image Services (com.apple.coredevice.feature.disableddiservices)
+    • Disconnect from Device (com.apple.coredevice.feature.disconnectdevice)
+    • Fetch Application Icons (com.apple.coredevice.feature.fetchappicons)
+    • Fetch AuthListing Identifiers (com.apple.coredevice.feature.getauthlistingidentifiers)
+    • Fetch Developer Disk Image Services Metadata (com.apple.coredevice.feature.fetchddimetadata)
+    • Fetch Extended Device Info (com.apple.coredevice.feature.getdeviceinfo)
+    • Get Display Information (com.apple.coredevice.feature.getdisplayinfo)
+    • Get Lock State (com.apple.coredevice.feature.getlockstate)
+    • Install Application (com.apple.coredevice.feature.installapp)
+    • Install Root (com.apple.coredevice.feature.installroot)
+    • Launch Application (com.apple.coredevice.feature.launchapplication)
+    • List Files (com.apple.coredevice.feature.listFiles)
+    • List Roots (com.apple.coredevice.feature.listroots)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+    • Monitor Process for Termination (com.apple.coredevice.feature.monitorprocesstermination)
+    • Post Darwin Notification (com.apple.dt.customer.postdarwinnotification)
+    • Process Control (com.apple.coredevice.feature.processcontrol)
+    • Query MobileGestalt (com.apple.coredevice.feature.querymobilegestalt)
+    • Reboot Device (com.apple.coredevice.feature.rebootdevice)
+    • Send Memory Warning to Process (com.apple.coredevice.feature.sendmemorywarningtoprocess)
+    • Send Signal to Process (com.apple.coredevice.feature.sendsignaltoprocess)
+    • Service Hub Profile (com.apple.dt.profile)
+    • Spawn Executable (com.apple.coredevice.feature.spawnexecutable)
+    • Stream Application List (com.apple.coredevice.feature.streamapplist)
+    • Stream Process List (com.apple.coredevice.feature.streamprocesslist)
+    • Transfer Files (com.apple.coredevice.feature.transferFiles)
+    • Uninstall Application (com.apple.coredevice.feature.uninstallapp)
+    • Uninstall Root (com.apple.coredevice.feature.uninstallroot)
+    • Unpair Device (com.apple.coredevice.feature.unpairdevice)
+• visibilityClass: default
+[exit-code] 0

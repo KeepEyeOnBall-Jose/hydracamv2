@@ -268,3 +268,256 @@ $ mv /Users/jose/Library/Android/sdk/ndk/28.2.13676358 /Users/jose/Library/Andro
 [exit-code] 0
 
 $ /Users/jose/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --install ndk;28.2.13676358
+
+[exit-code] 0
+
+$ test -f /Users/jose/Library/Android/sdk/ndk/28.2.13676358/source.properties
+[exit-code] 0
+
+$ cat /Users/jose/Library/Android/sdk/ndk/28.2.13676358/source.properties
+Pkg.Desc = Android NDK
+Pkg.Revision = 28.2.13676358
+Pkg.BaseRevision = 28.2.13676358
+Pkg.ReleaseName = r28c
+[exit-code] 0
+
+$ flutter build apk --debug
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             27.5s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ ls -lh build/app/outputs/flutter-apk/app-debug.apk
+-rw-r--r--@ 1 jose  staff   191M Jun  8 03:16 build/app/outputs/flutter-apk/app-debug.apk
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece logcat -c
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 logcat -c
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX logcat -c
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell monkey -p com.amaia23.hydracam 1
+  bash arg: -p
+  bash arg: com.amaia23.hydracam
+  bash arg: 1
+Events injected: 1
+## Network stats: elapsed time=101ms (0ms mobile, 0ms wifi, 101ms not connected)
+
+[stderr]
+args: [-p, com.amaia23.hydracam, 1]
+ arg: "-p"
+ arg: "com.amaia23.hydracam"
+ arg: "1"
+data="com.amaia23.hydracam"
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell monkey -p com.amaia23.hydracam 1
+  bash arg: -p
+  bash arg: com.amaia23.hydracam
+  bash arg: 1
+Events injected: 1
+## Network stats: elapsed time=44ms (0ms mobile, 0ms wifi, 44ms not connected)
+
+[stderr]
+args: [-p, com.amaia23.hydracam, 1]
+ arg: "-p"
+ arg: "com.amaia23.hydracam"
+ arg: "1"
+data="com.amaia23.hydracam"
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell monkey -p com.amaia23.hydracam 1
+  bash arg: -p
+  bash arg: com.amaia23.hydracam
+  bash arg: 1
+Events injected: 1
+## Network stats: elapsed time=105ms (0ms mobile, 0ms wifi, 105ms not connected)
+
+[stderr]
+args: [-p, com.amaia23.hydracam, 1]
+ arg: "-p"
+ arg: "com.amaia23.hydracam"
+ arg: "1"
+data="com.amaia23.hydracam"
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell cmd location is-location-enabled
+
+[stderr]
+No shell command implementation.
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell cmd location is-location-enabled
+false
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell cmd location is-location-enabled
+
+[stderr]
+No shell command implementation.
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell appops get com.amaia23.hydracam
+Uid mode: COARSE_LOCATION: foreground
+FINE_LOCATION: foreground
+CAMERA: foreground
+RECORD_AUDIO: foreground
+LEGACY_STORAGE: ignore
+COARSE_LOCATION: allow
+FINE_LOCATION: allow
+SYSTEM_ALERT_WINDOW: default; rejectTime=+12h43m16s905ms ago
+CAMERA: allow; time=+1m59s175ms ago; duration=+244ms
+RECORD_AUDIO: allow; time=+8h36m51s601ms ago; duration=+31s336ms
+WRITE_MEDIA_VIDEO: deny; rejectTime=+8h38m45s812ms ago
+WRITE_MEDIA_IMAGES: deny; rejectTime=+3h31m30s769ms ago
+MANAGE_EXTERNAL_STORAGE: default; rejectTime=+3h31m30s781ms ago
+NO_ISOLATED_STORAGE: deny; rejectTime=+3h31m30s777ms ago
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell rm -f /sdcard/hydracam-ndk-check.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell rm -f /sdcard/hydracam-ndk-check.mp4
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell rm -f /sdcard/hydracam-ndk-check.mp4
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell screenrecord --time-limit 5 /sdcard/hydracam-ndk-check.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screenrecord --time-limit 5 /sdcard/hydracam-ndk-check.mp4
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell screenrecord --time-limit 5 /sdcard/hydracam-ndk-check.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-ndk-check.mp4 logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/9885e6503930304946-launch.mp4
+
+[stderr]
+/sdcard/hydracam-ndk-check.mp4: 1 file pulled, 0 skipped. 10.4 MB/s (64975 bytes in 0.006s)
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece pull /sdcard/hydracam-ndk-check.mp4 logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/29d816ac550b7ece-launch.mp4
+
+[stderr]
+/sdcard/hydracam-ndk-check.mp4: 1 file pulled, 0 skipped. 1.7 MB/s (39535 bytes in 0.022s)
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX pull /sdcard/hydracam-ndk-check.mp4 logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/video/RF8M90QE7LX-launch.mp4
+
+[stderr]
+/sdcard/hydracam-ndk-check.mp4: 1 file pulled, 0 skipped. 18.9 MB/s (190637 bytes in 0.010s)
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell uiautomator dump /sdcard/hydracam-window.xml
+UI hierchary dumped to: /sdcard/hydracam-window.xml
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell uiautomator dump /sdcard/hydracam-window.xml
+UI hierchary dumped to: /sdcard/hydracam-window.xml
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell uiautomator dump /sdcard/hydracam-window.xml
+UI hierchary dumped to: /sdcard/hydracam-window.xml
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece pull /sdcard/hydracam-window.xml logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/29d816ac550b7ece-window.xml
+
+[stderr]
+/sdcard/hydracam-window.xml: 1 file pulled, 0 skipped. 1.5 MB/s (6213 bytes in 0.004s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-window.xml logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/9885e6503930304946-window.xml
+
+[stderr]
+/sdcard/hydracam-window.xml: 1 file pulled, 0 skipped. 1.7 MB/s (5883 bytes in 0.003s)
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX pull /sdcard/hydracam-window.xml logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/RF8M90QE7LX-window.xml
+
+[stderr]
+/sdcard/hydracam-window.xml: 1 file pulled, 0 skipped. 1.7 MB/s (7169 bytes in 0.004s)
+[exit-code] 0
+
+$ zsh -lc adb -s 29d816ac550b7ece logcat -d -v time > logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/29d816ac550b7ece-logcat.txt
+[exit-code] 0
+
+$ zsh -lc adb -s 9885e6503930304946 logcat -d -v time > logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/9885e6503930304946-logcat.txt
+[exit-code] 0
+
+$ zsh -lc adb -s RF8M90QE7LX logcat -d -v time > logs/verification-runs/20260608-0235-android-ndk-permission-display-device-check/device-logs/RF8M90QE7LX-logcat.txt
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:9
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:8
+RF8M90QE7LX            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:6
+
+[exit-code] 0
+
+$ rm -rf /Users/jose/Library/Android/sdk/ndk/28.2.13676358.incomplete-20260608-0235
+[exit-code] 0
+
+$ rm -rf /Users/jose/Library/Android/sdk/ndk/28.2.13676358.incomplete-20260608-0235-retry1
+[exit-code] 0

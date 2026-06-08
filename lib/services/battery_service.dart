@@ -2,6 +2,7 @@ import "dart:async";
 import "package:battery_plus/battery_plus.dart";
 import "package:flutter/material.dart";
 
+import "linux_dbus_availability.dart";
 import "log_service.dart";
 
 /// BatteryService monitors battery level and shows warnings when it becomes low.
@@ -42,6 +43,14 @@ class BatteryService {
     if (!_monitoringEnabled) {
       LogService.instance.registerLog(
           "BatteryService monitoring disabled - timer not started.");
+      return;
+    }
+
+    if (LinuxDbusAvailability.shouldSkipSystemBusPlugins) {
+      LogService.instance.registerLog(
+        "BatteryService monitoring skipped on linux because "
+        "${LinuxDbusAvailability.systemBusSocketPath} is unavailable.",
+      );
       return;
     }
 
@@ -148,5 +157,16 @@ class BatteryService {
     } else {
       _instance?._startMonitoring();
     }
+  }
+
+  @visibleForTesting
+  static bool shouldSkipBatteryPluginForTesting({
+    required bool isLinux,
+    required bool hasSystemBusSocket,
+  }) {
+    return LinuxDbusAvailability.shouldSkipSystemBusPluginsFor(
+      isLinux: isLinux,
+      hasSystemBusSocket: hasSystemBusSocket,
+    );
   }
 }

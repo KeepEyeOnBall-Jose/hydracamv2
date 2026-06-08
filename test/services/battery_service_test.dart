@@ -3,6 +3,23 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/battery_service.dart";
 
 void main() {
+  test("skips linux battery plugin when DBus system bus is missing", () {
+    expect(
+      BatteryService.shouldSkipBatteryPluginForTesting(
+        isLinux: true,
+        hasSystemBusSocket: false,
+      ),
+      isTrue,
+    );
+    expect(
+      BatteryService.shouldSkipBatteryPluginForTesting(
+        isLinux: true,
+        hasSystemBusSocket: true,
+      ),
+      isFalse,
+    );
+  });
+
   testWidgets("BatteryService shows warning when battery level is low",
       (tester) async {
     final messengerKey = GlobalKey<ScaffoldMessengerState>();

@@ -1,0 +1,446 @@
+{
+  "acceptanceChecks": [
+    "Android screens are dimmed through scripts/android_screen_brightness.py and brightness state is recorded",
+    "ADB battery/power baseline is recorded for every visible Android target",
+    "Idle runtime evidence is collected before any wait-loop fix is proposed"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:17:40.615985+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:17:52.970774+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_screen_brightness.py",
+        "status"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:17:52.993896+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_screen_brightness.py",
+        "dim"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:18:37.098915+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_power_monitor.py",
+        "--duration",
+        "60",
+        "--interval",
+        "10",
+        "--output",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-samples.jsonl",
+        "--summary-output",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-summary.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:22:06.204911+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 29d816ac550b7ece exec-out screencap -p > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/screenshots/29d816ac550b7ece.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:41.532886+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 9885e6503930304946 exec-out screencap -p > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/screenshots/9885e6503930304946.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:41.929341+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 29d816ac550b7ece shell dumpsys battery > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-dumpsys-battery.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:42.644285+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 29d816ac550b7ece shell dumpsys power > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-dumpsys-power.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:42.738621+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 9885e6503930304946 shell dumpsys power > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-dumpsys-power.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:42.826314+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s RF8M90QE7LX exec-out screencap -p > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/screenshots/RF8M90QE7LX.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:43.027817+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 29d816ac550b7ece shell top -H -b -n 1 -p 12205 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-top-threads.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:43.706473+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 9885e6503930304946 shell top -H -b -n 1 -p 21252 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-top-threads.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:44.213298+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s RF8M90QE7LX shell dumpsys power > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-dumpsys-power.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:44.656161+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 9885e6503930304946 shell dumpsys battery > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-dumpsys-battery.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:44.774401+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s RF8M90QE7LX shell dumpsys battery > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-dumpsys-battery.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:44.852871+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s RF8M90QE7LX shell top -H -b -n 1 -p 32433 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-top-threads.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:24:44.926362+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 29d816ac550b7ece logcat -d -t 1200 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/29d816ac550b7ece-logcat-tail.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:25:04.731340+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s 9885e6503930304946 logcat -d -t 1200 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/9885e6503930304946-logcat-tail.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:25:04.908400+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-c",
+        "adb -s RF8M90QE7LX logcat -d -t 1200 > logs/verification-runs/20260608-0317-android-usb-power-screen-dim/device-logs/RF8M90QE7LX-logcat-tail.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:25:05.072673+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_power_monitor.py",
+        "--duration",
+        "30",
+        "--interval",
+        "10",
+        "--output",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-cameraserver-samples.jsonl",
+        "--summary-output",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/artifacts/android-power-cameraserver-summary.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:27:44.456032+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "scripts/test_android_power_monitor.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:29:36.047627+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-08T01:29:36.114152+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:02.214472+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:07.806609+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:13.726936+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "pull",
+        "/sdcard/hydracam-power-dim.mp4",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/29d816ac550b7ece.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:36.152236+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:36.192708+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:36.247255+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-power-dim.mp4",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/9885e6503930304946.mp4"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T01:31:36.365337+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "pull",
+        "/sdcard/hydracam-power-dim.mp4",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/RF8M90QE7LX.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:36.412615+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:36.634545+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:31:53.397643+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-power-dim.mp4",
+        "logs/verification-runs/20260608-0317-android-usb-power-screen-dim/video/9885e6503930304946.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:32:06.031280+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-power-dim.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T01:32:11.243237+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android physical",
+      "name": "Samsung SM-G935F",
+      "notes": [],
+      "os": "Android 8.0.0 / API 26",
+      "role": "USB attached idle target"
+    },
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android physical",
+      "name": "Samsung SM-G960F",
+      "notes": [],
+      "os": "Android 10 / API 29",
+      "role": "USB attached idle target"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical",
+      "name": "Samsung SM-G970F",
+      "notes": [],
+      "os": "Android 12 / API 31",
+      "role": "USB attached idle target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/29d816ac550b7ece.png",
+    "screenshots/9885e6503930304946.png",
+    "screenshots/RF8M90QE7LX.png",
+    "video/29d816ac550b7ece.mp4",
+    "video/9885e6503930304946.mp4",
+    "video/RF8M90QE7LX.mp4",
+    "device-logs/29d816ac550b7ece-dumpsys-battery.txt",
+    "device-logs/29d816ac550b7ece-dumpsys-power.txt",
+    "device-logs/29d816ac550b7ece-logcat-tail.txt",
+    "device-logs/29d816ac550b7ece-top-threads.txt",
+    "device-logs/9885e6503930304946-dumpsys-battery.txt",
+    "device-logs/9885e6503930304946-dumpsys-power.txt",
+    "device-logs/9885e6503930304946-logcat-tail.txt",
+    "device-logs/9885e6503930304946-top-threads.txt",
+    "device-logs/RF8M90QE7LX-dumpsys-battery.txt",
+    "device-logs/RF8M90QE7LX-dumpsys-power.txt",
+    "device-logs/RF8M90QE7LX-logcat-tail.txt",
+    "device-logs/RF8M90QE7LX-top-threads.txt"
+  ],
+  "item": {
+    "slug": "android-usb-power-screen-dim",
+    "source": "docs/control/evidence-first-loop.md#default-priority-queue",
+    "title": "Battery, storage, and network safety"
+  },
+  "notes": [
+    "Android screens dimmed; ADB current, battery, app CPU, and cameraserver CPU monitoring captured. S7 edge cameraserver wait loop identified as the main inefficient idle candidate.",
+    "Added video artifacts after pack check required Tier A recordings."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

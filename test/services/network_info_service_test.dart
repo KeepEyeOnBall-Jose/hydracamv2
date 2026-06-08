@@ -41,5 +41,29 @@ void main() {
         "Enable location for SSID",
       );
     });
+
+    test("skips linux connectivity plugin when DBus system bus is missing", () {
+      expect(
+        NetworkInfoService.shouldSkipConnectivityPluginForTesting(
+          isLinux: true,
+          hasSystemBusSocket: false,
+        ),
+        isTrue,
+      );
+      expect(
+        NetworkInfoService.shouldSkipConnectivityPluginForTesting(
+          isLinux: true,
+          hasSystemBusSocket: true,
+        ),
+        isFalse,
+      );
+      expect(
+        NetworkInfoService.shouldSkipConnectivityPluginForTesting(
+          isLinux: false,
+          hasSystemBusSocket: false,
+        ),
+        isFalse,
+      );
+    });
   });
 }
