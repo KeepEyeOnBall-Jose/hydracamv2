@@ -3,6 +3,8 @@ import "dart:convert";
 import "dart:io";
 
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/models/capture_context_metadata.dart";
+import "package:hydracam/services/camera_setup_service.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
 import "package:hydracam/services/storage_service.dart";
 import "package:hydracam/slave/slave_client.dart";
@@ -89,6 +91,75 @@ void main() {
       if (!networkPayload.isCompleted) {
         networkPayload.complete(null);
       }
+    }
+  });
+
+  test("slave heartbeat includes camera setup status when available", () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+    CameraSetupService.instance.setPerspective(
+      CameraPerspectiveMetadata.fromId("tin_back_floor_center"),
+    );
+
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final sockets = <WebSocket>[];
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = jsonDecode(data as String);
+        if (decoded is Map<String, dynamic>) {
+          messages.add(decoded);
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () async => null,
+    );
+
+    try {
+      await client.connect();
+      final heartbeat = await messages.stream
+          .firstWhere((message) => message["type"] == "heartbeat")
+          .timeout(const Duration(seconds: 1));
+
+      expect(heartbeat["setupStatus"], {
+        "cameraPerspectiveId": "tin_back_floor_center",
+        "cameraPerspectiveLabel": "Tin to back, floor, centered",
+        "isLevel": false,
+        "sensorAvailable": false,
+      });
+    } finally {
+      client.disconnect();
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await messages.close();
+      await server.close(force: true);
+      CameraSetupService.instance.resetForTest();
     }
   });
 }

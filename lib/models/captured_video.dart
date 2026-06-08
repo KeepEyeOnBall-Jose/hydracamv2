@@ -1,6 +1,8 @@
 import "dart:io";
 import "dart:typed_data";
 
+import "capture_context_metadata.dart";
+
 /// CapturedVideo - Represents a video captured by a slave device.
 /// This class holds the binary data of the video (temporarily), the file path where it's stored,
 /// the device ID that recorded the video, and the timestamps for when it was started, ended, and received.
@@ -23,6 +25,9 @@ class CapturedVideo {
 
   /// The date and time when the video was received by the master device.
   final DateTime receivedDate;
+
+  /// Setup metadata captured from the local device before recording began.
+  final MediaCaptureContext? captureContext;
 
   /// Flag to track upload status
   bool isUploaded;
@@ -49,6 +54,7 @@ class CapturedVideo {
     required this.startRecordingDate,
     required this.endRecordingDate,
     required this.receivedDate,
+    this.captureContext,
     this.isUploaded = false,
     this.uploadDuration,
     this.uploadStartTime,

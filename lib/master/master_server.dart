@@ -6,6 +6,7 @@ import "../globals.dart";
 import "../models/capture_session.dart";
 import "package:path_provider/path_provider.dart";
 // import "package:gallery_saver/gallery_saver.dart";  // Temporarily disabled - incompatible plugin
+import "../models/capture_context_metadata.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../services/camera_service.dart";
@@ -30,6 +31,7 @@ class ConnectedDeviceInfo {
   final String? remoteIp;
   final NetworkSnapshot? networkSnapshot;
   final ConnectedDeviceNetworkStatus networkStatus;
+  final ConnectedDeviceSetupStatus? setupStatus;
   final DateTime lastSeen;
   final DateTime registeredAt;
 
@@ -40,6 +42,7 @@ class ConnectedDeviceInfo {
     required this.registeredAt,
     this.remoteIp,
     this.networkSnapshot,
+    this.setupStatus,
   });
 
   String get shortDeviceId {
@@ -53,6 +56,7 @@ class ConnectedDeviceInfo {
     String? remoteIp,
     NetworkSnapshot? networkSnapshot,
     ConnectedDeviceNetworkStatus? networkStatus,
+    ConnectedDeviceSetupStatus? setupStatus,
     DateTime? lastSeen,
     DateTime? registeredAt,
   }) {
@@ -61,10 +65,83 @@ class ConnectedDeviceInfo {
       remoteIp: remoteIp ?? this.remoteIp,
       networkSnapshot: networkSnapshot ?? this.networkSnapshot,
       networkStatus: networkStatus ?? this.networkStatus,
+      setupStatus: setupStatus ?? this.setupStatus,
       lastSeen: lastSeen ?? this.lastSeen,
       registeredAt: registeredAt ?? this.registeredAt,
     );
   }
+}
+
+class ConnectedDeviceSetupStatus {
+  const ConnectedDeviceSetupStatus({
+    required this.cameraPerspectiveId,
+    required this.cameraPerspectiveLabel,
+    required this.isLevel,
+    required this.sensorAvailable,
+    this.rollDegrees,
+    this.pitchDegrees,
+  });
+
+  final String cameraPerspectiveId;
+  final String cameraPerspectiveLabel;
+  final bool isLevel;
+  final bool sensorAvailable;
+  final double? rollDegrees;
+  final double? pitchDegrees;
+
+  static ConnectedDeviceSetupStatus? tryFromJson(Object? value) {
+    if (value is! Map) {
+      return null;
+    }
+    final map = value.map((key, value) => MapEntry(key.toString(), value));
+    final id = map["cameraPerspectiveId"]?.toString();
+    final label = map["cameraPerspectiveLabel"]?.toString();
+    if (id == null || id.isEmpty || label == null || label.isEmpty) {
+      return null;
+    }
+    return ConnectedDeviceSetupStatus(
+      cameraPerspectiveId: id,
+      cameraPerspectiveLabel: label,
+      isLevel: map["isLevel"] == true,
+      sensorAvailable: map["sensorAvailable"] == true,
+      rollDegrees: _toDouble(map["rollDegrees"]),
+      pitchDegrees: _toDouble(map["pitchDegrees"]),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "cameraPerspectiveId": cameraPerspectiveId,
+      "cameraPerspectiveLabel": cameraPerspectiveLabel,
+      "isLevel": isLevel,
+      "sensorAvailable": sensorAvailable,
+      if (rollDegrees != null) "rollDegrees": rollDegrees,
+      if (pitchDegrees != null) "pitchDegrees": pitchDegrees,
+    };
+  }
+
+  static double? _toDouble(Object? value) {
+    if (value is double) {
+      return value;
+    }
+    if (value is num) {
+      return value.toDouble();
+    }
+    if (value is String) {
+      return double.tryParse(value);
+    }
+    return null;
+  }
+}
+
+Map<String, dynamic>? _mapValue(Object? value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  if (value is Map) {
+    return value.map((key, value) => MapEntry(key.toString(), value));
+  }
+  return null;
 }
 
 class MasterNetworkSnapshotCache {
@@ -181,6 +258,8 @@ class MasterServer {
                       remoteIp: remoteIp,
                       networkSnapshot:
                           NetworkSnapshot.tryFromJson(decodedData["network"]),
+                      setupStatus: ConnectedDeviceSetupStatus.tryFromJson(
+                          decodedData["setupStatus"]),
                     );
                     LogService.instance.registerLog(
                         "Registered new slave with deviceId: $deviceId");
@@ -232,6 +311,9 @@ class MasterServer {
                       captureDate: captureDate,
                       receivedDate: receivedDate,
                       slaveDeviceId: deviceId!,
+                      captureContext: MediaCaptureContext.fromJson(
+                        _mapValue(decodedData["captureContext"]),
+                      ),
                     );
                     //currentSession?.addPhoto(receivedPhoto);
                     // Add photo via SessionManager
@@ -252,6 +334,9 @@ class MasterServer {
                       startRecordingDate: startRecordingDate,
                       endRecordingDate: endRecordingDate,
                       receivedDate: receivedDate,
+                      captureContext: MediaCaptureContext.fromJson(
+                        _mapValue(decodedData["captureContext"]),
+                      ),
                     );
                     //currentSession?.addVideo(receivedVideo);
                     // Add photo via SessionManager
@@ -273,6 +358,8 @@ class MasterServer {
                       remoteIp: remoteIp,
                       networkSnapshot:
                           NetworkSnapshot.tryFromJson(decodedData["network"]),
+                      setupStatus: ConnectedDeviceSetupStatus.tryFromJson(
+                          decodedData["setupStatus"]),
                     );
                     LogService.instance
                         .registerLog("Received heartbeat from $deviceId");
@@ -373,9 +460,11 @@ class MasterServer {
     required WebSocket socket,
     required String? remoteIp,
     required NetworkSnapshot? networkSnapshot,
+    required ConnectedDeviceSetupStatus? setupStatus,
   }) {
     final previousInfo = _clientInfo[deviceId];
     final effectiveSnapshot = networkSnapshot ?? previousInfo?.networkSnapshot;
+    final effectiveSetupStatus = setupStatus ?? previousInfo?.setupStatus;
     final now = DateTime.now();
 
     _clients[deviceId] = socket;
@@ -386,6 +475,7 @@ class MasterServer {
       networkSnapshot: effectiveSnapshot,
       networkStatus:
           previousInfo?.networkStatus ?? ConnectedDeviceNetworkStatus.unknown,
+      setupStatus: effectiveSetupStatus,
       lastSeen: now,
       registeredAt: previousInfo?.registeredAt ?? now,
     );
@@ -426,6 +516,7 @@ class MasterServer {
       remoteIp: remoteIp ?? previousInfo?.remoteIp,
       networkSnapshot: effectiveSnapshot,
       networkStatus: networkStatus,
+      setupStatus: previousInfo?.setupStatus,
       lastSeen: now,
       registeredAt: previousInfo?.registeredAt ?? now,
     );
@@ -468,12 +559,14 @@ class MasterServer {
     required WebSocket socket,
     required String? remoteIp,
     required NetworkSnapshot? networkSnapshot,
+    ConnectedDeviceSetupStatus? setupStatus,
   }) {
     return _registerOrUpdateClient(
       deviceId: deviceId,
       socket: socket,
       remoteIp: remoteIp,
       networkSnapshot: networkSnapshot,
+      setupStatus: setupStatus,
     );
   }
 

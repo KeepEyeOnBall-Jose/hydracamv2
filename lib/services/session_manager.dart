@@ -4,6 +4,7 @@ import "package:flutter/foundation.dart";
 import "settings_service.dart";
 import "uploader_service.dart";
 import "package:path_provider/path_provider.dart";
+import "../models/capture_context_metadata.dart";
 import "../models/capture_session.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
@@ -156,33 +157,7 @@ class SessionManager extends ChangeNotifier {
       }
 
       final metadataFile = File("${sessionDirectory.path}/metadata.json");
-      final metadata = {
-        "sessionId": _currentSession!.sessionId,
-        "sessionGuid": _sessionGuid,
-        "startTime": _currentSession!.startTime.toIso8601String(),
-        "endTime": _currentSession!.endTime?.toIso8601String(),
-        "deviceType": _deviceType,
-        "photos": _currentSession!.capturedPhotos
-            .map((photo) => {
-                  "photoPath": photo.photoPath,
-                  "slaveDeviceId": photo.slaveDeviceId,
-                  "captureDate": photo.captureDate.toIso8601String(),
-                  "receivedDate": photo.receivedDate.toIso8601String(),
-                  "isUploaded": photo.isUploaded,
-                })
-            .toList(),
-        "videos": _currentSession!.capturedVideos
-            .map((video) => {
-                  "videoPath": video.videoPath,
-                  "slaveDeviceId": video.slaveDeviceId,
-                  "startRecordingDate":
-                      video.startRecordingDate.toIso8601String(),
-                  "endRecordingDate": video.endRecordingDate.toIso8601String(),
-                  "receivedDate": video.receivedDate.toIso8601String(),
-                  "isUploaded": video.isUploaded,
-                })
-            .toList(),
-      };
+      final metadata = _buildMetadataJson();
 
       await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
       LogService.instance
@@ -213,29 +188,12 @@ class SessionManager extends ChangeNotifier {
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
             : null,
-        capturedPhotos: (metadata["photos"] as List<dynamic>).map((photo) {
-          return CapturedPhoto(
-            photoPath: photo["photoPath"],
-            slaveDeviceId: photo["slaveDeviceId"]?.isEmpty ?? true
-                ? deviceId
-                : photo["slaveDeviceId"],
-            captureDate: DateTime.parse(photo["captureDate"]),
-            receivedDate: DateTime.parse(photo["receivedDate"]),
-            isUploaded: photo["isUploaded"],
-          );
-        }).toList(),
-        capturedVideos: (metadata["videos"] as List<dynamic>).map((video) {
-          return CapturedVideo(
-            videoPath: video["videoPath"],
-            slaveDeviceId: video["slaveDeviceId"]?.isEmpty ?? true
-                ? deviceId
-                : video["slaveDeviceId"],
-            startRecordingDate: DateTime.parse(video["startRecordingDate"]),
-            endRecordingDate: DateTime.parse(video["endRecordingDate"]),
-            receivedDate: DateTime.parse(video["receivedDate"]),
-            isUploaded: video["isUploaded"],
-          );
-        }).toList(),
+        capturedPhotos: (metadata["photos"] as List<dynamic>? ?? const [])
+            .map((photo) => _parsePhoto(photo, deviceId))
+            .toList(),
+        capturedVideos: (metadata["videos"] as List<dynamic>? ?? const [])
+            .map((video) => _parseVideo(video, deviceId))
+            .toList(),
       );
 
       // Correct sessionguid if null
@@ -246,8 +204,8 @@ class SessionManager extends ChangeNotifier {
             "Session GUID was null. Corrected to $sessionGuid and saved.");
       }
 
-      _sessionGuid = metadata["sessionGuid"];
-      _deviceType = metadata["deviceType"];
+      _sessionGuid = metadata["sessionGuid"] ?? sessionGuid;
+      _deviceType = metadata["deviceType"] ?? "Unknown";
 
       notifyListeners();
 
@@ -400,33 +358,7 @@ class SessionManager extends ChangeNotifier {
       }
 
       final metadataFile = File("${sessionDirectory.path}/metadata.json");
-      final metadata = {
-        "sessionId": _currentSession!.sessionId,
-        "sessionGuid": _sessionGuid,
-        "startTime": _currentSession!.startTime.toIso8601String(),
-        "endTime": _currentSession!.endTime?.toIso8601String(),
-        "deviceType": _deviceType,
-        "photos": _currentSession!.capturedPhotos
-            .map((photo) => {
-                  "photoPath": photo.photoPath,
-                  "slaveDeviceId": photo.slaveDeviceId,
-                  "captureDate": photo.captureDate.toIso8601String(),
-                  "receivedDate": photo.receivedDate.toIso8601String(),
-                  "isUploaded": photo.isUploaded,
-                })
-            .toList(),
-        "videos": _currentSession!.capturedVideos
-            .map((video) => {
-                  "videoPath": video.videoPath,
-                  "slaveDeviceId": video.slaveDeviceId,
-                  "startRecordingDate":
-                      video.startRecordingDate.toIso8601String(),
-                  "endRecordingDate": video.endRecordingDate.toIso8601String(),
-                  "receivedDate": video.receivedDate.toIso8601String(),
-                  "isUploaded": video.isUploaded,
-                })
-            .toList(),
-      };
+      final metadata = _buildMetadataJson();
 
       await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
       LogService.instance
@@ -434,5 +366,93 @@ class SessionManager extends ChangeNotifier {
     } catch (e) {
       LogService.instance.registerLog("Error saving session metadata: $e");
     }
+  }
+
+  Map<String, dynamic> _buildMetadataJson() {
+    return {
+      "sessionId": _currentSession!.sessionId,
+      "sessionGuid": _sessionGuid,
+      "startTime": _currentSession!.startTime.toIso8601String(),
+      "endTime": _currentSession!.endTime?.toIso8601String(),
+      "deviceType": _deviceType,
+      "photos": _currentSession!.capturedPhotos.map(_photoToJson).toList(),
+      "videos": _currentSession!.capturedVideos.map(_videoToJson).toList(),
+    };
+  }
+
+  Map<String, dynamic> _photoToJson(CapturedPhoto photo) {
+    return {
+      "photoPath": photo.photoPath,
+      "slaveDeviceId": photo.slaveDeviceId,
+      "captureDate": photo.captureDate.toIso8601String(),
+      "receivedDate": photo.receivedDate.toIso8601String(),
+      "isUploaded": photo.isUploaded,
+      if (photo.captureContext != null)
+        "captureContext": photo.captureContext!.toJson(),
+    };
+  }
+
+  Map<String, dynamic> _videoToJson(CapturedVideo video) {
+    return {
+      "videoPath": video.videoPath,
+      "slaveDeviceId": video.slaveDeviceId,
+      "startRecordingDate": video.startRecordingDate.toIso8601String(),
+      "endRecordingDate": video.endRecordingDate.toIso8601String(),
+      "receivedDate": video.receivedDate.toIso8601String(),
+      "isUploaded": video.isUploaded,
+      if (video.captureContext != null)
+        "captureContext": video.captureContext!.toJson(),
+    };
+  }
+
+  CapturedPhoto _parsePhoto(Object? rawPhoto, String fallbackDeviceId) {
+    final photo = _asMap(rawPhoto);
+    final slaveDeviceId = photo["slaveDeviceId"]?.toString();
+    return CapturedPhoto(
+      photoPath: photo["photoPath"].toString(),
+      slaveDeviceId: slaveDeviceId == null || slaveDeviceId.isEmpty
+          ? fallbackDeviceId
+          : slaveDeviceId,
+      captureDate: DateTime.parse(photo["captureDate"].toString()),
+      receivedDate: DateTime.parse(photo["receivedDate"].toString()),
+      isUploaded: photo["isUploaded"] == true,
+      captureContext:
+          MediaCaptureContext.fromJson(_asNullableMap(photo["captureContext"])),
+    );
+  }
+
+  CapturedVideo _parseVideo(Object? rawVideo, String fallbackDeviceId) {
+    final video = _asMap(rawVideo);
+    final slaveDeviceId = video["slaveDeviceId"]?.toString();
+    return CapturedVideo(
+      videoPath: video["videoPath"].toString(),
+      slaveDeviceId: slaveDeviceId == null || slaveDeviceId.isEmpty
+          ? fallbackDeviceId
+          : slaveDeviceId,
+      startRecordingDate:
+          DateTime.parse(video["startRecordingDate"].toString()),
+      endRecordingDate: DateTime.parse(video["endRecordingDate"].toString()),
+      receivedDate: DateTime.parse(video["receivedDate"].toString()),
+      isUploaded: video["isUploaded"] == true,
+      captureContext:
+          MediaCaptureContext.fromJson(_asNullableMap(video["captureContext"])),
+    );
+  }
+
+  Map<String, dynamic> _asMap(Object? value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return value.map((key, value) => MapEntry(key.toString(), value));
+    }
+    return <String, dynamic>{};
+  }
+
+  Map<String, dynamic>? _asNullableMap(Object? value) {
+    if (value == null) {
+      return null;
+    }
+    return _asMap(value);
   }
 }

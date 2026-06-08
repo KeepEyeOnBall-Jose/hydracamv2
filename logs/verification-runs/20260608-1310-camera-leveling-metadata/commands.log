@@ -1,0 +1,402 @@
+# HydraCam evidence run command log
+
+$ flutter analyze
+Analyzing codex-camera-leveling-metadata...                     
+No issues found! (ran in 1.2s)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter test test/services/settings_service_test.dart test/services/session_manager_test.dart test/platform/multi_device_orchestration_test.dart test/screens/master_video_recording_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart: master recording defaults off on macOS controller builds
+00:00 +1: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart: stored master recording preference overrides macOS default
+00:00 +2: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart: new installs default to auto back lens and standard 1080p30
+00:00 +3: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart: legacy camera quality migrates to video capture profiles
+00:00 +4: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Log registered: {message: Updated camera lens preference to ultraWide, timestamp: 2026-06-08 13:28:01.775095, function: null, file: null}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 13:28:01.788235, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/settings_service_test.dart: stores selected camera perspective by canonical id
+Log registered: {message: Updated camera perspective to right_backglass_diagonal, timestamp: 2026-06-08 13:28:01.790363, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: (setUpAll)
+00:00 +6: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Session lifecycle starts with no active session
+00:00 +7: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.965239, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.967798, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 13:28:01.968112, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.977681, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.977888, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.977965, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:01.978034, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.980339, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.980469, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 13:28:01.980540, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.981347, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.981470, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.981532, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:01.981595, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.983196, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.983273, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 13:28:01.983340, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media31RYRt/test_photo.jpg, timestamp: 2026-06-08 13:28:01.984728, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media31RYRt/test_photo.jpg, timestamp: 2026-06-08 13:28:01.985255, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:01.986859, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.987888, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.987993, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.988081, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:01.988147, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+00:00 +10: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.988546, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.989539, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.989614, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 13:28:01.989676, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaSIsf82/test_video.mp4, timestamp: 2026-06-08 13:28:01.990350, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaSIsf82/test_video.mp4, timestamp: 2026-06-08 13:28:01.990533, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:01.990948, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.991922, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.992038, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.992112, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:01.992163, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+00:00 +11: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.992502, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:01.993469, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:01.993547, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 13:28:01.993609, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaZytWhg/context_video.mp4, timestamp: 2026-06-08 13:28:01.994911, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaZytWhg/context_video.mp4, timestamp: 2026-06-08 13:28:01.995059, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:01.996009, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.996840, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:01.996947, function: null, file: null}
+Log registered: {message: Generated new Device ID: 9694ac53-e846-428a-8df0-3f497b8f5aee, timestamp: 2026-06-08 13:28:02.001020, function: null, file: null}
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 13:28:02.002508, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:02.003835, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.003987, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.004058, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.004119, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: (setUpAll)
+00:00 +12: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.005592, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.005665, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 13:28:02.005723, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediamBegD9/test_photo_1.jpg, timestamp: 2026-06-08 13:28:02.006290, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediamBegD9/test_photo_1.jpg, timestamp: 2026-06-08 13:28:02.006408, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediamBegD9/test_photo_2.jpg, timestamp: 2026-06-08 13:28:02.006491, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediamBegD9/test_photo_2.jpg, timestamp: 2026-06-08 13:28:02.006729, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.006950, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.007069, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:02.008055, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:02.008152, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.008209, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.008261, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.008316, function: null, file: null}
+00:00 +13: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+00:00 +13: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsuzCdWc/session_test-guid/metadata.json, timestamp: 2026-06-08 13:28:02.008678, function: null, file: null}
+00:00 +13: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.012396, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.014814, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.017338, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.017882, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p1 on device type: Master, timestamp: 2026-06-08 13:28:02.018152, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaVkAuWt/p1-0.jpg, timestamp: 2026-06-08 13:28:02.021736, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaVkAuWt/p1-0.jpg, timestamp: 2026-06-08 13:28:02.023527, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaVkAuWt/p1-1.jpg, timestamp: 2026-06-08 13:28:02.025809, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaVkAuWt/p1-1.jpg, timestamp: 2026-06-08 13:28:02.026122, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaVkAuWt/p1-2.jpg, timestamp: 2026-06-08 13:28:02.026519, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaVkAuWt/p1-2.jpg, timestamp: 2026-06-08 13:28:02.026640, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.028822, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.028940, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.029042, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7CGtfW/session_session_p1/metadata.json, timestamp: 2026-06-08 13:28:02.032125, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7CGtfW/session_session_p1/metadata.json, timestamp: 2026-06-08 13:28:02.032289, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7CGtfW/session_session_p1/metadata.json, timestamp: 2026-06-08 13:28:02.032373, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.053026, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.053230, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docs7CGtfW/session_session_p1/metadata.json, timestamp: 2026-06-08 13:28:02.054306, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.054415, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.054495, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.054576, function: null, file: null}
+00:00 +14: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.056410, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.056491, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.056907, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.056973, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p2 on device type: Master, timestamp: 2026-06-08 13:28:02.057034, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaYftVrb/p2-a.jpg, timestamp: 2026-06-08 13:28:02.057319, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaYftVrb/p2-a.jpg, timestamp: 2026-06-08 13:28:02.057405, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaYftVrb/p2-b.jpg, timestamp: 2026-06-08 13:28:02.057670, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaYftVrb/p2-b.jpg, timestamp: 2026-06-08 13:28:02.057756, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.058021, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.058203, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsw7vyQn/session_session_p2/metadata.json, timestamp: 2026-06-08 13:28:02.058781, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsw7vyQn/session_session_p2/metadata.json, timestamp: 2026-06-08 13:28:02.058887, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.081264, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.081462, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsw7vyQn/session_session_p2/metadata.json, timestamp: 2026-06-08 13:28:02.082282, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.082365, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.082431, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.082482, function: null, file: null}
+00:00 +15: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +15: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P3: round-robin commands respect device order
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.083938, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.084011, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.084386, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.084452, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p3 on device type: Master, timestamp: 2026-06-08 13:28:02.084507, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-A.jpg, timestamp: 2026-06-08 13:28:02.084838, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-A.jpg, timestamp: 2026-06-08 13:28:02.084995, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-B.jpg, timestamp: 2026-06-08 13:28:02.085540, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-B.jpg, timestamp: 2026-06-08 13:28:02.085736, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-C.jpg, timestamp: 2026-06-08 13:28:02.086010, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-C.jpg, timestamp: 2026-06-08 13:28:02.086106, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-D.jpg, timestamp: 2026-06-08 13:28:02.086338, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaPRqi0q/slave-D.jpg, timestamp: 2026-06-08 13:28:02.086423, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.086845, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.086998, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.087122, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.087251, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsjD5KUW/session_session_p3/metadata.json, timestamp: 2026-06-08 13:28:02.088108, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsjD5KUW/session_session_p3/metadata.json, timestamp: 2026-06-08 13:28:02.088227, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsjD5KUW/session_session_p3/metadata.json, timestamp: 2026-06-08 13:28:02.088298, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsjD5KUW/session_session_p3/metadata.json, timestamp: 2026-06-08 13:28:02.088362, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.108998, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.109212, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsjD5KUW/session_session_p3/metadata.json, timestamp: 2026-06-08 13:28:02.110037, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.110137, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.110200, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.110247, function: null, file: null}
+00:00 +16: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +16: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P4: master rotation resets session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.111900, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.111993, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.112360, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.112427, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p4_a on device type: Master, timestamp: 2026-06-08 13:28:02.112477, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediav3kOEa/p4.jpg, timestamp: 2026-06-08 13:28:02.112794, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediav3kOEa/p4.jpg, timestamp: 2026-06-08 13:28:02.112895, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.113150, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsV2ivIC/session_session_p4_a/metadata.json, timestamp: 2026-06-08 13:28:02.113707, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsV2ivIC/session_session_p4_a/metadata.json, timestamp: 2026-06-08 13:28:02.135685, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.135874, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.135935, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.135983, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.136036, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.136078, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.136144, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.136183, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p4_b on device type: Master, timestamp: 2026-06-08 13:28:02.136221, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.136501, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.136559, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsV2ivIC/session_session_p4_b/metadata.json, timestamp: 2026-06-08 13:28:02.137401, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.137470, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.137521, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.137564, function: null, file: null}
+00:00 +17: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +17: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V1: single slave video stored in session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.139142, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.139205, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.139505, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.139560, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v1 on device type: Master, timestamp: 2026-06-08 13:28:02.139609, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaFnk7i1/v1.mp4, timestamp: 2026-06-08 13:28:02.140404, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaFnk7i1/v1.mp4, timestamp: 2026-06-08 13:28:02.140536, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.140939, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSF4qyB/session_session_v1/metadata.json, timestamp: 2026-06-08 13:28:02.141847, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.162277, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.162483, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSF4qyB/session_session_v1/metadata.json, timestamp: 2026-06-08 13:28:02.163351, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.163462, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.163509, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.163558, function: null, file: null}
+00:00 +18: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +18: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V2: multiple slave videos persist metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.165102, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.165195, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.165541, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.165601, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v2 on device type: Master, timestamp: 2026-06-08 13:28:02.165653, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTbfyva/v2-a.mp4, timestamp: 2026-06-08 13:28:02.165947, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTbfyva/v2-a.mp4, timestamp: 2026-06-08 13:28:02.166033, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTbfyva/v2-b.mp4, timestamp: 2026-06-08 13:28:02.166269, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTbfyva/v2-b.mp4, timestamp: 2026-06-08 13:28:02.166346, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.166623, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.166763, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsweqyYt/session_session_v2/metadata.json, timestamp: 2026-06-08 13:28:02.167361, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsweqyYt/session_session_v2/metadata.json, timestamp: 2026-06-08 13:28:02.167449, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.189459, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.189642, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsweqyYt/session_session_v2/metadata.json, timestamp: 2026-06-08 13:28:02.190464, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.190558, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.190620, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.190701, function: null, file: null}
+00:00 +19: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:00 +19: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V3: scheduled starts preserve offsets
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.192418, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.192546, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.193014, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.193088, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v3 on device type: Master, timestamp: 2026-06-08 13:28:02.193140, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaBTQpwe/v3-a.mp4, timestamp: 2026-06-08 13:28:02.193446, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaBTQpwe/v3-a.mp4, timestamp: 2026-06-08 13:28:02.193528, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaBTQpwe/v3-b.mp4, timestamp: 2026-06-08 13:28:02.193803, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaBTQpwe/v3-b.mp4, timestamp: 2026-06-08 13:28:02.193874, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaBTQpwe/v3-c.mp4, timestamp: 2026-06-08 13:28:02.194104, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaBTQpwe/v3-c.mp4, timestamp: 2026-06-08 13:28:02.194189, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.194483, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.194604, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 13:28:02.194715, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsDZz2R8/session_session_v3/metadata.json, timestamp: 2026-06-08 13:28:02.195444, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsDZz2R8/session_session_v3/metadata.json, timestamp: 2026-06-08 13:28:02.195541, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsDZz2R8/session_session_v3/metadata.json, timestamp: 2026-06-08 13:28:02.195655, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.216280, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.216497, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsDZz2R8/session_session_v3/metadata.json, timestamp: 2026-06-08 13:28:02.217286, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 13:28:02.217379, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 13:28:02.217445, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 13:28:02.217492, function: null, file: null}
+00:00 +20: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+Log registered: {message: Closing recording preview because no recording is active., timestamp: 2026-06-08 13:28:02.472360, function: null, file: null}
+00:00 +21: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter test test/models/capture_context_metadata_test.dart test/services/device_level_service_test.dart test/widgets/camera_level_overlay_test.dart test/widgets/camera_setup_preview_screen_test.dart test/slave/slave_client_registration_test.dart test/master/master_network_snapshot_cache_test.dart test/master/connected_client_automation_payload_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/models/capture_context_metadata_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/models/capture_context_metadata_test.dart: CameraPerspectiveMetadata exposes media-timeline canonical perspective options
+00:00 +1: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/models/capture_context_metadata_test.dart: CameraPerspectiveMetadata normalizes known ids to canonical labels
+00:00 +2: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/models/capture_context_metadata_test.dart: MediaCaptureContext serializes perspective, level, camera, profile, and device metadata
+00:00 +3: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/models/capture_context_metadata_test.dart: MediaCaptureContext loads null and old metadata without capture context
+00:00 +4: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/device_level_service_test.dart: DeviceLevelReading reports green level when roll is within two degrees
+00:00 +5: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/device_level_service_test.dart: DeviceLevelReading reports amber warning when roll is within five degrees
+00:00 +6: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/device_level_service_test.dart: DeviceLevelReading reports red warning when roll is outside tolerance
+00:00 +7: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/services/device_level_service_test.dart: DeviceLevelReading records sensor unavailable without blocking capture
+00:00 +8: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_level_overlay_test.dart: shows green guidance for level devices
+00:00 +8: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 13:28:05.236954, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:49384/ws with Device ID: test-device, timestamp: 2026-06-08 13:28:05.239270, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:49384/ws, timestamp: 2026-06-08 13:28:05.241029, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +10: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +10: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Log registered: {message: Connection closed, timestamp: 2026-06-08 13:28:05.260449, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +11: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +11: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/slave/slave_client_registration_test.dart: slave heartbeat includes camera setup status when available
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 13:28:05.268860, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:49387/ws with Device ID: test-device, timestamp: 2026-06-08 13:28:05.268991, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:49387/ws, timestamp: 2026-06-08 13:28:05.269329, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 13:28:05.272827, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +13: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +14: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +15: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +16: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +16: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+Log registered: {message: Client slave-a disconnected. Total clients: 0, timestamp: 2026-06-08 13:28:05.300690, function: null, file: null}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+00:00 +17: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +18: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +19: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: warn-only flow allows recording while red tilted
+00:00 +20: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 7 connected devices:
+  SM G960F (mobile)       • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)       • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)       • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ flutter analyze
+Analyzing codex-camera-leveling-metadata...                     
+No issues found! (ran in 1.2s)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter test test/widgets/camera_setup_preview_screen_test.dart test/widgets/camera_level_overlay_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +1: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +2: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:00 +3: /Users/jose/src/work/hydracamv2/.worktrees/codex-camera-leveling-metadata/test/widgets/camera_setup_preview_screen_test.dart: warn-only flow allows recording while red tilted
+00:00 +4: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

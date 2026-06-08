@@ -54,7 +54,8 @@ void main() {
     expect(calls, 2);
   });
 
-  test("master server exposes connected client before network refresh completes",
+  test(
+      "master server exposes connected client before network refresh completes",
       () async {
     final snapshotCompleter = Completer<NetworkSnapshot>();
     final server = MasterServer(
@@ -98,7 +99,43 @@ void main() {
     );
   });
 
-  test("stale socket close does not remove current client registration", () async {
+  test("master server preserves optional camera setup status", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: MockWebSocket(),
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+      setupStatus: const ConnectedDeviceSetupStatus(
+        cameraPerspectiveId: "right_backglass_parallel",
+        cameraPerspectiveLabel:
+            "Right corner, behind glass, parallel to front wall",
+        isLevel: true,
+        sensorAvailable: true,
+      ),
+    );
+
+    final client = server.getConnectedDeviceInfos().single;
+    expect(client.setupStatus?.cameraPerspectiveId, "right_backglass_parallel");
+    expect(client.setupStatus?.isLevel, isTrue);
+  });
+
+  test("stale socket close does not remove current client registration",
+      () async {
     final server = MasterServer(
       MockCameraService(),
       masterNetworkSnapshotCache: MasterNetworkSnapshotCache(

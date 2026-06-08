@@ -1,0 +1,126 @@
+{
+  "acceptanceChecks": [
+    "Local setup preview, warn-only level overlay, media-timeline-compatible perspective metadata, and metadata persistence are covered by tests."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:27:56.447168+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/settings_service_test.dart",
+        "test/services/session_manager_test.dart",
+        "test/platform/multi_device_orchestration_test.dart",
+        "test/screens/master_video_recording_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:27:59.361421+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/models/capture_context_metadata_test.dart",
+        "test/services/device_level_service_test.dart",
+        "test/widgets/camera_level_overlay_test.dart",
+        "test/widgets/camera_setup_preview_screen_test.dart",
+        "test/slave/slave_client_registration_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:28:02.907431+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:28:05.910150+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:28:14.300415+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:29:46.112207+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/camera_setup_preview_screen_test.dart",
+        "test/widgets/camera_level_overlay_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:29:49.127049+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T11:29:52.478017+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "mobile",
+      "name": "SM G970F",
+      "notes": [
+        "Visible in flutter devices; manual setup preview tilt/capture validation was not run in this turn."
+      ],
+      "os": "Android 12 API 31",
+      "role": "android-visibility-only"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "mobile",
+      "name": "iPad (5)",
+      "notes": [
+        "Visible in flutter devices; manual setup preview tilt/capture validation was not run in this turn."
+      ],
+      "os": "iOS 17.7.11 21H461",
+      "role": "ios-visibility-only"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "camera-leveling-metadata",
+    "source": "codex",
+    "title": "HCMETA-001"
+  },
+  "notes": [
+    "Analyzer, unit/widget/protocol tests, and diff check passed. Physical Android/iOS setup-preview tilt/capture proof still requires an operator/device pass."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

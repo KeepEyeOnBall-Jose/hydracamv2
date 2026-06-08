@@ -19,6 +19,7 @@ Map<String, dynamic> buildConnectedClientAutomationPayload(
               "registeredAt": client.registeredAt.toIso8601String(),
               "lastSeen": client.lastSeen.toIso8601String(),
               "network": client.networkSnapshot?.toJson(),
+              "setupStatus": client.setupStatus?.toJson(),
             })
         .toList(),
   };

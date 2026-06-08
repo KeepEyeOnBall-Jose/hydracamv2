@@ -2,6 +2,7 @@ import "package:flutter/foundation.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 import "../models/camera_capture_settings.dart";
+import "../models/capture_context_metadata.dart";
 import "log_service.dart";
 
 // ignore: avoid_classes_with_only_static_members
@@ -16,6 +17,7 @@ class SettingsService {
   static const String _cameraLensPreferenceKey = "cameraLensPreference";
   static const String _selectedCameraNameKey = "selectedCameraName";
   static const String _videoCaptureProfileKey = "videoCaptureProfile";
+  static const String _cameraPerspectiveIdKey = "cameraPerspectiveId";
   static const String _deleteLocalAfterUploadKey =
       "deleteLocalAfterUpload"; // Choose if delete or not the media after uploading
   static const String _autoUploadMaterialsKey =
@@ -129,6 +131,24 @@ class SettingsService {
     await prefs.setString(_videoCaptureProfileKey, profile.storageValue);
     LogService.instance.registerLog(
         "Updated video capture profile to ${profile.storageValue}");
+  }
+
+  static Future<CameraPerspectiveMetadata> getCameraPerspective() async {
+    final prefs = await SharedPreferences.getInstance();
+    return CameraPerspectiveMetadata.fromId(
+      prefs.getString(_cameraPerspectiveIdKey),
+    );
+  }
+
+  static Future<void> setCameraPerspectiveId(String perspectiveId) async {
+    final perspective = CameraPerspectiveMetadata.fromId(perspectiveId);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      _cameraPerspectiveIdKey,
+      perspective.cameraPerspectiveId,
+    );
+    LogService.instance.registerLog(
+        "Updated camera perspective to ${perspective.cameraPerspectiveId}");
   }
 
   /// Retrieve the current value for "deleteLocalAfterUpload"

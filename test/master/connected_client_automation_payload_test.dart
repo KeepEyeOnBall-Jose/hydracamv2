@@ -42,6 +42,7 @@ void main() {
           "source": "test",
           "warnings": [],
         },
+        "setupStatus": null,
       },
     ]);
     expect(payload["masterServerStartedAt"], "2026-06-07T11:59:59.000Z");

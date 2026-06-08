@@ -10,7 +10,9 @@ import "gallery_persistence_service.dart";
 import "package:path_provider/path_provider.dart";
 import "../constants.dart";
 import "../models/camera_capture_settings.dart";
+import "../models/capture_context_metadata.dart";
 import "../models/captured_video.dart";
+import "camera_setup_service.dart";
 import "device_service.dart";
 import "log_service.dart";
 import "video_metadata_service.dart";
@@ -56,6 +58,8 @@ class CameraService {
   DateTime?
       videoStartRecordingDate; // Timestamp for when video recording starts
   DateTime? videoEndRecordingDate; // Timestamp for when video recording ends
+  MediaCaptureContext? lastPhotoCaptureContext;
+  MediaCaptureContext? recordingCaptureContext;
 
   /// Optional callbacks for photo/video captures.
   /// You can assign them at runtime (e.g., in `SlaveClient` or `MasterScreen`).
@@ -271,6 +275,7 @@ class CameraService {
       }
 
       await ensureCameraIsReady(); // Ensure the camera is ready before taking a photo
+      lastPhotoCaptureContext = await _buildCurrentCaptureContext();
 
       if (enableFlash) {
         await _setFlashModeIfSupported(FlashMode.torch, "photo capture");
@@ -343,6 +348,7 @@ class CameraService {
     try {
       if (_useMockCamera) {
         await _ensureMockCameraReady();
+        recordingCaptureContext = await _buildCurrentCaptureContext();
         videoStartRecordingDate = DateTime.now();
         videoEndRecordingDate = null;
         _isRecording = true;
@@ -352,6 +358,7 @@ class CameraService {
       }
 
       await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
+      recordingCaptureContext = await _buildCurrentCaptureContext();
 
       // Announce with flash before starting (if setting is enabled)
       await announceRecordingWithFlash();
@@ -372,6 +379,7 @@ class CameraService {
           .registerLog("Error starting video recording: $e\n$stackTrace");
       _isRecording = false;
       videoStartRecordingDate = null;
+      recordingCaptureContext = null;
       throw Exception("Failed to start video recording: $e");
     }
   }
@@ -451,6 +459,7 @@ class CameraService {
           startRecordingDate: videoStartRecordingDate!,
           endRecordingDate: DateTime.now(),
           receivedDate: DateTime.now(),
+          captureContext: recordingCaptureContext,
         );
         SessionManager.instance.addVideo(capturedVideo);
 
@@ -778,6 +787,7 @@ class CameraService {
 
   Future<String> _takeMockPhoto() async {
     await _ensureMockCameraReady();
+    lastPhotoCaptureContext = await _buildCurrentCaptureContext();
     final filePath = await _writeMockMediaFile(
       extension: "jpg",
       contents: "HydraCam mock photo captured at ${DateTime.now()}\n",
@@ -810,6 +820,14 @@ class CameraService {
       onVideoRecorded!(filePath);
     }
     return filePath;
+  }
+
+  Future<MediaCaptureContext> _buildCurrentCaptureContext() async {
+    final profile = await SettingsService.getVideoCaptureProfile();
+    return CameraSetupService.instance.buildCaptureContext(
+      controller: _controller,
+      videoCaptureProfile: profile.storageValue,
+    );
   }
 
   Future<String> _writeMockMediaFile({

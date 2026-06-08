@@ -8,6 +8,7 @@ import "../automation/automation_config.dart";
 import "../constants.dart" as constants;
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../screens/camera_setup_preview_screen.dart";
 import "../screens/master_video_recording_screen.dart";
 import "../screens/previous_sessions_screen.dart";
 import "../screens/role_selection_screen.dart";
@@ -24,6 +25,7 @@ import "../services/storage_service.dart";
 import "../services/user_service.dart";
 import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
+import "../widgets/camera_preview_widget.dart";
 import "../widgets/court_selection_widget.dart";
 import "../widgets/hydra_cam_app_bar.dart";
 import "../widgets/media_list_widget.dart";
@@ -186,6 +188,18 @@ class MasterScreenState extends State<MasterScreen> {
     LogService.instance.registerLog(
         "PRESSED TOGGLE RECORDING. IS RECORDING = $_recordingActive");
 
+    final bool shouldStartRecording = !_recordingActive;
+    final bool shouldMasterRecord =
+        await SettingsService.getMasterShouldRecord();
+    if (shouldStartRecording && shouldMasterRecord && showPreview) {
+      final didConfirmSetup = await _showMasterCameraSetupPreview();
+      if (!didConfirmSetup) {
+        LogService.instance
+            .registerLog("Master recording setup preview was cancelled.");
+        return;
+      }
+    }
+
     final timerDuration = await SettingsService.getTimerDuration();
     final DateTime scheduledTime =
         DateTime.now().add(Duration(seconds: timerDuration));
@@ -211,7 +225,7 @@ class MasterScreenState extends State<MasterScreen> {
 
     try {
       if (_recordingActive) {
-        if (await SettingsService.getMasterShouldRecord()) {
+        if (shouldMasterRecord) {
           await _stopMasterRecordingVideo();
         } else {
           setState(() {
@@ -219,7 +233,7 @@ class MasterScreenState extends State<MasterScreen> {
           });
         }
       } else {
-        if (await SettingsService.getMasterShouldRecord()) {
+        if (shouldMasterRecord) {
           final didStart =
               await _startMasterRecordingVideo(showPreview: showPreview);
           if (!didStart) {
@@ -388,6 +402,42 @@ class MasterScreenState extends State<MasterScreen> {
     return error.toString().replaceFirst("Exception: ", "");
   }
 
+  Future<bool> _showMasterCameraSetupPreview() async {
+    try {
+      await _server.cameraService.ensureCameraIsReady();
+    } catch (error, stackTrace) {
+      LogService.instance.registerLog(
+          "Master setup preview camera init failed: $error\n$stackTrace");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text("Could not open camera setup: ${_describeError(error)}"),
+          ),
+        );
+      }
+      return false;
+    }
+
+    if (!mounted) {
+      return false;
+    }
+
+    final controller = _server.cameraService.controller;
+    final confirmed = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CameraSetupPreviewScreen(
+          preview: controller == null
+              ? null
+              : CameraPreviewWidget(controller: controller),
+          onStartRecording: () => Navigator.of(context).pop(true),
+        ),
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   Future<bool> _startMasterRecordingVideo({bool showPreview = true}) async {
     LogService.instance.registerLog("Will record from master and show preview");
     try {
@@ -445,6 +495,7 @@ class MasterScreenState extends State<MasterScreen> {
       startRecordingDate: startRecordingDate,
       endRecordingDate: endRecordingDate,
       receivedDate: receivedDate,
+      captureContext: _server.cameraService.recordingCaptureContext,
     );
 
     SessionManager.instance.addVideo(capturedVideo);
@@ -534,6 +585,7 @@ class MasterScreenState extends State<MasterScreen> {
             captureDate: DateTime.now(),
             receivedDate: DateTime.now(),
             slaveDeviceId: deviceId,
+            captureContext: _server.cameraService.lastPhotoCaptureContext,
           );
 
           SessionManager.instance.addPhoto(capturedPhoto);
@@ -792,6 +844,11 @@ class MasterScreenState extends State<MasterScreen> {
                   final subnet =
                       network?.effectiveSubnetSignature ?? "Subnet unknown";
                   final remoteIp = device.remoteIp ?? "Remote IP unknown";
+                  final setupStatus = device.setupStatus;
+                  final setupLine = setupStatus == null
+                      ? "Setup: not reported"
+                      : "Setup: ${setupStatus.cameraPerspectiveLabel} | "
+                          "${setupStatus.isLevel ? 'Level' : 'Tilted'}";
                   return ListTile(
                     title: Text(
                         "${device.shortDeviceId} · ${device.networkStatus.label}"),
@@ -799,7 +856,8 @@ class MasterScreenState extends State<MasterScreen> {
                       "Device ID: ${device.deviceId}\n"
                       "SSID: $ssid\n"
                       "Device IP: $localIp | Remote: $remoteIp\n"
-                      "Subnet: $subnet",
+                      "Subnet: $subnet\n"
+                      "$setupLine",
                     ),
                     isThreeLine: true,
                     leading: Icon(

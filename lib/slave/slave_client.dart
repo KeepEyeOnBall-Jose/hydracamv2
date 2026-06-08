@@ -8,6 +8,7 @@ import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../services/camera_service.dart";
 import "../services/camera_service_singleton.dart";
+import "../services/camera_setup_service.dart";
 import "../services/device_service.dart"; // Import for device ID service
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
@@ -18,6 +19,7 @@ abstract class SlaveConnectionClient {
   Stream<String> get statusStream;
   Stream<bool> get connectionStatusStream;
   CameraController? get cameraController;
+  Future<void> prepareCameraPreview();
   void connect();
   void disconnect();
 }
@@ -85,6 +87,17 @@ class SlaveClient implements SlaveConnectionClient {
   @override
   CameraController? get cameraController => _cameraService.controller;
 
+  @override
+  Future<void> prepareCameraPreview() async {
+    try {
+      await _cameraService.ensureCameraIsReady();
+    } catch (error, stackTrace) {
+      LogService.instance.registerLog(
+          "Slave camera preview preparation failed: $error\n$stackTrace");
+      _statusStreamController.add("Camera preview unavailable: $error");
+    }
+  }
+
   /// Callbacks for recording events.
   final VoidCallback? onRecordingStarted;
   final VoidCallback? onRecordingStopped;
@@ -106,8 +119,8 @@ class SlaveClient implements SlaveConnectionClient {
     Function(String)? onPhotoTaken,
     this.onRecordingStarted,
     this.onRecordingStopped,
-    @visibleForTesting Future<Map<String, dynamic>?> Function()?
-        networkPayloadLoader,
+    @visibleForTesting
+    Future<Map<String, dynamic>?> Function()? networkPayloadLoader,
   })  : _networkPayloadLoader = networkPayloadLoader,
         _cameraService = CameraServiceSingleton.instance {
     // Reassign callback after the colon:
@@ -148,6 +161,7 @@ class SlaveClient implements SlaveConnectionClient {
       _channel?.sink.add(jsonEncode({
         "type": "deviceId",
         "deviceId": _deviceId,
+        "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
       }));
 
       // Also ask status of session
@@ -351,6 +365,7 @@ class SlaveClient implements SlaveConnectionClient {
           captureDate: photoCaptureDate!,
           receivedDate: receivedDate,
           slaveDeviceId: deviceId,
+          captureContext: _cameraService.lastPhotoCaptureContext,
         );
         SessionManager.instance.addPhoto(capturedPhoto);
 
@@ -414,6 +429,7 @@ class SlaveClient implements SlaveConnectionClient {
           startRecordingDate: startRecordingDate,
           endRecordingDate: endRecordingDate,
           receivedDate: receivedDate,
+          captureContext: _cameraService.recordingCaptureContext,
         );
         SessionManager.instance.addVideo(capturedVideo);
 
@@ -553,6 +569,7 @@ class SlaveClient implements SlaveConnectionClient {
       "type": "heartbeat",
       "deviceId": _deviceId,
       "timestamp": DateTime.now().toIso8601String(),
+      "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
       if (networkPayload != null) "network": networkPayload,
     }));
   }
