@@ -8,9 +8,11 @@ import "package:wakelock_plus/wakelock_plus.dart";
 import "app_theme.dart";
 import "automation/automation_bridge.dart";
 import "automation/automation_config.dart";
+import "automation/automation_screenshot_service.dart";
 import "automation/automation_standby_screen.dart";
 import "automation/runtime_role_switch.dart";
 import "master/master_screen.dart";
+import "screens/camera_setup_preview_screen.dart";
 import "services/battery_service.dart";
 import "services/camera_service_singleton.dart";
 import "services/device_id_provider.dart";
@@ -131,6 +133,8 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   late final AutomationHandler _setRoleAutomationHandler =
       _handleSetRuntimeRole;
+  late final AutomationHandler _captureScreenshotAutomationHandler =
+      AutomationScreenshotService.capture;
 
   @override
   void initState() {
@@ -142,6 +146,10 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
         "set_role",
         _setRoleAutomationHandler,
       );
+      AutomationBridge.instance.registerCommand(
+        "capture_screenshot",
+        _captureScreenshotAutomationHandler,
+      );
     }
   }
 
@@ -151,6 +159,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
     if (automationEnabled) {
       AutomationBridge.instance.unregisterCommandsIfCurrent({
         "set_role": _setRoleAutomationHandler,
+        "capture_screenshot": _captureScreenshotAutomationHandler,
       });
     }
     super.dispose();
@@ -236,13 +245,17 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
         automationEnabled && (config?.wantsMaster ?? false);
     final bool automationStandby =
         automationEnabled && (config?.wantsStandby ?? false);
+    final bool automationSetupPreview =
+        automationEnabled && (config?.wantsSetupPreview ?? false);
     final bool forceSlave = automationEnabled &&
         ((config?.wantsSlave ?? false) || (config?.forceSlaveMode ?? false));
 
     LogService.instance.registerLog(
         "Navigation decision: automationEnabled=$automationEnabled, "
         "config=$config, automationMaster=$automationMaster, "
-        "automationStandby=$automationStandby, forceSlave=$forceSlave");
+        "automationStandby=$automationStandby, "
+        "automationSetupPreview=$automationSetupPreview, "
+        "forceSlave=$forceSlave");
 
     if (automationMaster) {
       LogService.instance.registerLog("Navigating to MasterScreen");
@@ -252,6 +265,12 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
     if (automationStandby) {
       LogService.instance.registerLog("Navigating to AutomationStandbyScreen");
       return const AutomationStandbyScreen();
+    }
+
+    if (automationSetupPreview) {
+      LogService.instance
+          .registerLog("Navigating to CameraSetupStandaloneScreen");
+      return const CameraSetupStandaloneScreen();
     }
 
     LogService.instance
@@ -305,7 +324,10 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
             }
           });
 
-          return _initialScreen();
+          return RepaintBoundary(
+            key: AutomationScreenshotService.repaintBoundaryKey,
+            child: _initialScreen(),
+          );
         },
       ),
     );

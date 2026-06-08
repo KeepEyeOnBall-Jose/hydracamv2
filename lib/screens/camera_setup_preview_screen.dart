@@ -3,10 +3,14 @@ import "dart:async";
 import "package:flutter/material.dart";
 
 import "../models/capture_context_metadata.dart";
+import "../services/camera_service.dart";
+import "../services/camera_service_singleton.dart";
 import "../services/camera_setup_service.dart";
 import "../services/device_level_service.dart";
+import "../services/log_service.dart";
 import "../services/settings_service.dart";
 import "../widgets/camera_level_overlay.dart";
+import "../widgets/camera_preview_widget.dart";
 
 class CameraSetupPreviewScreen extends StatefulWidget {
   const CameraSetupPreviewScreen({
@@ -140,6 +144,93 @@ class CameraSetupPreviewPanel extends StatefulWidget {
   @override
   State<CameraSetupPreviewPanel> createState() =>
       _CameraSetupPreviewPanelState();
+}
+
+class CameraSetupStandaloneScreen extends StatefulWidget {
+  const CameraSetupStandaloneScreen({
+    super.key,
+    this.title = "Prepare Camera",
+  });
+
+  final String title;
+
+  @override
+  State<CameraSetupStandaloneScreen> createState() =>
+      _CameraSetupStandaloneScreenState();
+}
+
+class _CameraSetupStandaloneScreenState
+    extends State<CameraSetupStandaloneScreen> {
+  late final CameraService _cameraService;
+  bool _isPreparingCamera = true;
+  String? _cameraError;
+
+  @override
+  void initState() {
+    super.initState();
+    _cameraService = CameraServiceSingleton.instance;
+    unawaited(_prepareCamera());
+  }
+
+  @override
+  void dispose() {
+    unawaited(_cameraService.stopCamera());
+    super.dispose();
+  }
+
+  Future<void> _prepareCamera() async {
+    setState(() {
+      _isPreparingCamera = true;
+      _cameraError = null;
+    });
+
+    try {
+      await _cameraService.ensureCameraIsReady();
+    } catch (error, stackTrace) {
+      LogService.instance.registerError(
+        "Failed to prepare standalone setup camera preview",
+        error,
+        stackTrace,
+      );
+      _cameraError = error.toString();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isPreparingCamera = false;
+        });
+      }
+    }
+  }
+
+  Widget _previewWidget() {
+    final controller = _cameraService.controller;
+    if (controller != null && controller.value.isInitialized) {
+      return CameraPreviewWidget(controller: controller);
+    }
+
+    if (_isPreparingCamera) {
+      return const SizedBox(
+        width: 48,
+        height: 48,
+        child: CircularProgressIndicator(strokeWidth: 3),
+      );
+    }
+
+    return _CameraPreviewStatus(
+      hasError: _cameraError != null,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.title)),
+      body: CameraSetupPreviewPanel(
+        title: "Placement preview",
+        preview: _previewWidget(),
+      ),
+    );
+  }
 }
 
 class _CameraSetupPreviewPanelState extends State<CameraSetupPreviewPanel> {
@@ -337,5 +428,20 @@ class _CameraPreviewPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = reading.sensorAvailable ? Icons.videocam : Icons.sensors_off;
     return Icon(icon, size: 56, color: Colors.white70);
+  }
+}
+
+class _CameraPreviewStatus extends StatelessWidget {
+  const _CameraPreviewStatus({required this.hasError});
+
+  final bool hasError;
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      hasError ? Icons.videocam_off : Icons.videocam,
+      size: 56,
+      color: Colors.white70,
+    );
   }
 }

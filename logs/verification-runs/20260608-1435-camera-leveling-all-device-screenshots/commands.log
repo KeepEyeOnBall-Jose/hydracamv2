@@ -1,0 +1,1116 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 7 connected devices:
+  SM G960F (mobile)       • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)       • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)       • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:10
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M90QE7LX            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:6
+
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State         Model
+-------------------   -----------------------------------   ------------------------------------   -----------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   unavailable   iPhone 12 Pro (iPhone13,3)
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected     iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=setup-preview
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleDebug'...
+Running Gradle task 'assembleDebug'...                             38.0s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties.
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application.
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android.
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 logcat -d -t 600
+--------- beginning of system
+06-08 14:45:04.215  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.216  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.217  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.217  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.218  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.219  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.220  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.220  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.221  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.222  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.222  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.223  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.224  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.225  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.225  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.226  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 1000 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.226  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.227  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.228  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.229  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.229  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.230  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.231  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.232  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.233  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.233  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10074 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.234  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.235  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.235  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.236  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.237  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10140 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.238  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.238  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.239  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10131 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.240  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.241  4857  5224 I chatty  : uid=1000(system) ConnectivityThr identical 2 lines
+06-08 14:45:04.242  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.243  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.244  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.245  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.245  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.246  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.247  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.247  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.248  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.249  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.250  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.250  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.251  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.252  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.253  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.253  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.254  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.254  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.254  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.255  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.255  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.256  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.256  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.257  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.257  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.258  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.258  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.258  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.260  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.261  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.262  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.263  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.264  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.264  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10128 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.265  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.265  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.266  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.266  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.267  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.267  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.268  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.268  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.269  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.269  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.269  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 1000 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.270  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.270  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+--------- beginning of main
+06-08 14:45:04.294  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue expire 130 lines
+06-08 14:45:04.298  4857  5114 D SamsungAlarmManager: Expired : 4
+06-08 14:45:04.298  4857  5114 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260608T144741, SetElapsed=3523697628, nowELAPSED=3523539951
+06-08 14:45:04.298  4857  5114 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260608T144600, SetElapsed=3523595653, nowELAPSED=3523539951
+06-08 14:45:04.299  4857  5114 V SamsungAlarmManager: Sending to uid : 1000 listener=android.app.AlarmManager$ListenerWrapper@49dd2d3 alarm=Alarm{822bfdf type 2 when 3523539951 android}
+06-08 14:45:04.299  4857  5114 V SamsungAlarmManager: Sending to uid : 10010 action=com.samsung.action.EVERY_MINUTE_CLOCK_UPDATE alarm=Alarm{2bbd42c type 1 when 1780922700000 com.sec.android.app.launcher}
+06-08 14:45:04.300  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.304  6388  6388 I Launcher: onReceive: com.samsung.action.EVERY_MINUTE_CLOCK_UPDATE
+06-08 14:45:04.305  4857  4857 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145141 - CU:1000/CP:4857
+06-08 14:45:04.305  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.316  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 2 lines
+06-08 14:45:04.321  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.324  4857  6524 D SamsungAlarmManager: setInexact Intent (T:1/F:0/AC:false) 20260608T144600 - CU:10010/CP:6388
+06-08 14:45:04.325  6388  6388 I IconView: applyFromShortcutInfo - start GetLive : com.samsung.android.calendar
+06-08 14:45:04.326  6388  6388 I BitmapCacheContainer: getBitmapCache: BitmapCache expired com.samsung.android.calendar/UserHandle{0}
+06-08 14:45:04.327  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.333  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.335  6388  6388 D ApplicationPackageManager: we has com.samsung.android.calendar class. reuse it
+06-08 14:45:04.341  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.357  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 3 lines
+06-08 14:45:04.362  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.364  6388  6388 I ApplicationPackageManager: load= live icon for com.samsung.android.calendar, from overlay = false
+06-08 14:45:04.366  6388  6388 I LiveIconManager: getLiveIcon: complete(sync_created)
+06-08 14:45:04.366  6388  6388 I IconView: applyFromShortcutInfo - end GetLive : com.samsung.android.calendar
+06-08 14:45:04.368  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.368  6388  6388 I IconView: applyFromApplicationInfo - start GetLive : com.sec.android.app.clockpackage
+06-08 14:45:04.371  6388  6388 D ApplicationPackageManager: we has com.sec.android.app.clockpackage class. reuse it
+06-08 14:45:04.371  6388  6388 D LiveIconLoader: getLiveIcon was called in ClockPackage
+06-08 14:45:04.373  6388  6388 D LiveIconLoader: getLiveIcon res = com.sec.android.app.clockpackage
+06-08 14:45:04.373  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.375  6388  6388 D LiveIconLoader: stdIconSize : 144 , targetIconSize : 162
+06-08 14:45:04.375  6388  6388 D LiveIconLoader: mIconDpi : 640 , mTargetIconDpi : 480
+06-08 14:45:04.378  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.383  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.385  6388  6388 I ApplicationPackageManager: load= live icon for com.sec.android.app.clockpackage, from overlay = false
+06-08 14:45:04.387  6388  6388 I LiveIconManager: getLiveIcon: complete(sync_created)
+06-08 14:45:04.387  6388  6388 I IconView: applyFromApplicationInfo - end GetLive : com.sec.android.app.clockpackage
+06-08 14:45:04.388  6388  6388 I IconView: applyFromApplicationInfo - start GetLive : com.samsung.android.calendar
+06-08 14:45:04.388  6388  6388 I IconView: applyFromApplicationInfo - end GetLive : com.samsung.android.calendar
+06-08 14:45:04.389  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.394  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 1 line
+06-08 14:45:04.397  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.399  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.400  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.400 19511 19716 D ConnectivityManager: requestNetwork; CallingUid : 10067, CallingPid : 19511
+06-08 14:45:04.404  4857  6376 D ConnectivityService: requestNetwork for uid/pid:10067/19511 NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:04.404  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.405  4857  5230 D ConnectivityService: rematching NetworkAgentInfo [WIFI () - 502]
+06-08 14:45:04.405  4857  5230 D ConnectivityService:  network has: [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&FOREGROUND LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -63]
+06-08 14:45:04.406  4857  5230 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 502] was already satisfying request 1517. No change.
+06-08 14:45:04.406  4857  5230 D ConnectivityService: sending mNetworkRequests to WWSM through Network Monitor [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN]
+06-08 14:45:04.406  4857  5230 D ConnectivityService: multi(falsetruefalse)
+06-08 14:45:04.406  4857  5230 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 502] was already satisfying request 1403. No change.
+06-08 14:45:04.406  4857  5230 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 502] was already satisfying request 1409. No change.
+06-08 14:45:04.406  4857  5230 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 502] was already satisfying request 3. No change.
+06-08 14:45:04.406  4857  5230 D ConnectivityService:   checking if request is satisfied: NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:04.406  4857  5230 D ConnectivityService: currentScore = 0, newScore = 60
+06-08 14:45:04.406  4857  5230 D ConnectivityService: rematch for NetworkAgentInfo [WIFI () - 502]
+06-08 14:45:04.406  4857  5230 D ConnectivityService:    accepting network in place of null
+06-08 14:45:04.406  4857 23728 D NetworkMonitor/NetworkAgentInfo [WIFI () - 502]: EvaluatingState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=1391}] target=com.android.internal.util.StateMachine$SmHandler }
+06-08 14:45:04.406  4857  5230 D ConnectivityService: sending new Min Network Score(60): NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:04.406  4857 23728 D NetworkMonitor/NetworkAgentInfo [WIFI () - 502]: MaybeNotifyState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=1391}] target=com.android.internal.util.StateMachine$SmHandler }
+06-08 14:45:04.406  4857 23728 D NetworkMonitor/NetworkAgentInfo [WIFI () - 502]: DefaultState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=1391}] target=com.android.internal.util.StateMachine$SmHandler }
+06-08 14:45:04.407  4857  5178 D WIFI_UT : got request NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-08 14:45:04.407  4857  5178 D WIFI_UT :   my score=2147483647, my filter=[ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps]
+06-08 14:45:04.407  4857  5178 D WIFI_UT : evalRequest
+06-08 14:45:04.407  4857  5178 D WIFI_UT :   needNetworkFor
+06-08 14:45:04.407  4857  5227 D WIFI_P2P: got request NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-08 14:45:04.407  4857  5227 D WIFI_P2P:   my score=60, my filter=[ Transports: WIFI Capabilities: WIFI_P2P&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps]
+06-08 14:45:04.407  4857  5227 D WIFI_P2P: evalRequest
+06-08 14:45:04.407  4857  5227 D WIFI_P2P:   done
+06-08 14:45:04.408  4857  5369 D Ethernet: got request NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-08 14:45:04.408  4857  5369 D Ethernet:   my score=-1, my filter=[ Transports: ETHERNET Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=100000Kbps LinkDnBandwidth>=100000Kbps]
+06-08 14:45:04.408  4857  5369 D Ethernet: evalRequest
+06-08 14:45:04.408  4857  5369 D Ethernet:   done
+06-08 14:45:04.408  4857  5230 D ConnectivityService: MultiNetwork Request(TransportType - Wi-Fi request). Internet Capability doesn't required (false)
+06-08 14:45:04.408  4857  5178 D WIFI    : got request NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-08 14:45:04.408  4857  5230 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 502] was already satisfying request 1. No change.
+06-08 14:45:04.408  4857  5230 D ConnectivityService: sending mNetworkRequests to WWSM through Network Monitor [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN]
+06-08 14:45:04.408  4857  5178 D WIFI    :   my score=60, my filter=[ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps]
+06-08 14:45:04.408  4857  5230 D ConnectivityService: multi(falsetruefalse)
+06-08 14:45:04.409  4857  5178 D WIFI    : evalRequest
+06-08 14:45:04.409  4857  5178 D WIFI    :   needNetworkFor
+06-08 14:45:04.409  4857 23728 D NetworkMonitor/NetworkAgentInfo [WIFI () - 502]: EvaluatingState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=1390}] target=com.android.internal.util.StateMachine$SmHandler }
+06-08 14:45:04.409  4857  5230 D ConnectivityService: sending notification AVAILABLE for NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:04.409  4857 23728 D NetworkMonitor/NetworkAgentInfo [WIFI () - 502]: MaybeNotifyState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=1390}] target=com.android.internal.util.StateMachine$SmHandler }
+06-08 14:45:04.409  4857 23728 D NetworkMonitor/NetworkAgentInfo [WIFI () - 502]: DefaultState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=1390}] target=com.android.internal.util.StateMachine$SmHandler }
+06-08 14:45:04.409  5795  5795 D PhoneSwitcherNetworkRequstListener: got request NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-08 14:45:04.410  5795  5795 D PhoneSwitcherNetworkRequstListener:   my score=101, my filter=[ Transports: CELLULAR Capabilities: MMS&SUPL&DUN&FOTA&IMS&CBS&IA&RCS&XCAP&EIMS&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&ENT1 Specifier: <android.net.MatchAllNetworkSpecifier@0>]
+06-08 14:45:04.410  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.410  5795  5795 D PhoneSwitcherNetworkRequstListener: evalRequest
+06-08 14:45:04.410  5795  5795 D PhoneSwitcherNetworkRequstListener:   needNetworkFor
+06-08 14:45:04.410  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:04.411  4857  5230 D ConnectivityService: sending notification IP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:04.412  4857  6376 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.413  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.414  4857  6376 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.415  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.417  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:04.572  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 30 lines
+06-08 14:45:04.577  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.579 19511 19613 I A       : (REDACTED) Attempting to cache the data for enabled corpora %s.
+06-08 14:45:04.583  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.593  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 2 lines
+06-08 14:45:04.598  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.602 19511 19726 I A       : (REDACTED) Starting batch sync for corpora: %s
+06-08 14:45:04.604  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.609  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.609 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Attempting to force open the camera.
+06-08 14:45:04.611 14499 14556 D CameraStateRegistry: tryOpenCamera(Camera@6c80a9[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: Recalculating open cameras:
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: Camera                                       State
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: -------------------------------------------------------------------
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: Camera@6c80a9[id=0]                          OPENING
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: Camera@79dafeb[id=1]                         UNKNOWN
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: -------------------------------------------------------------------
+06-08 14:45:04.613 14499 14556 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-08 14:45:04.614  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.615 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@698f569
+06-08 14:45:04.617 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Opening camera.
+06-08 14:45:04.619  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.621 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-08 14:45:04.623 14499 14556 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-08 14:45:04.624 14499 14556 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-08 14:45:04.624  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.628 14499 14556 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-77bdcbac-1684-45b2-98a8-6eaaa458ea1c136340729, androidx.camera.core.Preview-7db6e1c6-fd4b-4690-85e5-4e849dfec087259530051, androidx.camera.core.ImageAnalysis-562d94f6-0451-487d-a308-978e9326a16f224505418] for camera: 0
+06-08 14:45:04.629 14499 14556 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-08 14:45:04.630  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.633  4719 16874 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-08 14:45:04.635  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.637  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-08 14:45:04.640  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.698  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 11 lines
+06-08 14:45:04.704  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.705 19511 14614 I A       : (REDACTED) The syncToken for corpus %s is %s.
+06-08 14:45:04.707 19511 14614 I A       : (REDACTED) The syncToken for corpus %s is %s.
+06-08 14:45:04.709  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.714  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:04.717  4728  4892 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-08 14:45:04.719  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:06.627  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 361 lines
+06-08 14:45:06.632  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:06.638  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-08 14:45:06.638  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.157  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 97 lines
+06-08 14:45:07.162  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.162 20528 20612 D ContactsProvider_EventLog: contents_sample_state: [CONTACT contacts(3954) data(22477) accounts({vnd.sec.contact.phone (1)=1, com.google (9)=3967, com.whatsapp (5)=1}) accounts deleted({}) calls([logtype:100 cnt:1, logtype:300 cnt:4, logtype:1000 cnt:1]) countryIso(DE) userId(0)  ]
+06-08 14:45:07.162 20528 20612 D ContactsProvider_EventLog: contents_sample_state: [ agr({[1 ,5]=1, [9 ,9]=14, [9]=3939})  ]
+06-08 14:45:07.162 20528 20612 D ContactsProvider_EventLog: contents_sample_state: [ actCnt({android.process.acore(20528)=1})  ]
+06-08 14:45:07.162 20528 20612 D ContactsProvider_EventLog: contents_sample_state: [PROFILE contacts(0) data(0) accounts({})  ]
+06-08 14:45:07.162 20528 20612 D ContactsProvider_EventLog: contents_sample_state: [SAPROFILE contacts(1) data(3) accounts({vnd.sec.contact.phone (1)=1})  ]
+06-08 14:45:07.164 20528 20612 E ContactsProvider_EventLog: Flush buffer to file cnt : 1 size : 1Kb duration : 1ms lastUpdatedAfter : 60189 ms mFlush_time_threasold : 2000 mCurrentSize : 601
+06-08 14:45:07.167  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.292  6142  6142 D io_stats: !@   8,0 r 4282564 217259984 w 1835570 41236136 d 128508 32023664 f 799512 798777 iot 4562210 3584069 th 216536 0 0 pt 0 inp 0 0 242619.052
+06-08 14:45:07.624  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 86 lines
+06-08 14:45:07.630  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.633  4719 16874 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-08 14:45:07.635  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.641  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.641 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Camera receive onErrorCallback
+06-08 14:45:07.643 14499 14555 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-08 14:45:07.645 14499 14555 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-08 14:45:07.646  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.647 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-08 14:45:07.650 14499 14555 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-08 14:45:07.650 14499 14555 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-08 14:45:07.651  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.653 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Resetting Capture Session
+06-08 14:45:07.656  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.657 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-08 14:45:07.660 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Releasing session in state REOPENING
+06-08 14:45:07.662  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.664 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-08 14:45:07.667 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} closing camera
+06-08 14:45:07.667  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.670 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} CameraDevice.onClosed()
+06-08 14:45:07.672 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-08 14:45:07.673  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:07.674 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@89e137f activeResuming = true
+06-08 14:45:07.678  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.628  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 178 lines
+06-08 14:45:08.634  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.638  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-08 14:45:08.639  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.676  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 7 lines
+06-08 14:45:08.681  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.681 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Attempting to force open the camera.
+06-08 14:45:08.683 14499 14556 D CameraStateRegistry: tryOpenCamera(Camera@6c80a9[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-08 14:45:08.686  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: Recalculating open cameras:
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: Camera                                       State
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: -------------------------------------------------------------------
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: Camera@6c80a9[id=0]                          OPENING
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: Camera@79dafeb[id=1]                         UNKNOWN
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: -------------------------------------------------------------------
+06-08 14:45:08.687 14499 14556 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-08 14:45:08.689 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@89e137f
+06-08 14:45:08.691 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Opening camera.
+06-08 14:45:08.691  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.693 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-08 14:45:08.693 14499 14556 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-08 14:45:08.694 14499 14556 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-08 14:45:08.697  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.699 14499 14556 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-77bdcbac-1684-45b2-98a8-6eaaa458ea1c136340729, androidx.camera.core.Preview-7db6e1c6-fd4b-4690-85e5-4e849dfec087259530051, androidx.camera.core.ImageAnalysis-562d94f6-0451-487d-a308-978e9326a16f224505418] for camera: 0
+06-08 14:45:08.700 14499 14556 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-08 14:45:08.702  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:08.706  4719 16874 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-08 14:45:08.707  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.773  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 199 lines
+06-08 14:45:09.778  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.782 19511 19710 I SettingsDataLayer.PR: PR status onSyncCompleted called in TNG
+06-08 14:45:09.783  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.789  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.793 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.793 19511 19710 I chatty  : uid=10067(u0_a67) Lite Thread #4 identical 1 line
+06-08 14:45:09.793 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.794  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.795 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.795 19511 19710 I A       : Proto config empty. Exit merge.
+06-08 14:45:09.799 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.799  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.799 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.799 19511 19710 I chatty  : uid=10067(u0_a67) Lite Thread #4 identical 1 line
+06-08 14:45:09.800 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.801 19511 19710 I A       : Proto config empty. Exit merge.
+06-08 14:45:09.801 19511 19615 I SettingsDataLayer.PR: (REDACTED) PR status onSyncCompleted updated in TNG to %s
+06-08 14:45:09.803 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.803 19511 19710 I chatty  : uid=10067(u0_a67) Lite Thread #4 identical 1 line
+06-08 14:45:09.803 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.804  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.805 19511 19710 I A       : getLocaleToModelSpecsMap
+06-08 14:45:09.805 19511 19710 I A       : Proto config empty. Exit merge.
+06-08 14:45:09.809 19511 19710 I A       : PR status onSyncCompleted called
+06-08 14:45:09.810  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.815  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 1 line
+06-08 14:45:09.820  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.823 19511 14614 I A       : (REDACTED) PR status onSyncCompleted updated to %s
+06-08 14:45:09.825  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.836  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 2 lines
+06-08 14:45:09.841  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.846 19511 19599 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=71d17c9f-c830-42eb-8de5-14c2207345ba, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.google.apps.tiktok.sync.impl.workmanager.SyncWorker } ]
+06-08 14:45:09.847  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.851 19511 19511 D ConnectivityManager: unregisterNetworkCallback; CallingUid : 10067, CallingPid : 19511
+06-08 14:45:09.852  4857  5230 D ConnectivityService: releasing NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] (CALLBACK_RELEASED)
+06-08 14:45:09.852  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.852  4857  5230 D ConnectivityService:  Removing from current network NetworkAgentInfo [WIFI () - 502], leaving 18 requests.
+06-08 14:45:09.853  4857  5230 D ConnectivityService: sending notification RELEASED for NetworkRequest [ TRACK_DEFAULT id=1518, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:09.860  4857  6376 I ActivityManager: KPU : put [com.samsung.android.sm.policy] : 5202 K
+06-08 14:45:09.861  4857  6376 I ActivityManager: Killing 14094:com.samsung.android.sm.policy/u0a160 (adj 906): DHA:empty #25
+06-08 14:45:09.879  4857  6524 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145141 - CU:1000/CP:4857
+06-08 14:45:09.882  4857  6524 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145221 - CU:1000/CP:4857
+06-08 14:45:09.893  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 6 lines
+06-08 14:45:09.899  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.900  5768  5781 D ForegroundUtils: could not check pending caller
+06-08 14:45:09.904  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.909  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.911 19511 19598 I A       : NGA disabled due to not being eligible.
+06-08 14:45:09.915  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.920  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.922  4857  6524 D PackageManager: setEnabledSetting : userId = 0 packageName = com.google.android.googlequicksearchbox cmp = androidx.work.impl.background.systemalarm.RescheduleReceiver newState = 1 callingPackage = 10067/com.google.android.googlequicksearchbox
+06-08 14:45:09.925  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.970  4857  6524 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145141 - CU:1000/CP:4857
+06-08 14:45:09.972  4857  6524 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145221 - CU:1000/CP:4857
+06-08 14:45:09.977  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 10 lines
+06-08 14:45:09.983  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:09.984  4857  6524 D PackageManager: setEnabledSetting : userId = 0 packageName = com.google.android.googlequicksearchbox cmp = androidx.work.impl.background.systemalarm.RescheduleReceiver newState = 1 callingPackage = 10067/com.google.android.googlequicksearchbox
+06-08 14:45:09.988  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:10.017  4857  6524 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145141 - CU:1000/CP:4857
+06-08 14:45:10.020  4857  6524 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260608T145221 - CU:1000/CP:4857
+06-08 14:45:10.030  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 8 lines
+06-08 14:45:10.035  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:10.037  4857  6524 D PackageManager: setEnabledSetting : userId = 0 packageName = com.google.android.googlequicksearchbox cmp = androidx.work.impl.background.systemalarm.RescheduleReceiver newState = 1 callingPackage = 10067/com.google.android.googlequicksearchbox
+06-08 14:45:10.040  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:10.056  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:10.067  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 5 lines
+06-08 14:45:10.072  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:10.074  4857  6524 D PackageManager: setEnabledSetting : userId = 0 packageName = com.google.android.googlequicksearchbox cmp = androidx.work.impl.background.systemalarm.RescheduleReceiver newState = 1 callingPackage = 10067/com.google.android.googlequicksearchbox
+06-08 14:45:10.077  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:10.096  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:10.633  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 106 lines
+06-08 14:45:10.638  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:10.638  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-08 14:45:10.643  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:11.701  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 199 lines
+06-08 14:45:11.706  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:11.707  4719 16874 E CameraService: CameraService::connect (PID -1) rejected (too many other clients connecting).
+06-08 14:45:11.711 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Camera receive onErrorCallback
+06-08 14:45:11.711  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:11.712 14499 14555 D Camera2CameraImpl: CameraDevice.onError(): 0 failed with ERROR_MAX_CAMERAS_IN_USE while in OPENING state. Will attempt recovering from error.
+06-08 14:45:11.713 14499 14555 D Camera2CameraImpl: Attempt to reopen camera[0] after error[ERROR_MAX_CAMERAS_IN_USE]
+06-08 14:45:11.715 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Transitioning camera internal state: OPENING --> REOPENING
+06-08 14:45:11.715 14499 14555 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}} from OPENING and StateError{code=1, cause=null}
+06-08 14:45:11.716 14499 14555 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=StateError{code=1, cause=null}}
+06-08 14:45:11.716  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:11.717 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Resetting Capture Session
+06-08 14:45:11.720 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Skipping Capture Session state check due to current camera state: REOPENING and previous session status: false
+06-08 14:45:11.722  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:11.722 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Releasing session in state REOPENING
+06-08 14:45:11.724 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Camera reopen required. Checking if the current camera can be closed safely.
+06-08 14:45:11.726 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} closing camera
+06-08 14:45:11.727  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:11.728 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} CameraDevice.onClosed()
+06-08 14:45:11.730 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Camera closed due to error: ERROR_MAX_CAMERAS_IN_USE
+06-08 14:45:11.732 14499 14555 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Attempting camera re-open in 1000ms: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@de11250 activeResuming = true
+06-08 14:45:11.732  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.295  6142  6142 D io_stats: !@   8,0 r 4282867 217284376 w 1835622 41236664 d 128508 32023664 f 799525 798790 iot 4562330 3584216 th 216668 0 0 pt 0 inp 0 0 242624.056
+06-08 14:45:12.633  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 169 lines
+06-08 14:45:12.638  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.639  4719 21207 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_captureStreamThreadFunc):wait timeout
+06-08 14:45:12.643  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.729  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 16 lines
+06-08 14:45:12.734  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.739 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Attempting to force open the camera.
+06-08 14:45:12.740  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.741 14499 14556 D CameraStateRegistry: tryOpenCamera(Camera@6c80a9[id=0]) [Available Cameras: 0, Already Open: true (Previous state: OPENING)] --> SUCCESS
+06-08 14:45:12.745  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: Recalculating open cameras:
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: Camera                                       State
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: -------------------------------------------------------------------
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: Camera@6c80a9[id=0]                          OPENING
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: Camera@79dafeb[id=1]                         UNKNOWN
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: -------------------------------------------------------------------
+06-08 14:45:12.746 14499 14556 D CameraStateRegistry: Open count: 1 (Max allowed: 1)
+06-08 14:45:12.748 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Cancelling scheduled re-open: androidx.camera.camera2.internal.Camera2CameraImpl$StateCallback$ScheduledReopen@de11250
+06-08 14:45:12.750  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.751 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Opening camera.
+06-08 14:45:12.754 14499 14556 D Camera2CameraImpl: {Camera@6c80a9[id=0]} Transitioning camera internal state: REOPENING --> OPENING
+06-08 14:45:12.754 14499 14556 D CameraStateMachine: New public camera state CameraState{type=OPENING, error=null} from OPENING and null
+06-08 14:45:12.755 14499 14556 D CameraStateMachine: Publishing new public camera state CameraState{type=OPENING, error=null}
+06-08 14:45:12.756  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.761  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.762 14499 14556 D UseCaseAttachState: All use case: [androidx.camera.core.ImageCapture-77bdcbac-1684-45b2-98a8-6eaaa458ea1c136340729, androidx.camera.core.Preview-7db6e1c6-fd4b-4690-85e5-4e849dfec087259530051, androidx.camera.core.ImageAnalysis-562d94f6-0451-487d-a308-978e9326a16f224505418] for camera: 0
+06-08 14:45:12.764 14499 14556 I CameraManager: getCameraCharacteristics : cameraId = 0
+06-08 14:45:12.766  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.772  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:12.773  4719 16874 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) for HAL version default and Camera API version 2
+06-08 14:45:12.777  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:13.533  4857  6376 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:13.616  4857  4914 W StorageManager: getStorageFullBytes DEFAULT_FULL_THRESHOLD_BYTES : 20971520, threadhold : 20971520
+06-08 14:45:13.617  4857  4914 W StorageManager: getStorageLowBytes lowPercent : 5, lowBytes : 1332166656, maxLowBytes : 524288000
+06-08 14:45:13.618  4857  4914 W DeviceStorageMonitorService: updateBroadcasts(/data) oldLevel:0, newLevel:0, seq:1
+06-08 14:45:13.619  4857  4914 W DeviceStorageMonitorService: updateBroadcasts_filenode(/data) fn_oldLevel:0, fn_newLevel:0, seq:1
+06-08 14:45:13.875  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 206 lines
+06-08 14:45:13.878  4857  6376 D BatteryService: !@BatteryListener : batteryPropertiesChanged!
+06-08 14:45:13.879  4857  6376 D BatteryService: level:100, scale:100, status:5, health:2, present:true, voltage: 4250, temperature: 311, technology: Li-ion, AC powered:false, USB powered:true, POGO powered:false, Wireless powered:false, icon:17303851, invalid charger:0, maxChargingCurrent:0, maxChargingVoltage:0, chargeCounter:0
+06-08 14:45:13.879  4857  6376 D BatteryService: online:6, current avg:-98, charge type:2, power sharing:false, high voltage charger:false, capacity:280000, batterySWSelfDischarging:false, misc_event:65536, current_event:0, current_now:-19
+06-08 14:45:13.879  4857  4857 D BatteryService: Sending ACTION_BATTERY_CHANGED.
+06-08 14:45:13.880  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:13.881  4857  4857 I MotionRecognitionService: Plugged
+06-08 14:45:13.882  4857  4857 D MotionRecognitionService:   mCableConnection= 1
+06-08 14:45:13.882  4857  4857 D MotionRecognitionService: setPowerConnected : mGripEnabled = false
+06-08 14:45:13.882  4857  4857 D SamsungPhoneWindowManager: ACTION_BATTERY_CHANGED - Level :: 100, battStatus :: 5
+06-08 14:45:13.883  4857  4912 D UsbDeviceManager: handleMessage -> MSG_UPDATE_CHARGING_STATE = 1
+06-08 14:45:13.884  5429  5429 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-08 14:45:13.886  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:13.887  5429  5429 D BatteryController: onReceive-ACTION_BATTERY_CHANGED : mLevel=100, mBatteryStatus=5
+06-08 14:45:13.891  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:13.893  5429  5429 D PowerUI : priorPlugType = 2 mPlugType =  2
+06-08 14:45:13.896  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.047  4857  7905 D SSRM:t  : SIOP:: AP = 390, PST = 401 (W:10), BAT = 311, CHG = 386, CP = 320
+06-08 14:45:14.050  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 29 lines
+06-08 14:45:14.053  4857  7905 D aq      : limitGPUFreq:: freq = -1
+06-08 14:45:14.055  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.056  4857  7905 D TelephonyManager: getAllCellInfo : Caller (PID / UID / TID): 4857 / 1000 / 7905
+06-08 14:45:14.061  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.066  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 1 line
+06-08 14:45:14.072  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.074  4718  5971 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;outDevice
+06-08 14:45:14.075  4718  5971 V APM_AudioPolicyManager: getNewOutputDevice() selected device 0
+06-08 14:45:14.075  4718  5971 V APM_AudioPolicyManager: ### curdevice : 2
+06-08 14:45:14.075  4718  5971 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;outDevice
+06-08 14:45:14.075  4718  5971 V APM_AudioPolicyManager: getNewOutputDevice() selected device 0
+06-08 14:45:14.075  4718  5971 V APM_AudioPolicyManager: ### curdevice : 2
+06-08 14:45:14.076  4718  5971 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;outDevice
+06-08 14:45:14.076  4718  5971 V APM_AudioPolicyManager: getNewOutputDevice() selected device 0
+06-08 14:45:14.076  4718  5971 V APM_AudioPolicyManager: ### curdevice : 2
+06-08 14:45:14.077  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.082  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.083  4718  5971 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;activeStream
+06-08 14:45:14.083  4718  5971 V APM_AudioPolicyManager: ### active stream : 0
+06-08 14:45:14.083  4857  7905 D AudioService: active stream is 0x0
+06-08 14:45:14.087  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.190  4857  5230 D ConnectivityService: updateCapabilities: oldCap = [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&FOREGROUND LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -63], newCap = [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -64]
+06-08 14:45:14.190  4857  5230 D ConnectivityService: notifyType CAP_CHANGED for NetworkAgentInfo [WIFI () - 502]
+06-08 14:45:14.190  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ REQUEST id=1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.190  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=3, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.191  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=3, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.191  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=5, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.192  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=5, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.192  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=6, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.192  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=6, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.193  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=7, [] ]
+06-08 14:45:14.193  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.193  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=7, [] ]
+06-08 14:45:14.193  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=8, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.194  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=8, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.194  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=9, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.194  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.195  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=9, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.195  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 1001 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.197  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1390, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.197  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1390, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.197  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10131 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.198  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1391, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.198  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1391, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.199  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.200  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10061 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.201  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1403, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.201  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1403, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.201  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.203  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1409, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.203  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1409, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.204  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1411, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.205  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1411, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.207  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1424, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.207  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1424, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.208  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1433, [ Transports: CELLULAR|WIFI|BLUETOOTH|ETHERNET|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND] ]
+06-08 14:45:14.208  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.208  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1433, [ Transports: CELLULAR|WIFI|BLUETOOTH|ETHERNET|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND] ]
+06-08 14:45:14.209  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10066 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.210  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.211  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1460, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.211  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1460, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.211  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.212  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1477, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.212  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1477, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-08 14:45:14.212  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1516, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.213  4857  6376 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.213  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=1516, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.214  4857  6524 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.214  4857  5230 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1517, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.215  4857  5230 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1517, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-08 14:45:14.216  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.217  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10160 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.218  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.219  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.220  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.221  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.222  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.223  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.224  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.225  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.226  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.227  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.228  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.229  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10128 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.230  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.231  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.232  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.233  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.233  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.234  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.235  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.236  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.237  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.238  4857  5224 I chatty  : uid=1000(system) ConnectivityThr identical 1 line
+06-08 14:45:14.239  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.239  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.240  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.241  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.242  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.242  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.243  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.244  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.245  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.246  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.247  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.247  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 1000 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.248  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.249  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.250  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.251  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.252  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.254  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.254  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.255  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.256  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.256  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10074 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.257  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.258  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.259  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.259  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.260  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10140 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.261  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.262  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.263  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10131 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.263  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.265  4857  5224 I chatty  : uid=1000(system) ConnectivityThr identical 2 lines
+06-08 14:45:14.266  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.266  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.267  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.268  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.269  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.269  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.270  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.271  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.272  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.273  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.273  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.274  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.275  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.275  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.276  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.277  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.277  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10016 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.278  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.279  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.280  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.281  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.282  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.283  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.284  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.284  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.285  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.285  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.286  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.286  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10122 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.288  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.289  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10179 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.291  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10114 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.292  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10128 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.295  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10020 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.296  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.298  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.299  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.300  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10151 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.302  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.302  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.303  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.303  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.304  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10189 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.304  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 1000 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.304  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10120 networkInfo: [type: WIFI[] - WIFI, state: DISCONNECTED/BLOCKED, reason: (unspecified), extra: (none), failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.305  4857  5224 D ConnectivityService: filterNetworkStateForUid() uid: 10067 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "FRITZ!Box 6591 Cable TZ", failover: false, available: true, roaming: false, metered: false]
+06-08 14:45:14.539  4719 21206 I chatty  : uid=1047(cameraserver) ExynosCameraQue identical 85 lines
+06-08 14:45:14.544  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+06-08 14:45:14.547 12709 12709 E adbd    : recv: OPEN 00004e69 00000000 004b:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 3A 65 78 70 6F 72 74 20 41 4E 44 52 4F 49 44 5F 4C 4F 47 5F 54 41 47 53 3D 27 27 3B 20 65 78 65 63 20 6C 6F 67 63 61 74 20 27 2D 64 27 20 27 2D 74 27 20 27 36 30 30 27 00
+06-08 14:45:14.547 12709 12709 E adbd    : service_to_fd: shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '600'
+06-08 14:45:14.550  4719 21206 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_captureThreadFunc[4735]):Wait to start reprocessing stream
+[exit-code] 0
+
+$ flutter build macos --debug --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=macos-setup --dart-define=HYDRACAM_MOCK_CAMERA=true
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running pod install...                                             571ms
+Building macOS application...
+✓ Built build/macos/Build/Products/Debug/HydraCam.app
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ open -n build/macos/Build/Products/Debug/HydraCam.app
+[exit-code] 0
+
+$ flutter build ios --simulator --debug --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=iphone-sim-setup
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building com.vectorblanco.hydracam.dev for simulator (ios)...
+Running pod install...                                             622ms
+Running Xcode build...
+Xcode build done.                                           47.9s
+✓ Built build/ios/iphonesimulator/Runner.app
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun simctl install 5CF4A12E-A8B5-4285-AE86-407B9067CB5F build/ios/iphonesimulator/Runner.app
+[exit-code] 0
+
+$ xcrun simctl privacy 5CF4A12E-A8B5-4285-AE86-407B9067CB5F grant camera com.vectorblanco.hydracam.dev
+[exit-code] 0
+
+$ xcrun simctl privacy 5CF4A12E-A8B5-4285-AE86-407B9067CB5F grant microphone com.vectorblanco.hydracam.dev
+[exit-code] 0
+
+$ xcrun simctl launch 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.vectorblanco.hydracam.dev
+com.vectorblanco.hydracam.dev: 88422
+[exit-code] 0
+
+$ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=ipad-setup --dart-define=HYDRACAM_AUTOMATION_PORT=4775
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+60 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building com.vectorblanco.hydracam.dev for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 8T78Y2X37H
+Running Xcode build...
+Xcode build done.                                           39.1s
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Build succeeded but the expected app at /Users/jose/src/work/hydracamv2/build/ios/iphoneos/Runner.app not found
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app
+15:08:27  Acquired tunnel connection to device.
+15:08:27  Enabling developer disk image services.
+15:08:27  Acquired usage assertion.
+
+[stderr]
+ERROR: Failed to install the app on the device. (com.apple.dt.CoreDeviceError error 3002 (0xBBA))
+       NSURL = build/ios/iphoneos/Runner.app -- file:///Users/jose/src/work/hydracamv2/
+       ----------------------------------------
+           Could not obtain access to one or more requested file system resources because CoreDevice was unable to create bookmark data. (com.apple.dt.CoreDeviceError error 1005 (0x3ED))
+           NSLocalizedFailureReason = Access to the resource was denied by this process' sandbox. Please ensure that the app has the appropriate entitlements to access the resource.
+           NSURL = file:///Users/jose/src/work/hydracamv2/build/ios/iphoneos/Runner.app
+       ----------------------------------------
+               The file couldn’t be opened because it doesn’t exist. (NSCocoaErrorDomain error 260 (0x104))
+[exit-code] 1
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/Profile-iphoneos/Runner.app
+15:08:47  Acquired tunnel connection to device.
+15:08:47  Enabling developer disk image services.
+15:08:47  Acquired usage assertion.
+App installed:
+• bundleID: com.vectorblanco.hydracam.dev
+• installationURL: file:///private/var/containers/Bundle/Application/374863B2-7B05-4482-A73C-7C1B35AEEB47/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1316
+• options:
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing com.vectorblanco.hydracam.dev
+15:09:10  Acquired tunnel connection to device.
+15:09:10  Enabling developer disk image services.
+15:09:10  Acquired usage assertion.
+Launched application with com.vectorblanco.hydracam.dev bundle identifier.
+[exit-code] 0

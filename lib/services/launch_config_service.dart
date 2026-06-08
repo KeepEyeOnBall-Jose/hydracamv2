@@ -20,6 +20,7 @@ class LaunchConfig {
   bool get wantsMaster => role?.toLowerCase() == "master";
   bool get wantsSlave => role?.toLowerCase() == "slave";
   bool get wantsStandby => role?.toLowerCase() == "standby";
+  bool get wantsSetupPreview => role?.toLowerCase() == "setup";
 }
 
 class LaunchConfigService {

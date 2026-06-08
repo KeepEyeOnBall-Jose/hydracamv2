@@ -37,4 +37,14 @@ void main() {
     expect(config.wantsSlave, isFalse);
     expect(config.targetId, "ipad");
   });
+
+  test("launch config recognizes setup preview role", () {
+    const config = LaunchConfig(role: "setup", targetId: "android-tilted");
+
+    expect(config.wantsSetupPreview, isTrue);
+    expect(config.wantsStandby, isFalse);
+    expect(config.wantsMaster, isFalse);
+    expect(config.wantsSlave, isFalse);
+    expect(config.targetId, "android-tilted");
+  });
 }

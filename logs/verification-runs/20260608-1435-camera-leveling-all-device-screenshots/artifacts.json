@@ -1,0 +1,445 @@
+{
+  "acceptanceChecks": [
+    "Merged camera leveling work is committed/pushed, and screenshots show the setup/leveling UI on macOS, iPad/iPhone, and all three Android devices."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:35:28.741709+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:35:41.050089+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:35:41.119342+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=setup-preview"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:41:17.426035+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:42:11.725713+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:42:47.809816+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:42:56.852286+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:42.036403+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:42.160157+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:42.296650+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:42.472237+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:42.552638+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:43.769019+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/com.amaia23.hydracam.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:55.438044+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/com.amaia23.hydracam.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:55.858442+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/com.amaia23.hydracam.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:43:56.071827+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-d",
+        "-t",
+        "600"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:45:14.369941+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "macos",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=macos-setup",
+        "--dart-define=HYDRACAM_MOCK_CAMERA=true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:45:48.725421+00:00"
+    },
+    {
+      "command": [
+        "open",
+        "-n",
+        "build/macos/Build/Products/Debug/HydraCam.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:46:41.551674+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--simulator",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=iphone-sim-setup"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:48:11.732179+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "install",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "build/ios/iphonesimulator/Runner.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:49:38.357252+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "privacy",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "grant",
+        "camera",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:49:38.940808+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "privacy",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "grant",
+        "microphone",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:49:39.673901+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "launch",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T12:49:49.172680+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=ipad-setup",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4775"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:07:21.439131+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "build/ios/iphoneos/Runner.app"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T13:08:27.555221+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "build/ios/Profile-iphoneos/Runner.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:08:47.121820+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--terminate-existing",
+        "com.vectorblanco.hydracam.dev"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T13:09:10.447331+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "mobile",
+      "name": "SM G960F",
+      "notes": [],
+      "os": "Android 10 API 29",
+      "role": "android"
+    },
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "mobile",
+      "name": "SM G935F",
+      "notes": [],
+      "os": "Android 8 API 26",
+      "role": "android"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "mobile",
+      "name": "SM G970F",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "android"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "mobile",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "ios-ipad"
+    },
+    {
+      "identifier": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "kind": "simulator",
+      "name": "iPhone 16 Plus Simulator",
+      "notes": [],
+      "os": "iOS 18.4 simulator",
+      "role": "ios-iphone-simulator"
+    },
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS",
+      "notes": [],
+      "os": "macOS 26.4.1",
+      "role": "macos"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/android-sm-g935f-setup.png",
+    "screenshots/android-sm-g960f-setup.png",
+    "screenshots/android-sm-g970f-setup.png",
+    "screenshots/ipad-physical-setup-rendered.png",
+    "screenshots/iphone-16-plus-simulator-setup-after-wait.png",
+    "screenshots/iphone-16-plus-simulator-setup-attached.png",
+    "screenshots/iphone-16-plus-simulator-setup.png",
+    "screenshots/macos-setup-preview-foreground.png",
+    "screenshots/macos-setup-preview-window.png",
+    "screenshots/macos-setup-preview.png",
+    "device-logs/ipad-capture-screenshot-response.json",
+    "device-logs/ipad-physical-setup-logs.json"
+  ],
+  "item": {
+    "slug": "camera-leveling-all-device-screenshots",
+    "source": "codex",
+    "title": "HCMETA-002"
+  },
+  "notes": [
+    "Setup/leveling screenshots captured for macOS, iPhone simulator, physical iPad, and three Android devices; physical iPhone unavailable and S7 edge preview background black."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}
