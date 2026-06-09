@@ -1,0 +1,72 @@
+{
+  "acceptanceChecks": [
+    "Old-media scan preserves active session GUID",
+    "Old-media scan preserves active device type",
+    "Session folder scanning ignores non-session folders",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:44:29.994712+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:44:32.073477+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:46:04.048314+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter session-manager unit-test runner",
+      "notes": [
+        "Runs SessionManager old-media scan regression with fake path provider and reconstructed session directory."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/gallery_scan_active_session_preserved.png",
+    "video/gallery_scan_active_session_preserved_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "gallery-scan-active-session-preserved",
+    "source": "docs/control/backlog-import.md#9-improve-old-mediagallery-session-attachment",
+    "title": "9. Improve old-media/gallery session attachment"
+  },
+  "notes": [
+    "Old-media scan now preserves active session identity while reconstructing historical session metadata.",
+    "Old-media scan now preserves active session identity while reconstructing historical session metadata and ignores non-session folders."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

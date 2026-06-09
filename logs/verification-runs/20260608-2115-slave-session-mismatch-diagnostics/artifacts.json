@@ -1,0 +1,78 @@
+{
+  "acceptanceChecks": [
+    "Slave heartbeats report active session GUID and master diagnostics flag slaves connected to a different session."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:56:44.886413+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:56:57.092947+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:57:04.722795+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:57:18.853628+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "SlaveClient heartbeat + connected-client automation payload",
+      "kind": "loopback-and-unit-test",
+      "name": "Flutter loopback/unit test runner",
+      "notes": [
+        "Focused tests verify SlaveClient reports active sessionGuid in heartbeat and master diagnostics classify a different slave session."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "session-mismatch-diagnostics"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/slave_session_mismatch_diagnostics.png",
+    "video/slave_session_mismatch_diagnostics_proof.mp4",
+    "device-logs/green-focused-tests.log",
+    "device-logs/red-tests.log"
+  ],
+  "item": {
+    "slug": "slave-session-mismatch-diagnostics",
+    "source": "docs/control/backlog-import.md",
+    "title": "Backlog row 8: Detect devices connected to another session"
+  },
+  "notes": [
+    "Focused TDD slice for backlog row 8/session integrity. Slave registration and heartbeat report active sessionGuid; master diagnostics label different slave session. Does not claim real-device reconnect reproduction."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

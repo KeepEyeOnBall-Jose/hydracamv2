@@ -1,0 +1,55 @@
+{
+  "acceptanceChecks": [
+    "identifySlave acknowledgement produces a visible temporary slave-side frame without changing network command semantics"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "--plain-name",
+        "identify command acknowledgement shows visible slave frame"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:45:44.627997+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave/slave_screen_fast_connect_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:45:47.682685+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "test/slave/slave_screen_fast_connect_test.dart",
+      "kind": "simulated-ui",
+      "name": "Flutter widget test surface",
+      "notes": [
+        "Local widget proof for slave-side identify frame behavior"
+      ],
+      "os": "macOS Flutter test",
+      "role": "slave"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-identify-visible-frame",
+    "source": "docs/control/backlog-import.md row 47",
+    "title": "FALLOS Y MEJORAS row 47"
+  },
+  "notes": [
+    "Local widget proof passed for slave-side identify visible frame; real multi-device diagnostic proof remains open."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

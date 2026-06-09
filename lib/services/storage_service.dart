@@ -19,7 +19,7 @@ class StorageService {
   final ScaffoldMessengerState? _messengerState;
   final double _lowStorageThreshold;
   final double _criticalStorageThreshold;
-  final Function() _onCriticalStorageCallback;
+  final FutureOr<void> Function() _onCriticalStorageCallback;
 
   Timer? _storageCheckTimer;
   DateTime? _lastWarningShownTime;
@@ -31,7 +31,7 @@ class StorageService {
     required ScaffoldMessengerState? messengerState,
     double lowStorageThreshold = 2.0,
     double criticalStorageThreshold = 0.5,
-    required Function() onCriticalStorageCallback,
+    required FutureOr<void> Function() onCriticalStorageCallback,
   })  : _messengerState = messengerState,
         _lowStorageThreshold = lowStorageThreshold,
         _criticalStorageThreshold = criticalStorageThreshold,
@@ -73,8 +73,10 @@ class StorageService {
     if (availableStorageGB < _criticalStorageThreshold) {
       if (!_blockRecording) {
         _blockRecording = true;
-        _onCriticalStorageCallback();
+        unawaited(_runCriticalStorageCallback());
       }
+    } else {
+      _blockRecording = false;
     }
 
     if (availableStorageGB < _lowStorageThreshold) {
@@ -82,8 +84,18 @@ class StorageService {
         _showLowStorageWarning(availableStorageGB);
         _lastWarningShownTime = now;
       }
-    } else {
-      _blockRecording = false;
+    }
+  }
+
+  Future<void> _runCriticalStorageCallback() async {
+    try {
+      await _onCriticalStorageCallback();
+    } catch (error, stackTrace) {
+      LogService.instance.registerError(
+        "StorageService: critical storage callback failed",
+        error,
+        stackTrace,
+      );
     }
   }
 

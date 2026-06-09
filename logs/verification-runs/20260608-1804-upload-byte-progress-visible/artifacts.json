@@ -1,0 +1,142 @@
+{
+  "acceptanceChecks": [
+    "Current upload progress shows percentage",
+    "Current upload progress shows uploaded bytes and total bytes when file size is available",
+    "Focused widget test covers byte-level progress",
+    "Screenshot and video proof show byte-level progress"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:04:22.995739+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:04:41.868083+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:05:08.334938+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:05:17.490087+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1804-upload-byte-progress-visible/upload_byte_progress_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:05:41.958607+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1804-upload-byte-progress-visible/screenshots/upload_byte_progress_visible.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1804-upload-byte-progress-visible/video/upload_byte_progress_visible_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:05:44.186333+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:06:14.472634+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:06:19.450622+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/widgets/media_list_widget.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1804-upload-byte-progress-visible/summary.md",
+        "logs/verification-runs/20260608-1804-upload-byte-progress-visible/device-logs/flutter-widget-runner.log",
+        "logs/verification-runs/20260608-1804-upload-byte-progress-visible/upload_byte_progress_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:06:19.546318+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulated app surface",
+      "name": "macOS Flutter widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "media list upload progress proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/upload_byte_progress_visible.png",
+    "video/upload_byte_progress_visible_proof.mp4",
+    "device-logs/flutter-widget-runner.log"
+  ],
+  "item": {
+    "slug": "upload-byte-progress-visible",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "Current upload progress now shows byte-level progress with widget test, screenshot, and video proof; time estimates and upload controls remain on the existing item."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

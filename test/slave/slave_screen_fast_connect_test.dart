@@ -11,15 +11,23 @@ import "package:hydracam/services/network_info_service.dart";
 import "package:hydracam/services/storage_service.dart";
 import "package:hydracam/slave/slave_client.dart";
 import "package:hydracam/slave/slave_screen.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class FakeSlaveConnectionClient implements SlaveConnectionClient {
-  FakeSlaveConnectionClient(this.serverAddress);
+  FakeSlaveConnectionClient(
+    this.serverAddress, {
+    this.onRecordingStarted,
+    this.onRecordingStopped,
+  });
 
   final String serverAddress;
+  final VoidCallback? onRecordingStarted;
+  final VoidCallback? onRecordingStopped;
   final statusController = StreamController<String>.broadcast();
   final connectionController = StreamController<bool>.broadcast();
   bool connected = false;
   bool disconnected = false;
+  int stopRecordingCalls = 0;
 
   @override
   Stream<String> get statusStream => statusController.stream;
@@ -34,6 +42,12 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
   Future<void> prepareCameraPreview() async {}
 
   @override
+  Future<void> stopRecordingLocally() async {
+    stopRecordingCalls += 1;
+    onRecordingStopped?.call();
+  }
+
+  @override
   void connect() {
     connected = true;
   }
@@ -41,6 +55,10 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
   @override
   void disconnect() {
     disconnected = true;
+  }
+
+  void emitRecordingStarted() {
+    onRecordingStarted?.call();
   }
 
   Future<void> dispose() async {
@@ -53,6 +71,9 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({
+      "screenAutoOff": false,
+    });
     if (!CameraServiceSingleton.isInitialized) {
       final storageService = StorageService(
         messengerState: null,
@@ -116,6 +137,46 @@ void main() {
     expect(clients, hasLength(1));
     expect(clients.single.serverAddress, "ws://192.168.178.153:4040/ws");
     expect(clients.single.connected, isTrue);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("slave app bar opens uploader info directly", (tester) async {
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byTooltip("Uploader Info"), findsOneWidget);
+
+    await tester.tap(find.byTooltip("Uploader Info"));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Photos uploaded: 0 / 0"), findsOneWidget);
+    expect(find.text("Videos uploaded: 0 / 0"), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
     for (final client in clients) {
@@ -202,5 +263,147 @@ void main() {
       await client.dispose();
     }
     debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets("recording slave surface exposes safe stop control",
+      (tester) async {
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(
+              serverAddress,
+              onRecordingStarted: onRecordingStarted,
+              onRecordingStopped: onRecordingStopped,
+            );
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    clients.single.emitRecordingStarted();
+    await tester.pump();
+
+    expect(find.text("Recording..."), findsOneWidget);
+    expect(find.byTooltip("Stop recording safely"), findsOneWidget);
+
+    await tester.tap(find.byTooltip("Stop recording safely"));
+    await tester.pump();
+
+    expect(clients.single.stopRecordingCalls, 1);
+    expect(find.text("Recording stopped."), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("recording slave screen auto-off dims and tap wakes",
+      (tester) async {
+    SharedPreferences.setMockInitialValues({
+      "screenAutoOff": true,
+    });
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(
+              serverAddress,
+              onRecordingStarted: onRecordingStarted,
+              onRecordingStopped: onRecordingStopped,
+            );
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    clients.single.emitRecordingStarted();
+    await tester.pump();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 11));
+
+    expect(find.text("Screen Off - Tap to wake"), findsOneWidget);
+
+    await tester.tap(find.text("Screen Off - Tap to wake"));
+    await tester.pump();
+
+    expect(find.text("Screen Off - Tap to wake"), findsNothing);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("identify command acknowledgement shows visible slave frame",
+      (tester) async {
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    clients.single.statusController.add("Identify acknowledged to master.");
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text("Identifying this slave"), findsOneWidget);
+    expect(find.text("Identify acknowledged to master."), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 3));
+
+    expect(find.text("Identifying this slave"), findsNothing);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
   });
 }

@@ -1,0 +1,87 @@
+{
+  "acceptanceChecks": [
+    "UserService restores a saved Auth0 session at startup, re-fetches the HydraCam backend user GUID from the restored email, and clears login state when restore fails."
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:22:07.231494+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/user_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T18:22:33.474883+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/user_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:23:28.846949+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/user_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:24:07.890695+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:25:12.350548+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos-flutter-test",
+      "kind": "local-test",
+      "name": "Flutter unit test runner",
+      "notes": [
+        "Unit-level proof for restored Auth0 session mapping back to HydraCam user GUID; mobile smoke remains in board item 11."
+      ],
+      "os": "macOS / Flutter test",
+      "role": "user-service"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/user_guid_restore_after_auth0_restore.png",
+    "video/user_guid_restore_after_auth0_restore_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "user-guid-restore-after-auth0-restore",
+    "source": "docs/control/backlog-import.md",
+    "title": "Board item 11: Make mobile Auth0 login recoverable and release-safe"
+  },
+  "notes": [
+    "UserService restores Auth0 credentials at startup and re-fetches the HydraCam backend user GUID before marking the user logged in."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}

@@ -1,0 +1,68 @@
+{
+  "acceptanceChecks": [
+    "Slave app bar exposes uploader info directly",
+    "Direct uploader action opens UploaderInfoScreen",
+    "Focused widget test, screenshot, and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:22:44.715196+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_screen_fast_connect_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:22:48.408249+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1922-slave-upload-info-action/render_slave_upload_info_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:23:42.250561+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter widget test runner",
+      "notes": [
+        "Runs SlaveScreen widget test with fake slave client and mock camera service."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/slave_upload_info_action.png",
+    "video/slave_upload_info_action_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "slave-upload-info-action",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "4. Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "Direct slave uploader-info action implemented with focused widget proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

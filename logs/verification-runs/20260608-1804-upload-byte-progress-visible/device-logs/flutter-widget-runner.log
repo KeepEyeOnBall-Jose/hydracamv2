@@ -1,0 +1,14 @@
+Flutter widget evidence for backlog item 4.
+
+No physical device log was captured in this UI-only slice. The proof uses a
+MediaListWidget harness with one currently uploading video and a deterministic
+0.5 progress value. The rendered upload indicator shows both 50% and the byte
+count 2 B / 4 B.
+
+Primary command evidence is captured in ../commands.log:
+- RED: flutter test --no-pub test/widgets/media_list_widget_test.dart failed
+  because "2 B / 4 B" was not rendered for the uploading media item.
+- GREEN: the same focused widget test passed after MediaListWidget rendered
+  byte-level progress under the percentage indicator.
+- ANALYZE: flutter analyze --no-pub passed.
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1804-upload-byte-progress-visible/upload_byte_progress_visual_test.dart

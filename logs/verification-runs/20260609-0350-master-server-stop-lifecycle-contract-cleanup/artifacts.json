@@ -1,0 +1,118 @@
+{
+  "acceptanceChecks": [
+    "MasterServer.stopServer is documented and tested as transport cleanup only",
+    "Explicit MasterServer.endCurrentSession remains the only server-side session-ending path",
+    "Focused MasterServer tests, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "dart",
+        "format",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:51:09.305072+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:51:14.221716+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:51:34.050182+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:51:38.934058+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_server.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "docs/control/backlog-import.md"
+      ],
+      "returnCode": 65,
+      "startedAt": "2026-06-09T01:52:10.957817+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_server.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:52:19.172710+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:52:25.086737+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:52:33.006269+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:52:37.703447+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:52:49.216752+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-server-stop-lifecycle-contract-cleanup",
+    "source": "cleanup scan: MasterServer.stopServer session-ending TODO",
+    "title": "Master server stop lifecycle contract cleanup"
+  },
+  "notes": [
+    "Documented MasterServer.stopServer as transport cleanup only and added a regression proving it clears socket/client state while preserving the active session until endCurrentSession() is called explicitly."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

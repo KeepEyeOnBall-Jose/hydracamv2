@@ -1,0 +1,44 @@
+# HydraCam evidence run command log
+
+$ flutter test test/screens/session_details_screen_test.dart --plain-name session details metadata uses guid as primary session reference
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: session details metadata uses guid as primary session reference
+00:00 +1: (tearDownAll)
+00:00 +1: All tests passed!
+
+[stderr]
+Waiting for another flutter command to release the startup lock...
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter test test/screens/session_details_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: session details shows player assignment backend state
+00:00 +1: session details title prefers the session guid
+00:00 +2: session details metadata uses guid as primary session reference
+00:00 +3: load session action falls back to session id without guid
+Log registered: {message: No metadata file found for session snapshot legacy-session-id, timestamp: 2026-06-09 04:51:30.094916, function: null, file: null}
+00:00 +4: upload confirm action reports missing restored metadata
+Log registered: {message: No metadata file found for session snapshot missing-upload-guid, timestamp: 2026-06-09 04:51:30.241147, function: null, file: null}
+00:00 +5: (tearDownAll)
+00:00 +5: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0

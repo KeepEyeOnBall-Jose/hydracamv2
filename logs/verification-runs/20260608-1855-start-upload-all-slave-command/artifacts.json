@@ -1,0 +1,139 @@
+{
+  "acceptanceChecks": [
+    "Slave WebSocket command starts the manual uploader",
+    "Existing queued media is consumed through the manual upload path",
+    "Screenshot and video proof show the command path"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:56:10.331835+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:56:37.515636+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/render_start_upload_all_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:57:11.493459+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/screenshots/start_upload_all_slave_command.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/video/start_upload_all_slave_command_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:57:17.470037+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/slave/slave_client.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:57:49.459370+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/slave/slave_client.dart",
+        "test/slave/slave_client_registration_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/summary.md",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/render_start_upload_all_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:57:57.322784+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:57:57.339628+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:58:03.960083+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:58:14.417560+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/commands.log",
+        "logs/verification-runs/20260608-1855-start-upload-all-slave-command/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:58:29.242205+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/start_upload_all_slave_command.png",
+    "video/start_upload_all_slave_command_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "start-upload-all-slave-command",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Start upload all slave command"
+  },
+  "notes": [
+    "Start-upload-all slave command passed red/green WebSocket command test, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for in-flight network cancellation and slave upload info."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

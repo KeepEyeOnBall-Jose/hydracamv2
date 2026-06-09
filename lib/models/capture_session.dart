@@ -22,6 +22,9 @@ class CaptureSession {
   /// A list of videos captured during this session.
   final List<CapturedVideo> capturedVideos;
 
+  /// Whether this session is backed by a server/API-created session.
+  final bool backendCreated;
+
   /// Constructor to initialize a CaptureSession with a unique ID, start time,
   /// and optional lists of captured photos and videos.
   ///
@@ -33,8 +36,19 @@ class CaptureSession {
     this.endTime,
     List<CapturedPhoto>? capturedPhotos,
     List<CapturedVideo>? capturedVideos,
+    this.backendCreated = true,
   })  : capturedPhotos = capturedPhotos ?? [],
         capturedVideos = capturedVideos ?? [];
+
+  /// Prefer the backend/API GUID for cross-device references, falling back to
+  /// the legacy session ID for older local metadata.
+  String get preferredIdentifier {
+    final guid = sessionGuid;
+    if (guid != null && guid.isNotEmpty) {
+      return guid;
+    }
+    return sessionId;
+  }
 
   /// Adds a captured photo to the session.
   void addPhoto(CapturedPhoto photo) {

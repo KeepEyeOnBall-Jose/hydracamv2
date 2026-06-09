@@ -545,7 +545,7 @@ def apply_settings(target: MatrixTarget) -> dict[str, Any]:
             "timerDuration": 0,
             "autoplayVideoOnMaster": False,
             "flashForVideoAnnounce": False,
-            "autoUploadMaterials": False,
+            "autoUploadMaterials": True,
             "cameraLensPreference": target.lens,
             "videoCaptureProfile": target.profile,
         },
@@ -602,10 +602,10 @@ def run_capture_flow(
     command_times: dict[str, str] = {}
     try:
         session_id = f"parallel-{target.slug}-{int(time.time())}"
-        command_times["start_local_session"] = dt.datetime.now().isoformat()
-        snapshots["start_local_session"] = post_command(
+        command_times["start_session"] = dt.datetime.now().isoformat()
+        snapshots["start_session"] = post_command(
             target.bridge_url,
-            "start_local_session",
+            "start_session",
             {"sessionId": session_id},
             deadline,
         )
@@ -831,7 +831,7 @@ def run_matrix(args: argparse.Namespace) -> int:
             "targetCount": len(targets),
             "captureTargetCount": sum(1 for target in targets if target.capture_enabled),
             "commandSkewSeconds": {
-                "start_local_session": command_skew_seconds(results, "start_local_session"),
+                "start_session": command_skew_seconds(results, "start_session"),
                 "take_photo": command_skew_seconds(results, "take_photo"),
                 "start_recording": command_skew_seconds(results, "start_recording"),
                 "stop_recording": command_skew_seconds(results, "stop_recording"),

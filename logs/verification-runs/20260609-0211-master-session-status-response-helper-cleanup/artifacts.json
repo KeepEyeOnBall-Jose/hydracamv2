@@ -1,0 +1,89 @@
+{
+  "acceptanceChecks": [
+    "Session-status and no-session response payload construction is centralized outside startServer inline branches",
+    "Registered-client and explicit getSessionStatus paths use the same encoded response helper",
+    "Focused tests prove active and inactive session response payloads"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:11:32.403109+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:12:24.431050+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:13:02.624236+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:13:07.300918+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:13:16.842781+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:13:51.591424+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "hydracamv2-local-tests",
+      "kind": "macOS host",
+      "name": "Flutter unit test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "master-session-response-regression"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-session-status-response-helper-cleanup",
+    "source": "lib/master/master_server.dart#startServer-session-status-duplication",
+    "title": "Master session-status response helper cleanup"
+  },
+  "notes": [
+    "Master session-status response helper cleanup passed focused red/green tests, diff check, analyzer, and full Flutter test suite.",
+    "Human summary updated with repo gates."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

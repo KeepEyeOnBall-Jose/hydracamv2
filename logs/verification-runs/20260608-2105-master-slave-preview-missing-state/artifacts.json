@@ -1,0 +1,77 @@
+{
+  "acceptanceChecks": [
+    "Master diagnostics expose an explicit missing-preview state for connected slaves until preview transport exists."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:50:04.812141+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:50:15.884984+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:50:22.593744+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:50:37.166207+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "connected-client automation payload",
+      "kind": "unit-test",
+      "name": "Flutter unit test runner",
+      "notes": [
+        "Focused payload test verifies connected slave diagnostics include explicit missing-preview status fields; modal UI uses the same status labels."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "master-preview-diagnostics"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/master_slave_preview_missing_state.png",
+    "video/master_slave_preview_missing_state_proof.mp4",
+    "device-logs/green-focused-tests.log",
+    "device-logs/red-tests.log"
+  ],
+  "item": {
+    "slug": "master-slave-preview-missing-state",
+    "source": "docs/control/backlog-import.md",
+    "title": "Board item 14: Add mobile preview streams on master"
+  },
+  "notes": [
+    "Focused TDD slice for board item 14. Adds explicit missing-preview status to connected-client diagnostics and modal UI. Does not implement preview transport or claim bandwidth/latency proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

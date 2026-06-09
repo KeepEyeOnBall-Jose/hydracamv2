@@ -235,7 +235,7 @@ def run_repro(args: argparse.Namespace) -> int:
             args.port,
             args.scan_subnet,
             deadline,
-            required_command="start_local_session",
+            required_command="start_session",
         )
         (run_dir / "bridge-url.txt").write_text(bridge_url + "\n", encoding="utf-8")
     else:
@@ -253,7 +253,7 @@ def run_repro(args: argparse.Namespace) -> int:
                 "timerDuration": 0,
                 "autoplayVideoOnMaster": False,
                 "flashForVideoAnnounce": False,
-                "autoUploadMaterials": False,
+                "autoUploadMaterials": True,
                 "cameraLensPreference": args.lens,
                 "videoCaptureProfile": args.profile,
             },
@@ -261,9 +261,9 @@ def run_repro(args: argparse.Namespace) -> int:
         snapshots["settings"] = request_json(bridge_url, "GET", "/settings")
 
         session_id = f"ios-repro-{int(time.time())}"
-        snapshots["start_local_session"] = post_command(
+        snapshots["start_session"] = post_command(
             bridge_url,
-            "start_local_session",
+            "start_session",
             {"sessionId": session_id},
             deadline,
         )

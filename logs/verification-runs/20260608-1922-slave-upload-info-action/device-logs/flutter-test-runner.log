@@ -1,0 +1,98 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/uploader_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? lib/services/gallery_session_matcher.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ flutter test --no-pub test/slave/slave_screen_fast_connect_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart
+00:00 +0: forced preferred master connects without network readiness probe
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 19:22:50.995440, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 19:22:50.997759, function: null, file: null}
+00:00 +1: slave app bar opens uploader info directly
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 19:22:51.239022, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 19:22:51.239493, function: null, file: null}
+00:00 +2: connectivity stream errors are logged without uncaught exception
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 19:22:51.417924, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 19:22:51.418267, function: null, file: null}
+Log registered: {message: Connectivity change listener failed: SocketException: dbus unavailable
+#0      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:197:18)
+<asynchronous suspension>
+#1      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#2      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#3      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-08 19:22:51.438939, function: null, file: null}
+00:00 +3: linux skips default connectivity stream subscription
+Log registered: {message: Skipping connectivity change listener on linux; network readiness will be checked on demand., timestamp: 2026-06-08 19:22:51.459125, function: null, file: null}
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 19:22:51.459397, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 19:22:51.459549, function: null, file: null}
+00:00 +4: All tests passed!
+[exit-code] 0
+
+$ python3 logs/verification-runs/20260608-1922-slave-upload-info-action/render_slave_upload_info_proof.py
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-1922-slave-upload-info-action/screenshots/slave_upload_info_action.png
+[exit-code] 0

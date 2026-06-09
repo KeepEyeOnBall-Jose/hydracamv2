@@ -1,0 +1,68 @@
+{
+  "acceptanceChecks": [
+    "Legacy cameraQuality reads return the mapped VideoCaptureProfile and persist the canonical videoCaptureProfile key, while existing canonical profile values remain authoritative."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/settings_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:23:10.540102+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/settings_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:24:00.066154+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:24:50.375615+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:24:55.586372+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:25:02.882206+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "settings-legacy-camera-quality-migration-cleanup",
+    "source": "test/services/settings_service_test.dart and lib/services/settings_service.dart legacy cameraQuality fallback",
+    "title": "settings legacy camera quality migration cleanup"
+  },
+  "notes": [
+    "SettingsService legacy cameraQuality now performs a one-time canonical videoCaptureProfile migration, with canonical values remaining authoritative. Focused settings tests, analyzer, full Flutter tests, and diff whitespace checks passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

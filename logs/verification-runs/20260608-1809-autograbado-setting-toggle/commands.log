@@ -1,0 +1,388 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/uploader_service.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ flutter test --no-pub test/services/settings_service_test.dart test/screens/capture_settings_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: test/services/settings_service_test.dart:96:34: Error: Member not found: 'SettingsService.getAutograbadoMode'.
+      expect(await SettingsService.getAutograbadoMode(), isFalse);
+                                   ^^^^^^^^^^^^^^^^^^
+  test/services/settings_service_test.dart:98:27: Error: Member not found: 'SettingsService.setAutograbadoMode'.
+      await SettingsService.setAutograbadoMode(true);
+                            ^^^^^^^^^^^^^^^^^^
+  test/services/settings_service_test.dart:100:34: Error: Member not found: 'SettingsService.getAutograbadoMode'.
+      expect(await SettingsService.getAutograbadoMode(), isTrue);
+                                   ^^^^^^^^^^^^^^^^^^
+  .
+  Error: The Dart compiler exited unexpectedly.
+  package:flutter_tools/src/base/common.dart 34:3  throwToolExit
+  package:flutter_tools/src/compile.dart 1009:11   DefaultResidentCompiler._compile.<fn>
+  dart:async/zone_root.dart 48:47                  _rootRunUnary
+  dart:async/zone.dart 733:19                      _CustomZone.runUnary
+  dart:async/future_impl.dart 948:45               Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 977:13               Future._propagateToListeners
+  dart:async/future_impl.dart 862:9                Future._propagateToListeners
+  dart:async/future_impl.dart 720:5                Future._completeWithValue
+  dart:async/future_impl.dart 804:7                Future._asyncCompleteWithValue.<fn>
+  dart:async/zone_root.dart 35:13                  _rootRun
+  dart:async/zone.dart 726:19                      _CustomZone.run
+  dart:async/zone.dart 625:7                       _CustomZone.runGuarded
+  dart:async/zone.dart 666:23                      _CustomZone.bindCallbackGuarded.<fn>
+  dart:async/schedule_microtask.dart 40:35         _microtaskLoop
+  dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
+
+00:00 +0 -1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:00 +1 -1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Autograbado mode": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart:39:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart line 39
+The test description was:
+  settings screen exposes disabled autograbado toggle
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +1 -2: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle [E]
+  Test failed. See exception logs above.
+  The test description was: settings screen exposes disabled autograbado toggle
+
+00:00 +1 -2: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+  /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart
+
+[stderr]
+test/services/settings_service_test.dart:96:34: Error: Member not found: 'SettingsService.getAutograbadoMode'.
+    expect(await SettingsService.getAutograbadoMode(), isFalse);
+                                 ^^^^^^^^^^^^^^^^^^
+test/services/settings_service_test.dart:98:27: Error: Member not found: 'SettingsService.setAutograbadoMode'.
+    await SettingsService.setAutograbadoMode(true);
+                          ^^^^^^^^^^^^^^^^^^
+test/services/settings_service_test.dart:100:34: Error: Member not found: 'SettingsService.getAutograbadoMode'.
+    expect(await SettingsService.getAutograbadoMode(), isTrue);
+                                 ^^^^^^^^^^^^^^^^^^
+[exit-code] 1
+
+$ flutter test --no-pub test/services/settings_service_test.dart test/screens/capture_settings_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: master recording defaults off on macOS controller builds
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stored master recording preference overrides macOS default
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: new installs default to auto back lens and standard 1080p30
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: legacy camera quality migrates to video capture profiles
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Log registered: {message: Updated camera lens preference to ultraWide, timestamp: 2026-06-08 18:11:08.292518, function: null, file: null}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 18:11:08.304917, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera perspective by canonical id
+Log registered: {message: Updated camera perspective to right_backglass_diagonal, timestamp: 2026-06-08 18:11:08.307003, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: autograbado defaults disabled and can be stored
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 18:11:08.308218, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:00 +8: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+
+Warning: A call to tap() with finder "Found 1 widget with key [<'autograbadoMode'>]: [
+  Switch-[<'autograbadoMode'>](value: off, dependencies: [InheritedCupertinoTheme, _InheritedTheme, _LocalizationsScope-[GlobalKey#62295]]),
+]" derived an Offset (Offset(754.0, 632.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+Indeed, Offset(754.0, 632.0) is outside the bounds of the root of the render tree, Size(800.0, 600.0).
+The finder corresponds to this RenderBox: RenderSemanticsAnnotations#2b571 relayoutBoundary=up14
+The hit test result at that offset is: HitTestResult(HitTestEntry<HitTestTarget>#e20c8(_ReusableRenderView#63dfd), HitTestEntry<HitTestTarget>#ad8bf(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2165:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1947:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1080:7)
+#3      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart:44:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: <null>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart:47:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart line 47
+The test description was:
+  settings screen exposes disabled autograbado toggle
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +8 -1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle [E]
+  Test failed. See exception logs above.
+  The test description was: settings screen exposes disabled autograbado toggle
+
+00:00 +8 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+[exit-code] 1
+
+$ flutter test --no-pub test/services/settings_service_test.dart test/screens/capture_settings_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: master recording defaults off on macOS controller builds
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stored master recording preference overrides macOS default
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: new installs default to auto back lens and standard 1080p30
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: legacy camera quality migrates to video capture profiles
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Log registered: {message: Updated camera lens preference to ultraWide, timestamp: 2026-06-08 18:11:29.507803, function: null, file: null}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 18:11:29.519513, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera perspective by canonical id
+Log registered: {message: Updated camera perspective to right_backglass_diagonal, timestamp: 2026-06-08 18:11:29.521433, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: autograbado defaults disabled and can be stored
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 18:11:29.522751, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:00 +8: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 18:11:30.073879, function: null, file: null}
+00:00 +9: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 3.7s)
+[exit-code] 0
+
+$ flutter test --no-pub --update-goldens logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart
+00:00 +0: autograbado setting visual proof
+══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 72 pixels on the right.
+
+The relevant error-causing widget was:
+  Row Row:file:///Users/jose/src/work/hydracamv2/lib/widgets/settings_option.dart:24:14
+
+The overflowing RenderFlex has an orientation of Axis.horizontal.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
+black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the
+RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be
+seen. If the content is legitimately bigger than the available space, consider clipping it with a
+ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex,
+like a ListView.
+The specific RenderFlex in question is: RenderFlex#eaa88 relayoutBoundary=up13 OVERFLOWING:
+  needs compositing
+  creator: Row ← Padding ← SettingsOption ← Column ← Padding ← _SingleChildViewport ←
+    IgnorePointer-[GlobalKey#7c2cf] ← Semantics ← Listener ← _GestureSemantics ←
+    RawGestureDetector-[LabeledGlobalKey<RawGestureDetectorState>#e735a] ← Listener ← ⋯
+  parentData: offset=Offset(0.0, 10.0) (can use size)
+  constraints: BoxConstraints(0.0<=w<=398.0, 0.0<=h<=Infinity)
+  size: Size(398.0, 299.0)
+  direction: horizontal
+  mainAxisAlignment: spaceBetween
+  mainAxisSize: max
+  crossAxisAlignment: center
+  textDirection: ltr
+  verticalDirection: down
+  spacing: 0.0
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: autograbado setting visual proof [E]
+  Test failed. See exception logs above.
+  The test description was: autograbado setting visual proof
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart: autograbado setting visual proof
+[exit-code] 1
+
+$ flutter test --no-pub test/services/settings_service_test.dart test/screens/capture_settings_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: master recording defaults off on macOS controller builds
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stored master recording preference overrides macOS default
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: new installs default to auto back lens and standard 1080p30
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: legacy camera quality migrates to video capture profiles
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Log registered: {message: Updated camera lens preference to ultraWide, timestamp: 2026-06-08 18:12:47.569218, function: null, file: null}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 18:12:47.581416, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera perspective by canonical id
+Log registered: {message: Updated camera perspective to right_backglass_diagonal, timestamp: 2026-06-08 18:12:47.583596, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: autograbado defaults disabled and can be stored
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 18:12:47.584926, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:00 +8: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 18:12:48.186010, function: null, file: null}
+00:00 +9: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub --update-goldens logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart
+00:00 +0: autograbado setting visual proof
+00:00 +1: All tests passed!
+[exit-code] 0
+
+$ ffmpeg -y -loop 1 -t 3 -i logs/verification-runs/20260608-1809-autograbado-setting-toggle/screenshots/autograbado_setting_toggle.png -vf format=yuv420p -movflags +faststart logs/verification-runs/20260608-1809-autograbado-setting-toggle/video/autograbado_setting_toggle_proof.mp4
+
+[stderr]
+ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.6.4.2)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60. 26.100 / 60. 26.100
+  libavcodec     62. 28.100 / 62. 28.100
+  libavformat    62. 12.100 / 62. 12.100
+  libavdevice    62.  3.100 / 62.  3.100
+  libavfilter    11. 14.100 / 11. 14.100
+  libswscale      9.  5.100 /  9.  5.100
+  libswresample   6.  3.100 /  6.  3.100
+Input #0, png_pipe, from 'logs/verification-runs/20260608-1809-autograbado-setting-toggle/screenshots/autograbado_setting_toggle.png':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc, gbr/bt709/iec61966-2-1), 1290x2160, 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0xc70c28a80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0xc70c28a80] profile High, level 5.0, 4:2:0, 8-bit
+[libx264 @ 0xc70c28a80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=24 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260608-1809-autograbado-setting-toggle/video/autograbado_setting_toggle_proof.mp4':
+  Metadata:
+    encoder         : Lavf62.12.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, unknown/bt709/iec61966-2-1, progressive), 1290x2160, q=2-31, 25 fps, 12800 tbn
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[mp4 @ 0xc70c20280] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0xc71004840] video:25KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 6.996749%
+frame=   75 fps=0.0 q=-1.0 Lsize=      26KiB time=00:00:02.92 bitrate=  73.9kbits/s speed=14.4x elapsed=0:00:00.20
+[libx264 @ 0xc70c28a80] frame I:1     Avg QP:16.31  size: 15909
+[libx264 @ 0xc70c28a80] frame P:19    Avg QP:12.44  size:   146
+[libx264 @ 0xc70c28a80] frame B:55    Avg QP:12.94  size:   107
+[libx264 @ 0xc70c28a80] consecutive B-frames:  1.3%  2.7%  0.0% 96.0%
+[libx264 @ 0xc70c28a80] mb I  I16..4: 42.8% 52.1%  5.1%
+[libx264 @ 0xc70c28a80] mb P  I16..4:  0.0%  0.0%  0.0%  P16..4:  0.1%  0.0%  0.0%  0.0%  0.0%    skip:99.9%
+[libx264 @ 0xc70c28a80] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.1%  0.0%  0.0%  direct: 0.0%  skip:99.8%  L0:52.5% L1:47.5% BI: 0.0%
+[libx264 @ 0xc70c28a80] 8x8 transform intra:51.4% inter:17.7%
+[libx264 @ 0xc70c28a80] coded y,uvDC,uvAC intra: 2.7% 3.0% 1.1% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0xc70c28a80] i16 v,h,dc,p: 78% 20%  2%  0%
+[libx264 @ 0xc70c28a80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 57% 27% 15%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0xc70c28a80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 39% 35% 15%  2%  3%  2%  2%  1%  1%
+[libx264 @ 0xc70c28a80] i8c dc,h,v,p: 87% 11%  2%  0%
+[libx264 @ 0xc70c28a80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0xc70c28a80] ref P L0: 79.9%  3.3% 16.8%
+[libx264 @ 0xc70c28a80] ref B L0: 39.4% 59.1%  1.5%
+[libx264 @ 0xc70c28a80] ref B L1: 97.6%  2.4%
+[libx264 @ 0xc70c28a80] kb/s:65.43
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+
+warning • The member 'setMockInitialValues' can only be used within 'package:shared_preferences/src/shared_preferences_legacy.dart' or a test • logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart:10:23 • invalid_use_of_visible_for_testing_member
+
+
+[stderr]
+1 issue found. (ran in 3.7s)
+[exit-code] 1
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 3.6s)
+[exit-code] 0
+
+$ git diff --check -- lib/services/settings_service.dart lib/screens/settings_screen.dart lib/widgets/settings_option.dart test/services/settings_service_test.dart test/screens/capture_settings_screen_test.dart docs/control/backlog-import.md logs/verification-runs/20260608-1809-autograbado-setting-toggle/summary.md logs/verification-runs/20260608-1809-autograbado-setting-toggle/device-logs/flutter-widget-runner.log logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/screens/settings_screen.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/settings_service.dart
+ M lib/services/uploader_service.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/settings_service_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0

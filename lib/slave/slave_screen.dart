@@ -5,6 +5,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "../screens/camera_setup_preview_screen.dart";
 import "../screens/role_selection_screen.dart";
+import "../screens/uploader_info_screen.dart";
 import "../globals.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
@@ -59,6 +60,10 @@ class SlaveScreen extends StatefulWidget {
 }
 
 class SlaveScreenState extends State<SlaveScreen> {
+  static const String _identifyAcknowledgedStatus =
+      "Identify acknowledged to master.";
+  static const Duration _identifyFrameDuration = Duration(seconds: 2);
+
   SlaveConnectionClient? _client;
   StreamSubscription<String>?
       _statusSubscription; // Subscription to listen to status updates
@@ -72,10 +77,13 @@ class SlaveScreenState extends State<SlaveScreen> {
   bool _isConnected = false; // Local variable for connection status
 
   Timer? dimTimer; // Timer for screen dimming
+  Timer? _identifyFrameTimer;
   int dimTime = 10; // Number of seconds before turning screen black
   bool isScreenDimmed = false; // To control the dimmed screen state
+  bool _isIdentifyFrameVisible = false;
   bool _isCheckingNetwork = false;
   bool _isPreparingPreview = false;
+  bool _isStoppingRecording = false;
   NetworkReadinessResult? _networkReadiness;
 
   // Getters for SessionManager photos and videos
@@ -312,13 +320,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       onRecordingStopped: _handleRecordingStopped,
     );
 
-    _statusSubscription = _client?.statusStream.listen((message) {
-      if (mounted) {
-        setState(() {
-          statusMessage = message;
-        });
-      }
-    });
+    _statusSubscription = _client?.statusStream.listen(_handleStatusMessage);
 
     _connectionStatusSubscription =
         _client?.connectionStatusStream.listen((isConnected) {
@@ -352,6 +354,33 @@ class SlaveScreenState extends State<SlaveScreen> {
     }
   }
 
+  void _handleStatusMessage(String message) {
+    if (!mounted) {
+      return;
+    }
+
+    final isIdentifyAcknowledgement = message == _identifyAcknowledgedStatus;
+    setState(() {
+      statusMessage = message;
+      if (isIdentifyAcknowledgement) {
+        isScreenDimmed = false;
+        _isIdentifyFrameVisible = true;
+      }
+    });
+
+    if (isIdentifyAcknowledgement) {
+      _identifyFrameTimer?.cancel();
+      _identifyFrameTimer = Timer(_identifyFrameDuration, () {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _isIdentifyFrameVisible = false;
+        });
+      });
+    }
+  }
+
   Future<void> _prepareCameraPreview() async {
     if (_isPreparingPreview) {
       return;
@@ -376,8 +405,8 @@ class SlaveScreenState extends State<SlaveScreen> {
     if (mounted) {
       setState(() {
         isRecording = true; // Update recording flag
-        _startDimTimer(); // Start dim timer in case we want to set screen black
       });
+      unawaited(_startDimTimer());
     }
   }
 
@@ -386,6 +415,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       setState(() {
         isRecording = false;
         isScreenDimmed = false;
+        _isStoppingRecording = false;
         statusMessage = "Recording stopped.";
       });
       dimTimer?.cancel();
@@ -393,24 +423,55 @@ class SlaveScreenState extends State<SlaveScreen> {
     }
   }
 
-  void _startDimTimer() async {
-    dimTimer?.cancel();
-    if (await _getAutoOffSetting()) {
-      dimTimer = Timer(Duration(seconds: dimTime), () {
-        if (isRecording) {
-          setState(() {
-            isScreenDimmed = true;
-          });
-        }
-      });
+  Future<void> _stopRecordingSafely() async {
+    final client = _client;
+    if (client == null || !isRecording || _isStoppingRecording) {
+      return;
+    }
+
+    setState(() {
+      _isStoppingRecording = true;
+      statusMessage = "Stopping recording...";
+    });
+
+    try {
+      await client.stopRecordingLocally();
+    } catch (error, stackTrace) {
+      LogService.instance.registerError(
+        "Slave stop recording control failed",
+        error,
+        stackTrace,
+      );
+      if (mounted) {
+        setState(() {
+          _isStoppingRecording = false;
+          statusMessage = "Recording stop failed: $error";
+        });
+      }
     }
   }
 
-  void _resetDimTimer() async {
-    setState(() {
-      isScreenDimmed = false;
+  Future<void> _startDimTimer() async {
+    dimTimer?.cancel();
+    if (!await _getAutoOffSetting() || !mounted) {
+      return;
+    }
+    dimTimer = Timer(Duration(seconds: dimTime), () {
+      if (mounted && isRecording) {
+        setState(() {
+          isScreenDimmed = true;
+        });
+      }
     });
-    _startDimTimer();
+  }
+
+  Future<void> _resetDimTimer() async {
+    if (mounted) {
+      setState(() {
+        isScreenDimmed = false;
+      });
+      await _startDimTimer();
+    }
   }
 
   Future<bool> _getAutoOffSetting() async {
@@ -435,6 +496,8 @@ class SlaveScreenState extends State<SlaveScreen> {
     _client = null;
     autoModeTimer?.cancel();
     autoModeTimer = null;
+    _identifyFrameTimer?.cancel();
+    _identifyFrameTimer = null;
     _masterDiscovery?.stopListening();
     _masterDiscovery = null;
 
@@ -461,6 +524,7 @@ class SlaveScreenState extends State<SlaveScreen> {
   void dispose() {
     try {
       dimTimer?.cancel();
+      _identifyFrameTimer?.cancel();
       _statusSubscription
           ?.cancel(); // Cancel the subscription to avoid memory leaks
       _connectionStatusSubscription?.cancel();
@@ -515,7 +579,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       return Stack(
         children: [
           _buildStatusMessage(),
-          if (isRecording) _recordingLabel(),
+          if (isRecording) _recordingControls(),
         ],
       );
     }
@@ -540,24 +604,84 @@ class SlaveScreenState extends State<SlaveScreen> {
               )
             else
               _buildStatusMessage(),
-            if (isRecording) _recordingLabel(),
+            if (isRecording) _recordingControls(),
           ],
         );
       },
     );
   }
 
-  Widget _recordingLabel() {
-    return const Positioned(
+  Widget _recordingControls() {
+    return Positioned(
       bottom: 20,
       left: 0,
       right: 0,
       child: Center(
-        child: Text(
-          "Recording...",
-          style: TextStyle(color: Colors.red, fontSize: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Recording...",
+              style: TextStyle(color: Colors.red, fontSize: 24),
+            ),
+            const SizedBox(height: 12),
+            Tooltip(
+              message: "Stop recording safely",
+              child: ElevatedButton.icon(
+                key: const ValueKey("slaveStopRecordingButton"),
+                icon: const Icon(Icons.stop_circle_outlined),
+                label: Text(_isStoppingRecording ? "Stopping..." : "Stop"),
+                onPressed: _isStoppingRecording ? null : _stopRecordingSafely,
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _identifyFrameOverlay() {
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.amberAccent, width: 10),
+            color: Colors.white.withValues(alpha: 0.24),
+          ),
+          child: const Center(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Text(
+                  "Identifying this slave",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUploaderInfoAction() {
+    return IconButton(
+      tooltip: "Uploader Info",
+      icon: const Icon(Icons.cloud_upload_outlined),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const UploaderInfoScreen()),
+        );
+      },
     );
   }
 
@@ -594,7 +718,9 @@ class SlaveScreenState extends State<SlaveScreen> {
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
       // Vertical layout: controls and media list stacked
       return GestureDetector(
-          onTap: _resetDimTimer, // Reset dimming on user interaction
+          onTap: () => unawaited(
+                _resetDimTimer(),
+              ), // Reset dimming on user interaction
           child: Stack(
             children: [
               Scaffold(
@@ -608,6 +734,7 @@ class SlaveScreenState extends State<SlaveScreen> {
                           builder: (context) => const RoleSelectionScreen()),
                     );
                   },
+                  additionalActions: [_buildUploaderInfoAction()],
                 ),
                 body: Column(
                   children: [
@@ -627,7 +754,9 @@ class SlaveScreenState extends State<SlaveScreen> {
               ),
               if (isScreenDimmed)
                 GestureDetector(
-                  onTap: _resetDimTimer, // Wake up the screen
+                  onTap: () => unawaited(
+                    _resetDimTimer(),
+                  ), // Wake up the screen
                   child: Container(
                     color: Colors.black,
                     child: const Center(
@@ -638,12 +767,13 @@ class SlaveScreenState extends State<SlaveScreen> {
                     ),
                   ),
                 ),
+              if (_isIdentifyFrameVisible) _identifyFrameOverlay(),
             ],
           ));
     } else {
       // Horizontal layout: controls on the left, media list on the right
       return GestureDetector(
-        onTap: _resetDimTimer,
+        onTap: () => unawaited(_resetDimTimer()),
         child: Stack(
           children: [
             Scaffold(
@@ -657,6 +787,7 @@ class SlaveScreenState extends State<SlaveScreen> {
                         builder: (context) => const RoleSelectionScreen()),
                   );
                 },
+                additionalActions: [_buildUploaderInfoAction()],
               ),
               body: Row(
                 children: [
@@ -679,7 +810,9 @@ class SlaveScreenState extends State<SlaveScreen> {
             ),
             if (isScreenDimmed)
               GestureDetector(
-                onTap: _resetDimTimer, // Wake up the screen
+                onTap: () => unawaited(
+                  _resetDimTimer(),
+                ), // Wake up the screen
                 child: Container(
                   color: Colors.black,
                   child: const Center(
@@ -690,6 +823,7 @@ class SlaveScreenState extends State<SlaveScreen> {
                   ),
                 ),
               ),
+            if (_isIdentifyFrameVisible) _identifyFrameOverlay(),
           ],
         ),
       );

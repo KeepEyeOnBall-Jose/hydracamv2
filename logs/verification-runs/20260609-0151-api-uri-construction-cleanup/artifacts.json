@@ -1,0 +1,80 @@
+{
+  "acceptanceChecks": [
+    "GET and POST API helpers build URIs through one shared path instead of whitespace-stripping string concatenation",
+    "Endpoint query values preserve spaces and special characters through Uri query encoding",
+    "Existing upload and user API contract tests keep passing"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T23:51:44.471212+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:53:05.470668+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:53:46.422112+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:53:50.393950+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:53:59.199979+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "hydracamv2-local-tests",
+      "kind": "macOS host",
+      "name": "Flutter unit test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "api-uri-contract-regression"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "api-uri-construction-cleanup",
+    "source": "docs/control/backlog-import.md#row-106-api-contract-cleanup",
+    "title": "HydraCam API URI construction cleanup"
+  },
+  "notes": [
+    "API URI construction cleanup passed red/green focused service tests, diff check, analyzer, and full Flutter test suite.",
+    "Human summary updated with final repo gates."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

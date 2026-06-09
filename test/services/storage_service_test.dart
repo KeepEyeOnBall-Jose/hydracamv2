@@ -81,5 +81,76 @@ void main() {
       expect(storageService.isRecordingBlocked, true);
       expect(criticalCallbackTriggered, true);
     });
+
+    testWidgets(
+        "clears recording block after recovering above critical threshold",
+        (tester) async {
+      StorageService.configureMonitoring(enabled: false);
+
+      final messengerKey = GlobalKey<ScaffoldMessengerState>();
+      await tester.pumpWidget(
+        MaterialApp(
+          scaffoldMessengerKey: messengerKey,
+          home: const Scaffold(body: SizedBox.shrink()),
+        ),
+      );
+
+      var criticalCallbackCount = 0;
+      final storageService = StorageService(
+        messengerState: messengerKey.currentState!,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () {
+          criticalCallbackCount += 1;
+        },
+      );
+
+      addTearDown(() {
+        storageService.dispose();
+        StorageService.configureMonitoring(enabled: true);
+      });
+
+      storageService.simulateStorageLevel(400); // 400 MB ~ 0.39 GB.
+      expect(storageService.isRecordingBlocked, true);
+      expect(criticalCallbackCount, 1);
+
+      storageService.simulateStorageLevel(900); // 900 MB ~ 0.88 GB.
+
+      expect(storageService.isRecordingBlocked, false);
+      expect(criticalCallbackCount, 1);
+    });
+
+    testWidgets("critical callback failures do not escape storage handling",
+        (tester) async {
+      StorageService.configureMonitoring(enabled: false);
+
+      final messengerKey = GlobalKey<ScaffoldMessengerState>();
+      await tester.pumpWidget(
+        MaterialApp(
+          scaffoldMessengerKey: messengerKey,
+          home: const Scaffold(body: SizedBox.shrink()),
+        ),
+      );
+
+      final storageService = StorageService(
+        messengerState: messengerKey.currentState!,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () {
+          throw StateError("forced stop failed");
+        },
+      );
+
+      addTearDown(() {
+        storageService.dispose();
+        StorageService.configureMonitoring(enabled: true);
+      });
+
+      expect(
+        () => storageService.simulateStorageLevel(400),
+        returnsNormally,
+      );
+      expect(storageService.isRecordingBlocked, true);
+    });
   });
 }

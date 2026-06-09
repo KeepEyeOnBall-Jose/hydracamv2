@@ -55,7 +55,12 @@ class FakeSessionManager extends Fake implements SessionManager {
   bool get isSessionActive => _isSessionActive;
 
   @override
-  void startSession(String guid, String? id, {required String deviceType}) {
+  void startSession(
+    String guid,
+    String? id, {
+    required String deviceType,
+    bool backendCreated = true,
+  }) {
     _sessionGuid = guid;
     _isSessionActive = true;
   }

@@ -1,0 +1,79 @@
+{
+  "acceptanceChecks": [
+    "Master connected-device diagnostics report live and disconnected totals, present live devices before stale devices, and keep the modal clearer without losing disconnected diagnostics."
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:27:44.817831+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/connected_client_automation_payload_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T18:28:37.637603+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/connected_client_automation_payload_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:29:54.393331+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:31:35.047004+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos-flutter-test",
+      "kind": "local-test",
+      "name": "Flutter unit/widget test runner",
+      "notes": [
+        "Tests-only proof for master device-list UX refinement; real-device network smoke remains separate."
+      ],
+      "os": "macOS / Flutter test",
+      "role": "master-device-list"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/master_device_list_summary_sort.png",
+    "video/master_device_list_summary_sort_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "master-device-list-summary-sort",
+    "source": "docs/control/backlog-import.md",
+    "title": "Board item 6: Make network/device identity visible"
+  },
+  "notes": [
+    "Master device list now summarizes known/live/disconnected clients and sorts live devices before disconnected history."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

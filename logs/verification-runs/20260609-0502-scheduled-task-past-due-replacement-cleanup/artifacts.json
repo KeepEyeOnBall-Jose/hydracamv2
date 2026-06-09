@@ -1,0 +1,33 @@
+{
+  "acceptanceChecks": [
+    "ScheduledTaskService cancels and settles any same-id pending task before executing a past-due replacement, preventing stale timers from remaining registered"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/scheduled_task_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:02:42.950721+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "scheduled-task-past-due-replacement-cleanup",
+    "source": "docs/control/backlog-import.md row 43",
+    "title": "FALLOS Y MEJORAS row 43"
+  },
+  "notes": [
+    "Local scheduler regression passed for past-due same-id replacement cleanup; real device offset/skew proof remains open."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

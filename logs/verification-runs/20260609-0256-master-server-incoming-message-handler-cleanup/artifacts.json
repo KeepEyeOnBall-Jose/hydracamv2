@@ -1,0 +1,95 @@
+{
+  "acceptanceChecks": [
+    "Incoming WebSocket message handling is extracted from startServer into a testable handler",
+    "Device registration via incoming message still sends the current session status response",
+    "Focused master tests plus repo gates pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:57:09.670141+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:58:42.443533+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:59:14.627383+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:59:31.870449+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:59:45.925135+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:59:46.018899+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:59:57.239130+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:00:39.093919+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-server-incoming-message-handler-cleanup",
+    "source": "lib/master/master_server.dart#startServer",
+    "title": "master-server-incoming-message-cleanup"
+  },
+  "notes": [],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

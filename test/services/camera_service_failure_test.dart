@@ -8,6 +8,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/camera_capture_settings.dart";
 import "package:hydracam/services/camera_service.dart";
 import "package:hydracam/services/log_service.dart";
+import "package:hydracam/services/session_manager.dart";
 import "package:mocktail/mocktail.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
@@ -180,6 +181,126 @@ void main() {
     expect(File(photoPath).existsSync(), isTrue);
     expect(File(videoPath).existsSync(), isTrue);
     expect(cameraService.isRecording, isFalse);
+  });
+
+  test("critical battery force stop saves mock recording and interrupts",
+      () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.startSession(
+      "critical-battery-force-stop",
+      "critical-battery-force-stop",
+      deviceType: "Master",
+    );
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: true,
+    );
+
+    try {
+      await cameraService.initAvailableCameras();
+      await cameraService.startRecordingVideo();
+
+      await cameraService.forceStopRecordingDueToBattery();
+
+      final videos =
+          SessionManager.instance.currentSession?.capturedVideos ?? [];
+      expect(cameraService.isRecording, isFalse);
+      expect(cameraService.recordingInterrupted.value, isTrue);
+      expect(videos, hasLength(1));
+      expect(File(videos.single.videoPath).existsSync(), isTrue);
+      verify(() => storageService.showNotification(
+          "Recording stopped due to critical battery.")).called(1);
+      expect(
+        LogService.instance.logs.any((entry) => entry["message"]
+            .toString()
+            .contains("Stopping recording due to critical battery.")),
+        isTrue,
+      );
+    } finally {
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+    }
+  });
+
+  test("critical storage force stop saves mock recording and interrupts",
+      () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.startSession(
+      "critical-storage-force-stop",
+      "critical-storage-force-stop",
+      deviceType: "Master",
+    );
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: true,
+    );
+
+    try {
+      await cameraService.initAvailableCameras();
+      await cameraService.startRecordingVideo();
+
+      await cameraService.forceStopRecordingDueToStorage();
+
+      final videos =
+          SessionManager.instance.currentSession?.capturedVideos ?? [];
+      expect(cameraService.isRecording, isFalse);
+      expect(cameraService.recordingInterrupted.value, isTrue);
+      expect(videos, hasLength(1));
+      expect(File(videos.single.videoPath).existsSync(), isTrue);
+      verify(() => storageService
+          .showNotification("Recording stopped due to low storage.")).called(1);
+      expect(
+        LogService.instance.logs.any((entry) => entry["message"]
+            .toString()
+            .contains("Stopping recording due to critical storage.")),
+        isTrue,
+      );
+    } finally {
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+    }
+  });
+
+  test("critical battery force stop survives missing start timestamp",
+      () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.startSession(
+      "critical-battery-missing-start",
+      "critical-battery-missing-start",
+      deviceType: "Master",
+    );
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: true,
+    );
+
+    try {
+      await cameraService.initAvailableCameras();
+      await cameraService.startRecordingVideo();
+      cameraService.videoStartRecordingDate = null;
+
+      await cameraService.forceStopRecordingDueToBattery();
+
+      final videos =
+          SessionManager.instance.currentSession?.capturedVideos ?? [];
+      expect(cameraService.isRecording, isFalse);
+      expect(cameraService.recordingInterrupted.value, isTrue);
+      expect(videos, hasLength(1));
+      expect(videos.single.startRecordingDate, isNotNull);
+      expect(videos.single.endRecordingDate, isNotNull);
+    } finally {
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+    }
   });
 
   test("selected ultra-wide lens uses sport 1080p60 controller settings",

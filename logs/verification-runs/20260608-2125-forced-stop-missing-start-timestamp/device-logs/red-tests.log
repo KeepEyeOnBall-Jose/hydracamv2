@@ -1,0 +1,211 @@
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: takePhoto surfaces camera failures instead of returning a fake path
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.167236, function: null, file: null}
+Log registered: {message: Error taking photo: Exception: No cameras available on this device.
+#0      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:246:7)
+<asynchronous suspension>
+#1      CameraService.takePhoto (package:hydracam/services/camera_service.dart:296:7)
+<asynchronous suspension>
+#2      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#4      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:56:5)
+<asynchronous suspension>
+#7      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#9      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 20:58:47.173721, function: null, file: null}
+00:00 +1: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.181820, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 20:58:47.183307, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 20:58:47.186613, function: null, file: null}
+Log registered: {message: Generated new Device ID: 49527c92-c919-411c-b64d-03f1150e55dd, timestamp: 2026-06-08 20:58:47.188175, function: null, file: null}
+Log registered: {message: Camera video recording start failed with explicit fps; retrying with resolution preset defaults. Error: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:708:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:81:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 20:58:47.189635, function: null, file: null}
+Log registered: {message: Camera reinitialized for video recording start without explicit fps: camera=fake-back-camera, profile=standard1080p30., timestamp: 2026-06-08 20:58:47.596911, function: null, file: null}
+Log registered: {message: Error starting video recording: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:724:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:81:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 20:58:47.597890, function: null, file: null}
+00:00 +2: startRecordingVideo works when the iPad has no flash capability
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.604292, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 20:58:47.604915, function: null, file: null}
+Log registered: {message: Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities), timestamp: 2026-06-08 20:58:47.605990, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 20:58:47.606323, function: null, file: null}
+Log registered: {message: Generated new Device ID: d0598e7f-56bd-47ef-8c5e-f61b2c38b531, timestamp: 2026-06-08 20:58:47.606654, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 20:58:47.607283, function: null, file: null}
+00:00 +3: non-flash initialization failures still surface
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.610022, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 20:58:47.610468, function: null, file: null}
+Log registered: {message: Error initializing camera: CameraException(setFlashModeFailed, Camera session is unavailable)
+#0      CameraController.setFlashMode (package:camera/src/camera_controller.dart:729:7)
+<asynchronous suspension>
+#1      CameraService._setFlashModeIfSupported (package:hydracam/services/camera_service.dart:801:7)
+<asynchronous suspension>
+#2      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:261:7)
+<asynchronous suspension>
+#3      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#4      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#5      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#6      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#7      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:130:5)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#10     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 20:58:47.611189, function: null, file: null}
+00:00 +4: stopRecordingVideo surfaces the camera plugin no-recording error
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.613487, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 20:58:47.613872, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 20:58:47.614396, function: null, file: null}
+Log registered: {message: Error stopping video recording: Exception: stopVideoRecording was called when no video is recording.
+#0      CameraService.stopRecordingVideo (package:hydracam/services/camera_service.dart:416:9)
+#1      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:153:21)
+<asynchronous suspension>
+#2      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#3      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#4      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 20:58:47.614841, function: null, file: null}
+00:00 +5: mock camera writes placeholder media without a platform camera
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 20:58:47.617375, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 20:58:47.617742, function: null, file: null}
+Log registered: {message: Generated new Device ID: 1442adbb-5380-43ef-b643-7526b3354e38, timestamp: 2026-06-08 20:58:47.618079, function: null, file: null}
+Log registered: {message: Mock photo saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_null/mock_1_2026-06-08T20-58-47-618415.jpg, timestamp: 2026-06-08 20:58:47.620045, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 20:58:47.620259, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 1442adbb-5380-43ef-b643-7526b3354e38, timestamp: 2026-06-08 20:58:47.620448, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 20:58:47.620626, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_null/mock_2_2026-06-08T20-58-47-620997.mp4, timestamp: 2026-06-08 20:58:47.622004, function: null, file: null}
+00:00 +6: critical battery force stop saves mock recording and interrupts
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 20:58:47.624170, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 20:58:47.624317, function: null, file: null}
+Log registered: {message: Generated new Device ID: 8e930d95-8760-4d99-b9c4-f304676cd828, timestamp: 2026-06-08 20:58:47.624575, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 20:58:47.624676, function: null, file: null}
+Log registered: {message: Stopping recording due to critical battery., timestamp: 2026-06-08 20:58:47.624937, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_null/mock_1_2026-06-08T20-58-47-625032.mp4, timestamp: 2026-06-08 20:58:47.625925, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 8e930d95-8760-4d99-b9c4-f304676cd828, timestamp: 2026-06-08 20:58:47.626488, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_null/mock_1_2026-06-08T20-58-47-625032.mp4, timestamp: 2026-06-08 20:58:47.627042, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_null/mock_1_2026-06-08T20-58-47-625032.mp4, timestamp: 2026-06-08 20:58:47.630167, function: null, file: null}
+Log registered: {message: Auto-upload is enabled. Starting upload process., timestamp: 2026-06-08 20:58:47.630547, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 20:58:47.630793, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 20:58:47.631279, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=null, timestamp: 2026-06-08 20:58:47.631491, function: null, file: null}
+Log registered: {message: No session GUID available. Cannot upload media., timestamp: 2026-06-08 20:58:47.631573, function: null, file: null}
+00:00 +7: critical battery force stop survives missing start timestamp
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:58:47.633458, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:58:47.633768, function: null, file: null}
+Log registered: {message: Session started with GUID: critical-battery-missing-start on device type: Master, timestamp: 2026-06-08 20:58:47.634016, function: null, file: null}
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 20:58:47.634108, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 20:58:47.634229, function: null, file: null}
+Log registered: {message: Generated new Device ID: b6cd5457-6e1d-4986-bac5-be125e43c2e8, timestamp: 2026-06-08 20:58:47.634439, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 20:58:47.634541, function: null, file: null}
+Log registered: {message: Stopping recording due to critical battery., timestamp: 2026-06-08 20:58:47.634621, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_critical-battery-missing-start/mock_1_2026-06-08T20-58-47-634698.mp4, timestamp: 2026-06-08 20:58:47.635684, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: b6cd5457-6e1d-4986-bac5-be125e43c2e8, timestamp: 2026-06-08 20:58:47.636013, function: null, file: null}
+Log registered: {message: Error force-stopping recording due to battery: Null check operator used on a null value, timestamp: 2026-06-08 20:58:47.636138, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsjVsNVC/session_critical-battery-missing-start/metadata.json, timestamp: 2026-06-08 20:58:47.638580, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:58:47.638679, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:58:47.638768, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 20:58:47.638831, function: null, file: null}
+00:00 +7 -1: critical battery force stop survives missing start timestamp [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/services/camera_service_failure_test.dart 233:7  main.<fn>
+
+00:00 +7 -1: selected ultra-wide lens uses sport 1080p60 controller settings
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.657612, function: null, file: null}
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 20:58:47.657933, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 20:58:47.658360, function: null, file: null}
+Log registered: {message: Generated new Device ID: bc98cd6f-b6d7-48b4-8173-9376498697b1, timestamp: 2026-06-08 20:58:47.658507, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 20:58:47.658712, function: null, file: null}
+00:00 +8 -1: changing video profile preserves the selected camera
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:47.660258, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 20:58:47.660763, function: null, file: null}
+Log registered: {message: Changing video capture profile to detail4k30 (current: standard1080p30), timestamp: 2026-06-08 20:58:47.660941, function: null, file: null}
+Log registered: {message: Updated video capture profile to detail4k30, timestamp: 2026-06-08 20:58:47.661417, function: null, file: null}
+Log registered: {message: Camera capture settings applied and reinitialized: camera=iphone-telephoto, profile=detail4k30., timestamp: 2026-06-08 20:58:48.067202, function: null, file: null}
+00:00 +9 -1: setup preview uses preset defaults without explicit fps
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 20:58:48.075898, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 20:58:48.077064, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 20:58:48.078118, function: null, file: null}
+00:00 +10 -1: recording after setup preview rebuilds the explicit fps controller
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 20:58:48.081042, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 20:58:48.081474, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 20:58:48.082057, function: null, file: null}
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 20:58:48.082243, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 20:58:48.486236, function: null, file: null}
+Log registered: {message: Generated new Device ID: b76365b1-35c8-413f-8f03-77a99e940793, timestamp: 2026-06-08 20:58:48.488110, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 20:58:48.489122, function: null, file: null}
+00:01 +11 -1: macOS runtime uses the real camera backend unless mock is explicit
+00:01 +12 -1: (tearDownAll)
+00:01 +12 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: critical battery force stop survives missing start timestamp

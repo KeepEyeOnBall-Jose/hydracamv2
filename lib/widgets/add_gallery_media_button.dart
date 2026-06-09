@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 import "package:flutter/material.dart";
 import "package:photo_manager/photo_manager.dart";
@@ -5,6 +6,7 @@ import "../app_theme.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../services/device_service.dart";
+import "../services/gallery_session_candidate_source.dart";
 import "../services/session_manager.dart";
 import "../services/log_service.dart";
 import "media_filter_dialog.dart";
@@ -39,13 +41,13 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     setState(() {});
   }
 
-  void _onPressed() async {
+  Future<void> _onPressed() async {
     if (!SessionManager.instance.isSessionActive) {
       _showNoSessionAlert();
       return;
     }
 
-    _openFilterDialog();
+    await _openFilterDialog();
   }
 
   void _showNoSessionAlert() {
@@ -67,7 +69,7 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     );
   }
 
-  void _openFilterDialog() async {
+  Future<void> _openFilterDialog() async {
     final filters = await showDialog<MediaFilters>(
       context: context,
       builder: (context) {
@@ -75,8 +77,12 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       },
     );
 
+    if (!mounted) {
+      return;
+    }
+
     if (filters != null) {
-      _queryAndSelectMedia(filters);
+      await _queryAndSelectMedia(filters);
     }
   }
 
@@ -171,11 +177,16 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
 
     if (!mounted) return;
 
+    final candidateSessions =
+        await const GallerySessionCandidateSource().load();
+    if (!mounted) return;
+
     final selectedMedia = await Navigator.push<List<AssetEntity>>(
       context,
       MaterialPageRoute(
         builder: (context) => MediaSelectionScreen(
           mediaList: media,
+          candidateSessions: candidateSessions,
         ),
       ),
     );
@@ -201,7 +212,7 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
           receivedDate: DateTime.now(),
           slaveDeviceId: deviceId,
         );
-        SessionManager.instance.addPhoto(photo);
+        await SessionManager.instance.addPhoto(photo);
       } else if (asset.type == AssetType.video) {
         final CapturedVideo video = CapturedVideo(
           videoPath: file.path,
@@ -210,7 +221,7 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
           receivedDate: DateTime.now(),
           slaveDeviceId: deviceId,
         );
-        SessionManager.instance.addVideo(video);
+        await SessionManager.instance.addVideo(video);
       }
     }
 
@@ -231,7 +242,7 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: isButtonEnabled ? _onPressed : null,
+        onPressed: isButtonEnabled ? () => unawaited(_onPressed()) : null,
         style: ElevatedButton.styleFrom(
           backgroundColor:
               isButtonEnabled ? null : AppTheme.disabledButtonColor,

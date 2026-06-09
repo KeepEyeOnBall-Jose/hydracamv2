@@ -1,0 +1,16 @@
+Simulated Flutter widget runner evidence for backlog item 6.
+
+No physical device log was captured in this run. The visual proof uses a
+Flutter widget harness that injects deterministic diagnostics into
+SessionInfoWidget and renders the visible network/IP, short device ID, app
+version, and hardware identity lines.
+
+Primary command evidence is captured in ../commands.log:
+- RED 1: flutter test --no-pub test/widgets/session_info_widget_test.dart
+  failed because device/app diagnostics were not rendered.
+- GREEN 1: focused widget tests passed after adding device/app diagnostics.
+- RED 2: focused widget tests failed because hardware diagnostics were not
+  rendered.
+- GREEN 2: focused widget tests passed after adding the hardware line.
+- ANALYZE: flutter analyze --no-pub passed.
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1751-device-identity-diagnostics/device_identity_visual_test.dart

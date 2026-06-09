@@ -1,0 +1,138 @@
+{
+  "acceptanceChecks": [
+    "Critical battery during recording triggers a safe stop callback exactly once per critical event",
+    "The user sees a meaningful critical-battery message",
+    "Battery autostop writes a LogService entry",
+    "Non-critical low-battery warnings remain throttled"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:45:56.148288+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/battery_service_test.dart",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:47:50.201977+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/battery_service_test.dart",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:46.039779+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:48:55.229767+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1745-critical-battery-autostop/battery_autostop_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:36.122651+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1745-critical-battery-autostop/screenshots/critical_battery_snackbar.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1745-critical-battery-autostop/video/critical_battery_snackbar_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:49:49.307487+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/main.dart",
+        "lib/services/battery_service.dart",
+        "lib/services/camera_service.dart",
+        "test/services/battery_service_test.dart",
+        "test/services/camera_service_failure_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1745-critical-battery-autostop/summary.md",
+        "logs/verification-runs/20260608-1745-critical-battery-autostop/device-logs/flutter-widget-runner.log",
+        "logs/verification-runs/20260608-1745-critical-battery-autostop/battery_autostop_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:50:52.222423+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:50:52.242144+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulated app surface",
+      "name": "macOS Flutter widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "battery-service behavior proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/critical_battery_snackbar.png",
+    "video/critical_battery_snackbar_proof.mp4",
+    "device-logs/flutter-widget-runner.log"
+  ],
+  "item": {
+    "slug": "critical-battery-autostop",
+    "source": "docs/control/backlog-import.md#5-add-critical-battery-autostop",
+    "title": "Add critical battery autostop"
+  },
+  "notes": [
+    "Critical battery autostop code, tests, snackbar screenshot, and proof video are complete for the simulated app surface; real-device/emulator battery-event recording proof remains."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

@@ -1,0 +1,69 @@
+{
+  "acceptanceChecks": [
+    "Received video media is saved with .mp4 when declared as video even if bytes start with 0xFF",
+    "Received photo media remains saved with .jpg",
+    "Focused SessionMediaStorage tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/session_media_storage.dart",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:38:04.476802+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "_fileExtensionFor|uses declared media type|SessionMediaType.video => \"mp4\"|SessionMediaType.photo => \"jpg\"",
+        "lib/services/session_media_storage.dart",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:38:05.673982+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:38:10.801237+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter SessionMediaStorage unit-test runner",
+      "notes": [
+        "Runs received-media storage tests with deterministic documents directory and fake gallery persistor."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "received-media-declared-type-extension-cleanup",
+    "source": "docs/control/backlog-import.md#open-bugimprovement-rows-from-fallos-y-mejoras",
+    "title": "Received media storage declared type extension cleanup"
+  },
+  "notes": [
+    "Received-media file extensions now follow declared SessionMediaType instead of first-byte inference.",
+    "Focused SessionMediaStorage tests pass."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

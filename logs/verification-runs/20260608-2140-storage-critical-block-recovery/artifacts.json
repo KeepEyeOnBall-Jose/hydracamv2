@@ -1,0 +1,104 @@
+{
+  "acceptanceChecks": [
+    "StorageService clears recording block when available storage recovers above the critical threshold, while still allowing low-storage warning behavior below the low threshold."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/storage_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T19:40:53.744358+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/storage_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:41:22.220799+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-2140-storage-critical-block-recovery/render_storage_recovery_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:42:10.714440+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:42:55.504356+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/storage_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:43:06.147749+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:43:16.973998+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:43:38.895623+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "StorageService critical block recovery",
+      "kind": "widget-test",
+      "name": "StorageService widget test runner",
+      "notes": [
+        "Focused test verifies critical storage blocks recording and recovery above the critical threshold clears the block even while below the low-warning threshold."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "storage-recovery"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/storage_critical_block_recovery.png",
+    "video/storage_critical_block_recovery_proof.mp4",
+    "device-logs/storage-recovery-test-commands.log"
+  ],
+  "item": {
+    "slug": "storage-critical-block-recovery",
+    "source": "docs/control/backlog-import.md",
+    "title": "T-017: Critical storage block recovery"
+  },
+  "notes": [
+    "Focused TDD slice for T-017. StorageService now clears recording block as soon as available storage recovers above the critical threshold while leaving low-threshold warning behavior intact. Broader closure still needs real-device storage-pressure recording proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

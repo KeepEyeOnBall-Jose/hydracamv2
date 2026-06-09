@@ -1,0 +1,92 @@
+{
+  "acceptanceChecks": [
+    "Active-session AddGalleryMediaButton opens the media filter dialog under widget test",
+    "Gallery button async handlers return Future<void> and are dispatched explicitly from onPressed",
+    "Focused widget tests, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/add_gallery_media_button_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:10:08.376279+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/add_gallery_media_button_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:10:28.290475+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/widgets/add_gallery_media_button.dart",
+        "test/widgets/add_gallery_media_button_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:10:59.276497+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/add_gallery_media_button_test.dart",
+        "test/widgets/media_filter_dialog_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:11:11.597801+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:11:19.505591+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:11:23.119592+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:11:32.035886+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "add-gallery-media-button-async-handler-cleanup",
+    "source": "cleanup scan: async void widget handlers",
+    "title": "Add gallery media button async handler cleanup"
+  },
+  "notes": [
+    "Added active-session widget coverage for AddGalleryMediaButton opening MediaFilterDialog.",
+    "Converted private async handlers to Future<void> and dispatched from onPressed with unawaited.",
+    "Focused widget tests, git diff --check, flutter analyze --no-pub, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

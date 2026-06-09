@@ -1,0 +1,174 @@
+{
+  "acceptanceChecks": [
+    "Current upload progress shows an estimated time remaining when upload timing is known",
+    "Estimate is deterministic in widget tests",
+    "Existing byte progress and upload states remain compatible",
+    "Screenshot and video proof show the time estimate"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:30:20.022809+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:30:36.078215+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:31:16.043353+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:32:09.205912+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/render_upload_time_estimate_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:32:38.460365+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/screenshots/upload_time_estimate_visible.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/video/upload_time_estimate_visible_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:32:44.615932+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/widgets/media_list_widget.dart",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:33:02.549166+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:33:11.641112+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:33:13.900528+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:33:24.599024+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/commands.log",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:33:38.014187+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/widgets/media_list_widget.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/summary.md",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/render_upload_time_estimate_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:33:43.567857+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/widgets/media_list_widget.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/summary.md",
+        "logs/verification-runs/20260608-1830-upload-time-estimate-visible/render_upload_time_estimate_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:34:07.006379+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/upload_time_estimate_visible.png",
+    "video/upload_time_estimate_visible_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "upload-time-estimate-visible",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "Upload time-estimate slice passed focused widget tests, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for cancel controls, start-upload commands, and slave upload info."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

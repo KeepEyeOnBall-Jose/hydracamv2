@@ -1,0 +1,77 @@
+{
+  "acceptanceChecks": [
+    "Upload API returns false for a missing media file with a clear file-missing log and without sending an HTTP multipart request."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:19:49.706958+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:20:03.961472+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:20:10.762276+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:20:24.831834+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "HydraCamApiService missing file guard",
+      "kind": "unit-test",
+      "name": "Mock HTTP upload API",
+      "notes": [
+        "Focused API-service test verifies missing media files fail before HTTP multipart send."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "invalid-upload-file"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/invalid_upload_file_guard.png",
+    "video/invalid_upload_file_guard_proof.mp4",
+    "device-logs/green-focused-tests.log",
+    "device-logs/red-tests.log"
+  ],
+  "item": {
+    "slug": "invalid-upload-file-guard",
+    "source": "docs/control/backlog-import.md",
+    "title": "Testing T-016: Invalid upload file guard"
+  },
+  "notes": [
+    "Focused TDD slice for testing candidate T-016. Missing local media files now return false with a clear missing-file log before any multipart HTTP send. Does not claim corrupt-file or backend invalid-file handling."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

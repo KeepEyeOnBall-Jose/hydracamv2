@@ -1,0 +1,90 @@
+{
+  "acceptanceChecks": [
+    "AuthService can restore a valid stored credential set without browser login",
+    "Restored session sets access token, email, and profile picture from the stored ID token",
+    "Expired stored credentials fall back to login-required state",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:06:36.924543+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T18:07:05.536870+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:07:36.623691+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:07:51.799662+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:10:36.030450+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter Auth0 startup-restore test runner",
+      "notes": [
+        "Runs AuthService startup restore tests with an in-memory credential store."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/auth0_startup_restore_valid_credentials.png",
+    "video/auth0_startup_restore_valid_credentials_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "auth0-startup-restore-valid-credentials",
+    "source": "docs/control/backlog-import.md#11-make-mobile-auth0-login-recoverable-and-release-safe",
+    "title": "11. Make mobile Auth0 login recoverable and release-safe"
+  },
+  "notes": [
+    "AuthService restores valid stored credentials without browser login and rejects expired credentials."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

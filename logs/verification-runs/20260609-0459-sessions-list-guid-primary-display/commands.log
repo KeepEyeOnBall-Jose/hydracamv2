@@ -1,0 +1,32 @@
+# HydraCam evidence run command log
+
+$ flutter test test/screens/sessions_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/screens/sessions_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: backend sessions list uses guid as primary session reference
+Log registered: {message: Get token, timestamp: 2026-06-09 04:59:09.840812, function: null, file: null}
+Log registered: {message: Parsed list (sessions): [{guid: backend-session-guid, sessionId: legacy-session-id, startTime: 2026-06-09T01:00:00Z, endTime: 2026-06-09T02:00:00Z}], timestamp: 2026-06-09 04:59:09.918420, function: null, file: null}
+00:00 +1: loading backend session reports guid as selected session
+Log registered: {message: Get token, timestamp: 2026-06-09 04:59:10.097249, function: null, file: null}
+Log registered: {message: Parsed list (sessions): [{guid: backend-session-guid, sessionId: legacy-session-id, startTime: 2026-06-09T01:00:00Z, endTime: 2026-06-09T02:00:00Z}], timestamp: 2026-06-09 04:59:10.111428, function: null, file: null}
+Log registered: {message: Loading session: {guid: backend-session-guid, sessionId: legacy-session-id, startTime: 2026-06-09T01:00:00Z, endTime: 2026-06-09T02:00:00Z}, timestamp: 2026-06-09 04:59:10.162374, function: _loadSession, file: sessions_screen.dart}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-09 04:59:10.163044, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-09 04:59:10.163423, function: null, file: null}
+Log registered: {message: Session started with GUID: backend-session-guid on device type: Master, timestamp: 2026-06-09 04:59:10.163673, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/sessions_screen_docsx3EzSl/session_backend-session-guid/metadata.json, timestamp: 2026-06-09 04:59:10.241984, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-09 04:59:10.242181, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-09 04:59:10.242251, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-09 04:59:10.242314, function: null, file: null}
+00:00 +2: (tearDownAll)
+00:00 +2: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0

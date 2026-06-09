@@ -47,6 +47,10 @@ class DeployMacosDevHostTests(unittest.TestCase):
 
         self.assertIn("scripts/prepare_macos_dev_host.zsh", source)
         self.assertIn("flutter run -d macos --debug", source)
+        self.assertIn("--dart-define=HYDRACAM_AUTOMATION=true", source)
+        self.assertIn("--dart-define=HYDRACAM_AUTOMATION_ROLE=master", source)
+        self.assertNotIn("HYDRACAM_AUTOMATION_ENABLED", source)
+        self.assertNotIn("HYDRACAM_AUTOMATION_INITIAL_ROLE", source)
         self.assertIn("FLUTTER_RUN_STATUS=debug-session-started", source)
         self.assertIn("flutter build apk --debug", source)
         self.assertIn("flutter build ios --debug --no-codesign", source)

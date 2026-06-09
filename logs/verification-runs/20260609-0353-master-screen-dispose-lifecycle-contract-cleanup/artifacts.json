@@ -1,0 +1,163 @@
+{
+  "acceptanceChecks": [
+    "MasterScreen dispose is documented and tested as UI/server resource cleanup only",
+    "Active capture session remains alive until the explicit end-session path is called",
+    "Focused MasterScreen tests, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "dart",
+        "format",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:54:03.994774+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "pending server start closes immediately when stop is requested"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:59:41.776372+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_server.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:00:02.656348+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "pending server start closes immediately when stop is requested"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:00:07.986551+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_screen.dart",
+        "lib/master/master_server.dart",
+        "test/master/master_screen_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:03:52.859936+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "pending server start closes immediately when stop is requested"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:03:58.623761+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_screen.dart",
+        "lib/master/master_server.dart",
+        "test/master/master_screen_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:16:25.725354+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "pending server start closes immediately when stop is requested"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:16:30.511069+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart",
+        "--plain-name",
+        "disposing master screen does not end active session",
+        "-r",
+        "expanded"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:16:38.079027+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:16:47.743458+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:17:08.849604+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:17:13.681651+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:17:28.273156+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-screen-dispose-lifecycle-contract-cleanup",
+    "source": "cleanup scan: MasterScreen.dispose session-ending TODO",
+    "title": "Master screen dispose lifecycle contract cleanup"
+  },
+  "notes": [
+    "Made MasterScreen server/announcer dependencies injectable for lifecycle tests, documented dispose as resource cleanup only, fixed MasterServer async bind stop race, and proved active sessions survive screen disposal until explicit endCurrentSession()."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

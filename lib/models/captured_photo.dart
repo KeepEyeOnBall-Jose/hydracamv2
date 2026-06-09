@@ -33,6 +33,7 @@ class CapturedPhoto {
   /// Metadata about upload elapsed time
   Duration? uploadDuration; // to track upload time
   DateTime? uploadStartTime; // to track upload start time
+  String? uploadFailureReason;
 
   /// File size metadata
   final int fileSizeInBytes;
@@ -54,6 +55,7 @@ class CapturedPhoto {
     this.isUploaded = false,
     this.uploadDuration,
     this.uploadStartTime,
+    this.uploadFailureReason,
   }) : fileSizeInBytes = File(photoPath).lengthSync().toInt();
 
   /// Getter for media path (used by UploaderService)

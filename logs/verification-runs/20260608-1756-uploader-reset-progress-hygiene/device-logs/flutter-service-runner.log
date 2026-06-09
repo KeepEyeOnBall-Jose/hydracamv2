@@ -1,0 +1,13 @@
+Flutter service-test evidence for backlog item 3.
+
+No physical device log was required for this service-level reset hygiene slice.
+The proof uses a focused Flutter test that seeds the uploader queue and visible
+upload notifiers, calls UploaderService.reset(), and verifies stale queue,
+current upload state, estimated time, and upload progress are cleared.
+
+Primary command evidence is captured in ../commands.log:
+- RED: flutter test --no-pub test/services/uploader_service_test.dart failed
+  because uploadProgressNotifier stayed at 0.73 after reset.
+- GREEN: the same focused test passed after reset set progress back to 0.0.
+- ANALYZE: flutter analyze --no-pub passed.
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/uploader_reset_visual_test.dart

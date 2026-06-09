@@ -1,0 +1,49 @@
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart
+test/master/master_network_snapshot_cache_test.dart:315:7: Error: No named parameter with the name 'masterTime'.
+      masterTime: masterTime,
+      ^^^^^^^^^^
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: test/master/master_network_snapshot_cache_test.dart:315:7: Error: No named parameter with the name 'masterTime'.
+        masterTime: masterTime,
+        ^^^^^^^^^^
+  .
+  Error: The Dart compiler exited unexpectedly.
+  package:flutter_tools/src/base/common.dart 34:3  throwToolExit
+  package:flutter_tools/src/compile.dart 1009:11   DefaultResidentCompiler._compile.<fn>
+  dart:async/zone_root.dart 48:47                  _rootRunUnary
+  dart:async/zone.dart 733:19                      _CustomZone.runUnary
+  dart:async/future_impl.dart 948:45               Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 977:13               Future._propagateToListeners
+  dart:async/future_impl.dart 862:9                Future._propagateToListeners
+  dart:async/future_impl.dart 720:5                Future._completeWithValue
+  dart:async/future_impl.dart 804:7                Future._asyncCompleteWithValue.<fn>
+  dart:async/zone_root.dart 35:13                  _rootRun
+  dart:async/zone.dart 726:19                      _CustomZone.run
+  dart:async/zone.dart 625:7                       _CustomZone.runGuarded
+  dart:async/zone.dart 666:23                      _CustomZone.bindCallbackGuarded.<fn>
+  dart:async/schedule_microtask.dart 40:35         _microtaskLoop
+  dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
+
+test/slave/slave_client_registration_test.dart:381:7: Error: No named parameter with the name 'scheduledTaskService'.
+      scheduledTaskService: scheduledTaskService,
+      ^^^^^^^^^^^^^^^^^^^^
+lib/slave/slave_client.dart:119:3: Context: Found this candidate, but the arguments don't match.
+  SlaveClient(
+  ^^^^^^^^^^^
+00:00 +0 -2: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: test/slave/slave_client_registration_test.dart:381:7: Error: No named parameter with the name 'scheduledTaskService'.
+        scheduledTaskService: scheduledTaskService,
+        ^^^^^^^^^^^^^^^^^^^^
+  lib/slave/slave_client.dart:119:3: Context: Found this candidate, but the arguments don't match.
+    SlaveClient(
+    ^^^^^^^^^^^
+  .
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: loading /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart
+  /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart

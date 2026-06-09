@@ -1,0 +1,12 @@
+Simulated Flutter widget runner evidence for backlog item 5.
+
+No physical battery service log was captured in this run. The visual proof
+uses a Flutter widget harness that instantiates BatteryService with monitoring
+disabled, simulates an 8% battery reading, and verifies the critical snackbar,
+LogService entry, and one-shot autostop callback path.
+
+Primary command evidence is captured in ../commands.log:
+- RED: flutter test --no-pub test/services/battery_service_test.dart test/services/camera_service_failure_test.dart
+- GREEN: flutter test --no-pub test/services/battery_service_test.dart test/services/camera_service_failure_test.dart
+- ANALYZE: flutter analyze --no-pub
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1745-critical-battery-autostop/battery_autostop_visual_test.dart

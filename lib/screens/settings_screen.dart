@@ -1,12 +1,19 @@
 import "package:flutter/material.dart";
 import "../app_theme.dart";
+import "../l10n/app_localizations.dart";
 import "../models/camera_capture_settings.dart";
+import "../services/app_locale_service.dart";
 import "../services/camera_service_singleton.dart";
 import "../services/settings_service.dart";
 import "../widgets/settings_option.dart"; // Import the widget
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({
+    super.key,
+    AppLocaleService? localeService,
+  }) : _localeService = localeService;
+
+  final AppLocaleService? _localeService;
 
   @override
   SettingsScreenState createState() => SettingsScreenState();
@@ -22,9 +29,16 @@ class SettingsScreenState extends State<SettingsScreen> {
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
+  bool _autoRecordMode = false;
   int _timerDuration = 3;
   bool _screenAutoOff = false;
   bool _flashForVideoAnnounce = false;
+  String _selectedLocaleCode = _systemLocaleCode;
+
+  static const String _systemLocaleCode = "system";
+
+  AppLocaleService get _localeService =>
+      widget._localeService ?? AppLocaleService.instance;
 
   @override
   void initState() {
@@ -42,10 +56,13 @@ class SettingsScreenState extends State<SettingsScreen> {
     final autoUploadMaterials = await SettingsService.getAutoUploadMaterials();
     final autoplayVideoOnMaster =
         await SettingsService.getAutoplayVideoOnMaster();
+    final autoRecordMode = await SettingsService.getAutoRecordMode();
     final timerDuration = await SettingsService.getTimerDuration();
     final screenAutoOff = await SettingsService.getScreenAutoOff();
     final flashForVideoAnnounce =
         await SettingsService.getFlashForVideoAnnounce();
+    await _localeService.load();
+    final localeCode = _localeService.localeOverrideCode ?? _systemLocaleCode;
 
     setState(() {
       _masterShouldRecord = shouldRecord;
@@ -54,9 +71,11 @@ class SettingsScreenState extends State<SettingsScreen> {
       _deleteLocalAfterUpload = deleteLocalAfterUpload;
       _autoUploadMaterials = autoUploadMaterials;
       _autoplayVideoOnMaster = autoplayVideoOnMaster;
+      _autoRecordMode = autoRecordMode;
       _timerDuration = timerDuration;
       _screenAutoOff = screenAutoOff;
       _flashForVideoAnnounce = flashForVideoAnnounce;
+      _selectedLocaleCode = localeCode;
     });
   }
 
@@ -112,6 +131,13 @@ class SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  Future<void> _updateAutoRecordMode(bool value) async {
+    await SettingsService.setAutoRecordMode(value);
+    setState(() {
+      _autoRecordMode = value;
+    });
+  }
+
   Future<void> _updateTimerDuration(double value) async {
     final newDuration = value.toInt();
     await SettingsService.setTimerDuration(newDuration);
@@ -127,12 +153,47 @@ class SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  Future<void> _updateLocaleOverride(String value) async {
+    final overrideCode = value == _systemLocaleCode ? null : value;
+    await _localeService.setLocaleOverride(overrideCode);
+    setState(() {
+      _selectedLocaleCode = value;
+    });
+  }
+
+  List<DropdownMenuItem<String>> _localeOverrideItems(AppLocalizations l10n) {
+    return [
+      DropdownMenuItem(
+        value: _systemLocaleCode,
+        child: Text(l10n.settingsLanguageSystemDefault),
+      ),
+      DropdownMenuItem(
+        value: "en",
+        child: Text(l10n.settingsLanguageEnglish),
+      ),
+      DropdownMenuItem(
+        value: "es",
+        child: Text(l10n.settingsLanguageSpanish),
+      ),
+      DropdownMenuItem(
+        value: "de",
+        child: Text(l10n.settingsLanguageGerman),
+      ),
+      DropdownMenuItem(
+        value: "pl",
+        child: Text(l10n.settingsLanguagePolish),
+      ),
+    ];
+  }
+
   /// Widget with actual screen
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(l10n.appShellSettings),
       ),
       body: SingleChildScrollView(
         // Allow scrolling if needed
@@ -141,12 +202,26 @@ class SettingsScreenState extends State<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Preferences",
+              l10n.settingsPreferencesHeading,
               style: AppTheme.headline1.copyWith(fontSize: 24),
             ),
             const SizedBox(height: 20),
             SettingsOption(
-              title: "Master should record",
+              title: l10n.settingsLanguageTitle,
+              description: l10n.settingsLanguageDescription,
+              control: DropdownButton<String>(
+                key: const ValueKey("localeOverrideDropdown"),
+                value: _selectedLocaleCode,
+                items: _localeOverrideItems(l10n),
+                onChanged: (value) {
+                  if (value != null) {
+                    _updateLocaleOverride(value);
+                  }
+                },
+              ),
+            ),
+            SettingsOption(
+              title: l10n.settingsMasterShouldRecordTitle,
               control: Switch(
                 value: _masterShouldRecord,
                 onChanged: _updateMasterRecording,
@@ -155,13 +230,12 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             Text(
-              "Capture Settings",
+              l10n.settingsCaptureHeading,
               style: AppTheme.headline1.copyWith(fontSize: 20),
             ),
             SettingsOption(
-              title: "Camera Lens",
-              description:
-                  "Squash: use Ultra Wide (0.5x) when the phone exposes it.",
+              title: l10n.settingsCameraLensTitle,
+              description: l10n.settingsCameraLensDescription,
               control: DropdownButton<LensPreference>(
                 value: _lensPreference,
                 items: LensPreference.values
@@ -180,9 +254,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SettingsOption(
-              title: "Video Profile",
-              description:
-                  "Profiles are targets; the phone may fall back if unsupported.",
+              title: l10n.settingsVideoProfileTitle,
+              description: l10n.settingsVideoProfileDescription,
               control: DropdownButton<VideoCaptureProfile>(
                 value: _videoCaptureProfile,
                 items: VideoCaptureProfile.values
@@ -203,12 +276,12 @@ class SettingsScreenState extends State<SettingsScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
               child: Text(
-                "Target: ${_videoCaptureProfile.targetLabel}",
+                l10n.settingsVideoTarget(_videoCaptureProfile.targetLabel),
                 style: AppTheme.bodyText1,
               ),
             ),
             SettingsOption(
-              title: "Delete local after upload",
+              title: l10n.settingsDeleteLocalAfterUploadTitle,
               control: Switch(
                 value: _deleteLocalAfterUpload,
                 onChanged: _updateDeleteLocalAfterUpload,
@@ -217,7 +290,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SettingsOption(
-              title: "Auto-upload materials",
+              title: l10n.settingsAutoUploadMaterialsTitle,
               control: Switch(
                 value: _autoUploadMaterials,
                 onChanged: _updateAutoUploadMaterials,
@@ -226,9 +299,29 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SettingsOption(
-              title: "Autoplay video on master",
-              description:
-                  "Activate or deactivate automatic playback of videos after recording them on the master device.",
+              title: l10n.settingsStorageLocationTitle,
+              description: l10n.settingsStorageLocationDescription,
+              control: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    l10n.settingsInternalAppStorage,
+                    style: AppTheme.bodyText1,
+                    textAlign: TextAlign.right,
+                  ),
+                  Text(
+                    l10n.settingsSdCardNotConfigured,
+                    style: AppTheme.bodyText1.copyWith(
+                      color: AppTheme.disabledButtonColor,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ),
+            SettingsOption(
+              title: l10n.settingsAutoplayVideoOnMasterTitle,
+              description: l10n.settingsAutoplayVideoOnMasterDescription,
               control: Switch(
                 value: _autoplayVideoOnMaster,
                 onChanged: _updateAutoplayVideoOnMaster,
@@ -237,9 +330,19 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SettingsOption(
-              title: "Screen Auto-Off",
-              description:
-                  "Turn off the slave screen during recording to save battery. The screen will reactivate automatically or when you wake it manually.",
+              title: l10n.settingsAutoRecordModeTitle,
+              description: l10n.settingsAutoRecordModeDescription,
+              control: Switch(
+                key: const ValueKey("autoRecordMode"),
+                value: _autoRecordMode,
+                onChanged: _updateAutoRecordMode,
+                activeThumbColor: AppTheme.primaryColor,
+                inactiveThumbColor: AppTheme.disabledButtonColor,
+              ),
+            ),
+            SettingsOption(
+              title: l10n.settingsScreenAutoOffTitle,
+              description: l10n.settingsScreenAutoOffDescription,
               control: Switch(
                 value: _screenAutoOff,
                 onChanged: _updateScreenAutoOff,
@@ -248,9 +351,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SettingsOption(
-              title: "Timer Duration",
-              description:
-                  "Set the number of seconds for countdown timers when recording videos or taking photos.",
+              title: l10n.settingsTimerDurationTitle,
+              description: l10n.settingsTimerDurationDescription,
               control: Column(
                 children: [
                   Slider(
@@ -258,20 +360,19 @@ class SettingsScreenState extends State<SettingsScreen> {
                     min: 0,
                     max: 6,
                     divisions: 6,
-                    label: "$_timerDuration seconds",
+                    label: l10n.settingsTimerSeconds(_timerDuration),
                     onChanged: _updateTimerDuration,
                     thumbColor: AppTheme.primaryColor,
                     activeColor: AppTheme.lightAccentColor,
                     inactiveColor: AppTheme.disabledButtonColor,
                   ),
-                  Text("Current timer duration: $_timerDuration seconds"),
+                  Text(l10n.settingsCurrentTimerDuration(_timerDuration)),
                 ],
               ),
             ),
             SettingsOption(
-              title: "Flash for Video Announcements",
-              description:
-                  "If enabled, the camera flash will blink before and after video recording to signal start/end.",
+              title: l10n.settingsFlashForVideoAnnouncementsTitle,
+              description: l10n.settingsFlashForVideoAnnouncementsDescription,
               control: Switch(
                 value: _flashForVideoAnnounce,
                 onChanged: (value) async {

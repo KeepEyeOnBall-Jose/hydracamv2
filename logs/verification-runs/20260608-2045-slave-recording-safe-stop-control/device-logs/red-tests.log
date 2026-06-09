@@ -1,0 +1,56 @@
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart
+00:00 +0: forced preferred master connects without network readiness probe
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 20:41:02.187995, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 20:41:02.189651, function: null, file: null}
+00:00 +1: slave app bar opens uploader info directly
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 20:41:02.370916, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 20:41:02.371114, function: null, file: null}
+00:00 +2: connectivity stream errors are logged without uncaught exception
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 20:41:02.494021, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 20:41:02.494252, function: null, file: null}
+Log registered: {message: Connectivity change listener failed: SocketException: dbus unavailable
+#0      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:207:18)
+<asynchronous suspension>
+#1      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#2      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#3      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-08 20:41:02.508398, function: null, file: null}
+00:00 +3: linux skips default connectivity stream subscription
+Log registered: {message: Skipping connectivity change listener on linux; network readiness will be checked on demand., timestamp: 2026-06-08 20:41:02.521476, function: null, file: null}
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 20:41:02.521637, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 20:41:02.521723, function: null, file: null}
+00:00 +4: recording slave surface exposes safe stop control
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 20:41:02.552153, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 20:41:02.552301, function: null, file: null}
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _WidgetPredicateWidgetFinder:<Found 0 widgets with widget matching predicate: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:291:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart line 291
+The test description was:
+  recording slave surface exposes safe stop control
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +4 -1: recording slave surface exposes safe stop control [E]
+  Test failed. See exception logs above.
+  The test description was: recording slave surface exposes safe stop control
+
+00:00 +4 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: recording slave surface exposes safe stop control

@@ -1,0 +1,49 @@
+{
+  "acceptanceChecks": [
+    "Automation start_session keeps backend-only behavior with an explicit legacy localOnly rejection guard, no obfuscated localOnly string concatenation, and capture scripts do not send localOnly or disable uploads"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/test_no_local_sessions.py"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:17:19.396912+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/test_no_local_sessions.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:17:30.975984+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:18:20.224665+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "automation-local-only-guard-cleanup",
+    "source": "scripts/test_no_local_sessions.py and lib/master/master_screen.dart localOnly split-literal guard",
+    "title": "automation localOnly guard cleanup"
+  },
+  "notes": [
+    "No-local-session contract first failed on the obfuscated localOnly key, then passed after MasterScreen used an explicit localOnly rejection guard. Focused master-screen tests, analyzer, no-local-session script test, full Flutter tests, and diff whitespace checks passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

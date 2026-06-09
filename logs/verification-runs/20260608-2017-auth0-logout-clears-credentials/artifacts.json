@@ -1,0 +1,77 @@
+{
+  "acceptanceChecks": [
+    "Auth0 logout clears in-memory auth state, deletes secure stored credentials, invokes Auth0/browser end-session when an ID token is available, and prevents silent restore after logout."
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:16:30.227598+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T18:16:56.538955+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:19:17.761789+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:20:40.536029+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos-flutter-test",
+      "kind": "local-test",
+      "name": "Flutter unit test runner",
+      "notes": [
+        "Unit-level proof for Auth0 logout clearing; mobile smoke remains in board item 11."
+      ],
+      "os": "macOS / Flutter test",
+      "role": "auth-service"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/auth0_logout_clears_credentials.png",
+    "video/auth0_logout_clears_credentials_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "auth0-logout-clears-credentials",
+    "source": "docs/control/backlog-import.md",
+    "title": "Board item 11: Make mobile Auth0 login recoverable and release-safe"
+  },
+  "notes": [
+    "Logout clears secure stored credentials, clears local auth/user state, and calls Auth0 end-session when an ID token is available."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}

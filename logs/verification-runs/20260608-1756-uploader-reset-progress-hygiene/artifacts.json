@@ -1,0 +1,142 @@
+{
+  "acceptanceChecks": [
+    "Uploader reset clears queued stale work",
+    "Uploader reset clears current upload state",
+    "Uploader reset clears visible upload progress",
+    "Regression test covers reset behavior"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:56:35.654281+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:57:10.377632+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:35.098211+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:57:41.581398+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/uploader_reset_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:58:11.995580+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/screenshots/uploader_reset_progress.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/video/uploader_reset_progress_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:58:14.141040+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/uploader_service.dart",
+        "test/services/uploader_service_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/summary.md",
+        "logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/device-logs/flutter-service-runner.log",
+        "logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/uploader_reset_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:58:44.082605+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:58:44.100843+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:58:49.263782+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "unit test surface",
+      "name": "Dart service test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "uploader reset proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/uploader_reset_progress.png",
+    "video/uploader_reset_progress_proof.mp4",
+    "device-logs/flutter-service-runner.log"
+  ],
+  "item": {
+    "slug": "uploader-reset-progress-hygiene",
+    "source": "docs/control/backlog-import.md#3-prevent-stale-uploads-from-crossing-sessions",
+    "title": "Prevent stale uploads from crossing sessions"
+  },
+  "notes": [
+    "Uploader reset now clears visible upload progress with service test, screenshot, and video proof; deeper in-flight upload/session race proof remains on the existing item."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

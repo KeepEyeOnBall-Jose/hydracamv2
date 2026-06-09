@@ -1,0 +1,13 @@
+Flutter settings evidence for backlog item 8.
+
+No physical device log was captured in this settings-only slice. The proof uses
+SettingsService tests plus a SettingsScreen widget harness that renders the
+Autograbado mode switch disabled by default and verifies it can persist true.
+
+Primary command evidence is captured in ../commands.log:
+- RED: flutter test --no-pub test/services/settings_service_test.dart test/screens/capture_settings_screen_test.dart failed because SettingsService had no autograbado accessors and SettingsScreen had no Autograbado mode toggle.
+- GREEN: the same focused tests passed after adding the persisted setting and keyed switch.
+- VISUAL RED: the first screenshot harness exposed a narrow-width SettingsOption overflow.
+- GREEN VISUAL: SettingsOption now stacks label/control on narrow widths, and the screenshot harness passes.
+- ANALYZE: flutter analyze --no-pub passed.
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart

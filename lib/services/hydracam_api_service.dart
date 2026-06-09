@@ -3,8 +3,112 @@ import "dart:convert";
 import "dart:io";
 import "package:flutter/foundation.dart";
 import "package:http/http.dart" as http;
+import "package:package_info_plus/package_info_plus.dart";
 import "log_service.dart";
 import "auth0_m2m_service.dart";
+
+class HydraCamUploadMediaContract {
+  static const String method = "POST";
+  static const int successStatusCode = 200;
+  static const String endpoint = "sessions/upload-media";
+  static const String querySessionGuid = "sessionGuid";
+  static const String queryIsPhoto = "isPhoto";
+  static const String fieldSlaveDeviceId = "slaveDeviceId";
+  static const String fieldCaptureDate = "captureDate";
+  static const String fieldReceivedDate = "receivedDate";
+  static const String fieldRecordingEndDate = "recordingEndDate";
+  static const String fieldDurationMs = "durationMs";
+  static const String fieldAppVersion = "appVersion";
+  static const String fieldAppBuildNumber = "appBuildNumber";
+  static const String fileField = "files";
+}
+
+class HydraCamUserContract {
+  static const String getByEmailEndpoint = "users/get-by-email";
+  static const String queryEmail = "email";
+}
+
+class HydraCamSessionContract {
+  static const String courtsEndpoint = "courts";
+  static const String sportsCentersEndpoint = "sportscenters";
+  static const String sessionsEndpoint = "sessions";
+  static const String createSessionEndpoint = "sessions/create";
+  static const String endSessionEndpoint = "sessions/end";
+  static const String readyToTransmitEndpoint = "device/ReadyToTransmit";
+  static const String querySportsCenterGuid = "sportsCenterGuid";
+  static const String queryCourtGuid = "courtGuid";
+  static const String queryUserGuid = "userGuid";
+  static const String querySessionGuid = "sessionGuid";
+}
+
+@immutable
+class HydraCamBackendSession {
+  const HydraCamBackendSession({
+    required this.guid,
+    required this.sessionId,
+    this.numericId,
+  });
+
+  final String guid;
+  final String sessionId;
+  final int? numericId;
+
+  factory HydraCamBackendSession.fromCreateResponse(
+    Map<String, dynamic> response, {
+    required String requestedSessionId,
+  }) {
+    final rawGuid = response["guid"] ?? response["Guid"];
+    final guid = rawGuid?.toString().trim() ?? "";
+    if (guid.isEmpty) {
+      throw const FormatException(
+          "Session create response did not include a backend GUID.");
+    }
+    if (guid.startsWith("local-")) {
+      throw FormatException(
+          "Session create response returned a non-uploadable local GUID: $guid");
+    }
+
+    final rawId = response["id"] ?? response["Id"];
+    final numericId =
+        rawId is int ? rawId : int.tryParse(rawId?.toString() ?? "");
+    final rawSessionId =
+        response["sessionId"] ?? response["SessionId"] ?? requestedSessionId;
+    return HydraCamBackendSession(
+      guid: guid,
+      sessionId: rawSessionId.toString(),
+      numericId: numericId,
+    );
+  }
+
+  @override
+  String toString() {
+    return "HydraCamBackendSession(guid: $guid, sessionId: $sessionId, numericId: $numericId)";
+  }
+}
+
+String hydracamUserDetailsEndpoint(String guid) {
+  return "users/${Uri.encodeComponent(guid)}/info";
+}
+
+String hydracamApiEndpoint(
+  String path, {
+  Map<String, String?> queryParameters = const {},
+}) {
+  final trimmedPath = path.startsWith("/") ? path.substring(1) : path;
+  final effectiveQueryParameters = <String, String>{};
+  for (final entry in queryParameters.entries) {
+    final value = entry.value;
+    if (value != null) {
+      effectiveQueryParameters[entry.key] = value;
+    }
+  }
+
+  return Uri(
+    path: trimmedPath,
+    queryParameters:
+        effectiveQueryParameters.isEmpty ? null : effectiveQueryParameters,
+  ).toString();
+}
 
 /// Singleton class to manage API communication for HydraCam
 class HydraCamApiService {
@@ -29,6 +133,29 @@ class HydraCamApiService {
     _instance._httpClient = http.Client();
   }
 
+  void cancelInFlightRequests() {
+    _httpClient.close();
+    _httpClient = http.Client();
+    LogService.instance.registerLog("Cancelled in-flight API requests.");
+  }
+
+  Uri _apiUri(String endpoint) {
+    final baseUri = Uri.parse(_baseUrl);
+    final endpointUri = Uri.parse(endpoint);
+    final basePath = baseUri.path.endsWith("/")
+        ? baseUri.path.substring(0, baseUri.path.length - 1)
+        : baseUri.path;
+    final endpointPath = endpointUri.path.startsWith("/")
+        ? endpointUri.path.substring(1)
+        : endpointUri.path;
+
+    return baseUri.replace(
+      path: endpointPath.isEmpty ? basePath : "$basePath/$endpointPath",
+      queryParameters:
+          endpointUri.hasQuery ? endpointUri.queryParameters : null,
+    );
+  }
+
   /// Obtiene las cabeceras comunes, incluyendo `Authorization: Bearer <token>`.
   Future<Map<String, String>> _getHeaders() async {
     final token = await M2MAuthService().getToken();
@@ -42,11 +169,10 @@ class HydraCamApiService {
   }
 
   /// Generic GET request with headers and parsing
-  /// Generic GET request with headers and parsing
   Future<dynamic> _get(String endpoint) async {
     try {
       final headers = await _getHeaders();
-      final uri = Uri.parse("$_baseUrl/$endpoint".replaceAll(" ", ""));
+      final uri = _apiUri(endpoint);
       final response = await _httpClient.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
@@ -82,7 +208,7 @@ class HydraCamApiService {
       String endpoint, Map<String, dynamic> body) async {
     try {
       final headers = await _getHeaders();
-      final uri = Uri.parse("$_baseUrl / $endpoint".replaceAll(" ", ""));
+      final uri = _apiUri(endpoint);
       final response =
           await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
@@ -103,9 +229,12 @@ class HydraCamApiService {
   Future<List<Map<String, dynamic>>?> fetchCourts(
       {String? sportsCenterGuid}) async {
     try {
-      final endpoint = sportsCenterGuid != null
-          ? "courts?sportsCenterGuid=$sportsCenterGuid"
-          : "courts";
+      final endpoint = hydracamApiEndpoint(
+        HydraCamSessionContract.courtsEndpoint,
+        queryParameters: {
+          HydraCamSessionContract.querySportsCenterGuid: sportsCenterGuid,
+        },
+      );
       final response = await _get(endpoint);
 
       if (response is List) {
@@ -127,7 +256,7 @@ class HydraCamApiService {
 
   /// Fetch sports centers
   Future<List<Map<String, dynamic>>?> fetchSportsCenters() async {
-    final response = await _get("sportscenters");
+    final response = await _get(HydraCamSessionContract.sportsCentersEndpoint);
 
     if (response is List) {
       // Parse the list of sports centers
@@ -146,7 +275,10 @@ class HydraCamApiService {
   Future<List<Map<String, dynamic>>?> fetchSessions(String courtGuid) async {
     try {
       // Construct the endpoint
-      final endpoint = "sessions?courtGuid=$courtGuid";
+      final endpoint = hydracamApiEndpoint(
+        HydraCamSessionContract.sessionsEndpoint,
+        queryParameters: {HydraCamSessionContract.queryCourtGuid: courtGuid},
+      );
 
       // Fetch the response
       final response = await _get(endpoint);
@@ -174,7 +306,7 @@ class HydraCamApiService {
       String deviceId, String sessionGuid) async {
     try {
       final response = await _post(
-        "device/ReadyToTransmit",
+        HydraCamSessionContract.readyToTransmitEndpoint,
         {
           "DeviceId": deviceId,
           "SessionGuid": sessionGuid,
@@ -196,19 +328,17 @@ class HydraCamApiService {
   }
 
   /// Create a new capture session
-  /// Create a new capture session
-  Future<Map<String, dynamic>?> createSession(String sessionId,
+  Future<HydraCamBackendSession?> createSession(String sessionId,
       {String? courtGuid, String? userGuid}) async {
     try {
       // Construct the endpoint with optional query parameters
-      String endpoint = "sessions/create";
-      if (courtGuid != null || userGuid != null) {
-        final queryParameters = <String, String>{};
-        if (courtGuid != null) queryParameters["courtGuid"] = courtGuid;
-        if (userGuid != null) queryParameters["userGuid"] = userGuid;
-
-        endpoint += "?${Uri(queryParameters: queryParameters).query}";
-      }
+      final endpoint = hydracamApiEndpoint(
+        HydraCamSessionContract.createSessionEndpoint,
+        queryParameters: {
+          HydraCamSessionContract.queryCourtGuid: courtGuid,
+          HydraCamSessionContract.queryUserGuid: userGuid,
+        },
+      );
 
       // Prepare the request body
       final body = {
@@ -219,15 +349,24 @@ class HydraCamApiService {
       final headers = await _getHeaders();
 
       // Make the POST request
-      final uri = Uri.parse("$_baseUrl/$endpoint");
+      final uri = _apiUri(endpoint);
       final response =
           await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        if (responseData is! Map) {
+          LogService.instance.registerLog(
+              "Failed to create session: unexpected response $responseData");
+          return null;
+        }
+        final backendSession = HydraCamBackendSession.fromCreateResponse(
+          responseData.map((key, value) => MapEntry(key.toString(), value)),
+          requestedSessionId: sessionId,
+        );
         LogService.instance
-            .registerLog("Session created successfully: $responseData");
-        return responseData;
+            .registerLog("Session created successfully: $backendSession");
+        return backendSession;
       } else {
         LogService.instance
             .registerLog("Failed to create session: ${response.body}");
@@ -243,7 +382,12 @@ class HydraCamApiService {
   Future<bool> endSession(String sessionGuid) async {
     try {
       final response = await _post(
-        "sessions/end?sessionGuid=$sessionGuid",
+        hydracamApiEndpoint(
+          HydraCamSessionContract.endSessionEndpoint,
+          queryParameters: {
+            HydraCamSessionContract.querySessionGuid: sessionGuid,
+          },
+        ),
         {},
       );
       if (response != null) {
@@ -266,25 +410,65 @@ class HydraCamApiService {
     String slaveDeviceId,
     DateTime captureDate,
     DateTime receivedDate,
-    Function(double)? onProgress,
-  ) async {
+    Function(double)? onProgress, {
+    DateTime? recordingEndDate,
+    Duration? recordingDuration,
+  }) async {
     try {
-      final headers = await _getHeaders();
-      final uri = Uri.parse(
-          "$_baseUrl/sessions/upload-media?sessionGuid=$sessionGuid&isPhoto=$isPhoto");
-
-      final request = http.MultipartRequest("POST", uri)
-        ..headers.addAll(headers)
-        ..fields["slaveDeviceId"] = slaveDeviceId
-        ..fields["captureDate"] = captureDate.toUtc().toIso8601String()
-        ..fields["receivedDate"] = receivedDate.toUtc().toIso8601String();
+      if (!file.existsSync()) {
+        LogService.instance
+            .registerLog("Upload file does not exist: ${file.path}");
+        return false;
+      }
 
       final fileLength = await file.length();
+      if (fileLength == 0) {
+        LogService.instance.registerLog("Upload file is empty: ${file.path}");
+        return false;
+      }
+
+      final headers = await _getHeaders();
+      final appMetadata = await _getUploadAppMetadata();
+      final uri = _apiUri(
+        hydracamApiEndpoint(
+          HydraCamUploadMediaContract.endpoint,
+          queryParameters: {
+            HydraCamUploadMediaContract.querySessionGuid: sessionGuid,
+            HydraCamUploadMediaContract.queryIsPhoto: isPhoto.toString(),
+          },
+        ),
+      );
+
+      final request = http.MultipartRequest(
+        HydraCamUploadMediaContract.method,
+        uri,
+      )
+        ..headers.addAll(headers)
+        ..fields[HydraCamUploadMediaContract.fieldSlaveDeviceId] = slaveDeviceId
+        ..fields[HydraCamUploadMediaContract.fieldCaptureDate] =
+            captureDate.toUtc().toIso8601String()
+        ..fields[HydraCamUploadMediaContract.fieldReceivedDate] =
+            receivedDate.toUtc().toIso8601String()
+        ..fields.addAll(appMetadata);
+
+      if (!isPhoto) {
+        final effectiveDuration =
+            recordingDuration ?? recordingEndDate?.difference(captureDate);
+        if (recordingEndDate != null) {
+          request.fields[HydraCamUploadMediaContract.fieldRecordingEndDate] =
+              recordingEndDate.toUtc().toIso8601String();
+        }
+        if (effectiveDuration != null) {
+          request.fields[HydraCamUploadMediaContract.fieldDurationMs] =
+              effectiveDuration.inMilliseconds.toString();
+        }
+      }
+
       int uploadedBytes = 0;
 
       request.files.add(
         http.MultipartFile(
-          "files",
+          HydraCamUploadMediaContract.fileField,
           file.openRead().transform(
             StreamTransformer.fromHandlers(
               handleData: (chunk, sink) {
@@ -302,7 +486,13 @@ class HydraCamApiService {
       final streamedResponse = await _httpClient.send(request);
       final response = await http.Response.fromStream(streamedResponse);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode ==
+          HydraCamUploadMediaContract.successStatusCode) {
+        if (_uploadResponseReportsFailure(response.body)) {
+          LogService.instance.registerLog(
+              "Failed to upload media: backend response reported failure - ${response.body}");
+          return false;
+        }
         LogService.instance.registerLog("Media uploaded successfully");
         return true;
       } else {
@@ -316,9 +506,55 @@ class HydraCamApiService {
     }
   }
 
+  bool _uploadResponseReportsFailure(String responseBody) {
+    final trimmedBody = responseBody.trim();
+    if (trimmedBody.isEmpty) {
+      return false;
+    }
+
+    try {
+      final decoded = jsonDecode(trimmedBody);
+      if (decoded is! Map) {
+        return false;
+      }
+
+      final successValue =
+          decoded["success"] ?? decoded["succeeded"] ?? decoded["isSuccess"];
+      if (successValue is bool) {
+        return !successValue;
+      }
+
+      final statusValue = decoded["status"]?.toString().toLowerCase();
+      return statusValue == "failed" ||
+          statusValue == "failure" ||
+          statusValue == "error";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<Map<String, String>> _getUploadAppMetadata() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      return {
+        HydraCamUploadMediaContract.fieldAppVersion: packageInfo.version,
+        HydraCamUploadMediaContract.fieldAppBuildNumber:
+            packageInfo.buildNumber,
+      };
+    } catch (e) {
+      LogService.instance
+          .registerLog("App version metadata unavailable for upload: $e");
+      return {};
+    }
+  }
+
   /// Get user GUID by email
   Future<String?> getUserGuidByEmail(String email) async {
-    final response = await _get("users/get-by-email?email=$email");
+    final endpoint = hydracamApiEndpoint(
+      HydraCamUserContract.getByEmailEndpoint,
+      queryParameters: {HydraCamUserContract.queryEmail: email},
+    );
+    final response = await _get(endpoint);
     return response?["guid"];
   }
 
@@ -326,7 +562,7 @@ class HydraCamApiService {
   Future<Map?> fetchUserDetails(String guid) async {
     try {
       // Call the existing _get method with the appropriate endpoint
-      final response = await _get("users/$guid/info");
+      final response = await _get(hydracamUserDetailsEndpoint(guid));
 
       if (response is Map) {
         // Return the user details if the response is a map

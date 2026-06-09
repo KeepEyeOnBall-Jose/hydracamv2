@@ -1,0 +1,69 @@
+{
+  "acceptanceChecks": [
+    "Auth0 restore skips unsupported desktop platforms without reading credential storage",
+    "Auth0 login rejects unsupported desktop platforms before invoking the AppAuth client",
+    "Android/iOS Auth0 restore, refresh, login, and logout tests remain green"
+  ],
+  "commands": [
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/auth0_service.dart",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:26:26.464677+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:26:33.788399+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "TODO: MOBILE ONLY|Auth0 interactive login is only supported|Skipped Auth0 restore|unsupported desktop platforms|loginCalls|loadCalls",
+        "lib/services/auth0_service.dart",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:26:36.436003+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter Auth0 service unit-test runner",
+      "notes": [
+        "Runs AuthService platform-boundary tests with fake AppAuth client and in-memory credential store."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "auth0-mobile-platform-boundary-cleanup",
+    "source": "docs/control/backlog-import.md#11-make-mobile-auth0-login-recoverable-and-release-safe",
+    "title": "11. Make mobile Auth0 login recoverable and release-safe"
+  },
+  "notes": [
+    "Desktop targets now skip Auth0 restore before credential-store reads and reject interactive login before AppAuth.",
+    "Focused Auth0 service tests pass with Android/iOS coverage still green."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

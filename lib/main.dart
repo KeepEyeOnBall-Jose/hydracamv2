@@ -11,8 +11,10 @@ import "automation/automation_config.dart";
 import "automation/automation_screenshot_service.dart";
 import "automation/automation_standby_screen.dart";
 import "automation/runtime_role_switch.dart";
+import "l10n/app_localizations.dart";
 import "master/master_screen.dart";
 import "screens/camera_setup_preview_screen.dart";
+import "services/app_locale_service.dart";
 import "services/battery_service.dart";
 import "services/camera_service_singleton.dart";
 import "services/device_id_provider.dart";
@@ -22,6 +24,7 @@ import "services/linux_dbus_availability.dart";
 import "services/log_service.dart";
 import "services/permission_service.dart";
 import "services/storage_service.dart";
+import "services/user_service.dart";
 import "slave/slave_screen.dart";
 
 void main() {
@@ -62,6 +65,14 @@ void main() {
     LogService.instance.registerLog(
         "Location access will be requested on demand when the user opens the location view.");
 
+    final bool restoredUserSession = await UserService().restoreStoredSession();
+    if (restoredUserSession) {
+      LogService.instance
+          .registerLog("Restored persisted user session during startup.");
+    }
+    final localeService = AppLocaleService.instance;
+    await localeService.load();
+
     // Initialize CameraServiceSingleton early (before runApp)
     // with a temporary StorageService until we have the messenger
     final tempStorageService = StorageService(
@@ -87,7 +98,10 @@ void main() {
     runApp(
       ChangeNotifierProvider(
         create: (_) => DeviceIdProvider(deviceId),
-        child: HydraCamApp(launchConfig: launchConfig),
+        child: HydraCamApp(
+          launchConfig: launchConfig,
+          localeService: localeService,
+        ),
       ),
     );
   }, (error, stackTrace) {
@@ -118,9 +132,14 @@ Future<void> _enableScreenWakeLock(String reason) async {
 }
 
 class HydraCamApp extends StatefulWidget {
-  const HydraCamApp({super.key, this.launchConfig});
+  const HydraCamApp({
+    super.key,
+    this.launchConfig,
+    AppLocaleService? localeService,
+  }) : _localeService = localeService;
 
   final LaunchConfig? launchConfig;
+  final AppLocaleService? _localeService;
 
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -131,6 +150,8 @@ class HydraCamApp extends StatefulWidget {
 
 class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  late final AppLocaleService _localeService =
+      widget._localeService ?? AppLocaleService.instance;
   late final AutomationHandler _setRoleAutomationHandler =
       _handleSetRuntimeRole;
   late final AutomationHandler _captureScreenshotAutomationHandler =
@@ -286,50 +307,64 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      scaffoldMessengerKey: HydraCamApp.scaffoldMessengerKey,
-      title: "HydraCam",
-      theme: AppTheme.lightTheme,
-      home: Builder(
-        builder: (context) {
-          // Initialize BatteryService with messenger after MaterialApp builds
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final messenger = HydraCamApp.scaffoldMessengerKey.currentState;
-            if (messenger != null) {
-              // Update StorageService with the actual messenger
-              final storageService = StorageService(
-                messengerState: messenger,
-                lowStorageThreshold: 1.5,
-                criticalStorageThreshold: 0.5,
-                onCriticalStorageCallback: () async {
-                  LogService.instance.registerLog(
-                      "Critical storage: triggering recording stop.");
-                  if (CameraServiceSingleton.isInitialized) {
-                    await CameraServiceSingleton.instance
-                        .forceStopRecordingDueToStorage();
-                  }
-                },
-              );
-              // Re-initialize with proper messenger for notifications
-              CameraServiceSingleton.initialize(
-                storageService,
-                useMockCamera: mockCameraEnabled,
-              );
+    return ListenableBuilder(
+      listenable: _localeService,
+      builder: (context, _) {
+        return MaterialApp(
+          navigatorKey: _navigatorKey,
+          scaffoldMessengerKey: HydraCamApp.scaffoldMessengerKey,
+          title: "HydraCam",
+          theme: AppTheme.lightTheme,
+          locale: _localeService.locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) {
+            // Initialize BatteryService with messenger after MaterialApp builds.
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              final messenger = HydraCamApp.scaffoldMessengerKey.currentState;
+              if (messenger != null) {
+                final storageService = StorageService(
+                  messengerState: messenger,
+                  lowStorageThreshold: 1.5,
+                  criticalStorageThreshold: 0.5,
+                  onCriticalStorageCallback: () async {
+                    LogService.instance.registerLog(
+                        "Critical storage: triggering recording stop.");
+                    if (CameraServiceSingleton.isInitialized) {
+                      await CameraServiceSingleton.instance
+                          .forceStopRecordingDueToStorage();
+                    }
+                  },
+                );
+                CameraServiceSingleton.initialize(
+                  storageService,
+                  useMockCamera: mockCameraEnabled,
+                );
 
-              BatteryService(
-                messengerState: messenger,
-                lowBatteryThreshold: 25,
-              );
-            }
-          });
+                BatteryService(
+                  messengerState: messenger,
+                  lowBatteryThreshold: 25,
+                  criticalBatteryThreshold: 10,
+                  onCriticalBatteryCallback: (_) async {
+                    LogService.instance.registerLog(
+                        "Critical battery: triggering recording stop.");
+                    if (CameraServiceSingleton.isInitialized) {
+                      await CameraServiceSingleton.instance
+                          .forceStopRecordingDueToBattery();
+                    }
+                  },
+                );
+              }
+            });
 
-          return RepaintBoundary(
-            key: AutomationScreenshotService.repaintBoundaryKey,
-            child: _initialScreen(),
-          );
-        },
-      ),
+            return RepaintBoundary(
+              key: AutomationScreenshotService.repaintBoundaryKey,
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
+          home: _initialScreen(),
+        );
+      },
     );
   }
 }

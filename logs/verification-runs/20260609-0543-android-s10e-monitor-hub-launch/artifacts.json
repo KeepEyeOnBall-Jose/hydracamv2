@@ -1,0 +1,182 @@
+{
+  "acceptanceChecks": [
+    "ADB enumerates RF8M21J8XRT as a connected Android device",
+    "HydraCam installs or existing install is preserved on RF8M21J8XRT",
+    "HydraCam launches visibly on RF8M21J8XRT with screenshot or documented blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:43:55.339351+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:01.795647+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:17.890088+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:25.739326+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:30.570145+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:35.077617+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:40.420331+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:44:45.373651+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:45:03.001442+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-s10e-hub-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:45:19.213872+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "pull",
+        "/sdcard/hydracam-s10e-hub-launch.mp4",
+        "logs/verification-runs/20260609-0543-android-s10e-monitor-hub-launch/video/RF8M21J8XRT-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:45:31.584515+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android physical",
+      "name": "SM G970F",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "single app instance"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M21J8XRT-launch.png",
+    "video/RF8M21J8XRT-launch.mp4",
+    "device-logs/RF8M21J8XRT-logcat.txt"
+  ],
+  "item": {
+    "slug": "android-s10e-monitor-hub-launch",
+    "source": "user follow-up 2026-06-09",
+    "title": "Launch HydraCam on S10e behind monitor USB hub"
+  },
+  "notes": [
+    "RF8M21J8XRT behind the monitor USB hub was recognized by ADB, accepted the current debug APK, launched HydraCam, and produced screenshot/video/logcat evidence. Visible slave-screen overflow remains."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

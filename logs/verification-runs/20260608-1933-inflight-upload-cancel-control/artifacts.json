@@ -1,0 +1,90 @@
+{
+  "acceptanceChecks": [
+    "Active upload can be cancelled from uploader UI",
+    "Cancelling the active upload clears progress/current state",
+    "Late HTTP completion after cancellation cannot mark media uploaded",
+    "Cancelling active upload closes the HTTP client",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:33:25.234832+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:33:34.087455+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:33:42.185543+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/screens/uploader_info_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:33:44.655590+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1933-inflight-upload-cancel-control/render_inflight_cancel_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:34:14.216712+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter widget and service test runner",
+      "notes": [
+        "Runs uploader-service, media-list, and uploader-info screen tests with mocked HTTP and path provider."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/inflight_upload_cancel_control.png",
+    "video/inflight_upload_cancel_control_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "inflight-upload-cancel-control",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "4. Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "In-flight upload cancellation implemented with active-row UI, state guard, and HTTP client close proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1,0 +1,114 @@
+{
+  "acceptanceChecks": [
+    "Video media selection shows nearest candidate session",
+    "Candidate matching uses the existing session-window matcher",
+    "Non-matching media does not show a candidate label",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:48:41.898306+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:48:54.239062+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:49:23.592500+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:49:47.181271+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:50:40.219594+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:50:47.661339+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:52:51.462170+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter media-selection widget-test runner",
+      "notes": [
+        "Runs gallery session matcher and media-selection widget regression tests with constructed photo_manager assets."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/gallery_candidate_session_labels.png",
+    "video/gallery_candidate_session_labels_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "gallery-candidate-session-labels",
+    "source": "docs/control/backlog-import.md#9-improve-old-mediagallery-session-attachment",
+    "title": "9. Improve old-media/gallery session attachment"
+  },
+  "notes": [
+    "Media selection now surfaces nearest candidate sessions for video assets using the gallery session matcher.",
+    "Media selection now surfaces nearest candidate sessions for video assets using the gallery session matcher."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

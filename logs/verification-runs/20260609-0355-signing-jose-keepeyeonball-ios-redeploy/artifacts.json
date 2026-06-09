@@ -1,0 +1,237 @@
+{
+  "acceptanceChecks": [
+    "iPad and iPhone deploy attempts are recorded with current signing state; TestFlight beta upload is attempted or blocked with exact credential/signing reason"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:56:21.906948+00:00"
+    },
+    {
+      "command": [
+        "security",
+        "find-identity",
+        "-v",
+        "-p",
+        "codesigning"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:56:21.989837+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:56:32.358686+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:56:44.791377+00:00"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-showBuildSettings",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Release",
+        "-sdk",
+        "iphoneos",
+        "CODE_SIGN_STYLE=Automatic"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:56:44.849667+00:00"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-showBuildSettings",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Profile",
+        "-sdk",
+        "iphoneos",
+        "CODE_SIGN_STYLE=Automatic"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:56:52.779623+00:00"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-showBuildSettings",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Profile",
+        "-sdk",
+        "iphoneos",
+        "CODE_SIGN_STYLE=Automatic"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:58:20.622660+00:00"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-showBuildSettings",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Release",
+        "-sdk",
+        "iphoneos",
+        "CODE_SIGN_STYLE=Automatic"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:58:21.738319+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "IOS_XCODE_DESTINATION_ID=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "IOS_DEVICE=0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "DERIVED_DATA_PATH=build/ios-icon-profile-keepeyeonball-ipad",
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 65,
+      "startedAt": "2026-06-09T01:59:09.606831+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "IOS_XCODE_DESTINATION_ID=00008101-000A68811E43001E",
+        "IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "DERIVED_DATA_PATH=build/ios-icon-profile-keepeyeonball-iphone",
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 65,
+      "startedAt": "2026-06-09T02:00:07.969055+00:00"
+    },
+    {
+      "command": [
+        "env"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:01:07.068115+00:00"
+    },
+    {
+      "command": [
+        "find",
+        ".",
+        "-maxdepth",
+        "4",
+        "-iname",
+        "*AuthKey*.p8",
+        "-print"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:01:07.219239+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:04:19.439949+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:04:19.546897+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "ios-physical",
+      "name": "iPad (5)",
+      "notes": [
+        "CoreDevice connected; Flutter target id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+      ],
+      "os": "iOS 17.7.11",
+      "role": "deploy-target"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "ios-physical-wireless",
+      "name": "Jos\u00e9 Ram\u00f3n's iPhone",
+      "notes": [
+        "CoreDevice paired; Flutter wireless id 00008101-000A68811E43001E"
+      ],
+      "os": "iOS 26.5",
+      "role": "deploy-target"
+    }
+  ],
+  "evidenceFiles": [
+    "device-logs/ipad-displays.json",
+    "device-logs/ipad-displays.log",
+    "device-logs/ipad-lockstate.json",
+    "device-logs/ipad-lockstate.log",
+    "device-logs/iphone-displays.json",
+    "device-logs/iphone-displays.log",
+    "device-logs/iphone-lockstate.json",
+    "device-logs/iphone-lockstate.log"
+  ],
+  "item": {
+    "slug": "signing-jose-keepeyeonball-ios-redeploy",
+    "source": "user request 2026-06-09",
+    "title": "Update iOS signing to jose@keepeyeonball.com lane and redeploy to iPad/iPhone/TestFlight"
+  },
+  "notes": [
+    "Moved iOS Profile/Debug/TestFlight defaults to jose@keepeyeonball.com / team 4RRY2QT7H8 / com.keepeyeonball.",
+    "iPad and iPhone Profile build/install attempts both failed before install: Xcode has no local Apple account and no iOS Development certificate/private key for team 4RRY2QT7H8.",
+    "Both physical iOS devices were reachable and unlocked via CoreDevice lockState checks; blocker is local Mac/Xcode signing state.",
+    "TestFlight upload was not attempted because no IPA can be signed and no App Store Connect API key was found locally."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

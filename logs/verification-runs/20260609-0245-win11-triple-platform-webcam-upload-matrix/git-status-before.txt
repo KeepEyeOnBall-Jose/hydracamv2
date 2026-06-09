@@ -1,0 +1,148 @@
+## codex/remove-local-sessions-backend-upload
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/evidence-first-loop.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/win11-dev-host.md
+ M ios/Runner/Info.plist
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/models/capture_session.dart
+ M lib/models/captured_photo.dart
+ M lib/models/captured_video.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/storage_service.dart
+ M lib/services/uploader_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M linux/flutter/generated_plugin_registrant.cc
+ M linux/flutter/generated_plugins.cmake
+ M macos/Flutter/GeneratedPluginRegistrant.swift
+ M macos/Runner/Info.plist
+ M pubspec.lock
+ M pubspec.yaml
+ M scripts/ios_capture_repro.py
+ M scripts/run_parallel_device_matrix.py
+ M scripts/run_rotating_master_slave_matrix.py
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/platform/multi_device_orchestration_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/services/storage_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/test_utils/mock_services.dart
+ M test/widget_test.dart
+ M test/widgets/session_info_widget_test.dart
+ M windows/flutter/generated_plugin_registrant.cc
+ M windows/flutter/generated_plugins.cmake
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? docs/control/localization-inventory.md
+?? l10n.yaml
+?? lib/l10n/
+?? lib/services/app_locale_service.dart
+?? lib/services/gallery_session_candidate_source.dart
+?? lib/services/gallery_session_matcher.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-1933-inflight-upload-cancel-control/
+?? logs/verification-runs/20260608-1938-auth0-refresh-scope/
+?? logs/verification-runs/20260608-1944-gallery-scan-active-session-preserved/
+?? logs/verification-runs/20260608-1948-gallery-candidate-session-labels/
+?? logs/verification-runs/20260608-1953-gallery-historical-session-candidate-source/
+?? logs/verification-runs/20260608-2000-auth0-secure-credential-store/
+?? logs/verification-runs/20260608-2006-auth0-startup-restore-valid-credentials/
+?? logs/verification-runs/20260608-2011-20260608-2012-auth0-refresh-expired-credentials/
+?? logs/verification-runs/20260608-2017-auth0-logout-clears-credentials/
+?? logs/verification-runs/20260608-2022-user-guid-restore-after-auth0-restore/
+?? logs/verification-runs/20260608-2030-master-device-list-summary-sort/
+?? logs/verification-runs/20260608-2035-scheduled-command-master-time-offset/
+?? logs/verification-runs/20260608-2045-slave-recording-safe-stop-control/
+?? logs/verification-runs/20260608-2047-win11-triple-platform-camera-master-slave/
+?? logs/verification-runs/20260608-2055-session-player-source-missing-backend-state/
+?? logs/verification-runs/20260608-2105-master-slave-preview-missing-state/
+?? logs/verification-runs/20260608-2115-slave-session-mismatch-diagnostics/
+?? logs/verification-runs/20260608-2125-forced-stop-missing-start-timestamp/
+?? logs/verification-runs/20260608-2127-upload-media-contract-fields/
+?? logs/verification-runs/20260608-2132-in-flight-upload-dedupe/
+?? logs/verification-runs/20260608-2135-slave-identify-diagnostic-ack/
+?? logs/verification-runs/20260608-2136-uploader-estimate-completed-samples/
+?? logs/verification-runs/20260608-2140-storage-critical-block-recovery/
+?? logs/verification-runs/20260608-2144-user-login-clears-stale-guid/
+?? logs/verification-runs/20260608-2145-video-upload-duration-metadata/
+?? logs/verification-runs/20260608-2155-storage-location-missing-state/
+?? logs/verification-runs/20260608-2205-invalid-upload-file-guard/
+?? logs/verification-runs/20260608-2215-gallery-candidate-guid-label/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/
+?? logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/
+?? logs/verification-runs/20260609-0140-guid-api-upload-estimate-cleanup/
+?? logs/verification-runs/20260609-0140-ipad-uploader-webservice-check/
+?? logs/verification-runs/20260609-0145-session-restore-helper-cleanup/
+?? logs/verification-runs/20260609-0151-api-uri-construction-cleanup/
+?? logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/
+?? logs/verification-runs/20260609-0211-master-session-status-response-helper-cleanup/
+?? logs/verification-runs/20260609-0214-master-targeted-command-dispatch-cleanup/
+?? logs/verification-runs/20260609-0219-master-scheduled-command-dispatch-cleanup/
+?? logs/verification-runs/20260609-0223-uploader-enqueue-async-return-cleanup/
+?? logs/verification-runs/20260609-0228-session-add-media-async-return-cleanup/
+?? logs/verification-runs/20260609-0233-branch-compile-repair-backend-session-locale/
+?? scripts/test_no_local_sessions.py
+?? test/l10n/
+?? test/models/capture_session_test.dart
+?? test/screens/media_selection_screen_test.dart
+?? test/screens/session_details_screen_test.dart
+?? test/screens/uploader_info_screen_test.dart
+?? test/services/app_locale_service_test.dart
+?? test/services/auth0_service_test.dart
+?? test/services/gallery_session_candidate_source_test.dart
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/uploader_service_test.dart
+?? test/services/user_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart

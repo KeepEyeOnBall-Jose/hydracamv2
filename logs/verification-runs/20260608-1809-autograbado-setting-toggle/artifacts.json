@@ -1,0 +1,189 @@
+{
+  "acceptanceChecks": [
+    "Autograbado setting exists",
+    "Autograbado defaults disabled",
+    "User can toggle autograbado setting",
+    "Screenshot and video proof show the setting"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:10:03.301966+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/settings_service_test.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:10:34.515224+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/settings_service_test.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:11:06.811645+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/settings_service_test.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:11:27.900853+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:11:35.234047+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:11:58.817029+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/settings_service_test.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:12:46.046627+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:12:48.603406+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/screenshots/autograbado_setting_toggle.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/video/autograbado_setting_toggle_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:12:59.124678+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:12:59.381417+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:13:22.275988+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/settings_service.dart",
+        "lib/screens/settings_screen.dart",
+        "lib/widgets/settings_option.dart",
+        "test/services/settings_service_test.dart",
+        "test/screens/capture_settings_screen_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/summary.md",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/device-logs/flutter-widget-runner.log",
+        "logs/verification-runs/20260608-1809-autograbado-setting-toggle/autograbado_setting_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:13:54.451926+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:13:54.684472+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulated app surface",
+      "name": "macOS Flutter widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "settings UI proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/autograbado_setting_toggle.png",
+    "video/autograbado_setting_toggle_proof.mp4",
+    "device-logs/flutter-widget-runner.log"
+  ],
+  "item": {
+    "slug": "autograbado-setting-toggle",
+    "source": "docs/control/backlog-import.md#8-implement-autograbado-mode",
+    "title": "Implement autograbado mode"
+  },
+  "notes": [
+    "Autograbado setting now exists, defaults disabled, and is editable with tests, screenshot, and video proof; active-session auto-start remains on the existing item."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

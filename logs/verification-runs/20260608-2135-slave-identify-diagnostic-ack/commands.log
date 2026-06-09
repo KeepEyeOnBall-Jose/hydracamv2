@@ -1,0 +1,1207 @@
+# HydraCam evidence run command log
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 3.8s)
+[exit-code] 0
+
+$ flutter test --no-pub test/master/master_network_snapshot_cache_test.dart test/master/connected_client_automation_payload_test.dart test/slave/slave_client_registration_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master socket binding supports rapid shared rebind
+00:00 +1: /Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart: connected client automation payload exposes client readiness
+00:00 +2: /Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart: connected client automation payload exposes client readiness
+00:00 +3: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server exposes connected client before network refresh completes
+00:00 +4: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server exposes connected client before network refresh completes
+00:00 +5: /Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart: connected client automation payload summarizes and orders known clients
+00:00 +6: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server preserves optional camera setup status
+00:00 +7: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+00:00 +8: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+00:00 +9: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+Log registered: {message: Client slave-a disconnected. Total clients: 0, timestamp: 2026-06-08 21:09:07.511698, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server retains disconnected device status after socket removal
+00:00 +10: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +10: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server retains disconnected device status after socket removal
+Log registered: {message: Client slave-a disconnected. Total clients: 0, timestamp: 2026-06-08 21:09:07.517277, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server orders connected devices before disconnected history
+Log registered: {message: Client a-stale-slave disconnected. Total clients: 0, timestamp: 2026-06-08 21:09:07.520215, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: scheduled commands include master send time for slave clock offset
+Log registered: {message: Scheduling command 'takePhoto' for 2026-06-08T20:35:05.000Z, timestamp: 2026-06-08 21:09:07.522055, function: null, file: null}
+Log registered: {message: Scheduled command 'takePhoto' sent to slave with deviceId: slave-a., timestamp: 2026-06-08 21:09:07.523568, function: null, file: null}
+00:00 +13: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master sends identify command and records ack diagnostics
+Log registered: {message: Identify command sent to slave with deviceId: slave-a., timestamp: 2026-06-08 21:09:07.527472, function: null, file: null}
+00:00 +14: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.579883, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64084/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.581821, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64084/ws, timestamp: 2026-06-08 21:09:07.583264, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.597712, function: null, file: null}
+00:00 +15: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat includes camera setup status when available
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.603714, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64086/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.603819, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64086/ws, timestamp: 2026-06-08 21:09:07.604180, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.608443, function: null, file: null}
+00:00 +16: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat reports active session guid
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.614232, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.614591, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-08 21:09:07.614828, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.615232, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64088/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.615308, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64088/ws, timestamp: 2026-06-08 21:09:07.615601, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.618843, function: null, file: null}
+Log registered: {message: Error saving session metadata: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider), timestamp: 2026-06-08 21:09:07.619991, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.620097, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.620173, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:07.620230, function: null, file: null}
+00:00 +17: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.622639, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64090/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.622712, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64090/ws, timestamp: 2026-06-08 21:09:07.622970, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"sessionStarted","sessionGuid":"autograbado-session"}, timestamp: 2026-06-08 21:09:07.626039, function: null, file: null}
+Log registered: {message: Command: {"command":"sessionStarted","sessionGuid":"autograbado-session"}, timestamp: 2026-06-08 21:09:07.626631, function: null, file: null}
+Log registered: {message: Session guid: autograbado-session, timestamp: 2026-06-08 21:09:07.626722, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.626825, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.626885, function: null, file: null}
+Log registered: {message: Session started with GUID: autograbado-session on device type: Slave, timestamp: 2026-06-08 21:09:07.626943, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:07.627498, function: null, file: null}
+Log registered: {message: Fetch token, timestamp: 2026-06-08 21:09:07.627768, function: null, file: null}
+Log registered: {message: Autograbado starting recording for active session autograbado-session., timestamp: 2026-06-08 21:09:07.632773, function: null, file: null}
+Log registered: {message: Starting video recording, timestamp: 2026-06-08 21:09:07.633217, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 21:09:07.633551, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.635766, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 21:09:07.636103, function: null, file: null}
+Log registered: {message: Failed to fetch M2M token: , timestamp: 2026-06-08 21:09:07.636666, function: null, file: null}
+Log registered: {message: Error on POST device/ReadyToTransmit: Exception: Failed to retrieve M2M token, timestamp: 2026-06-08 21:09:07.636838, function: null, file: null}
+Log registered: {message: Failed to notify server: No response, timestamp: 2026-06-08 21:09:07.636900, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.637001, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsKYmcJZ/session_autograbado-session/mock_1_2026-06-08T21-09-07-637604.mp4, timestamp: 2026-06-08 21:09:07.642762, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsKYmcJZ/session_autograbado-session/metadata.json, timestamp: 2026-06-08 21:09:07.643514, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.643585, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.643850, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:07.643929, function: null, file: null}
+00:00 +18: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: startUploadingAll command starts pending upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.645590, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.645655, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_upload_commanddevw6B/queued-photo.jpg, timestamp: 2026-06-08 21:09:07.646808, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:07.647203, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.647272, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64092/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.647328, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64092/ws, timestamp: 2026-06-08 21:09:07.647572, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"startUploadingAll"}, timestamp: 2026-06-08 21:09:07.650487, function: null, file: null}
+Log registered: {message: Start-upload-all command received from master., timestamp: 2026-06-08 21:09:07.650728, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:09:07.650843, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:07.650976, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:07.651259, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=null, timestamp: 2026-06-08 21:09:07.651364, function: null, file: null}
+Log registered: {message: No session GUID available. Cannot upload media., timestamp: 2026-06-08 21:09:07.651428, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.661919, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.662061, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.662124, function: null, file: null}
+00:00 +19: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: identifySlave command replies with identifyAck
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.663923, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.663984, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-08 21:09:07.664034, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.664388, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64094/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.664443, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64094/ws, timestamp: 2026-06-08 21:09:07.664673, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"identifySlave","requestId":"identify-test"}, timestamp: 2026-06-08 21:09:07.667318, function: null, file: null}
+Log registered: {message: Sent identifyAck notification to master, timestamp: 2026-06-08 21:09:07.667737, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.668052, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsKYmcJZ/session_slave-session-guid/metadata.json, timestamp: 2026-06-08 21:09:07.669363, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:07.669438, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:07.669490, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:07.669537, function: null, file: null}
+00:00 +20: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: scheduled command applies master clock offset before countdown
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:07.671088, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64096/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:07.671166, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64096/ws, timestamp: 2026-06-08 21:09:07.671411, function: null, file: null}
+Log registered: {message: Command received from master: {"type":"scheduledCommand","command":"takePhoto","scheduledTime":"2026-06-08T20:35:05.000Z","masterTime":"2026-06-08T20:35:02.000Z"}, timestamp: 2026-06-08 21:09:07.673676, function: null, file: null}
+Log registered: {message: Updated slave scheduled clock offset from master: 2000 ms., timestamp: 2026-06-08 21:09:07.674365, function: null, file: null}
+Log registered: {message: Command 'takePhoto' scheduled for 2026-06-08 20:35:05.000Z., timestamp: 2026-06-08 21:09:07.674649, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:07.675050, function: null, file: null}
+00:00 +21: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/platform_setup_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/platform_setup_test.dart: Platform Setup Tests iOS Podfile should exist and be valid
+00:00 +1: /Users/jose/src/work/hydracamv2/test/platform_setup_test.dart: Platform Setup Tests Android build.gradle should exist
+00:00 +2: /Users/jose/src/work/hydracamv2/test/platform_setup_test.dart: Platform Setup Tests Web index.html should exist
+00:00 +3: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Platform detection works
+00:00 +4: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Mobile-specific features Camera should be available on mobile
+00:00 +5: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Mobile-specific features Gallery saving should work on mobile
+00:00 +6: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Mobile-specific features Permissions are required on mobile
+00:00 +7: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Desktop-specific features Desktop may have limited camera support
+00:00 +8: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Desktop-specific features Desktop uses file system directly
+00:00 +9: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Platform Behavior Desktop-specific features Desktop may not need runtime permissions
+00:00 +10: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Cross-platform features Networking works on all platforms
+00:00 +11: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Cross-platform features Storage management works on all platforms
+00:00 +12: /Users/jose/src/work/hydracamv2/test/platform/platform_behavior_test.dart: Cross-platform features Session management is platform-agnostic
+00:00 +13: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: (setUpAll)
+00:00 +13: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.761390, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.763725, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.765976, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.766423, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p1 on device type: Master, timestamp: 2026-06-08 21:09:13.766681, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_medians3HGO/p1-0.jpg, timestamp: 2026-06-08 21:09:13.769583, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_medians3HGO/p1-0.jpg, timestamp: 2026-06-08 21:09:13.771276, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_medians3HGO/p1-1.jpg, timestamp: 2026-06-08 21:09:13.773216, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_medians3HGO/p1-1.jpg, timestamp: 2026-06-08 21:09:13.773501, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_medians3HGO/p1-2.jpg, timestamp: 2026-06-08 21:09:13.773823, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_medians3HGO/p1-2.jpg, timestamp: 2026-06-08 21:09:13.773945, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.776185, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.776308, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.776372, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHsuxbs/session_session_p1/metadata.json, timestamp: 2026-06-08 21:09:13.779078, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHsuxbs/session_session_p1/metadata.json, timestamp: 2026-06-08 21:09:13.779261, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHsuxbs/session_session_p1/metadata.json, timestamp: 2026-06-08 21:09:13.779346, function: null, file: null}
+00:00 +14: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+00:00 +15: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+00:00 +16: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+00:00 +17: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P1: single slave burst populates queue and metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.801739, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.801892, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsHsuxbs/session_session_p1/metadata.json, timestamp: 2026-06-08 21:09:13.802910, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.802984, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.803044, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.803102, function: null, file: null}
+00:00 +18: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P2: two slaves contribute photos with unique device IDs
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.804935, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.805008, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.805400, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.805465, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p2 on device type: Master, timestamp: 2026-06-08 21:09:13.805520, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaiJs9QQ/p2-a.jpg, timestamp: 2026-06-08 21:09:13.805804, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaiJs9QQ/p2-a.jpg, timestamp: 2026-06-08 21:09:13.805895, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaiJs9QQ/p2-b.jpg, timestamp: 2026-06-08 21:09:13.806134, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaiJs9QQ/p2-b.jpg, timestamp: 2026-06-08 21:09:13.806219, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.806476, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.806672, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsX2Qt83/session_session_p2/metadata.json, timestamp: 2026-06-08 21:09:13.807287, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsX2Qt83/session_session_p2/metadata.json, timestamp: 2026-06-08 21:09:13.807378, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.829573, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.829708, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsX2Qt83/session_session_p2/metadata.json, timestamp: 2026-06-08 21:09:13.830442, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.830509, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.830562, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.830612, function: null, file: null}
+00:00 +19: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P3: round-robin commands respect device order
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.831949, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.832044, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.832466, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.832534, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p3 on device type: Master, timestamp: 2026-06-08 21:09:13.832608, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-A.jpg, timestamp: 2026-06-08 21:09:13.832941, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-A.jpg, timestamp: 2026-06-08 21:09:13.833089, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-B.jpg, timestamp: 2026-06-08 21:09:13.833368, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-B.jpg, timestamp: 2026-06-08 21:09:13.833459, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-C.jpg, timestamp: 2026-06-08 21:09:13.833670, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-C.jpg, timestamp: 2026-06-08 21:09:13.833747, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-D.jpg, timestamp: 2026-06-08 21:09:13.833950, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaTwSfbX/slave-D.jpg, timestamp: 2026-06-08 21:09:13.834028, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.834390, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.834528, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.834654, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.834772, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsLYBkWP/session_session_p3/metadata.json, timestamp: 2026-06-08 21:09:13.835539, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsLYBkWP/session_session_p3/metadata.json, timestamp: 2026-06-08 21:09:13.835622, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsLYBkWP/session_session_p3/metadata.json, timestamp: 2026-06-08 21:09:13.835691, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsLYBkWP/session_session_p3/metadata.json, timestamp: 2026-06-08 21:09:13.835752, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.857232, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.857358, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsLYBkWP/session_session_p3/metadata.json, timestamp: 2026-06-08 21:09:13.858126, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.858191, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.858243, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.858291, function: null, file: null}
+00:00 +20: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Photo Scenarios Scenario P4: master rotation resets session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.859717, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.859779, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.860165, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.860250, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p4_a on device type: Master, timestamp: 2026-06-08 21:09:13.860305, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediapkIYG6/p4.jpg, timestamp: 2026-06-08 21:09:13.860588, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediapkIYG6/p4.jpg, timestamp: 2026-06-08 21:09:13.860687, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.860930, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSU2BZ5/session_session_p4_a/metadata.json, timestamp: 2026-06-08 21:09:13.861451, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSU2BZ5/session_session_p4_a/metadata.json, timestamp: 2026-06-08 21:09:13.884339, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.884483, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.884554, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.884670, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.884747, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.884797, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.884842, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.884885, function: null, file: null}
+Log registered: {message: Session started with GUID: session_p4_b on device type: Master, timestamp: 2026-06-08 21:09:13.884927, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.885147, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.885201, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsSU2BZ5/session_session_p4_b/metadata.json, timestamp: 2026-06-08 21:09:13.886356, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.886528, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.886616, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.886675, function: null, file: null}
+00:00 +21: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V1: single slave video stored in session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.888405, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.888499, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.888861, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.888916, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v1 on device type: Master, timestamp: 2026-06-08 21:09:13.888975, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaKZjxlh/v1.mp4, timestamp: 2026-06-08 21:09:13.889787, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediaKZjxlh/v1.mp4, timestamp: 2026-06-08 21:09:13.889923, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.890369, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsKDEdG2/session_session_v1/metadata.json, timestamp: 2026-06-08 21:09:13.890875, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.911647, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.911746, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsKDEdG2/session_session_v1/metadata.json, timestamp: 2026-06-08 21:09:13.912368, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.912431, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.912477, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.912520, function: null, file: null}
+00:00 +22: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V2: multiple slave videos persist metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.913635, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.913722, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.914034, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.914088, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v2 on device type: Master, timestamp: 2026-06-08 21:09:13.914143, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediajE5GXT/v2-a.mp4, timestamp: 2026-06-08 21:09:13.914362, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediajE5GXT/v2-a.mp4, timestamp: 2026-06-08 21:09:13.914434, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediajE5GXT/v2-b.mp4, timestamp: 2026-06-08 21:09:13.914659, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_mediajE5GXT/v2-b.mp4, timestamp: 2026-06-08 21:09:13.914728, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.914938, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.915039, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsiopbin/session_session_v2/metadata.json, timestamp: 2026-06-08 21:09:13.915642, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsiopbin/session_session_v2/metadata.json, timestamp: 2026-06-08 21:09:13.915714, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.937487, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.937590, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsiopbin/session_session_v2/metadata.json, timestamp: 2026-06-08 21:09:13.938219, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.938277, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.938324, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.938369, function: null, file: null}
+00:00 +23: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: Video Scenarios Scenario V3: scheduled starts preserve offsets
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.939882, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.939945, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.940318, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.940368, function: null, file: null}
+Log registered: {message: Session started with GUID: session_v3 on device type: Master, timestamp: 2026-06-08 21:09:13.940414, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_media3ne238/v3-a.mp4, timestamp: 2026-06-08 21:09:13.940650, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_media3ne238/v3-a.mp4, timestamp: 2026-06-08 21:09:13.940723, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_media3ne238/v3-b.mp4, timestamp: 2026-06-08 21:09:13.940928, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_media3ne238/v3-b.mp4, timestamp: 2026-06-08 21:09:13.940994, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_media3ne238/v3-c.mp4, timestamp: 2026-06-08 21:09:13.941191, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_media3ne238/v3-c.mp4, timestamp: 2026-06-08 21:09:13.941285, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.941557, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.941679, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:13.941784, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsQx6kJ6/session_session_v3/metadata.json, timestamp: 2026-06-08 21:09:13.942431, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsQx6kJ6/session_session_v3/metadata.json, timestamp: 2026-06-08 21:09:13.942513, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsQx6kJ6/session_session_v3/metadata.json, timestamp: 2026-06-08 21:09:13.942615, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.964383, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.964508, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_multi_device_docsQx6kJ6/session_session_v3/metadata.json, timestamp: 2026-06-08 21:09:13.965167, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:13.965235, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:13.965283, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:13.965323, function: null, file: null}
+00:00 +24: /Users/jose/src/work/hydracamv2/test/platform/multi_device_orchestration_test.dart: (tearDownAll)
+00:01 +24: /Users/jose/src/work/hydracamv2/test/widget_test.dart: (setUpAll)
+00:01 +24: /Users/jose/src/work/hydracamv2/test/widget_test.dart: HydraCamApp builds without crashing
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-08 21:09:15.003376, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-08 21:09:15.005187, function: null, file: null}
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-08 21:09:15.164438, function: null, file: null}
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 21:09:15.165517, function: null, file: null}
+00:01 +24: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.174449, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.176837, function: null, file: null}
+00:01 +25: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +26: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +27: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +28: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +28 ~1: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +28 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.232272, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64133/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.234530, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64133/ws, timestamp: 2026-06-08 21:09:15.236440, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.254287, function: null, file: null}
+00:01 +29 ~1: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +29 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:01 +29 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat includes camera setup status when available
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.262316, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64135/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.262444, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64135/ws, timestamp: 2026-06-08 21:09:15.262990, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.267454, function: null, file: null}
+00:01 +30 ~1: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +30 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat reports active session guid
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.273788, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.274276, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-08 21:09:15.274523, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.275065, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64137/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.275185, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64137/ws, timestamp: 2026-06-08 21:09:15.275587, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.279813, function: null, file: null}
+Log registered: {message: Error saving session metadata: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider), timestamp: 2026-06-08 21:09:15.281230, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.281374, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.281443, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:15.281500, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.284828, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64139/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.284997, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64139/ws, timestamp: 2026-06-08 21:09:15.285351, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.286221, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.286498, function: null, file: null}
+Log registered: {message: Session started with GUID: uploader-info-session-guid on device type: Slave, timestamp: 2026-06-08 21:09:15.286870, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Command received from master: {"command":"sessionStarted","sessionGuid":"autograbado-session"}, timestamp: 2026-06-08 21:09:15.289457, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_info_screen_testXPEwgW/current-upload.mp4, timestamp: 2026-06-08 21:09:15.290206, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Command: {"command":"sessionStarted","sessionGuid":"autograbado-session"}, timestamp: 2026-06-08 21:09:15.290420, function: null, file: null}
+Log registered: {message: Session guid: autograbado-session, timestamp: 2026-06-08 21:09:15.290577, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.290762, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.290831, function: null, file: null}
+Log registered: {message: Session started with GUID: autograbado-session on device type: Slave, timestamp: 2026-06-08 21:09:15.290898, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_info_screen_testXPEwgW/current-upload.mp4, timestamp: 2026-06-08 21:09:15.290839, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:15.291600, function: null, file: null}
+Log registered: {message: Fetch token, timestamp: 2026-06-08 21:09:15.292042, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:09:15.292489, function: null, file: null}
+Log registered: {message: Cancelled pending upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_info_screen_testXPEwgW/current-upload.mp4, timestamp: 2026-06-08 21:09:15.292711, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:15.295929, function: null, file: null}
+00:01 +31 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Autograbado starting recording for active session autograbado-session., timestamp: 2026-06-08 21:09:15.299355, function: null, file: null}
+Log registered: {message: Starting video recording, timestamp: 2026-06-08 21:09:15.299979, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 21:09:15.300415, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.303200, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 21:09:15.303691, function: null, file: null}
+Log registered: {message: Failed to fetch M2M token: , timestamp: 2026-06-08 21:09:15.304431, function: null, file: null}
+Log registered: {message: Error on POST device/ReadyToTransmit: Exception: Failed to retrieve M2M token, timestamp: 2026-06-08 21:09:15.304639, function: null, file: null}
+Log registered: {message: Failed to notify server: No response, timestamp: 2026-06-08 21:09:15.304861, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.305058, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsHt9Bf4/session_autograbado-session/mock_1_2026-06-08T21-09-15-305911.mp4, timestamp: 2026-06-08 21:09:15.312647, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsHt9Bf4/session_autograbado-session/metadata.json, timestamp: 2026-06-08 21:09:15.313696, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.313841, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.314198, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:15.314346, function: null, file: null}
+00:01 +32 ~1: /Users/jose/src/work/hydracamv2/test/screens/session_details_screen_test.dart: session details shows player assignment backend state
+00:01 +32 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: startUploadingAll command starts pending upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.316808, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.316965, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_upload_commandePVMON/queued-photo.jpg, timestamp: 2026-06-08 21:09:15.318483, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:15.319066, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.319157, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64142/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.319234, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64142/ws, timestamp: 2026-06-08 21:09:15.319550, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"startUploadingAll"}, timestamp: 2026-06-08 21:09:15.323304, function: null, file: null}
+Log registered: {message: Start-upload-all command received from master., timestamp: 2026-06-08 21:09:15.323574, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:09:15.323703, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:15.323820, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:15.324191, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=null, timestamp: 2026-06-08 21:09:15.324406, function: null, file: null}
+Log registered: {message: No session GUID available. Cannot upload media., timestamp: 2026-06-08 21:09:15.324487, function: null, file: null}
+00:01 +33 ~1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:01 +33 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: startUploadingAll command starts pending upload queue
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.333920, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.334199, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.334266, function: null, file: null}
+00:01 +34 ~1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:01 +34 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: identifySlave command replies with identifyAck
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.336902, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.337046, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-08 21:09:15.337113, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.337706, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64144/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.337802, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64144/ws, timestamp: 2026-06-08 21:09:15.338135, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"identifySlave","requestId":"identify-test"}, timestamp: 2026-06-08 21:09:15.341599, function: null, file: null}
+Log registered: {message: Sent identifyAck notification to master, timestamp: 2026-06-08 21:09:15.342168, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.342538, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsHt9Bf4/session_slave-session-guid/metadata.json, timestamp: 2026-06-08 21:09:15.344225, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.344338, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.344416, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:15.344465, function: null, file: null}
+00:01 +35 ~1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:01 +35 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: scheduled command applies master clock offset before countdown
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 21:09:15.346888, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:64146/ws with Device ID: test-device, timestamp: 2026-06-08 21:09:15.346971, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:64146/ws, timestamp: 2026-06-08 21:09:15.347329, function: null, file: null}
+Log registered: {message: Command received from master: {"type":"scheduledCommand","command":"takePhoto","scheduledTime":"2026-06-08T20:35:05.000Z","masterTime":"2026-06-08T20:35:02.000Z"}, timestamp: 2026-06-08 21:09:15.350277, function: null, file: null}
+Log registered: {message: Updated slave scheduled clock offset from master: 2000 ms., timestamp: 2026-06-08 21:09:15.351173, function: null, file: null}
+Log registered: {message: Command 'takePhoto' scheduled for 2026-06-08 20:35:05.000Z., timestamp: 2026-06-08 21:09:15.351504, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 21:09:15.352097, function: null, file: null}
+00:01 +36 ~1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:01 +36 ~1: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+Log registered: {message: Closing recording preview because no recording is active., timestamp: 2026-06-08 21:09:15.490130, function: null, file: null}
+00:01 +37 ~1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen shows capture settings instead of camera quality
+00:01 +38 ~1: /Users/jose/src/work/hydracamv2/test/screens/master_video_recording_screen_test.dart: recording preview exits when no recording is active and no controller exists
+00:01 +39 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+00:02 +39 ~1: /Users/jose/src/work/hydracamv2/test/screens/capture_settings_screen_test.dart: settings screen exposes disabled autograbado toggle
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 21:09:15.614305, function: null, file: null}
+00:02 +39 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:09:15.631307, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_info_screen_testXPEwgW/current-upload.mp4, timestamp: 2026-06-08 21:09:15.631562, function: null, file: null}
+00:02 +40 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+00:02 +40 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: CameraServiceSingleton Initialization MasterScreen can be created when CameraServiceSingleton is initialized
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-08 21:09:15.660686, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-08 21:09:15.662588, function: null, file: null}
+00:02 +41 ~1: /Users/jose/src/work/hydracamv2/test/screens/uploader_info_screen_test.dart: cancel action clears the current upload row
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_info_screen_docsv0H6Pe/session_uploader-info-session-guid/metadata.json, timestamp: 2026-06-08 21:09:15.679719, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.679888, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.679962, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:15.680023, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:15.680085, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:15.680136, function: null, file: null}
+00:02 +42 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: CameraServiceSingleton Initialization SlaveScreen can be created when CameraServiceSingleton is initialized
+00:02 +43 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: CameraServiceSingleton Initialization Main app flow initializes CameraServiceSingleton early
+00:02 +44 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: CameraServiceSingleton Initialization (tearDownAll)
+00:02 +44 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: CameraServiceSingleton Error Prevention Accessing instance before initialization throws clear error
+00:02 +45 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: CameraServiceSingleton Error Prevention MasterScreen initState accesses CameraServiceSingleton safely
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-08 21:09:15.747799, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-08 21:09:15.748, function: null, file: null}
+00:02 +46 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: StorageService Nullable Messenger StorageService can be created with null messenger for early init
+00:02 +47 ~1: /Users/jose/src/work/hydracamv2/test/camera_singleton_initialization_test.dart: StorageService Nullable Messenger StorageService handles null messenger gracefully
+00:02 +48 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +49 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +50 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +51 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +52 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +53 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 21:09:15.988942, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 21:09:15.990781, function: null, file: null}
+00:02 +54 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +55 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +56 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +57 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +57 ~1: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+Log registered: {message: Client slave-a disconnected. Total clients: 0, timestamp: 2026-06-08 21:09:16.099772, function: null, file: null}
+00:02 +58 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +58 ~1: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: stale socket close does not remove current client registration
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:02 +58 ~1: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server retains disconnected device status after socket removal
+Log registered: {message: Client slave-a disconnected. Total clients: 0, timestamp: 2026-06-08 21:09:16.105813, function: null, file: null}
+00:02 +59 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +59 ~1: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master server orders connected devices before disconnected history
+Log registered: {message: Client a-stale-slave disconnected. Total clients: 0, timestamp: 2026-06-08 21:09:16.107327, function: null, file: null}
+00:02 +60 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +60 ~1: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: scheduled commands include master send time for slave clock offset
+Log registered: {message: Scheduling command 'takePhoto' for 2026-06-08T20:35:05.000Z, timestamp: 2026-06-08 21:09:16.109486, function: null, file: null}
+Log registered: {message: Scheduled command 'takePhoto' sent to slave with deviceId: slave-a., timestamp: 2026-06-08 21:09:16.111201, function: null, file: null}
+00:02 +61 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +61 ~1: /Users/jose/src/work/hydracamv2/test/master/master_network_snapshot_cache_test.dart: master sends identify command and records ack diagnostics
+Log registered: {message: Identify command sent to slave with deviceId: slave-a., timestamp: 2026-06-08 21:09:16.115711, function: null, file: null}
+00:02 +62 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:02 +63 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: slave app bar opens uploader info directly
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 21:09:16.209326, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 21:09:16.209577, function: null, file: null}
+00:02 +64 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +64 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: connectivity stream errors are logged without uncaught exception
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 21:09:16.356297, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 21:09:16.356521, function: null, file: null}
+Log registered: {message: Connectivity change listener failed: SocketException: dbus unavailable
+#0      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:214:18)
+<asynchronous suspension>
+#1      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#2      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#3      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-08 21:09:16.374303, function: null, file: null}
+00:02 +65 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +66 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +67 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +67 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: linux skips default connectivity stream subscription
+Log registered: {message: Skipping connectivity change listener on linux; network readiness will be checked on demand., timestamp: 2026-06-08 21:09:16.390182, function: null, file: null}
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 21:09:16.390393, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 21:09:16.390477, function: null, file: null}
+00:02 +68 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +68 ~1: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: recording slave surface exposes safe stop control
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-08 21:09:16.430163, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-08 21:09:16.430367, function: null, file: null}
+00:02 +69 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +70 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +71 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +72 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +73 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +74 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:02 +75 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +75 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: takePhoto surfaces camera failures instead of returning a fake path
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:16.578748, function: null, file: null}
+Log registered: {message: Error taking photo: Exception: No cameras available on this device.
+#0      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:246:7)
+<asynchronous suspension>
+#1      CameraService.takePhoto (package:hydracam/services/camera_service.dart:296:7)
+<asynchronous suspension>
+#2      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#4      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:56:5)
+<asynchronous suspension>
+#7      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#9      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 21:09:16.586530, function: null, file: null}
+00:03 +76 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +76 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:16.595777, function: null, file: null}
+00:03 +77 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +77 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 21:09:16.597736, function: null, file: null}
+00:03 +78 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +79 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +80 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +80 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 21:09:16.602175, function: null, file: null}
+00:03 +81 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +82 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +82 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Generated new Device ID: 62d749e8-057a-4760-9321-2ad33d515313, timestamp: 2026-06-08 21:09:16.604356, function: null, file: null}
+00:03 +83 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +83 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Camera video recording start failed with explicit fps; retrying with resolution preset defaults. Error: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:721:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:81:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 21:09:16.606373, function: null, file: null}
+00:03 +84 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +85 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +86 ~1: /Users/jose/src/work/hydracamv2/test/automation/automation_standby_screen_test.dart: standby screen renders visible status instead of a blank body
+00:03 +87 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:03 +87 ~1: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService restores HydraCam GUID after Auth0 restore
+Log registered: {message: Fetching restored GUID for email: restored@example.com, timestamp: 2026-06-08 21:09:16.701198, function: null, file: null}
+Log registered: {message: User session restored. GUID: hydracam-user-guid, timestamp: 2026-06-08 21:09:16.704478, function: null, file: null}
+00:03 +88 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:03 +88 ~1: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService restores HydraCam GUID after Auth0 restore
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:03 +89 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:03 +90 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:03 +91 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:03 +92 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:03 +93 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Camera reinitialized for video recording start without explicit fps: camera=fake-back-camera, profile=standard1080p30., timestamp: 2026-06-08 21:09:17.010163, function: null, file: null}
+Log registered: {message: Error starting video recording: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:737:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:81:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 21:09:17.010533, function: null, file: null}
+00:03 +94 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +94 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo works when the iPad has no flash capability
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:17.012960, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 21:09:17.013201, function: null, file: null}
+Log registered: {message: Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities), timestamp: 2026-06-08 21:09:17.013609, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 21:09:17.013702, function: null, file: null}
+Log registered: {message: Generated new Device ID: 2f7a9018-7683-484b-be9c-44ca3e207af7, timestamp: 2026-06-08 21:09:17.014052, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 21:09:17.014307, function: null, file: null}
+00:03 +95 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +95 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: non-flash initialization failures still surface
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:17.015573, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 21:09:17.015844, function: null, file: null}
+Log registered: {message: Error initializing camera: CameraException(setFlashModeFailed, Camera session is unavailable)
+#0      CameraController.setFlashMode (package:camera/src/camera_controller.dart:729:7)
+<asynchronous suspension>
+#1      CameraService._setFlashModeIfSupported (package:hydracam/services/camera_service.dart:814:7)
+<asynchronous suspension>
+#2      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:261:7)
+<asynchronous suspension>
+#3      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#4      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#5      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#6      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#7      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:130:5)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#10     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 21:09:17.016203, function: null, file: null}
+00:03 +96 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +96 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: stopRecordingVideo surfaces the camera plugin no-recording error
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:17.017710, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 21:09:17.017914, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 21:09:17.018225, function: null, file: null}
+Log registered: {message: Error stopping video recording: Exception: stopVideoRecording was called when no video is recording.
+#0      CameraService.stopRecordingVideo (package:hydracam/services/camera_service.dart:416:9)
+#1      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:153:21)
+<asynchronous suspension>
+#2      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#3      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#4      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 21:09:17.018490, function: null, file: null}
+00:03 +97 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +97 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: mock camera writes placeholder media without a platform camera
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 21:09:17.019952, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 21:09:17.020153, function: null, file: null}
+Log registered: {message: Generated new Device ID: 9c60d050-d262-43d2-8806-3c6ba25be69e, timestamp: 2026-06-08 21:09:17.020336, function: null, file: null}
+Log registered: {message: Mock photo saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_null/mock_1_2026-06-08T21-09-17-020530.jpg, timestamp: 2026-06-08 21:09:17.021648, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 21:09:17.021820, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 9c60d050-d262-43d2-8806-3c6ba25be69e, timestamp: 2026-06-08 21:09:17.021978, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 21:09:17.022120, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_null/mock_2_2026-06-08T21-09-17-022342.mp4, timestamp: 2026-06-08 21:09:17.023108, function: null, file: null}
+00:03 +98 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +98 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: critical battery force stop saves mock recording and interrupts
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 21:09:17.024826, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 21:09:17.024983, function: null, file: null}
+Log registered: {message: Generated new Device ID: 1c79661a-7cde-433e-a5e8-5b8f71660ce7, timestamp: 2026-06-08 21:09:17.025152, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 21:09:17.025226, function: null, file: null}
+Log registered: {message: Stopping recording due to critical battery., timestamp: 2026-06-08 21:09:17.025369, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_null/mock_1_2026-06-08T21-09-17-025441.mp4, timestamp: 2026-06-08 21:09:17.026249, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 1c79661a-7cde-433e-a5e8-5b8f71660ce7, timestamp: 2026-06-08 21:09:17.026769, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_null/mock_1_2026-06-08T21-09-17-025441.mp4, timestamp: 2026-06-08 21:09:17.027372, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_null/mock_1_2026-06-08T21-09-17-025441.mp4, timestamp: 2026-06-08 21:09:17.030017, function: null, file: null}
+Log registered: {message: Auto-upload is enabled. Starting upload process., timestamp: 2026-06-08 21:09:17.030381, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:17.030527, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:17.030919, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=null, timestamp: 2026-06-08 21:09:17.031137, function: null, file: null}
+Log registered: {message: No session GUID available. Cannot upload media., timestamp: 2026-06-08 21:09:17.031200, function: null, file: null}
+00:03 +99 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +99 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: critical battery force stop survives missing start timestamp
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.032869, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.033196, function: null, file: null}
+Log registered: {message: Session started with GUID: critical-battery-missing-start on device type: Master, timestamp: 2026-06-08 21:09:17.033460, function: null, file: null}
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 21:09:17.033545, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 21:09:17.033650, function: null, file: null}
+Log registered: {message: Generated new Device ID: f7b38c3d-9aef-4caf-bbf2-536540054ba6, timestamp: 2026-06-08 21:09:17.033825, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 21:09:17.033892, function: null, file: null}
+Log registered: {message: Stopping recording due to critical battery., timestamp: 2026-06-08 21:09:17.033943, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_critical-battery-missing-start/mock_1_2026-06-08T21-09-17-034001.mp4, timestamp: 2026-06-08 21:09:17.035139, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: f7b38c3d-9aef-4caf-bbf2-536540054ba6, timestamp: 2026-06-08 21:09:17.035481, function: null, file: null}
+Log registered: {message: Recording start timestamp was missing during forced stop; using end timestamp as fallback., timestamp: 2026-06-08 21:09:17.035575, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_critical-battery-missing-start/mock_1_2026-06-08T21-09-17-034001.mp4, timestamp: 2026-06-08 21:09:17.035745, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_critical-battery-missing-start/mock_1_2026-06-08T21-09-17-034001.mp4, timestamp: 2026-06-08 21:09:17.035828, function: null, file: null}
+Log registered: {message: Auto-upload is enabled. Starting upload process., timestamp: 2026-06-08 21:09:17.037398, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:17.037471, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:17.037523, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=critical-battery-missing-start, timestamp: 2026-06-08 21:09:17.037589, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:17.038413, function: null, file: null}
+Log registered: {message: Fetch token, timestamp: 2026-06-08 21:09:17.038728, function: null, file: null}
+Log registered: {message: Failed to fetch M2M token: , timestamp: 2026-06-08 21:09:17.046529, function: null, file: null}
+Log registered: {message: Error uploading media: Exception: Failed to retrieve M2M token, timestamp: 2026-06-08 21:09:17.046777, function: null, file: null}
+Log registered: {message: Failed to upload media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_critical-battery-missing-start/mock_1_2026-06-08T21-09-17-034001.mp4, timestamp: 2026-06-08 21:09:17.047177, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:09:17.047472, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=0, timestamp: 2026-06-08 21:09:17.047637, function: null, file: null}
+Log registered: {message: UploaderService: Queue is empty. Uploading stopped., timestamp: 2026-06-08 21:09:17.047732, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_critical-battery-missing-start/metadata.json, timestamp: 2026-06-08 21:09:17.049261, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsWXtPVP/session_critical-battery-missing-start/metadata.json, timestamp: 2026-06-08 21:09:17.049393, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.049477, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.049565, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.049613, function: null, file: null}
+00:03 +100 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +100 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: selected ultra-wide lens uses sport 1080p60 controller settings
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:17.051412, function: null, file: null}
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 21:09:17.051769, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 21:09:17.052580, function: null, file: null}
+Log registered: {message: Generated new Device ID: 80b87ff0-1b7f-4c3b-b61f-b691e462ab6c, timestamp: 2026-06-08 21:09:17.052858, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 21:09:17.053133, function: null, file: null}
+00:03 +101 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +101 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:17.054880, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 21:09:17.055360, function: null, file: null}
+Log registered: {message: Changing video capture profile to detail4k30 (current: standard1080p30), timestamp: 2026-06-08 21:09:17.055553, function: null, file: null}
+Log registered: {message: Updated video capture profile to detail4k30, timestamp: 2026-06-08 21:09:17.055959, function: null, file: null}
+00:03 +101 ~1: /Users/jose/src/work/hydracamv2/test/services/device_service_test.dart: DeviceIdService reports native macOS device info instead of unsupported platform
+Log registered: {message: Generated new Device ID: e67af73d-3f82-4102-a248-34c8f2491b29, timestamp: 2026-06-08 21:09:17.092951, function: null, file: null}
+00:03 +102 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-08 21:09:17.236347, function: null, file: null}
+00:03 +103 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +104 ~1: /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart: StorageService anchors blocks recording and triggers callback when storage is critical
+00:03 +105 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +105 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle starts with no active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.284922, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.287156, function: null, file: null}
+00:03 +106 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +106 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.293759, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.293858, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.294267, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.294349, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 21:09:17.295391, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.301444, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.301586, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.301655, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.301710, function: null, file: null}
+00:03 +107 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +107 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.302944, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.303036, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.303314, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.303375, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 21:09:17.303431, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.304122, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.304221, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.304291, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.304348, function: null, file: null}
+00:03 +108 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +108 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle scanAndReconstructSessions preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.305570, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.305696, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.306067, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.306134, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 21:09:17.306208, function: null, file: null}
+Log registered: {message: Generated new Device ID: ebc853cc-0506-42d7-b144-943c4acae563, timestamp: 2026-06-08 21:09:17.310866, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_scan-preserve-old/metadata.json, timestamp: 2026-06-08 21:09:17.313095, function: null, file: null}
+Log registered: {message: Reconstructed session: scan-preserve-old with 0 photos and 1 videos., timestamp: 2026-06-08 21:09:17.313241, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_active-guid/metadata.json, timestamp: 2026-06-08 21:09:17.315780, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.315891, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.315964, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.316019, function: null, file: null}
+00:03 +109 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +109 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle loadSessionMetadataSnapshot preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.317214, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.317303, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.317689, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.317759, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 21:09:17.317817, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: ebc853cc-0506-42d7-b144-943c4acae563, timestamp: 2026-06-08 21:09:17.319714, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 21:09:17.320424, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_active-guid/metadata.json, timestamp: 2026-06-08 21:09:17.321781, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.321891, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.321948, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.321999, function: null, file: null}
+00:03 +110 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +110 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.323317, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.323400, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.323806, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.323911, function: null, file: null}
+Log registered: {message: Session started with GUID: same-guid on device type: Master, timestamp: 2026-06-08 21:09:17.323972, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaNyJelL/same_session_photo.jpg, timestamp: 2026-06-08 21:09:17.324690, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaNyJelL/same_session_photo.jpg, timestamp: 2026-06-08 21:09:17.325151, function: null, file: null}
+Log registered: {message: Session already active with GUID: same-guid. Preserving existing media on rejoin as Slave., timestamp: 2026-06-08 21:09:17.325477, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.325979, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_same-guid/metadata.json, timestamp: 2026-06-08 21:09:17.327020, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_same-guid/metadata.json, timestamp: 2026-06-08 21:09:17.327129, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.327202, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.327268, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.327324, function: null, file: null}
+00:03 +111 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +111 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle joining a different session starts with clean media state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.328471, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.328572, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.328950, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.329012, function: null, file: null}
+Log registered: {message: Session started with GUID: old-guid on device type: Master, timestamp: 2026-06-08 21:09:17.329063, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediafU0rm1/old_session_photo.jpg, timestamp: 2026-06-08 21:09:17.329409, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediafU0rm1/old_session_photo.jpg, timestamp: 2026-06-08 21:09:17.329526, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.329641, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.329696, function: null, file: null}
+Log registered: {message: Session started with GUID: new-guid on device type: Master, timestamp: 2026-06-08 21:09:17.329744, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.330041, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_new-guid/metadata.json, timestamp: 2026-06-08 21:09:17.331231, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.331328, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.331382, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.331428, function: null, file: null}
+00:03 +112 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +112 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle joining a different session starts with clean media state
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_new-guid/metadata.json, timestamp: 2026-06-08 21:09:17.331771, function: null, file: null}
+00:03 +112 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.332571, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.332633, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.332855, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.332912, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 21:09:17.332960, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediakLvHyl/test_photo.jpg, timestamp: 2026-06-08 21:09:17.333297, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediakLvHyl/test_photo.jpg, timestamp: 2026-06-08 21:09:17.333433, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.333649, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.334619, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.334710, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.334768, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.334830, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.334885, function: null, file: null}
+00:03 +113 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +113 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.335963, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.336028, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.336209, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.336262, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 21:09:17.336341, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medias4DZ0E/test_video.mp4, timestamp: 2026-06-08 21:09:17.336824, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medias4DZ0E/test_video.mp4, timestamp: 2026-06-08 21:09:17.336970, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.337186, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.338277, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.338387, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.338450, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.338509, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.338556, function: null, file: null}
+00:03 +114 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +114 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.339556, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.339619, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.339807, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.339862, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 21:09:17.340011, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media5cGFkq/context_video.mp4, timestamp: 2026-06-08 21:09:17.340893, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media5cGFkq/context_video.mp4, timestamp: 2026-06-08 21:09:17.340987, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.342439, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.343444, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.343597, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: ebc853cc-0506-42d7-b144-943c4acae563, timestamp: 2026-06-08 21:09:17.345372, function: null, file: null}
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 21:09:17.346314, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.347506, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.347594, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.347645, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.347689, function: null, file: null}
+00:03 +115 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +115 ~1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.348672, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.348752, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.348948, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.349005, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 21:09:17.349060, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaPmX3Hf/test_photo_1.jpg, timestamp: 2026-06-08 21:09:17.349578, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaPmX3Hf/test_photo_1.jpg, timestamp: 2026-06-08 21:09:17.349694, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaPmX3Hf/test_photo_2.jpg, timestamp: 2026-06-08 21:09:17.349796, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaPmX3Hf/test_photo_2.jpg, timestamp: 2026-06-08 21:09:17.350071, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.350294, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:17.350534, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.351875, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.351976, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docszJTV3j/session_test-guid/metadata.json, timestamp: 2026-06-08 21:09:17.352040, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:17.352087, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:17.352463, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:17.352506, function: null, file: null}
+00:03 +116 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +116 ~1: /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:17.379643, function: null, file: null}
+00:03 +117 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +118 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +119 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +120 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +120 ~1: /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:09:17.399165, function: null, file: null}
+00:03 +121 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +122 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +123 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+00:03 +124 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+Log registered: {message: Camera capture settings applied and reinitialized: camera=iphone-telephoto, profile=detail4k30., timestamp: 2026-06-08 21:09:17.459703, function: null, file: null}
+00:03 +125 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: setup preview uses preset defaults without explicit fps
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 21:09:17.461559, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 21:09:17.461902, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 21:09:17.462316, function: null, file: null}
+00:03 +126 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: recording after setup preview rebuilds the explicit fps controller
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 21:09:17.463559, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 21:09:17.463804, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 21:09:17.464182, function: null, file: null}
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 21:09:17.464312, function: null, file: null}
+00:03 +126 ~1: /Users/jose/src/work/hydracamv2/test/services/log_service_test.dart: registerLog stores message, timestamp, function, and file
+Log registered: {message: Profile startup marker, timestamp: 2026-06-07 13:30:00.000, function: main, file: main.dart}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+00:04 +127 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: recording after setup preview rebuilds the explicit fps controller
+00:04 +127 ~1: /Users/jose/src/work/hydracamv2/test/services/log_service_test.dart: clearLogs removes stored entries
+Log registered: {message: temporary entry, timestamp: 2026-06-08 21:09:17.587186, function: null, file: null}
+00:04 +128 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: recording after setup preview rebuilds the explicit fps controller
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 21:09:17.867043, function: null, file: null}
+Log registered: {message: Generated new Device ID: 6c5b83f1-b298-43db-890b-78bfa6699bfe, timestamp: 2026-06-08 21:09:17.867409, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 21:09:17.867585, function: null, file: null}
+00:04 +129 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: macOS runtime uses the real camera backend unless mock is explicit
+00:04 +130 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: (tearDownAll)
+00:04 +130 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_test.dart: CameraService Recording state isRecording starts as false
+00:04 +131 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_test.dart: CameraService Recording state recordingInterrupted starts as false
+00:04 +132 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_test.dart: CameraService Storage constraints storage service is correctly wired
+00:04 +133 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_service_test.dart: CameraService Force stop recording forceStopRecordingDueToStorage API exists
+00:04 +134 ~1: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: computes delay from corrected local time
+00:04 +135 ~1: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: runs scheduled tasks immediately when corrected time has passed
+00:04 +136 ~1: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: keeps future corrected-time tasks cancellable
+00:04 +137 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: skips linux battery plugin when DBus system bus is missing
+00:04 +138 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +139 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +140 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +141 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +142 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +142 ~1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera name independently from lens preference
+Log registered: {message: Updated camera lens preference to ultraWide, timestamp: 2026-06-08 21:09:18.223941, function: null, file: null}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 21:09:18.236885, function: null, file: null}
+00:04 +143 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +143 ~1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: stores selected camera perspective by canonical id
+Log registered: {message: Updated camera perspective to right_backglass_diagonal, timestamp: 2026-06-08 21:09:18.239205, function: null, file: null}
+00:04 +144 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +144 ~1: /Users/jose/src/work/hydracamv2/test/services/settings_service_test.dart: autograbado defaults disabled and can be stored
+Log registered: {message: Updated autograbadoMode value to true, timestamp: 2026-06-08 21:09:18.240499, function: null, file: null}
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.302610, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.305, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Master, timestamp: 2026-06-08 21:09:18.305324, function: null, file: null}
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: reset clears stale queue, current upload state, and progress
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.309184, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.311268, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testTNdeWx/photo.jpg, timestamp: 2026-06-08 21:09:18.315950, function: null, file: null}
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Generated new Device ID: 8ed87061-2218-4832-a0f0-7692a889638d, timestamp: 2026-06-08 21:09:18.320217, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 21:09:18.322236, function: null, file: null}
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: reset clears stale queue, current upload state, and progress
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.321299, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.321586, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:18.322931, function: null, file: null}
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Retrieved existing Device ID: 8ed87061-2218-4832-a0f0-7692a889638d, timestamp: 2026-06-08 21:09:18.323324, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for active-guid, timestamp: 2026-06-08 21:09:18.323488, function: null, file: null}
+00:04 +145 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: reset clears stale queue, current upload state, and progress
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.323660, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.323791, function: null, file: null}
+00:04 +146 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +146 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: cancelQueuedMedia removes a pending item without touching others
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.326409, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.326517, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testljRm22/first.jpg, timestamp: 2026-06-08 21:09:18.327270, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testljRm22/second.jpg, timestamp: 2026-06-08 21:09:18.327604, function: null, file: null}
+00:04 +146 ~1: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_candidate_source_docsygGfUU/session_active-guid/metadata.json, timestamp: 2026-06-08 21:09:18.327748, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.327915, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.327999, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:18.328061, function: null, file: null}
+00:04 +147 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +147 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: cancelQueuedMedia removes a pending item without touching others
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-08 21:09:18.328546, function: null, file: null}
+Log registered: {message: Cancelled pending upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testljRm22/first.jpg, timestamp: 2026-06-08 21:09:18.328678, function: null, file: null}
+Log registered: {message: No pending queued media to cancel: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testljRm22/first.jpg, timestamp: 2026-06-08 21:09:18.328789, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:18.328933, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:18.328999, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.329114, function: null, file: null}
+00:04 +147 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +147 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: cancelQueuedMedia removes a pending item without touching others
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.329181, function: null, file: null}
+00:04 +148 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +148 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: reset ignores stale in-flight upload completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.333515, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.333609, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.334306, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.334415, function: null, file: null}
+Log registered: {message: Session started with GUID: old-session-guid on device type: Master, timestamp: 2026-06-08 21:09:18.334622, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testyx8Jpf/inflight.jpg, timestamp: 2026-06-08 21:09:18.334955, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:09:18.335139, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:18.335288, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:18.335700, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=old-session-guid, timestamp: 2026-06-08 21:09:18.335874, function: null, file: null}
+00:04 +149 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +149 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: reset ignores stale in-flight upload completion
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:18.336600, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:18.337273, function: null, file: null}
+00:04 +150 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +151 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +151 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: reset ignores stale in-flight upload completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.342180, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.342304, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.342375, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.342430, function: null, file: null}
+Log registered: {message: Session started with GUID: new-session-guid on device type: Master, timestamp: 2026-06-08 21:09:18.342484, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:09:18.349854, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testyx8Jpf/inflight.jpg, timestamp: 2026-06-08 21:09:18.350053, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docszgdn8Z/session_new-session-guid/metadata.json, timestamp: 2026-06-08 21:09:18.351766, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.351892, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.351958, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:18.352019, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.352082, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.352134, function: null, file: null}
+00:04 +152 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +152 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: cancelCurrentUpload clears active upload and ignores late completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.353243, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.353369, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.353812, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.353889, function: null, file: null}
+Log registered: {message: Session started with GUID: cancel-session-guid on device type: Master, timestamp: 2026-06-08 21:09:18.353955, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testcXDCFK/cancel-inflight.jpg, timestamp: 2026-06-08 21:09:18.354223, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:09:18.354362, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:18.354426, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:18.354478, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=cancel-session-guid, timestamp: 2026-06-08 21:09:18.354532, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:18.354596, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:18.354752, function: null, file: null}
+Log registered: {message: Cancelled in-flight API requests., timestamp: 2026-06-08 21:09:18.355330, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:09:18.355425, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testcXDCFK/cancel-inflight.jpg, timestamp: 2026-06-08 21:09:18.355521, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:09:18.356750, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testcXDCFK/cancel-inflight.jpg, timestamp: 2026-06-08 21:09:18.356853, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docszgdn8Z/session_cancel-session-guid/metadata.json, timestamp: 2026-06-08 21:09:18.357774, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.357888, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.357953, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:18.358029, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.358086, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.358133, function: null, file: null}
+00:04 +153 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:04 +153 ~1: /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: cancelCurrentUpload closes the active HTTP client
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.359086, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.359156, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.359558, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.359622, function: null, file: null}
+Log registered: {message: Session started with GUID: cancel-http-session-guid on device type: Master, timestamp: 2026-06-08 21:09:18.359675, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testOmB4XZ/cancel-http.jpg, timestamp: 2026-06-08 21:09:18.359983, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:09:18.360155, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:09:18.360217, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:09:18.360268, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=cancel-http-session-guid, timestamp: 2026-06-08 21:09:18.360322, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:09:18.360382, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:09:18.360547, function: null, file: null}
+Log registered: {message: Cancelled in-flight API requests., timestamp: 2026-06-08 21:09:18.361111, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:09:18.361218, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testOmB4XZ/cancel-http.jpg, timestamp: 2026-06-08 21:09:18.361273, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:09:18.362435, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testOmB4XZ/cancel-http.jpg, timestamp: 2026-06-08 21:09:18.362541, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docszgdn8Z/session_cancel-http-session-guid/metadata.json, timestamp: 2026-06-08 21:09:18.363408, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.363525, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.363602, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:09:18.363651, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:18.363702, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:18.363745, function: null, file: null}
+00:04 +154 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 21:09:18.430644, function: null, file: null}
+00:04 +155 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService triggers one autostop when battery becomes critical
+00:04 +155 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService: Error reading battery level: MissingPluginException(No implementation found for method getBatteryLevel on channel dev.fluttercommunity.plus/battery), timestamp: 2026-06-08 21:09:18.511009, function: null, file: null}
+00:04 +155 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService triggers one autostop when battery becomes critical
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 21:09:18.522141, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-08 21:09:18.522382, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-08 21:09:18.533349, function: null, file: null}
+00:04 +156 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService throttles repeated low-battery warnings
+00:04 +156 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService triggers one autostop when battery becomes critical
+Log registered: {message: BatteryService: Error reading battery level: MissingPluginException(No implementation found for method getBatteryLevel on channel dev.fluttercommunity.plus/battery), timestamp: 2026-06-08 21:09:18.541505, function: null, file: null}
+00:04 +156 ~1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService throttles repeated low-battery warnings
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 21:09:18.551708, function: null, file: null}
+00:05 +157 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_capture_settings_test.dart: VideoCaptureProfile maps sport 1080p60 to a 1080p target at 60 fps
+00:05 +158 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_capture_settings_test.dart: VideoCaptureProfile maps 4K profiles to ultraHigh with expected frame rates
+00:05 +159 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_capture_settings_test.dart: LensPreference labels iPhone ultra-wide as 0.5x
+00:05 +160 ~1: /Users/jose/src/work/hydracamv2/test/services/camera_capture_settings_test.dart: LensPreference labels Android back cameras by camera id when lens type is unknown
+00:05 +161 ~1: /Users/jose/src/work/hydracamv2/test/services/network_info_service_test.dart: Network type labels describes Wi-Fi with unavailable SSID explicitly
+00:05 +162 ~1: /Users/jose/src/work/hydracamv2/test/services/network_info_service_test.dart: Network type labels includes SSID when the platform exposes it
+00:05 +163 ~1: /Users/jose/src/work/hydracamv2/test/services/network_info_service_test.dart: Network type labels describes pending connected-device network status
+00:05 +164 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: (setUpAll)
+00:05 +165 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: (setUpAll)
+00:05 +166 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: (setUpAll)
+00:05 +166 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +166 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions skips unsupported macOS permission handler
+Log registered: {message: Skipping permission_handler startup request on macOS; native platform APIs will request resource access on demand., timestamp: 2026-06-08 21:09:19.108296, function: requestAllPermissions, file: PermissionService}
+00:05 +167 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +167 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions skips unsupported Linux permission handler
+Log registered: {message: Skipping permission_handler startup request on linux; native platform APIs will request resource access on demand., timestamp: 2026-06-08 21:09:19.116260, function: requestAllPermissions, file: PermissionService}
+00:05 +168 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +168 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions requests location immediately on Android
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone, Permission.locationWhenInUse]
+Denied: [], timestamp: 2026-06-08 21:09:19.120060, function: requestAllPermissions, file: PermissionService}
+00:05 +169 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +169 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: openAppSettings skips unsupported macOS permission handler
+Log registered: {message: Skipping permission_handler openAppSettings on macOS., timestamp: 2026-06-08 21:09:19.128329, function: openAppSettings, file: PermissionService}
+00:05 +170 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +170 ~1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: openAppSettings skips unsupported Linux permission handler
+Log registered: {message: Skipping permission_handler openAppSettings on linux., timestamp: 2026-06-08 21:09:19.131324, function: openAppSettings, file: PermissionService}
+00:05 +171 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +172 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +172 ~1: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login persists returned credentials through secure store
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-08 21:09:19.147437, function: login, file: auth0_service.dart}
+00:05 +173 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +173 ~1: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login persists returned credentials through secure store
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:05 +173 ~1: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore uses valid stored credentials
+Log registered: {message: Restored Auth0 session from secure store., timestamp: 2026-06-08 21:09:19.154185, function: restoreStoredSession, file: auth0_service.dart}
+00:05 +174 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +174 ~1: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore refreshes expired credentials
+Log registered: {message: Refreshed Auth0 session from secure store., timestamp: 2026-06-08 21:09:19.157276, function: restoreStoredSession, file: auth0_service.dart}
+00:05 +175 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +176 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +176 ~1: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 logout clears secure credentials and browser session
+Log registered: {message: Profile set: https://example.com/logout.png, timestamp: 2026-06-08 21:09:19.159983, function: login, file: auth0_service.dart}
+Log registered: {message: Cleared Auth0 session., timestamp: 2026-06-08 21:09:19.160390, function: logout, file: auth0_service.dart}
+00:05 +177 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +178 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +179 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +180 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +180 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: media list distinguishes failed uploads from pending uploads
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:19.522294, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:19.524035, function: null, file: null}
+00:05 +181 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: renders perspective selector and level overlay
+00:05 +182 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: current upload progress includes uploaded and total bytes
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:19.554097, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:19.554289, function: null, file: null}
+00:05 +183 ~1: /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: warn-only flow allows recording while red tilted
+00:05 +183 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: media list distinguishes failed uploads from pending uploads
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:05 +184 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: current upload progress includes estimated time remaining
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:19.576514, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:19.576680, function: null, file: null}
+00:05 +185 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: upload actions distinguish retry from queue upload
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:19.663542, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:19.663708, function: null, file: null}
+00:06 +186 ~1: /Users/jose/src/work/hydracamv2/test/widgets/session_info_widget_test.dart: does not reload network info during parent rebuilds
+00:06 +186 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: pending upload can be cancelled from the media row
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:19.686096, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:19.686266, function: null, file: null}
+00:06 +187 ~1: /Users/jose/src/work/hydracamv2/test/widgets/session_info_widget_test.dart: does not reload network info during parent rebuilds
+00:06 +187 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: current upload can be cancelled from the media row
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:09:19.707458, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:09:19.707599, function: null, file: null}
+00:06 +188 ~1: /Users/jose/src/work/hydracamv2/test/widgets/session_info_widget_test.dart: does not reload network info during parent rebuilds
+00:06 +189 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_filter_dialog_test.dart: browse all returns unconstrained media filters
+00:06 +190 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_filter_dialog_test.dart: browse all returns unconstrained media filters
+00:06 +191 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_filter_dialog_test.dart: browse all returns unconstrained media filters
+00:06 +192 ~1: /Users/jose/src/work/hydracamv2/test/widgets/media_filter_dialog_test.dart: browse all returns unconstrained media filters
+00:06 +193 ~1: All tests passed!
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

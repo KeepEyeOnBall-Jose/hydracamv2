@@ -1,0 +1,225 @@
+{
+  "acceptanceChecks": [
+    "ADB enumerates RF8M90QE7LX as a connected Android device",
+    "HydraCam installs or existing install is preserved on RF8M90QE7LX",
+    "HydraCam launches visibly on RF8M90QE7LX with screenshot or documented blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:46:34.093380+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:46:40.487009+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:46:58.849593+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:47:04.181848+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:47:11.418094+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:47:17.495755+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:47:22.414621+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:47:27.249400+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:47:44.447546+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "input",
+        "keyevent",
+        "BACK"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:48:02.342348+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:48:54.778376+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "cmd",
+        "statusbar",
+        "collapse"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:49:06.495100+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-second-s10e-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:49:35.769204+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "pull",
+        "/sdcard/hydracam-second-s10e-launch.mp4",
+        "logs/verification-runs/20260609-0546-android-second-s10e-launch/video/RF8M90QE7LX-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:49:51.332547+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical",
+      "name": "SM G970F",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "single app instance"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M90QE7LX-hydracam-launch-clean.png",
+    "screenshots/RF8M90QE7LX-launch-clean.png",
+    "screenshots/RF8M90QE7LX-launch.png",
+    "video/RF8M90QE7LX-launch.mp4",
+    "device-logs/RF8M90QE7LX-logcat.txt"
+  ],
+  "item": {
+    "slug": "android-second-s10e-launch",
+    "source": "user follow-up 2026-06-09",
+    "title": "Launch HydraCam on second S10e after USB hub recovery"
+  },
+  "notes": [
+    "RF8M90QE7LX was recognized by ADB, accepted the current debug APK, launched HydraCam, and produced screenshot/video/logcat evidence. Visible slave-screen overflow remains."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

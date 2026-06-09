@@ -1,9 +1,13 @@
+import "dart:async";
+import "dart:convert";
 import "dart:io";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/capture_context_metadata.dart";
 import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/models/captured_video.dart";
+import "package:hydracam/services/hydracam_api_service.dart";
 import "package:hydracam/services/session_manager.dart";
+import "package:hydracam/services/uploader_service.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -32,10 +36,13 @@ void main() {
 
   group("SessionManager", () {
     late SessionManager sessionManager;
+    late UploaderService uploaderService;
     late Directory tempMediaDir;
 
     setUp(() async {
       sessionManager = SessionManager.instance;
+      uploaderService = UploaderService();
+      uploaderService.reset();
       tempMediaDir =
           Directory.systemTemp.createTempSync("session_manager_test_media");
       // Reset state before each test
@@ -75,6 +82,44 @@ void main() {
         expect(sessionManager.sessionGuid, "test-guid");
       });
 
+      test("startBackendSession marks session as backend created", () {
+        sessionManager.startBackendSession(
+          const HydraCamBackendSession(
+            guid: "backend-guid",
+            sessionId: "backend-session",
+          ),
+          deviceType: "Master",
+        );
+
+        expect(sessionManager.isSessionActive, true);
+        expect(sessionManager.sessionGuid, "backend-guid");
+        expect(sessionManager.isCurrentSessionBackendCreated, isTrue);
+      });
+
+      test("startBackendSession rejects local session GUIDs", () {
+        expect(
+          () => sessionManager.startBackendSession(
+            const HydraCamBackendSession(
+              guid: "local-backend-guid",
+              sessionId: "backend-session",
+            ),
+            deviceType: "Master",
+          ),
+          throwsArgumentError,
+        );
+      });
+
+      test("joinBackendSession rejects local session GUIDs", () {
+        expect(
+          () => sessionManager.joinBackendSession(
+            "local-slave-guid",
+            "slave-session",
+            deviceType: "Slave",
+          ),
+          throwsArgumentError,
+        );
+      });
+
       test("endSession clears session state", () async {
         sessionManager.startSession("test-guid", "test-id",
             deviceType: "Master");
@@ -82,6 +127,250 @@ void main() {
 
         expect(sessionManager.isSessionActive, false);
         expect(sessionManager.sessionGuid, null);
+      });
+
+      test("scanAndReconstructSessions preserves active session identity",
+          () async {
+        sessionManager.startSession("active-guid", "active-id",
+            deviceType: "Slave");
+
+        final oldSessionDir = Directory(
+            "${testPathProvider.documentsDir.path}/session_scan-preserve-old");
+        if (oldSessionDir.existsSync()) {
+          oldSessionDir.deleteSync(recursive: true);
+        }
+        oldSessionDir.createSync(recursive: true);
+        File("${oldSessionDir.path}/old-video.mp4")
+            .writeAsBytesSync([1, 2, 3, 4]);
+        final nonSessionDir =
+            Directory("${testPathProvider.documentsDir.path}/camera_roll");
+        if (nonSessionDir.existsSync()) {
+          nonSessionDir.deleteSync(recursive: true);
+        }
+        nonSessionDir.createSync(recursive: true);
+        File("${nonSessionDir.path}/stray-video.mp4")
+            .writeAsBytesSync([4, 3, 2, 1]);
+
+        final reconstructed = await sessionManager.scanAndReconstructSessions();
+
+        expect(reconstructed, contains("scan-preserve-old"));
+        expect(reconstructed, isNot(contains("camera_roll")));
+        expect(sessionManager.sessionGuid, "active-guid");
+        expect(sessionManager.deviceType, "Slave");
+        expect(sessionManager.currentSession?.sessionGuid, "active-guid");
+      });
+
+      test("scanAndReconstructSessions preserves full directory session id",
+          () async {
+        const sessionIdentifier = "scan_preserve_full_guid";
+        final sessionDir = Directory(
+          "${testPathProvider.documentsDir.path}/session_$sessionIdentifier",
+        );
+        if (sessionDir.existsSync()) {
+          sessionDir.deleteSync(recursive: true);
+        }
+        sessionDir.createSync(recursive: true);
+        File("${sessionDir.path}/underscore-video.mp4")
+            .writeAsBytesSync([1, 2, 3, 4]);
+
+        final reconstructed = await sessionManager.scanAndReconstructSessions();
+
+        expect(reconstructed, contains(sessionIdentifier));
+        expect(reconstructed, isNot(contains("guid")));
+
+        final metadataFile = File("${sessionDir.path}/metadata.json");
+        expect(metadataFile.existsSync(), isTrue);
+        final metadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(metadata["sessionId"], sessionIdentifier);
+        expect(metadata["sessionGuid"], sessionIdentifier);
+      });
+
+      test("loadSessionMetadataSnapshot preserves active session identity",
+          () async {
+        sessionManager.startSession("active-guid", "active-id",
+            deviceType: "Slave");
+
+        final oldSessionDir =
+            Directory("${testPathProvider.documentsDir.path}/session_old-guid");
+        oldSessionDir.createSync(recursive: true);
+        await File("${oldSessionDir.path}/metadata.json").writeAsString(
+          jsonEncode({
+            "sessionId": "old-id",
+            "sessionGuid": "old-guid",
+            "startTime": DateTime.utc(2026, 6, 8, 9).toIso8601String(),
+            "endTime": DateTime.utc(2026, 6, 8, 9, 30).toIso8601String(),
+            "deviceType": "Master",
+            "photos": [],
+            "videos": [],
+          }),
+        );
+
+        final snapshot =
+            await sessionManager.loadSessionMetadataSnapshot("old-guid");
+
+        expect(snapshot?.sessionId, "old-id");
+        expect(snapshot?.sessionGuid, "old-guid");
+        expect(sessionManager.sessionGuid, "active-guid");
+        expect(sessionManager.deviceType, "Slave");
+        expect(sessionManager.currentSession?.sessionGuid, "active-guid");
+      });
+
+      test("rejoining same active session preserves media and upload queue",
+          () async {
+        sessionManager.startSession("same-guid", "same-id",
+            deviceType: "Master");
+        final photoPath = createTempMediaFile("same_session_photo.jpg");
+        final photo = CapturedPhoto(
+          photoPath: photoPath,
+          photoData: null,
+          captureDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+          slaveDeviceId: "device-1",
+        );
+        await sessionManager.addPhoto(photo);
+
+        expect(sessionManager.currentSession?.capturedPhotos, [photo]);
+        expect(uploaderService.queueLength, 1);
+
+        sessionManager.startSession("same-guid", "same-id",
+            deviceType: "Slave");
+
+        expect(sessionManager.sessionGuid, "same-guid");
+        expect(sessionManager.deviceType, "Slave");
+        expect(sessionManager.currentSession?.capturedPhotos, [photo]);
+        expect(uploaderService.queueLength, 1);
+      });
+
+      test("joining a different session starts with clean media state",
+          () async {
+        sessionManager.startSession("old-guid", "old-id", deviceType: "Master");
+        final photoPath = createTempMediaFile("old_session_photo.jpg");
+        final photo = CapturedPhoto(
+          photoPath: photoPath,
+          photoData: null,
+          captureDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+          slaveDeviceId: "device-1",
+        );
+        await sessionManager.addPhoto(photo);
+
+        expect(sessionManager.currentSession?.capturedPhotos, [photo]);
+        expect(uploaderService.queueLength, 1);
+
+        sessionManager.startSession("new-guid", "new-id", deviceType: "Master");
+
+        expect(sessionManager.sessionGuid, "new-guid");
+        expect(sessionManager.currentSession?.capturedPhotos, isEmpty);
+        expect(uploaderService.queueLength, 0);
+      });
+
+      test("addPhoto can be awaited through metadata and enqueue", () async {
+        const sessionGuid = "await-photo-guid";
+        sessionManager.startSession(sessionGuid, "await-photo-id",
+            deviceType: "Master");
+        final photoPath = createTempMediaFile("await_photo.jpg");
+        final photo = CapturedPhoto(
+          photoPath: photoPath,
+          photoData: null,
+          captureDate: DateTime.utc(2026, 6, 9, 2, 28),
+          receivedDate: DateTime.utc(2026, 6, 9, 2, 28, 1),
+          slaveDeviceId: "await-photo-device",
+        );
+
+        await sessionManager.addPhoto(photo);
+
+        final metadataFile = File(
+            "${testPathProvider.documentsDir.path}/session_$sessionGuid/metadata.json");
+        expect(metadataFile.existsSync(), isTrue);
+        final metadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(metadata["photos"], hasLength(1));
+        expect(metadata["photos"].single["photoPath"], photoPath);
+        expect(uploaderService.queueLength, 1);
+      });
+
+      test("addVideo can be awaited through metadata and enqueue", () async {
+        const sessionGuid = "await-video-guid";
+        sessionManager.startSession(sessionGuid, "await-video-id",
+            deviceType: "Slave");
+        final videoPath = createTempMediaFile("await_video.mp4");
+        final video = CapturedVideo(
+          videoPath: videoPath,
+          videoData: null,
+          startRecordingDate: DateTime.utc(2026, 6, 9, 2, 29),
+          endRecordingDate: DateTime.utc(2026, 6, 9, 2, 29, 5),
+          receivedDate: DateTime.utc(2026, 6, 9, 2, 29, 6),
+          slaveDeviceId: "await-video-device",
+        );
+
+        await sessionManager.addVideo(video);
+
+        final metadataFile = File(
+            "${testPathProvider.documentsDir.path}/session_$sessionGuid/metadata.json");
+        expect(metadataFile.existsSync(), isTrue);
+        final metadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(metadata["videos"], hasLength(1));
+        expect(metadata["videos"].single["videoPath"], videoPath);
+        expect(uploaderService.queueLength, 1);
+      });
+
+      test("restoreSessionFromMetadata restores media and caller role",
+          () async {
+        final restoredPhotoPath = createTempMediaFile("restored_photo.jpg");
+        final restoredVideoPath = createTempMediaFile("restored_video.mp4");
+        final sessionDirectory = Directory(
+            "${testPathProvider.documentsDir.path}/session_restore-guid");
+        sessionDirectory.createSync(recursive: true);
+        await File("${sessionDirectory.path}/metadata.json").writeAsString(
+          jsonEncode({
+            "sessionId": "restore-id",
+            "sessionGuid": "restore-guid",
+            "startTime": DateTime.utc(2026, 6, 9, 1).toIso8601String(),
+            "endTime": null,
+            "deviceType": "Slave",
+            "photos": [
+              {
+                "photoPath": restoredPhotoPath,
+                "slaveDeviceId": "photo-device",
+                "captureDate": DateTime.utc(2026, 6, 9, 1, 1).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 9, 1, 2).toIso8601String(),
+                "isUploaded": false,
+              },
+            ],
+            "videos": [
+              {
+                "videoPath": restoredVideoPath,
+                "slaveDeviceId": "video-device",
+                "startRecordingDate":
+                    DateTime.utc(2026, 6, 9, 1, 3).toIso8601String(),
+                "endRecordingDate":
+                    DateTime.utc(2026, 6, 9, 1, 4).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 9, 1, 5).toIso8601String(),
+                "isUploaded": false,
+              },
+            ],
+          }),
+        );
+
+        final restored = await sessionManager.restoreSessionFromMetadata(
+          "restore-guid",
+          deviceType: "Master",
+        );
+
+        expect(restored.sessionId, "restore-id");
+        expect(restored.sessionGuid, "restore-guid");
+        expect(sessionManager.sessionGuid, "restore-guid");
+        expect(sessionManager.deviceType, "Master");
+        expect(sessionManager.currentSession?.sessionId, "restore-id");
+        expect(sessionManager.currentSession?.capturedPhotos.single.photoPath,
+            restoredPhotoPath);
+        expect(sessionManager.currentSession?.capturedVideos.single.videoPath,
+            restoredVideoPath);
+        expect(uploaderService.queueLength, 2);
       });
     });
 
@@ -91,7 +380,7 @@ void main() {
             deviceType: "Master");
       });
 
-      test("addPhoto adds photo to current session", () {
+      test("addPhoto adds photo to current session", () async {
         final photoPath = createTempMediaFile("test_photo.jpg");
         final photo = CapturedPhoto(
           photoPath: photoPath,
@@ -101,13 +390,13 @@ void main() {
           slaveDeviceId: "device-1",
         );
 
-        sessionManager.addPhoto(photo);
+        await sessionManager.addPhoto(photo);
 
         expect(sessionManager.currentSession?.capturedPhotos.length, 1);
         expect(sessionManager.currentSession?.capturedPhotos.first, photo);
       });
 
-      test("addVideo adds video to current session", () {
+      test("addVideo adds video to current session", () async {
         final videoPath = createTempMediaFile("test_video.mp4");
         final video = CapturedVideo(
           videoPath: videoPath,
@@ -118,7 +407,7 @@ void main() {
           receivedDate: DateTime.now(),
         );
 
-        sessionManager.addVideo(video);
+        await sessionManager.addVideo(video);
 
         expect(sessionManager.currentSession?.capturedVideos.length, 1);
         expect(sessionManager.currentSession?.capturedVideos.first, video);
@@ -155,8 +444,7 @@ void main() {
           ),
         );
 
-        sessionManager.addVideo(video);
-        await sessionManager.updateMetadata();
+        await sessionManager.addVideo(video);
 
         final metadataFile = File(
           "${testPathProvider.documentsDir.path}/session_test-guid/metadata.json",
@@ -176,7 +464,50 @@ void main() {
         expect(loadedContext?.videoCaptureProfile, "sport1080p60");
       });
 
-      test("multiple media can be added to session", () {
+      test("metadata write preserves session captured before async path lookup",
+          () async {
+        const oldGuid = "metadata-old-guid";
+        const newGuid = "metadata-new-guid";
+        final oldSessionDir =
+            Directory("${testPathProvider.documentsDir.path}/session_$oldGuid");
+        final newSessionDir =
+            Directory("${testPathProvider.documentsDir.path}/session_$newGuid");
+        if (oldSessionDir.existsSync()) {
+          oldSessionDir.deleteSync(recursive: true);
+        }
+        if (newSessionDir.existsSync()) {
+          newSessionDir.deleteSync(recursive: true);
+        }
+
+        sessionManager.startSession(oldGuid, "metadata-old-id",
+            deviceType: "Master");
+
+        final releaseFirstPathLookup = Completer<void>();
+        testPathProvider.blockNextPathLookupUntil(
+          releaseFirstPathLookup.future,
+        );
+
+        final pendingOldSessionSave = sessionManager.updateMetadata();
+        await Future<void>.delayed(Duration.zero);
+
+        sessionManager.startSession(newGuid, "metadata-new-id",
+            deviceType: "Slave");
+        releaseFirstPathLookup.complete();
+        await pendingOldSessionSave;
+
+        final oldMetadataFile = File("${oldSessionDir.path}/metadata.json");
+        final newMetadataFile = File("${newSessionDir.path}/metadata.json");
+
+        expect(oldMetadataFile.existsSync(), isTrue);
+        expect(newMetadataFile.existsSync(), isFalse);
+
+        final metadata = jsonDecode(await oldMetadataFile.readAsString());
+        expect(metadata["sessionId"], "metadata-old-id");
+        expect(metadata["sessionGuid"], oldGuid);
+        expect(metadata["deviceType"], "Master");
+      });
+
+      test("multiple media can be added to session", () async {
         final photoPath1 = createTempMediaFile("test_photo_1.jpg");
         final photoPath2 = createTempMediaFile("test_photo_2.jpg");
         final photo1 = CapturedPhoto(
@@ -194,8 +525,8 @@ void main() {
           slaveDeviceId: "device-2",
         );
 
-        sessionManager.addPhoto(photo1);
-        sessionManager.addPhoto(photo2);
+        await sessionManager.addPhoto(photo1);
+        await sessionManager.addPhoto(photo2);
 
         expect(sessionManager.currentSession?.capturedPhotos.length, 2);
       });
@@ -205,6 +536,7 @@ void main() {
 
 class _TestPathProviderPlatform extends PathProviderPlatform {
   Directory? _documentsDir;
+  Future<void>? _nextPathLookupBlocker;
 
   Directory get documentsDir {
     _documentsDir ??=
@@ -212,8 +544,17 @@ class _TestPathProviderPlatform extends PathProviderPlatform {
     return _documentsDir!;
   }
 
+  void blockNextPathLookupUntil(Future<void> blocker) {
+    _nextPathLookupBlocker = blocker;
+  }
+
   @override
   Future<String?> getApplicationDocumentsPath() async {
+    final blocker = _nextPathLookupBlocker;
+    if (blocker != null) {
+      _nextPathLookupBlocker = null;
+      await blocker;
+    }
     return documentsDir.path;
   }
 

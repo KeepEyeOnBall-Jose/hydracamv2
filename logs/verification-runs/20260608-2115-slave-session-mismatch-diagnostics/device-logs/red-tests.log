@@ -1,0 +1,143 @@
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart
+test/master/connected_client_automation_payload_test.dart:133:9: Error: No named parameter with the name 'reportedSessionGuid'.
+        reportedSessionGuid: "slave-other-session",
+        ^^^^^^^^^^^^^^^^^^^
+lib/master/master_server.dart:42:9: Context: Found this candidate, but the arguments don't match.
+  const ConnectedDeviceInfo({
+        ^^^^^^^^^^^^^^^^^^^
+test/master/connected_client_automation_payload_test.dart:135:8: Error: No named parameter with the name 'masterSessionGuid'.
+    ], masterSessionGuid: "master-active-session");
+       ^^^^^^^^^^^^^^^^^
+lib/master/connected_client_automation_payload.dart:4:22: Context: Found this candidate, but the arguments don't match.
+Map<String, dynamic> buildConnectedClientAutomationPayload(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart: test/master/connected_client_automation_payload_test.dart:133:9: Error: No named parameter with the name 'reportedSessionGuid'.
+          reportedSessionGuid: "slave-other-session",
+          ^^^^^^^^^^^^^^^^^^^
+  lib/master/master_server.dart:42:9: Context: Found this candidate, but the arguments don't match.
+    const ConnectedDeviceInfo({
+          ^^^^^^^^^^^^^^^^^^^
+  test/master/connected_client_automation_payload_test.dart:135:8: Error: No named parameter with the name 'masterSessionGuid'.
+      ], masterSessionGuid: "master-active-session");
+         ^^^^^^^^^^^^^^^^^
+  lib/master/connected_client_automation_payload.dart:4:22: Context: Found this candidate, but the arguments don't match.
+  Map<String, dynamic> buildConnectedClientAutomationPayload(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .
+00:00 +0 -2: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart [E]
+  Error: The Dart compiler exited unexpectedly.
+  package:flutter_tools/src/base/common.dart 34:3  throwToolExit
+  package:flutter_tools/src/compile.dart 1009:11   DefaultResidentCompiler._compile.<fn>
+  dart:async/zone_root.dart 48:47                  _rootRunUnary
+  dart:async/zone.dart 733:19                      _CustomZone.runUnary
+  dart:async/future_impl.dart 948:45               Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 977:13               Future._propagateToListeners
+  dart:async/future_impl.dart 862:9                Future._propagateToListeners
+  dart:async/future_impl.dart 720:5                Future._completeWithValue
+  dart:async/future_impl.dart 804:7                Future._asyncCompleteWithValue.<fn>
+  dart:async/zone_root.dart 35:13                  _rootRun
+  dart:async/zone.dart 726:19                      _CustomZone.run
+  dart:async/zone.dart 625:7                       _CustomZone.runGuarded
+  dart:async/zone.dart 666:23                      _CustomZone.bindCallbackGuarded.<fn>
+  dart:async/schedule_microtask.dart 40:35         _microtaskLoop
+  dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
+
+00:00 +0 -2: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.584979, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:63121/ws with Device ID: test-device, timestamp: 2026-06-08 20:54:06.586790, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:63121/ws, timestamp: 2026-06-08 20:54:06.588192, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Connection closed, timestamp: 2026-06-08 20:54:06.603072, function: null, file: null}
+00:00 +1 -2: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat includes camera setup status when available
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.609062, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:63123/ws with Device ID: test-device, timestamp: 2026-06-08 20:54:06.609157, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:63123/ws, timestamp: 2026-06-08 20:54:06.609549, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 20:54:06.612485, function: null, file: null}
+00:00 +2 -2: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat reports active session guid
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:54:06.617662, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:54:06.618022, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-08 20:54:06.618266, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.618669, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:63125/ws with Device ID: test-device, timestamp: 2026-06-08 20:54:06.618749, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:63125/ws, timestamp: 2026-06-08 20:54:06.619039, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 20:54:06.625521, function: null, file: null}
+Log registered: {message: Error saving session metadata: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider), timestamp: 2026-06-08 20:54:06.626626, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:54:06.626726, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:54:06.626822, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 20:54:06.626907, function: null, file: null}
+00:00 +2 -3: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat reports active session guid [E]
+  Expected: 'slave-session-guid'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/slave/slave_client_registration_test.dart 230:7  main.<fn>
+
+Warning: At least one test in this suite creates an HttpClient. When running a test suite that uses
+TestWidgetsFlutterBinding, all HTTP requests will return status code 400, and no network request
+will actually be made. Any test expecting a real network connection and status code will fail.
+To test code that needs an HttpClient, provide your own HttpClient implementation to the code under
+test, so that your test can consistently provide a testable response to the code under test.
+00:00 +2 -3: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: autograbado starts recording when sessionStarted arrives
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.641834, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:63127/ws with Device ID: test-device, timestamp: 2026-06-08 20:54:06.641920, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:63127/ws, timestamp: 2026-06-08 20:54:06.642157, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"sessionStarted","sessionGuid":"autograbado-session"}, timestamp: 2026-06-08 20:54:06.645875, function: null, file: null}
+Log registered: {message: Command: {"command":"sessionStarted","sessionGuid":"autograbado-session"}, timestamp: 2026-06-08 20:54:06.646112, function: null, file: null}
+Log registered: {message: Session guid: autograbado-session, timestamp: 2026-06-08 20:54:06.646207, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:54:06.646374, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:54:06.646442, function: null, file: null}
+Log registered: {message: Session started with GUID: autograbado-session on device type: Slave, timestamp: 2026-06-08 20:54:06.646505, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 20:54:06.647195, function: null, file: null}
+Log registered: {message: Fetch token, timestamp: 2026-06-08 20:54:06.647479, function: null, file: null}
+Log registered: {message: Autograbado starting recording for active session autograbado-session., timestamp: 2026-06-08 20:54:06.652424, function: null, file: null}
+Log registered: {message: Starting video recording, timestamp: 2026-06-08 20:54:06.652870, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 20:54:06.653220, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.655631, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 20:54:06.655967, function: null, file: null}
+Log registered: {message: Failed to fetch M2M token: , timestamp: 2026-06-08 20:54:06.656604, function: null, file: null}
+Log registered: {message: Error on POST device/ReadyToTransmit: Exception: Failed to retrieve M2M token, timestamp: 2026-06-08 20:54:06.656811, function: null, file: null}
+Log registered: {message: Failed to notify server: No response, timestamp: 2026-06-08 20:54:06.656895, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 20:54:06.657021, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docs2HWgSL/session_autograbado-session/mock_1_2026-06-08T20-54-06-657698.mp4, timestamp: 2026-06-08 20:54:06.662584, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docs2HWgSL/session_autograbado-session/metadata.json, timestamp: 2026-06-08 20:54:06.663537, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:54:06.663626, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:54:06.663692, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 20:54:06.663746, function: null, file: null}
+00:00 +3 -3: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: startUploadingAll command starts pending upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:54:06.665470, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:54:06.665541, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_upload_commandNUXhMy/queued-photo.jpg, timestamp: 2026-06-08 20:54:06.666935, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 20:54:06.667525, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.667602, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:63129/ws with Device ID: test-device, timestamp: 2026-06-08 20:54:06.667659, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:63129/ws, timestamp: 2026-06-08 20:54:06.667968, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"startUploadingAll"}, timestamp: 2026-06-08 20:54:06.670882, function: null, file: null}
+Log registered: {message: Start-upload-all command received from master., timestamp: 2026-06-08 20:54:06.671117, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 20:54:06.671229, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 20:54:06.671336, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 20:54:06.671619, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=null, timestamp: 2026-06-08 20:54:06.671734, function: null, file: null}
+Log registered: {message: No session GUID available. Cannot upload media., timestamp: 2026-06-08 20:54:06.671789, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 20:54:06.681041, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 20:54:06.681226, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 20:54:06.681281, function: null, file: null}
+00:00 +4 -3: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: scheduled command applies master clock offset before countdown
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-08 20:54:06.683506, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:63131/ws with Device ID: test-device, timestamp: 2026-06-08 20:54:06.683574, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:63131/ws, timestamp: 2026-06-08 20:54:06.683815, function: null, file: null}
+Log registered: {message: Command received from master: {"type":"scheduledCommand","command":"takePhoto","scheduledTime":"2026-06-08T20:35:05.000Z","masterTime":"2026-06-08T20:35:02.000Z"}, timestamp: 2026-06-08 20:54:06.686367, function: null, file: null}
+Log registered: {message: Updated slave scheduled clock offset from master: 2000 ms., timestamp: 2026-06-08 20:54:06.687113, function: null, file: null}
+Log registered: {message: Command 'takePhoto' scheduled for 2026-06-08 20:35:05.000Z., timestamp: 2026-06-08 20:54:06.687356, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-08 20:54:06.687708, function: null, file: null}
+00:00 +5 -3: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart: loading /Users/jose/src/work/hydracamv2/test/master/connected_client_automation_payload_test.dart
+  /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart
+  /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat reports active session guid

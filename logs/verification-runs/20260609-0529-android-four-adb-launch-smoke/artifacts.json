@@ -1,0 +1,536 @@
+{
+  "acceptanceChecks": [
+    "ADB and Flutter both enumerate the four intended Android serials",
+    "HydraCam is installed or an existing install is preserved and launched on each Android serial",
+    "Each Android serial has a visible launched app screen or a documented launch blocker with log evidence"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:30:09.365063+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:30:14.305502+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:30:19.365534+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:30:39.197533+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:31:23.667335+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:31:47.343801+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:32:18.213126+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:32:25.253913+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:32:46.173259+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "575ecf2cbd24",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:33:02.974380+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "path",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:33:38.363730+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "path",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:33:39.571286+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "pm",
+        "path",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:33:39.707498+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "kill-server"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:05.639185+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "start-server"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:11.819300+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:20.370825+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:42.869211+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:49.131136+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:54.317725+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:34:58.545253+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.CAMERA"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:02.840379+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:07.746537+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:13.386579+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pm",
+        "grant",
+        "com.amaia23.hydracam",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:18.156303+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:26.849824+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:34.484234+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:49.734583+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:35:55.240775+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:36:23.509743+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:36:24.187860+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "input",
+        "keyevent",
+        "BACK"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:37:08.285221+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-launch-smoke.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:37:26.835189+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "pull",
+        "/sdcard/hydracam-launch-smoke.mp4",
+        "logs/verification-runs/20260609-0529-android-four-adb-launch-smoke/video/29d816ac550b7ece-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:37:38.747000+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-launch-smoke.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:37:46.071295+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-launch-smoke.mp4",
+        "logs/verification-runs/20260609-0529-android-four-adb-launch-smoke/video/9885e6503930304946-launch.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:37:57.476835+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:38:14.942618+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:38:15.059013+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:38:15.088523+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android physical",
+      "name": "SM G960F",
+      "notes": [],
+      "os": "Android 10 API 29",
+      "role": "single app instance"
+    },
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android physical",
+      "name": "SM G935F",
+      "notes": [],
+      "os": "Android 8.0 API 26",
+      "role": "single app instance"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical",
+      "name": "SM G970F",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "single app instance"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android physical",
+      "name": "SM G970F",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "single app instance"
+    },
+    {
+      "identifier": "575ecf2cbd24",
+      "kind": "Android physical",
+      "name": "2201116PG",
+      "notes": [],
+      "os": "Android 13 API 33",
+      "role": "single app instance"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/29d816ac550b7ece-launch-clean.png",
+    "screenshots/29d816ac550b7ece-launch.png",
+    "screenshots/9885e6503930304946-launch.png",
+    "video/29d816ac550b7ece-launch.mp4",
+    "video/9885e6503930304946-launch.mp4",
+    "device-logs/29d816ac550b7ece-logcat.txt",
+    "device-logs/9885e6503930304946-logcat.txt"
+  ],
+  "item": {
+    "slug": "android-four-adb-launch-smoke",
+    "source": "user request 2026-06-09",
+    "title": "Run HydraCam on all four ADB-visible Android devices"
+  },
+  "notes": [
+    "Two Samsung Android devices launched and were captured; two expected S10e serials disappeared from ADB; Xiaomi/Redmi install blocked by INSTALL_FAILED_USER_RESTRICTED and no existing HydraCam package was present."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

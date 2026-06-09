@@ -1,0 +1,89 @@
+{
+  "acceptanceChecks": [
+    "Storage and battery forced-stop paths share one helper without changing user-visible notifications",
+    "Focused camera-service tests prove mock recording stops, interruption flag flips, and captured video is persisted",
+    "Analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "dart",
+        "format",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:41:29.448532+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:41:33.752084+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/camera_service.dart",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:42:08.645637+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:42:12.795323+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:42:38.502548+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:42:42.541205+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:42:51.500819+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "camera-forced-stop-helper-cleanup",
+    "source": "cleanup scan: duplicate storage/battery forced-stop recording paths",
+    "title": "Camera forced-stop helper cleanup"
+  },
+  "notes": [
+    "Unified CameraService storage and battery forced-stop recording paths through one helper while preserving distinct notifications/logs; focused tests now prove both paths stop mock recording, persist the captured video, and set the interruption flag."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1,0 +1,14 @@
+Flutter widget evidence for backlog item 4.
+
+No physical device log was captured in this UI-only slice. The proof uses a
+MediaListWidget harness with one attempted-but-not-uploaded video and one
+untouched pending video. The rendered list shows a red failed state distinct
+from the normal pending upload state.
+
+Primary command evidence is captured in ../commands.log:
+- RED: flutter test --no-pub test/widgets/media_list_widget_test.dart failed
+  because "Upload failed" was not rendered.
+- GREEN: the same focused widget test passed after MediaListWidget rendered
+  failed/pending labels and icons.
+- ANALYZE: flutter analyze --no-pub passed.
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1759-failed-upload-visible-state/failed_upload_visual_test.dart

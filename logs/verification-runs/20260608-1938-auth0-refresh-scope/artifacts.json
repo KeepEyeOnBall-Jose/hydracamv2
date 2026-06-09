@@ -1,0 +1,68 @@
+{
+  "acceptanceChecks": [
+    "Auth0 login requests offline_access",
+    "Requested scopes are covered by a focused test",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:38:31.493998+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:38:35.556236+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1938-auth0-refresh-scope/render_auth0_scope_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:39:03.879148+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter auth unit-test runner",
+      "notes": [
+        "Runs focused AuthService scope regression test without invoking the Auth0 browser/plugin flow."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/auth0_refresh_scope.png",
+    "video/auth0_refresh_scope_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "auth0-refresh-scope",
+    "source": "docs/control/backlog-import.md#11-make-mobile-auth0-login-recoverable-and-release-safe",
+    "title": "11. Make mobile Auth0 login recoverable and release-safe"
+  },
+  "notes": [
+    "Auth0 request now includes offline_access as the first refresh-capable login prerequisite."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

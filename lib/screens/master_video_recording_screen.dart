@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "../models/captured_video.dart";
 import "../services/camera_service.dart";
@@ -25,7 +27,7 @@ class MasterVideoRecordingScreenState
     extends State<MasterVideoRecordingScreen> {
   bool _isStopping = false; // State variable to avoid button spam
 
-  void _handleStopRecording() async {
+  Future<void> _handleStopRecording() async {
     if (_isStopping) return; // Prevent multiple presses
 
     // Get possible timer
@@ -61,11 +63,12 @@ class MasterVideoRecordingScreenState
 
     final navigator = Navigator.of(context);
 
-    widget.onStopRecording().then((capturedVideo) {
+    try {
+      final capturedVideo = await widget.onStopRecording();
       if (mounted) {
         navigator.pop(capturedVideo);
       }
-    }).catchError((error) {
+    } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error stopping recording: $error")),
@@ -75,7 +78,7 @@ class MasterVideoRecordingScreenState
           _isStopping = false;
         });
       }
-    });
+    }
   }
 
   bool get _recordingActive {
@@ -87,7 +90,7 @@ class MasterVideoRecordingScreenState
     if (_isStopping) return;
 
     if (_recordingActive) {
-      _handleStopRecording();
+      unawaited(_handleStopRecording());
       return;
     }
 
@@ -156,7 +159,9 @@ class MasterVideoRecordingScreenState
                   child: ElevatedButton(
                     onPressed: _isStopping
                         ? null
-                        : _handleStopRecording, // Disable if stopping
+                        : () => unawaited(
+                              _handleStopRecording(),
+                            ), // Disable if stopping
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(

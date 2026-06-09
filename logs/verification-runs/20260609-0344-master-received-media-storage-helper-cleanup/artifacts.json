@@ -1,0 +1,102 @@
+{
+  "acceptanceChecks": [
+    "SessionMediaStorage owns session-directory creation, received-media filename generation, byte writes, and gallery persistence dispatch",
+    "MasterServer delegates received media saving to the storage helper without changing photo/video session registration",
+    "Focused storage/server tests, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:45:16.878487+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/session_media_storage.dart",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:45:39.930010+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:45:46.198331+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_server.dart",
+        "lib/services/session_media_storage.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/services/session_media_storage_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:47:42.124120+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_media_storage_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:47:55.871901+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:48:17.220844+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:48:21.779558+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:48:33.089392+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-received-media-storage-helper-cleanup",
+    "source": "cleanup scan: MasterServer._saveMediaLocally storage-manager TODO",
+    "title": "Master received-media storage helper cleanup"
+  },
+  "notes": [
+    "Extracted MasterServer received-media file placement into SessionMediaStorage with injectable directory, gallery, and clock dependencies; focused tests prove photo/video storage behavior and incoming slave photo registration."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

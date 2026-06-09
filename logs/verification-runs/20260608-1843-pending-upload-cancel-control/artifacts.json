@@ -1,0 +1,176 @@
+{
+  "acceptanceChecks": [
+    "Pending queued uploads can be cancelled from UploaderService",
+    "Media list exposes an explicit cancel action for pending queued media",
+    "Uploader info screen wires cancel actions to the upload queue",
+    "Screenshot and video proof show the cancel control"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:44:02.044388+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:44:30.226687+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:45:22.667464+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/render_pending_upload_cancel_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:45:54.638776+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/screenshots/pending_upload_cancel_control.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/video/pending_upload_cancel_control_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:46:00.500995+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/uploader_service.dart",
+        "lib/widgets/media_list_widget.dart",
+        "lib/screens/uploader_info_screen.dart",
+        "test/services/uploader_service_test.dart",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:46:20.351727+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:46:28.945396+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:46:31.457462+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:46:41.903822+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/commands.log",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:46:57.699586+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/uploader_service.dart",
+        "lib/widgets/media_list_widget.dart",
+        "lib/screens/uploader_info_screen.dart",
+        "test/services/uploader_service_test.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/summary.md",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/render_pending_upload_cancel_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:47:05.011713+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/uploader_service.dart",
+        "lib/widgets/media_list_widget.dart",
+        "lib/screens/uploader_info_screen.dart",
+        "test/services/uploader_service_test.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/summary.md",
+        "logs/verification-runs/20260608-1843-pending-upload-cancel-control/render_pending_upload_cancel_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:47:34.880195+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/pending_upload_cancel_control.png",
+    "video/pending_upload_cancel_control_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "pending-upload-cancel-control",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "Pending upload cancel slice passed focused tests, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for in-flight cancellation, start-upload commands, and slave upload info."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

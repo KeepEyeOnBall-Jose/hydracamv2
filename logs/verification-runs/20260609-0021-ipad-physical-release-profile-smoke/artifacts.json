@@ -1,0 +1,497 @@
+{
+  "acceptanceChecks": [
+    "Connected physical iPad is visible to current tooling and recorded in the device matrix.",
+    "Profile or debug app launch reaches an inspectable HydraCam runtime surface or produces actionable launch logs.",
+    "If the automation bridge is reachable, iPad identity and available capture/session state are recorded with screenshot/video/log evidence."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:21:48.590899+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:22:01.958774+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:22:02.021027+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:22:02.037672+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-08T22:22:37.361338+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--help"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:22:38.500178+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--ios-profile-app",
+        "build/ios/Profile-iphoneos/Runner.app",
+        "--standby-launch-timeout",
+        "90",
+        "--ios-profile-trust-retry-timeout",
+        "45",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T22:23:33.101565+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime-fresh",
+        "--no-use-latest-warm-summary",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--ios-profile-app",
+        "build/ios/Profile-iphoneos/Runner.app",
+        "--standby-launch-timeout",
+        "90",
+        "--ios-profile-trust-retry-timeout",
+        "45",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T22:23:51.457704+00:00"
+    },
+    {
+      "command": [
+        "dscacheutil",
+        "-q",
+        "host",
+        "-a",
+        "name",
+        "iPad-5.coredevice.local"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:24:22.405140+00:00"
+    },
+    {
+      "command": [
+        "ping",
+        "-c",
+        "2",
+        "iPad-5.coredevice.local"
+      ],
+      "returnCode": 68,
+      "startedAt": "2026-06-08T22:24:27.421566+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:24:32.436952+00:00"
+    },
+    {
+      "command": [
+        "arp",
+        "-a"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:24:32.643645+00:00"
+    },
+    {
+      "command": [
+        "ping",
+        "-c",
+        "2",
+        "169.254.193.202"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:26:30.888198+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-08T22:26:31.905447+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime-host",
+        "--no-use-latest-warm-summary",
+        "--ios-host",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--ios-profile-app",
+        "build/ios/Profile-iphoneos/Runner.app",
+        "--standby-launch-timeout",
+        "90",
+        "--ios-profile-trust-retry-timeout",
+        "45",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:26:55.161996+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:28:42.694123+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T22:29:00.129969+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "displays",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:29:00.394115+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-hide_banner",
+        "-f",
+        "avfoundation",
+        "-list_devices",
+        "true",
+        "-i",
+        ""
+      ],
+      "returnCode": 251,
+      "startedAt": "2026-06-08T22:29:07.499410+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{}",
+        "http://169.254.193.202:4762/command/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:29:19.835230+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-profile-standby\",\"pixelRatio\":1}",
+        "http://169.254.193.202:4762/commands/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:29:36.444840+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/automation-screenshots/ipad-profile-standby-2026-06-09T00-29-37-016641.png",
+        "--destination",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-profile-standby.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:29:54.263494+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"role\":\"master\",\"ackMode\":\"accepted\"}",
+        "http://169.254.193.202:4762/commands/set_role"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:30:05.405164+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:30:30.093345+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-profile-master\",\"pixelRatio\":1}",
+        "http://169.254.193.202:4762/commands/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:30:30.284440+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-single-capture",
+        "--no-use-latest-warm-summary",
+        "--ios-host",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--fast-ios-launch",
+        "--skip-build",
+        "--skip-install",
+        "--record-seconds",
+        "2",
+        "--timeout",
+        "180",
+        "--capture-stage-timeout",
+        "80",
+        "--recording-ready-timeout",
+        "80",
+        "--stop-recording-timeout",
+        "80",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:31:05.645592+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/session_local-rotation-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-1780957884/CAP_75949B0B-5A78-44E0-B151-1FAF76105E50.jpg",
+        "--destination",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-captured-photo.jpg"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:32:15.942696+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/session_local-rotation-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-1780957884/REC_382355F3-E26F-4163-BE10-621734F43BB9.mp4",
+        "--destination",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:32:16.174292+00:00"
+    },
+    {
+      "command": [
+        "file",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-profile-standby.png",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-captured-photo.jpg",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:33:18.434492+00:00"
+    },
+    {
+      "command": [
+        "ffprobe",
+        "-hide_banner",
+        "-show_streams",
+        "-show_format",
+        "logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T22:33:24.671374+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 / CoreDevice 0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS physical device",
+      "name": "iPad (5)",
+      "notes": [
+        "Flutter sees the iPad as connected; devicectl sees iPad (6th generation) connected."
+      ],
+      "os": "iOS 17.7.11 21H461",
+      "role": "single physical iPad profile/runtime smoke"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-captured-photo.jpg",
+    "screenshots/ipad-profile-standby.png",
+    "video/ipad-captured-video.mp4",
+    "device-logs/ipad-single-capture-automation-snapshots.json",
+    "device-logs/ipad-single-capture-logs.json"
+  ],
+  "item": {
+    "slug": "ipad-physical-release-profile-smoke",
+    "source": "docs/control/backlog-import.md#1-validate-ios-release-profile-launch-and-capture-readiness",
+    "title": "Validate iOS release/profile launch and capture readiness on connected iPad"
+  },
+  "notes": [
+    "Connected iPad Profile build/install/launch passed, bridge warmed at 169.254.193.202:4762, and iPad-only photo/video capture passed with local copied media evidence.",
+    "Master-mode runtime screenshot route currently fails after set_role because the automation RepaintBoundary is not mounted on the navigated surface; standby screenshot and full capture media are present.",
+    "Connected iPad Profile build/install/launch passed, bridge warmed at 169.254.193.202:4762, and iPad-only photo/video capture passed with local copied media evidence.",
+    "Master-mode runtime screenshot route currently fails after set_role because the automation RepaintBoundary is not mounted on the navigated surface; standby screenshot and full capture media are present.",
+    "Connected iPad Profile build/install/launch passed, bridge warmed at 169.254.193.202:4762, and iPad-only photo/video capture passed with local copied media evidence.",
+    "Master-mode runtime screenshot route currently fails after set_role because the automation RepaintBoundary is not mounted on the navigated surface; standby screenshot and full capture media are present."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

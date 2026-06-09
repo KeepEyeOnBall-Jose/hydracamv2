@@ -1,0 +1,213 @@
+{
+  "acceptanceChecks": [
+    "Master retains a disconnected device record after socket removal",
+    "Connected device IDs still include only live sockets",
+    "Master UI/status proof distinguishes disconnected devices"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:07:14.266544+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:08:50.907820+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:09:13.437439+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:09:20.944467+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:09:48.558790+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:09:50.772653+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/render_disconnected_device_state_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:10:33.653718+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/screenshots/disconnected_device_state_master_list.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/video/disconnected_device_state_master_list_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:10:39.697467+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/render_disconnected_device_state_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:11:00.395593+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/screenshots/disconnected_device_state_master_list.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/video/disconnected_device_state_master_list_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:11:00.486422+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_server.dart",
+        "lib/master/connected_client_automation_payload.dart",
+        "lib/master/master_screen.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:11:34.658436+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/connected_client_automation_payload_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:11:43.472864+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/master/master_server.dart",
+        "lib/master/connected_client_automation_payload.dart",
+        "lib/master/master_screen.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/connected_client_automation_payload_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/summary.md",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/render_disconnected_device_state_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:11:45.650067+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:11:50.835369+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:12:01.546331+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/commands.log",
+        "logs/verification-runs/20260608-1910-disconnected-device-state-master-list/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:12:17.049222+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/disconnected_device_state_master_list.png",
+    "video/disconnected_device_state_master_list_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "disconnected-device-state-master-list",
+    "source": "docs/control/backlog-import.md#6-make-network-device-identity-visible",
+    "title": "Disconnected device state in master list"
+  },
+  "notes": [
+    "Disconnected device state passed red/green master-server tests, automation-payload tests, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for broader master-list UX refinements and real-device validation."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

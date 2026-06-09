@@ -2676,7 +2676,7 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
     def test_xctrace_launch_error_classifies_untrusted_profile(self) -> None:
         module = load_module()
         stderr = (
-            "Unable to launch com.vectorblanco.hydracam.dev because it has "
+            "Unable to launch com.keepeyeonball because it has "
             "an invalid code signature, inadequate entitlements or its profile "
             "has not been explicitly trusted by the user."
         )
@@ -4018,6 +4018,24 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
                 names = set(archive.namelist())
 
         self.assertIn("Payload/Runner.app/Info.plist", names)
+
+    def test_resolve_ios_profile_app_path_uses_profile_iphoneos_fallback(
+        self,
+    ) -> None:
+        module = load_module()
+        with tempfile.TemporaryDirectory(prefix="hydracam_ios_profile_path_") as tmp:
+            tmp_path = Path(tmp)
+            old_default = tmp_path / "build" / "ios" / "iphoneos" / "Runner.app"
+            new_default = (
+                tmp_path / "build" / "ios" / "Profile-iphoneos" / "Runner.app"
+            )
+            new_default.mkdir(parents=True)
+            module.IOS_PROFILE_APP = old_default
+            module.IOS_PROFILE_APP_FALLBACKS = (new_default, old_default)
+
+            resolved = module.resolve_ios_profile_app_path(old_default)
+
+        self.assertEqual(resolved, new_default)
 
     def test_install_ios_profile_app_falls_back_to_flutter_install(self) -> None:
         module = load_module()

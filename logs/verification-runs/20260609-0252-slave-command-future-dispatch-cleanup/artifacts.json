@@ -1,0 +1,69 @@
+{
+  "acceptanceChecks": [
+    "Slave command dispatch awaits async command handlers instead of dropping Futures",
+    "Existing slave command, scheduled command, auto-record, and upload command tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave/slave_client_registration_test.dart",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "test/services/scheduled_task_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:53:12.498123+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:53:23.264025+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:53:23.329923+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:53:33.237248+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:54:12.946517+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-command-future-dispatch-cleanup",
+    "source": "lib/slave/slave_client.dart#_processCommand",
+    "title": "T-018"
+  },
+  "notes": [],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

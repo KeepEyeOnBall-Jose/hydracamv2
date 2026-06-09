@@ -19,6 +19,9 @@ def hasReleaseKeystore =
     file(keystoreProperties["storeFile"]).exists()
 def hydracamNdkVersion =
     (project.findProperty("hydracamNdkVersion") ?: "28.2.13676358").toString()
+def generatedPluginRegistrantFile = file(
+    "src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java"
+)
 
 android {
     namespace = "com.amaia23.hydracam"
@@ -68,4 +71,24 @@ android {
 
 flutter {
     source = "../.."
+}
+
+tasks.withType(JavaCompile).configureEach { task ->
+    if (task.name == "compileReleaseJavaWithJavac") {
+        task.doFirst {
+            // Flutter 3.44 generates dev-only integration_test registration, but
+            // its Gradle plugin deliberately excludes dev dependencies from release.
+            if (!generatedPluginRegistrantFile.exists()) {
+                return
+            }
+            def registrant = generatedPluginRegistrantFile.getText("UTF-8")
+            def strippedRegistrant = registrant.replaceAll(
+                /(?s)\n    try \{\n      flutterEngine\.getPlugins\(\)\.add\(new dev\.flutter\.plugins\.integration_test\.IntegrationTestPlugin\(\)\);\n    \} catch \(Exception e\) \{\n      Log\.e\(TAG, "Error registering plugin integration_test, dev\.flutter\.plugins\.integration_test\.IntegrationTestPlugin", e\);\n    \}/,
+                ""
+            )
+            if (strippedRegistrant != registrant) {
+                generatedPluginRegistrantFile.write(strippedRegistrant, "UTF-8")
+            }
+        }
+    }
 }

@@ -1,0 +1,305 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/uploader_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? lib/services/gallery_session_candidate_source.dart
+?? lib/services/gallery_session_matcher.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-1933-inflight-upload-cancel-control/
+?? logs/verification-runs/20260608-1938-auth0-refresh-scope/
+?? logs/verification-runs/20260608-1944-gallery-scan-active-session-preserved/
+?? logs/verification-runs/20260608-1948-gallery-candidate-session-labels/
+?? logs/verification-runs/20260608-1953-gallery-historical-session-candidate-source/
+?? logs/verification-runs/20260608-2000-auth0-secure-credential-store/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/screens/media_selection_screen_test.dart
+?? test/screens/uploader_info_screen_test.dart
+?? test/services/auth0_service_test.dart
+?? test/services/gallery_session_candidate_source_test.dart
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ flutter test --no-pub test/services/auth0_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: test/services/auth0_service_test.dart:45:34: Error: Type 'AuthClient' not found.
+  class _FakeAuthClient implements AuthClient {
+                                   ^^^^^^^^^^
+  test/services/auth0_service_test.dart:46:9: Error: Type 'AuthLoginResponse' not found.
+    final AuthLoginResponse response;
+          ^^^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:51:10: Error: Type 'AuthLoginResponse' not found.
+    Future<AuthLoginResponse> login({
+           ^^^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:61:48: Error: Type 'AuthCredentialStore' not found.
+  class _RecordingAuthCredentialStore implements AuthCredentialStore {
+                                                 ^^^^^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:62:3: Error: Type 'AuthCredentials' not found.
+    AuthCredentials? savedCredentials;
+    ^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:65:21: Error: Type 'AuthCredentials' not found.
+    Future<void> save(AuthCredentials credentials) async {
+                      ^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:20:19: Error: Method not found: 'AuthLoginResponse'.
+          response: AuthLoginResponse(
+                    ^^^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:19:7: Error: No named parameter with the name 'authClient'.
+        authClient: _FakeAuthClient(
+        ^^^^^^^^^^
+  lib/services/auth0_service.dart:7:7: Context: The class 'AuthService' has a constructor that takes no arguments.
+  class AuthService {
+        ^
+  test/services/auth0_service_test.dart:46:9: Error: 'AuthLoginResponse' isn't a type.
+    final AuthLoginResponse response;
+          ^^^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:62:3: Error: 'AuthCredentials' isn't a type.
+    AuthCredentials? savedCredentials;
+    ^^^^^^^^^^^^^^^
+  test/services/auth0_service_test.dart:65:21: Error: 'AuthCredentials' isn't a type.
+    Future<void> save(AuthCredentials credentials) async {
+                      ^^^^^^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+
+[stderr]
+test/services/auth0_service_test.dart:45:34: Error: Type 'AuthClient' not found.
+class _FakeAuthClient implements AuthClient {
+                                 ^^^^^^^^^^
+test/services/auth0_service_test.dart:46:9: Error: Type 'AuthLoginResponse' not found.
+  final AuthLoginResponse response;
+        ^^^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:51:10: Error: Type 'AuthLoginResponse' not found.
+  Future<AuthLoginResponse> login({
+         ^^^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:61:48: Error: Type 'AuthCredentialStore' not found.
+class _RecordingAuthCredentialStore implements AuthCredentialStore {
+                                               ^^^^^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:62:3: Error: Type 'AuthCredentials' not found.
+  AuthCredentials? savedCredentials;
+  ^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:65:21: Error: Type 'AuthCredentials' not found.
+  Future<void> save(AuthCredentials credentials) async {
+                    ^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:20:19: Error: Method not found: 'AuthLoginResponse'.
+        response: AuthLoginResponse(
+                  ^^^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:19:7: Error: No named parameter with the name 'authClient'.
+      authClient: _FakeAuthClient(
+      ^^^^^^^^^^
+lib/services/auth0_service.dart:7:7: Context: The class 'AuthService' has a constructor that takes no arguments.
+class AuthService {
+      ^
+test/services/auth0_service_test.dart:46:9: Error: 'AuthLoginResponse' isn't a type.
+  final AuthLoginResponse response;
+        ^^^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:62:3: Error: 'AuthCredentials' isn't a type.
+  AuthCredentials? savedCredentials;
+  ^^^^^^^^^^^^^^^
+test/services/auth0_service_test.dart:65:21: Error: 'AuthCredentials' isn't a type.
+  Future<void> save(AuthCredentials credentials) async {
+                    ^^^^^^^^^^^^^^^
+[exit-code] 1
+
+$ flutter test --no-pub test/services/auth0_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+00:00 +0: Auth0 login requests refresh-capable scopes
+00:00 +1: Auth0 login persists returned credentials through secure store
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-08 20:02:38.208542, function: login, file: auth0_service.dart}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+00:00 +2: All tests passed!
+[exit-code] 0
+
+$ rg -n flutter_secure_storage pubspec.yaml pubspec.lock lib/services/auth0_service.dart
+lib/services/auth0_service.dart:3:import "package:flutter_secure_storage/flutter_secure_storage.dart";
+pubspec.lock:310:  flutter_secure_storage:
+pubspec.lock:313:      name: flutter_secure_storage
+pubspec.lock:318:  flutter_secure_storage_darwin:
+pubspec.lock:321:      name: flutter_secure_storage_darwin
+pubspec.lock:326:  flutter_secure_storage_linux:
+pubspec.lock:329:      name: flutter_secure_storage_linux
+pubspec.lock:334:  flutter_secure_storage_platform_interface:
+pubspec.lock:337:      name: flutter_secure_storage_platform_interface
+pubspec.lock:342:  flutter_secure_storage_web:
+pubspec.lock:345:      name: flutter_secure_storage_web
+pubspec.lock:350:  flutter_secure_storage_windows:
+pubspec.lock:353:      name: flutter_secure_storage_windows
+pubspec.yaml:65:  flutter_secure_storage: ^10.3.1
+[exit-code] 0
+
+$ rg -n shared_preferences lib/services/auth0_service.dart test/services/auth0_service_test.dart
+[exit-code] 1
+
+$ flutter test --no-pub test/services/auth0_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+00:00 +0: Auth0 login requests refresh-capable scopes
+00:00 +1: Auth0 login persists returned credentials through secure store
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-08 20:03:12.137145, function: login, file: auth0_service.dart}
+Trace file unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+00:00 +2: All tests passed!
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/uploader_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M linux/flutter/generated_plugin_registrant.cc
+ M linux/flutter/generated_plugins.cmake
+ M macos/Flutter/GeneratedPluginRegistrant.swift
+ M pubspec.lock
+ M pubspec.yaml
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/widgets/session_info_widget_test.dart
+ M windows/flutter/generated_plugin_registrant.cc
+ M windows/flutter/generated_plugins.cmake
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? lib/services/gallery_session_candidate_source.dart
+?? lib/services/gallery_session_matcher.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-1933-inflight-upload-cancel-control/
+?? logs/verification-runs/20260608-1938-auth0-refresh-scope/
+?? logs/verification-runs/20260608-1944-gallery-scan-active-session-preserved/
+?? logs/verification-runs/20260608-1948-gallery-candidate-session-labels/
+?? logs/verification-runs/20260608-1953-gallery-historical-session-candidate-source/
+?? logs/verification-runs/20260608-2000-auth0-secure-credential-store/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/screens/media_selection_screen_test.dart
+?? test/screens/uploader_info_screen_test.dart
+?? test/services/auth0_service_test.dart
+?? test/services/gallery_session_candidate_source_test.dart
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ flutter test --no-pub test/services/auth0_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+00:00 +0: Auth0 login requests refresh-capable scopes
+00:00 +1: Auth0 login persists returned credentials through secure store
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-08 20:05:30.676124, function: login, file: auth0_service.dart}
+00:00 +2: All tests passed!
+[exit-code] 0

@@ -70,6 +70,12 @@ spreadsheet sprint rows.
 - `win11-dev-host.md`: current Win11 host identity, installed toolchains,
   Windows/Android/WSL validation results, USB camera inventory, and remaining
   host-readiness gaps.
+- `win11-triple-platform-proof-wrapup-2026-06-09.md`: aborted Win11
+  Windows/Linux/Android emulator capture/upload and role-matrix proof attempt;
+  records the partial evidence and the remaining blockers.
+- `hydracam-mobo-media-timeline-merge-plan.md`: cross-repo convergence plan for
+  the HydraCam mobile app, MoBo HydraCam webservice, and media-timeline event
+  and media backend.
 - `../superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`: executable
   Win11 C: cleanup and dev-environment moveout plan backed by SSH disk
   inventory.

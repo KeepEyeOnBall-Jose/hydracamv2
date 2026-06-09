@@ -1,0 +1,104 @@
+{
+  "acceptanceChecks": [
+    "UploaderService refuses to enqueue a retry for media that is already the current in-flight upload, preventing duplicate upload attempts for the same media path."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T19:32:34.625705+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:32:59.019790+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-2132-in-flight-upload-dedupe/render_upload_dedupe_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:33:46.034158+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:34:26.687927+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:34:37.719403+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:34:44.033888+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:34:57.928883+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "UploaderService in-flight duplicate guard",
+      "kind": "unit-test",
+      "name": "UploaderService unit test runner",
+      "notes": [
+        "Focused test verifies a retry cannot enqueue a second copy of the same media while that media is already the current upload."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "upload-dedupe"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/in_flight_upload_dedupe.png",
+    "video/in_flight_upload_dedupe_proof.mp4",
+    "device-logs/uploader-dedupe-test-commands.log"
+  ],
+  "item": {
+    "slug": "in-flight-upload-dedupe",
+    "source": "docs/control/backlog-import.md",
+    "title": "T-018: In-flight upload retry dedupe"
+  },
+  "notes": [
+    "Focused TDD slice for T-018. UploaderService now refuses to enqueue a retry for the media path already in currentlyUploadingNotifier, preventing duplicate in-flight upload attempts. Broader production closure still needs real upload smoke evidence."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

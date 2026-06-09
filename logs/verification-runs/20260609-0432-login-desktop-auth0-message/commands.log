@@ -1,0 +1,21 @@
+# HydraCam evidence run command log
+
+$ dart format lib/screens/login_screen.dart test/screens/login_screen_test.dart
+Formatted test/screens/login_screen_test.dart
+Formatted 2 files (1 changed) in 0.01 seconds.
+[exit-code] 0
+
+$ rg -n UnsupportedError|desktop Auth0 login failure|Auth0 interactive login is only supported|Failed to log in lib/screens/login_screen.dart test/screens/login_screen_test.dart
+lib/screens/login_screen.dart:31:    } on UnsupportedError catch (e) {
+lib/screens/login_screen.dart:37:        _errorMessage = "Failed to log in. Please try again.";
+test/screens/login_screen_test.dart:13:  testWidgets("desktop Auth0 login failure explains mobile-only support",
+test/screens/login_screen_test.dart:29:          "Auth0 interactive login is only supported on Android and iOS."),
+test/screens/login_screen_test.dart:32:    expect(find.text("Failed to log in. Please try again."), findsNothing);
+[exit-code] 0
+
+$ flutter test --no-pub test/screens/login_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart
+00:00 +0: desktop Auth0 login failure explains mobile-only support
+Log registered: {message: Error during login: Unsupported operation: Auth0 interactive login is only supported on Android and iOS., timestamp: 2026-06-09 04:31:44.276396, function: null, file: null}
+00:00 +1: All tests passed!
+[exit-code] 0

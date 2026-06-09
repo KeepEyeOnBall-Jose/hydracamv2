@@ -1,0 +1,410 @@
+{
+  "acceptanceChecks": [
+    "Profile app launch reaches an identity-matched iPad automation bridge",
+    "capture_screenshot works before and after runtime set_role to master",
+    "Analyzer and focused widget/app-shell tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:20:15.067885+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/runner-ipad-warm-prime-updated",
+        "--no-use-latest-warm-summary",
+        "--ios-host",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--ios-profile-app",
+        "build/ios/Profile-iphoneos/Runner.app",
+        "--standby-launch-timeout",
+        "90",
+        "--ios-profile-trust-retry-timeout",
+        "45",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:20:38.276515+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:21:48.954877+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "displays",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:21:49.042718+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-standby-after-boundary-fix\",\"pixelRatio\":1}",
+        "http://169.254.193.202:4762/commands/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:01.667638+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"role\":\"master\",\"ackMode\":\"accepted\"}",
+        "http://169.254.193.202:4762/commands/set_role"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:12.651065+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "2"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:17.365460+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:26.052530+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-master-after-boundary-fix\",\"pixelRatio\":1}",
+        "http://169.254.193.202:4762/commands/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:26.085189+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/automation-screenshots/ipad-standby-after-boundary-fix-2026-06-09T01-22-02-304099.png",
+        "--destination",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/screenshots/ipad-standby-after-boundary-fix.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:51.105150+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/automation-screenshots/ipad-master-after-boundary-fix-2026-06-09T01-22-26-642268.png",
+        "--destination",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/screenshots/ipad-master-after-boundary-fix.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:22:51.357977+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "-sS",
+        "-o",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/device-logs/ipad-automation-logs.json",
+        "http://169.254.193.202:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:23:22.692140+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"masterShouldRecord\":true,\"autoUploadMaterials\":false,\"timerDuration\":0}",
+        "http://169.254.193.202:4762/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:23:55.681767+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"sessionId\":\"screenshot-boundary-proof\"}",
+        "http://169.254.193.202:4762/commands/start_local_session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:00.809732+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "60",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{}",
+        "http://169.254.193.202:4762/commands/start_recording"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:06.051526+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "2"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:11.444447+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "80",
+        "-sS",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{}",
+        "http://169.254.193.202:4762/commands/stop_recording"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:19.224443+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/session_local-screenshot-boundary-proof/metadata.json",
+        "--destination",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/device-logs/ipad-session-local-screenshot-boundary-proof-metadata.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:26.919935+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/session_local-screenshot-boundary-proof/REC_977C382D-1B5C-48A9-95D5-A557A00713C5.mp4",
+        "--destination",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/video/ipad-master-after-boundary-fix-recording.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:40.557291+00:00"
+    },
+    {
+      "command": [
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "stream=codec_name,width,height,avg_frame_rate",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "json",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/video/ipad-master-after-boundary-fix-recording.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:55.908667+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:24:56.121515+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widget_test.dart",
+        "test/camera_singleton_initialization_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:25:01.601647+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "AGENTS.md",
+        "docs/control/backlog-import.md",
+        "docs/control/status-and-roadmap.md",
+        "lib/main.dart",
+        "test/widget_test.dart",
+        "logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/summary.md"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:26:46.328939+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:27:53.051225+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "physical iOS",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "single physical iPad profile/runtime screenshot proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-master-after-boundary-fix.png",
+    "screenshots/ipad-standby-after-boundary-fix.png",
+    "video/ipad-master-after-boundary-fix-recording.mp4",
+    "device-logs/ipad-automation-logs.json",
+    "device-logs/ipad-session-local-screenshot-boundary-proof-metadata.json",
+    "device-logs/warm-bridge-prime.json"
+  ],
+  "item": {
+    "slug": "ipad-runtime-screenshot-boundary-route-replacement",
+    "source": "docs/control/backlog-import.md#1-validate-ios-release-profile-launch-and-capture-readiness",
+    "title": "Validate iOS release/profile launch and capture readiness"
+  },
+  "notes": [
+    "Updated iPad Profile build proved capture_screenshot succeeds before and after runtime set_role.",
+    "Focused widget regression and app-shell tests passed after moving the automation screenshot boundary around the MaterialApp navigator.",
+    "Full flutter test --no-pub passed after the final control-plane update."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

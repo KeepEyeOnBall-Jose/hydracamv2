@@ -55,7 +55,7 @@ void main() {
       sessionManager.startSession(sessionGuid, null, deviceType: "Master");
 
       for (int i = 0; i < 3; i++) {
-        sessionManager.addPhoto(_createPhoto(tempMediaDir,
+        await sessionManager.addPhoto(_createPhoto(tempMediaDir,
             deviceId: "slave-alpha", fileName: "p1-$i.jpg"));
       }
 
@@ -75,9 +75,9 @@ void main() {
       const sessionGuid = "session_p2";
       sessionManager.startSession(sessionGuid, null, deviceType: "Master");
 
-      sessionManager.addPhoto(_createPhoto(tempMediaDir,
+      await sessionManager.addPhoto(_createPhoto(tempMediaDir,
           deviceId: "slave-one", fileName: "p2-a.jpg"));
-      sessionManager.addPhoto(_createPhoto(tempMediaDir,
+      await sessionManager.addPhoto(_createPhoto(tempMediaDir,
           deviceId: "slave-two", fileName: "p2-b.jpg"));
 
       await _flushAsyncTasks();
@@ -100,7 +100,7 @@ void main() {
 
       final deviceOrder = ["slave-A", "slave-B", "slave-C", "slave-D"];
       for (final deviceId in deviceOrder) {
-        sessionManager.addPhoto(_createPhoto(tempMediaDir,
+        await sessionManager.addPhoto(_createPhoto(tempMediaDir,
             deviceId: deviceId, fileName: "$deviceId.jpg"));
       }
 
@@ -114,7 +114,7 @@ void main() {
 
     test("Scenario P4: master rotation resets session state", () async {
       sessionManager.startSession("session_p4_a", null, deviceType: "Master");
-      sessionManager.addPhoto(
+      await sessionManager.addPhoto(
           _createPhoto(tempMediaDir, deviceId: "slave-A", fileName: "p4.jpg"));
       await _flushAsyncTasks();
       expect(uploaderService.queueLength, 1);
@@ -134,7 +134,7 @@ void main() {
       const sessionGuid = "session_v1";
       sessionManager.startSession(sessionGuid, null, deviceType: "Master");
 
-      sessionManager.addVideo(_createVideo(tempMediaDir,
+      await sessionManager.addVideo(_createVideo(tempMediaDir,
           deviceId: "slave-alpha",
           fileName: "v1.mp4",
           duration: const Duration(seconds: 5)));
@@ -149,11 +149,11 @@ void main() {
       const sessionGuid = "session_v2";
       sessionManager.startSession(sessionGuid, null, deviceType: "Master");
 
-      sessionManager.addVideo(_createVideo(tempMediaDir,
+      await sessionManager.addVideo(_createVideo(tempMediaDir,
           deviceId: "slave-one",
           fileName: "v2-a.mp4",
           duration: const Duration(seconds: 12)));
-      sessionManager.addVideo(_createVideo(tempMediaDir,
+      await sessionManager.addVideo(_createVideo(tempMediaDir,
           deviceId: "slave-two",
           fileName: "v2-b.mp4",
           duration: const Duration(seconds: 18)));
@@ -170,17 +170,17 @@ void main() {
       sessionManager.startSession(sessionGuid, null, deviceType: "Master");
 
       final start = DateTime.now();
-      sessionManager.addVideo(_createVideo(tempMediaDir,
+      await sessionManager.addVideo(_createVideo(tempMediaDir,
           deviceId: "slave-one",
           fileName: "v3-a.mp4",
           startTime: start,
           duration: const Duration(seconds: 10)));
-      sessionManager.addVideo(_createVideo(tempMediaDir,
+      await sessionManager.addVideo(_createVideo(tempMediaDir,
           deviceId: "slave-two",
           fileName: "v3-b.mp4",
           startTime: start.add(const Duration(seconds: 2)),
           duration: const Duration(seconds: 10)));
-      sessionManager.addVideo(_createVideo(tempMediaDir,
+      await sessionManager.addVideo(_createVideo(tempMediaDir,
           deviceId: "slave-three",
           fileName: "v3-c.mp4",
           startTime: start.add(const Duration(seconds: 4)),

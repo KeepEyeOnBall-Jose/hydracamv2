@@ -1,0 +1,40 @@
+{
+  "acceptanceChecks": [
+    "macOS dev-host debug probe uses the same HYDRACAM_AUTOMATION and HYDRACAM_AUTOMATION_ROLE dart defines read by lib/automation/automation_config.dart, and script contract tests reject the stale legacy define names"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/test_deploy_macos_dev_host.py"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:12:59.028736+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/test_deploy_macos_dev_host.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:13:09.854846+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "macos-dev-host-automation-define-cleanup",
+    "source": "scripts/deploy_macos_dev_host.zsh debug probe stale automation dart-define names",
+    "title": "macOS dev-host automation define cleanup"
+  },
+  "notes": [
+    "Static script contract first failed on stale HYDRACAM_AUTOMATION_ENABLED/HYDRACAM_AUTOMATION_INITIAL_ROLE defines, then passed after the macOS debug probe switched to HYDRACAM_AUTOMATION and HYDRACAM_AUTOMATION_ROLE; adjacent Python automation script tests also passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

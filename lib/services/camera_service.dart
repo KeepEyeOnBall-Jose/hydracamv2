@@ -36,6 +36,7 @@ import "video_metadata_service.dart";
 class CameraService {
   final StorageService _storageService; // Inject StorageService
   final bool _useMockCamera;
+  final String _mockMediaSourceDir;
 
   CameraController? _controller; // The camera controller instance
   CameraController? get controller =>
@@ -87,9 +88,15 @@ class CameraService {
       {required StorageService storageService,
       this.onPhotoTaken,
       this.onVideoRecorded,
-      bool? useMockCamera})
+      bool? useMockCamera,
+      String? mockMediaSourceDir})
       : _storageService = storageService,
-        _useMockCamera = useMockCamera ?? false;
+        _useMockCamera = useMockCamera ?? false,
+        _mockMediaSourceDir = mockMediaSourceDir ??
+            const String.fromEnvironment(
+              "HYDRACAM_MOCK_MEDIA_SOURCE_DIR",
+              defaultValue: "",
+            );
 
   bool get isUsingMockCamera => _useMockCamera;
 
@@ -453,41 +460,70 @@ class CameraService {
 
   /// Forces stop recording in case we reached full storage
   Future<void> forceStopRecordingDueToStorage() async {
+    await _forceStopRecording(
+      logMessage: "Stopping recording due to critical storage.",
+      notificationMessage: "Recording stopped due to low storage.",
+      errorLogPrefix: "Error force-stopping recording",
+    );
+  }
+
+  /// Forces stop recording in case battery becomes critically low.
+  Future<void> forceStopRecordingDueToBattery() async {
+    await _forceStopRecording(
+      logMessage: "Stopping recording due to critical battery.",
+      notificationMessage: "Recording stopped due to critical battery.",
+      errorLogPrefix: "Error force-stopping recording due to battery",
+    );
+  }
+
+  Future<void> _forceStopRecording({
+    required String logMessage,
+    required String notificationMessage,
+    required String errorLogPrefix,
+  }) async {
     try {
-      //await Future.delayed(const Duration(seconds:10)); //TODO: wait for timer if active
-
-      // Verify if the camera is actually recording before stopping
       if (_isRecording) {
-        //TODO this for some reason resets to false
-        LogService.instance
-            .registerLog("Stopping recording due to critical storage.");
-
-        // Stop recording
+        LogService.instance.registerLog(logMessage);
         final videoPath = await stopRecordingVideo();
-
-        // Notify user
-        _storageService
-            .showNotification("Recording stopped due to low storage.");
-
-        // Register video in SessionManager
-        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-        final capturedVideo = CapturedVideo(
-          videoData: null,
-          videoPath: videoPath,
-          slaveDeviceId: deviceId,
-          startRecordingDate: videoStartRecordingDate!,
-          endRecordingDate: DateTime.now(),
-          receivedDate: DateTime.now(),
-          captureContext: recordingCaptureContext,
-        );
-        SessionManager.instance.addVideo(capturedVideo);
-
-        // Notify interruption
+        _storageService.showNotification(notificationMessage);
+        await _persistForcedStopCapturedVideo(videoPath);
         recordingInterrupted.value = true;
       }
     } catch (e) {
-      LogService.instance.registerLog("Error force-stopping recording: $e");
+      LogService.instance.registerLog("$errorLogPrefix: $e");
     }
+  }
+
+  Future<void> _persistForcedStopCapturedVideo(String videoPath) async {
+    final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+    final capturedVideo = _buildForcedStopCapturedVideo(
+      videoPath: videoPath,
+      deviceId: deviceId,
+    );
+    await SessionManager.instance.addVideo(capturedVideo);
+  }
+
+  CapturedVideo _buildForcedStopCapturedVideo({
+    required String videoPath,
+    required String deviceId,
+  }) {
+    final endRecordingDate = videoEndRecordingDate ?? DateTime.now();
+    final startRecordingDate = videoStartRecordingDate ?? endRecordingDate;
+    if (videoStartRecordingDate == null) {
+      LogService.instance.registerLog(
+          "Recording start timestamp was missing during forced stop; "
+          "using end timestamp as fallback.");
+    }
+
+    return CapturedVideo(
+      videoData: null,
+      videoPath: videoPath,
+      slaveDeviceId: deviceId,
+      startRecordingDate: startRecordingDate,
+      endRecordingDate: endRecordingDate,
+      receivedDate: DateTime.now(),
+      captureContext: recordingCaptureContext,
+    );
   }
 
   /// Stops the camera and disposes of its resources.
@@ -807,10 +843,14 @@ class CameraService {
   Future<String> _takeMockPhoto() async {
     await _ensureMockCameraReady();
     lastPhotoCaptureContext = await _buildCurrentCaptureContext();
-    final filePath = await _writeMockMediaFile(
-      extension: "jpg",
-      contents: "HydraCam mock photo captured at ${DateTime.now()}\n",
-    );
+    final filePath = await _copyConfiguredMockMediaFile(
+          extension: "jpg",
+          sourceFileNames: const ["mock_photo.jpg", "photo.jpg"],
+        ) ??
+        await _writeMockMediaFile(
+          extension: "jpg",
+          contents: "HydraCam mock photo captured at ${DateTime.now()}\n",
+        );
     LogService.instance
         .registerLog("Mock photo saved to session path: $filePath");
     if (onPhotoTaken != null) {
@@ -828,17 +868,60 @@ class CameraService {
     videoEndRecordingDate = DateTime.now();
     _isRecording = false;
     final start = videoStartRecordingDate ?? videoEndRecordingDate;
-    final filePath = await _writeMockMediaFile(
-      extension: "mp4",
-      contents: "HydraCam mock video captured from $start to "
-          "$videoEndRecordingDate\n",
-    );
+    final filePath = await _copyConfiguredMockMediaFile(
+          extension: "mp4",
+          sourceFileNames: const ["mock_video.mp4", "video.mp4"],
+        ) ??
+        await _writeMockMediaFile(
+          extension: "mp4",
+          contents: "HydraCam mock video captured from $start to "
+              "$videoEndRecordingDate\n",
+        );
     LogService.instance
         .registerLog("Mock video saved to session path: $filePath");
     if (onVideoRecorded != null) {
       onVideoRecorded!(filePath);
     }
     return filePath;
+  }
+
+  Future<String?> _copyConfiguredMockMediaFile({
+    required String extension,
+    required List<String> sourceFileNames,
+  }) async {
+    if (_mockMediaSourceDir.isEmpty) {
+      return null;
+    }
+
+    _mockMediaSequence += 1;
+    final timestamp = DateTime.now()
+        .toIso8601String()
+        .replaceAll(":", "-")
+        .replaceAll(".", "-");
+    final destinationPath = await _getSessionMediaPath(
+        "mock_${_mockMediaSequence}_$timestamp.$extension");
+    for (final sourceFileName in sourceFileNames) {
+      final source = File(_joinPath(_mockMediaSourceDir, sourceFileName));
+      if (await source.exists()) {
+        final destination = File(destinationPath);
+        await destination.parent.create(recursive: true);
+        await source.copy(destination.path);
+        LogService.instance.registerLog(
+            "Copied configured mock media from ${source.path} to $destinationPath");
+        return destinationPath;
+      }
+    }
+
+    throw Exception(
+        "HYDRACAM_MOCK_MEDIA_SOURCE_DIR is set to $_mockMediaSourceDir, "
+        "but none of ${sourceFileNames.join(", ")} exist.");
+  }
+
+  String _joinPath(String directoryPath, String fileName) {
+    if (directoryPath.endsWith("/") || directoryPath.endsWith(r"\")) {
+      return "$directoryPath$fileName";
+    }
+    return "$directoryPath${Platform.pathSeparator}$fileName";
   }
 
   Future<MediaCaptureContext> _buildCurrentCaptureContext() async {

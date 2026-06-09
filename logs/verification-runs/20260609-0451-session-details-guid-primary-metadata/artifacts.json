@@ -1,0 +1,44 @@
+{
+  "acceptanceChecks": [
+    "SessionDetails metadata uses CaptureSession.preferredIdentifier as the primary session reference and labels legacy sessionId only as legacy when a backend GUID exists"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/session_details_screen_test.dart",
+        "--plain-name",
+        "session details metadata uses guid as primary session reference"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:51:24.366380+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:51:27.443375+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "session-details-guid-primary-metadata",
+    "source": "docs/control/backlog-import.md row 35",
+    "title": "JAVI IMMEDIATE BACKLOG row 35"
+  },
+  "notes": [
+    "Local widget proof passed for SessionDetails GUID-primary metadata; real old-media attachment smoke remains open."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

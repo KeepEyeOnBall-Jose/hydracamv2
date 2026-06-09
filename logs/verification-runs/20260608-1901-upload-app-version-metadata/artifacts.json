@@ -1,0 +1,183 @@
+{
+  "acceptanceChecks": [
+    "Upload multipart request includes app version metadata",
+    "Upload multipart request includes app build metadata",
+    "Screenshot and video proof show the metadata contract"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:00:39.498361+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:01:04.967194+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/render_upload_app_version_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:01:37.094639+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/screenshots/upload_app_version_metadata.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/video/upload_app_version_metadata_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:01:42.805388+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/hydracam_api_service.dart",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:02:14.263062+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:02:23.133866+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/hydracam_api_service.dart",
+        "test/services/hydracam_api_service_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/summary.md",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/render_upload_app_version_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:02:24.935072+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:02:29.739064+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "test/services/hydracam_api_service_test.dart",
+        "lib/services/hydracam_api_service.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:03:13.952855+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:03:21.203010+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:03:23.013332+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:03:36.980248+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/hydracam_api_service.dart",
+        "test/services/hydracam_api_service_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/summary.md",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/render_upload_app_version_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:03:44.799759+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/commands.log",
+        "logs/verification-runs/20260608-1901-upload-app-version-metadata/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:03:52.034185+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/upload_app_version_metadata.png",
+    "video/upload_app_version_metadata_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "upload-app-version-metadata",
+    "source": "docs/control/backlog-import.md#open-rows-from-javi-immediate-backlog-row-111",
+    "title": "Uploaded media includes app version"
+  },
+  "notes": [
+    "Upload media app-version metadata passed red/green multipart-field test, analyzer, full flutter test, readable screenshot, and MP4 proof. Related row remains open for backend contract acceptance and other upload metadata cleanup."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

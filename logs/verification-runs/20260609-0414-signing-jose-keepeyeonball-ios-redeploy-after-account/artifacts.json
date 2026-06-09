@@ -1,0 +1,676 @@
+{
+  "acceptanceChecks": [
+    "iPad and iPhone Profile build/install/launch are retried after account update and TestFlight readiness is checked"
+  ],
+  "commands": [
+    {
+      "command": [
+        "security",
+        "find-identity",
+        "-v",
+        "-p",
+        "codesigning"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:15:14.147667+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:15:14.177762+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:15:35.451779+00:00"
+    },
+    {
+      "command": [
+        "security",
+        "find-certificate",
+        "-a",
+        "-p",
+        "-c",
+        "Apple Development"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:15:35.546080+00:00"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-showBuildSettings",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Profile",
+        "-sdk",
+        "iphoneos",
+        "CODE_SIGN_STYLE=Automatic"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:15:35.562253+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "IOS_XCODE_DESTINATION_ID=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "IOS_DEVICE=0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "DERIVED_DATA_PATH=build/ios-icon-profile-keepeyeonball-ipad-postaccount",
+        "scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:15:43.666184+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--terminate-existing",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:19:23.367623+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "apps",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:19:24.029246+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-09T02:19:35.836119+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "apps",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "20",
+        "--bundle-id",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-09T02:19:55.894639+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-09T02:20:53.343565+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-09T02:20:58.361346+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "20",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:21:03.380649+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:21:27.682250+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/runner-ipad-warm-prime",
+        "--no-use-latest-warm-summary",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--standby-launch-timeout",
+        "120",
+        "--ios-profile-trust-retry-timeout",
+        "45",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:22:03.248985+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/runner-ipad-warm-prime-auto",
+        "--no-use-latest-warm-summary",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--auto-ios-bridge-hosts",
+        "--standby-launch-timeout",
+        "120",
+        "--ios-profile-trust-retry-timeout",
+        "45",
+        "--ios-profile-trust-retry-interval",
+        "5",
+        "--no-update-latest-warm-summary"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:22:40.262415+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:25:53.773962+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "build/ios/Profile-iphoneos/Runner.app",
+        "--json-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/ipad-flutter-profile-install.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/ipad-flutter-profile-install.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:27:12.436039+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:27:27.809778+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:27:27.919394+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "30",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:27:39.436328+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--timeout",
+        "25",
+        "--console",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-09T02:28:35.102428+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "build/ios/iphoneos/Runner.app",
+        "--json-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/ipad-fresh-flutter-profile-install.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/ipad-fresh-flutter-profile-install.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:29:20.702507+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:29:33.793703+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "30",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:29:36.870815+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--interface",
+        "en11",
+        "--max-time",
+        "8",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-09T02:32:52.923405+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--interface",
+        "en0",
+        "--max-time",
+        "8",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-09T02:33:00.938560+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "169.254.193.0/24",
+        "--timeout",
+        "30",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:33:08.956747+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--filter",
+        "bundleIdentifier == 'com.keepeyeonball'",
+        "--timeout",
+        "20",
+        "--json-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/ipad-process-filter.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/ipad-process-filter.log"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:33:40.030371+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "build/ios/iphoneos/Runner.app",
+        "--json-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/iphone-fresh-flutter-profile-install.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/iphone-fresh-flutter-profile-install.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:33:59.235882+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:34:06.454565+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"00008101-000A68811E43001E\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:34:20.615635+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--interface",
+        "en0",
+        "--max-time",
+        "8",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:34:36.230799+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--timeout",
+        "25",
+        "--console",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"00008101-000A68811E43001E\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-09T02:34:36.333423+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "30",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:35:01.385414+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "-sS",
+        "-X",
+        "POST",
+        "http://192.168.178.168:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type: application/json",
+        "--data",
+        "{\"name\":\"iphone-keepeyeonball-standby\",\"pixelRatio\":1}",
+        "--output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/iphone-capture-screenshot-command.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:35:52.672432+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--source",
+        "Documents/automation-screenshots/iphone-keepeyeonball-standby-2026-06-09T04-35-53-016484.png",
+        "--destination",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/screenshots/iphone-keepeyeonball-standby.png",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.keepeyeonball",
+        "--timeout",
+        "30",
+        "--json-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/iphone-copy-screenshot.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/device-logs/iphone-copy-screenshot.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:36:09.619736+00:00"
+    },
+    {
+      "command": [
+        "fastlane",
+        "ios",
+        "build_store"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:36:58.215427+00:00"
+    },
+    {
+      "command": [
+        "fastlane",
+        "--fastfile",
+        "ios/fastlane/Fastfile",
+        "ios",
+        "build_store"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T02:37:18.780366+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ipa",
+        "--release",
+        "--export-method",
+        "app-store"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:37:57.093575+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "ios-physical",
+      "name": "iPad (5)",
+      "notes": [
+        "CoreDevice connected; Flutter target id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+      ],
+      "os": "iOS 17.7.11",
+      "role": "deploy-target"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "ios-physical-wireless",
+      "name": "Jos\u00e9 Ram\u00f3n's iPhone",
+      "notes": [
+        "CoreDevice paired; Flutter wireless id 00008101-000A68811E43001E"
+      ],
+      "os": "iOS 26.5",
+      "role": "deploy-target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/iphone-keepeyeonball-standby.png",
+    "device-logs/ipad-flutter-profile-install.json",
+    "device-logs/ipad-flutter-profile-install.log",
+    "device-logs/ipad-fresh-flutter-profile-install.json",
+    "device-logs/ipad-fresh-flutter-profile-install.log",
+    "device-logs/ipad-process-filter.json",
+    "device-logs/ipad-process-filter.log",
+    "device-logs/iphone-capture-screenshot-command.json",
+    "device-logs/iphone-copy-screenshot.json",
+    "device-logs/iphone-copy-screenshot.log",
+    "device-logs/iphone-fresh-flutter-profile-install.json",
+    "device-logs/iphone-fresh-flutter-profile-install.log"
+  ],
+  "item": {
+    "slug": "signing-jose-keepeyeonball-ios-redeploy-after-account",
+    "source": "user confirmed account update 2026-06-09",
+    "title": "Continue Keepeyeonball iOS signing deployment after Xcode account update"
+  },
+  "notes": [
+    "Keepeyeonball Profile deploy works on iPhone and installs/launches on iPad; iPad bridge not reachable; App Store IPA export passed; TestFlight upload needs App Store Connect credentials."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

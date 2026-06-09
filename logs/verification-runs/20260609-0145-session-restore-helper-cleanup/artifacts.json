@@ -1,0 +1,89 @@
+{
+  "acceptanceChecks": [
+    "Previous-session restore logic is centralized outside SessionDetailsScreen duplicated UI methods",
+    "Restoring previous metadata starts the preferred session identifier and re-queues loaded photos/videos exactly once",
+    "SessionDetailsScreen load actions use the shared restore path"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T23:46:14.968696+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_manager_test.dart",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:46:54.500844+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:47:15.165281+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:49:40.120949+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:49:44.169723+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:49:53.377948+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "hydracamv2-local-tests",
+      "kind": "macOS host",
+      "name": "Flutter unit/widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "session-restore-regression"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "session-restore-helper-cleanup",
+    "source": "docs/control/backlog-import.md#open-rows-from-javi-immediate-backlog",
+    "title": "Session restore helper cleanup"
+  },
+  "notes": [
+    "Session restore helper cleanup passed focused tests, analyzer, diff check, and full Flutter test suite."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

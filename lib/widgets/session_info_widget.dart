@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:package_info_plus/package_info_plus.dart";
+import "../services/device_service.dart";
+import "../services/log_service.dart";
 import "../services/network_info_service.dart";
 
 typedef NetworkInfoLoader = Future<Map<String, String?>> Function();
@@ -35,7 +38,57 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
   }
 
   Future<Map<String, String?>> _loadNetworkInfo() {
-    return (widget.networkInfoLoader ?? NetworkInfoService.getNetworkInfo)();
+    return (widget.networkInfoLoader ?? _loadDefaultDiagnostics)();
+  }
+
+  Future<Map<String, String?>> _loadDefaultDiagnostics() async {
+    final diagnostics = await NetworkInfoService.getNetworkInfo();
+
+    try {
+      diagnostics["deviceId"] = await DeviceIdService.getOrCreateDeviceId();
+    } catch (error) {
+      LogService.instance
+          .registerLog("Error loading diagnostics device ID: $error");
+    }
+
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      diagnostics["appVersion"] =
+          "${packageInfo.version}+${packageInfo.buildNumber}";
+    } catch (error) {
+      LogService.instance
+          .registerLog("Error loading diagnostics app version: $error");
+    }
+
+    try {
+      final deviceInfo = await DeviceIdService.getDeviceInfo();
+      diagnostics["hardware"] = _hardwareLabelFromDeviceInfo(deviceInfo);
+      diagnostics["deviceId"] ??= deviceInfo["deviceId"]?.toString();
+    } catch (error) {
+      LogService.instance
+          .registerLog("Error loading diagnostics hardware info: $error");
+    }
+
+    return diagnostics;
+  }
+
+  String? _hardwareLabelFromDeviceInfo(Map<String, dynamic> deviceInfo) {
+    return _firstNonBlank([
+      deviceInfo["modelName"],
+      deviceInfo["model"],
+      deviceInfo["name"],
+      deviceInfo["platform"],
+    ]);
+  }
+
+  String? _firstNonBlank(Iterable<dynamic> values) {
+    for (final value in values) {
+      final text = value?.toString().trim();
+      if (text != null && text.isNotEmpty) {
+        return text;
+      }
+    }
+    return null;
   }
 
   Widget _buildInfoText(
@@ -58,6 +111,17 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
         ),
       ),
     );
+  }
+
+  String _shortDeviceId(String? deviceId) {
+    final normalized = deviceId?.trim();
+    if (normalized == null || normalized.isEmpty) {
+      return "Unknown device";
+    }
+    if (normalized.length <= 8) {
+      return normalized;
+    }
+    return normalized.substring(0, 8);
   }
 
   @override
@@ -89,8 +153,25 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
               final data = snapshot.data!;
               final networkType = data["networkType"] ?? "Unknown Network";
               final ip = data["ip"] ?? "Unknown IP";
-              return _buildInfoText(
-                "Network: $networkType | IP: $ip",
+              final shortDeviceId = _shortDeviceId(data["deviceId"]);
+              final appVersion =
+                  data["appVersion"] ?? "App version unavailable";
+              final hardware = data["hardware"] ?? "Hardware unavailable";
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInfoText(
+                    "Network: $networkType | IP: $ip",
+                  ),
+                  _buildInfoText(
+                    "Device: $shortDeviceId | App: $appVersion",
+                    maxLines: 1,
+                  ),
+                  _buildInfoText(
+                    "Hardware: $hardware",
+                    maxLines: 1,
+                  ),
+                ],
               );
             }
           },

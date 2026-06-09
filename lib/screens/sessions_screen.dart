@@ -10,13 +10,37 @@ class SessionsScreen extends StatelessWidget {
 
   final HydraCamApiService _apiService = HydraCamApiService();
 
-  void _loadSession(BuildContext context, Map<String, dynamic> session) {
-    LogService.instance.registerLog("Loading session: $session", function: "_loadSession", file: "sessions_screen.dart");
+  String _primarySessionReference(Map<String, dynamic> session) {
+    final guid = session["guid"]?.toString().trim();
+    if (guid != null && guid.isNotEmpty) {
+      return guid;
+    }
+    return session["sessionId"]?.toString() ?? "Unknown session";
+  }
 
-    // Start a session with SessionManager
-    SessionManager.instance.startSession(session["guid"], session["sessionId"], deviceType: "Master");
+  String? _legacySessionId(Map<String, dynamic> session) {
+    final sessionId = session["sessionId"]?.toString();
+    final primaryReference = _primarySessionReference(session);
+    if (sessionId == null ||
+        sessionId.isEmpty ||
+        sessionId == primaryReference) {
+      return null;
+    }
+    return sessionId;
+  }
+
+  void _loadSession(BuildContext context, Map<String, dynamic> session) {
+    LogService.instance.registerLog("Loading session: $session",
+        function: "_loadSession", file: "sessions_screen.dart");
+
+    final sessionReference = _primarySessionReference(session);
+
+    // Join an existing backend session with SessionManager
+    SessionManager.instance.joinBackendSession(
+        sessionReference, session["sessionId"]?.toString(),
+        deviceType: "Master");
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Session loaded: ${session['sessionId']}")),
+      SnackBar(content: Text("Session loaded: $sessionReference")),
     );
   }
 
@@ -38,11 +62,18 @@ class SessionsScreen extends StatelessWidget {
             itemCount: sessions.length,
             itemBuilder: (context, index) {
               final session = sessions[index];
+              final legacySessionId = _legacySessionId(session);
               return Card(
                 child: ListTile(
-                  title: Text(session["sessionId"]),
-                  subtitle: Text(
-                    "Start: ${session['startTime']}\nEnd: ${session['endTime']}",
+                  title: Text("Session: ${_primarySessionReference(session)}"),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (legacySessionId != null)
+                        Text("Legacy Session ID: $legacySessionId"),
+                      Text("Start: ${session['startTime']}"),
+                      Text("End: ${session['endTime']}"),
+                    ],
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.download),

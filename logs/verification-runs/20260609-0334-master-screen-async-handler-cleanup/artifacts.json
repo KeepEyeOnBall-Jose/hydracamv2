@@ -1,0 +1,135 @@
+{
+  "acceptanceChecks": [
+    "MasterScreen start-session button creates a backend session through the mocked API",
+    "MasterScreen recording start path opens the master video preview with mocked camera services",
+    "MasterScreen async handlers return Future<void> and UI callbacks dispatch them explicitly",
+    "Focused MasterScreen tests, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:33:28.409969+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:33:44.530983+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:34:05.756699+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:34:42.472328+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:35:23.828595+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:37:09.503154+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:37:49.615589+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/master/master_screen.dart",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:38:33.692272+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:38:37.916552+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:39:14.045700+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:39:19.128503+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:39:29.520627+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-screen-async-handler-cleanup",
+    "source": "cleanup scan: final MasterScreen async void handlers",
+    "title": "Master screen async handler cleanup"
+  },
+  "notes": [
+    "Converted final MasterScreen async UI handlers to awaitable Future<void> methods, dispatched button callbacks with unawaited(), added mounted guards around recording preview return, and proved backend session create plus local recording-preview route with focused widget tests."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

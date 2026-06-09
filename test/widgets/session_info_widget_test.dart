@@ -14,6 +14,9 @@ void main() {
       return {
         "networkType": "Wi-Fi (enable location for SSID)",
         "ip": "192.168.178.20",
+        "deviceId": "abcdef12-3456-7890",
+        "appVersion": "1.2.3+45",
+        "hardware": "iPhone 12 Pro",
       };
     }
 
@@ -37,6 +40,8 @@ void main() {
           "Network: Wi-Fi (enable location for SSID) | IP: 192.168.178.20"),
       findsOneWidget,
     );
+    expect(find.text("Device: abcdef12 | App: 1.2.3+45"), findsOneWidget);
+    expect(find.text("Hardware: iPhone 12 Pro"), findsOneWidget);
     expect(loadCount, 1);
 
     await tester.pumpWidget(buildWidget("Session Active"));
@@ -47,7 +52,38 @@ void main() {
           "Network: Wi-Fi (enable location for SSID) | IP: 192.168.178.20"),
       findsOneWidget,
     );
+    expect(find.text("Device: abcdef12 | App: 1.2.3+45"), findsOneWidget);
+    expect(find.text("Hardware: iPhone 12 Pro"), findsOneWidget);
     expect(loadCount, 1);
+  });
+
+  testWidgets("shows clear identity fallback when diagnostics are unavailable",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SessionInfoWidget(
+            sessionDisplay: "No active session",
+            networkInfoLoader: () async => {
+              "networkType": "No Connection",
+              "ip": "Unknown IP",
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(
+      find.text("Network: No Connection | IP: Unknown IP"),
+      findsOneWidget,
+    );
+    expect(
+      find.text("Device: Unknown device | App: App version unavailable"),
+      findsOneWidget,
+    );
+    expect(find.text("Hardware: Hardware unavailable"), findsOneWidget);
   });
 
   testWidgets("long session and network labels fit narrow desktop panes",
@@ -69,6 +105,9 @@ void main() {
                 "networkType":
                     "Wi-Fi (enable location for SSID and DBus system bus)",
                 "ip": "172.23.68.143",
+                "deviceId": "session-diagnostics-device-1234567890",
+                "appVersion": "2026.6.8+diagnostics-build",
+                "hardware": "Samsung Galaxy S10e diagnostic runner",
               },
             ),
           ),

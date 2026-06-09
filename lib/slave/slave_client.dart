@@ -13,13 +13,17 @@ import "../services/device_service.dart"; // Import for device ID service
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
 import "../services/network_info_service.dart";
+import "../services/scheduled_task_service.dart";
 import "../services/session_manager.dart";
+import "../services/settings_service.dart";
+import "../services/uploader_service.dart";
 
 abstract class SlaveConnectionClient {
   Stream<String> get statusStream;
   Stream<bool> get connectionStatusStream;
   CameraController? get cameraController;
   Future<void> prepareCameraPreview();
+  Future<void> stopRecordingLocally();
   void connect();
   void disconnect();
 }
@@ -98,6 +102,11 @@ class SlaveClient implements SlaveConnectionClient {
     }
   }
 
+  @override
+  Future<void> stopRecordingLocally() async {
+    await _executeCommand("stopRecordingVideo");
+  }
+
   /// Callbacks for recording events.
   final VoidCallback? onRecordingStarted;
   final VoidCallback? onRecordingStopped;
@@ -105,6 +114,8 @@ class SlaveClient implements SlaveConnectionClient {
   /// Callback for scheduled tasks that typically notifies UI to show countdown.
   final Function(String command, DateTime scheduledTime)? onScheduledCommand;
   final Future<Map<String, dynamic>?> Function()? _networkPayloadLoader;
+  final ScheduledTaskService _scheduledTaskService;
+  final DateTime Function() _now;
 
   /// Constructor for `SlaveClient`.
   ///
@@ -121,7 +132,12 @@ class SlaveClient implements SlaveConnectionClient {
     this.onRecordingStopped,
     @visibleForTesting
     Future<Map<String, dynamic>?> Function()? networkPayloadLoader,
+    @visibleForTesting ScheduledTaskService? scheduledTaskService,
+    @visibleForTesting DateTime Function()? now,
   })  : _networkPayloadLoader = networkPayloadLoader,
+        _scheduledTaskService =
+            scheduledTaskService ?? ScheduledTaskService.instance,
+        _now = now ?? DateTime.now,
         _cameraService = CameraServiceSingleton.instance {
     // Reassign callback after the colon:
     _cameraService.onPhotoTaken = onPhotoTaken;
@@ -161,6 +177,7 @@ class SlaveClient implements SlaveConnectionClient {
       _channel?.sink.add(jsonEncode({
         "type": "deviceId",
         "deviceId": _deviceId,
+        "sessionGuid": SessionManager.instance.sessionGuid,
         "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
       }));
 
@@ -199,9 +216,7 @@ class SlaveClient implements SlaveConnectionClient {
                   final String sessionGuid = decodedMessage["sessionGuid"];
                   LogService.instance.registerLog("Session guid: $sessionGuid");
                   if (sessionGuid.isNotEmpty) {
-                    SessionManager.instance.startSession(sessionGuid, null,
-                        deviceType: "Slave"); // Store the session
-                    notifyReadyToTransmit(sessionGuid);
+                    _handleSessionAvailable(sessionGuid);
                   }
                 } else if (command == "networkMismatch") {
                   final message = decodedMessage["message"] ??
@@ -220,7 +235,7 @@ class SlaveClient implements SlaveConnectionClient {
                       .registerLog("No active session on master.");
                 } else {
                   // Process rest of json commands
-                  _processCommand(message);
+                  await _processCommand(message);
                 }
                 // Additional JSON-based commands can be handled here
               }
@@ -231,7 +246,7 @@ class SlaveClient implements SlaveConnectionClient {
             }
           } else {
             // Process non-JSON (simple text) messages as specific commands
-            _processCommand(message);
+            await _processCommand(message);
           }
         },
         onError: (error) {
@@ -274,7 +289,7 @@ class SlaveClient implements SlaveConnectionClient {
   /// This includes scheduled commands for synchronized execution.
   /// Processes specific commands received from the master.
   /// Handles both scheduled commands and immediate commands, whether JSON-based or plain text.
-  void _processCommand(String message) async {
+  Future<void> _processCommand(String message) async {
     if (message.trim().startsWith("{")) {
       try {
         // Attempt to decode the message as JSON
@@ -288,13 +303,12 @@ class SlaveClient implements SlaveConnectionClient {
             // Handle scheduled commands
             final DateTime scheduledTime =
                 DateTime.parse(decodedMessage["scheduledTime"]);
-            _scheduleExecution(command, scheduledTime);
+            _updateClockOffsetFromMasterTime(decodedMessage["masterTime"]);
+            await _scheduleExecution(command, scheduledTime);
           } else if (type == "sessionStarted" || type == "sessionStatus") {
             // Handle session start/status
             final String sessionGuid = decodedMessage["sessionGuid"];
-            SessionManager.instance
-                .startSession(sessionGuid, null, deviceType: "Slave");
-            notifyReadyToTransmit(sessionGuid);
+            _handleSessionAvailable(sessionGuid);
           } else if (type == "sessionEnded") {
             // Handle session end
             await SessionManager.instance.endSession();
@@ -304,13 +318,17 @@ class SlaveClient implements SlaveConnectionClient {
             // Handle no active session
             await SessionManager.instance.endSession();
             LogService.instance.registerLog("No active session on master.");
+          } else if (command == "identifySlave") {
+            await _sendIdentifyAck(decodedMessage);
+          } else if (command != null) {
+            await _executeCommand(command);
           } else {
             // Unknown JSON command type
             LogService.instance.registerLog("Unknown JSON command type: $type");
           }
         } else {
           // If not a JSON message, treat it as a plain text command
-          _executeCommand(message);
+          await _executeCommand(message);
         }
       } catch (e) {
         // Handle errors in JSON decoding or processing
@@ -319,21 +337,51 @@ class SlaveClient implements SlaveConnectionClient {
       }
     } else {
       // Not a JSON, continue executing raw command
-      _executeCommand(message);
+      await _executeCommand(message);
     }
+  }
+
+  void _handleSessionAvailable(String sessionGuid) {
+    try {
+      SessionManager.instance
+          .joinBackendSession(sessionGuid, null, deviceType: "Slave");
+    } catch (error) {
+      LogService.instance.registerLog(
+          "Rejected non-backend session from master: $sessionGuid, error: $error");
+      return;
+    }
+    notifyReadyToTransmit(sessionGuid);
+    unawaited(_maybeStartAutoRecordRecording(sessionGuid));
+  }
+
+  Future<void> _maybeStartAutoRecordRecording(String sessionGuid) async {
+    final enabled = await SettingsService.getAutoRecordMode();
+    if (!enabled) {
+      return;
+    }
+    if (_cameraService.isRecording || isRecordingVideo) {
+      LogService.instance.registerLog(
+          "Auto-record skipped for $sessionGuid because recording is already active.");
+      return;
+    }
+
+    LogService.instance.registerLog(
+        "Auto-record starting recording for active session $sessionGuid.");
+    await _executeCommand("startRecordingVideo");
   }
 
   /// Schedules the execution of a command for a specific time.
   /// This ensures synchronized execution across devices.
-  void _scheduleExecution(String command, DateTime scheduledTime) {
+  Future<void> _scheduleExecution(String command, DateTime scheduledTime) async {
     // Find how much time left for scheduled execution
-    final Duration delay = scheduledTime.difference(DateTime.now());
+    final scheduledTasks = _scheduledTaskService;
+    final Duration delay = scheduledTasks.delayUntil(scheduledTime);
 
     // If we already late, we execute immediately
     if (delay.isNegative) {
       LogService.instance.registerLog(
           "Scheduled time for '$command' has already passed. Executing immediately.");
-      _executeCommand(command);
+      await _executeCommand(command);
     }
     // Else, we wait until scheduled time and then execute
     else {
@@ -343,12 +391,35 @@ class SlaveClient implements SlaveConnectionClient {
       // Notify the UI to handle the countdown
       onScheduledCommand?.call(command, scheduledTime);
 
-      Timer(delay, () => _executeCommand(command));
+      unawaited(scheduledTasks.scheduleTask(
+        "slave:$command:${scheduledTime.toIso8601String()}",
+        scheduledTime,
+        () => _executeCommand(command),
+      ));
     }
   }
 
+  void _updateClockOffsetFromMasterTime(Object? masterTimeValue) {
+    if (masterTimeValue is! String || masterTimeValue.isEmpty) {
+      return;
+    }
+
+    final masterTime = DateTime.tryParse(masterTimeValue);
+    if (masterTime == null) {
+      LogService.instance
+          .registerLog("Ignoring invalid master clock time: $masterTimeValue");
+      return;
+    }
+
+    final offset = masterTime.difference(_now());
+    _scheduledTaskService.updateClockOffset(offset);
+    LogService.instance
+        .registerLog("Updated slave scheduled clock offset from master: "
+            "${offset.inMilliseconds} ms.");
+  }
+
   /// Executes the received command.
-  void _executeCommand(String command) async {
+  Future<void> _executeCommand(String command) async {
     if (command == "takePhoto") {
       photoCaptureDate = DateTime.now();
       try {
@@ -367,7 +438,7 @@ class SlaveClient implements SlaveConnectionClient {
           slaveDeviceId: deviceId,
           captureContext: _cameraService.lastPhotoCaptureContext,
         );
-        SessionManager.instance.addPhoto(capturedPhoto);
+        await SessionManager.instance.addPhoto(capturedPhoto);
 
         // Update the UI
         _statusStreamController.add("Photo taken and saved locally.");
@@ -431,7 +502,7 @@ class SlaveClient implements SlaveConnectionClient {
           receivedDate: receivedDate,
           captureContext: _cameraService.recordingCaptureContext,
         );
-        SessionManager.instance.addVideo(capturedVideo);
+        await SessionManager.instance.addVideo(capturedVideo);
 
         // Update the UI
         _statusStreamController
@@ -454,9 +525,37 @@ class SlaveClient implements SlaveConnectionClient {
     } else if (command == "stopCamera") {
       // Stop the camera service when receiving 'stopCamera' command
       _cameraService.stopCamera();
+    } else if (command == "identifySlave") {
+      await _sendIdentifyAck();
+    } else if (command == "startUploadingAll") {
+      LogService.instance
+          .registerLog("Start-upload-all command received from master.");
+      _statusStreamController.add("Starting queued uploads...");
+      await UploaderService().startUploadingManually();
     } else {
       LogService.instance.registerLog("Unknown command received: $command");
     }
+  }
+
+  Future<void> _sendIdentifyAck([Map<String, dynamic>? request]) async {
+    if (_channel == null || !_isConnected) {
+      return;
+    }
+
+    final networkPayload = await _currentNetworkPayload();
+    final payload = {
+      "type": "identifyAck",
+      "deviceId": _deviceId,
+      "requestId": request?["requestId"],
+      "status": "alive",
+      "sessionGuid": SessionManager.instance.sessionGuid,
+      "timestamp": DateTime.now().toIso8601String(),
+      "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
+      if (networkPayload != null) "network": networkPayload,
+    };
+    _channel!.sink.add(jsonEncode(payload));
+    LogService.instance.registerLog("Sent identifyAck notification to master");
+    _statusStreamController.add("Identify acknowledged to master.");
   }
 
   /// Sends a notification to the server that the slave is ready to transmit media.
@@ -568,6 +667,7 @@ class SlaveClient implements SlaveConnectionClient {
     _channel?.sink.add(jsonEncode({
       "type": "heartbeat",
       "deviceId": _deviceId,
+      "sessionGuid": SessionManager.instance.sessionGuid,
       "timestamp": DateTime.now().toIso8601String(),
       "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
       if (networkPayload != null) "network": networkPayload,

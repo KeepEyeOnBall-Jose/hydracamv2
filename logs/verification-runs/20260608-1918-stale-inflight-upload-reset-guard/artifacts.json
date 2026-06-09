@@ -1,0 +1,139 @@
+{
+  "acceptanceChecks": [
+    "Reset during an in-flight upload prevents stale completion from marking media uploaded",
+    "Reset during an in-flight upload preserves the new session metadata",
+    "Screenshot and video proof show the stale completion guard"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:14:32.298300+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:15:03.960010+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/render_stale_inflight_upload_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:15:33.116728+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/screenshots/stale_inflight_upload_reset_guard.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/video/stale_inflight_upload_reset_guard_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:15:40.156092+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/uploader_service.dart",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:16:18.108761+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:16:26.506796+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/uploader_service.dart",
+        "test/services/uploader_service_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/summary.md",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/render_stale_inflight_upload_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:16:28.701322+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:16:34.783448+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:16:46.501049+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/commands.log",
+        "logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:17:02.780033+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/stale_inflight_upload_reset_guard.png",
+    "video/stale_inflight_upload_reset_guard_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "stale-inflight-upload-reset-guard",
+    "source": "docs/control/backlog-import.md#3-prevent-stale-uploads-from-crossing-sessions",
+    "title": "Ignore stale in-flight upload completion after reset"
+  },
+  "notes": [
+    "Stale in-flight upload reset guard passed red/green uploader-service test, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for server-side race proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

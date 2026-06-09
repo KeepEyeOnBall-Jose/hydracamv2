@@ -1,4 +1,5 @@
 import "dart:io";
+import "package:flutter/services.dart";
 import "package:photo_manager/photo_manager.dart";
 
 import "log_service.dart";
@@ -60,8 +61,20 @@ class GalleryPersistenceService {
       return true;
     }
 
-    final PermissionState state = await PhotoManager.requestPermissionExtend();
-    _hasPermission = state.hasAccess;
+    try {
+      final PermissionState state = await PhotoManager.requestPermissionExtend();
+      _hasPermission = state.hasAccess;
+    } on MissingPluginException catch (error) {
+      LogService.instance.registerLog(
+          "GalleryPersistenceService: Gallery plugin is unavailable on this "
+          "platform; keeping media in the session directory only. $error");
+      return false;
+    } catch (error) {
+      LogService.instance.registerLog(
+          "GalleryPersistenceService: Failed to request gallery permission; "
+          "keeping media in the session directory only. $error");
+      return false;
+    }
 
     if (!_hasPermission) {
       LogService.instance

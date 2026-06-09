@@ -44,11 +44,19 @@ void main() {
       await SettingsService.getVideoCaptureProfile(),
       VideoCaptureProfile.dataSaver480p30,
     );
+    expect(
+      (await SharedPreferences.getInstance()).getString("videoCaptureProfile"),
+      VideoCaptureProfile.dataSaver480p30.storageValue,
+    );
 
     SharedPreferences.setMockInitialValues({"cameraQuality": "medium"});
     expect(
       await SettingsService.getVideoCaptureProfile(),
       VideoCaptureProfile.compat720p30,
+    );
+    expect(
+      (await SharedPreferences.getInstance()).getString("videoCaptureProfile"),
+      VideoCaptureProfile.compat720p30.storageValue,
     );
 
     SharedPreferences.setMockInitialValues({"cameraQuality": "high"});
@@ -56,6 +64,51 @@ void main() {
       await SettingsService.getVideoCaptureProfile(),
       VideoCaptureProfile.standard1080p30,
     );
+    expect(
+      (await SharedPreferences.getInstance()).getString("videoCaptureProfile"),
+      VideoCaptureProfile.standard1080p30.storageValue,
+    );
+
+    SharedPreferences.setMockInitialValues({
+      "cameraQuality": "low",
+      "videoCaptureProfile": VideoCaptureProfile.sport1080p60.storageValue,
+    });
+    expect(
+      await SettingsService.getVideoCaptureProfile(),
+      VideoCaptureProfile.sport1080p60,
+    );
+    expect(
+      (await SharedPreferences.getInstance()).getString("videoCaptureProfile"),
+      VideoCaptureProfile.sport1080p60.storageValue,
+    );
+  });
+
+  test("legacy camera quality API writes canonical video profile only",
+      () async {
+    SharedPreferences.setMockInitialValues({});
+
+    await SettingsService.setCameraQuality("medium");
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(
+      prefs.getString("videoCaptureProfile"),
+      VideoCaptureProfile.compat720p30.storageValue,
+    );
+    expect(prefs.getString("cameraQuality"), isNull);
+    expect(await SettingsService.getCameraQuality(), "medium");
+  });
+
+  test("canonical video profile setter clears stale legacy camera quality",
+      () async {
+    SharedPreferences.setMockInitialValues({"cameraQuality": "low"});
+
+    await SettingsService.setVideoCaptureProfile(
+      VideoCaptureProfile.sport1080p60,
+    );
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString("cameraQuality"), isNull);
+    expect(await SettingsService.getCameraQuality(), "high");
   });
 
   test("stores selected camera name independently from lens preference",
@@ -88,5 +141,29 @@ void main() {
       perspective.cameraPerspectiveLabel,
       "Right corner, behind glass, diagonal to front-left",
     );
+  });
+
+  test("auto-record defaults disabled and can be stored", () async {
+    SharedPreferences.setMockInitialValues({});
+
+    expect(await SettingsService.getAutoRecordMode(), isFalse);
+
+    await SettingsService.setAutoRecordMode(true);
+
+    expect(await SettingsService.getAutoRecordMode(), isTrue);
+  });
+
+  test("locale override can be stored and cleared", () async {
+    SharedPreferences.setMockInitialValues({});
+
+    expect(await SettingsService.getLocaleOverride(), isNull);
+
+    await SettingsService.setLocaleOverride("pl");
+
+    expect(await SettingsService.getLocaleOverride(), "pl");
+
+    await SettingsService.clearLocaleOverride();
+
+    expect(await SettingsService.getLocaleOverride(), isNull);
   });
 }

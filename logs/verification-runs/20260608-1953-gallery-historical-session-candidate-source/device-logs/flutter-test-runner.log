@@ -1,0 +1,830 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/uploader_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? lib/services/gallery_session_matcher.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-1933-inflight-upload-cancel-control/
+?? logs/verification-runs/20260608-1938-auth0-refresh-scope/
+?? logs/verification-runs/20260608-1944-gallery-scan-active-session-preserved/
+?? logs/verification-runs/20260608-1948-gallery-candidate-session-labels/
+?? logs/verification-runs/20260608-1953-gallery-historical-session-candidate-source/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/screens/media_selection_screen_test.dart
+?? test/screens/uploader_info_screen_test.dart
+?? test/services/auth0_service_test.dart
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ flutter test --no-pub test/services/session_manager_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: test/services/session_manager_test.dart:144:34: Error: The method 'loadSessionMetadataSnapshot' isn't defined for the type 'SessionManager'.
+   - 'SessionManager' is from 'package:hydracam/services/session_manager.dart' ('lib/services/session_manager.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'loadSessionMetadataSnapshot'.
+              await sessionManager.loadSessionMetadataSnapshot("old-guid");
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart
+
+[stderr]
+test/services/session_manager_test.dart:144:34: Error: The method 'loadSessionMetadataSnapshot' isn't defined for the type 'SessionManager'.
+ - 'SessionManager' is from 'package:hydracam/services/session_manager.dart' ('lib/services/session_manager.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'loadSessionMetadataSnapshot'.
+            await sessionManager.loadSessionMetadataSnapshot("old-guid");
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[exit-code] 1
+
+$ flutter test --no-pub test/services/session_manager_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: SessionManager Session lifecycle starts with no active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.714454, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.716291, function: null, file: null}
+00:00 +1: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.722060, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.722166, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.723565, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.723668, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:54:54.724090, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.729009, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.729122, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.729190, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.729254, function: null, file: null}
+00:00 +2: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.730436, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.730514, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.730749, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.730807, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:54:54.730864, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.731585, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.731648, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.731709, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.731770, function: null, file: null}
+00:00 +3: SessionManager Session lifecycle scanAndReconstructSessions preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.732869, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.732948, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.733239, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.733304, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:54:54.733370, function: null, file: null}
+Log registered: {message: Generated new Device ID: 97b4abd2-fbbd-4615-866d-b6b059703635, timestamp: 2026-06-08 19:54:54.737171, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_scan-preserve-old/metadata.json, timestamp: 2026-06-08 19:54:54.738755, function: null, file: null}
+Log registered: {message: Reconstructed session: scan-preserve-old with 0 photos and 1 videos., timestamp: 2026-06-08 19:54:54.738836, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_active-guid/metadata.json, timestamp: 2026-06-08 19:54:54.740953, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.741028, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.741084, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.741134, function: null, file: null}
+00:00 +4: SessionManager Session lifecycle loadSessionMetadataSnapshot preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.742154, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.742227, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.742563, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.742628, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:54:54.742681, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 97b4abd2-fbbd-4615-866d-b6b059703635, timestamp: 2026-06-08 19:54:54.744193, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:54:54.744745, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_active-guid/metadata.json, timestamp: 2026-06-08 19:54:54.745456, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.745519, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.745570, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.745618, function: null, file: null}
+00:00 +5: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.746613, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.746676, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.746947, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.747004, function: null, file: null}
+Log registered: {message: Session started with GUID: same-guid on device type: Master, timestamp: 2026-06-08 19:54:54.747056, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media0mKq5o/same_session_photo.jpg, timestamp: 2026-06-08 19:54:54.747579, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media0mKq5o/same_session_photo.jpg, timestamp: 2026-06-08 19:54:54.747905, function: null, file: null}
+Log registered: {message: Session already active with GUID: same-guid. Preserving existing media on rejoin as Slave., timestamp: 2026-06-08 19:54:54.748172, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.748546, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_same-guid/metadata.json, timestamp: 2026-06-08 19:54:54.749361, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_same-guid/metadata.json, timestamp: 2026-06-08 19:54:54.749442, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.749495, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.749554, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.749596, function: null, file: null}
+00:00 +6: SessionManager Session lifecycle joining a different session starts with clean media state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.750502, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.750565, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.750851, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.750907, function: null, file: null}
+Log registered: {message: Session started with GUID: old-guid on device type: Master, timestamp: 2026-06-08 19:54:54.750952, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media71Pli3/old_session_photo.jpg, timestamp: 2026-06-08 19:54:54.751164, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media71Pli3/old_session_photo.jpg, timestamp: 2026-06-08 19:54:54.751241, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.751321, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.751369, function: null, file: null}
+Log registered: {message: Session started with GUID: new-guid on device type: Master, timestamp: 2026-06-08 19:54:54.751410, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.751654, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_new-guid/metadata.json, timestamp: 2026-06-08 19:54:54.752399, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_new-guid/metadata.json, timestamp: 2026-06-08 19:54:54.752487, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.752554, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.752612, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.752662, function: null, file: null}
+00:00 +7: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.753523, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.753586, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.753778, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.753825, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:54:54.753889, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medianJffYl/test_photo.jpg, timestamp: 2026-06-08 19:54:54.754153, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medianJffYl/test_photo.jpg, timestamp: 2026-06-08 19:54:54.754240, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.754523, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.755413, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.755484, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.755542, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.755595, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.755638, function: null, file: null}
+00:00 +8: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.756515, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.756589, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.756771, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.756815, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:54:54.756867, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediac2vo9T/test_video.mp4, timestamp: 2026-06-08 19:54:54.757215, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediac2vo9T/test_video.mp4, timestamp: 2026-06-08 19:54:54.757325, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.757554, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.758306, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.758396, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.758445, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.758495, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.758539, function: null, file: null}
+00:00 +9: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.759525, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.759588, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.759743, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.759801, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:54:54.759842, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediat5An4a/context_video.mp4, timestamp: 2026-06-08 19:54:54.760508, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediat5An4a/context_video.mp4, timestamp: 2026-06-08 19:54:54.760591, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.761793, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.762623, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.762694, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 97b4abd2-fbbd-4615-866d-b6b059703635, timestamp: 2026-06-08 19:54:54.764160, function: null, file: null}
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 19:54:54.764927, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.765840, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.765912, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.765961, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.766, function: null, file: null}
+00:00 +10: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.766863, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.766912, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.767062, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.767107, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:54:54.767155, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medialaxGTf/test_photo_1.jpg, timestamp: 2026-06-08 19:54:54.767606, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medialaxGTf/test_photo_1.jpg, timestamp: 2026-06-08 19:54:54.767703, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medialaxGTf/test_photo_2.jpg, timestamp: 2026-06-08 19:54:54.767783, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_medialaxGTf/test_photo_2.jpg, timestamp: 2026-06-08 19:54:54.768044, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.768257, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:54:54.768372, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.769214, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.769292, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsETpNhZ/session_test-guid/metadata.json, timestamp: 2026-06-08 19:54:54.769359, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:54:54.769411, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:54:54.769458, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:54:54.769826, function: null, file: null}
+00:00 +11: (tearDownAll)
+00:00 +11: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/gallery_session_candidate_source_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: test/services/gallery_session_candidate_source_test.dart:5:8: Error: Error when reading 'lib/services/gallery_session_candidate_source.dart': No such file or directory
+  import "package:hydracam/services/gallery_session_candidate_source.dart";
+         ^
+  test/services/gallery_session_candidate_source_test.dart:86:36: Error: Couldn't find constructor 'GallerySessionCandidateSource'.
+      final candidates = await const GallerySessionCandidateSource().load();
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart
+
+[stderr]
+test/services/gallery_session_candidate_source_test.dart:5:8: Error: Error when reading 'lib/services/gallery_session_candidate_source.dart': No such file or directory
+import "package:hydracam/services/gallery_session_candidate_source.dart";
+       ^
+test/services/gallery_session_candidate_source_test.dart:86:36: Error: Couldn't find constructor 'GallerySessionCandidateSource'.
+    final candidates = await const GallerySessionCandidateSource().load();
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[exit-code] 1
+
+$ flutter test --no-pub test/services/gallery_session_candidate_source_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:55:57.136302, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:55:57.138429, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Master, timestamp: 2026-06-08 19:55:57.138687, function: null, file: null}
+Log registered: {message: Generated new Device ID: a0d42095-6ed8-4d32-bcb6-0b945556d565, timestamp: 2026-06-08 19:55:57.151411, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:55:57.152095, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: a0d42095-6ed8-4d32-bcb6-0b945556d565, timestamp: 2026-06-08 19:55:57.153443, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for active-guid, timestamp: 2026-06-08 19:55:57.153585, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_candidate_source_docsenFr4E/session_active-guid/metadata.json, timestamp: 2026-06-08 19:55:57.157085, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:55:57.157202, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:55:57.157273, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:55:57.157333, function: null, file: null}
+00:00 +1: (tearDownAll)
+00:00 +1: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/session_manager_test.dart test/services/gallery_session_candidate_source_test.dart test/services/gallery_session_matcher_test.dart test/screens/media_selection_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: (setUpAll)
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle starts with no active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.668496, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.670779, function: null, file: null}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.677398, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.677501, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.678009, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.678109, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:56:04.678323, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.685901, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.686112, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.686256, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.686358, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.687694, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.687803, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.688095, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.688165, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:56:04.688224, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.688906, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.688974, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.689033, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.689115, function: null, file: null}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle scanAndReconstructSessions preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.690346, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.690419, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.690804, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.690912, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:56:04.690996, function: null, file: null}
+Log registered: {message: Generated new Device ID: 2ffdfe3e-0b62-42dc-bc40-aaf2234cb7ba, timestamp: 2026-06-08 19:56:04.695979, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_scan-preserve-old/metadata.json, timestamp: 2026-06-08 19:56:04.698163, function: null, file: null}
+Log registered: {message: Reconstructed session: scan-preserve-old with 0 photos and 1 videos., timestamp: 2026-06-08 19:56:04.698294, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_active-guid/metadata.json, timestamp: 2026-06-08 19:56:04.700808, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.700965, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.701096, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.701175, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle loadSessionMetadataSnapshot preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.702502, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.702589, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.702976, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.703055, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:56:04.703126, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 2ffdfe3e-0b62-42dc-bc40-aaf2234cb7ba, timestamp: 2026-06-08 19:56:04.704860, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:56:04.705556, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_active-guid/metadata.json, timestamp: 2026-06-08 19:56:04.706499, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.706612, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.706683, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.706814, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.708213, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.708298, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.708631, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.708693, function: null, file: null}
+Log registered: {message: Session started with GUID: same-guid on device type: Master, timestamp: 2026-06-08 19:56:04.708744, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaqkmewV/same_session_photo.jpg, timestamp: 2026-06-08 19:56:04.709371, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaqkmewV/same_session_photo.jpg, timestamp: 2026-06-08 19:56:04.709783, function: null, file: null}
+Log registered: {message: Session already active with GUID: same-guid. Preserving existing media on rejoin as Slave., timestamp: 2026-06-08 19:56:04.710127, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.710559, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_same-guid/metadata.json, timestamp: 2026-06-08 19:56:04.711622, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_same-guid/metadata.json, timestamp: 2026-06-08 19:56:04.711813, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.711879, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.711942, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.711987, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle joining a different session starts with clean media state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.713121, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.713203, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.713541, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.713607, function: null, file: null}
+Log registered: {message: Session started with GUID: old-guid on device type: Master, timestamp: 2026-06-08 19:56:04.713658, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediawAWRHl/old_session_photo.jpg, timestamp: 2026-06-08 19:56:04.713911, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediawAWRHl/old_session_photo.jpg, timestamp: 2026-06-08 19:56:04.714003, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.714104, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.714152, function: null, file: null}
+Log registered: {message: Session started with GUID: new-guid on device type: Master, timestamp: 2026-06-08 19:56:04.714291, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.714591, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_new-guid/metadata.json, timestamp: 2026-06-08 19:56:04.715628, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_new-guid/metadata.json, timestamp: 2026-06-08 19:56:04.715773, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.715855, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.715911, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.715961, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.717007, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.717072, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.717333, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.717407, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:56:04.717464, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediakaEeu2/test_photo.jpg, timestamp: 2026-06-08 19:56:04.717848, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediakaEeu2/test_photo.jpg, timestamp: 2026-06-08 19:56:04.717986, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.718215, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.719210, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.719295, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.719359, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.719402, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.719684, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.720455, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.720522, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.720692, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.720768, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:56:04.720835, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaaDogch/test_video.mp4, timestamp: 2026-06-08 19:56:04.721245, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaaDogch/test_video.mp4, timestamp: 2026-06-08 19:56:04.721438, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.721711, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.722825, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.722957, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.723018, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.723075, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.723121, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.724448, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.724533, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.724706, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.724757, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:56:04.724805, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediafXgE52/context_video.mp4, timestamp: 2026-06-08 19:56:04.725615, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediafXgE52/context_video.mp4, timestamp: 2026-06-08 19:56:04.725714, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.727149, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.728121, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.728248, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 2ffdfe3e-0b62-42dc-bc40-aaf2234cb7ba, timestamp: 2026-06-08 19:56:04.729868, function: null, file: null}
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 19:56:04.730688, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.731577, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.731654, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.731708, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.731751, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.732860, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.732926, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.733090, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.733140, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:56:04.733188, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediad9aoQD/test_photo_1.jpg, timestamp: 2026-06-08 19:56:04.733701, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediad9aoQD/test_photo_1.jpg, timestamp: 2026-06-08 19:56:04.733801, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediad9aoQD/test_photo_2.jpg, timestamp: 2026-06-08 19:56:04.733887, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediad9aoQD/test_photo_2.jpg, timestamp: 2026-06-08 19:56:04.734224, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.734440, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:56:04.734645, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.735782, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.735873, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsiouI2y/session_test-guid/metadata.json, timestamp: 2026-06-08 19:56:04.735936, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.736306, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.736353, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.736394, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: (tearDownAll)
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: (setUpAll)
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.800529, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.802768, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Master, timestamp: 2026-06-08 19:56:04.803028, function: null, file: null}
+Log registered: {message: Generated new Device ID: 3617ac80-fd13-4610-8b4c-2b2cfa025637, timestamp: 2026-06-08 19:56:04.817330, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:56:04.818147, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 3617ac80-fd13-4610-8b4c-2b2cfa025637, timestamp: 2026-06-08 19:56:04.818806, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for active-guid, timestamp: 2026-06-08 19:56:04.818926, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_candidate_source_docs0jt9bW/session_active-guid/metadata.json, timestamp: 2026-06-08 19:56:04.822955, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:56:04.823145, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:56:04.823225, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:56:04.823286, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: (tearDownAll)
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches gallery videos inside an explicit session margin
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: excludes videos outside the margin and ranks nearest candidates first
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches raw video time ranges without requiring a saved video file
+00:00 +15: /Users/jose/src/work/hydracamv2/test/screens/media_selection_screen_test.dart: video tiles show nearest candidate session
+00:00 +16: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/session_manager_test.dart test/services/gallery_session_candidate_source_test.dart test/services/gallery_session_matcher_test.dart test/screens/media_selection_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: (setUpAll)
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle starts with no active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.121559, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.123848, function: null, file: null}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.130589, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.130684, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.131118, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.131207, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:57:40.131406, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.138670, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.138883, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.138953, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.139014, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.140316, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.140481, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.140827, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.140909, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:57:40.140969, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.141654, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.141749, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.141823, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.141937, function: null, file: null}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle scanAndReconstructSessions preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.143119, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.143194, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.143550, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.143621, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:57:40.143696, function: null, file: null}
+Log registered: {message: Generated new Device ID: 0aff3da4-6ae8-47c7-93d1-05cce48d6449, timestamp: 2026-06-08 19:57:40.148231, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_scan-preserve-old/metadata.json, timestamp: 2026-06-08 19:57:40.150264, function: null, file: null}
+Log registered: {message: Reconstructed session: scan-preserve-old with 0 photos and 1 videos., timestamp: 2026-06-08 19:57:40.150414, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_active-guid/metadata.json, timestamp: 2026-06-08 19:57:40.153001, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.153095, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.153172, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.153225, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: (setUpAll)
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle loadSessionMetadataSnapshot preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.154399, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.154472, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.154832, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.154895, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:57:40.154947, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 0aff3da4-6ae8-47c7-93d1-05cce48d6449, timestamp: 2026-06-08 19:57:40.156616, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:57:40.157252, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_active-guid/metadata.json, timestamp: 2026-06-08 19:57:40.158075, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.158160, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.158220, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.158271, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.159546, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.159616, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.159930, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.159997, function: null, file: null}
+Log registered: {message: Session started with GUID: same-guid on device type: Master, timestamp: 2026-06-08 19:57:40.160050, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaWuStoy/same_session_photo.jpg, timestamp: 2026-06-08 19:57:40.160653, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaWuStoy/same_session_photo.jpg, timestamp: 2026-06-08 19:57:40.161045, function: null, file: null}
+Log registered: {message: Session already active with GUID: same-guid. Preserving existing media on rejoin as Slave., timestamp: 2026-06-08 19:57:40.161370, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.161895, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_same-guid/metadata.json, timestamp: 2026-06-08 19:57:40.162802, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.162892, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.162954, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.163004, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.160911, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_same-guid/metadata.json, timestamp: 2026-06-08 19:57:40.163340, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.163349, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Master, timestamp: 2026-06-08 19:57:40.163635, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle joining a different session starts with clean media state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.164165, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.164262, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.164559, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.164614, function: null, file: null}
+Log registered: {message: Session started with GUID: old-guid on device type: Master, timestamp: 2026-06-08 19:57:40.164659, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media6ZBwsj/old_session_photo.jpg, timestamp: 2026-06-08 19:57:40.164929, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media6ZBwsj/old_session_photo.jpg, timestamp: 2026-06-08 19:57:40.165023, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.165123, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.165224, function: null, file: null}
+Log registered: {message: Session started with GUID: new-guid on device type: Master, timestamp: 2026-06-08 19:57:40.165364, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.165716, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_new-guid/metadata.json, timestamp: 2026-06-08 19:57:40.166793, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_new-guid/metadata.json, timestamp: 2026-06-08 19:57:40.167045, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.167121, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.167174, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.167223, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.168421, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.168498, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.168733, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.168786, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:57:40.168847, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media1YvVvv/test_photo.jpg, timestamp: 2026-06-08 19:57:40.169198, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media1YvVvv/test_photo.jpg, timestamp: 2026-06-08 19:57:40.169301, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.169649, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.170889, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.171017, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.171073, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.171123, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.171165, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.172244, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.172314, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.172493, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.172547, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:57:40.172592, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaweFCZ1/test_video.mp4, timestamp: 2026-06-08 19:57:40.173063, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaweFCZ1/test_video.mp4, timestamp: 2026-06-08 19:57:40.173215, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.173408, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.174337, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.174484, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.174556, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.174606, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.174650, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.175933, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.176020, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.176208, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.176262, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:57:40.176307, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediar3na67/context_video.mp4, timestamp: 2026-06-08 19:57:40.177155, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediar3na67/context_video.mp4, timestamp: 2026-06-08 19:57:40.177288, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Generated new Device ID: 1c8de494-3b8a-4686-ab3a-b4f06fce056e, timestamp: 2026-06-08 19:57:40.177223, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:57:40.178109, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.178770, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Retrieved existing Device ID: 1c8de494-3b8a-4686-ab3a-b4f06fce056e, timestamp: 2026-06-08 19:57:40.178898, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for active-guid, timestamp: 2026-06-08 19:57:40.179026, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.179705, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.179792, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 0aff3da4-6ae8-47c7-93d1-05cce48d6449, timestamp: 2026-06-08 19:57:40.181436, function: null, file: null}
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 19:57:40.182314, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_candidate_source_docsW5qoJL/session_active-guid/metadata.json, timestamp: 2026-06-08 19:57:40.182557, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.182682, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.182753, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.182815, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.183332, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.183405, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.183453, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.183497, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: (tearDownAll)
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches gallery videos inside an explicit session margin
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.185081, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.185155, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.185339, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.185389, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:57:40.185437, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaefeqO4/test_photo_1.jpg, timestamp: 2026-06-08 19:57:40.185977, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaefeqO4/test_photo_1.jpg, timestamp: 2026-06-08 19:57:40.186083, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaefeqO4/test_photo_2.jpg, timestamp: 2026-06-08 19:57:40.186215, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaefeqO4/test_photo_2.jpg, timestamp: 2026-06-08 19:57:40.186627, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.186937, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:57:40.187072, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.188161, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:57:40.188276, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:57:40.188329, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:57:40.188373, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches gallery videos inside an explicit session margin
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.189239, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsPwW8UA/session_test-guid/metadata.json, timestamp: 2026-06-08 19:57:40.189325, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches gallery videos inside an explicit session margin
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: excludes videos outside the margin and ranks nearest candidates first
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches raw video time ranges without requiring a saved video file
+00:00 +15: /Users/jose/src/work/hydracamv2/test/screens/media_selection_screen_test.dart: video tiles show nearest candidate session
+00:00 +16: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/session_manager_test.dart test/services/gallery_session_candidate_source_test.dart test/services/gallery_session_matcher_test.dart test/screens/media_selection_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: (setUpAll)
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle starts with no active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.249172, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.251353, function: null, file: null}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle startSession creates new session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.257942, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.258033, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.258472, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.258576, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:58:30.258780, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.266783, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.266956, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.267021, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.267073, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle endSession clears session state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.268290, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.268434, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.268730, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.268799, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:58:30.268859, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.269548, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.269644, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.269705, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.269764, function: null, file: null}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle scanAndReconstructSessions preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.271005, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.271076, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.271422, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.271515, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:58:30.271600, function: null, file: null}
+Log registered: {message: Generated new Device ID: 9a83f3fa-2e30-4ea1-bf74-5b19d1731788, timestamp: 2026-06-08 19:58:30.276249, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_scan-preserve-old/metadata.json, timestamp: 2026-06-08 19:58:30.278331, function: null, file: null}
+Log registered: {message: Reconstructed session: scan-preserve-old with 0 photos and 1 videos., timestamp: 2026-06-08 19:58:30.278460, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_active-guid/metadata.json, timestamp: 2026-06-08 19:58:30.281094, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.281207, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.281274, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.281330, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: (setUpAll)
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle loadSessionMetadataSnapshot preserves active session identity
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.282914, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.282989, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.283356, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.283429, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Slave, timestamp: 2026-06-08 19:58:30.283486, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 9a83f3fa-2e30-4ea1-bf74-5b19d1731788, timestamp: 2026-06-08 19:58:30.284987, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:58:30.285609, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_active-guid/metadata.json, timestamp: 2026-06-08 19:58:30.286456, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.286529, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.286585, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.286635, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.287834, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.287907, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.288216, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.288275, function: null, file: null}
+Log registered: {message: Session started with GUID: same-guid on device type: Master, timestamp: 2026-06-08 19:58:30.288336, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediarp1X71/same_session_photo.jpg, timestamp: 2026-06-08 19:58:30.288891, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediarp1X71/same_session_photo.jpg, timestamp: 2026-06-08 19:58:30.289214, function: null, file: null}
+Log registered: {message: Session already active with GUID: same-guid. Preserving existing media on rejoin as Slave., timestamp: 2026-06-08 19:58:30.289555, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.288147, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.290120, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.290433, function: null, file: null}
+Log registered: {message: Session started with GUID: active-guid on device type: Master, timestamp: 2026-06-08 19:58:30.290753, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle rejoining same active session preserves media and upload queue
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_same-guid/metadata.json, timestamp: 2026-06-08 19:58:30.291108, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_same-guid/metadata.json, timestamp: 2026-06-08 19:58:30.291199, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.291260, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.291315, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.291359, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Session lifecycle joining a different session starts with clean media state
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.292366, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.292440, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.292782, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.292844, function: null, file: null}
+Log registered: {message: Session started with GUID: old-guid on device type: Master, timestamp: 2026-06-08 19:58:30.292894, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaxOP7Im/old_session_photo.jpg, timestamp: 2026-06-08 19:58:30.293197, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaxOP7Im/old_session_photo.jpg, timestamp: 2026-06-08 19:58:30.293285, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.293376, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.293426, function: null, file: null}
+Log registered: {message: Session started with GUID: new-guid on device type: Master, timestamp: 2026-06-08 19:58:30.293495, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.293957, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_new-guid/metadata.json, timestamp: 2026-06-08 19:58:30.294870, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_new-guid/metadata.json, timestamp: 2026-06-08 19:58:30.294963, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.295022, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.295070, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.295116, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addPhoto adds photo to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.296459, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.296551, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.296823, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.296942, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:58:30.296999, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media5gWqqT/test_photo.jpg, timestamp: 2026-06-08 19:58:30.297448, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_media5gWqqT/test_photo.jpg, timestamp: 2026-06-08 19:58:30.297564, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.297985, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.298968, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.299080, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.299147, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.299199, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.299243, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management addVideo adds video to current session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.300419, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.300506, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.300729, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.300791, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:58:30.300846, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaF5wkqr/test_video.mp4, timestamp: 2026-06-08 19:58:30.301307, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaF5wkqr/test_video.mp4, timestamp: 2026-06-08 19:58:30.301447, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.301663, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.302574, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.302659, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.302768, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.302834, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.302887, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.303916, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.303985, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.304171, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.304238, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:58:30.304283, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Generated new Device ID: 8a97a32a-d748-4c81-a510-bf9b878c8f0e, timestamp: 2026-06-08 19:58:30.304449, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaJgcceq/context_video.mp4, timestamp: 2026-06-08 19:58:30.305096, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediaJgcceq/context_video.mp4, timestamp: 2026-06-08 19:58:30.305203, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Session metadata snapshot loaded for old-guid, timestamp: 2026-06-08 19:58:30.305220, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 8a97a32a-d748-4c81-a510-bf9b878c8f0e, timestamp: 2026-06-08 19:58:30.306085, function: null, file: null}
+Log registered: {message: Session metadata snapshot loaded for active-guid, timestamp: 2026-06-08 19:58:30.306205, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.306571, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.307431, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.307543, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 9a83f3fa-2e30-4ea1-bf74-5b19d1731788, timestamp: 2026-06-08 19:58:30.309295, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_candidate_source_docsYsy8Qk/session_active-guid/metadata.json, timestamp: 2026-06-08 19:58:30.309986, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.310117, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.310198, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Session metadata loaded for session test-guid, timestamp: 2026-06-08 19:58:30.310222, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: loads active and historical gallery candidate sessions once
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.310261, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management video capture context persists and reloads from metadata
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.311177, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.311249, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.311304, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.311350, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/gallery_session_candidate_source_test.dart: (tearDownAll)
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/session_manager_test.dart: SessionManager Media management multiple media can be added to session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.312466, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.312532, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.312736, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.312787, function: null, file: null}
+Log registered: {message: Session started with GUID: test-guid on device type: Master, timestamp: 2026-06-08 19:58:30.312831, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediarYeJ0J/test_photo_1.jpg, timestamp: 2026-06-08 19:58:30.313348, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediarYeJ0J/test_photo_1.jpg, timestamp: 2026-06-08 19:58:30.313464, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediarYeJ0J/test_photo_2.jpg, timestamp: 2026-06-08 19:58:30.313555, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_test_mediarYeJ0J/test_photo_2.jpg, timestamp: 2026-06-08 19:58:30.313791, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.313986, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 19:58:30.314100, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.315247, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.315346, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/session_manager_docsnhdRQp/session_test-guid/metadata.json, timestamp: 2026-06-08 19:58:30.315413, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 19:58:30.315769, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 19:58:30.315821, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 19:58:30.315874, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches gallery videos inside an explicit session margin
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: excludes videos outside the margin and ranks nearest candidates first
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/gallery_session_matcher_test.dart: matches raw video time ranges without requiring a saved video file
+00:00 +15: /Users/jose/src/work/hydracamv2/test/screens/media_selection_screen_test.dart: video tiles show nearest candidate session
+00:00 +16: All tests passed!
+[exit-code] 0

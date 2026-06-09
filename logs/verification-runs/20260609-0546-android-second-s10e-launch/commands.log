@@ -1,0 +1,70 @@
+# HydraCam evidence run command log
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:1
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+RF8M21J8XRT            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:8
+RF8M90QE7LX            device usb:0-1.3.3 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:10
+
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell am start -W -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.amaia23.hydracam/.MainActivity
+TotalTime: 8043
+WaitTime: 8077
+Complete
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell pidof com.amaia23.hydracam
+21477
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell input keyevent BACK
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell am start -W -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.amaia23.hydracam/.MainActivity
+TotalTime: 3003
+WaitTime: 3012
+Complete
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell cmd statusbar collapse
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell screenrecord --time-limit 5 /sdcard/hydracam-second-s10e-launch.mp4
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX pull /sdcard/hydracam-second-s10e-launch.mp4 logs/verification-runs/20260609-0546-android-second-s10e-launch/video/RF8M90QE7LX-launch.mp4
+
+[stderr]
+/sdcard/hydracam-second-s10e-launch.mp4: 1 file pulled, 0 skipped. 18.1 MB/s (1852991 bytes in 0.098s)
+[exit-code] 0

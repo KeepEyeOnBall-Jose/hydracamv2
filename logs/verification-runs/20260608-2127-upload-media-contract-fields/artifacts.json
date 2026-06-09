@@ -1,0 +1,112 @@
+{
+  "acceptanceChecks": [
+    "Upload-media query and multipart field names are centralized in a named contract and uploadMedia uses that contract unchanged for photo and video requests."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T19:28:21.470117+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:28:58.517556+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-2127-upload-media-contract-fields/render_upload_contract_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:29:47.685848+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-2127-upload-media-contract-fields/render_upload_contract_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:30:12.449606+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:30:49.802421+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:30:59.574224+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:31:05.414700+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:31:19.486705+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "HydraCamApiService upload media contract",
+      "kind": "unit-test",
+      "name": "HydraCam API unit test runner",
+      "notes": [
+        "Focused tests verify uploadMedia sends query and multipart field names through a named contract without changing the backend payload."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "upload-contract"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/upload_media_contract_fields.png",
+    "video/upload_media_contract_fields_proof.mp4",
+    "device-logs/upload-contract-test-commands.log"
+  ],
+  "item": {
+    "slug": "upload-media-contract-fields",
+    "source": "docs/control/backlog-import.md",
+    "title": "JAVI row 106: Upload media field contract"
+  },
+  "notes": [
+    "Focused TDD slice for JAVI row 106. Mobile upload-media endpoint, query names, multipart fields, file field, method, and success status now live in HydraCamUploadMediaContract while the tested payload remains unchanged. Does not claim backend/server contract cleanup."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

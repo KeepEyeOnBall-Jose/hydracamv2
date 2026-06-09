@@ -1,11 +1,13 @@
 import "package:flutter/foundation.dart";
-import "package:permission_handler/permission_handler.dart";
 import "package:permission_handler/permission_handler.dart"
     as permission_handler;
 import "log_service.dart";
 
-typedef PermissionRequester = Future<Map<Permission, PermissionStatus>>
-    Function(List<Permission> permissions);
+typedef PermissionRequester
+    = Future<Map<permission_handler.Permission,
+        permission_handler.PermissionStatus>> Function(
+      List<permission_handler.Permission> permissions,
+    );
 
 // ignore: avoid_classes_with_only_static_members
 class PermissionService {
@@ -49,16 +51,21 @@ class PermissionService {
     return statuses.values.every((status) => status.isGranted);
   }
 
-  static List<Permission> _startupPermissionsFor(TargetPlatform platform) {
+  static List<permission_handler.Permission> _startupPermissionsFor(
+    TargetPlatform platform,
+  ) {
     return [
-      Permission.camera,
-      Permission.microphone,
-      if (platform == TargetPlatform.android) Permission.locationWhenInUse,
+      permission_handler.Permission.camera,
+      permission_handler.Permission.microphone,
+      if (platform == TargetPlatform.android)
+        permission_handler.Permission.locationWhenInUse,
     ];
   }
 
-  static Future<Map<Permission, PermissionStatus>> _defaultRequestPermissions(
-    List<Permission> permissions,
+  static Future<
+      Map<permission_handler.Permission,
+          permission_handler.PermissionStatus>> _defaultRequestPermissions(
+    List<permission_handler.Permission> permissions,
   ) {
     return permissions.request();
   }

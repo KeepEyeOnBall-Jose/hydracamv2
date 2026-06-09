@@ -11,8 +11,10 @@ class UploaderInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<CapturedPhoto> photos = SessionManager.instance.currentSession?.capturedPhotos ?? [];
-    final List<CapturedVideo> videos = SessionManager.instance.currentSession?.capturedVideos ?? [];
+    final List<CapturedPhoto> photos =
+        SessionManager.instance.currentSession?.capturedPhotos ?? [];
+    final List<CapturedVideo> videos =
+        SessionManager.instance.currentSession?.capturedVideos ?? [];
 
     final int uploadedPhotos = photos.where((p) => p.isUploaded).length;
     final int totalPhotos = photos.length;
@@ -28,44 +30,54 @@ class UploaderInfoScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ValueListenableBuilder<Duration>(
-            valueListenable: UploaderService().estimatedTimeNotifier,
-            builder: (context, estimatedTime, _){
-              return Row(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Photos uploaded: $uploadedPhotos / $totalPhotos", style: const TextStyle(fontSize: 16)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Videos uploaded: $uploadedVideos / $totalVideos", style: const TextStyle(fontSize: 16)),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  /*Padding(
+              valueListenable: UploaderService().estimatedTimeNotifier,
+              builder: (context, estimatedTime, _) {
+                return Row(
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              "Photos uploaded: $uploadedPhotos / $totalPhotos",
+                              style: const TextStyle(fontSize: 16)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              "Videos uploaded: $uploadedVideos / $totalVideos",
+                              style: const TextStyle(fontSize: 16)),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    /*Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('Estimated time: ${_formatDuration(estimatedTime)}',
                         style: const TextStyle(fontSize: 16)),
                   )*/
-
-                ],
-              );
-            }
-          ),
+                  ],
+                );
+              }),
           Expanded(
             child: MediaListWidget(
               photos: photos,
               videos: videos,
-              onRetryPhotoUpload: (photo) {
-                UploaderService().addMediaToQueue(photo);
-                UploaderService().startUploadingManually(); // Force manual upload
+              onRetryPhotoUpload: (photo) async {
+                await UploaderService().addMediaToQueue(photo);
+                await UploaderService()
+                    .startUploadingManually(); // Force manual upload
               },
-              onRetryVideoUpload: (video) {
-                UploaderService().addMediaToQueue(video);
-                UploaderService().startUploadingManually(); // Force manual upload
+              onRetryVideoUpload: (video) async {
+                await UploaderService().addMediaToQueue(video);
+                await UploaderService()
+                    .startUploadingManually(); // Force manual upload
+              },
+              onCancelPhotoUpload: (photo) {
+                UploaderService().cancelMediaUpload(photo);
+              },
+              onCancelVideoUpload: (video) {
+                UploaderService().cancelMediaUpload(video);
               },
             ),
           ),
@@ -73,5 +85,4 @@ class UploaderInfoScreen extends StatelessWidget {
       ),
     );
   }
-
 }

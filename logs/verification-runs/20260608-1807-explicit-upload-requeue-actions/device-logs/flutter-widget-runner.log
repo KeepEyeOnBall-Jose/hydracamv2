@@ -1,0 +1,14 @@
+Flutter widget evidence for backlog item 4.
+
+No physical device log was captured in this UI-only slice. The proof uses a
+MediaListWidget harness with one failed video and one pending video. The action
+buttons keep the existing requeue callbacks but now expose distinct tooltips:
+Retry upload for failed media and Queue upload for pending media.
+
+Primary command evidence is captured in ../commands.log:
+- RED: flutter test --no-pub test/widgets/media_list_widget_test.dart failed
+  because Retry upload and Queue upload tooltips were missing.
+- GREEN: the same focused widget test passed after MediaListWidget labeled the
+  existing requeue actions by upload state.
+- ANALYZE: flutter analyze --no-pub passed.
+- VISUAL: flutter test --no-pub --update-goldens logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/explicit_upload_actions_visual_test.dart

@@ -1,0 +1,371 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/win11-dev-host.md
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+[exit-code] 0
+
+$ flutter test --no-pub test/services/battery_service_test.dart test/services/camera_service_failure_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart
+00:00 +0 -1: loading /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: test/services/battery_service_test.dart:81:7: Error: No named parameter with the name 'criticalBatteryThreshold'.
+        criticalBatteryThreshold: 10,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  lib/services/battery_service.dart:30:3: Context: Found this candidate, but the arguments don't match.
+    BatteryService({
+    ^^^^^^^^^^^^^^
+  test/services/battery_service_test.dart:136:7: Error: No named parameter with the name 'criticalBatteryThreshold'.
+        criticalBatteryThreshold: 10,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  lib/services/battery_service.dart:30:3: Context: Found this candidate, but the arguments don't match.
+    BatteryService({
+    ^^^^^^^^^^^^^^
+  .
+  Error: The Dart compiler exited unexpectedly.
+  package:flutter_tools/src/base/common.dart 34:3  throwToolExit
+  package:flutter_tools/src/compile.dart 1009:11   DefaultResidentCompiler._compile.<fn>
+  dart:async/zone_root.dart 48:47                  _rootRunUnary
+  dart:async/zone.dart 733:19                      _CustomZone.runUnary
+  dart:async/future_impl.dart 948:45               Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 977:13               Future._propagateToListeners
+  dart:async/future_impl.dart 862:9                Future._propagateToListeners
+  dart:async/future_impl.dart 720:5                Future._completeWithValue
+  dart:async/future_impl.dart 804:7                Future._asyncCompleteWithValue.<fn>
+  dart:async/zone_root.dart 35:13                  _rootRun
+  dart:async/zone.dart 726:19                      _CustomZone.run
+  dart:async/zone.dart 625:7                       _CustomZone.runGuarded
+  dart:async/zone.dart 666:23                      _CustomZone.bindCallbackGuarded.<fn>
+  dart:async/schedule_microtask.dart 40:35         _microtaskLoop
+  dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
+
+00:00 +0 -2: loading /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart [E]
+  Failed to load "/Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart":
+  Compilation failed for testPath=/Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: test/services/camera_service_failure_test.dart:195:25: Error: The method 'forceStopRecordingDueToBattery' isn't defined for the type 'CameraService'.
+   - 'CameraService' is from 'package:hydracam/services/camera_service.dart' ('lib/services/camera_service.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'forceStopRecordingDueToBattery'.
+      await cameraService.forceStopRecordingDueToBattery();
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: loading /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart
+  /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: loading /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart
+
+[stderr]
+test/services/battery_service_test.dart:81:7: Error: No named parameter with the name 'criticalBatteryThreshold'.
+      criticalBatteryThreshold: 10,
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+lib/services/battery_service.dart:30:3: Context: Found this candidate, but the arguments don't match.
+  BatteryService({
+  ^^^^^^^^^^^^^^
+test/services/battery_service_test.dart:136:7: Error: No named parameter with the name 'criticalBatteryThreshold'.
+      criticalBatteryThreshold: 10,
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+lib/services/battery_service.dart:30:3: Context: Found this candidate, but the arguments don't match.
+  BatteryService({
+  ^^^^^^^^^^^^^^
+test/services/camera_service_failure_test.dart:195:25: Error: The method 'forceStopRecordingDueToBattery' isn't defined for the type 'CameraService'.
+ - 'CameraService' is from 'package:hydracam/services/camera_service.dart' ('lib/services/camera_service.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'forceStopRecordingDueToBattery'.
+    await cameraService.forceStopRecordingDueToBattery();
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[exit-code] 1
+
+$ flutter test --no-pub test/services/battery_service_test.dart test/services/camera_service_failure_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: skips linux battery plugin when DBus system bus is missing
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: takePhoto surfaces camera failures instead of returning a fake path
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.024876, function: null, file: null}
+Log registered: {message: Error taking photo: Exception: No cameras available on this device.
+#0      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:246:7)
+<asynchronous suspension>
+#1      CameraService.takePhoto (package:hydracam/services/camera_service.dart:296:7)
+<asynchronous suspension>
+#2      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#4      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:55:5)
+<asynchronous suspension>
+#7      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#9      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 17:48:48.032831, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.042854, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 17:48:48.044596, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 17:48:48.047741, function: null, file: null}
+Log registered: {message: Generated new Device ID: 6c25a01a-12c4-4237-9bbf-6ab08e25a844, timestamp: 2026-06-08 17:48:48.050227, function: null, file: null}
+Log registered: {message: Camera video recording start failed with explicit fps; retrying with resolution preset defaults. Error: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:708:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:80:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 17:48:48.051878, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 17:48:48.255627, function: null, file: null}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService triggers one autostop when battery becomes critical
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 17:48:48.338389, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-08 17:48:48.338749, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-08 17:48:48.352020, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService: Error reading battery level: MissingPluginException(No implementation found for method getBatteryLevel on channel dev.fluttercommunity.plus/battery), timestamp: 2026-06-08 17:48:48.370241, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart: BatteryService throttles repeated low-battery warnings
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 17:48:48.379968, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo stays inactive when the camera platform fails
+Log registered: {message: Camera reinitialized for video recording start without explicit fps: camera=fake-back-camera, profile=standard1080p30., timestamp: 2026-06-08 17:48:48.455983, function: null, file: null}
+Log registered: {message: Error starting video recording: CameraException(ios_camera_start_failed, Simulated iPad recording start failure)
+#0      CameraController.startVideoRecording (package:camera/src/camera_controller.dart:607:7)
+<asynchronous suspension>
+#1      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1061:7)
+<asynchronous suspension>
+#2      CameraService._startVideoRecordingWithFallback (package:hydracam/services/camera_service.dart:724:7)
+<asynchronous suspension>
+#3      CameraService.startRecordingVideo (package:hydracam/services/camera_service.dart:390:7)
+<asynchronous suspension>
+#4      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#5      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#7      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:80:5)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 17:48:48.456470, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: startRecordingVideo works when the iPad has no flash capability
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.458823, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 17:48:48.459082, function: null, file: null}
+Log registered: {message: Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities), timestamp: 2026-06-08 17:48:48.459501, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 17:48:48.459625, function: null, file: null}
+Log registered: {message: Generated new Device ID: bd3c7d2c-d333-4cdf-9f65-a0136cf8fc05, timestamp: 2026-06-08 17:48:48.459876, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 17:48:48.460360, function: null, file: null}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: non-flash initialization failures still surface
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.462175, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 17:48:48.462466, function: null, file: null}
+Log registered: {message: Error initializing camera: CameraException(setFlashModeFailed, Camera session is unavailable)
+#0      CameraController.setFlashMode (package:camera/src/camera_controller.dart:729:7)
+<asynchronous suspension>
+#1      CameraService._setFlashModeIfSupported (package:hydracam/services/camera_service.dart:801:7)
+<asynchronous suspension>
+#2      CameraService.ensureCameraIsReady (package:hydracam/services/camera_service.dart:261:7)
+<asynchronous suspension>
+#3      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#4      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#5      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#6      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#7      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:129:5)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#10     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 17:48:48.462896, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: stopRecordingVideo surfaces the camera plugin no-recording error
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.464322, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 17:48:48.464570, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 17:48:48.464941, function: null, file: null}
+Log registered: {message: Error stopping video recording: Exception: stopVideoRecording was called when no video is recording.
+#0      CameraService.stopRecordingVideo (package:hydracam/services/camera_service.dart:416:9)
+#1      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart:152:21)
+<asynchronous suspension>
+#2      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#3      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#4      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-08 17:48:48.465272, function: null, file: null}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: mock camera writes placeholder media without a platform camera
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 17:48:48.467107, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 17:48:48.467374, function: null, file: null}
+Log registered: {message: Generated new Device ID: b726a64b-5778-47aa-aa84-a10872eff629, timestamp: 2026-06-08 17:48:48.467576, function: null, file: null}
+Log registered: {message: Mock photo saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsN9MGRI/session_null/mock_1_2026-06-08T17-48-48-467957.jpg, timestamp: 2026-06-08 17:48:48.469619, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 17:48:48.469834, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: b726a64b-5778-47aa-aa84-a10872eff629, timestamp: 2026-06-08 17:48:48.469976, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 17:48:48.470110, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsN9MGRI/session_null/mock_2_2026-06-08T17-48-48-470335.mp4, timestamp: 2026-06-08 17:48:48.471172, function: null, file: null}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: critical battery force stop saves mock recording and interrupts
+Log registered: {message: Using mock camera because HYDRACAM_MOCK_CAMERA is enabled., timestamp: 2026-06-08 17:48:48.473189, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-08 17:48:48.473312, function: null, file: null}
+Log registered: {message: Generated new Device ID: b2e5dd2e-9d2b-4662-86da-61bce3e78ca0, timestamp: 2026-06-08 17:48:48.473505, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-08 17:48:48.473582, function: null, file: null}
+Log registered: {message: Stopping recording due to critical battery., timestamp: 2026-06-08 17:48:48.473817, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsN9MGRI/session_null/mock_1_2026-06-08T17-48-48-473893.mp4, timestamp: 2026-06-08 17:48:48.474588, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: b2e5dd2e-9d2b-4662-86da-61bce3e78ca0, timestamp: 2026-06-08 17:48:48.474999, function: null, file: null}
+Log registered: {message: Adding video to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsN9MGRI/session_null/mock_1_2026-06-08T17-48-48-473893.mp4, timestamp: 2026-06-08 17:48:48.475479, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/camera_service_mock_docsN9MGRI/session_null/mock_1_2026-06-08T17-48-48-473893.mp4, timestamp: 2026-06-08 17:48:48.478062, function: null, file: null}
+Log registered: {message: Auto-upload is enabled. Starting upload process., timestamp: 2026-06-08 17:48:48.478425, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 17:48:48.478599, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 17:48:48.478955, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=null, timestamp: 2026-06-08 17:48:48.479131, function: null, file: null}
+Log registered: {message: No session GUID available. Cannot upload media., timestamp: 2026-06-08 17:48:48.479220, function: null, file: null}
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: selected ultra-wide lens uses sport 1080p60 controller settings
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.481197, function: null, file: null}
+Log registered: {message: Updated selected camera name to iphone-ultra-wide, timestamp: 2026-06-08 17:48:48.481533, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 17:48:48.482070, function: null, file: null}
+Log registered: {message: Generated new Device ID: b50bcfb6-874f-4280-a157-585857105096, timestamp: 2026-06-08 17:48:48.482212, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 17:48:48.482390, function: null, file: null}
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: changing video profile preserves the selected camera
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.484142, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 17:48:48.484533, function: null, file: null}
+Log registered: {message: Changing video capture profile to detail4k30 (current: standard1080p30), timestamp: 2026-06-08 17:48:48.484681, function: null, file: null}
+Log registered: {message: Updated video capture profile to detail4k30, timestamp: 2026-06-08 17:48:48.485023, function: null, file: null}
+Log registered: {message: Camera capture settings applied and reinitialized: camera=iphone-telephoto, profile=detail4k30., timestamp: 2026-06-08 17:48:48.889708, function: null, file: null}
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: setup preview uses preset defaults without explicit fps
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 17:48:48.895421, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 17:48:48.895909, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 17:48:48.896641, function: null, file: null}
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: recording after setup preview rebuilds the explicit fps controller
+Log registered: {message: Initializing camera preview..., timestamp: 2026-06-08 17:48:48.898966, function: null, file: null}
+Log registered: {message: Updated selected camera name to fake-back-camera, timestamp: 2026-06-08 17:48:48.899394, function: null, file: null}
+Log registered: {message: Camera preview successfully initialized without explicit fps., timestamp: 2026-06-08 17:48:48.900708, function: null, file: null}
+Log registered: {message: Initializing camera..., timestamp: 2026-06-08 17:48:48.900918, function: null, file: null}
+Log registered: {message: Camera successfully initialized., timestamp: 2026-06-08 17:48:49.305777, function: null, file: null}
+Log registered: {message: Generated new Device ID: 58da9629-df20-49a6-ae37-ea37f92fabbe, timestamp: 2026-06-08 17:48:49.307244, function: null, file: null}
+Log registered: {message: Video recording started with flash off, timestamp: 2026-06-08 17:48:49.308098, function: null, file: null}
+00:01 +15: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: macOS runtime uses the real camera backend unless mock is explicit
+00:01 +16: /Users/jose/src/work/hydracamv2/test/services/camera_service_failure_test.dart: (tearDownAll)
+00:01 +16: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 4.8s)
+[exit-code] 0
+
+$ flutter test --no-pub --update-goldens logs/verification-runs/20260608-1745-critical-battery-autostop/battery_autostop_visual_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-1745-critical-battery-autostop/battery_autostop_visual_test.dart
+00:00 +0: critical battery snackbar visual proof
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-08 17:49:37.856612, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-08 17:49:37.858665, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +1: All tests passed!
+[exit-code] 0
+
+$ ffmpeg -y -loop 1 -t 3 -i logs/verification-runs/20260608-1745-critical-battery-autostop/screenshots/critical_battery_snackbar.png -vf format=yuv420p -movflags +faststart logs/verification-runs/20260608-1745-critical-battery-autostop/video/critical_battery_snackbar_proof.mp4
+
+[stderr]
+ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.6.4.2)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60. 26.100 / 60. 26.100
+  libavcodec     62. 28.100 / 62. 28.100
+  libavformat    62. 12.100 / 62. 12.100
+  libavdevice    62.  3.100 / 62.  3.100
+  libavfilter    11. 14.100 / 11. 14.100
+  libswscale      9.  5.100 /  9.  5.100
+  libswresample   6.  3.100 /  6.  3.100
+Input #0, png_pipe, from 'logs/verification-runs/20260608-1745-critical-battery-autostop/screenshots/critical_battery_snackbar.png':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc, gbr/bt709/iec61966-2-1), 1290x900, 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0xc1b058a80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0xc1b058a80] profile High, level 3.2, 4:2:0, 8-bit
+[libx264 @ 0xc1b058a80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=24 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260608-1745-critical-battery-autostop/video/critical_battery_snackbar_proof.mp4':
+  Metadata:
+    encoder         : Lavf62.12.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, unknown/bt709/iec61966-2-1, progressive), 1290x900, q=2-31, 25 fps, 12800 tbn
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[mp4 @ 0xc1ac24280] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0xc1b05c240] video:12KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 14.236167%
+frame=   75 fps=0.0 q=-1.0 Lsize=      14KiB time=00:00:02.92 bitrate=  38.8kbits/s speed=  30x elapsed=0:00:00.09
+[libx264 @ 0xc1b058a80] frame I:1     Avg QP:12.06  size:  6704
+[libx264 @ 0xc1b058a80] frame P:19    Avg QP:13.63  size:   106
+[libx264 @ 0xc1b058a80] frame B:55    Avg QP:13.11  size:    54
+[libx264 @ 0xc1b058a80] consecutive B-frames:  1.3%  2.7%  0.0% 96.0%
+[libx264 @ 0xc1b058a80] mb I  I16..4: 91.7%  2.6%  5.7%
+[libx264 @ 0xc1b058a80] mb P  I16..4:  0.2%  0.0%  0.0%  P16..4:  0.1%  0.0%  0.0%  0.0%  0.0%    skip:99.7%
+[libx264 @ 0xc1b058a80] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.2%  0.0%  0.0%  direct: 0.0%  skip:99.8%  L0:57.9% L1:42.1% BI: 0.0%
+[libx264 @ 0xc1b058a80] 8x8 transform intra:2.5% inter:4.0%
+[libx264 @ 0xc1b058a80] coded y,uvDC,uvAC intra: 2.4% 5.1% 3.5% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0xc1b058a80] i16 v,h,dc,p: 79% 19%  2%  0%
+[libx264 @ 0xc1b058a80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 12% 68% 20%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0xc1b058a80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 36% 32% 26%  1%  4%  0%  1%  0%  0%
+[libx264 @ 0xc1b058a80] i8c dc,h,v,p: 75% 19%  5%  0%
+[libx264 @ 0xc1b058a80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0xc1b058a80] ref P L0: 92.7%  0.0%  6.4%  0.9%
+[libx264 @ 0xc1b058a80] ref B L0: 24.5% 75.5%
+[libx264 @ 0xc1b058a80] ref B L1: 94.4%  5.6%
+[libx264 @ 0xc1b058a80] kb/s:31.22
+[exit-code] 0
+
+$ git diff --check -- lib/main.dart lib/services/battery_service.dart lib/services/camera_service.dart test/services/battery_service_test.dart test/services/camera_service_failure_test.dart docs/control/backlog-import.md logs/verification-runs/20260608-1745-critical-battery-autostop/summary.md logs/verification-runs/20260608-1745-critical-battery-autostop/device-logs/flutter-widget-runner.log logs/verification-runs/20260608-1745-critical-battery-autostop/battery_autostop_visual_test.dart
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+[exit-code] 0

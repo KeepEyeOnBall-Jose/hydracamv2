@@ -1,0 +1,125 @@
+{
+  "acceptanceChecks": [
+    "Auth0 login persists returned credentials through a secure credential-store abstraction",
+    "Persisted fields include access token, ID token, refresh token, and expiration",
+    "No token is stored in shared preferences",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:01:03.892629+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T18:01:36.303905+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:02:36.543011+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "flutter_secure_storage",
+        "pubspec.yaml",
+        "pubspec.lock",
+        "lib/services/auth0_service.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:02:51.300903+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "shared_preferences",
+        "lib/services/auth0_service.dart",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T18:02:51.478892+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:03:10.775314+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:04:22.617017+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:05:29.313072+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter Auth0 credential-store test runner",
+      "notes": [
+        "Runs AuthService secure credential persistence tests with fake AppAuth client and in-memory credential store."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/auth0_secure_credential_store.png",
+    "video/auth0_secure_credential_store_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "auth0-secure-credential-store",
+    "source": "docs/control/backlog-import.md#11-make-mobile-auth0-login-recoverable-and-release-safe",
+    "title": "11. Make mobile Auth0 login recoverable and release-safe"
+  },
+  "notes": [
+    "Auth0 login now persists returned credentials through a FlutterSecureStorage-backed credential store.",
+    "Auth0 login now persists returned credentials through a FlutterSecureStorage-backed credential store.",
+    "Auth0 login now persists returned credentials through a FlutterSecureStorage-backed credential store."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

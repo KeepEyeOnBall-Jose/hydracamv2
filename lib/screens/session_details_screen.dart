@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 import "package:flutter/material.dart";
 import "../models/capture_session.dart";
@@ -20,7 +21,7 @@ class SessionDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Session: ${session.sessionId}"),
+        title: Text("Session: ${session.preferredIdentifier}"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,6 +47,11 @@ class SessionDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildSessionMetadata(BuildContext context) {
+    final hasBackendGuid =
+        session.sessionGuid != null && session.sessionGuid!.isNotEmpty;
+    final hasDistinctLegacySessionId =
+        hasBackendGuid && session.sessionId != session.sessionGuid;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -60,13 +66,16 @@ class SessionDetailsScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Text("Session ID: ${session.sessionId}"),
-                Text("Session GUID: ${session.sessionGuid ?? 'Unavailable'}"),
+                Text("Session: ${session.preferredIdentifier}"),
+                if (hasDistinctLegacySessionId)
+                  Text("Legacy Session ID: ${session.sessionId}"),
                 Text("Start Time: ${session.startTime}"),
                 if (session.endTime != null)
                   Text("End Time: ${session.endTime}"),
                 Text("Total Photos: ${session.capturedPhotos.length}"),
                 Text("Total Videos: ${session.capturedVideos.length}"),
+                const SizedBox(height: 12),
+                _buildPlayerAssignmentState(),
               ],
             ),
           ),
@@ -80,7 +89,7 @@ class SessionDetailsScreen extends StatelessWidget {
               icon:
                   const Icon(Icons.file_download_outlined, color: Colors.blue),
               tooltip: "Load Session",
-              onPressed: () => _loadSessionWithoutUploading(context),
+              onPressed: () => unawaited(_loadSessionWithoutUploading(context)),
             ),
           ),
         ],
@@ -88,26 +97,46 @@ class SessionDetailsScreen extends StatelessWidget {
     );
   }
 
-  void _loadSessionWithoutUploading(BuildContext context) async {
+  Widget _buildPlayerAssignmentState() {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 420),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.groups_outlined, size: 20),
+              SizedBox(width: 8),
+              Text(
+                "Players",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text("Source: backend not configured"),
+          const SizedBox(height: 4),
+          Text(
+            "Player assignment unavailable",
+            style: TextStyle(color: Colors.grey.shade700),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _loadSessionWithoutUploading(BuildContext context) async {
     try {
-      // Jut load session without uploading anything
-      SessionManager.instance
-          .startSession(session.sessionGuid!, null, deviceType: "Master");
-
-      final loadedSession = await SessionManager.instance
-          .loadSessionMetadata(session.sessionGuid!);
-
-      if (loadedSession == null) {
-        throw Exception(
-            "Failed to load session metadata for GUID: ${session.sessionGuid!}");
-      }
-
-      for (final photo in loadedSession.capturedPhotos) {
-        SessionManager.instance.addPhoto(photo);
-      }
-      for (final video in loadedSession.capturedVideos) {
-        SessionManager.instance.addVideo(video);
-      }
+      await SessionManager.instance.restoreSessionFromMetadata(
+        session.preferredIdentifier,
+        deviceType: "Master",
+      );
 
       if (!context.mounted) return;
 
@@ -188,7 +217,7 @@ class SessionDetailsScreen extends StatelessWidget {
             // Ask to load session and upload all unsent media
             AlertUtils.showUploadAllMediaAlert(
               context,
-              () => _loadSessionAndUploadMedia(context),
+              () => unawaited(_loadSessionAndUploadMedia(context)),
             );
           }
         },
@@ -237,27 +266,12 @@ class SessionDetailsScreen extends StatelessWidget {
     );
   }
 
-  // TODO: Extract from here
-  void _loadSessionAndUploadMedia(BuildContext context) async {
+  Future<void> _loadSessionAndUploadMedia(BuildContext context) async {
     try {
-      // Load session
-      SessionManager.instance.startSession(session.sessionGuid!, null,
-          deviceType: "Master"); // TODO: Master or the previous one??
-
-      final loadedSession = await SessionManager.instance
-          .loadSessionMetadata(session.sessionGuid!);
-
-      if (loadedSession == null) {
-        throw Exception(
-            "Failed to load session metadata for GUID: ${session.sessionGuid!}");
-      }
-
-      for (final photo in loadedSession.capturedPhotos) {
-        SessionManager.instance.addPhoto(photo);
-      }
-      for (final video in loadedSession.capturedVideos) {
-        SessionManager.instance.addVideo(video);
-      }
+      await SessionManager.instance.restoreSessionFromMetadata(
+        session.preferredIdentifier,
+        deviceType: "Master",
+      );
 
       if (!context.mounted) return;
 
@@ -275,7 +289,7 @@ class SessionDetailsScreen extends StatelessWidget {
       );
 
       // Init upload process
-      UploaderService().startUploadingManually();
+      await UploaderService().startUploadingManually();
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

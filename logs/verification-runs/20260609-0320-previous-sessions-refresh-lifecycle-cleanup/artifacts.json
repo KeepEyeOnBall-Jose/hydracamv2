@@ -1,0 +1,92 @@
+{
+  "acceptanceChecks": [
+    "PreviousSessionsScreen ignores late refresh completion after disposal",
+    "PreviousSessions async handlers return Future<void> and are dispatched explicitly",
+    "Focused previous-sessions widget test, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/previous_sessions_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T01:16:30.521219+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/screens/previous_sessions_screen.dart",
+        "test/screens/previous_sessions_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:17:09.685716+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/previous_sessions_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:17:13.947211+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/previous_sessions_screen_test.dart",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:17:50.815961+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:17:59.364638+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:18:03.502118+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:18:13.010221+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "previous-sessions-refresh-lifecycle-cleanup",
+    "source": "cleanup scan: async void screen handlers",
+    "title": "Previous sessions refresh lifecycle cleanup"
+  },
+  "notes": [
+    "Red test reproduced setState after dispose when a blocked previous-session scan completed late.",
+    "PreviousSessionsScreen now guards mounted after the scan and dispatches init, refresh, and tap async work with unawaited.",
+    "Focused screen tests, git diff --check, flutter analyze --no-pub, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

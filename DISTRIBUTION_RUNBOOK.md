@@ -43,6 +43,7 @@ Do not submit a production build until all gates pass:
 3. In App Store Connect, create the HydraCam app record using that bundle ID.
 4. Confirm `ios/fastlane/Appfile` values:
    - `app_identifier("com.keepeyeonball")`
+   - `apple_id("jose@keepeyeonball.com")`
    - `team_id("4RRY2QT7H8")`
    - `itc_team_id("118432237")`
 5. Set Xcode signing for the Runner target to the Apple team. Automatic signing
@@ -84,8 +85,8 @@ For Home Screen icon testing before TestFlight, install a Profile build:
 ```bash
 IOS_XCODE_DESTINATION_ID=00008101-000A68811E43001E \
 IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A \
-IOS_DEVELOPMENT_TEAM=8T78Y2X37H \
-IOS_BUNDLE_ID=com.vectorblanco.hydracam.dev \
+IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 \
+IOS_BUNDLE_ID=com.keepeyeonball \
 scripts/ios_icon_launch_dev.sh
 ```
 
@@ -96,7 +97,7 @@ evidence without attaching Flutter tooling:
 xcrun devicectl device process launch \
   --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A \
   --terminate-existing \
-  com.vectorblanco.hydracam.dev
+  com.keepeyeonball
 ```
 
 Use `flutter run -d <ios-udid> --debug` only when hot reload, the Dart VM
@@ -104,10 +105,45 @@ Service, or Flutter debugger attachment is required.
 
 ## One-Time Google Play Setup
 
-1. Create or confirm access to the Google Play developer account.
-2. Create the Play Console app with package name `com.amaia23.hydracam`.
-3. Enable Play App Signing.
-4. Generate an upload keystore and keep it backed up outside Git:
+Current recovery evidence from 2026-06-09:
+
+- The Android package remains `com.amaia23.hydracam`.
+- `jose@keepeyeonball.com` is a recognized Google account but was stopped at
+  the Google password prompt in Chrome; Play Console ownership is not verified
+  yet.
+- `vectorblanco@gmail.com` is signed into Chrome, but
+  `https://play.google.com/console/u/0/developers` redirects that account to the
+  Play Console developer-account signup flow. The page says the currently
+  signed-in Google Account will own any new developer account and ownership
+  cannot be changed after creation.
+- Read-only Gmail and historical `HydraCam Dev Process` sheet checks did not
+  find Play Console ownership, invitation, package-registration, or Android
+  distribution evidence for `com.amaia23.hydracam`.
+- A new ignored AMAIA23/HydraCam upload keystore was created at
+  `/Users/jose/.config/hydracam/secrets/android/amaia23-hydracam-upload-20260609.jks`.
+- The public upload certificate is
+  `android/amaia23-hydracam-upload-certificate-20260609.pem`.
+- Use SHA-256 fingerprint
+  `51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3`
+  when registering the package or requesting an upload-key reset.
+- `flutter build appbundle --release` now builds the signed AAB at
+  `build/app/outputs/bundle/release/app-release.aab`; latest verified artifact
+  SHA-256:
+  `c4aab71383a76ffe4385a9aea0717a69e4c76b09ba2be1a185c1807651fd210f`.
+- Full non-secret evidence:
+  `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md`.
+
+1. Complete the `jose@keepeyeonball.com` sign-in and confirm whether that
+   account owns the prior Play Console developer account. If it does, invite
+   `vectorblanco@gmail.com` as an admin before making release changes.
+2. If no prior account exists, create an organization Play Console developer
+   account under the intended owner account before registering the package.
+3. Create the Play Console app with package name `com.amaia23.hydracam`.
+4. Enable Play App Signing.
+5. Generate or recover an upload keystore and keep it backed up outside Git.
+   The current recreated upload key is already wired through ignored
+   `android/key.properties`; generate a new one only if intentionally replacing
+   this recovery key.
 
    ```bash
    keytool -genkey -v \
@@ -201,6 +237,17 @@ Expected outputs:
 
 Use TestFlight. This is the least painful iPhone beta path because testers only
 need the TestFlight app and an invite or public link.
+
+Current 2026-06-09 state:
+
+- Local App Store export works for `com.keepeyeonball`; latest verified IPA is
+  `build/ios/ipa/HydraCam.ipa`.
+- The IPA is signed for team `4RRY2QT7H8` with a cloud-managed Apple
+  Distribution certificate and `iOS Team Store Provisioning Profile:
+  com.keepeyeonball`.
+- Upload still requires App Store Connect credentials. Provide
+  `APP_STORE_CONNECT_API_KEY_PATH=/absolute/path/to/api_key.json`, or upload the
+  IPA with Transporter / `xcrun altool` using an API key and issuer.
 
 Recommended setup:
 

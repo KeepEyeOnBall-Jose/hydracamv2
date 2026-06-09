@@ -1,0 +1,443 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/remove-local-sessions-backend-upload
+ M AGENTS.md
+ M DISTRIBUTION_RUNBOOK.md
+ M android/app/build.gradle
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/evidence-first-loop.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/win11-dev-host.md
+ M ios/Runner.xcodeproj/project.pbxproj
+ M ios/Runner/Info.plist
+ M ios/fastlane/Appfile
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_announcer.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/models/capture_session.dart
+ M lib/models/captured_photo.dart
+ M lib/models/captured_video.dart
+ M lib/screens/login_screen.dart
+ M lib/screens/master_video_recording_screen.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/previous_sessions_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/permission_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/storage_service.dart
+ M lib/services/uploader_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M linux/flutter/generated_plugin_registrant.cc
+ M linux/flutter/generated_plugins.cmake
+ M macos/Flutter/GeneratedPluginRegistrant.swift
+ M macos/Runner/Info.plist
+ M pubspec.lock
+ M pubspec.yaml
+ M scripts/deploy_macos_dev_host.zsh
+ M scripts/ios_capture_repro.py
+ M scripts/ios_icon_launch_dev.sh
+ M scripts/run_parallel_device_matrix.py
+ M scripts/run_rotating_master_slave_matrix.py
+ M scripts/test_deploy_macos_dev_host.py
+ M scripts/test_run_rotating_master_slave_matrix.py
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/platform/multi_device_orchestration_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/screens/master_video_recording_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/services/storage_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/test_utils/mock_services.dart
+ M test/widget_test.dart
+ M test/widgets/add_gallery_media_button_test.dart
+ M test/widgets/session_info_widget_test.dart
+ M windows/flutter/generated_plugin_registrant.cc
+ M windows/flutter/generated_plugins.cmake
+?? android/amaia23-hydracam-upload-certificate-20260609.pem
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? docs/control/localization-inventory.md
+?? docs/control/win11-triple-platform-proof-wrapup-2026-06-09.md
+?? l10n.yaml
+?? lib/l10n/
+?? lib/services/app_locale_service.dart
+?? lib/services/gallery_session_candidate_source.dart
+?? lib/services/gallery_session_matcher.dart
+?? lib/services/session_media_storage.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-1933-inflight-upload-cancel-control/
+?? logs/verification-runs/20260608-1938-auth0-refresh-scope/
+?? logs/verification-runs/20260608-1944-gallery-scan-active-session-preserved/
+?? logs/verification-runs/20260608-1948-gallery-candidate-session-labels/
+?? logs/verification-runs/20260608-1953-gallery-historical-session-candidate-source/
+?? logs/verification-runs/20260608-2000-auth0-secure-credential-store/
+?? logs/verification-runs/20260608-2006-auth0-startup-restore-valid-credentials/
+?? logs/verification-runs/20260608-2011-20260608-2012-auth0-refresh-expired-credentials/
+?? logs/verification-runs/20260608-2017-auth0-logout-clears-credentials/
+?? logs/verification-runs/20260608-2022-user-guid-restore-after-auth0-restore/
+?? logs/verification-runs/20260608-2030-master-device-list-summary-sort/
+?? logs/verification-runs/20260608-2035-scheduled-command-master-time-offset/
+?? logs/verification-runs/20260608-2045-slave-recording-safe-stop-control/
+?? logs/verification-runs/20260608-2047-win11-triple-platform-camera-master-slave/
+?? logs/verification-runs/20260608-2055-session-player-source-missing-backend-state/
+?? logs/verification-runs/20260608-2105-master-slave-preview-missing-state/
+?? logs/verification-runs/20260608-2115-slave-session-mismatch-diagnostics/
+?? logs/verification-runs/20260608-2125-forced-stop-missing-start-timestamp/
+?? logs/verification-runs/20260608-2127-upload-media-contract-fields/
+?? logs/verification-runs/20260608-2132-in-flight-upload-dedupe/
+?? logs/verification-runs/20260608-2135-slave-identify-diagnostic-ack/
+?? logs/verification-runs/20260608-2136-uploader-estimate-completed-samples/
+?? logs/verification-runs/20260608-2140-storage-critical-block-recovery/
+?? logs/verification-runs/20260608-2144-user-login-clears-stale-guid/
+?? logs/verification-runs/20260608-2145-video-upload-duration-metadata/
+?? logs/verification-runs/20260608-2155-storage-location-missing-state/
+?? logs/verification-runs/20260608-2205-invalid-upload-file-guard/
+?? logs/verification-runs/20260608-2215-gallery-candidate-guid-label/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/
+?? logs/verification-runs/20260609-0120-ipad-runtime-screenshot-boundary-route-replacement/
+?? logs/verification-runs/20260609-0140-guid-api-upload-estimate-cleanup/
+?? logs/verification-runs/20260609-0140-ipad-uploader-webservice-check/
+?? logs/verification-runs/20260609-0145-session-restore-helper-cleanup/
+?? logs/verification-runs/20260609-0151-api-uri-construction-cleanup/
+?? logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/
+?? logs/verification-runs/20260609-0211-master-session-status-response-helper-cleanup/
+?? logs/verification-runs/20260609-0214-master-targeted-command-dispatch-cleanup/
+?? logs/verification-runs/20260609-0219-master-scheduled-command-dispatch-cleanup/
+?? logs/verification-runs/20260609-0223-uploader-enqueue-async-return-cleanup/
+?? logs/verification-runs/20260609-0228-session-add-media-async-return-cleanup/
+?? logs/verification-runs/20260609-0233-branch-compile-repair-backend-session-locale/
+?? logs/verification-runs/20260609-0245-uploader-manual-upload-future-cleanup/
+?? logs/verification-runs/20260609-0245-win11-triple-platform-webcam-upload-matrix/
+?? logs/verification-runs/20260609-0252-slave-command-future-dispatch-cleanup/
+?? logs/verification-runs/20260609-0256-master-server-incoming-message-handler-cleanup/
+?? logs/verification-runs/20260609-0301-scheduled-task-future-callback-cleanup/
+?? logs/verification-runs/20260609-0310-scheduled-task-cancel-future-cleanup/
+?? logs/verification-runs/20260609-0313-add-gallery-media-button-async-handler-cleanup/
+?? logs/verification-runs/20260609-0317-session-details-async-handler-cleanup/
+?? logs/verification-runs/20260609-0320-previous-sessions-refresh-lifecycle-cleanup/
+?? logs/verification-runs/20260609-0323-master-video-stop-handler-async-cleanup/
+?? logs/verification-runs/20260609-0327-slave-dim-timer-async-cleanup/
+?? logs/verification-runs/20260609-0330-master-server-unused-session-history-cleanup/
+?? logs/verification-runs/20260609-0334-master-screen-async-handler-cleanup/
+?? logs/verification-runs/20260609-0340-camera-forced-stop-helper-cleanup/
+?? logs/verification-runs/20260609-0344-master-received-media-storage-helper-cleanup/
+?? logs/verification-runs/20260609-0350-master-server-stop-lifecycle-contract-cleanup/
+?? logs/verification-runs/20260609-0353-master-screen-dispose-lifecycle-contract-cleanup/
+?? logs/verification-runs/20260609-0355-signing-jose-keepeyeonball-ios-redeploy/
+?? logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/
+?? logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/
+?? logs/verification-runs/20260609-0415-win11-android-studio-quail-e-drive-move/
+?? logs/verification-runs/20260609-0426-auth0-mobile-platform-boundary-cleanup/
+?? logs/verification-runs/20260609-0430-upload-empty-file-guard/
+?? logs/verification-runs/20260609-0432-login-desktop-auth0-message/
+?? logs/verification-runs/20260609-0435-upload-backend-failure-response-guard/
+?? logs/verification-runs/20260609-0437-received-media-declared-type-extension-cleanup/
+?? logs/verification-runs/20260609-0445-slave-identify-visible-frame/
+?? logs/verification-runs/20260609-0451-session-details-guid-primary-metadata/
+?? logs/verification-runs/20260609-0459-sessions-list-guid-primary-display/
+?? logs/verification-runs/20260609-0502-scheduled-task-past-due-replacement-cleanup/
+?? logs/verification-runs/20260609-0506-session-directory-identifier-scan-cleanup/
+?? logs/verification-runs/20260609-0510-permission-service-import-unification-cleanup/
+?? logs/verification-runs/20260609-0512-macos-dev-host-automation-define-cleanup/
+?? logs/verification-runs/20260609-0517-automation-local-only-guard-cleanup/
+?? logs/verification-runs/20260609-0522-settings-legacy-camera-quality-migration-cleanup/
+?? logs/verification-runs/20260609-0527-master-announcer-lifecycle-cleanup/
+?? logs/verification-runs/20260609-0529-android-four-adb-launch-smoke/
+?? logs/verification-runs/20260609-ipad-backend-session-upload-proof-rerun/
+?? scripts/test_no_local_sessions.py
+?? test/l10n/
+?? test/master/master_announcer_test.dart
+?? test/master/master_screen_test.dart
+?? test/models/capture_session_test.dart
+?? test/screens/login_screen_test.dart
+?? test/screens/media_selection_screen_test.dart
+?? test/screens/previous_sessions_screen_test.dart
+?? test/screens/session_details_screen_test.dart
+?? test/screens/sessions_screen_test.dart
+?? test/screens/uploader_info_screen_test.dart
+?? test/services/app_locale_service_test.dart
+?? test/services/auth0_service_test.dart
+?? test/services/gallery_session_candidate_source_test.dart
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/session_media_storage_test.dart
+?? test/services/uploader_service_test.dart
+?? test/services/user_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:4
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 8 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  2201116PG (mobile)           • 575ecf2cbd24                             • android-arm64  • Android 13 (API 33)
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ flutter build apk --debug
+Running Gradle task 'assembleDebug'...
+Running Gradle task 'assembleDebug'...                             32.9s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties.
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application.
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android.
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT install -r build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+adb: device 'RF8M21J8XRT' not found
+[exit-code] 1
+
+$ adb -s RF8M90QE7LX install -r build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+adb: device 'RF8M90QE7LX' not found
+[exit-code] 1
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:4
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+
+[exit-code] 0
+
+$ adb -s 575ecf2cbd24 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+
+[stderr]
+adb: failed to install build/app/outputs/flutter-apk/app-debug.apk: Failure [INSTALL_FAILED_USER_RESTRICTED: Install canceled by user]
+
+[exit-code] 1
+
+$ adb -s 9885e6503930304946 shell pm path com.amaia23.hydracam
+package:/data/app/com.amaia23.hydracam-zLkcTD_PrXyRzJzqv6fC-Q==/base.apk
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm path com.amaia23.hydracam
+package:/data/app/com.amaia23.hydracam-JCsNXb-D5aFZQ-0nS5YGwQ==/base.apk
+[exit-code] 0
+
+$ adb -s 575ecf2cbd24 shell pm path com.amaia23.hydracam
+[exit-code] 1
+
+$ adb kill-server
+[exit-code] 0
+
+$ adb start-server
+
+[stderr]
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:1
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell am start -W -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+Status: timeout
+LaunchState: UNKNOWN (-1)
+Activity: com.amaia23.hydracam/.MainActivity
+WaitTime: 10243
+Complete
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -W -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+Status: timeout
+Activity: com.amaia23.hydracam/.MainActivity
+WaitTime: 10180
+Complete
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pidof com.amaia23.hydracam
+15955
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam
+8880
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell input keyevent BACK
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell screenrecord --time-limit 5 /sdcard/hydracam-launch-smoke.mp4
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece pull /sdcard/hydracam-launch-smoke.mp4 logs/verification-runs/20260609-0529-android-four-adb-launch-smoke/video/29d816ac550b7ece-launch.mp4
+
+[stderr]
+/sdcard/hydracam-launch-smoke.mp4: 1 file pulled, 0 skipped. 18.2 MB/s (76714 bytes in 0.004s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screenrecord --time-limit 5 /sdcard/hydracam-launch-smoke.mp4
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-launch-smoke.mp4 logs/verification-runs/20260609-0529-android-four-adb-launch-smoke/video/9885e6503930304946-launch.mp4
+
+[stderr]
+/sdcard/hydracam-launch-smoke.mp4: 1 file pulled, 0 skipped. 13.8 MB/s (209656 bytes in 0.015s)
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell pidof com.amaia23.hydracam
+15955
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:1
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam
+8880
+[exit-code] 0

@@ -79,8 +79,12 @@ DEFAULT_IOS_BRIDGE_SCAN_CONNECT_TIMEOUT_SECONDS = 0.5
 DEFAULT_IOS_BRIDGE_SCAN_HEALTH_TIMEOUT_SECONDS = 0.8
 DEFAULT_IOS_BRIDGE_SCAN_WORKERS = 128
 RUNTIME_ROLE_SWITCH_ACK_MODE = "accepted"
-IOS_BUNDLE_ID = "com.vectorblanco.hydracam.dev"
+IOS_BUNDLE_ID = "com.keepeyeonball"
 IOS_PROFILE_APP = REPO_ROOT / "build" / "ios" / "iphoneos" / "Runner.app"
+IOS_PROFILE_APP_FALLBACKS = (
+    REPO_ROOT / "build" / "ios" / "Profile-iphoneos" / "Runner.app",
+    IOS_PROFILE_APP,
+)
 MACOS_DEBUG_BINARY = (
     REPO_ROOT
     / "build"
@@ -2601,7 +2605,7 @@ def build_rotation_settings_payload(
         "timerDuration": 0,
         "autoplayVideoOnMaster": False,
         "flashForVideoAnnounce": False,
-        "autoUploadMaterials": False,
+        "autoUploadMaterials": True,
         "cameraLensPreference": target.lens,
         "videoCaptureProfile": target.profile,
     }
@@ -2698,11 +2702,11 @@ def run_rotation_capture_flow(
         append_progress_event(rotation_dir, "connected_clients", "completed")
 
         session_id = f"rotation-{rotation.master.device_id}-{int(time.time())}"
-        append_progress_event(rotation_dir, "start_local_session", "started")
-        command_times["start_local_session"] = dt.datetime.now().isoformat()
-        snapshots["start_local_session"] = post_command(
+        append_progress_event(rotation_dir, "start_session", "started")
+        command_times["start_session"] = dt.datetime.now().isoformat()
+        snapshots["start_session"] = post_command(
             rotation.master.bridge_url,
-            "start_local_session",
+            "start_session",
             {"sessionId": session_id},
             deadline,
         )
@@ -2714,7 +2718,7 @@ def run_rotation_capture_flow(
             timeout=min(capture_stage_timeout, timeout),
             required=lambda target: True,
         )
-        append_progress_event(rotation_dir, "start_local_session", "completed")
+        append_progress_event(rotation_dir, "start_session", "completed")
 
         append_progress_event(rotation_dir, "take_photo", "started")
         command_times["take_photo"] = dt.datetime.now().isoformat()
@@ -2812,7 +2816,7 @@ def run_rotation_capture_flow(
     rotation_result = {
         **rotation_to_json(rotation),
         "status": status,
-        "barrierReleasedAt": command_times.get("start_local_session"),
+        "barrierReleasedAt": command_times.get("start_session"),
         "commandTimes": command_times,
         "targetResults": target_results,
         "failures": [
@@ -3059,6 +3063,16 @@ def build_ios_profile_app() -> None:
     )
 
 
+def resolve_ios_profile_app_path(app_path: Path) -> Path:
+    if app_path.exists():
+        return app_path
+    if app_path == IOS_PROFILE_APP:
+        for candidate in IOS_PROFILE_APP_FALLBACKS:
+            if candidate.exists():
+                return candidate
+    return app_path
+
+
 def build_devicectl_ios_profile_install_command(
     target: MatrixTarget,
     app_path: Path,
@@ -3138,8 +3152,12 @@ def install_ios_profile_app(
     app_path: Path,
     run_dir: Path,
 ) -> None:
+    app_path = resolve_ios_profile_app_path(app_path)
     if not app_path.exists():
-        raise MatrixRunError(f"iOS profile app not found: {app_path}")
+        candidates = ", ".join(str(path) for path in IOS_PROFILE_APP_FALLBACKS)
+        raise MatrixRunError(
+            f"iOS profile app not found: {app_path}. Checked fallbacks: {candidates}"
+        )
     target_dir = run_dir / "ios-profile-install" / target.slug
     target_dir.mkdir(parents=True, exist_ok=True)
     try:

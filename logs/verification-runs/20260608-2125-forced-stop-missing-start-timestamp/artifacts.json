@@ -1,0 +1,77 @@
+{
+  "acceptanceChecks": [
+    "Forced recording stop records media even when the camera start timestamp is missing, using a safe fallback instead of a null-check failure."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:02:38.781392+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:02:48.489846+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:02:55.563478+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:03:08.827295+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "CameraService mock forced stop",
+      "kind": "unit-test",
+      "name": "Flutter service test runner",
+      "notes": [
+        "Focused test clears videoStartRecordingDate before critical-battery forced stop and verifies media is still recorded with fallback timestamps."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "forced-stop-recording"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/forced_stop_missing_start_timestamp.png",
+    "video/forced_stop_missing_start_timestamp_proof.mp4",
+    "device-logs/green-focused-tests.log",
+    "device-logs/red-tests.log"
+  ],
+  "item": {
+    "slug": "forced-stop-missing-start-timestamp",
+    "source": "docs/control/backlog-import.md",
+    "title": "Backlog row 36: Null check error stopping recording on macOS/iPad"
+  },
+  "notes": [
+    "Focused TDD slice for backlog row 36. Forced battery/storage stop uses a safe fallback start timestamp when the camera start timestamp is missing. Does not claim real macOS/iPad reproduction proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

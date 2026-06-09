@@ -46,7 +46,7 @@ Use the strongest available tier for the selected item:
 | --- | --- | --- |
 | A: real hardware | Physical camera/gallery, battery/storage, local networking, release/profile launch, and release blockers | Device model/OS, launch or flow video, screenshots, device logs. |
 | B: emulator/simulator e2e | UI, session, upload queue, navigation, settings, non-camera app behavior | Emulator/simulator screenshot, video for flows, device logs. |
-| C: multi-device emulated cluster | master/slave, reconnect, network identity, sync, autograbado, upload orchestration | Master plus slave screenshots/video, orchestrator output, device logs. |
+| C: multi-device emulated cluster | master/slave, reconnect, network identity, sync, auto-record, upload orchestration | Master plus slave screenshots/video, orchestrator output, device logs. |
 | D: integration/unit tests | pure service/model logic only | Focused tests and analyzer. Hardware evidence is optional only when no running app behavior changes. |
 
 Generic analyzer or unit-test output is not enough for UI, device, session,

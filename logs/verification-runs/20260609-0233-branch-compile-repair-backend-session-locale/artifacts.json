@@ -1,0 +1,135 @@
+{
+  "acceptanceChecks": [
+    "Backend-created session APIs compile and reject local session GUIDs",
+    "Uploader refuses upload work for sessions that are explicitly not backend-created",
+    "Locale override service and seeded localizations satisfy active settings tests"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_manager_test.dart",
+        "test/services/uploader_service_test.dart",
+        "test/services/app_locale_service_test.dart",
+        "test/l10n/app_localizations_test.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:37:40.126385+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_manager_test.dart",
+        "test/services/uploader_service_test.dart",
+        "test/services/app_locale_service_test.dart",
+        "test/l10n/app_localizations_test.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:38:25.071532+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:38:41.939337+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:38:41.974844+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:39:18.151312+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T00:39:31.390435+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/hydra_cam_app_bar_test.dart",
+        "test/camera_singleton_initialization_test.dart",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "test/automation/automation_standby_screen_test.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:42:34.095373+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:42:48.239764+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:42:48.270223+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T00:42:58.649915+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos-arm64",
+      "kind": "host",
+      "name": "MacBook host",
+      "notes": [
+        "Focused and full Flutter test host"
+      ],
+      "os": "macOS 26.4.1",
+      "role": "unit-test-runner"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "branch-compile-repair-backend-session-locale",
+    "source": "test/services/session_manager_test.dart test/services/app_locale_service_test.dart test/l10n/app_localizations_test.dart",
+    "title": "Branch compile repair for backend sessions and locale override"
+  },
+  "notes": [],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

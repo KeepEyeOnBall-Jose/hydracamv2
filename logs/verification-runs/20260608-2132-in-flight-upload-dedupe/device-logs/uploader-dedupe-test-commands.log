@@ -1,0 +1,282 @@
+# HydraCam evidence run command log
+
+$ flutter test --no-pub test/services/uploader_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: reset clears stale queue, current upload state, and progress
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.025925, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.027470, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testl9qMg5/photo.jpg, timestamp: 2026-06-08 21:32:36.031521, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.035677, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.035840, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.036860, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.037404, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.037489, function: null, file: null}
+00:00 +1: cancelQueuedMedia removes a pending item without touching others
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.039219, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.039296, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testUk2AiH/first.jpg, timestamp: 2026-06-08 21:32:36.039936, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testUk2AiH/second.jpg, timestamp: 2026-06-08 21:32:36.040208, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-08 21:32:36.040966, function: null, file: null}
+Log registered: {message: Cancelled pending upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testUk2AiH/first.jpg, timestamp: 2026-06-08 21:32:36.041044, function: null, file: null}
+Log registered: {message: No pending queued media to cancel: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testUk2AiH/first.jpg, timestamp: 2026-06-08 21:32:36.041144, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.041265, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.041327, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.041966, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.042062, function: null, file: null}
+00:00 +2: addMediaToQueue ignores retry for media already uploading
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.044454, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.044523, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testnV9Ubi/currently-uploading.jpg, timestamp: 2026-06-08 21:32:36.044970, function: null, file: null}
+00:00 +2 -1: addMediaToQueue ignores retry for media already uploading [E]
+  Expected: <0>
+    Actual: <1>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/uploader_service_test.dart 131:5      main.<fn>
+
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.057814, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.057917, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.058198, function: null, file: null}
+00:00 +2 -1: reset ignores stale in-flight upload completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.061363, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.061433, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.062047, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.062108, function: null, file: null}
+Log registered: {message: Session started with GUID: old-session-guid on device type: Master, timestamp: 2026-06-08 21:32:36.062320, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_test8lCuqc/inflight.jpg, timestamp: 2026-06-08 21:32:36.062568, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:32:36.062740, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:32:36.062858, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:32:36.063184, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=old-session-guid, timestamp: 2026-06-08 21:32:36.063324, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.064724, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:32:36.065147, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.068772, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.068854, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.068915, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.068967, function: null, file: null}
+Log registered: {message: Session started with GUID: new-session-guid on device type: Master, timestamp: 2026-06-08 21:32:36.069021, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:32:36.074212, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_test8lCuqc/inflight.jpg, timestamp: 2026-06-08 21:32:36.074301, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docsRxFVNI/session_new-session-guid/metadata.json, timestamp: 2026-06-08 21:32:36.075896, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.075987, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.076044, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:32:36.076094, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.076149, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.076194, function: null, file: null}
+00:00 +3 -1: cancelCurrentUpload clears active upload and ignores late completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.077178, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.077246, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.077665, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.077735, function: null, file: null}
+Log registered: {message: Session started with GUID: cancel-session-guid on device type: Master, timestamp: 2026-06-08 21:32:36.077791, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testICpCxa/cancel-inflight.jpg, timestamp: 2026-06-08 21:32:36.077988, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:32:36.078087, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:32:36.078175, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:32:36.078252, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=cancel-session-guid, timestamp: 2026-06-08 21:32:36.078316, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.078458, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:32:36.078638, function: null, file: null}
+Log registered: {message: Cancelled in-flight API requests., timestamp: 2026-06-08 21:32:36.079009, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:32:36.079083, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testICpCxa/cancel-inflight.jpg, timestamp: 2026-06-08 21:32:36.079186, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:32:36.080319, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testICpCxa/cancel-inflight.jpg, timestamp: 2026-06-08 21:32:36.080382, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docsRxFVNI/session_cancel-session-guid/metadata.json, timestamp: 2026-06-08 21:32:36.081240, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.081310, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.081359, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:32:36.081407, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.081456, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.081498, function: null, file: null}
+00:00 +4 -1: cancelCurrentUpload closes the active HTTP client
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.082570, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.082631, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.082973, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.083032, function: null, file: null}
+Log registered: {message: Session started with GUID: cancel-http-session-guid on device type: Master, timestamp: 2026-06-08 21:32:36.083082, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testwT10kG/cancel-http.jpg, timestamp: 2026-06-08 21:32:36.083298, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:32:36.083392, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:32:36.083473, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:32:36.083543, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=cancel-http-session-guid, timestamp: 2026-06-08 21:32:36.083586, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:32:36.083735, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:32:36.083955, function: null, file: null}
+Log registered: {message: Cancelled in-flight API requests., timestamp: 2026-06-08 21:32:36.084355, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:32:36.084423, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testwT10kG/cancel-http.jpg, timestamp: 2026-06-08 21:32:36.084515, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:32:36.085642, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testwT10kG/cancel-http.jpg, timestamp: 2026-06-08 21:32:36.085705, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docsRxFVNI/session_cancel-http-session-guid/metadata.json, timestamp: 2026-06-08 21:32:36.086692, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.086762, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.086814, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:32:36.086858, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:32:36.086899, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:32:36.086941, function: null, file: null}
+00:00 +5 -1: (tearDownAll)
+00:00 +5 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart: addMediaToQueue ignores retry for media already uploading
+[exit-code] 1
+
+$ flutter test --no-pub test/services/uploader_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/uploader_service_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: reset clears stale queue, current upload state, and progress
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.349025, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.350560, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_test2LHQ3N/photo.jpg, timestamp: 2026-06-08 21:33:00.354568, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.358571, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.358764, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:33:00.359698, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.360231, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.360314, function: null, file: null}
+00:00 +1: cancelQueuedMedia removes a pending item without touching others
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.361996, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.362069, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testInd0pk/first.jpg, timestamp: 2026-06-08 21:33:00.362653, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testInd0pk/second.jpg, timestamp: 2026-06-08 21:33:00.362913, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-08 21:33:00.363667, function: null, file: null}
+Log registered: {message: Cancelled pending upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testInd0pk/first.jpg, timestamp: 2026-06-08 21:33:00.363771, function: null, file: null}
+Log registered: {message: No pending queued media to cancel: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testInd0pk/first.jpg, timestamp: 2026-06-08 21:33:00.363886, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:33:00.364028, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:33:00.364098, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.364534, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.364623, function: null, file: null}
+00:00 +2: addMediaToQueue ignores retry for media already uploading
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.367170, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.367242, function: null, file: null}
+Log registered: {message: Media already uploading: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testvG75L3/currently-uploading.jpg, timestamp: 2026-06-08 21:33:00.367718, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.368173, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.368240, function: null, file: null}
+00:00 +3: reset ignores stale in-flight upload completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.369496, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.369564, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.370124, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.370188, function: null, file: null}
+Log registered: {message: Session started with GUID: old-session-guid on device type: Master, timestamp: 2026-06-08 21:33:00.370397, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testSbo260/inflight.jpg, timestamp: 2026-06-08 21:33:00.370621, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:33:00.370779, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:33:00.370899, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:33:00.371217, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=old-session-guid, timestamp: 2026-06-08 21:33:00.371350, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:33:00.372227, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:33:00.372569, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.376817, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.376913, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.376977, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.377035, function: null, file: null}
+Log registered: {message: Session started with GUID: new-session-guid on device type: Master, timestamp: 2026-06-08 21:33:00.377089, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:33:00.382525, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testSbo260/inflight.jpg, timestamp: 2026-06-08 21:33:00.382616, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docs4s7RtE/session_new-session-guid/metadata.json, timestamp: 2026-06-08 21:33:00.384081, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.384168, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.384264, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:33:00.384357, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.384438, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.384502, function: null, file: null}
+00:00 +4: cancelCurrentUpload clears active upload and ignores late completion
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.385400, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.385483, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.385852, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.385917, function: null, file: null}
+Log registered: {message: Session started with GUID: cancel-session-guid on device type: Master, timestamp: 2026-06-08 21:33:00.385975, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testZTgapc/cancel-inflight.jpg, timestamp: 2026-06-08 21:33:00.386205, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:33:00.386328, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:33:00.386411, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:33:00.386467, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=cancel-session-guid, timestamp: 2026-06-08 21:33:00.386560, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:33:00.386752, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:33:00.387054, function: null, file: null}
+Log registered: {message: Cancelled in-flight API requests., timestamp: 2026-06-08 21:33:00.387425, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:33:00.387502, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testZTgapc/cancel-inflight.jpg, timestamp: 2026-06-08 21:33:00.387599, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:33:00.388644, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testZTgapc/cancel-inflight.jpg, timestamp: 2026-06-08 21:33:00.388710, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docs4s7RtE/session_cancel-session-guid/metadata.json, timestamp: 2026-06-08 21:33:00.389489, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.389551, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.389601, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:33:00.389652, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.389733, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.389805, function: null, file: null}
+00:00 +5: cancelCurrentUpload closes the active HTTP client
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.390890, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.390958, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.391303, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.391365, function: null, file: null}
+Log registered: {message: Session started with GUID: cancel-http-session-guid on device type: Master, timestamp: 2026-06-08 21:33:00.391413, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testKVaVok/cancel-http.jpg, timestamp: 2026-06-08 21:33:00.391608, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-08 21:33:00.391733, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-08 21:33:00.391786, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-08 21:33:00.391849, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=cancel-http-session-guid, timestamp: 2026-06-08 21:33:00.391944, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-08 21:33:00.392123, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-08 21:33:00.392286, function: null, file: null}
+Log registered: {message: Cancelled in-flight API requests., timestamp: 2026-06-08 21:33:00.392632, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-08 21:33:00.392693, function: null, file: null}
+Log registered: {message: Cancelled active upload: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testKVaVok/cancel-http.jpg, timestamp: 2026-06-08 21:33:00.392751, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:33:00.393850, function: null, file: null}
+Log registered: {message: Ignoring stale upload completion after uploader reset or cancellation: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_uploader_testKVaVok/cancel-http.jpg, timestamp: 2026-06-08 21:33:00.393924, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/uploader_service_docs4s7RtE/session_cancel-http-session-guid/metadata.json, timestamp: 2026-06-08 21:33:00.394843, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.394922, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.394976, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-08 21:33:00.395020, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-08 21:33:00.395065, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-08 21:33:00.395106, function: null, file: null}
+00:00 +6: (tearDownAll)
+00:00 +6: All tests passed!
+[exit-code] 0
+
+$ python3 logs/verification-runs/20260608-2132-in-flight-upload-dedupe/render_upload_dedupe_proof.py
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-2132-in-flight-upload-dedupe/screenshots/in_flight_upload_dedupe.png
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-2132-in-flight-upload-dedupe/video/in_flight_upload_dedupe_proof.mp4
+
+[stderr]
+ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.6.4.2)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60. 26.100 / 60. 26.100
+  libavcodec     62. 28.100 / 62. 28.100
+  libavformat    62. 12.100 / 62. 12.100
+  libavdevice    62.  3.100 / 62.  3.100
+  libavfilter    11. 14.100 / 11. 14.100
+  libswscale      9.  5.100 /  9.  5.100
+  libswresample   6.  3.100 /  6.  3.100
+Input #0, image2, from '/Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-2132-in-flight-upload-dedupe/video/frames/frame_%03d.png':
+  Duration: 00:00:04.50, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1440x900, 12 fps, 12 tbr, 12 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0x804c28a80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0x804c28a80] profile High, level 4.0, 4:2:0, 8-bit
+[libx264 @ 0x804c28a80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=24 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=12 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to '/Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-2132-in-flight-upload-dedupe/video/in_flight_upload_dedupe_proof.mp4':
+  Metadata:
+    encoder         : Lavf62.12.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1440x900, q=2-31, 12 fps, 12288 tbn
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[out#0/mp4 @ 0x805004840] video:69KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 2.138787%
+frame=   54 fps=0.0 q=-1.0 Lsize=      70KiB time=00:00:04.33 bitrate= 133.0kbits/s speed=48.1x elapsed=0:00:00.09
+[libx264 @ 0x804c28a80] frame I:1     Avg QP: 7.49  size: 30709
+[libx264 @ 0x804c28a80] frame P:14    Avg QP:12.70  size:  2584
+[libx264 @ 0x804c28a80] frame B:39    Avg QP:10.86  size:    77
+[libx264 @ 0x804c28a80] consecutive B-frames:  3.7%  0.0%  0.0% 96.3%
+[libx264 @ 0x804c28a80] mb I  I16..4: 82.8%  8.2%  9.0%
+[libx264 @ 0x804c28a80] mb P  I16..4:  0.7%  0.7%  0.6%  P16..4:  0.2%  0.0%  0.0%  0.0%  0.0%    skip:97.7%
+[libx264 @ 0x804c28a80] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.7%  0.0%  0.0%  direct: 0.0%  skip:99.3%  L0:63.3% L1:36.7% BI: 0.0%
+[libx264 @ 0x804c28a80] 8x8 transform intra:14.2% inter:4.4%
+[libx264 @ 0x804c28a80] coded y,uvDC,uvAC intra: 9.0% 13.7% 13.1% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0x804c28a80] i16 v,h,dc,p: 87% 11%  2%  0%
+[libx264 @ 0x804c28a80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 65% 11% 24%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0x804c28a80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 36% 25% 19%  2%  3%  4%  4%  3%  5%
+[libx264 @ 0x804c28a80] i8c dc,h,v,p: 79% 16%  5%  1%
+[libx264 @ 0x804c28a80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x804c28a80] ref P L0: 83.1%  4.4% 11.2%  1.2%
+[libx264 @ 0x804c28a80] ref B L0: 62.0% 37.9%  0.1%
+[libx264 @ 0x804c28a80] kb/s:124.20
+[exit-code] 0

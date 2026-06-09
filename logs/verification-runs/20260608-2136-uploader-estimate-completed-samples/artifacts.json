@@ -1,0 +1,104 @@
+{
+  "acceptanceChecks": [
+    "UploaderService estimates queued upload time from completed upload samples, so a later queued media item gets a non-zero estimate based on observed bytes per second."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T19:36:40.446514+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:37:29.546242+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-2136-uploader-estimate-completed-samples/render_upload_estimate_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:38:14.873466+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:39:07.265532+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:39:17.410408+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:39:24.101177+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:39:38.770828+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "UploaderService completed-sample estimate",
+      "kind": "unit-test",
+      "name": "UploaderService unit test runner",
+      "notes": [
+        "Focused test verifies a later queued media item gets an estimated duration from a completed upload sample."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "upload-estimate"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/uploader_estimate_completed_samples.png",
+    "video/uploader_estimate_completed_samples_proof.mp4",
+    "device-logs/uploader-estimate-test-commands.log"
+  ],
+  "item": {
+    "slug": "uploader-estimate-completed-samples",
+    "source": "docs/control/backlog-import.md",
+    "title": "T-020: Upload estimate uses completed samples"
+  },
+  "notes": [
+    "Focused TDD slice for T-020. UploaderService now records completed upload samples, recalculates estimates when later media is queued, and proves a 100-byte/5-second sample estimates 200 queued bytes at 10 seconds. Broader closure still needs real upload telemetry."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

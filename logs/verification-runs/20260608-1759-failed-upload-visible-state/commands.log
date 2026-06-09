@@ -1,0 +1,178 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+M  docs/control/status-and-roadmap.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/uploader_service.dart
+ M lib/widgets/session_info_widget.dart
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/.evidence-pack.lock
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/artifacts.json
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/commands.log
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/device-logs/iphone-devicectl-install-current-profile-coredevice.json
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/device-logs/iphone-devicectl-install-current-profile.json
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/git-status-after.txt
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/git-status-before.txt
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/screenshots/physical-iphone-setup-screenshot-blocked.txt
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/summary.md
+A  logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/video/physical-iphone-setup-video-blocked.txt
+A  scripts/discover_automation_bridge.py
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/services/uploader_service_test.dart
+[exit-code] 0
+
+$ flutter test --no-pub test/widgets/media_list_widget_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart
+00:00 +0: media list distinguishes failed uploads from pending uploads
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Upload failed": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart:61:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart line 61
+The test description was:
+  media list distinguishes failed uploads from pending uploads
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: media list distinguishes failed uploads from pending uploads [E]
+  Test failed. See exception logs above.
+  The test description was: media list distinguishes failed uploads from pending uploads
+
+Warning: At least one test in this suite creates an HttpClient. When running a test suite that uses
+TestWidgetsFlutterBinding, all HTTP requests will return status code 400, and no network request
+will actually be made. Any test expecting a real network connection and status code will fail.
+To test code that needs an HttpClient, provide your own HttpClient implementation to the code under
+test, so that your test can consistently provide a testable response to the code under test.
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart: media list distinguishes failed uploads from pending uploads
+[exit-code] 1
+
+$ flutter test --no-pub test/widgets/media_list_widget_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/widgets/media_list_widget_test.dart
+00:00 +0: media list distinguishes failed uploads from pending uploads
+00:00 +1: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 3.8s)
+[exit-code] 0
+
+$ flutter test --no-pub --update-goldens logs/verification-runs/20260608-1759-failed-upload-visible-state/failed_upload_visual_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/logs/verification-runs/20260608-1759-failed-upload-visible-state/failed_upload_visual_test.dart
+00:00 +0: failed upload media list visual proof
+00:00 +1: All tests passed!
+[exit-code] 0
+
+$ ffmpeg -y -loop 1 -t 3 -i logs/verification-runs/20260608-1759-failed-upload-visible-state/screenshots/failed_upload_visible_state.png -vf format=yuv420p -movflags +faststart logs/verification-runs/20260608-1759-failed-upload-visible-state/video/failed_upload_visible_state_proof.mp4
+
+[stderr]
+ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.6.4.2)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60. 26.100 / 60. 26.100
+  libavcodec     62. 28.100 / 62. 28.100
+  libavformat    62. 12.100 / 62. 12.100
+  libavdevice    62.  3.100 / 62.  3.100
+  libavfilter    11. 14.100 / 11. 14.100
+  libswscale      9.  5.100 /  9.  5.100
+  libswresample   6.  3.100 /  6.  3.100
+Input #0, png_pipe, from 'logs/verification-runs/20260608-1759-failed-upload-visible-state/screenshots/failed_upload_visible_state.png':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc, gbr/bt709/iec61966-2-1), 1290x900, 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0x904c24a80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0x904c24a80] profile High, level 3.2, 4:2:0, 8-bit
+[libx264 @ 0x904c24a80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=24 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260608-1759-failed-upload-visible-state/video/failed_upload_visible_state_proof.mp4':
+  Metadata:
+    encoder         : Lavf62.12.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, unknown/bt709/iec61966-2-1, progressive), 1290x900, q=2-31, 25 fps, 12800 tbn
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[mp4 @ 0x905018280] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x905060240] video:17KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 10.220627%
+frame=   75 fps=0.0 q=-1.0 Lsize=      19KiB time=00:00:02.92 bitrate=  52.1kbits/s speed=32.8x elapsed=0:00:00.08
+[libx264 @ 0x904c24a80] frame I:1     Avg QP:19.24  size:  8087
+[libx264 @ 0x904c24a80] frame P:19    Avg QP:21.02  size:   175
+[libx264 @ 0x904c24a80] frame B:55    Avg QP:14.15  size:    94
+[libx264 @ 0x904c24a80] consecutive B-frames:  1.3%  2.7%  0.0% 96.0%
+[libx264 @ 0x904c24a80] mb I  I16..4: 35.2% 56.7%  8.2%
+[libx264 @ 0x904c24a80] mb P  I16..4:  0.5%  0.0%  0.0%  P16..4:  0.3%  0.0%  0.0%  0.0%  0.0%    skip:99.2%
+[libx264 @ 0x904c24a80] mb B  I16..4:  0.1%  0.0%  0.0%  B16..8:  0.8%  0.0%  0.0%  direct: 0.0%  skip:99.1%  L0:57.0% L1:43.0% BI: 0.0%
+[libx264 @ 0x904c24a80] 8x8 transform intra:48.6% inter:7.8%
+[libx264 @ 0x904c24a80] coded y,uvDC,uvAC intra: 3.6% 5.0% 1.6% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0x904c24a80] i16 v,h,dc,p: 41% 56%  3%  0%
+[libx264 @ 0x904c24a80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 57% 15% 28%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0x904c24a80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 40% 39% 17%  0%  2%  0%  0%  0%  0%
+[libx264 @ 0x904c24a80] i8c dc,h,v,p: 76% 20%  4%  0%
+[libx264 @ 0x904c24a80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x904c24a80] ref P L0: 80.0%  0.0% 20.0%
+[libx264 @ 0x904c24a80] ref B L0: 42.8% 56.8%  0.4%
+[libx264 @ 0x904c24a80] ref B L1: 95.2%  4.8%
+[libx264 @ 0x904c24a80] kb/s:44.21
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 3.6s)
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/uploader_service.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/widgets/session_info_widget_test.dart
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? test/services/uploader_service_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ git diff --check -- lib/widgets/media_list_widget.dart test/widgets/media_list_widget_test.dart docs/control/backlog-import.md logs/verification-runs/20260608-1759-failed-upload-visible-state/summary.md logs/verification-runs/20260608-1759-failed-upload-visible-state/device-logs/flutter-widget-runner.log logs/verification-runs/20260608-1759-failed-upload-visible-state/failed_upload_visual_test.dart
+[exit-code] 0

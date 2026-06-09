@@ -1,0 +1,174 @@
+{
+  "acceptanceChecks": [
+    "Rejoining the same active session does not clear captured media",
+    "Rejoining the same active session does not reset the uploader queue",
+    "Different session GUIDs still start fresh sessions",
+    "Screenshot and video proof show preserved media"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:34:49.459815+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:35:06.224834+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:35:29.157939+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:35:50.656575+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/render_same_session_rejoin_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:36:18.968257+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/screenshots/same_session_rejoin_preserves_media.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/video/same_session_rejoin_preserves_media_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:36:26.628855+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/session_manager.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:36:49.607400+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:36:57.453846+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:36:59.324184+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:37:10.673274+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/commands.log",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:37:24.057001+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/session_manager.dart",
+        "test/services/session_manager_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/summary.md",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/render_same_session_rejoin_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:37:32.905582+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/session_manager.dart",
+        "test/services/session_manager_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/summary.md",
+        "logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/render_same_session_rejoin_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:37:57.796108+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/same_session_rejoin_preserves_media.png",
+    "video/same_session_rejoin_preserves_media_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "same-session-rejoin-preserves-media",
+    "source": "docs/control/backlog-import.md#2-preserve-session-state-across-master-reconnect",
+    "title": "Preserve session state across master reconnect"
+  },
+  "notes": [
+    "Same-session rejoin slice passed focused tests, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for real master/slave reconnect proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

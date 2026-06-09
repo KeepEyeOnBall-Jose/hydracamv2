@@ -1,0 +1,30 @@
+# HydraCam evidence run command log
+
+$ flutter test test/services/permission_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: requestAllPermissions skips unsupported macOS permission handler
+Log registered: {message: Skipping permission_handler startup request on macOS; native platform APIs will request resource access on demand., timestamp: 2026-06-09 05:10:56.009891, function: requestAllPermissions, file: PermissionService}
+00:00 +1: requestAllPermissions skips unsupported Linux permission handler
+Log registered: {message: Skipping permission_handler startup request on linux; native platform APIs will request resource access on demand., timestamp: 2026-06-09 05:10:56.018003, function: requestAllPermissions, file: PermissionService}
+00:00 +2: requestAllPermissions requests location immediately on Android
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone, Permission.locationWhenInUse]
+Denied: [], timestamp: 2026-06-09 05:10:56.021758, function: requestAllPermissions, file: PermissionService}
+00:00 +3: openAppSettings skips unsupported macOS permission handler
+Log registered: {message: Skipping permission_handler openAppSettings on macOS., timestamp: 2026-06-09 05:10:56.030101, function: openAppSettings, file: PermissionService}
+00:00 +4: openAppSettings skips unsupported Linux permission handler
+Log registered: {message: Skipping permission_handler openAppSettings on linux., timestamp: 2026-06-09 05:10:56.032878, function: openAppSettings, file: PermissionService}
+00:00 +5: (tearDownAll)
+00:00 +5: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0

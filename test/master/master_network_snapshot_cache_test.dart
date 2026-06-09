@@ -1,17 +1,51 @@
 import "dart:async";
+import "dart:convert";
 import "dart:io";
 
 import "package:flutter_test/flutter_test.dart";
 import "package:mocktail/mocktail.dart";
+// ignore: depend_on_referenced_packages
+import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 import "package:hydracam/master/master_server.dart";
 import "package:hydracam/services/network_info_service.dart";
+import "package:hydracam/services/session_manager.dart";
+import "package:hydracam/services/session_media_storage.dart";
 
 import "../test_utils/mock_services.dart";
 
 class MockWebSocket extends Mock implements WebSocket {}
 
+class MockHttpServer extends Mock implements HttpServer {}
+
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  final pathProvider = _MasterServerPathProvider();
+
+  setUpAll(() {
+    PathProviderPlatform.instance = pathProvider;
+  });
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({
+      "autoUploadMaterials": false,
+      "deleteLocalAfterUpload": false,
+    });
+    pathProvider.resetDocumentsDir();
+  });
+
+  tearDown(() async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    pathProvider.resetDocumentsDir();
+  });
+
+  tearDownAll(() {
+    pathProvider.dispose();
+  });
+
   test("master socket binding supports rapid shared rebind", () async {
     final first = await MasterServer.bindMasterSocket(
       address: "127.0.0.1",
@@ -24,6 +58,29 @@ void main() {
 
     await second.close(force: true);
     await first.close(force: true);
+  });
+
+  test("pending server start closes immediately when stop is requested",
+      () async {
+    final bindCompleter = Completer<HttpServer>();
+    final httpServer = MockHttpServer();
+    when(() => httpServer.close(force: any(named: "force")))
+        .thenAnswer((_) async => httpServer);
+    final server = MasterServer(
+      MockCameraService(),
+      bindMasterSocket: ({address = "0.0.0.0", port = 4040}) {
+        return bindCompleter.future;
+      },
+    );
+
+    final startFuture = server.startServer();
+
+    server.stopServer();
+    bindCompleter.complete(httpServer);
+    await startFuture;
+
+    expect(server.serverStartedAt, isNull);
+    verify(() => httpServer.close(force: true)).called(1);
   });
 
   test("master network snapshot cache reuses snapshots inside ttl", () async {
@@ -52,6 +109,21 @@ void main() {
     expect(second.ipAddress, "192.168.178.1");
     expect(third.ipAddress, "192.168.178.2");
     expect(calls, 2);
+  });
+
+  test("master session response payloads share one encoded command helper", () {
+    final activePayload = jsonDecode(
+      encodeMasterSessionStatusResponse("active-session-guid"),
+    ) as Map<String, dynamic>;
+    final inactivePayload = jsonDecode(
+      encodeMasterSessionStatusResponse(null),
+    ) as Map<String, dynamic>;
+
+    expect(activePayload, {
+      "command": "sessionStatus",
+      "sessionGuid": "active-session-guid",
+    });
+    expect(inactivePayload, {"command": "noSession"});
   });
 
   test(
@@ -134,6 +206,92 @@ void main() {
     expect(client.setupStatus?.isLevel, isTrue);
   });
 
+  test("incoming device registration sends current session status", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "deviceId",
+        "deviceId": "slave-a",
+        "sessionGuid": "slave-session-guid",
+        "network": {
+          "isWifiActive": true,
+          "ipAddress": "192.168.178.62",
+          "source": "slave-test",
+        },
+      }),
+      socket: socket,
+      remoteIp: "192.168.178.62",
+    );
+
+    expect(server.getConnectedDeviceIds(), ["slave-a"]);
+    final sentMessage =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    expect(jsonDecode(sentMessage), {"command": "noSession"});
+  });
+
+  test("incoming photo media is saved through session media storage", () async {
+    final galleryCalls = <SessionMediaType>[];
+    final storageRoot =
+        Directory.systemTemp.createTempSync("master_received_media");
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+      sessionMediaStorage: SessionMediaStorage(
+        documentsDirectoryProvider: () async => storageRoot,
+        galleryMediaPersistor: (filePath, mediaType) async {
+          galleryCalls.add(mediaType);
+        },
+        now: () => DateTime.fromMillisecondsSinceEpoch(1770000000789),
+      ),
+    );
+    SessionManager.instance.startSession(
+      "server-media-guid",
+      "server-media-id",
+      deviceType: "Master",
+    );
+
+    try {
+      await server.handleIncomingMessageForTest(
+        jsonEncode({
+          "type": "photo",
+          "deviceId": "slave-a",
+          "data": [0xFF, 0xD8, 0xFF],
+          "captureDate": DateTime.utc(2026, 6, 9, 3, 44).toIso8601String(),
+        }),
+        socket: MockWebSocket(),
+      );
+
+      final photos =
+          SessionManager.instance.currentSession?.capturedPhotos ?? [];
+      final expectedPath =
+          "${storageRoot.path}/session_server-media-guid/media_1770000000789.jpg";
+      expect(photos, hasLength(1));
+      expect(photos.single.photoPath, expectedPath);
+      expect(photos.single.slaveDeviceId, "slave-a");
+      expect(File(expectedPath).readAsBytesSync(), [0xFF, 0xD8, 0xFF]);
+      expect(galleryCalls, [SessionMediaType.photo]);
+    } finally {
+      storageRoot.deleteSync(recursive: true);
+    }
+  });
+
   test("stale socket close does not remove current client registration",
       () async {
     final server = MasterServer(
@@ -176,12 +334,503 @@ void main() {
     );
 
     expect(server.getConnectedDeviceInfos(), hasLength(1));
+    expect(server.getConnectedDeviceInfos().single.isConnected, isTrue);
+    expect(server.getConnectedDeviceIds(), ["slave-a"]);
 
     server.removeClientIfCurrentForTest(
       deviceId: "slave-a",
       socket: secondSocket,
     );
 
-    expect(server.getConnectedDeviceInfos(), isEmpty);
+    expect(server.getConnectedDeviceIds(), isEmpty);
+    expect(server.getConnectedDeviceInfos(), hasLength(1));
+    expect(server.getConnectedDeviceInfos().single.isConnected, isFalse);
   });
+
+  test("master server retains disconnected device status after socket removal",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+
+    expect(server.getConnectedDeviceIds(), ["slave-a"]);
+
+    server.removeClientIfCurrentForTest(
+      deviceId: "slave-a",
+      socket: socket,
+    );
+
+    expect(server.getConnectedDeviceIds(), isEmpty);
+    final devices = server.getConnectedDeviceInfos();
+    expect(devices, hasLength(1));
+    expect(devices.single.deviceId, "slave-a");
+    expect(devices.single.isConnected, isFalse);
+    expect(devices.single.connectionStatusLabel, "Disconnected");
+    expect(devices.single.disconnectedAt, isNotNull);
+  });
+
+  test("stopServer clears transport state without ending the active session",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+    when(() => socket.close(
+          any<int?>(),
+          any<String?>(),
+        )).thenAnswer((_) async {});
+    SessionManager.instance.startSession(
+      "stop-server-session-guid",
+      "stop-server-session-id",
+      deviceType: "Master",
+    );
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+
+    server.stopServer();
+
+    expect(server.getConnectedDeviceIds(), isEmpty);
+    expect(server.getConnectedDeviceInfos(), isEmpty);
+    expect(SessionManager.instance.isSessionActive, isTrue);
+    expect(SessionManager.instance.sessionGuid, "stop-server-session-guid");
+    verify(() => socket.close(
+          WebSocketStatus.normalClosure,
+          "Server shutting down",
+        )).called(1);
+
+    await server.endCurrentSession();
+
+    expect(SessionManager.instance.isSessionActive, isFalse);
+  });
+
+  test("master server orders connected devices before disconnected history",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final staleSocket = MockWebSocket();
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "a-stale-slave",
+      socket: staleSocket,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+    );
+    server.removeClientIfCurrentForTest(
+      deviceId: "a-stale-slave",
+      socket: staleSocket,
+    );
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "z-live-slave",
+      socket: MockWebSocket(),
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+
+    final devices = server.getConnectedDeviceInfos();
+
+    expect(devices.map((device) => device.deviceId), [
+      "z-live-slave",
+      "a-stale-slave",
+    ]);
+  });
+
+  test("scheduled commands include master send time for slave clock offset",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+    final scheduledTime = DateTime.utc(2026, 6, 8, 20, 35, 5);
+    final masterTime = DateTime.utc(2026, 6, 8, 20, 35, 2);
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+
+    server.scheduleCommand(
+      "takePhoto",
+      scheduledTime,
+      deviceId: "slave-a",
+      masterTime: masterTime,
+    );
+
+    final sentMessage =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    final payload = jsonDecode(sentMessage) as Map<String, dynamic>;
+
+    expect(payload["type"], "scheduledCommand");
+    expect(payload["command"], "takePhoto");
+    expect(payload["scheduledTime"], scheduledTime.toIso8601String());
+    expect(payload["masterTime"], masterTime.toIso8601String());
+  });
+
+  test("scheduled command for missing slave does not broadcast", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socketA = MockWebSocket();
+    final socketB = MockWebSocket();
+    final scheduledTime = DateTime.utc(2026, 6, 9, 2, 20);
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socketA,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-b",
+      socket: socketB,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+    );
+
+    server.scheduleCommand(
+      "takePhoto",
+      scheduledTime,
+      deviceId: "missing-slave",
+      masterTime: scheduledTime,
+    );
+
+    verifyNever(() => socketA.add(any()));
+    verifyNever(() => socketB.add(any()));
+  });
+
+  test("scheduled broadcast sends to all eligible connected slaves", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socketA = MockWebSocket();
+    final socketB = MockWebSocket();
+    final scheduledTime = DateTime.utc(2026, 6, 9, 2, 20);
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socketA,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-b",
+      socket: socketB,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+    );
+
+    server.scheduleCommand(
+      "startRecordingVideo",
+      scheduledTime,
+      masterTime: scheduledTime,
+    );
+
+    final payloadA = jsonDecode(
+      verify(() => socketA.add(captureAny())).captured.single as String,
+    ) as Map<String, dynamic>;
+    final payloadB = jsonDecode(
+      verify(() => socketB.add(captureAny())).captured.single as String,
+    ) as Map<String, dynamic>;
+
+    expect(payloadA["type"], "scheduledCommand");
+    expect(payloadA["command"], "startRecordingVideo");
+    expect(payloadA["scheduledTime"], scheduledTime.toIso8601String());
+    expect(payloadA["masterTime"], scheduledTime.toIso8601String());
+    expect(payloadB, payloadA);
+  });
+
+  test("targeted command for missing slave does not broadcast", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socketA = MockWebSocket();
+    final socketB = MockWebSocket();
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socketA,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-b",
+      socket: socketB,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+    );
+
+    server.sendCommand("takePhoto", deviceId: "missing-slave");
+
+    verifyNever(() => socketA.add(any()));
+    verifyNever(() => socketB.add(any()));
+  });
+
+  test("targeted command only sends to the requested connected slave",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socketA = MockWebSocket();
+    final socketB = MockWebSocket();
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socketA,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-b",
+      socket: socketB,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+    );
+
+    server.sendCommand("takePhoto", deviceId: "slave-a");
+
+    verify(() => socketA.add("takePhoto")).called(1);
+    verifyNever(() => socketB.add(any()));
+  });
+
+  test("broadcast command sends to all eligible connected slaves", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socketA = MockWebSocket();
+    final socketB = MockWebSocket();
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socketA,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-b",
+      socket: socketB,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+    );
+
+    server.sendCommand("stopRecordingVideo");
+
+    verify(() => socketA.add("stopRecordingVideo")).called(1);
+    verify(() => socketB.add("stopRecordingVideo")).called(1);
+  });
+
+  test("master sends identify command and records ack diagnostics", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+    final requestedAt = DateTime.utc(2026, 6, 8, 21, 35);
+    final acknowledgedAt = DateTime.utc(2026, 6, 8, 21, 35, 1);
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+
+    final sent = server.sendIdentifyCommand(
+      deviceId: "slave-a",
+      requestId: "identify-test",
+      requestedAt: requestedAt,
+    );
+
+    expect(sent, isTrue);
+    final sentMessage =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    final payload = jsonDecode(sentMessage) as Map<String, dynamic>;
+    expect(payload, {
+      "command": "identifySlave",
+      "requestId": "identify-test",
+      "requestedAt": requestedAt.toIso8601String(),
+    });
+
+    server.recordIdentifyAckForTest(
+      deviceId: "slave-a",
+      requestId: "identify-test",
+      acknowledgedAt: acknowledgedAt,
+    );
+
+    final client = server.getConnectedDeviceInfos().single;
+    expect(client.identifyStatus, "acknowledged");
+    expect(client.identifyStatusLabel, "Identify acknowledged");
+    expect(client.lastIdentifyRequestId, "identify-test");
+    expect(client.lastIdentifyRequestedAt, requestedAt);
+    expect(client.lastIdentifyAckAt, acknowledgedAt);
+  });
+}
+
+class _MasterServerPathProvider extends PathProviderPlatform {
+  Directory? _documentsDir;
+
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    _documentsDir ??= Directory.systemTemp.createTempSync("master_server_docs");
+    return _documentsDir!.path;
+  }
+
+  void resetDocumentsDir() {
+    if (_documentsDir != null && _documentsDir!.existsSync()) {
+      _documentsDir!.deleteSync(recursive: true);
+    }
+    _documentsDir = null;
+  }
+
+  void dispose() {
+    resetDocumentsDir();
+  }
 }

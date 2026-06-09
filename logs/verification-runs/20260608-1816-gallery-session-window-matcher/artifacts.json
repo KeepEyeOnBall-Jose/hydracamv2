@@ -1,0 +1,225 @@
+{
+  "acceptanceChecks": [
+    "Candidate matching uses an explicit session time window",
+    "Videos inside the margin are ranked as candidates",
+    "Videos outside the margin are excluded",
+    "Screenshot and video proof show the matching result"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:16:37.847358+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:17:40.819254+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:18:10.211053+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/gallery_session_window_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:18:51.524330+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/screenshots/gallery_session_window_matcher.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/video/gallery_session_window_matcher_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:18:59.288390+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/render_gallery_session_window_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:22:29.890778+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/screenshots/gallery_session_window_matcher.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/video/gallery_session_window_matcher_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:22:37.521608+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:23:00.621383+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:23:35.454343+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:23:41.252391+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:23:50.379312+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/commands.log",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:24:08.119597+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/gallery_session_matcher.dart",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:24:38.850057+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:24:48.048442+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_matcher_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:24:52.911347+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:25:00.108287+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/commands.log",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:25:14.458893+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/gallery_session_matcher.dart",
+        "test/services/gallery_session_matcher_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/summary.md",
+        "logs/verification-runs/20260608-1816-gallery-session-window-matcher/render_gallery_session_window_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:25:19.939497+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/gallery_session_window_matcher.png",
+    "video/gallery_session_window_matcher_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "gallery-session-window-matcher",
+    "source": "docs/control/backlog-import.md#9-improve-old-media-gallery-session-attachment",
+    "title": "Improve old-media/gallery session attachment"
+  },
+  "notes": [
+    "Matcher slice passed focused tests, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for gallery UI surfacing and metadata attachment proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

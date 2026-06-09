@@ -17,12 +17,15 @@ class BatteryService {
 
   final ScaffoldMessengerState _messengerState;
   final int _lowBatteryThreshold;
+  final int _criticalBatteryThreshold;
+  final FutureOr<void> Function(int currentLevel)? _onCriticalBatteryCallback;
   final Battery _battery = Battery();
 
   Timer? _batteryCheckTimer;
   StreamSubscription<BatteryState>? _batteryStateSubscription;
   DateTime? _lastWarningShownTime;
   int? _lastWarningLevel;
+  bool _criticalStopTriggered = false;
 
   static const Duration _reshowInterval = Duration(minutes: 5);
   static const Duration _pollInterval = Duration(minutes: 1);
@@ -30,8 +33,12 @@ class BatteryService {
   BatteryService({
     required ScaffoldMessengerState messengerState,
     int lowBatteryThreshold = 30,
+    int criticalBatteryThreshold = 10,
+    FutureOr<void> Function(int currentLevel)? onCriticalBatteryCallback,
   })  : _messengerState = messengerState,
-        _lowBatteryThreshold = lowBatteryThreshold {
+        _lowBatteryThreshold = lowBatteryThreshold,
+        _criticalBatteryThreshold = criticalBatteryThreshold,
+        _onCriticalBatteryCallback = onCriticalBatteryCallback {
     _startMonitoring();
     _instance = this;
   }
@@ -74,6 +81,13 @@ class BatteryService {
   }
 
   void _handleBatteryLevel(int currentLevel) {
+    if (currentLevel <= _criticalBatteryThreshold) {
+      _handleCriticalBatteryLevel(currentLevel);
+      return;
+    }
+
+    _criticalStopTriggered = false;
+
     if (currentLevel < _lowBatteryThreshold) {
       final now = DateTime.now();
       final shouldShow = _shouldShowWarning(now, currentLevel);
@@ -86,6 +100,37 @@ class BatteryService {
     } else {
       _lastWarningLevel = null;
       _lastWarningShownTime = null;
+    }
+  }
+
+  void _handleCriticalBatteryLevel(int currentLevel) {
+    if (_criticalStopTriggered) {
+      return;
+    }
+
+    _criticalStopTriggered = true;
+    LogService.instance.registerLog(
+        "Critical battery: triggering recording stop at $currentLevel%.");
+    _showCriticalBatteryWarning(currentLevel);
+
+    final callback = _onCriticalBatteryCallback;
+    if (callback != null) {
+      unawaited(_runCriticalBatteryCallback(callback, currentLevel));
+    }
+  }
+
+  Future<void> _runCriticalBatteryCallback(
+    FutureOr<void> Function(int currentLevel) callback,
+    int currentLevel,
+  ) async {
+    try {
+      await callback(currentLevel);
+    } catch (error, stackTrace) {
+      LogService.instance.registerError(
+        "BatteryService: critical battery callback failed",
+        error,
+        stackTrace,
+      );
     }
   }
 
@@ -127,6 +172,33 @@ class BatteryService {
       backgroundColor: Colors.yellow.shade100,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 5),
+    );
+
+    _messengerState.showSnackBar(snackBar);
+  }
+
+  void _showCriticalBatteryWarning(int currentLevel) {
+    _messengerState.clearSnackBars();
+
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Icon(
+            Icons.battery_alert,
+            color: Colors.red.shade900,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              "Recording stopped due to critical battery ($currentLevel%).",
+              style: TextStyle(color: Colors.red.shade900),
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: Colors.red.shade100,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 8),
     );
 
     _messengerState.showSnackBar(snackBar);

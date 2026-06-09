@@ -1,0 +1,142 @@
+{
+  "acceptanceChecks": [
+    "Failed uploads show a visible state in media lists",
+    "Pending uploads remain visually distinct from failed uploads",
+    "Focused widget test covers failed upload display",
+    "Screenshot and video proof show the failed state"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:59:45.728111+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:00:11.139652+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:00:43.873419+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:00:51.244751+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1759-failed-upload-visible-state/failed_upload_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:01:20.240034+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1759-failed-upload-visible-state/screenshots/failed_upload_visible_state.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1759-failed-upload-visible-state/video/failed_upload_visible_state_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:01:22.435597+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:01:50.656459+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:01:55.545090+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/widgets/media_list_widget.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1759-failed-upload-visible-state/summary.md",
+        "logs/verification-runs/20260608-1759-failed-upload-visible-state/device-logs/flutter-widget-runner.log",
+        "logs/verification-runs/20260608-1759-failed-upload-visible-state/failed_upload_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:01:55.631820+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulated app surface",
+      "name": "macOS Flutter widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "media list upload state proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/failed_upload_visible_state.png",
+    "video/failed_upload_visible_state_proof.mp4",
+    "device-logs/flutter-widget-runner.log"
+  ],
+  "item": {
+    "slug": "failed-upload-visible-state",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "Failed uploads now show a distinct visible state with widget test, screenshot, and video proof; other upload UI controls remain on the existing item."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

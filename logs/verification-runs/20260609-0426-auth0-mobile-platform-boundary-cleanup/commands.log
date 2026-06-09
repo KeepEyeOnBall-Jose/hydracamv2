@@ -1,0 +1,40 @@
+# HydraCam evidence run command log
+
+$ dart format lib/services/auth0_service.dart test/services/auth0_service_test.dart
+Formatted 2 files (0 changed) in 0.01 seconds.
+[exit-code] 0
+
+$ flutter test --no-pub test/services/auth0_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+00:00 +0: Auth0 login requests refresh-capable scopes
+00:00 +1: Auth0 login persists returned credentials through secure store
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-09 04:26:35.777526, function: login, file: auth0_service.dart}
+00:00 +2: Auth0 startup restore uses valid stored credentials
+00:00 +2: Auth0 login persists returned credentials through secure store
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +2: Auth0 startup restore uses valid stored credentials
+Log registered: {message: Restored Auth0 session from secure store., timestamp: 2026-06-09 04:26:35.785377, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +3: Auth0 startup restore refreshes expired credentials
+Log registered: {message: Refreshed Auth0 session from secure store., timestamp: 2026-06-09 04:26:35.787749, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +4: Auth0 startup restore rejects expired stored credentials
+00:00 +5: Auth0 logout clears secure credentials and browser session
+Log registered: {message: Profile set: https://example.com/logout.png, timestamp: 2026-06-09 04:26:35.792682, function: login, file: auth0_service.dart}
+Log registered: {message: Cleared Auth0 session., timestamp: 2026-06-09 04:26:35.793404, function: logout, file: auth0_service.dart}
+00:00 +6: Auth0 startup restore skips unsupported desktop platforms
+Log registered: {message: Skipped Auth0 restore on unsupported platform., timestamp: 2026-06-09 04:26:35.795090, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +7: Auth0 login rejects unsupported desktop platforms
+00:00 +8: All tests passed!
+[exit-code] 0
+
+$ rg -n TODO: MOBILE ONLY|Auth0 interactive login is only supported|Skipped Auth0 restore|unsupported desktop platforms|loginCalls|loadCalls lib/services/auth0_service.dart test/services/auth0_service_test.dart
+test/services/auth0_service_test.dart:200:  test("Auth0 startup restore skips unsupported desktop platforms", () async {
+test/services/auth0_service_test.dart:228:    expect(credentialStore.loadCalls, 0);
+test/services/auth0_service_test.dart:234:  test("Auth0 login rejects unsupported desktop platforms", () async {
+test/services/auth0_service_test.dart:256:    expect(authClient.loginCalls, 0);
+test/services/auth0_service_test.dart:266:  int loginCalls = 0;
+test/services/auth0_service_test.dart:280:    loginCalls += 1;
+test/services/auth0_service_test.dart:312:  int loadCalls = 0;
+test/services/auth0_service_test.dart:324:    loadCalls += 1;
+lib/services/auth0_service.dart:238:        "Auth0 interactive login is only supported on Android and iOS.",
+lib/services/auth0_service.dart:306:          "Skipped Auth0 restore on unsupported platform.",
+[exit-code] 0

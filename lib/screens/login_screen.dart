@@ -28,6 +28,10 @@ class LoginScreenState extends State<LoginScreen> {
     try {
       await _userService.login();
       await _fetchUserDetails(); // Fetch user details after login
+    } on UnsupportedError catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+      });
     } catch (e) {
       setState(() {
         _errorMessage = "Failed to log in. Please try again.";

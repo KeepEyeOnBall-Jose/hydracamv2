@@ -1,0 +1,219 @@
+{
+  "acceptanceChecks": [
+    "Live iPad automation bridge reports the running session identity and upload state",
+    "Persisted iPad app logs show the upload request outcome or an actionable missing-log blocker",
+    "HydraCam webservice is checked for the same session GUID or exact endpoint blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:40:15.870483+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:40:28.747719+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:40:28.806865+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "8",
+        "http://169.254.193.202:4762/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:40:53.419906+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "15",
+        "http://169.254.193.202:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:40:53.437587+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "8",
+        "http://169.254.193.202:4762/session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:40:53.471407+00:00"
+    },
+    {
+      "command": [
+        "node",
+        "logs/verification-runs/20260609-0140-ipad-uploader-webservice-check/device-logs/webservice_probe.mjs",
+        "local-screenshot-boundary-proof"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:42:52.190482+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "8",
+        "http://169.254.193.202:4762/session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:43:07.269639+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "8",
+        "http://169.254.193.202:4762/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:43:07.379733+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "2",
+        "--max-time",
+        "15",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-uploader-failed-state\",\"pixelRatio\":1}",
+        "http://169.254.193.202:4762/commands/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:43:40.831133+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/automation-screenshots/ipad-uploader-failed-state-2026-06-09T01-43-41-366766.png",
+        "--destination",
+        "logs/verification-runs/20260609-0140-ipad-uploader-webservice-check/screenshots/ipad-uploader-failed-state.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:44:00.330043+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/session_local-screenshot-boundary-proof/REC_96DB28BD-E6BE-4FF5-A5D5-6589B433C5D4.mp4",
+        "--destination",
+        "logs/verification-runs/20260609-0140-ipad-uploader-webservice-check/video/ipad-failed-upload-sample.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:44:00.623379+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.vectorblanco.hydracam.dev",
+        "--source",
+        "Documents/session_local-screenshot-boundary-proof/metadata.json",
+        "--destination",
+        "logs/verification-runs/20260609-0140-ipad-uploader-webservice-check/device-logs/ipad-session-local-screenshot-boundary-proof-metadata.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T23:44:01.088458+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "physical iOS device",
+      "name": "iPad (5)",
+      "notes": [
+        "Bridge health matched expected automationTargetId at 169.254.193.202:4762 and 192.168.178.104:4762"
+      ],
+      "os": "iOS 17.7.11 21H461",
+      "role": "running HydraCam app / uploader verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-uploader-failed-state.png",
+    "video/ipad-failed-upload-sample.mp4",
+    "device-logs/ipad-session-local-screenshot-boundary-proof-metadata.json",
+    "device-logs/webservice_probe.mjs"
+  ],
+  "item": {
+    "slug": "ipad-uploader-webservice-check",
+    "source": "docs/control/status-and-roadmap.md#current-mobile-status",
+    "title": "Verify iPad uploader failure against webservice state"
+  },
+  "notes": [
+    "iPad uploader failure verified: local automation session GUID was not present in the HydraCam webservice; app-facing upload endpoint returned 404 Session not found."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "failed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

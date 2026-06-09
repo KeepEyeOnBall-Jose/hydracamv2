@@ -1,0 +1,201 @@
+{
+  "acceptanceChecks": [
+    "Session diagnostics show network type and IP",
+    "Session diagnostics show a short local device ID",
+    "Session diagnostics show app version or a clear unavailable fallback",
+    "Long diagnostics fit narrow panes without layout exceptions"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:51:18.054847+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/session_info_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:51:52.819892+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/session_info_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:52:24.391407+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:52:33.324011+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:52:56.276979+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/device_identity_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:53:21.312823+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/screenshots/session_identity_diagnostics.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/video/session_identity_diagnostics_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:53:29.933812+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/session_info_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T15:53:54.211687+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/session_info_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:54:25.171250+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/device_identity_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:54:41.589264+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:54:44.452532+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/screenshots/session_identity_diagnostics.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/video/session_identity_diagnostics_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:54:58.973367+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/widgets/session_info_widget.dart",
+        "test/widgets/session_info_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/summary.md",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/device-logs/flutter-widget-runner.log",
+        "logs/verification-runs/20260608-1751-device-identity-diagnostics/device_identity_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:29.589532+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T15:55:29.609823+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulated app surface",
+      "name": "macOS Flutter widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "session diagnostics UI proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/session_identity_diagnostics.png",
+    "video/session_identity_diagnostics_proof.mp4",
+    "device-logs/flutter-widget-runner.log"
+  ],
+  "item": {
+    "slug": "device-identity-diagnostics",
+    "source": "docs/control/backlog-import.md#6-make-network-device-identity-visible",
+    "title": "Make network/device identity visible"
+  },
+  "notes": [
+    "Session diagnostics now show network/IP, short device ID, app version fallback, and hardware fallback with tests, screenshot, and video; disconnected-state/master-list refinements remain on the existing item."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

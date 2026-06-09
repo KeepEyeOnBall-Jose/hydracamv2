@@ -1,0 +1,132 @@
+{
+  "acceptanceChecks": [
+    "Historical session metadata can be loaded without mutating active session state",
+    "Gallery import candidate list includes active and historical sessions",
+    "Candidate sourcing avoids duplicate active-session entries",
+    "Screenshot and video proof attached"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:54:03.745783+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:54:29.937945+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:54:53.243810+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_candidate_source_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T17:55:26.661822+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_candidate_source_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:55:55.754792+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "test/services/gallery_session_candidate_source_test.dart",
+        "test/services/gallery_session_matcher_test.dart",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:56:03.175666+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "test/services/gallery_session_candidate_source_test.dart",
+        "test/services/gallery_session_matcher_test.dart",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:57:38.527056+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "test/services/gallery_session_candidate_source_test.dart",
+        "test/services/gallery_session_matcher_test.dart",
+        "test/screens/media_selection_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T17:58:28.658813+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter gallery candidate-source test runner",
+      "notes": [
+        "Runs SessionManager and gallery candidate source regression tests with fake app documents directory."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/gallery_historical_session_candidate_source.png",
+    "video/gallery_historical_session_candidate_source_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "gallery-historical-session-candidate-source",
+    "source": "docs/control/backlog-import.md#9-improve-old-mediagallery-session-attachment",
+    "title": "9. Improve old-media/gallery session attachment"
+  },
+  "notes": [
+    "Gallery import now sources active and historical candidate sessions without mutating active session state.",
+    "Gallery import now sources active and historical candidate sessions without mutating active session state.",
+    "Gallery import now sources active and historical candidate sessions without mutating active session state."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

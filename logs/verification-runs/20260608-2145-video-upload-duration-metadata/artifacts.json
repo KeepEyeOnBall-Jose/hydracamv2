@@ -1,0 +1,77 @@
+{
+  "acceptanceChecks": [
+    "Video uploads include recording end timestamp and computed duration metadata while photo uploads remain unchanged."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:13:02.569347+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:13:14.199655+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:13:20.947013+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T19:13:34.303690+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "HydraCamApiService video metadata fields",
+      "kind": "unit-test",
+      "name": "Mock HTTP multipart upload",
+      "notes": [
+        "Focused multipart tests capture fields for video and photo upload requests."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "upload-metadata"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/video_upload_duration_metadata.png",
+    "video/video_upload_duration_metadata_proof.mp4",
+    "device-logs/green-focused-tests.log",
+    "device-logs/red-tests.log"
+  ],
+  "item": {
+    "slug": "video-upload-duration-metadata",
+    "source": "docs/control/backlog-import.md",
+    "title": "Backlog row 17: Video upload duration metadata"
+  },
+  "notes": [
+    "Focused TDD slice for backlog row 17. Video multipart uploads now include recordingEndDate and durationMs while photo uploads omit those fields. Does not claim backend duration display is fixed."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

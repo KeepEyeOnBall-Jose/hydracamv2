@@ -24,12 +24,16 @@ class SettingsService {
       "autoUploadMaterials"; // Choose if automatically upload materials or not
   static const String _autoplayVideoOnMasterKey =
       "autoplayVideoOnMaster"; // Toggle auto video play in master device after recording
+  static const String _autoRecordModeKey =
+      "autograbadoMode"; // Legacy storage key for auto-record mode.
   static const String _timerDurationKey =
       "timerDuration"; // Key for the timer duration setting
   static const String _screenAutoOffKey =
       "screenAutoOff"; // Key for auto screen off setting
   static const String _flashForVideoAnnounceKey =
       "flashForVideoAnnounce"; // Key for flashing on start/stop recording
+  static const String _localeOverrideKey =
+      "localeOverride"; // Optional app language override.
 
   /// Retrieve the current value for "flashForVideoAnnounce".
   static Future<bool> getFlashForVideoAnnounce() async {
@@ -70,16 +74,17 @@ class SettingsService {
 
   /// Retrieve the current camera quality setting
   static Future<String> getCameraQuality() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_cameraQualityKey) ?? "high"; // Default to 'high'
+    final profile = await getVideoCaptureProfile();
+    return _legacyQualityFromVideoCaptureProfile(profile);
   }
 
   /// Update the camera quality setting
   static Future<void> setCameraQuality(String quality) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_cameraQualityKey, quality);
+    final profile = VideoCaptureProfile.fromLegacyCameraQuality(quality);
+    await setVideoCaptureProfile(profile);
 
-    LogService.instance.registerLog("Update Camera Quality value to $quality");
+    LogService.instance
+        .registerLog("Updated legacy camera quality value to $quality");
   }
 
   static Future<LensPreference> getCameraLensPreference() async {
@@ -122,15 +127,34 @@ class SettingsService {
     }
 
     final legacyQuality = prefs.getString(_cameraQualityKey);
-    return VideoCaptureProfile.fromLegacyCameraQuality(legacyQuality);
+    final migratedProfile =
+        VideoCaptureProfile.fromLegacyCameraQuality(legacyQuality);
+    if (legacyQuality != null) {
+      await prefs.setString(
+          _videoCaptureProfileKey, migratedProfile.storageValue);
+      await prefs.remove(_cameraQualityKey);
+      LogService.instance.registerLog(
+          "Migrated legacy camera quality to ${migratedProfile.storageValue}");
+    }
+    return migratedProfile;
   }
 
   static Future<void> setVideoCaptureProfile(
       VideoCaptureProfile profile) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_videoCaptureProfileKey, profile.storageValue);
+    await prefs.remove(_cameraQualityKey);
     LogService.instance.registerLog(
         "Updated video capture profile to ${profile.storageValue}");
+  }
+
+  static String _legacyQualityFromVideoCaptureProfile(
+      VideoCaptureProfile profile) {
+    return switch (profile) {
+      VideoCaptureProfile.dataSaver480p30 => "low",
+      VideoCaptureProfile.compat720p30 => "medium",
+      _ => "high",
+    };
   }
 
   static Future<CameraPerspectiveMetadata> getCameraPerspective() async {
@@ -196,6 +220,19 @@ class SettingsService {
         .registerLog("Updated autoplayVideoOnMaster value to $value");
   }
 
+  /// Retrieve the current value for auto-record mode.
+  static Future<bool> getAutoRecordMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_autoRecordModeKey) ?? false;
+  }
+
+  /// Update the value for auto-record mode.
+  static Future<void> setAutoRecordMode(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_autoRecordModeKey, value);
+    LogService.instance.registerLog("Updated autoRecordMode value to $value");
+  }
+
   /// Retrieve the current value for "timerDuration"
   static Future<int> getTimerDuration() async {
     if (_timerDurationOverride != null) {
@@ -210,6 +247,23 @@ class SettingsService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_timerDurationKey, value);
     LogService.instance.registerLog("Updated timerDuration to $value seconds");
+  }
+
+  static Future<String?> getLocaleOverride() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_localeOverrideKey);
+  }
+
+  static Future<void> setLocaleOverride(String localeCode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_localeOverrideKey, localeCode);
+    LogService.instance.registerLog("Updated locale override to $localeCode");
+  }
+
+  static Future<void> clearLocaleOverride() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_localeOverrideKey);
+    LogService.instance.registerLog("Cleared locale override");
   }
 
   @visibleForTesting

@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 
 import "package:flutter/material.dart";
@@ -35,7 +36,15 @@ import "connected_client_automation_payload.dart";
 import "master_server.dart";
 
 class MasterScreen extends StatefulWidget {
-  const MasterScreen({super.key});
+  const MasterScreen({
+    super.key,
+    MasterServer? masterServer,
+    MasterAnnouncer? announcer,
+  })  : _masterServer = masterServer,
+        _announcer = announcer;
+
+  final MasterServer? _masterServer;
+  final MasterAnnouncer? _announcer;
 
   @override
   MasterScreenState createState() => MasterScreenState();
@@ -43,7 +52,7 @@ class MasterScreen extends StatefulWidget {
 
 class MasterScreenState extends State<MasterScreen> {
   late final MasterServer _server;
-  final MasterAnnouncer _announcer = MasterAnnouncer(); // Broadcast announcer
+  late final MasterAnnouncer _announcer; // Broadcast announcer
   final HydraCamApiService _apiService =
       HydraCamApiService(); // API service instance
   final Map<String, AutomationHandler> _automationHandlers = {};
@@ -56,12 +65,9 @@ class MasterScreenState extends State<MasterScreen> {
       (_server.cameraService.controller?.value.isRecordingVideo ?? false);
   bool _isRecordingTransitioning =
       false; // Track if recording state is changing
-  // String? sessionGuid; // Store the session GUID from the API (Now from Session Manager)
-  bool get sessionActive => SessionManager
-      .instance.isSessionActive; // TODO: Extract to session manager??
+  bool get sessionActive => SessionManager.instance.isSessionActive;
   String? selectedCourtName; // Name of the selected Court
-  String?
-      selectedCourtGuid; // GUID of the selected Court (TODO: To be improved)
+  String? selectedCourtGuid; // GUID of the selected Court
 
   // Getters for SessionManager photos and videos
   List<CapturedPhoto> get photos =>
@@ -85,9 +91,12 @@ class MasterScreenState extends State<MasterScreen> {
   @override
   void initState() {
     super.initState();
+    _announcer = widget._announcer ?? MasterAnnouncer();
+    _server =
+        widget._masterServer ?? MasterServer(CameraServiceSingleton.instance);
+
     _announcer.startBroadcasting();
     // Use singletons directly instead of Provider
-    _server = MasterServer(CameraServiceSingleton.instance);
 
     _server.onClientCountChange = (count) {
       if (mounted) {
@@ -109,7 +118,7 @@ class MasterScreenState extends State<MasterScreen> {
         ),
       );
     };
-    _server.startServer();
+    unawaited(_server.startServer());
 
     if (automationEnabled) {
       _registerAutomationHandlers();
@@ -135,8 +144,8 @@ class MasterScreenState extends State<MasterScreen> {
       // Stop server and announcer
       _server.stopServer();
       _announcer.stopBroadcasting();
-
-      // TODO: Handle session ending if necessary
+      // Screen disposal is resource cleanup only. End the capture session via
+      // _endCurrentSession() when the user or automation explicitly requests it.
     } catch (e) {
       LogService.instance.registerLog("Error during dispose: $e");
     }
@@ -144,7 +153,7 @@ class MasterScreenState extends State<MasterScreen> {
   }
 
   // Method to init a new session
-  void _startOrEndSession() async {
+  Future<void> _startOrEndSession() async {
     if (sessionActive) {
       await _endCurrentSession();
     } else {
@@ -153,7 +162,7 @@ class MasterScreenState extends State<MasterScreen> {
   }
 
   void _handleToggleRecordingButton() {
-    _toggleRecording();
+    unawaited(_toggleRecording());
   }
 
   Future<void> _toggleRecording({
@@ -305,23 +314,17 @@ class MasterScreenState extends State<MasterScreen> {
 
     final handlers = <String, AutomationHandler>{
       "start_session": (payload) async {
-        if (payload["localOnly"] == true) {
-          final sessionGuid = payload["sessionGuid"] as String? ??
-              "local-${DateTime.now().millisecondsSinceEpoch}";
-          _server.startNewSession(sessionGuid);
-          setState(() {});
-        } else {
-          await _createSession(
-            suppressSnackbars: true,
-            skipCourtSelectionWarning: true,
-            overrideCourtGuid: payload["courtGuid"] as String?,
-            overrideSessionId: payload["sessionId"] as String?,
-          );
+        const legacyLocalOnlyKey = "localOnly";
+        if (payload.containsKey(legacyLocalOnlyKey)) {
+          throw ArgumentError(
+              "Local-only automation sessions are disabled; backend sessions are mandatory.");
         }
-        return AutomationBridge.instance.buildSessionSnapshot();
-      },
-      "start_local_session": (payload) async {
-        _startLocalAutomationSession(payload["sessionId"] as String?);
+        await _createSession(
+          suppressSnackbars: true,
+          skipCourtSelectionWarning: true,
+          overrideCourtGuid: payload["courtGuid"] as String?,
+          overrideSessionId: payload["sessionId"] as String?,
+        );
         return AutomationBridge.instance.buildSessionSnapshot();
       },
       "connected_clients": (payload) async {
@@ -329,23 +332,16 @@ class MasterScreenState extends State<MasterScreen> {
           ...buildConnectedClientAutomationPayload(
             _server.getConnectedDeviceInfos(),
             serverStartedAt: _server.serverStartedAt,
+            masterSessionGuid: SessionManager.instance.sessionGuid,
           ),
           "session": AutomationBridge.instance.buildSessionSnapshot(),
         };
       },
       "end_session": (payload) async {
-        if (SessionManager.instance.sessionGuid?.startsWith("local-") ??
-            false) {
-          await _server.endCurrentSession();
-          if (mounted) {
-            setState(() {});
-          }
-        } else {
-          await _endCurrentSession(
-            requireConfirmation: false,
-            suppressSnackbars: true,
-          );
-        }
+        await _endCurrentSession(
+          requireConfirmation: false,
+          suppressSnackbars: true,
+        );
         return AutomationBridge.instance.buildSessionSnapshot();
       },
       "take_photo": (payload) async {
@@ -382,20 +378,6 @@ class MasterScreenState extends State<MasterScreen> {
 
     handlers.forEach(AutomationBridge.instance.registerCommand);
     _automationHandlers.addAll(handlers);
-  }
-
-  void _startLocalAutomationSession(String? sessionId) {
-    final effectiveSessionId =
-        sessionId ?? "automation-local-${DateTime.now().toIso8601String()}";
-    final sessionGuid = "local-$effectiveSessionId";
-    SessionManager.instance
-        .startSession(sessionGuid, effectiveSessionId, deviceType: "Master");
-    _server.startNewSession(sessionGuid);
-    LogService.instance.registerLog(
-        "Automation local session created with GUID: $sessionGuid");
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   String _describeError(Object error) {
@@ -449,7 +431,7 @@ class MasterScreenState extends State<MasterScreen> {
         isRecording = true;
       });
       if (showPreview) {
-        _showMasterVideoPreview();
+        unawaited(_showMasterVideoPreview());
       }
       return true;
     } catch (error, stackTrace) {
@@ -498,7 +480,7 @@ class MasterScreenState extends State<MasterScreen> {
       captureContext: _server.cameraService.recordingCaptureContext,
     );
 
-    SessionManager.instance.addVideo(capturedVideo);
+    await SessionManager.instance.addVideo(capturedVideo);
 
     setState(() {
       isRecording = false; // Update recording state
@@ -510,7 +492,7 @@ class MasterScreenState extends State<MasterScreen> {
   }
 
   /// Open the "camera" preview screen while recording and then return video and show preview.
-  void _showMasterVideoPreview() async {
+  Future<void> _showMasterVideoPreview() async {
     // Move to recording preview screen and get recorded video
     final capturedVideo = await Navigator.push<CapturedVideo>(
       context,
@@ -522,22 +504,26 @@ class MasterScreenState extends State<MasterScreen> {
       ),
     );
 
-    if (capturedVideo != null) {
-      // Automatically show recorded video only if autoplay setting is active
-      final bool autoplayEnabled =
-          await SettingsService.getAutoplayVideoOnMaster();
-      if (autoplayEnabled) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) {
-            _showVideoDialog(capturedVideo, autoClose: true);
-          }
-        });
-      }
+    if (!mounted || capturedVideo == null) {
+      return;
     }
+
+    // Automatically show recorded video only if autoplay setting is active
+    final bool autoplayEnabled =
+        await SettingsService.getAutoplayVideoOnMaster();
+    if (!mounted || !autoplayEnabled) {
+      return;
+    }
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        _showVideoDialog(capturedVideo, autoClose: true);
+      }
+    });
   }
 
   void _handleTakePhotoButton() {
-    _executeTakePhoto(showCountdown: true);
+    unawaited(_executeTakePhoto(showCountdown: true));
   }
 
   Future<void> _executeTakePhoto({
@@ -588,7 +574,7 @@ class MasterScreenState extends State<MasterScreen> {
             captureContext: _server.cameraService.lastPhotoCaptureContext,
           );
 
-          SessionManager.instance.addPhoto(capturedPhoto);
+          await SessionManager.instance.addPhoto(capturedPhoto);
           setState(() {});
 
           if (!suppressSnackbars) {
@@ -684,20 +670,23 @@ class MasterScreenState extends State<MasterScreen> {
       }
 
       final String? userGuid = UserService().guid;
-      final response = await _apiService.createSession(
+      final backendSession = await _apiService.createSession(
         sessionId,
         courtGuid: overrideCourtGuid ?? selectedCourtGuid,
         userGuid: userGuid,
       );
 
-      LogService.instance.registerLog("Response to create session: $response");
+      LogService.instance
+          .registerLog("Response to create session: $backendSession");
 
       if (!mounted) return;
 
-      if (response != null) {
-        final String sessionGuid = response["guid"];
-        SessionManager.instance
-            .startSession(sessionGuid, sessionId, deviceType: "Master");
+      if (backendSession != null) {
+        final String sessionGuid = backendSession.guid;
+        SessionManager.instance.startBackendSession(
+          backendSession,
+          deviceType: "Master",
+        );
         _server.startNewSession(sessionGuid);
 
         LogService.instance
@@ -828,13 +817,15 @@ class MasterScreenState extends State<MasterScreen> {
       context: context,
       builder: (context) {
         final List<ConnectedDeviceInfo> devices = getConnectedDeviceInfos();
+        final summary = summarizeConnectedDeviceInfos(devices);
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Connected Devices",
+              const Text("Known Devices",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(summary.label),
               const SizedBox(height: 10),
               if (devices.isNotEmpty)
                 ...devices.map((device) {
@@ -849,26 +840,44 @@ class MasterScreenState extends State<MasterScreen> {
                       ? "Setup: not reported"
                       : "Setup: ${setupStatus.cameraPerspectiveLabel} | "
                           "${setupStatus.isLevel ? 'Level' : 'Tilted'}";
+                  final isDisconnected = !device.isConnected;
+                  final disconnectedLine = device.disconnectedAt == null
+                      ? ""
+                      : "Disconnected: ${device.disconnectedAt!.toLocal()}\n";
+                  final sessionLine =
+                      "Session: ${device.sessionStatusLabel(masterSessionGuid: SessionManager.instance.sessionGuid)}";
+                  final identifyLine =
+                      "Identify: ${device.identifyStatusLabel}";
                   return ListTile(
-                    title: Text(
-                        "${device.shortDeviceId} · ${device.networkStatus.label}"),
+                    title: Text("${device.shortDeviceId} · "
+                        "${device.connectionStatusLabel} · "
+                        "${device.networkStatus.label}"),
                     subtitle: Text(
                       "Device ID: ${device.deviceId}\n"
                       "SSID: $ssid\n"
                       "Device IP: $localIp | Remote: $remoteIp\n"
                       "Subnet: $subnet\n"
+                      "Preview: ${device.previewStatusLabel} "
+                      "(${device.previewTransportLabel})\n"
+                      "$sessionLine\n"
+                      "$identifyLine\n"
+                      "$disconnectedLine"
                       "$setupLine",
                     ),
                     isThreeLine: true,
                     leading: Icon(
-                      device.networkStatus ==
-                              ConnectedDeviceNetworkStatus.wrongNetwork
-                          ? Icons.warning
-                          : Icons.wifi,
-                      color: device.networkStatus ==
-                              ConnectedDeviceNetworkStatus.wrongNetwork
-                          ? Colors.red
-                          : Colors.green,
+                      isDisconnected
+                          ? Icons.link_off
+                          : device.networkStatus ==
+                                  ConnectedDeviceNetworkStatus.wrongNetwork
+                              ? Icons.warning
+                              : Icons.wifi,
+                      color: isDisconnected
+                          ? Colors.grey
+                          : device.networkStatus ==
+                                  ConnectedDeviceNetworkStatus.wrongNetwork
+                              ? Colors.red
+                              : Colors.green,
                     ),
                   );
                 })
@@ -936,8 +945,9 @@ class MasterScreenState extends State<MasterScreen> {
                 SizedBox(
                   width: buttonWidth,
                   child: ElevatedButton(
-                    onPressed:
-                        isProcessingStartSession ? null : _startOrEndSession,
+                    onPressed: isProcessingStartSession
+                        ? null
+                        : () => unawaited(_startOrEndSession()),
                     child: isProcessingStartSession
                         ? const SizedBox(
                             width: 20,
@@ -1040,7 +1050,7 @@ class MasterScreenState extends State<MasterScreen> {
           child: ElevatedButton(
             onPressed: isProcessingEndSession || sessionGuid == null
                 ? null
-                : _endCurrentSession,
+                : () => unawaited(_endCurrentSession()),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: isProcessingEndSession
                 ? const SizedBox(

@@ -1,0 +1,69 @@
+{
+  "acceptanceChecks": [
+    "uploadMedia rejects HTTP 200 backend bodies that explicitly report upload failure",
+    "uploadMedia preserves existing empty-body HTTP 200 success behavior",
+    "Focused HydraCam API service tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/hydracam_api_service.dart",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:35:09.507523+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "backend response reported failure|_uploadResponseReportsFailure|rejects backend failure bodies|success\": false|statusValue",
+        "lib/services/hydracam_api_service.dart",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:35:10.247860+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T02:35:19.753952+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulator",
+      "name": "Flutter HydraCam API service unit-test runner",
+      "notes": [
+        "Runs uploadMedia backend response-shape and multipart-contract tests with mock HTTP client."
+      ],
+      "os": "macOS test host",
+      "role": "verification"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "upload-backend-failure-response-guard",
+    "source": "docs/control/backlog-import.md#testing-issue-candidates",
+    "title": "T-016. Photo/video upload API backend response-shape guard"
+  },
+  "notes": [
+    "HTTP 200 upload responses with explicit backend failure fields now return false.",
+    "Focused HydraCam API service tests pass while empty-body success remains compatible."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1,0 +1,33 @@
+{
+  "acceptanceChecks": [
+    "PermissionService uses a single permission_handler import while preserving startup permission requests and unsupported-platform app-settings behavior under focused service tests"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/permission_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:10:53.866968+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "permission-service-import-unification-cleanup",
+    "source": "code audit: lib/services/permission_service.dart duplicate permission_handler imports",
+    "title": "PermissionService import unification cleanup"
+  },
+  "notes": [
+    "Focused PermissionService tests passed after replacing duplicate permission_handler imports with one prefixed import; behavior remained unchanged for Android startup permissions and unsupported-platform settings skips."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1,0 +1,142 @@
+{
+  "acceptanceChecks": [
+    "Failed media has an explicit retry upload action",
+    "Pending media has an explicit queue upload action",
+    "Upload action callbacks still invoke the existing requeue path",
+    "Screenshot and video proof show the explicit actions"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:07:18.912087+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:07:44.042897+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/media_list_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:08:06.780462+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:08:13.902843+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "--update-goldens",
+        "logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/explicit_upload_actions_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:08:39.706040+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/screenshots/explicit_upload_actions.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/video/explicit_upload_actions_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:08:41.962687+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:09:10.296574+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/widgets/media_list_widget.dart",
+        "test/widgets/media_list_widget_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/summary.md",
+        "logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/device-logs/flutter-widget-runner.log",
+        "logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/explicit_upload_actions_visual_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:09:15.052001+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:09:15.080082+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "flutter-test",
+      "kind": "simulated app surface",
+      "name": "macOS Flutter widget test runner",
+      "notes": [],
+      "os": "macOS",
+      "role": "media list upload action proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/explicit_upload_actions.png",
+    "video/explicit_upload_actions_proof.mp4",
+    "device-logs/flutter-widget-runner.log"
+  ],
+  "item": {
+    "slug": "explicit-upload-requeue-actions",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Improve upload failure, cancel, requeue, and progress UI"
+  },
+  "notes": [
+    "Failed/pending media now expose explicit requeue action labels with callback coverage, screenshot, and video proof; true cancel controls and other upload UI work remain on the existing item."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

@@ -1,0 +1,134 @@
+{
+  "acceptanceChecks": [
+    "Native Windows HydraCam captures one photo and one short video from webcam or records a real camera-access blocker with fallback media",
+    "WSL Linux HydraCam captures one photo and one short video from webcam or records a real camera-access blocker with fallback media",
+    "Android emulator HydraCam captures one photo and one short video from webcam or records a real camera-access blocker with fallback media",
+    "Windows, Linux, and Android emulator are exercised as master and slave in all ordered combinations, or blockers are documented with a fallback plan"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:47:43.007485+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"Set-Location 'D:\\src\\work\\hydracamv2'; flutter emulators; emulator -list-avds; wsl -d Ubuntu-22.04 -- bash -lc 'set -x; uname -a; ls -l /dev/video* 2>&1 || true; command -v v4l2-ctl && v4l2-ctl --list-devices || true; echo DISPLAY= WAYLAND_DISPLAY='\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:48:14.142512+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"Get-ChildItem 'C:\\Users\\jose\\AppData\\Local\\Android\\Sdk\\emulator\\emulator.exe','D:\\android-avd' -ErrorAction SilentlyContinue; Get-ChildItem 'D:\\android-avd' -Recurse -Filter '*.ini' -ErrorAction SilentlyContinue | Select-Object FullName; Get-ChildItem 'D:\\android-avd' -Directory -ErrorAction SilentlyContinue | Select-Object FullName; Get-ChildItem Env:ANDROID* | Format-Table -AutoSize\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:48:56.335748+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "BatchMode=yes",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"New-Item -ItemType Directory -Force -Path 'D:\\hydracam-evidence\\win11-triple-platform-camera-master-slave\\scripts' | Out-Null\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:50:47.986216+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/services/gallery_persistence_service.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:59:41.971345+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-i",
+        "/Users/jose/Downloads/codex_ssh_key",
+        "-o",
+        "IdentitiesOnly=yes",
+        "jose@100.110.8.112",
+        "powershell -NoProfile -Command \"wsl -l -v; wsl -d Ubuntu-22.04 -- bash -lc 'set -o pipefail; echo ===uname===; uname -a; echo ===video===; ls -l /dev/video* 2>&1 || true; echo ===v4l2===; command -v v4l2-ctl || true; v4l2-ctl --list-devices 2>&1 || true; echo ===display===; env | grep -E \\\"^(DISPLAY|WAYLAND_DISPLAY|PULSE_SERVER|WSL|XDG_RUNTIME_DIR)=\\\" || true; echo ===wslg===; ls -la /mnt/wslg 2>&1 || true; echo ===flutter===; command -v flutter || true; flutter --version 2>&1 | head -20 || true'\""
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-08T19:21:26.682371+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "windows",
+      "kind": "Windows desktop",
+      "name": "DESKTOP-02NDERS native Windows",
+      "notes": [
+        "Remote Win11 host with USB2.0 HD UVC WebCam visible via DirectShow"
+      ],
+      "os": "Windows 11 Pro 25H2",
+      "role": "capture, master, slave"
+    },
+    {
+      "identifier": "linux",
+      "kind": "WSL Linux desktop",
+      "name": "DESKTOP-02NDERS WSL Ubuntu-22.04 Linux",
+      "notes": [
+        "Will probe WSLg and /dev/video availability; fallback media allowed if USB camera cannot be forwarded"
+      ],
+      "os": "Ubuntu 22.04 WSL2",
+      "role": "capture, master, slave"
+    },
+    {
+      "identifier": "HydraCam_API33_x86_64",
+      "kind": "Android emulator",
+      "name": "HydraCam_API33_x86_64 emulator",
+      "notes": [
+        "Will boot through Windows Android emulator and use host webcam if exposed by AVD"
+      ],
+      "os": "Android 13 API 33 x86_64",
+      "role": "capture, master, slave"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "win11-triple-platform-camera-master-slave",
+    "source": "user-request: native Windows, WSL Linux, Android emulator capture/upload and master/slave combinations",
+    "title": "Win11 Windows/Linux/Android HydraCam camera and master-slave proof"
+  },
+  "notes": [],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "prepared",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}

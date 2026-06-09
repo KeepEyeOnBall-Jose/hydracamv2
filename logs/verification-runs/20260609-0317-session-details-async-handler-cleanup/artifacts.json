@@ -1,0 +1,91 @@
+{
+  "acceptanceChecks": [
+    "SessionDetails load-session and upload-confirm paths are covered by widget tests",
+    "SessionDetails async handlers return Future<void> and are dispatched explicitly from UI callbacks",
+    "Focused screen tests, analyzer, diff check, and full Flutter tests pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:13:42.165685+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/screens/session_details_screen.dart",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:14:02.108510+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:14:05.847243+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:14:33.431099+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:14:42.131526+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:14:45.999460+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T01:14:54.679039+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "session-details-async-handler-cleanup",
+    "source": "cleanup scan: async void screen handlers",
+    "title": "Session details async handler cleanup"
+  },
+  "notes": [
+    "Added widget coverage for the SessionDetails unsent-media upload confirmation callback.",
+    "Converted SessionDetails load handlers to Future<void> and dispatched UI callbacks with unawaited.",
+    "Focused screen test, git diff --check, flutter analyze --no-pub, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

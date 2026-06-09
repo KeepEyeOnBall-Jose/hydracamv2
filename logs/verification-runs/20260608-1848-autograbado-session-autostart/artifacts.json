@@ -1,0 +1,159 @@
+{
+  "acceptanceChecks": [
+    "Autograbado starts slave recording when a sessionStarted message arrives",
+    "Autograbado starts only when the persisted setting is enabled",
+    "Existing session registration still happens",
+    "Screenshot and video proof show the autostart behavior"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:49:02.678733+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:49:28.649251+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-08T16:50:00.008105+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:50:33.034655+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/render_autograbado_session_autostart_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:51:01.137913+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-y",
+        "-loop",
+        "1",
+        "-t",
+        "3",
+        "-i",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/screenshots/autograbado_session_autostart.png",
+        "-vf",
+        "format=yuv420p",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/video/autograbado_session_autostart_proof.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:51:07.846229+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/slave/slave_client.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:51:33.367933+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:51:41.403807+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:51:43.331849+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:51:53.779939+00:00"
+    },
+    {
+      "command": [
+        "cp",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/commands.log",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/device-logs/flutter-test-runner.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:52:11.599659+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/slave/slave_client.dart",
+        "test/slave/slave_client_registration_test.dart",
+        "docs/control/backlog-import.md",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/summary.md",
+        "logs/verification-runs/20260608-1848-autograbado-session-autostart/render_autograbado_session_autostart_proof.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T16:52:18.633514+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "screenshots/autograbado_session_autostart.png",
+    "video/autograbado_session_autostart_proof.mp4",
+    "device-logs/flutter-test-runner.log"
+  ],
+  "item": {
+    "slug": "autograbado-session-autostart",
+    "source": "docs/control/backlog-import.md#8-implement-autograbado-mode",
+    "title": "Implement autograbado mode"
+  },
+  "notes": [
+    "Autograbado session auto-start slice passed focused WebSocket-path test, analyzer, full flutter test, readable screenshot, and MP4 proof. Item remains open for real-device unattended recording proof and safe stop controls."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

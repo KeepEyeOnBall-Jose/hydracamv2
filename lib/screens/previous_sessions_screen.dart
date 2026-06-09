@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "session_details_screen.dart";
 import "../services/session_manager.dart";
@@ -10,14 +12,15 @@ class PreviousSessionsScreen extends StatefulWidget {
 }
 
 class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
-  late Future<List<String>> _availableSessions;
+  Future<List<String>> _availableSessions = Future<List<String>>.value([]);
 
-  void _handleSessionTap(BuildContext context, String sessionId) async {
+  Future<void> _handleSessionTap(BuildContext context, String sessionId) async {
     // Store a reference to the current context
     final currentContext = context;
 
     // Load session metadata
-    final session = await SessionManager.instance.loadSessionMetadata(sessionId);
+    final session =
+        await SessionManager.instance.loadSessionMetadata(sessionId);
 
     // Check if the context is still valid and the widget is mounted
     if (currentContext.mounted) {
@@ -37,6 +40,10 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
   }
 
   Future<void> _refreshSessions() async {
+    if (!mounted) {
+      return;
+    }
+
     setState(() {
       _availableSessions = Future.value([]); // Clean view temporally
     });
@@ -44,17 +51,20 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
     // Rebuilt previous sessions if needed
     await SessionManager.instance.scanAndReconstructSessions();
 
+    if (!mounted) {
+      return;
+    }
+
     // Get available sessions after scan
     setState(() {
       _availableSessions = SessionManager.instance.getAvailableSessions();
     });
   }
 
-
   @override
   void initState() {
     super.initState();
-    _refreshSessions();
+    unawaited(_refreshSessions());
   }
 
   @override
@@ -65,11 +75,12 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () async {
+            onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Scanning and refreshing sessions...")),
+                const SnackBar(
+                    content: Text("Scanning and refreshing sessions...")),
               );
-              await _refreshSessions();
+              unawaited(_refreshSessions());
             },
           ),
         ],
@@ -95,7 +106,7 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
               return ListTile(
                 title: Text("Session: $sessionId"),
                 onTap: () {
-                  _handleSessionTap(context, sessionId);
+                  unawaited(_handleSessionTap(context, sessionId));
                 },
               );
             },

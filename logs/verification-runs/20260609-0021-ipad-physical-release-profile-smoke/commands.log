@@ -1,0 +1,803 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 6 connected devices:
+  SM G960F (mobile)       • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G935F (mobile)       • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 148.0.7778.216
+
+Found 1 wirelessly connected device:
+  José Ramón’s iPhone (wireless) (mobile) • 00008101-000A68811E43001E • ios • iOS 26.5 23F77
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State                Model
+-------------------   -----------------------------------   ------------------------------------   ------------------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected            iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:14
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:13
+
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/win11-dev-host.md
+ M lib/main.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/camera_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/scheduled_task_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/settings_service.dart
+ M lib/services/storage_service.dart
+ M lib/services/uploader_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/media_filter_dialog.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M linux/flutter/generated_plugin_registrant.cc
+ M linux/flutter/generated_plugins.cmake
+ M macos/Flutter/GeneratedPluginRegistrant.swift
+ M pubspec.lock
+ M pubspec.yaml
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/screens/capture_settings_screen_test.dart
+ M test/services/battery_service_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/settings_service_test.dart
+ M test/services/storage_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/widgets/session_info_widget_test.dart
+ M windows/flutter/generated_plugin_registrant.cc
+ M windows/flutter/generated_plugins.cmake
+?? docs/control/hydracam-mobo-media-timeline-merge-plan.md
+?? lib/services/gallery_session_candidate_source.dart
+?? lib/services/gallery_session_matcher.dart
+?? logs/verification-runs/20260608-1745-critical-battery-autostop/
+?? logs/verification-runs/20260608-1751-device-identity-diagnostics/
+?? logs/verification-runs/20260608-1756-uploader-reset-progress-hygiene/
+?? logs/verification-runs/20260608-1759-failed-upload-visible-state/
+?? logs/verification-runs/20260608-1804-upload-byte-progress-visible/
+?? logs/verification-runs/20260608-1807-explicit-upload-requeue-actions/
+?? logs/verification-runs/20260608-1809-autograbado-setting-toggle/
+?? logs/verification-runs/20260608-1816-gallery-session-window-matcher/
+?? logs/verification-runs/20260608-1826-scheduled-task-clock-offset/
+?? logs/verification-runs/20260608-1830-upload-time-estimate-visible/
+?? logs/verification-runs/20260608-1834-same-session-rejoin-preserves-media/
+?? logs/verification-runs/20260608-1838-gallery-browse-all-filter-action/
+?? logs/verification-runs/20260608-1843-pending-upload-cancel-control/
+?? logs/verification-runs/20260608-1848-autograbado-session-autostart/
+?? logs/verification-runs/20260608-1855-start-upload-all-slave-command/
+?? logs/verification-runs/20260608-1901-upload-app-version-metadata/
+?? logs/verification-runs/20260608-1910-disconnected-device-state-master-list/
+?? logs/verification-runs/20260608-1918-stale-inflight-upload-reset-guard/
+?? logs/verification-runs/20260608-1922-slave-upload-info-action/
+?? logs/verification-runs/20260608-1933-inflight-upload-cancel-control/
+?? logs/verification-runs/20260608-1938-auth0-refresh-scope/
+?? logs/verification-runs/20260608-1944-gallery-scan-active-session-preserved/
+?? logs/verification-runs/20260608-1948-gallery-candidate-session-labels/
+?? logs/verification-runs/20260608-1953-gallery-historical-session-candidate-source/
+?? logs/verification-runs/20260608-2000-auth0-secure-credential-store/
+?? logs/verification-runs/20260608-2006-auth0-startup-restore-valid-credentials/
+?? logs/verification-runs/20260608-2011-20260608-2012-auth0-refresh-expired-credentials/
+?? logs/verification-runs/20260608-2017-auth0-logout-clears-credentials/
+?? logs/verification-runs/20260608-2022-user-guid-restore-after-auth0-restore/
+?? logs/verification-runs/20260608-2030-master-device-list-summary-sort/
+?? logs/verification-runs/20260608-2035-scheduled-command-master-time-offset/
+?? logs/verification-runs/20260608-2045-slave-recording-safe-stop-control/
+?? logs/verification-runs/20260608-2047-win11-triple-platform-camera-master-slave/
+?? logs/verification-runs/20260608-2055-session-player-source-missing-backend-state/
+?? logs/verification-runs/20260608-2105-master-slave-preview-missing-state/
+?? logs/verification-runs/20260608-2115-slave-session-mismatch-diagnostics/
+?? logs/verification-runs/20260608-2125-forced-stop-missing-start-timestamp/
+?? logs/verification-runs/20260608-2127-upload-media-contract-fields/
+?? logs/verification-runs/20260608-2132-in-flight-upload-dedupe/
+?? logs/verification-runs/20260608-2135-slave-identify-diagnostic-ack/
+?? logs/verification-runs/20260608-2136-uploader-estimate-completed-samples/
+?? logs/verification-runs/20260608-2140-storage-critical-block-recovery/
+?? logs/verification-runs/20260608-2144-user-login-clears-stale-guid/
+?? logs/verification-runs/20260608-2145-video-upload-duration-metadata/
+?? logs/verification-runs/20260608-2155-storage-location-missing-state/
+?? logs/verification-runs/20260608-2205-invalid-upload-file-guard/
+?? logs/verification-runs/20260608-2215-gallery-candidate-guid-label/
+?? logs/verification-runs/20260608-win11-android-studio-ide-repair/
+?? logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/
+?? test/screens/media_selection_screen_test.dart
+?? test/screens/session_details_screen_test.dart
+?? test/screens/uploader_info_screen_test.dart
+?? test/services/auth0_service_test.dart
+?? test/services/gallery_session_candidate_source_test.dart
+?? test/services/gallery_session_matcher_test.dart
+?? test/services/hydracam_api_service_test.dart
+?? test/services/scheduled_task_service_test.dart
+?? test/services/uploader_service_test.dart
+?? test/services/user_service_test.dart
+?? test/widgets/media_filter_dialog_test.dart
+?? test/widgets/media_list_widget_test.dart
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (7) Failed to connect to 192.168.178.104 port 4762 after 1126 ms: Couldn't connect to server
+[exit-code] 7
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --help
+usage: run_rotating_master_slave_matrix.py [-h] [--ios-host DEVICE_ID=HOST]
+                                           [--auto-ios-bridge-hosts | --no-auto-ios-bridge-hosts]
+                                           [--ios-bridge-scan-subnet CIDR]
+                                           [--run-dir RUN_DIR] [--dry-run]
+                                           [--warm-summary WARM_SUMMARY]
+                                           [--use-latest-warm-summary | --no-use-latest-warm-summary]
+                                           [--latest-warm-summary LATEST_WARM_SUMMARY]
+                                           [--update-latest-warm-summary | --no-update-latest-warm-summary]
+                                           [--target-id TARGET_ID]
+                                           [--expect-target-id EXPECT_TARGET_ID]
+                                           [--master-id MASTER_ID]
+                                           [--skip-build] [--skip-install]
+                                           [--apk APK]
+                                           [--android-ndk-version ANDROID_NDK_VERSION]
+                                           [--android-port-base ANDROID_PORT_BASE]
+                                           [--local-port-base LOCAL_PORT_BASE]
+                                           [--physical-ios-port PHYSICAL_IOS_PORT]
+                                           [--record-seconds RECORD_SECONDS]
+                                           [--timeout TIMEOUT]
+                                           [--standby-launch-timeout STANDBY_LAUNCH_TIMEOUT]
+                                           [--role-switch-verify-timeout ROLE_SWITCH_VERIFY_TIMEOUT]
+                                           [--capture-stage-timeout CAPTURE_STAGE_TIMEOUT]
+                                           [--recording-ready-timeout RECORDING_READY_TIMEOUT]
+                                           [--stop-recording-timeout STOP_RECORDING_TIMEOUT]
+                                           [--macos-master-host MACOS_MASTER_HOST]
+                                           [--fast-ios-launch]
+                                           [--ios-profile-build-install]
+                                           [--ios-profile-app IOS_PROFILE_APP]
+                                           [--xctrace-ios-launch]
+                                           [--xctrace-time-limit-seconds XCTRACE_TIME_LIMIT_SECONDS]
+                                           [--ios-profile-trust-retry-timeout IOS_PROFILE_TRUST_RETRY_TIMEOUT]
+                                           [--ios-profile-trust-retry-interval IOS_PROFILE_TRUST_RETRY_INTERVAL]
+                                           [--immediate-role-switch]
+                                           [--warm-prime-only]
+                                           [--prime-then-immediate-role-switch]
+                                           [--runtime-role-switch]
+                                           [--role-switch-only]
+                                           [--repeat-role-switch-cycles REPEAT_ROLE_SWITCH_CYCLES]
+                                           [--max-set-role-request-start-skew-ms MAX_SET_ROLE_REQUEST_START_SKEW_MS]
+                                           [--stage-slaves-after-master-ready]
+                                           [--fully-parallel-role-switch]
+                                           [--collect-role-switch-logs]
+                                           [--reuse-running-bridges]
+                                           [--require-warm-bridges]
+
+Run a rotating HydraCam master/slave capture matrix. Each capture-capable
+device is launched once as master. Every other discovered target is launched
+as a forced slave pointed at that master's Wi-Fi host, then the capture
+scenario is sent only through the master automation bridge.
+
+options:
+  -h, --help            show this help message and exit
+  --ios-host DEVICE_ID=HOST
+                        Explicit bridge host for a physical iOS device. May
+                        repeat.
+  --auto-ios-bridge-hosts, --no-auto-ios-bridge-hosts
+                        Scan likely LAN hosts for physical iOS automation
+                        bridges and adopt only identity-matched /healthz
+                        responses. Enabled by the immediate role-switch
+                        shortcuts unless --no-auto-ios-bridge-hosts is passed.
+  --ios-bridge-scan-subnet CIDR
+                        Extra IPv4 subnet to scan for identity-matched
+                        physical iOS bridges when --auto-ios-bridge-hosts is
+                        enabled. May repeat.
+  --run-dir RUN_DIR
+  --dry-run
+  --warm-summary WARM_SUMMARY
+                        Reuse targets and masterHosts from a previous
+                        rotating-matrix summary.json or run directory,
+                        skipping flutter/adb discovery and master-host
+                        probing.
+  --use-latest-warm-summary, --no-use-latest-warm-summary
+                        Reuse the latest persisted warm bridge map instead of
+                        running Flutter/ADB discovery. Immediate role-switch
+                        shortcuts use this cache automatically when it exists;
+                        pass --no-use-latest-warm-summary to force fresh
+                        discovery.
+  --latest-warm-summary LATEST_WARM_SUMMARY
+                        Path to the persisted latest warm bridge map used by
+                        --use-latest-warm-summary and updated after successful
+                        warm role-switch runs.
+  --update-latest-warm-summary, --no-update-latest-warm-summary
+                        Update the latest warm bridge map after a successful
+                        warm role-switch run. Disable with --no-update-latest-
+                        warm-summary.
+  --target-id TARGET_ID
+                        Only include this device ID in the run. May repeat.
+                        Filtering happens before physical iOS host validation.
+  --expect-target-id EXPECT_TARGET_ID
+                        Require this device ID to be present after
+                        discovery/warm-summary loading and target filtering.
+                        May repeat. The runner fails before
+                        build/install/launch when an expected target is
+                        absent.
+  --master-id MASTER_ID
+                        Only run rotations where this device ID is master. May
+                        repeat.
+  --skip-build
+  --skip-install
+  --apk APK
+  --android-ndk-version ANDROID_NDK_VERSION
+                        Override the Gradle hydracamNdkVersion property for
+                        this build. Useful when the default repo NDK is not
+                        installed locally.
+  --android-port-base ANDROID_PORT_BASE
+  --local-port-base LOCAL_PORT_BASE
+  --physical-ios-port PHYSICAL_IOS_PORT
+  --record-seconds RECORD_SECONDS
+  --timeout TIMEOUT
+  --standby-launch-timeout STANDBY_LAUNCH_TIMEOUT
+                        Maximum seconds to wait for initial standby bridges in
+                        runtime role-switch mode. Defaults to --timeout.
+  --role-switch-verify-timeout ROLE_SWITCH_VERIFY_TIMEOUT
+                        Maximum seconds to wait after a warm runtime role
+                        switch for the promoted master commands and expected
+                        client connections.
+  --capture-stage-timeout CAPTURE_STAGE_TIMEOUT
+                        Maximum seconds to wait for start-session/photo/end-
+                        session state on all targets in a rotation.
+  --recording-ready-timeout RECORDING_READY_TIMEOUT
+                        Maximum seconds to wait for all required targets to
+                        report isRecording before the runner starts the
+                        record-seconds timer.
+  --stop-recording-timeout STOP_RECORDING_TIMEOUT
+                        Maximum seconds to wait for all required targets to
+                        save a video after stop_recording.
+  --macos-master-host MACOS_MASTER_HOST
+                        Explicit Wi-Fi/LAN IP other devices should use when
+                        macOS is master.
+  --fast-ios-launch     Use preinstalled physical iOS apps launched through
+                        devicectl runtime environment instead of flutter run.
+  --ios-profile-build-install
+                        Build and install an automation-enabled iOS Profile
+                        app on selected physical iOS devices before launch.
+                        Use this once to make --fast-ios-launch viable without
+                        Flutter tooling.
+  --ios-profile-app IOS_PROFILE_APP
+                        Path to the built iOS Profile Runner.app to install.
+  --xctrace-ios-launch  Use xctrace to launch preinstalled physical iOS apps.
+                        This is useful for older devices that appear in
+                        xcdevice but not devicectl.
+  --xctrace-time-limit-seconds XCTRACE_TIME_LIMIT_SECONDS
+                        How long xctrace should keep a launched physical iOS
+                        app alive. Only used with --xctrace-ios-launch.
+  --ios-profile-trust-retry-timeout IOS_PROFILE_TRUST_RETRY_TIMEOUT
+                        When warm-prime sees ios_profile_not_trusted, keep
+                        retrying the missing physical iOS bridge for this many
+                        seconds so the operator can trust the developer
+                        profile on-device without restarting the matrix
+                        command. Defaults to 0, which fails fast.
+  --ios-profile-trust-retry-interval IOS_PROFILE_TRUST_RETRY_INTERVAL
+                        Seconds between ios_profile_not_trusted warm-prime
+                        retry attempts.
+  --immediate-role-switch
+                        Shortcut for the fastest warm role-switch proof:
+                        runtime role switching, role-switch-only, reuse
+                        running bridges, require warm bridges, skip build, and
+                        skip install. It fails fast instead of falling back to
+                        cold launch when a selected bridge is missing.
+  --warm-prime-only     Only try to warm selected missing automation bridges,
+                        then write warm-bridge-prime.json. This reuses
+                        already-running bridges, skips build/install, and does
+                        not run role rotations.
+  --prime-then-immediate-role-switch
+                        Try to warm missing selected bridges first, then run
+                        the immediate role-switch proof only if every selected
+                        bridge is warm. This skips build/install and writes
+                        warm-bridge-prime.json before any rotation artifacts.
+  --runtime-role-switch
+                        Launch every target once in standby, then rotate
+                        master/slave roles through the automation bridge
+                        instead of relaunching apps.
+  --role-switch-only    Stop after proving the selected master exposes control
+                        commands and sees every selected client. No photo or
+                        video commands run.
+  --repeat-role-switch-cycles REPEAT_ROLE_SWITCH_CYCLES
+                        Repeat all selected rotations this many times in one
+                        hot runner. Values above 1 require runtime role-switch
+                        role-switch-only mode.
+  --max-set-role-request-start-skew-ms MAX_SET_ROLE_REQUEST_START_SKEW_MS
+                        Fail a runtime role-switch rotation if parallel
+                        set_role requests do not begin within this many
+                        milliseconds of each other.
+  --stage-slaves-after-master-ready
+                        In runtime role-switch mode, set the new master first,
+                        wait until it exposes master commands, then set all
+                        slaves in a parallel batch. This reduces slave
+                        connection races against slow master server startup
+                        while preserving parallel slave dispatch.
+  --fully-parallel-role-switch
+                        Diagnostic mode for runtime role-switch proofs: send
+                        the promoted master and all slaves in one parallel
+                        set_role batch. The immediate shortcuts default to
+                        staging the master first because current evidence
+                        shows that is faster end-to-end.
+  --collect-role-switch-logs
+                        Collect per-target logs even for successful role-
+                        switch-only rotations. By default logs are collected
+                        only on failures.
+  --reuse-running-bridges
+                        When a target's automation bridge is already healthy
+                        and exposes set_role, reuse it instead of terminating
+                        and relaunching the app.
+  --require-warm-bridges
+                        In runtime role-switch reuse mode, fail before
+                        build/install/launch unless every selected target
+                        already exposes an identity-matched set_role bridge.
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --run-dir logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --warm-prime-only --fast-ios-launch --ios-profile-build-install --ios-profile-app build/ios/Profile-iphoneos/Runner.app --standby-launch-timeout 90 --ios-profile-trust-retry-timeout 45 --ios-profile-trust-retry-interval 5 --no-update-latest-warm-summary
+
+[stderr]
+run_rotating_master_slave_matrix failed: unknown target-id(s): 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --run-dir logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime-fresh --no-use-latest-warm-summary --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --warm-prime-only --fast-ios-launch --ios-profile-build-install --ios-profile-app build/ios/Profile-iphoneos/Runner.app --standby-launch-timeout 90 --ios-profile-trust-retry-timeout 45 --ios-profile-trust-retry-interval 5 --no-update-latest-warm-summary
++ flutter devices
++ adb devices -l
+
+[stderr]
+run_rotating_master_slave_matrix failed: Missing --ios-host for physical iOS device(s): 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+[exit-code] 1
+
+$ dscacheutil -q host -a name iPad-5.coredevice.local
+name: ipad-5.coredevice.local
+ipv6_address: fdca:9853:ecfa::1
+ipv6_address: fdca:9853:ecfa::1
+
+[exit-code] 0
+
+$ ping -c 2 iPad-5.coredevice.local
+
+[stderr]
+ping: cannot resolve iPad-5.coredevice.local: Unknown host
+[exit-code] 68
+
+$ xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619
+Gathering device information…
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags:
+▿ hardwareProperties:
+    • cpuType: arm64 (type: 16777228, subtype: 0)
+    • deviceType: iPad
+    • ecid: 4003463842304166
+    • hardwareModel: J71bAP
+    • internalStorageCapacity: 32000000000
+    • isProductionFused: true
+    • marketingName: iPad (6th generation) (Model A1893)
+    • platform: iOS
+    • productType: iPad7,5
+    • reality: physical
+    • serialNumber: DMPW528HJF8K
+    ▿ supportedCPUTypes:
+        • arm64 (type: 16777228, subtype: 0)
+        • unknown-12-13 (type: 12, subtype: 13)
+    • supportedDeviceFamilies: [1, 2]
+    • thinningProductType: iPad7,5
+    • udid: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: true
+    • developerModeStatus: enabled
+    • hasInternalOSBuild: false
+    • name: iPad (5)
+    • osBuildUpdate: 21H461
+    • osVersionNumber: 17.7.11
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+    • rootFileSystemIsWritable: false
+    • bootedFromSnapshot: true
+    • bootedSnapshotName: com.apple.os.update-87253FEA1A5E1C6202739DA5112B7F7F03A085FE06EEA031E7CF9B829F4E11AE
+    • supportsCheckedAllocations: false
+▿ connectionProperties:
+    • authenticationType: manualPairing
+    • isMobileDeviceOnly: false
+    • lastConnectionDate: 2026-06-08 22:24:00 +0000
+    ▿ localHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    ▿ potentialHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    • pairingState: paired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelIPAddress: fdca:9853:ecfa::1
+    • tunnelState: connected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Application Control (com.apple.coredevice.feature.applicationcontrol)
+    • Capture Sysdiagnose (com.apple.coredevice.feature.capturesysdiagnose)
+    • Create Service Connection (com.apple.dt.serviceconnection.create)
+    • Create Service Socket (com.apple.dt.servicesocket.create)
+    • Disable Developer Disk Image Services (com.apple.coredevice.feature.disableddiservices)
+    • Disconnect from Device (com.apple.coredevice.feature.disconnectdevice)
+    • Fetch Application Icons (com.apple.coredevice.feature.fetchappicons)
+    • Fetch AuthListing Identifiers (com.apple.coredevice.feature.getauthlistingidentifiers)
+    • Fetch Developer Disk Image Services Metadata (com.apple.coredevice.feature.fetchddimetadata)
+    • Fetch Extended Device Info (com.apple.coredevice.feature.getdeviceinfo)
+    • Get Display Information (com.apple.coredevice.feature.getdisplayinfo)
+    • Get Lock State (com.apple.coredevice.feature.getlockstate)
+    • Install Application (com.apple.coredevice.feature.installapp)
+    • Install Root (com.apple.coredevice.feature.installroot)
+    • Launch Application (com.apple.coredevice.feature.launchapplication)
+    • List Files (com.apple.coredevice.feature.listFiles)
+    • List Roots (com.apple.coredevice.feature.listroots)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+    • Monitor Process for Termination (com.apple.coredevice.feature.monitorprocesstermination)
+    • Post Darwin Notification (com.apple.dt.customer.postdarwinnotification)
+    • Process Control (com.apple.coredevice.feature.processcontrol)
+    • Query MobileGestalt (com.apple.coredevice.feature.querymobilegestalt)
+    • Reboot Device (com.apple.coredevice.feature.rebootdevice)
+    • Send Memory Warning to Process (com.apple.coredevice.feature.sendmemorywarningtoprocess)
+    • Send Signal to Process (com.apple.coredevice.feature.sendsignaltoprocess)
+    • Service Hub Profile (com.apple.dt.profile)
+    • Spawn Executable (com.apple.coredevice.feature.spawnexecutable)
+    • Stream Application List (com.apple.coredevice.feature.streamapplist)
+    • Stream Process List (com.apple.coredevice.feature.streamprocesslist)
+    • Transfer Files (com.apple.coredevice.feature.transferFiles)
+    • Uninstall Application (com.apple.coredevice.feature.uninstallapp)
+    • Uninstall Root (com.apple.coredevice.feature.uninstallroot)
+    • Unpair Device (com.apple.coredevice.feature.unpairdevice)
+• visibilityClass: default
+[exit-code] 0
+
+$ arp -a
+? (169.254.169.254) at (incomplete) on en0 [ethernet]
+ipad-5.local (169.254.193.202) at b2:ca:68:c6:ee:51 on en11 [ethernet]
+? (192.168.178.1) at 44:4e:6d:be:f3:dc on en0 ifscope [ethernet]
+? (192.168.178.67) at (incomplete) on en0 ifscope [ethernet]
+? (192.168.178.104) at 56:82:7f:2a:d6:2d on en0 ifscope [ethernet]
+? (192.168.178.128) at 34:6f:24:ea:5d:17 on en0 ifscope [ethernet]
+? (192.168.178.149) at 2c:91:ab:8b:a3:5 on en0 ifscope [ethernet]
+? (192.168.178.151) at 1a:41:59:6c:3c:86 on en0 ifscope [ethernet]
+? (192.168.178.159) at b6:d8:3d:db:11:70 on en0 ifscope permanent [ethernet]
+? (192.168.178.168) at 76:e1:fd:f5:56:20 on en0 ifscope [ethernet]
+? (192.168.178.191) at 38:a:a:a1:e4:92 on en0 ifscope [ethernet]
+mdns.mcast.net (224.0.0.251) at 1:0:5e:0:0:fb on en0 ifscope permanent [ethernet]
+mdns.mcast.net (224.0.0.251) at 1:0:5e:0:0:fb on en11 ifscope permanent [ethernet]
+? (239.255.255.250) at 1:0:5e:7f:ff:fa on en0 ifscope permanent [ethernet]
+? (239.255.255.250) at 1:0:5e:7f:ff:fa on en11 ifscope permanent [ethernet]
+[exit-code] 0
+
+$ ping -c 2 169.254.193.202
+PING 169.254.193.202 (169.254.193.202): 56 data bytes
+64 bytes from 169.254.193.202: icmp_seq=0 ttl=255 time=1.638 ms
+64 bytes from 169.254.193.202: icmp_seq=1 ttl=255 time=1.005 ms
+
+--- 169.254.193.202 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.005/1.321/1.638/0.317 ms
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://169.254.193.202:4762/healthz
+
+[stderr]
+curl: (7) Failed to connect to 169.254.193.202 port 4762 after 1003 ms: Couldn't connect to server
+[exit-code] 7
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --run-dir logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime-host --no-use-latest-warm-summary --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --warm-prime-only --fast-ios-launch --ios-profile-build-install --ios-profile-app build/ios/Profile-iphoneos/Runner.app --standby-launch-timeout 90 --ios-profile-trust-retry-timeout 45 --ios-profile-trust-retry-interval 5 --no-update-latest-warm-summary
++ flutter devices
++ adb devices -l
++ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Building com.vectorblanco.hydracam.dev for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 8T78Y2X37H
+Running pod install...                                             663ms
+Running Xcode build...
+Xcode build done.                                           43.9s
+✓ Built build/ios/iphoneos/Runner.app (29.7MB)
++ xcrun devicectl device install app --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 build/ios/Profile-iphoneos/Runner.app --json-output logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime-host/ios-profile-install/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/devicectl-install.json
++ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.vectorblanco.hydracam.dev
+logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-warm-prime-host
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://169.254.193.202:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ xcrun devicectl device info processes --device 0A947DBD-A462-5BAA-AB84-17F143D41619
+00:29:00  Acquired tunnel connection to device.
+00:29:00  Enabling developer disk image services.
+00:29:00  Acquired usage assertion.
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 1
+
+$ xcrun devicectl device info displays --device 0A947DBD-A462-5BAA-AB84-17F143D41619
+00:29:00  Acquired tunnel connection to device.
+00:29:00  Enabling developer disk image services.
+00:29:00  Acquired usage assertion.
+Current Displays:
+▿ 1: LCD (primary):
+    • bounds: (0.0, 0.0, 1536.0, 2048.0)
+    • currentOrientation: rot270
+    • displayId: 1
+    • name: LCD
+    • nativeOrientation: rot0
+    • pointScale: 2
+    • nativeSize: (1536.0, 2048.0)
+    • primary: true
+Main display backlight state: backlight is on and active
+Main display orientation: landscapeLeft, non-flat orientation: landscapeLeft, orientation not locked
+[exit-code] 0
+
+$ ffmpeg -hide_banner -f avfoundation -list_devices true -i
+
+[stderr]
+[AVFoundation indev @ 0xb5ec1c140] AVFoundation video devices:
+[AVFoundation indev @ 0xb5ec1c140] [0] FaceTime HD Camera
+[AVFoundation indev @ 0xb5ec1c140] [1] Capture screen 0
+[AVFoundation indev @ 0xb5ec1c140] AVFoundation audio devices:
+[AVFoundation indev @ 0xb5ec1c140] [0] MacBook Pro Microphone
+[in#0 @ 0xb5ec1c000] Error opening input: Input/output error
+Error opening input file .
+Error opening input files: Input/output error
+[exit-code] 251
+
+$ curl --max-time 10 -sS -X POST -H Content-Type: application/json -d {} http://169.254.193.202:4762/command/capture_screenshot
+{"error":"unsupported_route","path":"/command/capture_screenshot"}
+[exit-code] 0
+
+$ curl --max-time 15 -sS -X POST -H Content-Type: application/json -d {"name":"ipad-profile-standby","pixelRatio":1} http://169.254.193.202:4762/commands/capture_screenshot
+{"status":"ok","command":"capture_screenshot","result":{"filePath":"/var/mobile/Containers/Data/Application/5E74AAA0-8F0F-47A6-8EBE-354B21FF35EF/Documents/automation-screenshots/ipad-profile-standby-2026-06-09T00-29-37-016641.png","appDataContainerSource":"Documents/automation-screenshots/ipad-profile-standby-2026-06-09T00-29-37-016641.png","width":1024,"height":768,"pixelRatio":1.0,"byteLength":20441}}
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --domain-type appDataContainer --domain-identifier com.vectorblanco.hydracam.dev --source Documents/automation-screenshots/ipad-profile-standby-2026-06-09T00-29-37-016641.png --destination logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-profile-standby.png
+00:29:54  Acquired tunnel connection to device.
+00:29:54  Enabling developer disk image services.
+00:29:54  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-profile-standby.png
+[exit-code] 0
+
+$ curl --max-time 10 -sS -X POST -H Content-Type: application/json -d {"role":"master","ackMode":"accepted"} http://169.254.193.202:4762/commands/set_role
+{"status":"ok","command":"set_role","result":{"role":"master","preferredMasterIp":null,"forceSlaveMode":false,"status":"role_switch_accepted","ackMode":"accepted"}}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://169.254.193.202:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","connected_clients","end_session","list_cameras","set_role","start_local_session","start_recording","start_session","stop_recording","take_photo"]}
+[exit-code] 0
+
+$ curl --max-time 15 -sS -X POST -H Content-Type: application/json -d {"name":"ipad-profile-master","pixelRatio":1} http://169.254.193.202:4762/commands/capture_screenshot
+{"error":"bridge_failure","details":"Bad state: Automation screenshot boundary is not mounted."}
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --run-dir logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-single-capture --no-use-latest-warm-summary --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --fast-ios-launch --skip-build --skip-install --record-seconds 2 --timeout 180 --capture-stage-timeout 80 --recording-ready-timeout 80 --stop-recording-timeout 80 --no-update-latest-warm-summary
++ flutter devices
++ adb devices -l
+=== Rotation master 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 ===
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-hjfb49vb.json --quiet
++ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "master", "HYDRACAM_AUTOMATION_TARGET_ID": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.vectorblanco.hydracam.dev
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-gmuqaqqn.json --quiet
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-qnbx0ood.json --quiet
+logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/runner-ipad-single-capture
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --domain-type appDataContainer --domain-identifier com.vectorblanco.hydracam.dev --source Documents/session_local-rotation-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-1780957884/CAP_75949B0B-5A78-44E0-B151-1FAF76105E50.jpg --destination logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-captured-photo.jpg
+00:32:15  Acquired tunnel connection to device.
+00:32:16  Enabling developer disk image services.
+00:32:16  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-captured-photo.jpg
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --domain-type appDataContainer --domain-identifier com.vectorblanco.hydracam.dev --source Documents/session_local-rotation-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-1780957884/REC_382355F3-E26F-4163-BE10-621734F43BB9.mp4 --destination logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4
+00:32:16  Acquired tunnel connection to device.
+00:32:16  Enabling developer disk image services.
+00:32:16  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4
+[exit-code] 0
+
+$ file logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-profile-standby.png logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-captured-photo.jpg logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4
+logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-profile-standby.png: PNG image data, 1024 x 768, 8-bit/color RGBA, non-interlaced
+logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/screenshots/ipad-captured-photo.jpg:  JPEG image data, Exif standard: [TIFF image data, big-endian, direntries=11, manufacturer=Apple, model=iPad (6th generation), orientation=upper-left, xresolution=174, yresolution=182, resolutionunit=2, software=17.7.11, datetime=2026:06:09 00:31:25, hostcomputer=iPad (6th generation)], baseline, precision 8, 1920x1080, components 3
+logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4:        ISO Media, MP4 v2 [ISO 14496-14]
+[exit-code] 0
+
+$ ffprobe -hide_banner -show_streams -show_format logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4
+[STREAM]
+index=0
+codec_name=aac
+codec_long_name=AAC (Advanced Audio Coding)
+profile=LC
+codec_type=audio
+codec_tag_string=mp4a
+codec_tag=0x6134706d
+mime_codec_string=mp4a.40.2
+sample_fmt=fltp
+sample_rate=44100
+channels=1
+channel_layout=mono
+bits_per_sample=0
+initial_padding=0
+id=0x1
+r_frame_rate=0/0
+avg_frame_rate=0/0
+time_base=1/44100
+start_pts=838
+start_time=0.019002
+duration_ts=93000
+duration=2.108844
+bit_rate=62819
+max_bit_rate=N/A
+bits_per_raw_sample=N/A
+nb_frames=93
+nb_read_frames=N/A
+nb_read_packets=N/A
+extradata_size=2
+DISPOSITION:default=1
+DISPOSITION:dub=0
+DISPOSITION:original=0
+DISPOSITION:comment=0
+DISPOSITION:lyrics=0
+DISPOSITION:karaoke=0
+DISPOSITION:forced=0
+DISPOSITION:hearing_impaired=0
+DISPOSITION:visual_impaired=0
+DISPOSITION:clean_effects=0
+DISPOSITION:attached_pic=0
+DISPOSITION:timed_thumbnails=0
+DISPOSITION:non_diegetic=0
+DISPOSITION:captions=0
+DISPOSITION:descriptions=0
+DISPOSITION:metadata=0
+DISPOSITION:dependent=0
+DISPOSITION:still_image=0
+DISPOSITION:multilayer=0
+TAG:creation_time=2026-06-08T22:31:26.000000Z
+TAG:language=und
+TAG:handler_name=Core Media Audio
+[/STREAM]
+[STREAM]
+index=1
+codec_name=h264
+codec_long_name=H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+profile=High
+codec_type=video
+codec_tag_string=avc1
+codec_tag=0x31637661
+mime_codec_string=avc1.640028
+width=1920
+height=1080
+coded_width=1920
+coded_height=1080
+has_b_frames=1
+sample_aspect_ratio=N/A
+display_aspect_ratio=N/A
+pix_fmt=yuv420p
+level=40
+color_range=tv
+color_space=smpte170m
+color_transfer=bt709
+color_primaries=bt709
+chroma_location=left
+field_order=progressive
+is_avc=true
+nal_length_size=4
+id=0x2
+r_frame_rate=30000/1001
+avg_frame_rate=12800/427
+time_base=1/600
+start_pts=0
+start_time=0.000000
+duration_ts=1281
+duration=2.135000
+bit_rate=14675597
+max_bit_rate=N/A
+bits_per_raw_sample=8
+nb_frames=64
+nb_read_frames=N/A
+nb_read_packets=N/A
+extradata_size=35
+DISPOSITION:default=1
+DISPOSITION:dub=0
+DISPOSITION:original=0
+DISPOSITION:comment=0
+DISPOSITION:lyrics=0
+DISPOSITION:karaoke=0
+DISPOSITION:forced=0
+DISPOSITION:hearing_impaired=0
+DISPOSITION:visual_impaired=0
+DISPOSITION:clean_effects=0
+DISPOSITION:attached_pic=0
+DISPOSITION:timed_thumbnails=0
+DISPOSITION:non_diegetic=0
+DISPOSITION:captions=0
+DISPOSITION:descriptions=0
+DISPOSITION:metadata=0
+DISPOSITION:dependent=0
+DISPOSITION:still_image=0
+DISPOSITION:multilayer=0
+TAG:creation_time=2026-06-08T22:31:26.000000Z
+TAG:language=und
+TAG:handler_name=Core Media Video
+[/STREAM]
+[FORMAT]
+filename=logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4
+nb_streams=2
+nb_programs=0
+nb_stream_groups=0
+format_name=mov,mp4,m4a,3gp,3g2,mj2
+format_long_name=QuickTime / MOV
+start_time=0.000000
+duration=2.135000
+size=3936150
+bit_rate=14749039
+probe_score=100
+TAG:major_brand=mp42
+TAG:minor_version=1
+TAG:compatible_brands=isommp41mp42
+TAG:creation_time=2026-06-08T22:31:26.000000Z
+[/FORMAT]
+
+[stderr]
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/video/ipad-captured-video.mp4':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 1
+    compatible_brands: isommp41mp42
+    creation_time   : 2026-06-08T22:31:26.000000Z
+  Duration: 00:00:02.14, start: 0.000000, bitrate: 14749 kb/s
+  Stream #0:0[0x1](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, mono, fltp, 62 kb/s, start 0.019002 (default)
+    Metadata:
+      creation_time   : 2026-06-08T22:31:26.000000Z
+      handler_name    : Core Media Audio
+  Stream #0:1[0x2](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, smpte170m/bt709/bt709, progressive), 1920x1080, 14675 kb/s, 29.98 fps, 29.97 tbr, 600 tbn (default)
+    Metadata:
+      creation_time   : 2026-06-08T22:31:26.000000Z
+      handler_name    : Core Media Video
+[exit-code] 0

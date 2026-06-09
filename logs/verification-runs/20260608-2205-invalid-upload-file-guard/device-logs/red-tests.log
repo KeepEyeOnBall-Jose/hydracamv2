@@ -1,0 +1,30 @@
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart
+00:00 +0: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Get token, timestamp: 2026-06-08 21:18:05.830914, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:18:05.846732, function: null, file: null}
+00:00 +1: uploadMedia includes video recording end and duration metadata
+Log registered: {message: Get token, timestamp: 2026-06-08 21:18:05.849699, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:18:05.851157, function: null, file: null}
+00:00 +2: uploadMedia omits video duration metadata for photo uploads
+Log registered: {message: Get token, timestamp: 2026-06-08 21:18:05.853137, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-08 21:18:05.854230, function: null, file: null}
+00:00 +3: uploadMedia rejects missing files before HTTP send
+Log registered: {message: Get token, timestamp: 2026-06-08 21:18:05.855588, function: null, file: null}
+Log registered: {message: Error uploading media: PathNotFoundException: Cannot retrieve length of file, path = '/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testSXi4Yx/missing-video.mp4' (OS Error: No such file or directory, errno = 2), timestamp: 2026-06-08 21:18:05.856357, function: null, file: null}
+00:00 +3 -1: uploadMedia rejects missing files before HTTP send [E]
+  Expected: contains 'Upload file does not exist: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testSXi4Yx/missing-video.mp4'
+    Actual: MappedListIterable<Map<String, dynamic>, dynamic>:[
+              'Get token',
+              'Error uploading media: PathNotFoundException: Cannot retrieve length of file, path = \'/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testSXi4Yx/missing-video.mp4\' (OS Error: No such file or directory, errno = 2)'
+            ]
+     Which: does not contain 'Upload file does not exist: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testSXi4Yx/missing-video.mp4'
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/hydracam_api_service_test.dart 171:5  main.<fn>
+
+00:00 +3 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart: uploadMedia rejects missing files before HTTP send

@@ -185,7 +185,7 @@ import subprocess
 import sys
 import time
 
-command_display = "flutter run -d macos --debug --no-pub --dart-define=HYDRACAM_AUTOMATION_ENABLED=true --dart-define=HYDRACAM_AUTOMATION_INITIAL_ROLE=master"
+command_display = "flutter run -d macos --debug --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=master"
 cmd = command_display.split()
 proc = subprocess.Popen(
     cmd,

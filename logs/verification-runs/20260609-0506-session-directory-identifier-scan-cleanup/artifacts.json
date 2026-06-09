@@ -1,0 +1,33 @@
+{
+  "acceptanceChecks": [
+    "SessionManager uses one session-directory identifier extraction path so scan/reconstruct preserves the full identifier after the session_ prefix, including identifiers containing underscores"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:07:04.400743+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "session-directory-identifier-scan-cleanup",
+    "source": "docs/control/backlog-import.md row 35",
+    "title": "JAVI IMMEDIATE BACKLOG row 35"
+  },
+  "notes": [
+    "Local service regression passed for preserving full previous-session directory identifiers; real old-media attachment smoke remains open."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

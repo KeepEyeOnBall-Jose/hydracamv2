@@ -1,0 +1,77 @@
+{
+  "acceptanceChecks": [
+    "Session details exposes an explicit player-assignment source state and handles missing backend support gracefully."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:46:45.118569+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:46:56.541552+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:47:05.439446+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-08T18:47:21.036447+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "SessionDetailsScreen",
+      "kind": "widget-test",
+      "name": "Flutter widget test runner",
+      "notes": [
+        "Focused widget test verifies session details exposes player-assignment source and missing-backend state without calling a nonexistent backend API."
+      ],
+      "os": "macOS host / Flutter test",
+      "role": "session-player-ui"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/session_player_source_missing_backend_state.png",
+    "video/session_player_source_missing_backend_state_proof.mp4",
+    "device-logs/green-focused-tests.log",
+    "device-logs/red-tests.log"
+  ],
+  "item": {
+    "slug": "session-player-source-missing-backend-state",
+    "source": "docs/control/backlog-import.md",
+    "title": "Board item 10: Add user/player assignment to sessions"
+  },
+  "notes": [
+    "Focused TDD slice for board item 10. Adds explicit session-player source and missing-backend state in session details. Does not define or call a session-player assignment backend contract."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

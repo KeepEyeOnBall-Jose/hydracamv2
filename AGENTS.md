@@ -38,6 +38,11 @@ durable project context and working agreements.
 - Use `rg` or `rg --files` for repository searches.
 - Prefer `LogService.instance.registerLog()` for app logging; do not introduce
   ad hoc `print()` logging in production Flutter code.
+- At the end of every substantive turn, explicitly consider "what should our
+  next steps be?" and include a clear ordered sequence of 2 to 4 next actions.
+  Keep the sequence concrete and grounded in the current evidence, blockers, and
+  project priorities. If the work is fully complete, list the most useful
+  follow-up checks or decisions rather than padding with generic tasks.
 
 ## Worktrees and Branch Hygiene
 
@@ -98,8 +103,26 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   `192.168.178.104:4762` with the expected
   `automationTargetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63`. The follow-up
   warm-prime confirmation `20260608-ipad-ios17711-warm-bridge-confirmed`
-  passed with zero missing warm bridges; rerun the full selected-set loop before
-  claiming a new six-target role-switch benchmark. The
+  passed with zero missing warm bridges. The 2026-06-09 connected-iPad Profile
+  smoke `20260609-0021-ipad-physical-release-profile-smoke` passed no-tooling
+  Profile launch, identity-matched bridge warmup at `169.254.193.202:4762`, and
+  one-device photo/video capture with copied iPad JPEG/MP4 evidence. The
+  follow-up `20260609-0120-ipad-runtime-screenshot-boundary-route-replacement`
+  fixed and proved runtime `capture_screenshot` after `set_role` by keeping the
+  automation `RepaintBoundary` around the `MaterialApp` navigator. The
+  2026-06-09 Keepeyeonball signing follow-up
+  `20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account`
+  confirmed the Xcode account/certificate update for team `4RRY2QT7H8`, built
+  and installed `com.keepeyeonball` Profile on iPad and iPhone, launched both
+  through `devicectl`, proved the iPhone automation bridge and screenshot copy
+  path at `192.168.178.168:4762`, and exported App Store IPA
+  `build/ios/ipa/HydraCam.ipa` with a cloud-managed Apple Distribution
+  certificate. The iPad install/launch succeeded, but its automation bridge did
+  not answer on `169.254.193.202`, `192.168.178.104`, or scanned LAN/link-local
+  subnets in that run. TestFlight upload still requires App Store Connect upload
+  credentials, for example `APP_STORE_CONNECT_API_KEY_PATH` or Transporter/altool
+  API key and issuer. Rerun the full
+  selected-set loop before claiming a new six-target role-switch benchmark. The
   prior broad "white screen" blocker is superseded; keep validating the
   foreground release/user lane, signing, two-device capture flows, and native
   metadata before production claims.
@@ -220,7 +243,12 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   dispose or hide the newly promoted master. Use
   `docs/control/status-and-roadmap.md` for the current evidence paths and keep
   capture-enabled master/slave proof separate from role-only proof.
-- Desktop (Windows/macOS) and web: Planned for future support
+- Desktop (Windows/macOS) and web: Planned for future support. The 2026-06-09
+  Win11 Windows/Linux/Android emulator proof attempt is documented in
+  `docs/control/win11-triple-platform-proof-wrapup-2026-06-09.md`: native
+  Windows real-webcam capture/upload passed, WSL Linux and Android emulator
+  only passed with fallback media, and the all-combinations role matrix was
+  aborted before completion.
 
 ## Development Commands
 

@@ -1,0 +1,22 @@
+# HydraCam evidence run command log
+
+$ dart format lib/services/session_media_storage.dart test/services/session_media_storage_test.dart
+Formatted 2 files (0 changed) in 0.01 seconds.
+[exit-code] 0
+
+$ rg -n _fileExtensionFor|uses declared media type|SessionMediaType.video => "mp4"|SessionMediaType.photo => "jpg" lib/services/session_media_storage.dart test/services/session_media_storage_test.dart
+test/services/session_media_storage_test.dart:72:  test("saveReceivedMedia uses declared media type for file extension",
+lib/services/session_media_storage.dart:49:    final fileExtension = _fileExtensionFor(mediaType);
+lib/services/session_media_storage.dart:58:  String _fileExtensionFor(SessionMediaType mediaType) {
+lib/services/session_media_storage.dart:60:      SessionMediaType.photo => "jpg",
+lib/services/session_media_storage.dart:61:      SessionMediaType.video => "mp4",
+[exit-code] 0
+
+$ flutter test --no-pub test/services/session_media_storage_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/session_media_storage_test.dart
+00:00 +0: saveReceivedMedia writes photo bytes into the session directory
+00:00 +1: saveReceivedMedia writes video bytes and dispatches video persistence
+00:00 +2: saveReceivedMedia uses declared media type for file extension
+00:00 +3: saveReceivedMedia requires an active session guid
+00:00 +4: All tests passed!
+[exit-code] 0

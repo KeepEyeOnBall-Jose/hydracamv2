@@ -113,6 +113,15 @@ class MediaFilterDialogState extends State<MediaFilterDialog> {
         ),
         TextButton(
           onPressed: () {
+            Navigator.pop(
+              context,
+              MediaFilters(isPhoto: isPhoto),
+            );
+          },
+          child: const Text("Browse All"),
+        ),
+        TextButton(
+          onPressed: () {
             // Return the filters
             final MediaFilters filters = MediaFilters(
               isPhoto: isPhoto,
