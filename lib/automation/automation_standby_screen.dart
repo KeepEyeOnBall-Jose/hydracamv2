@@ -3,7 +3,12 @@ import "package:flutter/material.dart";
 import "../widgets/hydra_cam_app_bar.dart";
 
 class AutomationStandbyScreen extends StatelessWidget {
-  const AutomationStandbyScreen({super.key});
+  const AutomationStandbyScreen({
+    super.key,
+    this.onOpenNormalApp,
+  });
+
+  final VoidCallback? onOpenNormalApp;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +17,7 @@ class AutomationStandbyScreen extends StatelessWidget {
     return Scaffold(
       appBar: HydraCamAppBar(
         title: "HydraCam",
-        onBack: () {},
+        onBack: onOpenNormalApp ?? () {},
       ),
       body: Center(
         child: ConstrainedBox(
@@ -39,6 +44,14 @@ class AutomationStandbyScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge,
                 ),
+                if (onOpenNormalApp != null) ...[
+                  const SizedBox(height: 28),
+                  ElevatedButton.icon(
+                    onPressed: onOpenNormalApp,
+                    icon: const Icon(Icons.play_arrow),
+                    label: const Text("Open HydraCam"),
+                  ),
+                ],
               ],
             ),
           ),

@@ -1,0 +1,91 @@
+## master-jose-2025...github/master-jose-2025
+ M .gitignore
+ M AGENTS.md
+ M DISTRIBUTION_RUNBOOK.md
+ M android/Gemfile
+ M android/app/src/main/res/drawable-v21/launch_background.xml
+ M android/app/src/main/res/drawable/launch_background.xml
+ M docs/control/README.md
+ M docs/control/status-and-roadmap.md
+ M ios/Gemfile
+ M ios/Gemfile.lock
+ M ios/Runner.xcodeproj/project.pbxproj
+ D ios/Runner.xcodeproj/project.pbxproj.1763301227.bak
+ D ios/Runner.xcodeproj/project.pbxproj.1763301243.bak
+ D ios/Runner.xcodeproj/project.pbxproj.1763301333.bak
+ D ios/Runner.xcodeproj/project.pbxproj.1763301503.bak
+ D ios/Runner.xcodeproj/project.pbxproj.1763301658.bak
+ D ios/Runner.xcodeproj/project.pbxproj.1763387621.bak
+ M ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
+ M ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
+ M ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
+ M ios/Runner/Info.plist
+ D ios/fastlane/report.xml
+ M lib/automation/automation_bridge.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/main.dart
+ M lib/services/camera_service.dart
+ M lib/services/launch_config_service.dart
+ M lib/services/permission_service.dart
+ M logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/artifacts.json
+ M logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/commands.log
+ M logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/summary.md
+ M scripts/build_store_artifacts.sh
+ M scripts/discover_automation_bridge.py
+ M test/automation/automation_bridge_test.dart
+ M test/automation/automation_standby_screen_test.dart
+ M test/automation/runtime_role_switch_test.dart
+ M test/services/camera_service_failure_test.dart
+ M test/services/permission_service_test.dart
+?? android/Gemfile.lock
+?? docs/control/store-privacy-and-metadata.md
+?? docs/store/
+?? ios/Runner/PrivacyInfo.xcprivacy
+?? lib/services/camera_compatibility_policy.dart
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-4763-launch/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-launch/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-settle/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-xctrace-4763/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-4763-launch.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-4763-launch.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-launch.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-launch.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-settle.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-settle.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-xctrace-4763.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-xctrace-4763.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-lockstate-after-patched.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-devicectl-install.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-devicectl-install.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-launch-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-launch-com-keepeyeonball.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-devicectl-install.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-devicectl-install.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-launch-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-launch-com-keepeyeonball.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-process-runner.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-process-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-reboot.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-reboot.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-uninstall-old-vectorblanco.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-uninstall-old-vectorblanco.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-capture-screenshot-command.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-copy-screenshot.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-copy-screenshot.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-devicectl-install.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-devicectl-install.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-launch-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-launch-com-keepeyeonball.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-uninstall-old-vectorblanco.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-uninstall-old-vectorblanco.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/git-status-after.txt
+?? logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/
+?? logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/
+?? logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/
+?? logs/verification-runs/20260609-store-readiness-static-build/
+?? scripts/android_fastlane.sh
+?? scripts/check_store_readiness.sh
+?? scripts/ios_fastlane.sh

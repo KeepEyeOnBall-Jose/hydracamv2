@@ -12,14 +12,48 @@ or informs the mobile app.
 | Area | Status | Notes |
 | --- | --- | --- |
 | iOS simulator | Runs, but no camera | 2026-06-07 simulator run applied camera settings after camera/mic privacy grants, but Flutter `camera` reported no available cameras. Use simulator for launch/UI checks only, not capture proof. Latest parallel matrix kept it launch-only on bridge port `4771`. Evidence: `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`. |
-| iOS physical device | Working in debug automation; Keepeyeonball Profile deploy works on iPhone and installs/launches on iPad | The prior broad white-screen blocker is superseded. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` shows iPhone 12 Pro debug launch, permissions, session creation, photo capture/upload, and video start. `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md` shows iPhone 12 Pro / iOS 26.5 passing the coordinated independent-capture matrix at `ultraWide` + `sport1080p60`, and iPad 5 passing `autoBack` + `standard1080p30`. `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/` shows the no-tooling iPhone Profile bridge can be found by identity-based LAN scan without a manual `--ios-host`. Debug `Runner.app` still cannot be fast-launched by `devicectl` without Flutter tooling. After the iPad update to iOS 17.7.11, `logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/` shows the connected iPad passing Profile build/install/launch through `devicectl`, warming an identity-matched bridge at `169.254.193.202:4762`, and passing one-device master photo/video capture. The Keepeyeonball follow-up `logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/` confirms team `4RRY2QT7H8`, bundle `com.keepeyeonball`, and Apple ID `jose@keepeyeonball.com`: Profile build/install/launch succeeded on iPad and iPhone, iPhone `/healthz` passed at `192.168.178.168:4762` with target `00008101-000A68811E43001E`, and an iPhone automation screenshot was copied to `screenshots/iphone-keepeyeonball-standby.png`. In that same run the iPad app installed/launched but no bridge answered on `169.254.193.202`, `192.168.178.104`, `192.168.178.0/24`, or `169.254.193.0/24`; treat iPad bridge readiness as the current device-side follow-up before multi-device claims. Limitation: saved-video metadata remains unavailable on iOS multi-device matrices, though prior iPad evidence recorded native MP4 dimensions/fps in logs. |
-| Android | In development; current camera evidence mixed | 2026-06-07 parallel matrix: both Samsung S10e devices and Samsung SM-G960F captured one photo and one video at `standard1080p30` under a shared capture barrier. Samsung S7 edge still fails at `standard1080p30` with bounded photo timeout plus Exynos/Camera2 reopen errors, now classified as `s7_exynos_camera_timeout`. Xiaomi 2201116PG install is still blocked by `INSTALL_FAILED_USER_RESTRICTED`. Evidence: `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md`. |
-| Camera lens/profile settings | Implemented; device proof partial | 2026-06-07 added local lens preference and target video profiles from 480p30 through 4K60. The video profile selector now shows concrete target text (`1080p at 30 fps`, `1080p at 60 fps`) instead of arbitrary names; the latest parallel matrix confirms `/settings.videoCaptureTarget` on macOS, Android, iPhone, and iPad. iPhone 12 Pro 0.5x debug automation passes 1080p60 and 4K30 targets, but iOS metadata extraction is still unavailable and S7 rear-wide 1080p60/4K30 remains blocked by basic capture failure. ASAP item 0 remains open. |
-| Camera setup and leveling | Implemented; physical proof partial | 2026-06-08 camera setup evidence shows local placement preview, warn-only red tilt guidance, perspective selector, and local capture-context metadata on reachable devices. Evidence roots: `logs/verification-runs/20260608-1435-camera-leveling-all-device-screenshots/`, `logs/verification-runs/20260608-1517-camera-leveling-remaining-device-gaps/`, and `logs/verification-runs/20260608-1533-camera-leveling-device-continuation/`. The latest S7 setup-preview rerun now renders live camera video after rebooting the S7 to reset its stuck vendor camera service and using preset-default FPS for setup preview; S7 capture reliability remains a separate blocker. The latest physical iPhone recovery attempt, `logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/`, briefly recovered the iPhone to CoreDevice `available (paired)` and Flutter wireless visibility, then launched the installed setup bridge, but that installed build was stale and lacked `capture_screenshot`; the current Profile build passed, but install attempts failed after the phone returned to CoreDevice unavailable / Flutter code -27. Physical iPhone setup screenshot/video proof remains blocked by device-side wireless developer availability, not app setup-preview code. |
+| iOS physical device | Recovered on current Profile automation builds; selected iPhone+iPad role switching passed | The prior broad white-screen blocker is superseded. `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` shows iPhone 12 Pro debug launch, permissions, session creation, photo capture/upload, and video start. `logs/verification-runs/20260607-parallel-device-matrix-staged-logcat/summary.md` shows iPhone 12 Pro / iOS 26.5 passing the coordinated independent-capture matrix at `ultraWide` + `sport1080p60`, and iPad 5 passing `autoBack` + `standard1080p30`. `logs/verification-runs/20260608-auto-ios-host-warm-immediate-five-hot-rerun/` shows the no-tooling iPhone Profile bridge can be found by identity-based LAN scan without a manual `--ios-host`. Debug `Runner.app` still cannot be fast-launched by `devicectl` without Flutter tooling. After the iPad update to iOS 17.7.11, `logs/verification-runs/20260609-0021-ipad-physical-release-profile-smoke/` shows the connected iPad passing Profile build/install/launch through `devicectl`, warming an identity-matched bridge at `169.254.193.202:4762`, and passing one-device master photo/video capture. The Keepeyeonball follow-up `logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/` confirms team `4RRY2QT7H8`, bundle `com.keepeyeonball`, and Apple ID `jose@keepeyeonball.com`: Profile build/install/launch succeeded on iPad and iPhone, iPhone `/healthz` passed at `192.168.178.168:4762` with target `00008101-000A68811E43001E`, and an iPhone automation screenshot was copied to `screenshots/iphone-keepeyeonball-standby.png`. In that same run the iPad app installed/launched but no bridge answered on `169.254.193.202`, `192.168.178.104`, `192.168.178.0/24`, or `169.254.193.0/24`. `logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/` reproduced the user report, removed the stale duplicate iPhone `com.vectorblanco.hydracam.dev` app, and showed the iPad was stalling after early bridge startup. Current recovery evidence `logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/` fixes the iPad startup stall by bounding startup permission requests to 8 seconds, keeps automation bridge bind failure non-fatal, rebuilds and installs patched Profile automation apps on both physical iOS devices, proves current standby screenshots for iPhone and iPad, restores both identity-matched bridges on standard port `4762`, and passes the selected physical iPhone+iPad immediate role-switch proof with explicit LAN hosts in `0.45s`. Use `--no-auto-ios-bridge-hosts` with explicit `--ios-host 00008101-000A68811E43001E=192.168.178.168` and `--ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104` for this selected pair; otherwise identity auto-scan can adopt the iPhone link-local bridge and poison expected remote-client IP checks. Limitation: saved-video metadata remains unavailable on iOS multi-device matrices, though prior iPad evidence recorded native MP4 dimensions/fps in logs. |
+| Android | In development; current role-switch evidence good; S7 camera path now preserves 1080p30 | 2026-06-07 parallel matrix: both Samsung S10e devices and Samsung SM-G960F captured one photo and one video at `standard1080p30` under a shared capture barrier. Current S7 edge code detects SM-G935F, preserves the requested capture profile, uses preset-default FPS, and retries timed-out still capture after controller reinitialization. `logs/verification-runs/20260609-1405-s7-higher-resolution-compat/` proves direct S7 automation-master `standard1080p30` JPEG and MP4 save with copied 1920x1080 artifacts. The standard backend-session matrix in the earlier `20260609-1012-s7-camera-compat-automation-exit` run still timed out on `start_session`; treat that as a session/backend automation issue, not a basic S7 camera-open failure. Xiaomi 2201116PG install is still blocked by `INSTALL_FAILED_USER_RESTRICTED`. |
+| Camera lens/profile settings | Implemented; device proof partial | 2026-06-07 added local lens preference and target video profiles from 480p30 through 4K60. The video profile selector now shows concrete target text (`1080p at 30 fps`, `1080p at 60 fps`) instead of arbitrary names; the latest parallel matrix confirms `/settings.videoCaptureTarget` on macOS, Android, iPhone, and iPad. iPhone 12 Pro 0.5x debug automation passes 1080p60 and 4K30 targets, but iOS metadata extraction is still unavailable. S7 now has current `standard1080p30` photo/video proof with 1920x1080 artifacts; S7 rear-wide 1080p60/4K30 remains intentionally unproven. ASAP item 0 remains open. |
+| Camera setup and leveling | Implemented; physical proof partial | 2026-06-08 camera setup evidence shows local placement preview, warn-only red tilt guidance, perspective selector, and local capture-context metadata on reachable devices. Evidence roots: `logs/verification-runs/20260608-1435-camera-leveling-all-device-screenshots/`, `logs/verification-runs/20260608-1517-camera-leveling-remaining-device-gaps/`, and `logs/verification-runs/20260608-1533-camera-leveling-device-continuation/`. The latest S7 setup-preview rerun renders live camera video after rebooting the S7 to reset its stuck vendor camera service and using preset-default FPS for setup preview; the later `20260609-1405-s7-higher-resolution-compat` run proves direct S7 1080p photo/video save on the current compatibility path. The latest physical iPhone recovery attempt, `logs/verification-runs/20260608-1744-physical-iphone-resumed-recovery/`, briefly recovered the iPhone to CoreDevice `available (paired)` and Flutter wireless visibility, then launched the installed setup bridge, but that installed build was stale and lacked `capture_screenshot`; the current Profile build passed, but install attempts failed after the phone returned to CoreDevice unavailable / Flutter code -27. Physical iPhone setup screenshot/video proof remains blocked by device-side wireless developer availability, not app setup-preview code. |
 | Mobile login/auth | Imperfect | Current Auth0 login uses a browser-backed OAuth flow. Secure credential persistence, startup restore, refresh-token renewal, logout/end-session clearing, and HydraCam GUID restore now have local unit coverage, and desktop targets skip the mobile-only Auth0 restore/login path. Android/iOS smoke evidence, Android process-death recovery, and Android-native account-picker UX are not complete. |
 | Desktop and web | macOS controller debug path working; Win11 proof partial and aborted | macOS debug `.app` builds and launches for controller/monitoring use with a mock local camera. The 2026-06-09 Win11 triple-platform attempt proved native Windows real-webcam photo/video upload, proved WSL Linux and Android emulator only through fallback media, and did not complete the Windows/Linux/Android master-slave role matrix. Do not treat it as all-combinations desktop/emulator proof. Wrap-up: `docs/control/win11-triple-platform-proof-wrapup-2026-06-09.md`. |
-| Multi-device capture | Runtime role switching works; five-device hot loop including iPhone passed; iPad Profile bridge refreshed | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/summary.json` proves Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, physical iPad 5, and macOS can launch once, rotate which device is master, and connect the other four devices as slaves without relaunching. Current split-ack cold proof `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/summary.json` passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, and macOS across two cycles / 8 rotations, but build/install/launch made it take `63.919s`. The fastest four-local proof is `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/summary.json`: the same four targets passed explicit `--expect-target-id` selection across five hot cycles / 20 master rotations in `8.118s` runner elapsed, with no build/install/standby launch after warm preflight, `--stage-slaves-after-master-ready`, synchronous master acknowledgement, async accepted acknowledgement for slaves, 25 ms connected-client polling, and `--max-set-role-request-start-skew-ms 10` enforced. `logs/verification-runs/20260608-warm-summary-prime-five-repeat/summary.json` is the current fastest cold-iPhone repeat proof: using `--warm-summary` skipped `flutter devices`, `adb devices`, and master-host probing, launched only the missing iPhone Profile bridge, then passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 rotations in `9.167s`. Parallel request-start skew stayed below `0.686 ms`, `set_role` averaged `162.803 ms`, and connected-client verification averaged `201.572 ms`. A separate pure-immediate warm-summary rerun, `logs/verification-runs/20260608-warm-summary-hot-five-repeat/summary.json`, passed the same 25 rotations in `8.806s` with no discovery, build, install, or launch; warm preflight had no missing bridges. `logs/verification-runs/20260608-ipad-ios17711-warm-bridge-confirmed/warm-bridge-prime.json` confirms the refreshed iPad iOS 17.7.11 Profile bridge is warm at `192.168.178.104:4762`; rerun the full selected-set loop before claiming a new six-target rotation benchmark. |
-| Store distribution | Android signed AAB ready locally; iOS App Store IPA ready locally; store upload credentials still unverified | Android recovery evidence `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md` recreated an AMAIA23/HydraCam upload keystore, exported public certificate `android/amaia23-hydracam-upload-certificate-20260609.pem`, and built signed AAB `build/app/outputs/bundle/release/app-release.aab` with artifact SHA-256 `c4aab71383a76ffe4385a9aea0717a69e4c76b09ba2be1a185c1807651fd210f` and upload-certificate SHA-256 `51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3`. `vectorblanco@gmail.com` is signed into Chrome but lands on Play Console developer-account signup, so it has no visible existing Play developer profile there. `jose@keepeyeonball.com` is a recognized Google account and reaches the password challenge, but Play Console developer/app ownership remains unverified until that sign-in completes. Read-only Gmail and historical `HydraCam Dev Process` sheet checks found no Play Console ownership/invite/package-registration evidence. iOS now targets Apple ID `jose@keepeyeonball.com`, team `4RRY2QT7H8`, and bundle `com.keepeyeonball`; `flutter build ipa --release --export-method app-store` passed in `logs/verification-runs/20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account/` and produced `build/ios/ipa/HydraCam.ipa` signed with `Cloud Managed Apple Distribution` and `iOS Team Store Provisioning Profile: com.keepeyeonball`. TestFlight upload remains blocked on App Store Connect upload authentication: no local `APP_STORE_CONNECT_API_KEY_PATH`, no discovered `AuthKey_*.p8`, and no `FASTLANE_SESSION`. Real submission also depends on privacy review and device smoke tests. |
+| Multi-device capture | Runtime role switching works; six-device iOS/Android current-build proof passed; fastest five-device hot loop remains separate | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/summary.json` proves Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, physical iPad 5, and macOS can launch once, rotate which device is master, and connect the other four devices as slaves without relaunching. Current split-ack cold proof `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/summary.json` passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, and macOS across two cycles / 8 rotations, but build/install/launch made it take `63.919s`. The fastest four-local proof is `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/summary.json`: the same four targets passed explicit `--expect-target-id` selection across five hot cycles / 20 master rotations in `8.118s` runner elapsed, with no build/install/standby launch after warm preflight, `--stage-slaves-after-master-ready`, synchronous master acknowledgement, async accepted acknowledgement for slaves, 25 ms connected-client polling, and `--max-set-role-request-start-skew-ms 10` enforced. `logs/verification-runs/20260608-warm-summary-prime-five-repeat/summary.json` is the current fastest cold-iPhone repeat proof: using `--warm-summary` skipped `flutter devices`, `adb devices`, and master-host probing, launched only the missing iPhone Profile bridge, then passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 rotations in `9.167s`. Parallel request-start skew stayed below `0.686 ms`, `set_role` averaged `162.803 ms`, and connected-client verification averaged `201.572 ms`. A separate pure-immediate warm-summary rerun, `logs/verification-runs/20260608-warm-summary-hot-five-repeat/summary.json`, passed the same 25 rotations in `8.806s` with no discovery, build, install, or launch; warm preflight had no missing bridges. Current physical iPhone+iPad recovery evidence `logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch-explicit-lan/summary.md` passed the selected pair across two master rotations in `0.45s` with both bridges on `4762` and explicit LAN hosts. Current six-device iOS/Android proof is recorded below. |
+| Store distribution | Android signed AAB ready locally; current-source iOS App Store IPA export blocked by local signing; store upload credentials still unverified | Android recovery evidence `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md` recreated an AMAIA23/HydraCam upload keystore and exported public certificate `android/amaia23-hydracam-upload-certificate-20260609.pem`; the current beta-first readiness cleanup evidence is `logs/verification-runs/20260609-store-readiness-static-build/summary.md` and proves current-source Android AAB SHA-256 `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`. The Android release build no longer falls back to debug signing; the readiness preflight verifies preserved app IDs across platform manifests, Gradle, and fastlane, Android minSdk `24`, Android target/compile SDK at or above `35`, the Login screen privacy/support/account-deletion paths, `android/key.properties`, the referenced upload keystore, and the AAB signer SHA-256 fingerprint `51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3` against the exported certificate. The current Android sidecar `build/app/outputs/bundle/release/app-release.aab.store-metadata.tsv` records the same artifact hash, builder, build override environment, and compiled store URL values; upload preflight now fails if an AAB/IPA sidecar is missing or mismatched. Launcher icons have been regenerated from `lib/assets/images/icon.png`; the readiness preflight now verifies referenced iOS app icons and Android launcher icon densities are real PNG assets. A prior default iOS IPA export produced SHA-256 `385e08c05b7213b0b5c199a4621198b0d2b0f356034c69f5fa89ebe85ab0dc08`, but that IPA predates the bundled court-fallback and launcher-icon cleanups and has been removed from `build/ios/ipa/` so it cannot be mistaken for an upload candidate. The latest current-source iOS archive succeeded, then App Store IPA export failed with `No Accounts` and no `iOS Distribution` signing certificate; `security find-identity -v -p codesigning` shows Apple Development identities only. `ios/Runner/PrivacyInfo.xcprivacy` is bundled in the Runner app and `ios/Runner/Info.plist` declares `ITSAppUsesNonExemptEncryption=false`; both are validated by `scripts/check_store_readiness.sh local`, which now fails truthfully on the missing local Distribution signing identity and warns that no current IPA exists plus missing external values. `scripts/check_store_readiness.sh upload` fails until a current IPA exists, upload credentials are provided, public non-placeholder HTTPS privacy/support/account-deletion URLs are configured, and artifact metadata sidecars match. `upload-ios` and `upload-android` now provide narrower TestFlight-only and Google-Play-only gates so one store credential does not block preflighting the other store. Upload-certificate SHA-256 remains `51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3`. `vectorblanco@gmail.com` is signed into Chrome but lands on Play Console developer-account signup, so it has no visible existing Play developer profile there. `jose@keepeyeonball.com` is a recognized Google account and reaches the password challenge, but Play Console developer/app ownership remains unverified until that sign-in completes. Read-only Gmail and historical `HydraCam Dev Process` sheet checks found no Play Console ownership/invite/package-registration evidence. iOS targets Apple ID `jose@keepeyeonball.com`, team `4RRY2QT7H8`, and bundle `com.keepeyeonball`; `scripts/ios_fastlane.sh --version` now verifies the locked Homebrew Ruby/Bundler lane, and `scripts/android_fastlane.sh --version` verifies the locked Android fastlane lane. TestFlight upload remains blocked on local Distribution signing plus App Store Connect upload authentication: no local `APP_STORE_CONNECT_API_KEY_PATH`, no discovered `AuthKey_*.p8`, and no `FASTLANE_SESSION`. Google Play upload remains blocked on `GOOGLE_PLAY_JSON_KEY` and Play Console ownership. Real submission also depends on publishing the privacy/support/deletion drafts, privacy review, and release-lane device smoke tests. |
+
+Latest all-hardware iOS/Android update proof:
+`logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/`
+built the current automation-enabled Android APK (`1.4.0+16`, minSdk 24),
+installed it on Samsung G960F `29d816ac550b7ece`, Samsung S7 edge
+`9885e6503930304946`, Samsung S10e `RF8M21J8XRT`, and Samsung S10e
+`RF8M90QE7LX`, and confirmed all five visible Android phones were on
+`192.168.178.0/24`. Xiaomi 2201116PG `575ecf2cbd24` remained blocked by
+device-side `INSTALL_FAILED_USER_RESTRICTED`, so it was recorded as excluded
+from the current-build role proof. The current-build role-switch run
+`device-logs/six-device-current-build-role-switch/summary.md` passed six
+rotations in `43.435s` across the four updated Androids plus physical iPhone
+12 Pro `00008101-000A68811E43001E` and iPad 5
+`8b406aa5c597eab4c4dfd9908f4a09b10a89ec63`; every selected device became
+master once and saw the other five connected clients. The evidence pack also
+contains six screenshots and one Android foreground screen recording.
+
+Latest S7 camera compatibility proof:
+`logs/verification-runs/20260609-1405-s7-higher-resolution-compat/`
+verifies the corrected Samsung S7 edge / SM-G935F compatibility path on the
+physical S7 (`9885e6503930304946`, Android 8/API 26). Device logs show the
+policy preserving requested `standard1080p30`, using platform-default FPS, then
+saving `session_null/CAP3852750848982854487.jpg` and
+`session_null/REC5731514365530415283.mp4`. Copied artifacts
+`screenshots/s7-standard1080p30-photo.jpg` and
+`video/s7-standard1080p30-video.mp4` are readable; the JPEG EXIF reports
+`SM-G935F` at 1920x1080, `ffprobe` reports the MP4 stream at 1920x1080, and app
+video metadata reports `1920x1080, unknown fps, 13962 ms`. The earlier
+`logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/`
+720x480 workaround is superseded for S7 camera resolution, but still records
+the automation standby escape fix. The standard single-device backend-session
+matrix in that earlier run still timed out on `start_session`, so S7 camera
+compatibility should be tracked separately from backend/session automation
+health.
 
 Latest acceleration proof: `logs/verification-runs/20260608-latest-cache-shortest-default-staged-five-hot/summary.json`
 passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12
@@ -67,7 +101,9 @@ fresh checks for the three still-unverified devices. Samsung S7 edge still
 fails before photo save even at `dataSaver480p30`; at that time iPhone 12 Pro
 direct launch was denied because the phone was locked; Xiaomi still fails debug
 APK install with `INSTALL_FAILED_USER_RESTRICTED`. The later new-devices rerun
-below supersedes the iPhone lock blocker for debug automation capture.
+below supersedes the iPhone lock blocker for debug automation capture, and the
+later `20260609-1405-s7-higher-resolution-compat` run supersedes this S7 camera
+failure with direct 1920x1080 photo/video proof.
 
 ## Latest New-Devices Rerun
 
@@ -145,7 +181,9 @@ master/slave discovery or synchronized broadcast proof.
 - Samsung SM-G960F and both S10e devices passed `autoBack` +
   `standard1080p30`.
 - Samsung S7 edge still failed before photo save and was classified from
-  collected logcat as `s7_exynos_camera_timeout`.
+  collected logcat as `s7_exynos_camera_timeout`; this S7 result is superseded
+  for camera resolution by the later
+  `20260609-1405-s7-higher-resolution-compat` 1920x1080 proof.
 - iOS simulator launched with automation port `4771`, but remains launch-only
   because no camera is exposed.
 
@@ -712,7 +750,8 @@ is now explicitly out of scope.
 
 Android devices used for current validation should be API 24 or newer. The
 Samsung Galaxy S7/SM-G935F on Android 8.0/API 26 remains a usable low-end
-Android target after current app launch and runtime permission verification.
+Android target after current app launch, runtime permission verification, and
+the SM-G935F compatibility camera mode above.
 
 ## Current Goals
 
@@ -881,6 +920,12 @@ pulled into active mobile work:
 
 ## Recent Android Evidence
 
+- `logs/verification-runs/20260609-1405-s7-higher-resolution-compat/`:
+  Samsung S7 edge / Android 8 preserves requested `standard1080p30` on the
+  SM-G935F compatibility path, uses preset-default FPS, captures a copied
+  1920x1080 JPEG, and records a copied 1920x1080 MP4. This supersedes the
+  older S7 480p workaround and the June 7 baseline S7 photo timeouts for
+  direct camera-open/capture proof.
 - `logs/verification-runs/20260607-camera-settings-device-matrix/android/20260607_023947-s10e-autoBack-standard1080p30/`:
   Samsung S10e / Android 12 applied `autoBack` + `standard1080p30`, captured one
   photo and one video, and logged recorded video metadata as `1920x1080,
@@ -937,6 +982,64 @@ pulled into active mobile work:
 
 ## Release Blockers
 
+- 2026-06-09 beta-first readiness cleanup implemented the local release wrapper
+  fix, branded launch placeholders, fastlane Ruby/Bundler wrapper, generated
+  backup cleanup, and store privacy/metadata checklist. Local static gates
+  passed in the implementation turn: `flutter analyze`, `flutter test`,
+  `git diff --check`, `scripts/build_store_artifacts.sh all` with default
+  versioning, and `BUILD_NAME=1.4.0 BUILD_NUMBER=17
+  scripts/build_store_artifacts.sh all`, with `SKIP_CHECKS=1` on the build-only
+  wrapper runs after static validation passed. The current verified default
+  `1.4.0+16` artifact SHA-256 values are current-source Android
+  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc` and
+  historical pre-cleanup iOS
+  `385e08c05b7213b0b5c199a4621198b0d2b0f356034c69f5fa89ebe85ab0dc08`.
+  The pre-privacy-manifest `1.4.0+17` wrapper validation artifacts were Android
+  `4de67e7df246b9c88c99c6598d887992a0f9d7e892f282a102d972dfd67a6b02` and iOS
+  `7ec7a6a90e064cc6b1cac12d5c5ccd8adf2972926b05251eca67ad7f610c6895`;
+  rerun the override before uploading build number 17.
+- 2026-06-09 follow-up cleaned iOS store permission metadata by removing
+  release-visible Dart VM Bonjour services from `Info.plist`, replacing casual
+  photo-library copy with review-grade descriptions, and adding bundled
+  `ios/Runner/PrivacyInfo.xcprivacy` declarations for app-functionality data
+  collection plus required-reason APIs. A later follow-up added
+  `ITSAppUsesNonExemptEncryption=false` after a source scan found no custom
+  non-exempt cryptography. The current follow-up also removed bundled
+  placeholder/test court fallback data from the master court picker and added
+  `test/constants_release_hygiene_test.dart`; regenerated launcher icons from
+  the branded source asset, removed obsolete unreferenced JPEG-backed iOS icon
+  files, and updated the launcher-icon config to `flutter_launcher_icons`; full
+  `flutter test` now passes with `284` tests and `1` skipped. The follow-up
+  also replaced the default pubspec description, removed Android release
+  debug-signing fallback, added `url_launcher` for the pre-login account
+  privacy/support/deletion URL handoff, pins `url_launcher_android` to `6.3.23`
+  for the current AGP `8.7.3` release stack, and added preflight checks for
+  preserved app IDs, fastlane Appfile targets, Android SDK floor, Android
+  target/compile SDK policy, Login screen privacy/support/account-deletion
+  paths and Dart defines, configured upload
+  keystore, AAB signer fingerprint, `url_launcher_android` pin,
+  app-specific Auth0 redirect schemes, and HydraCam-branded web metadata. The
+  current code/manifest path uses `com.keepeyeonball://login-callback` on iOS
+  and the Gradle `appAuthRedirectScheme` placeholder resolves to
+  `com.amaia23.hydracam://login-callback` on Android, replacing the old generic
+  `com.hydracam` callback scheme. The new
+  `scripts/check_store_readiness.sh local` preflight fails on missing local
+  Apple/iOS Distribution signing identity, verifies launcher icon PNG assets,
+  verifies the Android upload certificate path, and warns that no current iOS
+  IPA exists plus missing external submission values. The same script in
+  `upload` mode fails until the IPA is rebuilt,
+  `APP_STORE_CONNECT_API_KEY_PATH`,
+  `GOOGLE_PLAY_JSON_KEY`, `HYDRACAM_PRIVACY_POLICY_URL`,
+  `HYDRACAM_SUPPORT_URL`, and `HYDRACAM_ACCOUNT_DELETION_URL` are set to usable
+  values, and the URLs are public non-placeholder HTTPS URLs. Final upload
+  artifacts must be rebuilt with `HYDRACAM_PRIVACY_POLICY_URL`,
+  `HYDRACAM_SUPPORT_URL`, and `HYDRACAM_ACCOUNT_DELETION_URL` set so the
+  published policy, support, and deletion pages are compiled into the release
+  app; the wrapper and fastlane lanes now write `*.store-metadata.tsv`
+  sidecars, and upload preflight fails if the sidecar hash, build override, or
+  compiled store URLs do not match the artifact and current environment. Auth0
+  Allowed Callback URLs and Allowed Logout URLs must also be updated to include
+  the two app-specific callback URLs before beta login testing.
 - Android local distribution signing/build is no longer the blocker:
   `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md`
   proves a signed AAB built with the recreated AMAIA23/HydraCam upload
@@ -947,19 +1050,27 @@ pulled into active mobile work:
   `vectorblanco@gmail.com`, request/upload-key reset with the recorded
   certificate fingerprint, or create the organization developer profile and
   register `com.amaia23.hydracam`.
-- iOS production submission still needs a foreground signed release/profile
-  smoke run on target hardware, using the intended Apple team/certificates. The
-  2026-06-07 Profile dev build now installs, launches without Flutter tooling,
-  and exposes an identity-matched automation bridge on iPhone; foreground
-  icon/user-lane proof remains separate from automation launch proof.
+- Android toolchain future-compatibility is a known follow-up, not a current
+  beta artifact blocker: Flutter 3.44 warns that Gradle `8.10.2`, Android
+  Gradle Plugin `8.7.3`, Kotlin `2.1.0`, and legacy Kotlin Gradle Plugin usage
+  will be unsupported in future Flutter releases. A 2026-06-09 direct bump to
+  Gradle `8.14.5`, AGP `8.11.1`, and Kotlin `2.2.20` was tested but did not
+  finish the release AAB build in the validation window; it was terminated after
+  `652.2s` with exit `143`, so the repo is intentionally kept on the last
+  proven Android store-build stack for the beta-first path.
+- iOS local signing/build is no longer the primary blocker: current evidence
+  proves the Keepeyeonball team, bundle, App Store IPA export, and recovered
+  physical iPhone+iPad Profile automation lane. Remaining iOS store work is
+  external App Store Connect upload authentication plus release-lane user smoke
+  and two-device capture workflow evidence before production.
 - Store privacy answers must be reviewed against current code and backend
   behavior before submission.
 - Android and iOS real-device smoke tests must pass on the exact release lane.
 - Camera lens/profile claims still need production-grade proof. iPhone 12 Pro
   ultra-wide 1080p60 and 4K30 now pass in debug automation, and iPhone Profile
   automation launch is proven for role switching, but iOS saved-video metadata
-  remains unavailable. Samsung S7 rear-wide 1080p60/4K30 remains unproven
-  because the device fails before photo save even at `dataSaver480p30`.
+  remains unavailable. Samsung S7 rear-wide `standard1080p30` now has direct
+  1920x1080 photo/video proof; S7 rear-wide 1080p60/4K30 remains unproven.
 - Human-user login must survive app restart and Android process-death during
   browser authentication, and logout/account switching must be validated before
   release claims depend on user identity.

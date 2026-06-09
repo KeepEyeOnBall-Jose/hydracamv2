@@ -73,6 +73,16 @@ spreadsheet sprint rows.
 - `win11-triple-platform-proof-wrapup-2026-06-09.md`: aborted Win11
   Windows/Linux/Android emulator capture/upload and role-matrix proof attempt;
   records the partial evidence and the remaining blockers.
+- `store-privacy-and-metadata.md`: store privacy/data-safety, support URL,
+  review-note, and beta-readiness checklist for App Store Connect and Google
+  Play.
+- `../../scripts/check_store_readiness.sh`: local/upload preflight for store
+  IDs, permission metadata, launch assets, artifact presence, and submission
+  credentials/URLs.
+- `../store/hydracam-privacy-policy.md`, `../store/hydracam-support.md`, and
+  `../store/hydracam-account-deletion.md`: publish-ready drafts for required
+  store URLs; review and host publicly before external beta or production
+  review.
 - `hydracam-mobo-media-timeline-merge-plan.md`: cross-repo convergence plan for
   the HydraCam mobile app, MoBo HydraCam webservice, and media-timeline event
   and media backend.

@@ -1,0 +1,2941 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 10 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  2201116PG (mobile)           • 575ecf2cbd24                             • android-arm64  • Android 13 (API 33)
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.102
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:1
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+RF8M21J8XRT            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:8
+RF8M90QE7LX            device usb:0-1.3.3 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:10
+
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State       Model                                        
+-------------------   -----------------------------------   ------------------------------------   ---------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   connected   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+iPad (5) (17.7.11) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ sed -n 1,80p pubspec.yaml
+name: hydracam
+description: A Flutter project on connecting multiple mobile devices to synchronize their cameras and capture photos or videos.
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.4.0+16
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  web_socket_channel: ^3.0.3
+  camera: ^0.11.4
+  permission_handler: ^12.0.1
+  path_provider: ^2.1.1
+  video_player: ^2.7.2
+  http: ^1.0.0
+  device_info_plus: ^12.2.0
+  shared_preferences: ^2.2.2
+  uuid: ^4.1.0
+  provider: ^6.1.2
+  # gallery_saver: ^2.3.2  # Removed - incompatible with current Android Gradle plugin, use photo_manager instead
+  geolocator: ^14.0.2
+  wakelock_plus: ^1.1.4
+  #flutter_webrtc: ^0.9.34
+  photo_manager: ^3.6.3
+  intl: ^0.20.2
+  flutter_appauth: ^11.0.0
+  connectivity_plus: ^7.0.0
+  network_info_plus: ^7.0.0
+  flutter_launcher_icons: ^0.14.4
+  package_info_plus: ^8.3.1
+  # battery_info: ^1.1.1  # Removed - incompatible with current Android Gradle plugin
+  context_holder: ^0.0.5
+  disk_space_plus: ^0.2.4
+  battery_plus: ^7.0.0
+  camera_desktop: ^1.1.7
+  sensors_plus: ^7.0.0
+  flutter_secure_storage: ^10.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  camera_platform_interface: ^2.12.0
+  mocktail: ^1.0.0
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        796e5a0 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 8cf7f72
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        796e5a0 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter d5a2fc3
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        ef6b559 com.amaia23.hydracam/.MainActivity filter 5b4947d
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        622851e com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 51220be
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        622851e com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter dc5f040
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        622851e com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter dfafb79
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        622851e com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter fa6051f
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (47601ff):
+    sourcePackage=com.amaia23.hydracam
+    uid=10452 gids=null type=0 prot=signature
+    perm=Permission{514bbcc com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    packageSetting=PackageSetting{6d44e15 com.amaia23.hydracam/10452}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{16dd52a com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{16dd52a com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{7b8b691 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 235
+
+Packages:
+  Package [com.amaia23.hydracam] (6d44e15):
+    userId=10452
+    pkg=Package{66c19f6 com.amaia23.hydracam}
+    codePath=/data/app/com.amaia23.hydracam-JCsNXb-D5aFZQ-0nS5YGwQ==
+    resourcePath=/data/app/com.amaia23.hydracam-JCsNXb-D5aFZQ-0nS5YGwQ==
+    legacyNativeLibraryDir=/data/app/com.amaia23.hydracam-JCsNXb-D5aFZQ-0nS5YGwQ==/lib
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    versionCode=16 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=ApplicationInfo{7b8b691 com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE ]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 05:31:35
+    firstInstallTime=2026-06-07 14:42:09
+    lastUpdateTime=2026-06-09 05:31:40
+    signatures=PackageSignatures{63431f7 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_EXTERNAL_STORAGE: restricted=true
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=593822 installed=true hidden=false suspended=false stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+    User 10: ceDataInode=853596 installed=true hidden=false suspended=false stopped=true notLaunched=true enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+SkippingApks:
+  name : (eBay)_idapk-1.0.0.26-2-DE-CS.apk
+  name : 100Game_MOVISTAR_4x3_KU84_2009_2.0.9.apk
+  name : 204_companion-release.apk
+  name : ATL_5.12.9_MiVF_Oct19.apk
+  name : Adalyst_v2.1_9_23.apk
+  name : AirtelStub.apk
+  name : AmazonMDIP-Android-1.0.51.0-release-signed-Sh-DE.apk
+  name : CLAROAPPS_STUB_1_0_0.apk
+  name : CLiP.apk
+  name : CNX_newMcare_AUTH_PROD_v3.3.7.apk
+  name : ClaroContenedor_Stub.apk
+  name : ClaroJuegos_Stub.apk
+  name : CnnPanel.apk
+  name : Ebay_Carrier_ID_AT_TR.apk
+  name : EweMBMSServer_TEL.apk
+  name : FBInstagram_stub.apk
+  name : FBMessenger_stub.apk
+  name : FlipboardBriefing.apk
+  name : HPSClient.apk
+  name : Ignite-globeIgniteAgent_7.1.196-5368_release.apk
+  name : Ignite-singtelIgniteAgent_6.1.037-4944_release.apk
+  name : KT114Provider2.apk
+  name : KTCustomerService.apk
+  name : KTHiddenMenu.apk
+  name : KTOneStore.apk
+  name : KTPushNotiService.apk
+  name : KTServiceAgent.apk
+  name : KTServiceMenu.apk
+  name : LGUGPSnWPS.apk
+  name : LGUHiddenMenu.apk
+  name : LGUMiniCustomerCenter.apk
+  name : LGUOZStore.apk
+  name : LGUSetting.apk
+  name : LGUplusTsmProxy.apk
+  name : LinkedIn_SamsungStub.apk
+  name : MTL_A1-selfcare-app.apk
+  name : MiClaro_CDR_v5.1.apk
+  name : MiClaro_CENAM_v2.0.1.apk
+  name : MiClaro_CTI_v1.2.0-111.apk
+  name : MiClaro_ECO_v3.6.1.apk
+  name : MiClaro_PCT_v1.5.3_build67.apk
+  name : MinhaClaro_v5.0.3-28.apk
+  name : MundoTigoRRO_07122016.apk
+  name : MundoTigo_v2.3.apk
+  name : MyApps-1.6.1-logoff-obson-prodMyAppsRelease.apk
+  name : MyGalaxy.apk
+  name : MySingtel_v7.5.apk
+  name : NaverV_N.apk
+  name : OMN_MyVodafone_11.3.0_preprodStore_store.apk
+  name : OPENMarketHiddenMenu.apk
+  name : Omc.apk
+  name : OnStartNotification_v20.apk
+  name : OneStoreService.apk
+  name : Portal_Stub.apk
+  name : ProductSearch.apk
+  name : RRO_AMX_stk1.apk
+  name : RRO_AMX_stk2.apk
+  name : SEIOAgent.apk
+  name : SFRJeux-8.0.4-logoff-obson-sfrjeuxRelease.apk
+  name : SKTHiddenMenu.apk
+  name : SKTMemberShip.apk
+  name : SKTOneStore.apk
+  name : SafetyCleaner.apk
+  name : SamsungClub_CTP_v1.0.apk
+  name : SamsungConcierge_stub.apk
+  name : SktUsimService.apk
+  name : SmartPush.apk
+  name : TCL_MyVodafone_4.3.7.apk
+  name : TPhoneOnePackage.apk
+  name : TPhoneSetup.apk
+  name : TelcelContenedorStub.apk
+  name : UWT_STK_RRO_v1.1_20160113.apk
+  name : UserManual.apk
+  name : VD2_app-productionflavor-storeRelease_92004.apk
+  name : VDC_com.zentity.vodafone-3.5.1_20181011.apk
+  name : VDH_MAH-app-ProductionFlavor-release-2-9-104.apk
+  name : VDI_vfie-117-prd1.apk
+  name : VGR_Release-4.7.13.0-5854AL-REL-app.apk
+  name : VOD_app-release_MVA10.apk
+  name : Vivo_Apps_Clube-v1.19.112-263-release.apk
+  name : WhatsAppDownloader.apk
+  name : Yandex_Search_10.51.apk
+  name : ZVV_STK2_RRO.apk
+  name : ZVV_STK_RRO.apk
+  name : appcloud_oobe_hutchison-release_V3.20.1.0.apk
+  name : apps_brasil_signed_aligned.apk
+  name : downloadsvivo-1-10-10-1.apk
+  name : idapk-1.0.0.2-1.apk
+  name : idapk-1.0.0.43-92.apk
+  name : instagram-stub.apk
+  name : miClaroPeru_Stub.apk
+  name : miClaro_COM_Stub.apk
+  name : miTelcel_Stub.apk
+  name : mobileTworld.apk
+  name : samsung_club_uy_access_release_v1_3.apk
+  name : signatureClub.apk
+  name : ubank_samsung.apk
+  name : vivo-maisapps-2.5.9.apk
+  name : wapp-2_0_0-33-unsigned-signed.apk
+  name : SearchSelector.apk
+
+Package Changes:
+  Sequence number=1162
+  User 0:
+    seq=0, package=com.google.android.inputmethod.latin
+    seq=44, package=com.microsoft.appmanager
+    seq=91, package=com.google.android.gms
+    seq=93, package=com.samsung.android.lool
+    seq=249, package=com.google.android.apps.maps
+    seq=250, package=com.android.chrome
+    seq=251, package=com.google.android.trichromelibrary_782705933
+    seq=268, package=com.google.android.apps.nbu.files
+    seq=269, package=com.google.android.projection.gearhead
+    seq=848, package=com.google.android.webview
+    seq=1046, package=com.android.vending
+    seq=1090, package=com.samsung.android.forest
+    seq=1091, package=com.amaia23.hydracam
+    seq=1119, package=com.google.android.apps.docs
+    seq=1161, package=com.facebook.appmanager
+  User 10:
+    seq=115, package=com.google.android.gms
+    seq=134, package=com.google.android.gm
+    seq=249, package=com.google.android.apps.maps
+    seq=250, package=com.android.chrome
+    seq=252, package=com.google.android.trichromelibrary_782705933
+    seq=269, package=com.google.android.projection.gearhead
+    seq=848, package=com.google.android.webview
+    seq=932, package=com.samsung.android.mobileservice
+    seq=1046, package=com.android.vending
+    seq=1091, package=com.amaia23.hydracam
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/com.amaia23.hydracam-JCsNXb-D5aFZQ-0nS5YGwQ==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 2667
+
+Active APEX packages:
+
+
+Inactive APEX packages:
+
+
+Factory APEX packages:
+
+
+  APEX session state:
+
+Active install Logging info:
+  []
+    1780826014186: "Ver":"", "Session":"1", 
+
+Historical install Logging info(9/10):
+  [com.android.vending]
+    1780954733208: "Ver":"85172120", "Session":"0", "Write":"3274", "Write":"806", "Write":"789", "Write":"342", "Write"
+    :"534", "Commit":"22304", "Stage":"27", "Init":"383", "Verified(Unknown)":"154", "Verified(Unknown)":"142", "Copy":"
+    65", "Sign":"9", "DexOpt":"333", 
+  [com.google.android.webview]
+    1780911567315: "Ver":"782704803", "Session":"0", "Write":"5674", "Write":"14495", "Commit":"32993", "Stage":"35", "I
+    nit":"377", "Verified(Unknown)":"143", "Verified(Unknown)":"202", "Copy":"28", "Sign":"6", "DexOpt":"708", 
+  [com.amaia23.hydracam]
+    1780975885410: "Ver":"16", "Session":"0", "Write":"30", "Commit":"10643", "Stage":"10", "Init":"393", "Verified(Unkn
+    own)":"3002", "Verified(Unknown)":"211", "Copy":"50", "Sign":"8", "DexOpt":"630", 
+[exit-code] 0
+
+$ adb -s 575ecf2cbd24 shell dumpsys package com.amaia23.hydracam
+Unable to find package: com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        f5c55de com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 42e63bf
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        f5c55de com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter ededa8c
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        1189860 com.amaia23.hydracam/.MainActivity filter 265119
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        fc1e5d5 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 8e51378
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        fc1e5d5 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 153f1ea
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        fc1e5d5 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 96f7cdb
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        fc1e5d5 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter c480a51
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (b862941):
+    sourcePackage=com.amaia23.hydracam
+    uid=10325 gids=[] type=0 prot=signature
+    perm=PermissionInfo{1f78ee6 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{fd61c27 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{fd61c27 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{7e80ed4 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 58
+
+Packages:
+  Package [com.amaia23.hydracam] (37ffded):
+    userId=10325
+    pkg=Package{e4b187d com.amaia23.hydracam}
+    codePath=/data/app/~~OO7l9b3ooy96M6eqxgGC1g==/com.amaia23.hydracam-bgJqFrkXuCq9jggvXSKj4Q==
+    resourcePath=/data/app/~~OO7l9b3ooy96M6eqxgGC1g==/com.amaia23.hydracam-bgJqFrkXuCq9jggvXSKj4Q==
+    legacyNativeLibraryDir=/data/app/~~OO7l9b3ooy96M6eqxgGC1g==/com.amaia23.hydracam-bgJqFrkXuCq9jggvXSKj4Q==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=16 minSdk=24 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.4.0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=PackageImpl{e4b187d com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    queriesIntents=[Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:///... }]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 05:46:46
+    firstInstallTime=2026-06-07 00:07:29
+    lastUpdateTime=2026-06-09 05:46:49
+    signatures=PackageSignatures{c15ceb3 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=1363 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+SkippingApks:
+  name : 100Game_PERSONAL_4x4_PF36_2009_2.0.2.apk
+  name : 149_companion-release.apk
+  name : 4.4.4.Agosto(175).apk
+  name : AirtelStub.apk
+  name : AlticeMusic_2.3.apk
+  name : AmazonMDIP-Android-1.0.51.0-42010-release-signed-UK-KnShMu-201806.apk
+  name : AmazonMDIP-AndroidApp-release-signed-3ATITUK-SP-AV-102020.apk
+  name : AmazonShopping-32bit.apk
+  name : ClaroContenedor_Full.apk
+  name : ClaroJuegos_FULL.apk
+  name : ClaroJuegos_FULL_MX.apk
+  name : CnnPanel.apk
+  name : Ebay_Carrier_ID_AT_TR.apk
+  name : EntelPlay_6.3.apk
+  name : FBInstagram_stub.apk
+  name : FBMessenger_stub.apk
+  name : FlipboardBriefing.apk
+  name : HPSClient.apk
+  name : ITracker.apk
+  name : Ignite-globeIgniteAgent_5.4.037-4583_release.apk
+  name : Ignite-singtelIgniteAgent_6.1.037-4944_release.apk
+  name : Ignite-telefonica.apk
+  name : KT114Provider2.apk
+  name : KTCustomerService.apk
+  name : KTCustomerService_v060302.apk
+  name : KTHiddenMenu.apk
+  name : KTOneStore.apk
+  name : KTPushNotiService.apk
+  name : KTServiceAgent.apk
+  name : KTServiceMenu.apk
+  name : LGUGPSnWPS.apk
+  name : LGUHiddenMenu.apk
+  name : LGUMiniCustomerCenter.apk
+  name : LGUOZStore.apk
+  name : LGUplusTsmProxy.apk
+  name : MDIP.apk
+  name : MaftPreloadManagerAndroidApp-MovistarMX.apk
+  name : MaftPreloadManagerAndroidApp-TEF_LATAM.apk
+  name : MaftPreloadManagerAndroidApp-release-signed-tagged.apk
+  name : MeinVF-signed-7.7.5.apk
+  name : MeuTIM.apk
+  name : MinhaOi.apk
+  name : Multi_SKU_MDIP-mshop-android-optus-all-all-all-pre.apk
+  name : Musica_VIVA_v1.1.apk
+  name : MyApps-1.7.2-logoff-obson-prodMyAppsRelease.apk
+  name : MyGalaxy.apk
+  name : MySingtel_v7.4.apk
+  name : MyVodafone-production-R7.3_28_08_2018.apk
+  name : MyVodafone_10.3.0_prodStore_store.apk
+  name : My_A1_v3.0.0_prod.apk
+  name : My_Vodafone_4.2.0.apk
+  name : NaverV_N.apk
+  name : OPENMarketHiddenMenu.apk
+  name : OiApps.apk
+  name : OiAppsClube.apk
+  name : OiRecarga.apk
+  name : OiWiFi.apk
+  name : Omc.apk
+  name : OnStart_Notification_V30.apk
+  name : OneStoreService.apk
+  name : ProductSearch.apk
+  name : RRO_AMX_stk1.apk
+  name : RRO_AMX_stk2.apk
+  name : SEIOAgent.apk
+  name : SFRJeux-8.2.2-logoff-obson-sfrjeuxRelease.apk
+  name : SKTFindLostPhone.apk
+  name : SKTHiddenMenu.apk
+  name : SKTMemberShip.apk
+  name : SKTOneStore.apk
+  name : SYSdll.apk
+  name : SafetyCleaner.apk
+  name : SelfCareMobile-6.0.3-prod-signed.apk
+  name : SktUsimService.apk
+  name : SmartPush.apk
+  name : TPhoneOnePackage.apk
+  name : TPhoneSetup.apk
+  name : TelcelContenedor_Full.apk
+  name : UserManual.apk
+  name : VivoAppsClube.apk
+  name : VivoMaisApps.apk
+  name : WhatsAppDownloader.apk
+  name : ZVV_STK2_RRO.apk
+  name : ZVV_STK_RRO.apk
+  name : appcloud_oobe_hutchison-release_V3.24.3.0.apk
+  name : appcloud_oobe_samsungVodafone-release_V5.2.4.6.apk
+  name : che_notification_6.1.apk
+  name : com.zentity.vodafone-3.5.1_20181011.apk
+  name : entel_peru_7-6-1.apk
+  name : idapk-1.0.0.2-1.apk
+  name : idapk-1.0.0.75-92.apk
+  name : instagram-stub-BR.apk
+  name : instagram-stub_45-1-22.apk
+  name : instagram-stub_52-0-3.apk
+  name : instagram_stub.apk
+  name : kolbi_5.0.19.apk
+  name : messenger-stub-BR.apk
+  name : messenger-stub_45-1-22.apk
+  name : messenger-stub_52-0-3.apk
+  name : miTelcel_Stub.apk
+  name : mobileTworld.apk
+  name : myflow_cww_6-9-0-174.apk
+  name : noticias_aro_146.apk
+  name : rro_psn_stk1.apk
+  name : rro_uwt_srk1.apk
+  name : rro_uwt_stk2.apk
+  name : rro_ztm_stk1.apk
+  name : rro_ztm_stk2.apk
+  name : rro_ztr_stk1.apk
+  name : rro_ztr_stk2.apk
+  name : tickantel_1-8-1.apk
+  name : trendy_aro_28.apk
+  name : tuapp_4-0-2-4.apk
+  name : veramas_1-17-5.apk
+  name : veratv_2-4-0.apk
+  name : vfgr-myvf-4.6.3.1-3568AL-d180791-REL.apk
+  name : yandex.search.apk
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+    [com.samsung.android.bixby.service,com.samsung.android.bixby.agent]:
+      com.amaia23.hydracam
+    de.axelspringer.yana.zeropage:
+      com.amaia23.hydracam
+    com.facebook.katana:
+      com.amaia23.hydracam
+    com.amaia23.hydracam:
+      com.microsoft.skydrive
+      com.google.android.googlequicksearchbox
+      com.android.chrome
+      com.google.android.setupwizard
+  queryable via interaction:
+    User 0:
+      [com.android.networkstack.tethering.inprocess,com.dsi.ant.server,com.samsung.android.mdecservice,com.sec.android.app.hwmoduletest,com.samsung.android.forest,com.sec.android.app.personalization,com.sec.enterprise.mdm.services.simpin,com.samsung.android.knox.pushmanager,com.android.providers.settings,com.sec.android.app.SecSetupWizard,com.sec.android.emergencymode.service,com.samsung.android.bluelightfilter,com.samsung.android.bio.face.service,com.wssyncmldm,com.samsung.cmfa.AuthTouch,com.sec.app.RilErrorNotifier,com.sec.factory.camera,com.samsung.android.hdmapp,com.samsung.clipboardsaveservice,com.samsung.android.smartswitchassistant,com.android.keychain,com.samsung.android.tadownloader,com.sec.bcservice,com.samsung.android.app.omcagent,com.samsung.android.bixby.wakeup,com.samsung.android.localeoverlaymanager,com.android.wallpaperbackup,com.samsung.android.knox.attestation,com.android.location.fused,com.sec.android.smartfpsadjuster,com.sec.mhs.smarttethering,com.samsung.android.themecenter,com.sec.android.app.applinker,com.samsung.android.app.dressroom,com.sec.imslogger,com.samsung.android.camerasdkservice,com.sec.usbsettings,com.samsung.gpuwatchapp,com.skms.android.agent,com.samsung.android.aircommandmanager,com.samsung.sec.android.teegris.tui_service,com.samsung.android.svcagent,com.samsung.android.fmm,com.samsung.android.sume.nn.service,com.sec.automation,com.samsung.android.vtcamerasettings,com.sec.android.emergencylauncher,com.samsung.SMT,android,com.android.server.telecom,com.sec.android.app.desktoplauncher,com.sec.android.app.parser,com.sec.factory,com.samsung.aasaservice,com.sec.android.soagent,com.sec.android.app.bluetoothtest,com.sec.android.app.wlantest,com.sec.epdg,com.android.inputdevices,com.sec.android.sdhms,com.samsung.android.hmt.vrsvc,com.samsung.android.lool,com.sec.sve,com.samsung.android.smartface,com.samsung.android.stickercenter,com.samsung.android.brightnessbackupservice,com.sec.android.app.quicktool,com.sec.android.app.servicemodeapp,com.samsung.android.bbc.bbcagent,com.sec.android.app.apex,com.sec.imsservice,com.android.settings,com.sec.android.app.factorykeystring,com.samsung.rcs,com.sec.android.app.dexonpc,com.samsung.android.cameraxservice,com.samsung.accessibility,com.samsung.android.provider.filterprovider,com.sec.modem.settings,com.samsung.android.da.daagent,com.sem.factoryapp,com.sec.android.diagmonagent,com.samsung.android.biometrics.app.setting,com.samsung.android.cmfa.framework,com.samsung.android.app.settings.bixby,com.samsung.android.peripheral.framework,com.android.dynsystem,com.samsung.android.dqagent,com.android.localtransport,com.samsung.android.shortcutbackupservice]:
+        com.amaia23.hydracam
+      com.android.chrome:
+        com.amaia23.hydracam
+      com.samsung.android.honeyboard:
+        com.amaia23.hydracam
+  queryable via uses-library:
+
+Package Changes:
+  Sequence number=94
+  User 0:
+    seq=1, package=com.sec.unifiedwfc
+    seq=13, package=com.sec.android.app.samsungapps
+    seq=19, package=com.samsung.android.sm.policy
+    seq=21, package=com.google.android.trichromelibrary_768017733
+    seq=22, package=com.android.chrome
+    seq=23, package=com.google.android.gms
+    seq=25, package=com.gombosdev.ampere
+    seq=27, package=com.google.android.as.oss
+    seq=30, package=com.google.ar.core
+    seq=33, package=com.google.android.googlequicksearchbox
+    seq=34, package=com.google.android.apps.restore
+    seq=36, package=com.google.android.apps.tachyon
+    seq=38, package=com.google.android.tts
+    seq=39, package=com.google.android.projection.gearhead
+    seq=47, package=com.google.android.youtube
+    seq=48, package=com.google.android.apps.maps
+    seq=49, package=com.google.android.gm
+    seq=82, package=com.samsung.android.networkdiagnostic
+    seq=87, package=com.samsung.android.forest
+    seq=89, package=com.osp.app.signin
+    seq=91, package=com.amaia23.hydracam
+    seq=92, package=com.android.vending
+    seq=93, package=com.microsoft.appmanager
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/~~OO7l9b3ooy96M6eqxgGC1g==/com.amaia23.hydracam-bgJqFrkXuCq9jggvXSKj4Q==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+HeimdAllFS state:
+  HeimdAllFS does not supported.
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 6106
+
+Active install Logging info:
+  []
+    1780785391390: "Ver":"", "Session":"0", "Write":"1993", "Write":"1963", "Write":"431", 
+
+Historical install Logging info(9/10):
+  []
+    1780976910940: "Ver":"", "Session":"0", "Write":"2904", "Write":"547", "Write":"51", "Write":"1001", "Write":"25", "
+    Write":"374", "Commit":"17340", "Stage":"0", "Copy":"57", "Sign":"10", "DexOpt":"6", 
+Snapshot statistics
+   Unrecorded-hits: 14433  Cork-level: 0
+   Summary stats               TotBlds     TotUsed     TotCork     BigBlds    ShortLvd     TotTime     MaxTime
+          0:17         now           0           0           0           0           0           0           0
+          1:17        0:17           0           0           0           0           0           0           0
+          2:17        1:17           0           0           0           0           0           0           0
+          3:17        2:17           0           0           0           0           0           0           0
+          4:17        3:17           0           0           0           0           0           0           0
+          5:17        4:17           0           0           0           0           0           0           0
+          6:17        5:17           0           0           0           0           0           0           0
+          7:17        6:17           0           0           0           0           0           0           0
+          8:17        7:17           0           0           0           0           0           0           0
+          9:17        8:17           0           0           0           0           0           0           0
+    2:09:29:42         now        1204     7738531           0          34         158        1617          43
+
+   Build times                  <= 1ms      <= 2ms      <= 5ms     <= 10ms     <= 20ms     <= 50ms    <= 100ms     > 100ms
+          0:17         now           0           0           0           0           0           0           0           0
+          1:17        0:17           0           0           0           0           0           0           0           0
+          2:17        1:17           0           0           0           0           0           0           0           0
+          3:17        2:17           0           0           0           0           0           0           0           0
+          4:17        3:17           0           0           0           0           0           0           0           0
+          5:17        4:17           0           0           0           0           0           0           0           0
+          6:17        5:17           0           0           0           0           0           0           0           0
+          7:17        6:17           0           0           0           0           0           0           0           0
+          8:17        7:17           0           0           0           0           0           0           0           0
+          9:17        8:17           0           0           0           0           0           0           0           0
+    2:09:29:42         now        1082          49          31          10          19          13           0           0
+
+   Use counters                   <= 1        <= 2        <= 5       <= 10       <= 20       <= 50      <= 100       > 100
+          0:17         now           0           0           0           0           0           0           0           0
+          1:17        0:17           0           0           0           0           0           0           0           0
+          2:17        1:17           0           0           0           0           0           0           0           0
+          3:17        2:17           0           0           0           0           0           0           0           0
+          4:17        3:17           0           0           0           0           0           0           0           0
+          5:17        4:17           0           0           0           0           0           0           0           0
+          6:17        5:17           0           0           0           0           0           0           0           0
+          7:17        6:17           0           0           0           0           0           0           0           0
+          8:17        7:17           0           0           0           0           0           0           0           0
+          9:17        8:17           0           0           0           0           0           0           0           0
+    2:09:29:42         now         151           0           6          16          26          85          98         821
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        eef22c1 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter aaeca66
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        eef22c1 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter efb71a7
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        98c63cb com.amaia23.hydracam/.MainActivity filter 13087a8
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        bda7654 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter e638143
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        bda7654 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 50a29fd
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        bda7654 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 4cd26f2
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        bda7654 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter e92a3c0
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (644c378):
+    sourcePackage=com.amaia23.hydracam
+    uid=10367 gids=[] type=0 prot=signature
+    perm=PermissionInfo{5a5fa51 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{59672b6 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{59672b6 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{6c67bb7 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 68
+
+Packages:
+  Package [com.amaia23.hydracam] (2be9f24):
+    userId=10367
+    pkg=Package{97eea8d com.amaia23.hydracam}
+    codePath=/data/app/~~OfN3YcRnRXEMmOmyzqyzsQ==/com.amaia23.hydracam-1ANRQrwQLTdLhsK-_asrWA==
+    resourcePath=/data/app/~~OfN3YcRnRXEMmOmyzqyzsQ==/com.amaia23.hydracam-1ANRQrwQLTdLhsK-_asrWA==
+    legacyNativeLibraryDir=/data/app/~~OfN3YcRnRXEMmOmyzqyzsQ==/com.amaia23.hydracam-1ANRQrwQLTdLhsK-_asrWA==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=16 minSdk=24 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.4.0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=PackageImpl{97eea8d com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    queriesIntents=[Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:///... }]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 05:44:07
+    firstInstallTime=2026-06-07 14:44:29
+    lastUpdateTime=2026-06-09 05:44:09
+    signatures=PackageSignatures{c8f0442 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=2689898 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+SkippingApks:
+  name : 100Game_PERSONAL_4x4_PF36_2009_2.0.2.apk
+  name : 149_companion-release.apk
+  name : 4.4.4.Agosto(175).apk
+  name : AirtelStub.apk
+  name : AlticeMusic_2.3.apk
+  name : AmazonMDIP-Android-1.0.51.0-42010-release-signed-UK-KnShMu-201806.apk
+  name : AmazonMDIP-AndroidApp-release-signed-3ATITUK-SP-AV-102020.apk
+  name : AmazonShopping-32bit.apk
+  name : ClaroContenedor_Full.apk
+  name : ClaroJuegos_FULL.apk
+  name : ClaroJuegos_FULL_MX.apk
+  name : CnnPanel.apk
+  name : Ebay_Carrier_ID_AT_TR.apk
+  name : EntelPlay_6.3.apk
+  name : FBInstagram_stub.apk
+  name : FBMessenger_stub.apk
+  name : FlipboardBriefing.apk
+  name : HPSClient.apk
+  name : ITracker.apk
+  name : Ignite-globeIgniteAgent_5.4.037-4583_release.apk
+  name : Ignite-singtelIgniteAgent_6.1.037-4944_release.apk
+  name : Ignite-telefonica.apk
+  name : KT114Provider2.apk
+  name : KTCustomerService.apk
+  name : KTCustomerService_v060302.apk
+  name : KTHiddenMenu.apk
+  name : KTOneStore.apk
+  name : KTPushNotiService.apk
+  name : KTServiceAgent.apk
+  name : KTServiceMenu.apk
+  name : LGUGPSnWPS.apk
+  name : LGUHiddenMenu.apk
+  name : LGUMiniCustomerCenter.apk
+  name : LGUOZStore.apk
+  name : LGUplusTsmProxy.apk
+  name : MDIP-TIM_O2UK_DTDE_VFAU_OPTUSAU_3IT_sdk-30.apk
+  name : MDIP.apk
+  name : MaftPreloadManagerAndroidApp-MovistarMX.apk
+  name : MaftPreloadManagerAndroidApp-TEF_LATAM.apk
+  name : MaftPreloadManagerAndroidApp-release-signed-tagged.apk
+  name : MeinVF-signed-7.7.5.apk
+  name : MeuTIM.apk
+  name : MinhaOi.apk
+  name : Multi_SKU_MDIP-mshop-android-optus-all-all-all-pre.apk
+  name : Musica_VIVA_v1.1.apk
+  name : MyApps-1.7.2-logoff-obson-prodMyAppsRelease.apk
+  name : MyGalaxy.apk
+  name : MySingtel_v7.4.apk
+  name : MyVodafone-production-R7.3_28_08_2018.apk
+  name : MyVodafone_10.3.0_prodStore_store.apk
+  name : My_A1_v3.0.0_prod.apk
+  name : My_Vodafone_4.2.0.apk
+  name : NaverV_N.apk
+  name : OPENMarketHiddenMenu.apk
+  name : OiApps.apk
+  name : OiAppsClube.apk
+  name : OiRecarga.apk
+  name : OiWiFi.apk
+  name : Omc.apk
+  name : OnStart_Notification_V30.apk
+  name : OneStoreService.apk
+  name : ProductSearch.apk
+  name : RRO_AMX_stk1.apk
+  name : RRO_AMX_stk2.apk
+  name : SEIOAgent.apk
+  name : SFRJeux-8.2.2-logoff-obson-sfrjeuxRelease.apk
+  name : SKTFindLostPhone.apk
+  name : SKTHiddenMenu.apk
+  name : SKTMemberShip.apk
+  name : SKTOneStore.apk
+  name : SYSdll.apk
+  name : SafetyCleaner.apk
+  name : SelfCareMobile-6.0.3-prod-signed.apk
+  name : SktUsimService.apk
+  name : SmartPush.apk
+  name : TPhoneOnePackage.apk
+  name : TPhoneSetup.apk
+  name : TelcelContenedor_Full.apk
+  name : UserManual.apk
+  name : VivoAppsClube.apk
+  name : VivoMaisApps.apk
+  name : WhatsAppDownloader.apk
+  name : ZVV_STK2_RRO.apk
+  name : ZVV_STK_RRO.apk
+  name : appcloud_oobe_hutchison-release_V3.24.3.0.apk
+  name : appcloud_oobe_samsungDeutscheTelekom-release_V5.2.4.1.apk
+  name : appcloud_oobe_samsungVodafone-release_V5.2.4.6.apk
+  name : che_notification_6.1.apk
+  name : com.zentity.vodafone-3.5.1_20181011.apk
+  name : entel_peru_7-6-1.apk
+  name : idapk-1.0.0.2-1.apk
+  name : idapk-1.0.0.75-92.apk
+  name : instagram-stub-BR.apk
+  name : instagram-stub_45-1-22.apk
+  name : instagram-stub_52-0-3.apk
+  name : instagram_stub.apk
+  name : kolbi_5.0.19.apk
+  name : messenger-stub-BR.apk
+  name : messenger-stub_45-1-22.apk
+  name : messenger-stub_52-0-3.apk
+  name : miTelcel_Stub.apk
+  name : mobileTworld.apk
+  name : myflow_cww_6-9-0-174.apk
+  name : noticias_aro_146.apk
+  name : rro_psn_stk1.apk
+  name : rro_uwt_srk1.apk
+  name : rro_uwt_stk2.apk
+  name : rro_ztm_stk1.apk
+  name : rro_ztm_stk2.apk
+  name : rro_ztr_stk1.apk
+  name : rro_ztr_stk2.apk
+  name : tickantel_1-8-1.apk
+  name : trendy_aro_28.apk
+  name : tuapp_4-0-2-4.apk
+  name : veramas_1-17-5.apk
+  name : veratv_2-4-0.apk
+  name : vfgr-myvf-4.6.3.1-3568AL-d180791-REL.apk
+  name : yandex.search.apk
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+    [com.samsung.android.bixby.service,com.samsung.android.bixby.agent]:
+      com.amaia23.hydracam
+    de.axelspringer.yana.zeropage:
+      com.amaia23.hydracam
+    com.facebook.katana:
+      com.amaia23.hydracam
+    com.whatsapp:
+      com.amaia23.hydracam
+    com.app.tgtg:
+      com.amaia23.hydracam
+    com.revolut.revolut:
+      com.amaia23.hydracam
+    [com.samsung.android.app.watchmanager,com.samsung.android.waterplugin]:
+      com.amaia23.hydracam
+    com.amaia23.hydracam:
+      com.microsoft.skydrive
+      com.google.android.googlequicksearchbox
+      com.android.chrome
+      com.google.android.setupwizard
+      com.google.android.apps.docs
+      com.lidl.eci.lidlplus
+  queryable via interaction:
+    User 0:
+      [com.samsung.android.svcagent,com.dsi.ant.server,com.sec.android.app.dexonpc,com.samsung.android.camerasdkservice,com.samsung.gpuwatchapp,com.sec.android.emergencylauncher,com.sec.app.RilErrorNotifier,com.sec.android.emergencymode.service,com.android.networkstack.tethering.inprocess,com.sec.android.app.desktoplauncher,com.samsung.android.cmfa.framework,com.samsung.android.cameraxservice,com.sec.factory.camera,com.sec.android.app.bluetoothtest,com.samsung.accessibility,com.samsung.android.stickercenter,com.samsung.android.aircommandmanager,com.android.inputdevices,com.samsung.android.localeoverlaymanager,com.sec.factory,com.sec.android.app.parser,com.sem.factoryapp,com.samsung.android.brightnessbackupservice,com.sec.mhs.smarttethering,com.sec.android.app.SecSetupWizard,com.sec.android.app.hwmoduletest,com.sec.android.smartfpsadjuster,com.android.server.telecom,com.samsung.android.hdmapp,com.skms.android.agent,com.sec.imsservice,com.android.localtransport,com.samsung.aasaservice,com.samsung.sec.android.teegris.tui_service,com.samsung.android.bio.face.service,com.samsung.cmfa.AuthTouch,com.samsung.android.dqagent,com.samsung.android.da.daagent,com.sec.android.app.personalization,com.sec.android.app.quicktool,com.sec.imslogger,com.sec.modem.settings,com.android.settings,com.android.dynsystem,com.samsung.android.bbc.bbcagent,com.samsung.android.app.omcagent,com.samsung.android.knox.attestation,com.sec.android.soagent,com.wssyncmldm,com.samsung.android.bluelightfilter,com.sec.android.diagmonagent,com.samsung.android.forest,com.samsung.android.mdecservice,com.samsung.android.themecenter,com.samsung.android.lool,com.samsung.rcs,com.samsung.android.app.dressroom,com.samsung.android.hmt.vrsvc,com.android.providers.settings,com.samsung.android.app.settings.bixby,com.sec.android.app.wlantest,com.sec.android.app.servicemodeapp,com.sec.android.app.applinker,com.samsung.android.smartswitchassistant,com.android.keychain,android,com.sec.usbsettings,com.sec.epdg,com.samsung.android.smartface,com.samsung.android.knox.pushmanager,com.samsung.android.bixby.wakeup,com.samsung.android.peripheral.framework,com.android.location.fused,com.sec.automation,com.samsung.android.tadownloader,com.samsung.android.fmm,com.samsung.android.shortcutbackupservice,com.samsung.clipboardsaveservice,com.sec.android.app.apex,com.samsung.android.vtcamerasettings,com.sec.enterprise.mdm.services.simpin,com.samsung.android.provider.filterprovider,com.sec.sve,com.samsung.SMT,com.sec.bcservice,com.samsung.android.sume.nn.service,com.sec.android.sdhms,com.sec.android.app.factorykeystring,com.android.wallpaperbackup,com.samsung.android.biometrics.app.setting]:
+        com.amaia23.hydracam
+      com.android.chrome:
+        com.amaia23.hydracam
+      com.google.android.inputmethod.latin:
+        com.amaia23.hydracam
+  queryable via uses-library:
+
+Package Changes:
+  Sequence number=616
+  User 0:
+    seq=11, package=com.google.android.partnersetup
+    seq=15, package=com.google.android.gms
+    seq=71, package=com.app.tgtg
+    seq=87, package=com.google.android.youtube
+    seq=88, package=com.google.android.apps.maps
+    seq=89, package=com.google.android.apps.tachyon
+    seq=107, package=com.google.android.as.oss
+    seq=160, package=com.google.android.projection.gearhead
+    seq=176, package=com.openai.chatgpt
+    seq=279, package=com.lidl.eci.lidlplus
+    seq=539, package=de.number26.android
+    seq=563, package=com.sec.unifiedwfc
+    seq=592, package=com.android.bluetooth
+    seq=594, package=com.samsung.android.forest
+    seq=610, package=com.google.android.apps.docs
+    seq=612, package=com.samsung.android.sm.policy
+    seq=613, package=com.amaia23.hydracam
+    seq=615, package=com.microsoft.appmanager
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/~~OfN3YcRnRXEMmOmyzqyzsQ==/com.amaia23.hydracam-1ANRQrwQLTdLhsK-_asrWA==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+HeimdAllFS state:
+  HeimdAllFS does not supported.
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 6076
+
+Active install Logging info:
+  []
+    1780769176173: "Ver":"", "Session":"0", 
+
+Historical install Logging info(9/10):
+  []
+    1780976641113: "Ver":"", "Session":"0", "Write":"12", "Commit":"8565", "Stage":"0", "Copy":"48", "Sign":"22", "DexOp
+    t":"2", 
+Snapshot statistics
+   Unrecorded-hits: 29009  Cork-level: 0
+   Summary stats               TotBlds     TotUsed     TotCork     BigBlds    ShortLvd     TotTime     MaxTime
+          0:35         now           0           0           0           0           0           0           0
+          1:35        0:35           0           0           0           0           0           0           0
+          2:35        1:35           0           0           0           0           0           0           0
+          3:35        2:35           0           0           0           0           0           0           0
+          4:35        3:35           0           0           0           0           0           0           0
+          5:35        4:35           0           0           0           0           0           0           0
+          6:35        5:35           0           0           0           0           0           0           0
+          7:35        6:35           0           0           0           0           0           0           0
+          8:35        7:35           0           0           0           0           0           0           0
+          9:35        8:35           0           0           0           0           0           0           0
+    3:14:54:03         now        1793    13796613           0          23         242        2193          32
+
+   Build times                  <= 1ms      <= 2ms      <= 5ms     <= 10ms     <= 20ms     <= 50ms    <= 100ms     > 100ms
+          0:35         now           0           0           0           0           0           0           0           0
+          1:35        0:35           0           0           0           0           0           0           0           0
+          2:35        1:35           0           0           0           0           0           0           0           0
+          3:35        2:35           0           0           0           0           0           0           0           0
+          4:35        3:35           0           0           0           0           0           0           0           0
+          5:35        4:35           0           0           0           0           0           0           0           0
+          6:35        5:35           0           0           0           0           0           0           0           0
+          7:35        6:35           0           0           0           0           0           0           0           0
+          8:35        7:35           0           0           0           0           0           0           0           0
+          9:35        8:35           0           0           0           0           0           0           0           0
+    3:14:54:03         now        1577          99          74          22          10          11           0           0
+
+   Use counters                   <= 1        <= 2        <= 5       <= 10       <= 20       <= 50      <= 100       > 100
+          0:35         now           0           0           0           0           0           0           0           0
+          1:35        0:35           0           0           0           0           0           0           0           0
+          2:35        1:35           0           0           0           0           0           0           0           0
+          3:35        2:35           0           0           0           0           0           0           0           0
+          4:35        3:35           0           0           0           0           0           0           0           0
+          5:35        4:35           0           0           0           0           0           0           0           0
+          6:35        5:35           0           0           0           0           0           0           0           0
+          7:35        6:35           0           0           0           0           0           0           0           0
+          8:35        7:35           0           0           0           0           0           0           0           0
+          9:35        8:35           0           0           0           0           0           0           0           0
+    3:14:54:03         now         151           1          89          89          64         154         131        1113
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        33ca045 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 543418e
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        33ca045 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter d705daf
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        403739a com.amaia23.hydracam/.MainActivity filter cbdd89
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        5cd54cb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 2bd1f53
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        5cd54cb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter cc0758d
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        5cd54cb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 9d13342
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        5cd54cb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 743d090
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (84524a8):
+    sourcePackage=com.amaia23.hydracam
+    uid=10193 gids=null type=0 prot=signature
+    perm=Permission{88bfbc1 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    packageSetting=PackageSetting{2952f66 com.amaia23.hydracam/10193}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{cda72a7 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{cda72a7 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{c1be354 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 37
+
+Packages:
+  Package [com.amaia23.hydracam] (2952f66):
+    userId=10193
+    pkg=Package{e1b92fd com.amaia23.hydracam}
+    codePath=/data/app/com.amaia23.hydracam-zLkcTD_PrXyRzJzqv6fC-Q==
+    resourcePath=/data/app/com.amaia23.hydracam-zLkcTD_PrXyRzJzqv6fC-Q==
+    legacyNativeLibraryDir=/data/app/com.amaia23.hydracam-zLkcTD_PrXyRzJzqv6fC-Q==/lib
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    dexMode=unknown
+    versionCode=16 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=ApplicationInfo{c1be354 com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 05:32:00
+    firstInstallTime=2026-06-07 02:45:12
+    lastUpdateTime=2026-06-09 05:32:11
+    signatures=PackageSignatures{534dbf2 [1d1013c1]}
+    installPermissionsFixed=true installStatus=1
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=522674 installed=true hidden=false suspended=false stopped=false notLaunched=false enabled=0 instant=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true
+        android.permission.READ_EXTERNAL_STORAGE: granted=true
+        android.permission.ACCESS_COARSE_LOCATION: granted=true
+        android.permission.CAMERA: granted=true
+        android.permission.WRITE_EXTERNAL_STORAGE: granted=true
+        android.permission.RECORD_AUDIO: granted=true
+mSkippingApks:
+  package : YahooEdgeNews.apk
+  package : FlipboardBriefing.apk
+  package : GalaxyCare.apk
+  package : SamsungPayStub.apk
+  package : AndroidPay_erasable_Hero.apk
+  package : CnnPanel.apk
+  package : NaverV_N.apk
+  package : UnifiedWFC.apk
+  package : OMCAgent.apk
+  package : SamsungUpdates.apk
+  package : AirtelStub.apk
+  package : KT114Provider.apk
+
+Package Changes:
+  Sequence number=328
+  User 0:
+    seq=23, package=com.samsung.android.contacts
+    seq=66, package=com.google.android.gms
+    seq=74, package=com.microsoft.skydrive
+    seq=298, package=com.facebook.appmanager
+    seq=326, package=com.google.android.apps.docs
+    seq=327, package=com.amaia23.hydracam
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    Instruction Set: arm64
+      path: /data/app/com.amaia23.hydracam-zLkcTD_PrXyRzJzqv6fC-Q==/base.apk
+      status: /data/app/com.amaia23.hydracam-zLkcTD_PrXyRzJzqv6fC-Q==/oat/arm64/base.odex[status=kOatUpToDate, compilati
+      on_filter=quicken]
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 4634
+
+
+Package White/Blacklist Metadata:
+
+Historical install Logging info(1/10):
+  [com.amaia23.hydracam]
+    1780975908445: "Ver":"16", "Session":"0", "Write":"36", "Commit":"12786", "Stage":"405", "Init":"363", "Verified(Unk
+    nown)":"3736", "Verified(Unknown)":"168", "Copy":"41", "Sign":"26", "DexOpt":"4649", 
+
+-------- coreapps list --------
+com.sec.location.nsflp2:/system/priv-app/NSFusedLocation_v3.2
+com.google.android.ext.services:/system/priv-app/GoogleExtServices
+com.android.providers.telephony:/system/priv-app/SecTelephonyProvider
+com.google.android.ext.shared:/system/app/GoogleExtShared
+com.samsung.android.incallui:/system/priv-app/SamsungInCallUI
+com.samsung.android.knox.containercore:/system/priv-app/KnoxCore
+com.sec.vsimservice:/system/app/vsimservice
+org.simalliance.openmobileapi.service:/system/app/SmartcardService
+com.android.mms.service:/system/priv-app/MmsService
+com.samsung.ucs.agent.boot:/system/app/bootagent
+com.android.defcontainer:/system/priv-app/DefaultContainerService
+com.sec.ims:/system/priv-app/ImsTelephonyService
+com.sec.sve:/system/app/sveservice
+com.samsung.android.SettingsReceiver:/system/priv-app/SettingsReceiver
+android:/system/framework/framework-res.apk
+com.android.providers.settings:/system/priv-app/SecSettingsProvider
+com.sec.imsservice:/system/priv-app/imsservice
+com.android.inputdevices:/system/priv-app/InputDevices
+com.samsung.knox.securefolder:/system/priv-app/SecureFolder
+com.samsung.advp.imssettings:/system/app/ImsSettings
+com.sec.android.inputmethod:/system/app/SamsungIMEv3.0
+com.android.server.telecom:/system/priv-app/Telecom
+com.google.android.packageinstaller:/system/priv-app/GooglePackageInstaller
+com.android.proxyhandler:/system/priv-app/ProxyHandler
+com.sec.phone:/system/app/SecFactoryPhoneTest
+com.sec.app.RilErrorNotifier:/system/priv-app/PhoneErrService
+com.android.settings:/system/priv-app/SecSettings
+com.android.phone:/system/priv-app/TeleService
+com.android.shell:/system/priv-app/Shell
+com.android.location.fused:/system/priv-app/FusedLocation
+com.sec.epdg:/system/priv-app/EpdgService
+com.android.systemui:/system/priv-app/SystemUI
+[exit-code] 0
+
+$ flutter build apk --debug --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             37.1s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ ls -lh build/app/outputs/flutter-apk/app-debug.apk
+-rw-r--r--@ 1 jose  staff   191M Jun  9 09:33 build/app/outputs/flutter-apk/app-debug.apk
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 575ecf2cbd24 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+
+[stderr]
+adb: failed to install build/app/outputs/flutter-apk/app-debug.apk: Failure [INSTALL_FAILED_USER_RESTRICTED: Install canceled by user]
+
+[exit-code] 1
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        a6aaf1b com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 63aaf5f
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        a6aaf1b com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter ae5cdac
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        aa8f8b8 com.amaia23.hydracam/.MainActivity filter e420bfe
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        c0a2691 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter b84e27b
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        c0a2691 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 78b2a75
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        c0a2691 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 8aeea0a
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        c0a2691 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter ab81898
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (47601ff):
+    sourcePackage=com.amaia23.hydracam
+    uid=10452 gids=null type=0 prot=signature
+    perm=Permission{d38c9f6 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    packageSetting=PackageSetting{6d44e15 com.amaia23.hydracam/10452}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{8fb21f7 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{8fb21f7 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{350e864 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 235
+
+Packages:
+  Package [com.amaia23.hydracam] (6d44e15):
+    userId=10452
+    pkg=Package{1999acd com.amaia23.hydracam}
+    codePath=/data/app/com.amaia23.hydracam-EVLCDXMmHWI149o5mMK7nQ==
+    resourcePath=/data/app/com.amaia23.hydracam-EVLCDXMmHWI149o5mMK7nQ==
+    legacyNativeLibraryDir=/data/app/com.amaia23.hydracam-EVLCDXMmHWI149o5mMK7nQ==/lib
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    versionCode=16 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=ApplicationInfo{350e864 com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE ]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 09:34:05
+    firstInstallTime=2026-06-07 14:42:09
+    lastUpdateTime=2026-06-09 09:34:09
+    signatures=PackageSignatures{63431f7 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_EXTERNAL_STORAGE: restricted=true
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=593822 installed=true hidden=false suspended=false stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+    User 10: ceDataInode=853596 installed=true hidden=false suspended=false stopped=true notLaunched=true enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+SkippingApks:
+  name : (eBay)_idapk-1.0.0.26-2-DE-CS.apk
+  name : 100Game_MOVISTAR_4x3_KU84_2009_2.0.9.apk
+  name : 204_companion-release.apk
+  name : ATL_5.12.9_MiVF_Oct19.apk
+  name : Adalyst_v2.1_9_23.apk
+  name : AirtelStub.apk
+  name : AmazonMDIP-Android-1.0.51.0-release-signed-Sh-DE.apk
+  name : CLAROAPPS_STUB_1_0_0.apk
+  name : CLiP.apk
+  name : CNX_newMcare_AUTH_PROD_v3.3.7.apk
+  name : ClaroContenedor_Stub.apk
+  name : ClaroJuegos_Stub.apk
+  name : CnnPanel.apk
+  name : Ebay_Carrier_ID_AT_TR.apk
+  name : EweMBMSServer_TEL.apk
+  name : FBInstagram_stub.apk
+  name : FBMessenger_stub.apk
+  name : FlipboardBriefing.apk
+  name : HPSClient.apk
+  name : Ignite-globeIgniteAgent_7.1.196-5368_release.apk
+  name : Ignite-singtelIgniteAgent_6.1.037-4944_release.apk
+  name : KT114Provider2.apk
+  name : KTCustomerService.apk
+  name : KTHiddenMenu.apk
+  name : KTOneStore.apk
+  name : KTPushNotiService.apk
+  name : KTServiceAgent.apk
+  name : KTServiceMenu.apk
+  name : LGUGPSnWPS.apk
+  name : LGUHiddenMenu.apk
+  name : LGUMiniCustomerCenter.apk
+  name : LGUOZStore.apk
+  name : LGUSetting.apk
+  name : LGUplusTsmProxy.apk
+  name : LinkedIn_SamsungStub.apk
+  name : MTL_A1-selfcare-app.apk
+  name : MiClaro_CDR_v5.1.apk
+  name : MiClaro_CENAM_v2.0.1.apk
+  name : MiClaro_CTI_v1.2.0-111.apk
+  name : MiClaro_ECO_v3.6.1.apk
+  name : MiClaro_PCT_v1.5.3_build67.apk
+  name : MinhaClaro_v5.0.3-28.apk
+  name : MundoTigoRRO_07122016.apk
+  name : MundoTigo_v2.3.apk
+  name : MyApps-1.6.1-logoff-obson-prodMyAppsRelease.apk
+  name : MyGalaxy.apk
+  name : MySingtel_v7.5.apk
+  name : NaverV_N.apk
+  name : OMN_MyVodafone_11.3.0_preprodStore_store.apk
+  name : OPENMarketHiddenMenu.apk
+  name : Omc.apk
+  name : OnStartNotification_v20.apk
+  name : OneStoreService.apk
+  name : Portal_Stub.apk
+  name : ProductSearch.apk
+  name : RRO_AMX_stk1.apk
+  name : RRO_AMX_stk2.apk
+  name : SEIOAgent.apk
+  name : SFRJeux-8.0.4-logoff-obson-sfrjeuxRelease.apk
+  name : SKTHiddenMenu.apk
+  name : SKTMemberShip.apk
+  name : SKTOneStore.apk
+  name : SafetyCleaner.apk
+  name : SamsungClub_CTP_v1.0.apk
+  name : SamsungConcierge_stub.apk
+  name : SktUsimService.apk
+  name : SmartPush.apk
+  name : TCL_MyVodafone_4.3.7.apk
+  name : TPhoneOnePackage.apk
+  name : TPhoneSetup.apk
+  name : TelcelContenedorStub.apk
+  name : UWT_STK_RRO_v1.1_20160113.apk
+  name : UserManual.apk
+  name : VD2_app-productionflavor-storeRelease_92004.apk
+  name : VDC_com.zentity.vodafone-3.5.1_20181011.apk
+  name : VDH_MAH-app-ProductionFlavor-release-2-9-104.apk
+  name : VDI_vfie-117-prd1.apk
+  name : VGR_Release-4.7.13.0-5854AL-REL-app.apk
+  name : VOD_app-release_MVA10.apk
+  name : Vivo_Apps_Clube-v1.19.112-263-release.apk
+  name : WhatsAppDownloader.apk
+  name : Yandex_Search_10.51.apk
+  name : ZVV_STK2_RRO.apk
+  name : ZVV_STK_RRO.apk
+  name : appcloud_oobe_hutchison-release_V3.20.1.0.apk
+  name : apps_brasil_signed_aligned.apk
+  name : downloadsvivo-1-10-10-1.apk
+  name : idapk-1.0.0.2-1.apk
+  name : idapk-1.0.0.43-92.apk
+  name : instagram-stub.apk
+  name : miClaroPeru_Stub.apk
+  name : miClaro_COM_Stub.apk
+  name : miTelcel_Stub.apk
+  name : mobileTworld.apk
+  name : samsung_club_uy_access_release_v1_3.apk
+  name : signatureClub.apk
+  name : ubank_samsung.apk
+  name : vivo-maisapps-2.5.9.apk
+  name : wapp-2_0_0-33-unsigned-signed.apk
+  name : SearchSelector.apk
+
+Package Changes:
+  Sequence number=1163
+  User 0:
+    seq=0, package=com.google.android.inputmethod.latin
+    seq=44, package=com.microsoft.appmanager
+    seq=91, package=com.google.android.gms
+    seq=93, package=com.samsung.android.lool
+    seq=249, package=com.google.android.apps.maps
+    seq=250, package=com.android.chrome
+    seq=251, package=com.google.android.trichromelibrary_782705933
+    seq=268, package=com.google.android.apps.nbu.files
+    seq=269, package=com.google.android.projection.gearhead
+    seq=848, package=com.google.android.webview
+    seq=1046, package=com.android.vending
+    seq=1090, package=com.samsung.android.forest
+    seq=1119, package=com.google.android.apps.docs
+    seq=1161, package=com.facebook.appmanager
+    seq=1162, package=com.amaia23.hydracam
+  User 10:
+    seq=115, package=com.google.android.gms
+    seq=134, package=com.google.android.gm
+    seq=249, package=com.google.android.apps.maps
+    seq=250, package=com.android.chrome
+    seq=252, package=com.google.android.trichromelibrary_782705933
+    seq=269, package=com.google.android.projection.gearhead
+    seq=848, package=com.google.android.webview
+    seq=932, package=com.samsung.android.mobileservice
+    seq=1046, package=com.android.vending
+    seq=1162, package=com.amaia23.hydracam
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/com.amaia23.hydracam-EVLCDXMmHWI149o5mMK7nQ==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 2667
+
+Active APEX packages:
+
+
+Inactive APEX packages:
+
+
+Factory APEX packages:
+
+
+  APEX session state:
+
+Active install Logging info:
+  []
+    1780826014186: "Ver":"", "Session":"1", 
+
+Historical install Logging info(9/10):
+  [com.android.vending]
+    1780954733208: "Ver":"85172120", "Session":"0", "Write":"3274", "Write":"806", "Write":"789", "Write":"342", "Write"
+    :"534", "Commit":"22304", "Stage":"27", "Init":"383", "Verified(Unknown)":"154", "Verified(Unknown)":"142", "Copy":"
+    65", "Sign":"9", "DexOpt":"333", 
+  [com.google.android.webview]
+    1780911567315: "Ver":"782704803", "Session":"0", "Write":"5674", "Write":"14495", "Commit":"32993", "Stage":"35", "I
+    nit":"377", "Verified(Unknown)":"143", "Verified(Unknown)":"202", "Copy":"28", "Sign":"6", "DexOpt":"708", 
+  [com.amaia23.hydracam]
+    1780990435869: "Ver":"16", "Session":"0", "Write":"18", "Commit":"9566", "Stage":"11", "Init":"407", "Verified(Unkno
+    wn)":"3028", "Verified(Unknown)":"154", "Copy":"49", "Sign":"12", "DexOpt":"594", 
+[exit-code] 0
+
+$ adb -s 575ecf2cbd24 shell dumpsys package com.amaia23.hydracam
+Unable to find package: com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        20a508c com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter b3723d5
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        20a508c com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter f2357ea
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        2e15bde com.amaia23.hydracam/.MainActivity filter fa5f1bf
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        fd1eadb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter bd708b6
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        fd1eadb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 251e978
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        fd1eadb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter cd32851
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        fd1eadb com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 1fa59b7
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (5b668ad):
+    sourcePackage=com.amaia23.hydracam
+    uid=10325 gids=[] type=0 prot=signature
+    perm=PermissionInfo{55d77e2 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{e1f1773 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{e1f1773 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{2543630 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 58
+
+Packages:
+  Package [com.amaia23.hydracam] (37ffded):
+    userId=10325
+    pkg=Package{f7de2a9 com.amaia23.hydracam}
+    codePath=/data/app/~~feFauXJPms4G0sDFDCsLxQ==/com.amaia23.hydracam-VXfY-mW3582jsjEC8gS_Lw==
+    resourcePath=/data/app/~~feFauXJPms4G0sDFDCsLxQ==/com.amaia23.hydracam-VXfY-mW3582jsjEC8gS_Lw==
+    legacyNativeLibraryDir=/data/app/~~feFauXJPms4G0sDFDCsLxQ==/com.amaia23.hydracam-VXfY-mW3582jsjEC8gS_Lw==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=16 minSdk=24 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.4.0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=PackageImpl{f7de2a9 com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    queriesIntents=[Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:///... }]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 09:37:00
+    firstInstallTime=2026-06-07 00:07:29
+    lastUpdateTime=2026-06-09 09:37:03
+    signatures=PackageSignatures{c15ceb3 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=1363 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+SkippingApks:
+  name : 100Game_PERSONAL_4x4_PF36_2009_2.0.2.apk
+  name : 149_companion-release.apk
+  name : 4.4.4.Agosto(175).apk
+  name : AirtelStub.apk
+  name : AlticeMusic_2.3.apk
+  name : AmazonMDIP-Android-1.0.51.0-42010-release-signed-UK-KnShMu-201806.apk
+  name : AmazonMDIP-AndroidApp-release-signed-3ATITUK-SP-AV-102020.apk
+  name : AmazonShopping-32bit.apk
+  name : ClaroContenedor_Full.apk
+  name : ClaroJuegos_FULL.apk
+  name : ClaroJuegos_FULL_MX.apk
+  name : CnnPanel.apk
+  name : Ebay_Carrier_ID_AT_TR.apk
+  name : EntelPlay_6.3.apk
+  name : FBInstagram_stub.apk
+  name : FBMessenger_stub.apk
+  name : FlipboardBriefing.apk
+  name : HPSClient.apk
+  name : ITracker.apk
+  name : Ignite-globeIgniteAgent_5.4.037-4583_release.apk
+  name : Ignite-singtelIgniteAgent_6.1.037-4944_release.apk
+  name : Ignite-telefonica.apk
+  name : KT114Provider2.apk
+  name : KTCustomerService.apk
+  name : KTCustomerService_v060302.apk
+  name : KTHiddenMenu.apk
+  name : KTOneStore.apk
+  name : KTPushNotiService.apk
+  name : KTServiceAgent.apk
+  name : KTServiceMenu.apk
+  name : LGUGPSnWPS.apk
+  name : LGUHiddenMenu.apk
+  name : LGUMiniCustomerCenter.apk
+  name : LGUOZStore.apk
+  name : LGUplusTsmProxy.apk
+  name : MDIP.apk
+  name : MaftPreloadManagerAndroidApp-MovistarMX.apk
+  name : MaftPreloadManagerAndroidApp-TEF_LATAM.apk
+  name : MaftPreloadManagerAndroidApp-release-signed-tagged.apk
+  name : MeinVF-signed-7.7.5.apk
+  name : MeuTIM.apk
+  name : MinhaOi.apk
+  name : Multi_SKU_MDIP-mshop-android-optus-all-all-all-pre.apk
+  name : Musica_VIVA_v1.1.apk
+  name : MyApps-1.7.2-logoff-obson-prodMyAppsRelease.apk
+  name : MyGalaxy.apk
+  name : MySingtel_v7.4.apk
+  name : MyVodafone-production-R7.3_28_08_2018.apk
+  name : MyVodafone_10.3.0_prodStore_store.apk
+  name : My_A1_v3.0.0_prod.apk
+  name : My_Vodafone_4.2.0.apk
+  name : NaverV_N.apk
+  name : OPENMarketHiddenMenu.apk
+  name : OiApps.apk
+  name : OiAppsClube.apk
+  name : OiRecarga.apk
+  name : OiWiFi.apk
+  name : Omc.apk
+  name : OnStart_Notification_V30.apk
+  name : OneStoreService.apk
+  name : ProductSearch.apk
+  name : RRO_AMX_stk1.apk
+  name : RRO_AMX_stk2.apk
+  name : SEIOAgent.apk
+  name : SFRJeux-8.2.2-logoff-obson-sfrjeuxRelease.apk
+  name : SKTFindLostPhone.apk
+  name : SKTHiddenMenu.apk
+  name : SKTMemberShip.apk
+  name : SKTOneStore.apk
+  name : SYSdll.apk
+  name : SafetyCleaner.apk
+  name : SelfCareMobile-6.0.3-prod-signed.apk
+  name : SktUsimService.apk
+  name : SmartPush.apk
+  name : TPhoneOnePackage.apk
+  name : TPhoneSetup.apk
+  name : TelcelContenedor_Full.apk
+  name : UserManual.apk
+  name : VivoAppsClube.apk
+  name : VivoMaisApps.apk
+  name : WhatsAppDownloader.apk
+  name : ZVV_STK2_RRO.apk
+  name : ZVV_STK_RRO.apk
+  name : appcloud_oobe_hutchison-release_V3.24.3.0.apk
+  name : appcloud_oobe_samsungVodafone-release_V5.2.4.6.apk
+  name : che_notification_6.1.apk
+  name : com.zentity.vodafone-3.5.1_20181011.apk
+  name : entel_peru_7-6-1.apk
+  name : idapk-1.0.0.2-1.apk
+  name : idapk-1.0.0.75-92.apk
+  name : instagram-stub-BR.apk
+  name : instagram-stub_45-1-22.apk
+  name : instagram-stub_52-0-3.apk
+  name : instagram_stub.apk
+  name : kolbi_5.0.19.apk
+  name : messenger-stub-BR.apk
+  name : messenger-stub_45-1-22.apk
+  name : messenger-stub_52-0-3.apk
+  name : miTelcel_Stub.apk
+  name : mobileTworld.apk
+  name : myflow_cww_6-9-0-174.apk
+  name : noticias_aro_146.apk
+  name : rro_psn_stk1.apk
+  name : rro_uwt_srk1.apk
+  name : rro_uwt_stk2.apk
+  name : rro_ztm_stk1.apk
+  name : rro_ztm_stk2.apk
+  name : rro_ztr_stk1.apk
+  name : rro_ztr_stk2.apk
+  name : tickantel_1-8-1.apk
+  name : trendy_aro_28.apk
+  name : tuapp_4-0-2-4.apk
+  name : veramas_1-17-5.apk
+  name : veratv_2-4-0.apk
+  name : vfgr-myvf-4.6.3.1-3568AL-d180791-REL.apk
+  name : yandex.search.apk
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+    [com.samsung.android.bixby.service,com.samsung.android.bixby.agent]:
+      com.amaia23.hydracam
+    de.axelspringer.yana.zeropage:
+      com.amaia23.hydracam
+    com.facebook.katana:
+      com.amaia23.hydracam
+    com.amaia23.hydracam:
+      com.microsoft.skydrive
+      com.google.android.googlequicksearchbox
+      com.android.chrome
+      com.google.android.setupwizard
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Package Changes:
+  Sequence number=95
+  User 0:
+    seq=1, package=com.sec.unifiedwfc
+    seq=13, package=com.sec.android.app.samsungapps
+    seq=19, package=com.samsung.android.sm.policy
+    seq=21, package=com.google.android.trichromelibrary_768017733
+    seq=22, package=com.android.chrome
+    seq=23, package=com.google.android.gms
+    seq=25, package=com.gombosdev.ampere
+    seq=27, package=com.google.android.as.oss
+    seq=30, package=com.google.ar.core
+    seq=33, package=com.google.android.googlequicksearchbox
+    seq=34, package=com.google.android.apps.restore
+    seq=36, package=com.google.android.apps.tachyon
+    seq=38, package=com.google.android.tts
+    seq=39, package=com.google.android.projection.gearhead
+    seq=47, package=com.google.android.youtube
+    seq=48, package=com.google.android.apps.maps
+    seq=49, package=com.google.android.gm
+    seq=82, package=com.samsung.android.networkdiagnostic
+    seq=87, package=com.samsung.android.forest
+    seq=89, package=com.osp.app.signin
+    seq=92, package=com.android.vending
+    seq=93, package=com.microsoft.appmanager
+    seq=94, package=com.amaia23.hydracam
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/~~feFauXJPms4G0sDFDCsLxQ==/com.amaia23.hydracam-VXfY-mW3582jsjEC8gS_Lw==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+HeimdAllFS state:
+  HeimdAllFS does not supported.
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 6106
+
+Active install Logging info:
+  []
+    1780785391390: "Ver":"", "Session":"0", "Write":"1993", "Write":"1963", "Write":"431", 
+
+Historical install Logging info(9/10):
+  []
+    1780990613626: "Ver":"", "Session":"0", "Write":"16", "Commit":"10083", "Stage":"0", "Copy":"19", "Sign":"18", "DexO
+    pt":"1", 
+Snapshot statistics
+   Unrecorded-hits: 1502  Cork-level: 0
+   Summary stats               TotBlds     TotUsed     TotCork     BigBlds    ShortLvd     TotTime     MaxTime
+          0:45         now           6       88207           0           0           2           6           3
+          1:45        0:45           0           0           0           0           0           0           0
+          2:45        1:45           0           0           0           0           0           0           0
+          3:45        2:45           0           0           0           0           0           0           0
+          4:45        3:45           0           0           0           0           0           0           0
+          5:45        4:45           0           0           0           0           0           0           0
+          6:45        5:45           0           0           0           0           0           0           0
+          7:45        6:45           0           0           0           0           0           0           0
+          8:45        7:45           0           0           0           0           0           0           0
+          9:45        8:45           0           0           0           0           0           0           0
+    2:09:35:10         now        1210     7826738           0          34         160        1623          43
+
+   Build times                  <= 1ms      <= 2ms      <= 5ms     <= 10ms     <= 20ms     <= 50ms    <= 100ms     > 100ms
+          0:45         now           5           0           1           0           0           0           0           0
+          1:45        0:45           0           0           0           0           0           0           0           0
+          2:45        1:45           0           0           0           0           0           0           0           0
+          3:45        2:45           0           0           0           0           0           0           0           0
+          4:45        3:45           0           0           0           0           0           0           0           0
+          5:45        4:45           0           0           0           0           0           0           0           0
+          6:45        5:45           0           0           0           0           0           0           0           0
+          7:45        6:45           0           0           0           0           0           0           0           0
+          8:45        7:45           0           0           0           0           0           0           0           0
+          9:45        8:45           0           0           0           0           0           0           0           0
+    2:09:35:10         now        1087          49          32          10          19          13           0           0
+
+   Use counters                   <= 1        <= 2        <= 5       <= 10       <= 20       <= 50      <= 100       > 100
+          0:45         now           2           0           0           0           0           0           0           4
+          1:45        0:45           0           0           0           0           0           0           0           0
+          2:45        1:45           0           0           0           0           0           0           0           0
+          3:45        2:45           0           0           0           0           0           0           0           0
+          4:45        3:45           0           0           0           0           0           0           0           0
+          5:45        4:45           0           0           0           0           0           0           0           0
+          6:45        5:45           0           0           0           0           0           0           0           0
+          7:45        6:45           0           0           0           0           0           0           0           0
+          8:45        7:45           0           0           0           0           0           0           0           0
+          9:45        8:45           0           0           0           0           0           0           0           0
+    2:09:35:10         now         153           0           6          16          26          85          98         825
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        4feb3e3 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 1e86396
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        4feb3e3 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter a4e4b17
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        fd3f1e0 com.amaia23.hydracam/.MainActivity filter bf7a2b1
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        4306c99 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 177863b
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        4306c99 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 86b835
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        4306c99 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 37ac4ca
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        4306c99 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 76c5158
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (84524a8):
+    sourcePackage=com.amaia23.hydracam
+    uid=10193 gids=null type=0 prot=signature
+    perm=Permission{10b0b5e com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    packageSetting=PackageSetting{2952f66 com.amaia23.hydracam/10193}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{7deab3f com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{7deab3f com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{3b64c0c com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 37
+
+Packages:
+  Package [com.amaia23.hydracam] (2952f66):
+    userId=10193
+    pkg=Package{d123955 com.amaia23.hydracam}
+    codePath=/data/app/com.amaia23.hydracam-sNg80b-NBgWWvXde2JDKaw==
+    resourcePath=/data/app/com.amaia23.hydracam-sNg80b-NBgWWvXde2JDKaw==
+    legacyNativeLibraryDir=/data/app/com.amaia23.hydracam-sNg80b-NBgWWvXde2JDKaw==/lib
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    dexMode=unknown
+    versionCode=16 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=ApplicationInfo{3b64c0c com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 09:36:01
+    firstInstallTime=2026-06-07 02:45:12
+    lastUpdateTime=2026-06-09 09:36:13
+    signatures=PackageSignatures{534dbf2 [1d1013c1]}
+    installPermissionsFixed=true installStatus=1
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=522674 installed=true hidden=false suspended=false stopped=false notLaunched=false enabled=0 instant=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true
+        android.permission.READ_EXTERNAL_STORAGE: granted=true
+        android.permission.ACCESS_COARSE_LOCATION: granted=true
+        android.permission.CAMERA: granted=true
+        android.permission.WRITE_EXTERNAL_STORAGE: granted=true
+        android.permission.RECORD_AUDIO: granted=true
+mSkippingApks:
+  package : YahooEdgeNews.apk
+  package : FlipboardBriefing.apk
+  package : GalaxyCare.apk
+  package : SamsungPayStub.apk
+  package : AndroidPay_erasable_Hero.apk
+  package : CnnPanel.apk
+  package : NaverV_N.apk
+  package : UnifiedWFC.apk
+  package : OMCAgent.apk
+  package : SamsungUpdates.apk
+  package : AirtelStub.apk
+  package : KT114Provider.apk
+
+Package Changes:
+  Sequence number=329
+  User 0:
+    seq=23, package=com.samsung.android.contacts
+    seq=66, package=com.google.android.gms
+    seq=74, package=com.microsoft.skydrive
+    seq=298, package=com.facebook.appmanager
+    seq=326, package=com.google.android.apps.docs
+    seq=328, package=com.amaia23.hydracam
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    Instruction Set: arm64
+      path: /data/app/com.amaia23.hydracam-sNg80b-NBgWWvXde2JDKaw==/base.apk
+      status: /data/app/com.amaia23.hydracam-sNg80b-NBgWWvXde2JDKaw==/oat/arm64/base.odex[status=kOatUpToDate, compilati
+      on_filter=quicken]
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 5661
+
+
+Package White/Blacklist Metadata:
+
+Historical install Logging info(2/10):
+  [com.amaia23.hydracam]
+    1780990548931: "Ver":"16", "Session":"0", "Write":"15", "Commit":"13160", "Stage":"545", "Init":"390", "Verified(Unk
+    nown)":"4084", "Verified(Unknown)":"209", "Copy":"43", "Sign":"23", "DexOpt":"5675", 
+
+-------- coreapps list --------
+com.sec.location.nsflp2:/system/priv-app/NSFusedLocation_v3.2
+com.google.android.ext.services:/system/priv-app/GoogleExtServices
+com.android.providers.telephony:/system/priv-app/SecTelephonyProvider
+com.google.android.ext.shared:/system/app/GoogleExtShared
+com.samsung.android.incallui:/system/priv-app/SamsungInCallUI
+com.samsung.android.knox.containercore:/system/priv-app/KnoxCore
+com.sec.vsimservice:/system/app/vsimservice
+org.simalliance.openmobileapi.service:/system/app/SmartcardService
+com.android.mms.service:/system/priv-app/MmsService
+com.samsung.ucs.agent.boot:/system/app/bootagent
+com.android.defcontainer:/system/priv-app/DefaultContainerService
+com.sec.ims:/system/priv-app/ImsTelephonyService
+com.sec.sve:/system/app/sveservice
+com.samsung.android.SettingsReceiver:/system/priv-app/SettingsReceiver
+android:/system/framework/framework-res.apk
+com.android.providers.settings:/system/priv-app/SecSettingsProvider
+com.sec.imsservice:/system/priv-app/imsservice
+com.android.inputdevices:/system/priv-app/InputDevices
+com.samsung.knox.securefolder:/system/priv-app/SecureFolder
+com.samsung.advp.imssettings:/system/app/ImsSettings
+com.sec.android.inputmethod:/system/app/SamsungIMEv3.0
+com.android.server.telecom:/system/priv-app/Telecom
+com.google.android.packageinstaller:/system/priv-app/GooglePackageInstaller
+com.android.proxyhandler:/system/priv-app/ProxyHandler
+com.sec.phone:/system/app/SecFactoryPhoneTest
+com.sec.app.RilErrorNotifier:/system/priv-app/PhoneErrService
+com.android.settings:/system/priv-app/SecSettings
+com.android.phone:/system/priv-app/TeleService
+com.android.shell:/system/priv-app/Shell
+com.android.location.fused:/system/priv-app/FusedLocation
+com.sec.epdg:/system/priv-app/EpdgService
+com.android.systemui:/system/priv-app/SystemUI
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.hydracam:
+        db3532 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter e371283
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+          Authority: "login-callback": -1
+        db3532 com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 968fc00
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.hydracam"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        50fca94 com.amaia23.hydracam/.MainActivity filter 9ea893d
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        67b7c39 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 361d82c
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        67b7c39 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter f83727e
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        67b7c39 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 34e53df
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        67b7c39 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter e8ea2f5
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (cd2b767):
+    sourcePackage=com.amaia23.hydracam
+    uid=10367 gids=[] type=0 prot=signature
+    perm=PermissionInfo{a43a914 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{5cb45bd com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{5cb45bd com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{3fa77b2 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 68
+
+Packages:
+  Package [com.amaia23.hydracam] (2be9f24):
+    userId=10367
+    pkg=Package{7c96303 com.amaia23.hydracam}
+    codePath=/data/app/~~r1n-b__D1Inha1f7zL5bKA==/com.amaia23.hydracam-x6IhBqIOwP9yId_Y84J8NQ==
+    resourcePath=/data/app/~~r1n-b__D1Inha1f7zL5bKA==/com.amaia23.hydracam-x6IhBqIOwP9yId_Y84J8NQ==
+    legacyNativeLibraryDir=/data/app/~~r1n-b__D1Inha1f7zL5bKA==/com.amaia23.hydracam-x6IhBqIOwP9yId_Y84J8NQ==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=16 minSdk=24 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.4.0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=PackageImpl{7c96303 com.amaia23.hydracam}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    queriesIntents=[Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:///... }]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-06-09 09:36:36
+    firstInstallTime=2026-06-07 14:44:29
+    lastUpdateTime=2026-06-09 09:36:40
+    signatures=PackageSignatures{c8f0442 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=2689898 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+SkippingApks:
+  name : 100Game_PERSONAL_4x4_PF36_2009_2.0.2.apk
+  name : 149_companion-release.apk
+  name : 4.4.4.Agosto(175).apk
+  name : AirtelStub.apk
+  name : AlticeMusic_2.3.apk
+  name : AmazonMDIP-Android-1.0.51.0-42010-release-signed-UK-KnShMu-201806.apk
+  name : AmazonMDIP-AndroidApp-release-signed-3ATITUK-SP-AV-102020.apk
+  name : AmazonShopping-32bit.apk
+  name : ClaroContenedor_Full.apk
+  name : ClaroJuegos_FULL.apk
+  name : ClaroJuegos_FULL_MX.apk
+  name : CnnPanel.apk
+  name : Ebay_Carrier_ID_AT_TR.apk
+  name : EntelPlay_6.3.apk
+  name : FBInstagram_stub.apk
+  name : FBMessenger_stub.apk
+  name : FlipboardBriefing.apk
+  name : HPSClient.apk
+  name : ITracker.apk
+  name : Ignite-globeIgniteAgent_5.4.037-4583_release.apk
+  name : Ignite-singtelIgniteAgent_6.1.037-4944_release.apk
+  name : Ignite-telefonica.apk
+  name : KT114Provider2.apk
+  name : KTCustomerService.apk
+  name : KTCustomerService_v060302.apk
+  name : KTHiddenMenu.apk
+  name : KTOneStore.apk
+  name : KTPushNotiService.apk
+  name : KTServiceAgent.apk
+  name : KTServiceMenu.apk
+  name : LGUGPSnWPS.apk
+  name : LGUHiddenMenu.apk
+  name : LGUMiniCustomerCenter.apk
+  name : LGUOZStore.apk
+  name : LGUplusTsmProxy.apk
+  name : MDIP-TIM_O2UK_DTDE_VFAU_OPTUSAU_3IT_sdk-30.apk
+  name : MDIP.apk
+  name : MaftPreloadManagerAndroidApp-MovistarMX.apk
+  name : MaftPreloadManagerAndroidApp-TEF_LATAM.apk
+  name : MaftPreloadManagerAndroidApp-release-signed-tagged.apk
+  name : MeinVF-signed-7.7.5.apk
+  name : MeuTIM.apk
+  name : MinhaOi.apk
+  name : Multi_SKU_MDIP-mshop-android-optus-all-all-all-pre.apk
+  name : Musica_VIVA_v1.1.apk
+  name : MyApps-1.7.2-logoff-obson-prodMyAppsRelease.apk
+  name : MyGalaxy.apk
+  name : MySingtel_v7.4.apk
+  name : MyVodafone-production-R7.3_28_08_2018.apk
+  name : MyVodafone_10.3.0_prodStore_store.apk
+  name : My_A1_v3.0.0_prod.apk
+  name : My_Vodafone_4.2.0.apk
+  name : NaverV_N.apk
+  name : OPENMarketHiddenMenu.apk
+  name : OiApps.apk
+  name : OiAppsClube.apk
+  name : OiRecarga.apk
+  name : OiWiFi.apk
+  name : Omc.apk
+  name : OnStart_Notification_V30.apk
+  name : OneStoreService.apk
+  name : ProductSearch.apk
+  name : RRO_AMX_stk1.apk
+  name : RRO_AMX_stk2.apk
+  name : SEIOAgent.apk
+  name : SFRJeux-8.2.2-logoff-obson-sfrjeuxRelease.apk
+  name : SKTFindLostPhone.apk
+  name : SKTHiddenMenu.apk
+  name : SKTMemberShip.apk
+  name : SKTOneStore.apk
+  name : SYSdll.apk
+  name : SafetyCleaner.apk
+  name : SelfCareMobile-6.0.3-prod-signed.apk
+  name : SktUsimService.apk
+  name : SmartPush.apk
+  name : TPhoneOnePackage.apk
+  name : TPhoneSetup.apk
+  name : TelcelContenedor_Full.apk
+  name : UserManual.apk
+  name : VivoAppsClube.apk
+  name : VivoMaisApps.apk
+  name : WhatsAppDownloader.apk
+  name : ZVV_STK2_RRO.apk
+  name : ZVV_STK_RRO.apk
+  name : appcloud_oobe_hutchison-release_V3.24.3.0.apk
+  name : appcloud_oobe_samsungDeutscheTelekom-release_V5.2.4.1.apk
+  name : appcloud_oobe_samsungVodafone-release_V5.2.4.6.apk
+  name : che_notification_6.1.apk
+  name : com.zentity.vodafone-3.5.1_20181011.apk
+  name : entel_peru_7-6-1.apk
+  name : idapk-1.0.0.2-1.apk
+  name : idapk-1.0.0.75-92.apk
+  name : instagram-stub-BR.apk
+  name : instagram-stub_45-1-22.apk
+  name : instagram-stub_52-0-3.apk
+  name : instagram_stub.apk
+  name : kolbi_5.0.19.apk
+  name : messenger-stub-BR.apk
+  name : messenger-stub_45-1-22.apk
+  name : messenger-stub_52-0-3.apk
+  name : miTelcel_Stub.apk
+  name : mobileTworld.apk
+  name : myflow_cww_6-9-0-174.apk
+  name : noticias_aro_146.apk
+  name : rro_psn_stk1.apk
+  name : rro_uwt_srk1.apk
+  name : rro_uwt_stk2.apk
+  name : rro_ztm_stk1.apk
+  name : rro_ztm_stk2.apk
+  name : rro_ztr_stk1.apk
+  name : rro_ztr_stk2.apk
+  name : tickantel_1-8-1.apk
+  name : trendy_aro_28.apk
+  name : tuapp_4-0-2-4.apk
+  name : veramas_1-17-5.apk
+  name : veratv_2-4-0.apk
+  name : vfgr-myvf-4.6.3.1-3568AL-d180791-REL.apk
+  name : yandex.search.apk
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+    [com.samsung.android.bixby.service,com.samsung.android.bixby.agent]:
+      com.amaia23.hydracam
+    de.axelspringer.yana.zeropage:
+      com.amaia23.hydracam
+    com.facebook.katana:
+      com.amaia23.hydracam
+    com.whatsapp:
+      com.amaia23.hydracam
+    com.app.tgtg:
+      com.amaia23.hydracam
+    com.revolut.revolut:
+      com.amaia23.hydracam
+    [com.samsung.android.app.watchmanager,com.samsung.android.waterplugin]:
+      com.amaia23.hydracam
+    com.amaia23.hydracam:
+      com.microsoft.skydrive
+      com.google.android.googlequicksearchbox
+      com.android.chrome
+      com.google.android.setupwizard
+      com.google.android.apps.docs
+      com.lidl.eci.lidlplus
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Package Changes:
+  Sequence number=617
+  User 0:
+    seq=11, package=com.google.android.partnersetup
+    seq=15, package=com.google.android.gms
+    seq=71, package=com.app.tgtg
+    seq=87, package=com.google.android.youtube
+    seq=88, package=com.google.android.apps.maps
+    seq=89, package=com.google.android.apps.tachyon
+    seq=107, package=com.google.android.as.oss
+    seq=160, package=com.google.android.projection.gearhead
+    seq=176, package=com.openai.chatgpt
+    seq=279, package=com.lidl.eci.lidlplus
+    seq=539, package=de.number26.android
+    seq=563, package=com.sec.unifiedwfc
+    seq=592, package=com.android.bluetooth
+    seq=594, package=com.samsung.android.forest
+    seq=610, package=com.google.android.apps.docs
+    seq=612, package=com.samsung.android.sm.policy
+    seq=615, package=com.microsoft.appmanager
+    seq=616, package=com.amaia23.hydracam
+
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/~~r1n-b__D1Inha1f7zL5bKA==/com.amaia23.hydracam-x6IhBqIOwP9yId_Y84J8NQ==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+HeimdAllFS state:
+  HeimdAllFS does not supported.
+
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 6076
+
+Active install Logging info:
+  []
+    1780769176173: "Ver":"", "Session":"0", 
+
+Historical install Logging info(9/10):
+  []
+    1780990589911: "Ver":"", "Session":"0", "Write":"17", "Commit":"10379", "Stage":"0", "Copy":"27", "Sign":"11", "DexO
+    pt":"2", 
+Snapshot statistics
+   Unrecorded-hits: 5384  Cork-level: 0
+   Summary stats               TotBlds     TotUsed     TotCork     BigBlds    ShortLvd     TotTime     MaxTime
+          0:03         now           0           0           0           0           0           0           0
+          1:03        0:03           7      101224           0           0           3           9           7
+          2:03        1:03           0           0           0           0           0           0           0
+          3:03        2:03           0           0           0           0           0           0           0
+          4:03        3:03           0           0           0           0           0           0           0
+          5:03        4:03           0           0           0           0           0           0           0
+          6:03        5:03           0           0           0           0           0           0           0
+          7:03        6:03           0           0           0           0           0           0           0
+          8:03        7:03           0           0           0           0           0           0           0
+          9:03        8:03           0           0           0           0           0           0           0
+    3:14:59:31         now        1800    13897837           0          23         245        2203          32
+
+   Build times                  <= 1ms      <= 2ms      <= 5ms     <= 10ms     <= 20ms     <= 50ms    <= 100ms     > 100ms
+          0:03         now           0           0           0           0           0           0           0           0
+          1:03        0:03           6           0           0           1           0           0           0           0
+          2:03        1:03           0           0           0           0           0           0           0           0
+          3:03        2:03           0           0           0           0           0           0           0           0
+          4:03        3:03           0           0           0           0           0           0           0           0
+          5:03        4:03           0           0           0           0           0           0           0           0
+          6:03        5:03           0           0           0           0           0           0           0           0
+          7:03        6:03           0           0           0           0           0           0           0           0
+          8:03        7:03           0           0           0           0           0           0           0           0
+          9:03        8:03           0           0           0           0           0           0           0           0
+    3:14:59:31         now        1583          99          74          23          10          11           0           0
+
+   Use counters                   <= 1        <= 2        <= 5       <= 10       <= 20       <= 50      <= 100       > 100
+          0:03         now           0           0           0           0           0           0           0           0
+          1:03        0:03           3           0           0           0           0           0           0           4
+          2:03        1:03           0           0           0           0           0           0           0           0
+          3:03        2:03           0           0           0           0           0           0           0           0
+          4:03        3:03           0           0           0           0           0           0           0           0
+          5:03        4:03           0           0           0           0           0           0           0           0
+          6:03        5:03           0           0           0           0           0           0           0           0
+          7:03        6:03           0           0           0           0           0           0           0           0
+          8:03        7:03           0           0           0           0           0           0           0           0
+          9:03        8:03           0           0           0           0           0           0           0           0
+    3:14:59:31         now         154           1          89          89          64         154         131        1117
+[exit-code] 0
+
+$ python3 scripts/android_wifi_preflight.py --expected-subnet 192.168.178.0/24 --check-only --device 29d816ac550b7ece --device 575ecf2cbd24 --device 9885e6503930304946 --device RF8M21J8XRT --device RF8M90QE7LX --timeout 10
+Expected subnet: 192.168.178.0/24
+[OK] 29d816ac550b7ece SM-G960F Android 10 wlan0=192.168.178.153 wifi_on=2
+  wifi: Security exception: Uid 2000 does not have access to wifi commands
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.153
+[OK] 575ecf2cbd24 2201116PG Android 13 wlan0=192.168.178.132 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.132
+[OK] 9885e6503930304946 SM-G935F Android 8.0.0 wlan0=192.168.178.64 wifi_on=2
+  wifi: No shell command implementation.
+  routes:
+    192.168.178.0/24 dev wlan0  proto kernel  scope link  src 192.168.178.64
+[OK] RF8M21J8XRT SM-G970F Android 12 wlan0=192.168.178.175 wifi_on=2
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.175
+[OK] RF8M90QE7LX SM-G970F Android 12 wlan0=192.168.178.160 wifi_on=2
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.160
+
+All selected Android devices have wlan0 on the expected subnet.
+[exit-code] 0
+
+$ curl --fail --max-time 5 http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","set_role"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   127    0   127    0     0   1300      0 --:--:-- --:--:-- --:--:--  1309
+[exit-code] 0
+
+$ curl --fail --max-time 5 http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","connected_clients","end_session","list_cameras","set_role","start_recording","start_session","stop_recording","take_photo"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   255    0   255    0     0   1092      0 --:--:-- --:--:-- --:--:--  1089
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --runtime-role-switch --role-switch-only --fast-ios-launch --skip-build --skip-install --no-use-latest-warm-summary --no-update-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=192.168.178.168 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104 --physical-ios-port 4762 --target-id 29d816ac550b7ece --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 29d816ac550b7ece --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id 00008101-000A68811E43001E --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --standby-launch-timeout 120 --role-switch-verify-timeout 45 --timeout 180 --collect-role-switch-logs --stage-slaves-after-master-ready --run-dir logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/six-device-current-build-role-switch
++ flutter devices
++ adb devices -l
++ adb -s 29d816ac550b7ece forward --remove-all
++ adb -s 9885e6503930304946 forward --remove-all
++ adb -s RF8M21J8XRT forward --remove-all
++ adb -s RF8M90QE7LX forward --remove-all
++ adb -s 29d816ac550b7ece shell ip -f inet addr show wlan0
++ adb -s 29d816ac550b7ece shell ip route get 1.1.1.1
++ adb -s 9885e6503930304946 shell ip -f inet addr show wlan0
++ adb -s 9885e6503930304946 shell ip route get 1.1.1.1
++ adb -s RF8M21J8XRT shell ip -f inet addr show wlan0
++ adb -s RF8M21J8XRT shell ip route get 1.1.1.1
++ adb -s RF8M90QE7LX shell ip -f inet addr show wlan0
++ adb -s RF8M90QE7LX shell ip route get 1.1.1.1
++ adb -s 29d816ac550b7ece forward tcp:6400 tcp:4762
++ adb -s 9885e6503930304946 forward tcp:6401 tcp:4762
++ adb -s RF8M21J8XRT forward tcp:6402 tcp:4762
++ adb -s RF8M90QE7LX forward tcp:6403 tcp:4762
+6400
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.CAMERA
+6401
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
+6402
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.CAMERA
+6403
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ xcrun devicectl device info processes --device 00008101-000A68811E43001E --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-maayj6g4.json --quiet
++ xcrun devicectl device process terminate --device 00008101-000A68811E43001E --pid 5246 --quiet
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-5kutjvb7.json --quiet
++ adb -s 29d816ac550b7ece shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s 29d816ac550b7ece shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s 29d816ac550b7ece shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 29d816ac550b7ece
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M90QE7LX
++ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 9885e6503930304946
++ adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M21J8XRT
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ xcrun devicectl device process launch --device 00008101-000A68811E43001E --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "00008101-000A68811E43001E"} com.keepeyeonball
++ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
+=== Rotation master 29d816ac550b7ece ===
++ adb -s 29d816ac550b7ece logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s RF8M21J8XRT logcat -d -t 400
++ adb -s RF8M90QE7LX logcat -d -t 400
+=== Rotation master 9885e6503930304946 ===
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s 29d816ac550b7ece logcat -d -t 400
++ adb -s RF8M21J8XRT logcat -d -t 400
++ adb -s RF8M90QE7LX logcat -d -t 400
+=== Rotation master RF8M21J8XRT ===
++ adb -s RF8M21J8XRT logcat -d -t 400
++ adb -s 29d816ac550b7ece logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s RF8M90QE7LX logcat -d -t 400
+=== Rotation master RF8M90QE7LX ===
++ adb -s RF8M90QE7LX logcat -d -t 400
++ adb -s 29d816ac550b7ece logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s RF8M21J8XRT logcat -d -t 400
+=== Rotation master 00008101-000A68811E43001E ===
++ adb -s 29d816ac550b7ece logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s RF8M21J8XRT logcat -d -t 400
++ adb -s RF8M90QE7LX logcat -d -t 400
+=== Rotation master 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 ===
++ adb -s 29d816ac550b7ece logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s RF8M21J8XRT logcat -d -t 400
++ adb -s RF8M90QE7LX logcat -d -t 400
++ xcrun devicectl device info processes --device 00008101-000A68811E43001E --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-lvrzcj_7.json --quiet
++ xcrun devicectl device process terminate --device 00008101-000A68811E43001E --pid 5428 --quiet
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-80eni7hs.json --quiet
++ adb -s 29d816ac550b7ece shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
+logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/six-device-current-build-role-switch
++ adb -s 29d816ac550b7ece forward --remove-all
++ adb -s 9885e6503930304946 forward --remove-all
++ adb -s RF8M21J8XRT forward --remove-all
++ adb -s RF8M90QE7LX forward --remove-all
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell screencap -p /sdcard/hydracam-six-device-29d816ac550b7ece.png
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screencap -p /sdcard/hydracam-six-device-9885e6503930304946.png
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.168:4762/commands/capture_screenshot -H Content-Type:application/json --data name:iphone-six-device-after-role-switch pixelRatio:1 --output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-six-device-screenshot-command.json
+
+[stderr]
+curl: (7) Failed to connect to 192.168.178.168 port 4762 after 1204 ms: Couldn't connect to server
+curl: (6) Could not resolve host: pixelRatio
+[exit-code] 6
+
+$ adb -s RF8M21J8XRT shell screencap -p /sdcard/hydracam-six-device-RF8M21J8XRT.png
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.104:4762/commands/capture_screenshot -H Content-Type:application/json --data name:ipad-six-device-after-role-switch pixelRatio:1 --output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-six-device-screenshot-command.json
+
+[stderr]
+curl: (22) The requested URL returned error: 500
+curl: (6) Could not resolve host: pixelRatio
+[exit-code] 6
+
+$ adb -s RF8M90QE7LX shell screencap -p /sdcard/hydracam-six-device-RF8M90QE7LX.png
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 29d816ac550b7ece
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M21J8XRT
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M90QE7LX
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"00008101-000A68811E43001E"} com.keepeyeonball
+09:44:47  Enabling developer disk image services.
+09:44:47  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
+
+$ curl --fail --max-time 10 http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","set_role"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   127    0   127    0     0   1121      0 --:--:-- --:--:-- --:--:--  1123
+[exit-code] 0
+
+$ sleep 5
+[exit-code] 0
+
+$ curl --fail --max-time 10 http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","connected_clients","end_session","list_cameras","set_role","start_recording","start_session","stop_recording","take_photo"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   255    0   255    0     0   2868      0 --:--:-- --:--:-- --:--:--  2897
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screencap -p /sdcard/hydracam-six-device-9885e6503930304946.png
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell screencap -p /sdcard/hydracam-six-device-29d816ac550b7ece.png
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT shell screencap -p /sdcard/hydracam-six-device-RF8M21J8XRT.png
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.168:4762/commands/capture_screenshot -H Content-Type: application/json --data {"name":"iphone-six-device-after-role-switch","pixelRatio":1} --output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-six-device-screenshot-command.json
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell screencap -p /sdcard/hydracam-six-device-RF8M90QE7LX.png
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.104:4762/commands/capture_screenshot -H Content-Type: application/json --data {"name":"ipad-six-device-after-role-switch","pixelRatio":1} --output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-six-device-screenshot-command.json
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece pull /sdcard/hydracam-six-device-29d816ac550b7ece.png logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-29d816ac550b7ece-six-device.png
+
+[stderr]
+/sdcard/hydracam-six-device-29d816ac550b7ece.png: 1 file pulled, 0 skipped. 12.4 MB/s (50659 bytes in 0.004s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/hydracam-six-device-9885e6503930304946.png logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-9885e6503930304946-six-device.png
+
+[stderr]
+/sdcard/hydracam-six-device-9885e6503930304946.png: 1 file pulled, 0 skipped. 8.2 MB/s (82119 bytes in 0.010s)
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX pull /sdcard/hydracam-six-device-RF8M90QE7LX.png logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-RF8M90QE7LX-six-device.png
+
+[stderr]
+/sdcard/hydracam-six-device-RF8M90QE7LX.png: 1 file pulled, 0 skipped. 14.4 MB/s (207173 bytes in 0.014s)
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT pull /sdcard/hydracam-six-device-RF8M21J8XRT.png logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-RF8M21J8XRT-six-device.png
+
+[stderr]
+/sdcard/hydracam-six-device-RF8M21J8XRT.png: 1 file pulled, 0 skipped. 7.4 MB/s (90863 bytes in 0.012s)
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --source Documents/automation-screenshots/iphone-six-device-after-role-switch-2026-06-09T09-48-54-030423.png --destination logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/iphone-six-device-after-role-switch.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-copy-six-device-screenshot.json --log-output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-copy-six-device-screenshot.log
+09:49:55  Acquired tunnel connection to device.
+09:49:55  Enabling developer disk image services.
+09:49:55  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/iphone-six-device-after-role-switch.png
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents/automation-screenshots/ipad-six-device-after-role-switch-2026-06-09T09-48-55-128241.png --destination logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/ipad-six-device-after-role-switch.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-copy-six-device-screenshot.json --log-output logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-copy-six-device-screenshot.log
+09:49:55  Acquired tunnel connection to device.
+09:49:55  Enabling developer disk image services.
+09:49:56  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/ipad-six-device-after-role-switch.png
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT shell screenrecord --time-limit 4 /sdcard/hydracam-six-device-RF8M21J8XRT.mp4
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT pull /sdcard/hydracam-six-device-RF8M21J8XRT.mp4 logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/video/android-RF8M21J8XRT-six-device-foreground.mp4
+
+[stderr]
+/sdcard/hydracam-six-device-RF8M21J8XRT.mp4: 1 file pulled, 0 skipped. 7.3 MB/s (59862 bytes in 0.008s)
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell rm /sdcard/hydracam-six-device-29d816ac550b7ece.png
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell rm /sdcard/hydracam-six-device-9885e6503930304946.png
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT shell rm /sdcard/hydracam-six-device-RF8M21J8XRT.png /sdcard/hydracam-six-device-RF8M21J8XRT.mp4
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell rm /sdcard/hydracam-six-device-RF8M90QE7LX.png
+[exit-code] 0

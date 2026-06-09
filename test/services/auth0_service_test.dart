@@ -18,6 +18,58 @@ void main() {
     );
   });
 
+  test("Auth0 login uses Android package redirect URI", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final authClient = _FakeAuthClient(
+      response: AuthLoginResponse(
+        accessToken: "android-access-token",
+        idToken: _idToken(
+          email: "android@example.com",
+          picture: "https://example.com/android.png",
+        ),
+        refreshToken: "android-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: _RecordingAuthCredentialStore(),
+    );
+
+    await authService.login();
+
+    expect(
+      authClient.lastLoginRedirectUrl,
+      "com.amaia23.hydracam://login-callback",
+    );
+  });
+
+  test("Auth0 login uses iOS bundle redirect URI", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    final authClient = _FakeAuthClient(
+      response: AuthLoginResponse(
+        accessToken: "ios-access-token",
+        idToken: _idToken(
+          email: "ios@example.com",
+          picture: "https://example.com/ios.png",
+        ),
+        refreshToken: "ios-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: _RecordingAuthCredentialStore(),
+    );
+
+    await authService.login();
+
+    expect(
+      authClient.lastLoginRedirectUrl,
+      "com.keepeyeonball://login-callback",
+    );
+  });
+
   test("Auth0 login persists returned credentials through secure store",
       () async {
     final expiresAt = DateTime.utc(2026, 6, 8, 20);
@@ -120,6 +172,10 @@ void main() {
 
     expect(restored, isTrue);
     expect(authClient.refreshCalls, 1);
+    expect(
+      authClient.lastRefreshRedirectUrl,
+      "com.amaia23.hydracam://login-callback",
+    );
     expect(authClient.lastRefreshToken, "stored-refresh-token");
     expect(authService.accessToken, "refreshed-access-token");
     expect(authService.email, "refreshed@example.com");
@@ -190,6 +246,10 @@ void main() {
 
     expect(authClient.logoutCalls, 1);
     expect(authClient.lastLogoutIdToken, idToken);
+    expect(
+      authClient.lastLogoutRedirectUrl,
+      "com.amaia23.hydracam://login-callback",
+    );
     expect(credentialStore.clearCalls, 1);
     expect(authService.accessToken, isNull);
     expect(authService.email, isNull);
@@ -265,8 +325,11 @@ class _FakeAuthClient implements AuthClient {
   int refreshCalls = 0;
   int loginCalls = 0;
   int logoutCalls = 0;
+  String? lastLoginRedirectUrl;
+  String? lastRefreshRedirectUrl;
   String? lastRefreshToken;
   String? lastLogoutIdToken;
+  String? lastLogoutRedirectUrl;
 
   _FakeAuthClient({required this.response, this.refreshResponse});
 
@@ -278,6 +341,7 @@ class _FakeAuthClient implements AuthClient {
     required List<String> scopes,
   }) async {
     loginCalls += 1;
+    lastLoginRedirectUrl = redirectUrl;
     return response;
   }
 
@@ -290,6 +354,7 @@ class _FakeAuthClient implements AuthClient {
     required String refreshToken,
   }) async {
     refreshCalls += 1;
+    lastRefreshRedirectUrl = redirectUrl;
     lastRefreshToken = refreshToken;
     return refreshResponse ?? response;
   }
@@ -302,6 +367,7 @@ class _FakeAuthClient implements AuthClient {
   }) async {
     logoutCalls += 1;
     lastLogoutIdToken = idToken;
+    lastLogoutRedirectUrl = postLogoutRedirectUrl;
   }
 }
 

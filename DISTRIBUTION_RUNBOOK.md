@@ -1,9 +1,12 @@
 # HydraCam Mobile Distribution Runbook
 
-Last checked against official store docs: 2026-06-04.
+Last checked against official store docs: 2026-06-09.
 
 This runbook covers iPhone App Store/TestFlight distribution and Android Google
 Play distribution for HydraCam.
+
+Latest static/build evidence:
+`logs/verification-runs/20260609-store-readiness-static-build/summary.md`.
 
 ## Current App IDs
 
@@ -12,6 +15,14 @@ Play distribution for HydraCam.
 - Display name: `HydraCam`
 - Current Flutter version: `1.4.0+16`
 - Android target SDK: `35`
+- Last verified default Android AAB SHA-256 (`1.4.0+16`):
+  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`
+- Historical default iOS IPA SHA-256 (`1.4.0+16`, prior to bundled
+  court-fallback and launcher-icon cleanup):
+  `385e08c05b7213b0b5c199a4621198b0d2b0f356034c69f5fa89ebe85ab0dc08`
+- Current-source iOS App Store IPA export is blocked locally until an Apple/iOS
+  Distribution signing identity or Xcode account is available again; no current
+  IPA is kept in `build/ios/ipa/`.
 
 Treat app IDs as permanent once published. Changing either ID creates a different
 store app.
@@ -26,14 +37,50 @@ Do not submit a production build until all gates pass:
 - Real iPhone smoke test passes on the intended release/profile lane. Debug
   launches through Flutter tooling are useful development evidence, but they do
   not prove that the app starts from the Home Screen icon.
-- iOS release build is produced with Xcode 26 or later and the iOS 26 SDK or
-  later, matching Apple's current upload requirement.
+- iOS release build is produced with Xcode 26 or later and an iOS 26 SDK or
+  later, matching Apple's current upload requirement. The current local host
+  reports Xcode `26.5`.
 - Real Android smoke test passes on at least one physical phone.
+- Android release builds use the configured upload keystore only; debug-signing
+  fallback is not allowed for store artifacts, and the built AAB signer
+  certificate must match the published upload-certificate SHA-256 fingerprint.
+- `scripts/check_store_readiness.sh local` verifies the preserved app IDs across
+  platform manifests, Gradle, and fastlane: iOS `com.keepeyeonball`, Android
+  `com.amaia23.hydracam`, Android `minSdk` 24, and Android target/compile SDK
+  at or above 35.
 - Two-device HydraCam workflow passes on the same local network or hotspot:
   master discovery, slave connection, photo capture, video start/stop, local
   save, upload queue, and session end.
-- Store privacy disclosures have been reviewed against the current code and
-  backend behavior.
+- Store privacy disclosures have been reviewed against
+  `docs/control/store-privacy-and-metadata.md`, current code, and backend
+  behavior.
+- The Login screen privacy policy, support, and account-deletion request paths
+  are present. Public HTTPS privacy, support, and account-deletion URLs are
+  configured for store forms and upload preflight. The store build wrapper and
+  fastlane lanes compile those URLs into the app with
+  `HYDRACAM_PRIVACY_POLICY_URL`, `HYDRACAM_SUPPORT_URL`, and
+  `HYDRACAM_ACCOUNT_DELETION_URL`; rebuild after publishing the real URLs.
+- Auth0 mobile callback and logout URLs use app-specific schemes, not the old
+  generic `com.hydracam` scheme: iOS uses
+  `com.keepeyeonball://login-callback`, and Android uses
+  `com.amaia23.hydracam://login-callback` through the Gradle
+  `appAuthRedirectScheme` manifest placeholder. Configure both in Auth0 Allowed
+  Callback URLs and Allowed Logout URLs before beta login testing.
+- `ios/Runner/PrivacyInfo.xcprivacy` is present in the Runner resources phase
+  and matches the current code paths for required-reason APIs and collected
+  app-functionality data.
+- iOS and Android launcher icons are regenerated from
+  `lib/assets/images/icon.png`; referenced iOS app icon files must be real PNG
+  files, and Android launcher icon densities must be present.
+- Web metadata, while outside the mobile store target, must still use HydraCam
+  product naming and description instead of Flutter template text so public
+  links and future web builds are not visibly unfinished.
+- `ios/Runner/Info.plist` declares
+  `ITSAppUsesNonExemptEncryption=false` for the current no-custom-cryptography
+  app, avoiding a repeat App Store Connect missing-compliance prompt on upload.
+- Local macOS signing has an Apple/iOS Distribution identity or a signed-in
+  Xcode account capable of creating one. `scripts/check_store_readiness.sh
+  local` fails this gate when only Apple Development identities are visible.
 
 ## One-Time Apple Setup
 
@@ -50,10 +97,13 @@ Do not submit a production build until all gates pass:
    is the easiest local setup.
 6. Create an App Store Connect API key for automation. Store it outside the repo
    and point fastlane at it with `APP_STORE_CONNECT_API_KEY_PATH`.
-7. Add store metadata:
+7. In Auth0, add `com.keepeyeonball://login-callback` to Allowed Callback URLs
+   and Allowed Logout URLs for the mobile application.
+8. Add store metadata:
    - App name, subtitle, description, keywords.
    - Support URL and marketing URL.
    - Privacy policy URL.
+   - Account deletion URL if Auth0 account creation remains enabled.
    - iPhone screenshots for required device sizes.
    - App Review contact details and demo credentials if login is required.
    - App privacy answers.
@@ -128,8 +178,12 @@ Current recovery evidence from 2026-06-09:
   when registering the package or requesting an upload-key reset.
 - `flutter build appbundle --release` now builds the signed AAB at
   `build/app/outputs/bundle/release/app-release.aab`; latest verified artifact
-  SHA-256:
-  `c4aab71383a76ffe4385a9aea0717a69e4c76b09ba2be1a185c1807651fd210f`.
+  SHA-256 for the default `1.4.0+16` build:
+  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`.
+- The release Gradle config no longer falls back to debug signing. The store
+  readiness preflight verifies `android/key.properties`, the referenced upload
+  keystore, app IDs, Android SDK floor, Android target/compile SDK policy, and
+  the AAB signer fingerprint before upload.
 - Full non-secret evidence:
   `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md`.
 
@@ -164,9 +218,14 @@ Current recovery evidence from 2026-06-09:
    - Content rating questionnaire.
    - Target countries.
    - App access instructions if reviewers need credentials.
-7. Create a Google Play service account for fastlane uploads, grant only the
+7. In Auth0, add `com.amaia23.hydracam://login-callback` to Allowed Callback
+   URLs and Allowed Logout URLs for the mobile application.
+8. Create a Google Play service account for fastlane uploads, grant only the
    needed Play Console permissions, store the JSON key outside the repo, and set
    `GOOGLE_PLAY_JSON_KEY=/absolute/path/to/key.json`.
+9. Use `scripts/android_fastlane.sh` from the repo root when the shell would
+   otherwise choose `/usr/bin/bundle`; that wrapper forces the Homebrew
+   Ruby/Bundler path used by the locked Android fastlane bundle.
 
 Official references:
 
@@ -185,8 +244,11 @@ Official references:
 
 ## Store Privacy Inputs
 
-Verify these before each submission because the real answer depends on backend
-storage and third-party SDK behavior:
+Use `docs/control/store-privacy-and-metadata.md` as the working checklist and
+publish the drafts in `docs/store/` for the privacy policy, support page, and
+account/data deletion page, then verify the final answers before each
+submission because the real answer depends on backend storage and third-party
+SDK behavior:
 
 - Media: photos, videos, and microphone audio are captured and may be uploaded.
 - Location: requested on demand to identify the active recording venue.
@@ -204,21 +266,115 @@ backend, Auth0, and any SDKs included in the release build.
 Use the version in `pubspec.yaml` by default, or override with `BUILD_NAME` and
 `BUILD_NUMBER`.
 
+Known build warnings from Flutter 3.44:
+
+- Android release builds still warn that Gradle `8.10.2`, Android Gradle Plugin
+  `8.7.3`, and Kotlin `2.1.0` will be unsupported by a future Flutter release.
+  A direct bump to Gradle `8.14.5`, AGP `8.11.1`, and Kotlin `2.2.20` was
+  attempted on 2026-06-09, but `flutter build appbundle --release` did not
+  finish in the validation window and was terminated after `652.2s` with exit
+  code `143`. Keep the proven current toolchain for beta artifacts and handle
+  this as an isolated Android toolchain upgrade before it becomes a hard build
+  failure.
+- `url_launcher_android` is pinned to `6.3.23` because `6.3.29+` pulls
+  AndroidX Core `1.17.0` and Browser `1.9.0`, which require Android Gradle
+  Plugin `8.9.1+`. Keep the pin until the Android toolchain upgrade is proven.
+- Flutter also warns that several iOS/macOS plugins do not yet support Swift
+  Package Manager and that Android app/plugin builds still use the legacy
+  Kotlin Gradle Plugin path. These are future-compatibility issues, not current
+  App Store or Play Console submission blockers while the verified builds pass.
+
+Run the local readiness preflight before building or uploading:
+
+```bash
+scripts/check_store_readiness.sh local
+```
+
+Local mode verifies bundle/package IDs, display name, version, permissions,
+launch assets, the iOS privacy manifest, fastlane wrappers, in-app
+privacy/support/deletion paths, and artifact presence/freshness against
+release-relevant source inputs. It also verifies that referenced iOS and
+Android launcher icons are valid PNG assets, that the web manifest/index no
+longer expose Flutter template metadata, and that `url_launcher_android`
+remains pinned for the current Android toolchain. It includes fastlane
+Appfile/Fastfile, Gemfile/Gemfile.lock, and wrapper scripts in artifact
+freshness checks. It also checks each generated AAB/IPA metadata sidecar
+(`*.store-metadata.tsv`) when an artifact exists, warning locally if the
+artifact hash, build override, or compiled store URLs do not match the current
+build environment. It warns, but does not fail, when external upload
+credentials or public URLs are missing.
+
+Before any real upload attempt, run upload mode with the required external
+values:
+
+```bash
+APP_STORE_CONNECT_API_KEY_PATH=/absolute/path/to/app-store-connect-api-key.json \
+GOOGLE_PLAY_JSON_KEY=/absolute/path/to/google-play-service-account.json \
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+scripts/check_store_readiness.sh upload
+```
+
+Combined upload mode fails until both credential files exist, all public store
+URLs are non-placeholder HTTPS URLs, and the AAB/IPA artifacts are current
+against release-relevant source inputs. It also requires the AAB/IPA metadata
+sidecars to match the artifact hash, `BUILD_NAME`/`BUILD_NUMBER` overrides,
+and the three compiled store URLs, so publish the URLs first and rebuild before
+upload. Keep secret files outside this repo.
+
+For a platform-specific beta check, use one of these narrower modes:
+
+```bash
+APP_STORE_CONNECT_API_KEY_PATH=/absolute/path/to/app-store-connect-api-key.json \
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+scripts/check_store_readiness.sh upload-ios
+```
+
+```bash
+GOOGLE_PLAY_JSON_KEY=/absolute/path/to/google-play-service-account.json \
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+scripts/check_store_readiness.sh upload-android
+```
+
+`upload-ios` still requires the current IPA and App Store Connect credentials,
+but does not fail on missing Google Play credentials. `upload-android` still
+requires the current AAB and Google Play credentials, but does not fail on
+missing iOS signing or IPA state.
+
 Build both store artifacts:
 
 ```bash
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
 scripts/build_store_artifacts.sh all
 ```
+
+The wrapper removes the previous generated AAB/IPA before rebuilding that
+platform and writes an ignored `*.store-metadata.tsv` sidecar next to each
+artifact. If a build or export fails, do not reuse an older artifact left from a
+prior run.
 
 Build only Android:
 
 ```bash
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
 scripts/build_store_artifacts.sh android
 ```
 
 Build only iOS:
 
 ```bash
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
 scripts/build_store_artifacts.sh ios
 ```
 
@@ -232,6 +388,14 @@ Expected outputs:
 
 - iOS IPA: `build/ios/ipa/*.ipa`
 - Android App Bundle: `build/app/outputs/bundle/release/app-release.aab`
+- Store artifact metadata sidecars: `*.store-metadata.tsv` next to each
+  generated AAB/IPA.
+
+The 2026-06-09 wrapper validation also passed with
+`BUILD_NAME=1.4.0 BUILD_NUMBER=17`; those validation artifacts had Android
+SHA-256 `4de67e7df246b9c88c99c6598d887992a0f9d7e892f282a102d972dfd67a6b02`
+and iOS SHA-256
+`7ec7a6a90e064cc6b1cac12d5c5ccd8adf2972926b05251eca67ad7f610c6895`.
 
 ## iPhone Beta To Friends
 
@@ -240,24 +404,38 @@ need the TestFlight app and an invite or public link.
 
 Current 2026-06-09 state:
 
-- Local App Store export works for `com.keepeyeonball`; latest verified IPA is
-  `build/ios/ipa/HydraCam.ipa`.
-- The IPA is signed for team `4RRY2QT7H8` with a cloud-managed Apple
-  Distribution certificate and `iOS Team Store Provisioning Profile:
-  com.keepeyeonball`.
+- A prior local App Store export for `com.keepeyeonball` produced default
+  `1.4.0+16` IPA SHA-256
+  `385e08c05b7213b0b5c199a4621198b0d2b0f356034c69f5fa89ebe85ab0dc08`, with
+  `Payload/Runner.app/PrivacyInfo.xcprivacy` and
+  `ITSAppUsesNonExemptEncryption=false` in the built app. That IPA predates the
+  fallback-data and launcher-icon cleanups and has been removed from
+  `build/ios/ipa/`.
+- After the bundled court-fallback and launcher-icon cleanup, Android rebuilt
+  successfully but current-source iOS export is blocked locally. `xcodebuild`
+  archived `com.keepeyeonball` but `exportArchive` failed with `No Accounts`
+  and no signing certificate `iOS Distribution` / `Apple Distribution` found.
+- `security find-identity -v -p codesigning` currently reports Apple
+  Development identities only and no local Distribution identity; restore the
+  Xcode Apple account/certificate or install a Distribution certificate before
+  retrying the current-source IPA export.
 - Upload still requires App Store Connect credentials. Provide
   `APP_STORE_CONNECT_API_KEY_PATH=/absolute/path/to/api_key.json`, or upload the
   IPA with Transporter / `xcrun altool` using an API key and issuer.
+- In this checkout, use `scripts/ios_fastlane.sh` from the repo root when the
+  shell would otherwise choose `/usr/bin/bundle`; that wrapper forces the
+  Homebrew Ruby/Bundler path required by `ios/Gemfile.lock`.
 
 Recommended setup:
 
-1. Upload a build with:
+1. Upload a build from the repo root with:
 
    ```bash
-   cd ios
-   bundle install
    APP_STORE_CONNECT_API_KEY_PATH=/absolute/path/to/api_key.json \
-     bundle exec fastlane ios beta
+   HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+   HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+   HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+     scripts/ios_fastlane.sh ios beta
    ```
 
 2. In App Store Connect, create an external TestFlight group named
@@ -274,11 +452,13 @@ If you already created the `Friends Beta` external group, fastlane can upload an
 assign the build:
 
 ```bash
-cd ios
 TESTFLIGHT_DISTRIBUTE_EXTERNAL=true \
 TESTFLIGHT_GROUPS="Friends Beta" \
 APP_STORE_CONNECT_API_KEY_PATH=/absolute/path/to/api_key.json \
-bundle exec fastlane ios beta
+HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+scripts/ios_fastlane.sh ios beta
 ```
 
 ## Android Beta To Friends
@@ -286,15 +466,27 @@ bundle exec fastlane ios beta
 Use Google Play Internal testing first. It is fast, private, and does not require
 friends to install APKs manually.
 
+Current 2026-06-09 state:
+
+- Local Android App Bundle export works for `com.amaia23.hydracam`; the latest
+  default `1.4.0+16` run produced Android AAB SHA-256
+  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`.
+  Later override builds overwrite
+  `build/app/outputs/bundle/release/app-release.aab`, so hash the artifact
+  immediately before uploading.
+- `GOOGLE_PLAY_JSON_KEY` is not set locally, so fastlane upload cannot run yet.
+- Play Console account ownership for `com.amaia23.hydracam` is still unverified.
+
 1. Add friends' Google accounts to an Internal testing email list in Play
    Console.
 2. Upload an internal build with:
 
    ```bash
-   cd android
-   bundle install
    GOOGLE_PLAY_JSON_KEY=/absolute/path/to/google-play-service-account.json \
-     bundle exec fastlane android internal
+   HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+   HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+   HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+     scripts/android_fastlane.sh android internal
    ```
 
 3. Share the internal test opt-in link from Play Console.

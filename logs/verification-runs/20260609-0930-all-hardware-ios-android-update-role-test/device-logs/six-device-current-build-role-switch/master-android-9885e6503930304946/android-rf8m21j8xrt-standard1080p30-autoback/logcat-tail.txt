@@ -1,0 +1,418 @@
+--------- beginning of main
+06-09 09:40:51.742   576 13100 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[212]):YUV_STALL[5] Size 1920x1080 Format NV21 PixelSizeNum 0
+06-09 09:40:51.742   576 13100 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA_REPROCESSING]-(setupPipe[241]):setupPipe() is succeed, Pipe(202), prepare(0)
+06-09 09:40:51.742   576 13100 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP_REPROCESSING]-(needSerialization[1270]):PIPE_ISP_REPROCESSING serialized operation enabled
+06-09 09:40:51.743   576 13100 W ExynosCameraNode: [CAM(0)][REPROCESSING_ISP_CAPTURE_M2M]-(setFormat[750]):name(REPROCESSING_ISP_CAPTURE_M2M) fd 161, bytesperline(0) < width(4032), height(2268)
+06-09 09:40:51.744   576 13100 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_YUV_1]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_YUV_1) fd 167, bytesperline(0) < width(1920), height(1080)
+06-09 09:40:51.745   576 13100 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_YUV_2]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_YUV_2) fd 168, bytesperline(0) < width(1920), height(1080)
+06-09 09:40:51.745   576 13100 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_MAIN]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_MAIN) fd 169, bytesperline(0) < width(4032), height(2268)
+06-09 09:40:51.746   576 13105 I ExynosCamera: [CAM(0)][Back_0]-(m_mainPreviewThreadFunc[1284]):Wait to run FrameFactory. state(3)
+06-09 09:40:51.746   576 13092 I ExynosCameraSec: DEBUG:duration time(   78 msec):(m_frameFactoryStartThreadFunc)
+06-09 09:40:51.747   576 13100 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_THUMBNAIL]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_THUMBNAIL) fd 170, bytesperline(0) < width(512), height(384)
+06-09 09:40:51.748   576 13100 W ExynosCameraNode: [CAM(0)][MCSC_DS_REPROCESSING]-(setFormat[750]):name(MCSC_DS_REPROCESSING) fd 171, bytesperline(0) < width(640), height(480)
+06-09 09:40:51.748   576 13100 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP_REPROCESSING]-(setupPipe[241]):setupPipe() is succeed, Pipe(207), prepare(0)
+06-09 09:40:51.753   576 13100 W ExynosCameraNode: [CAM(0)][PIPE_VRA_REPROCESSING]-(setFormat[750]):name(PIPE_VRA_REPROCESSING) fd 174, bytesperline(0) < width(640), height(480)
+06-09 09:40:51.753   576 13100 I ExynosCameraPipe: [CAM(0)][PIPE_VRA_REPROCESSING]-(setupPipe[165]):setupPipe() is succeed (219) prepare (0)
+06-09 09:40:51.753   576 13100 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(startPipes[842]):
+06-09 09:40:51.754   576 13100 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP_REPROCESSING]-(start[296]):start() is succeed, Pipe(207)
+06-09 09:40:51.754   576 13100 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(startPipes[892]):Starting Reprocessing [SCC>ISP] Success!
+06-09 09:40:51.754   576 13100 I ExynosCamera: DEBUG:duration time(    1 msec):(m_startReprocessingFrameFactory)
+06-09 09:40:51.767   576 13101 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F1(7) T2) 3AA DONE
+06-09 09:40:51.794   576 13102 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F1(7)), type(2) ISP DONE
+06-09 09:40:51.794   576 13102 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13347]):============= First Preview time ==================
+06-09 09:40:51.794   576 13102 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13348]):= configureStream ~ first frame  : 459 msec
+06-09 09:40:51.794   576 13102 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13349]):===================================================
+06-09 09:40:51.795   576 13066 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureResult: 1327: Receiving first 0xf2d42668(PREVIEW) buffer from HAL. : frameNumber=0
+06-09 09:40:51.796   576 13066 I Unihal  : FwkCaptureManager.cpp: synchronized_uni_process_capture_result: 1188: Transmitting first 0xf2d42668(PREVIEW) buffer to FWK. : frameNumber=0
+06-09 09:40:51.797   739   912 D Camera3-OutputStream: returnBufferCheckedLocked: First frame for stream 0, width 1920, height 1080, format 34
+06-09 09:40:51.798   576 13066 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureResult: 1312: Receiving first full metadata from HAL. : frameNumber=0
+06-09 09:40:51.799   576 13066 I Unihal  : FwkCaptureManager.cpp: synchronized_uni_process_capture_result: 1173: Transmitting first full metadata to FWK. : frameNumber=0
+06-09 09:40:51.799   576 13066 I SehCamDevSession@5.0-impl: [CAMKPI] camera3->process_capture_result : E
+06-09 09:40:51.800   576 13066 I SehCamDevSession@5.0-impl: [CAMKPI] camera3->process_capture_result : X
+06-09 09:40:51.820   976  1946 V WindowManager: Relayout Window{6c2cdc u0 StatusBar}: viewVisibility=0 req=2280x72 d0
+--------- beginning of system
+06-09 09:40:51.821   976  1946 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0xb4539d1
+06-09 09:40:51.821   976  1946 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1, destroy=false, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8
+06-09 09:40:51.821   976  1946 I WindowManager: Reparenting to leash, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8, leashParent=Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1
+06-09 09:40:51.822   629   809 I SurfaceFlinger: id=9725 createSurf (0x0),-1 flag=24000, Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1
+06-09 09:40:51.823   976  1946 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x4dea0ea
+06-09 09:40:51.827   976  1946 V WindowManager: Relayout hash=6c2cdc, pid=1353: mAttrs={(0,0)(fillx72) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+06-09 09:40:51.827   976  1946 V WindowManager:   fl=81000008
+06-09 09:40:51.827   976  1946 V WindowManager:   pfl=13001000
+06-09 09:40:51.827   976  1946 V WindowManager:   bhv=DEFAULT naviIconColor=0
+06-09 09:40:51.827   976  1946 V WindowManager:   sfl=2000}
+06-09 09:40:51.827   629   629 I Layer   : id=9710 removeFromCurrentState Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0 (159)
+06-09 09:40:51.829  1353  1353 I ViewRootImpl@55a15ca[StatusBar]: Relayout returned: old=(0,0,2280,72) new=(0,0,2280,72) req=(2280,72)0 dur=9 res=0x1 s={true 498725286128} ch=false fn=26047
+06-09 09:40:51.849   629  1961 I SurfaceFlinger: id=9710 Removed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0 (159)
+06-09 09:40:51.850  1353  1353 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-09 09:40:51.852  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-09 09:40:51.852  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-09 09:40:51.852  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-09 09:40:51.855  1353  1353 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-09 09:40:51.855  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-09 09:40:51.855  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-09 09:40:51.855  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-09 09:40:51.859  1353  1353 W LooperSlow: RunCallback: type=3, action=android.view.ViewRootImpl$TraversalRunnable@f6b4105, token=null, latencyMillis=65, dur=46ms
+06-09 09:40:51.859  1353  1353 W Looper  : Slow dispatch took 65ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:51.860   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:51.861   629   629 I Layer   : id=9710 Destroyed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0
+06-09 09:40:51.863  1353  1353 W Looper  : Slow delivery took 50ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:51.864  1353  1353 W Looper  : Drained
+06-09 09:40:51.871 12939 12939 D FlutterJNI: Sending viewport metrics to the engine.
+06-09 09:40:51.877   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:51.889  1353  1353 W Looper  : Slow dispatch took 12ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:51.927   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:51.938  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:51.954   576 13106 I ExynosCamera: [CAM(0)][Back_0]-(m_monitorThreadFunc[7405]):@FIMC_IS_SYNC 2245
+06-09 09:40:51.961   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:51.974  1353  1353 W Looper  : Slow dispatch took 13ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:51.977   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.021   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:52.024  1353  1353 W Looper  : Slow dispatch took 28ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:52.034  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:52.037   458   458 D io_stats: !@   8,0 r 6314223 234129904 w 1701441 99904784 d 0 0 f 0 0 iot 1932888 0 th 0 0 0 pt 0 inp 0 0 105941.621
+06-09 09:40:52.044   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.044  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:52.061   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.077   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.144   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.161   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.175   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.034703087]
+06-09 09:40:52.176   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.41413411]
+06-09 09:40:52.176   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.85881245]
+06-09 09:40:52.176   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.772769 msecs
+06-09 09:40:52.178   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.153346 msecs
+06-09 09:40:52.178   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.178   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.810462 msecs
+06-09 09:40:52.244   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.261   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.278   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.345   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.361   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.395   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.428   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.445   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.476   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:52.478   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.545   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.563   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.596   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.645   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.662   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.681   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.028178582]
+06-09 09:40:52.681   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.19537763]
+06-09 09:40:52.681   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.82426584]
+06-09 09:40:52.682   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.745423 msecs
+06-09 09:40:52.683   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.290616 msecs
+06-09 09:40:52.685   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.641654 msecs
+06-09 09:40:52.685  1878 13044 I SecHAL  : device_sleep: NFC can be going to sleep
+06-09 09:40:52.695   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.715   565 13033 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 7146107
+06-09 09:40:52.746   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.763   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.796   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.846   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.863   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.880   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:52.896   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.963   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.980   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:52.997   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.063   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.080   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.097   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.130   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.180   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.188   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.02749279]
+06-09 09:40:53.188   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.77561784]
+06-09 09:40:53.188   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.8034748]
+06-09 09:40:53.188   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.584693 msecs
+06-09 09:40:53.189   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.990885 msecs
+06-09 09:40:53.191   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.029654 msecs
+06-09 09:40:53.197   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.264   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.281   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.297   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.331   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.334   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:53.347   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.397   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.448   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.465   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.481   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.543  1353  1353 D PrivacyDotViewController: scheduleUpdate: 
+06-09 09:40:53.543  1353  2450 D PrivacyDotViewController: processNextViewState: 
+06-09 09:40:53.543  1353  2450 D PrivacyDotViewController: resolveState ViewState(viewInitialized=true, havingInset=true, isEdgeActive=false, dotTopMargin=45, systemPrivacyEventIsActive=true, shadeExpanded=false, qsExpanded=false, portraitRect=Rect(0, 0 - 931, 117), landscapeRect=Rect(116, 0 - 2136, 72), upsideDownRect=Rect(0, 0 - 1068, 117), seascapeRect=Rect(0, 0 - 2136, 72), layoutRtl=false, rotation=1, height=72, cornerIndex=2, designatedCorner=android.widget.FrameLayout{3be90ca I.E...... ......ID 0,45-144,117 #7f0b067a app:id/privacy_dot_right_container})
+06-09 09:40:53.548   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.549   976  1946 V WindowManager: Relayout Window{9a90763 u0 ScreenDecorOverlay}: viewVisibility=0 req=149x1008 d0
+06-09 09:40:53.555   976  3810 V WindowManager: Relayout Window{6c2cdc u0 StatusBar}: viewVisibility=0 req=2280x72 d0
+06-09 09:40:53.555   976  1946 V WindowManager: Relayout hash=9a90763, pid=1353: mAttrs={(0,0)(wrapxfill) gr=LEFT CENTER_HORIZONTAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-09 09:40:53.555   976  1946 V WindowManager:   fl=21800128
+06-09 09:40:53.555   976  1946 V WindowManager:   pfl=13000050
+06-09 09:40:53.555   976  1946 V WindowManager:   vsysui=100
+06-09 09:40:53.555   976  1946 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-09 09:40:53.556   976  3810 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x4dea0ea
+06-09 09:40:53.556   976  3810 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1, destroy=false, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8
+06-09 09:40:53.556   976  3810 I WindowManager: Reparenting to leash, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8, leashParent=Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1
+06-09 09:40:53.557   629   809 I SurfaceFlinger: id=9726 createSurf (0x0),-1 flag=24000, Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0
+06-09 09:40:53.557  1353  2450 I ViewRootImpl@c08ba28[ScreenDecorOverlay]: Relayout returned: old=(0,0,149,1080) new=(0,0,149,1080) req=(149,1008)0 dur=7 res=0x1 s={true 498727762608} ch=false fn=61
+06-09 09:40:53.558   976  3810 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0xe712624
+06-09 09:40:53.562   976  3810 V WindowManager: Relayout hash=6c2cdc, pid=1353: mAttrs={(0,0)(fillx72) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+06-09 09:40:53.562   976  3810 V WindowManager:   fl=81000008
+06-09 09:40:53.562   976  3810 V WindowManager:   pfl=13000000
+06-09 09:40:53.562   976  3810 V WindowManager:   bhv=DEFAULT naviIconColor=0
+06-09 09:40:53.562   976  3810 V WindowManager:   sfl=2000}
+06-09 09:40:53.563  1353  1353 I ViewRootImpl@55a15ca[StatusBar]: Relayout returned: old=(0,0,2280,72) new=(0,0,2280,72) req=(2280,72)0 dur=11 res=0x1 s={true 498725286128} ch=false fn=26059
+06-09 09:40:53.564   976  1946 V WindowManager: Relayout Window{b9ab6bf u0 ScreenDecorOverlayBottom}: viewVisibility=0 req=195x1008 d0
+06-09 09:40:53.564  1353  1353 W Looper  : Slow dispatch took 13ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:53.565   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.565   629   629 I Layer   : id=9725 removeFromCurrentState Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1 (159)
+06-09 09:40:53.565   629   629 I SurfaceFlinger: id=9725 Removed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1 (159)
+06-09 09:40:53.566   629   629 I Layer   : id=9725 Destroyed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1
+06-09 09:40:53.572   976  1946 V WindowManager: Relayout hash=b9ab6bf, pid=1353: mAttrs={(0,0)(wrapxfill) gr=RIGHT CENTER_HORIZONTAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-09 09:40:53.572   976  1946 V WindowManager:   fl=21800128
+06-09 09:40:53.572   976  1946 V WindowManager:   pfl=13000050
+06-09 09:40:53.572   976  1946 V WindowManager:   vsysui=100
+06-09 09:40:53.572   976  1946 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-09 09:40:53.575  1353  2450 I ViewRootImpl@17bfdc3[ScreenDecorOverlayBottom]: Relayout returned: old=(2085,0,2280,1080) new=(2085,0,2280,1080) req=(195,1008)0 dur=15 res=0x1 s={true 498727535888} ch=false fn=59
+06-09 09:40:53.576 12939 12939 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_STATUS_BAR on com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+06-09 09:40:53.581   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.584 12939 12939 D FlutterJNI: Sending viewport metrics to the engine.
+06-09 09:40:53.611  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:53.628  1353  1353 W Looper  : Slow dispatch took 13ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:53.648   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.665   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.682   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.694   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.02717458]
+06-09 09:40:53.695   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.75162536]
+06-09 09:40:53.695   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.87977904]
+06-09 09:40:53.695   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.636077 msecs
+06-09 09:40:53.696   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.202038 msecs
+06-09 09:40:53.698   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.436769 msecs
+06-09 09:40:53.729  1353  1353 W Looper  : Slow dispatch took 13ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:53.749   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.766   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.781   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:53.782   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.817  1353  1353 W Looper  : Slow dispatch took 18ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:53.849   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.866   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.883   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.950   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.966   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:53.983   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.039   458   458 D io_stats: !@   8,0 r 6314279 234131040 w 1701441 99904784 d 0 0 f 0 0 iot 1932904 0 th 0 0 0 pt 0 inp 0 0 105943.622
+06-09 09:40:54.049   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.054  1353  1353 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-09 09:40:54.054  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-09 09:40:54.054  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-09 09:40:54.054  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-09 09:40:54.060  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-09 09:40:54.066   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.083   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.133   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.150   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.156   976  1274 I SemWifiServiceDetector: Traff. tracking suspended
+06-09 09:40:54.183   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.191   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:54.250   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.267   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.283   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.350   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.367   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.384   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.410   556   580 D BatteryDump: wait_for_battery_event : occurred : change@/devices/platform/battery/power_supply/battery 
+06-09 09:40:54.420   556   556 I android.hardware.health@2.1-service-samsung: updateLrpSysfs: write: 345
+06-09 09:40:54.423   976  1180 D BatteryService: Sending ACTION_BATTERY_CHANGED. scale:100, info:{.chargerAcOnline = false, .chargerUsbOnline = true, .chargerWirelessOnline = false, .maxChargingCurrent = 0, .maxChargingVoltage = 0, .batteryStatus = CHARGING, .batteryHealth = GOOD, .batteryPresent = true, .batteryLevel = 51, .batteryVoltage = 3813, .batteryTemperature = 358, .batteryCurrent = -315, .batteryCycleCount = 0, .batteryFullCharge = 3000000, .batteryChargeCounter = 1533000, .batteryTechnology = Li-ion}
+06-09 09:40:54.423   976  1180 D BatteryService: online:5, current avg:-60, charge type:2, POGO powered:false, power sharing:false, high voltage charger:false, charger_type:0, capacity:280000, misc_event:0x10000, current_event:0x8000, current_now:-315
+06-09 09:40:54.427   976  1164 D MotionRecognitionService: [SAR]  onReceive : ACTION_BATTERY_CHANGED, Plugged: 2
+06-09 09:40:54.427   976  1164 I MotionRecognitionService: [TA] In/out: true, curr state: 1
+06-09 09:40:54.429   976   976 D SemWifiApBroadcastReceiver: Received : android.intent.action.BATTERY_CHANGED
+06-09 09:40:54.429   976   976 D AdaptiveBrightnessLongtermModelBuilder: Received android.intent.action.BATTERY_CHANGED
+06-09 09:40:54.430  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-09 09:40:54.438  1353  1353 I AODBatteryManager: updateBatteryData: ACTION_BATTERY_CHANGED
+06-09 09:40:54.449  1353  1353 I AODBatteryManager: saveBatteryData : AOD BatteryData [mBatteryLevel=51, mBatteryStatus=CHARGING, mBatteryPlugType=USB, mBatteryPlugged=true, mRemainingChargeTime=11877000, mBatteryChargingType=1, mBatteryChargerType=NORMAL, mBatteryOnline=NOT_DEFINED, mBatterySwellingMode=NONE, mBatteryProtectMode=false]
+06-09 09:40:54.449  1353  1353 W Looper  : Slow dispatch took 11ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@5c7ddb3 m=0
+06-09 09:40:54.449  1353  1353 I PowerUI : mBootCompleted = true |  mFullyConnected = true
+06-09 09:40:54.449  1353  1353 I PowerUI : BATTERY_HEALTH_CHECK extraHealth=2 mBatteryMiscEvent=65536
+06-09 09:40:54.449  1353  1353 D PowerUI : priorPlugType = 2 mPlugType = 2 priorBatteryStatus = 2 mBatteryStatus = 2
+06-09 09:40:54.449  1353  1353 I PowerUI : oldMisalign : false, curMisalign : false
+06-09 09:40:54.451  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-09 09:40:54.454  1353  3225 D PowerUI.Notification: 1. restoreScreenTimeOut - saved_value : :
+06-09 09:40:54.454  1353  3225 E PowerUI.Notification: no saved value, so we do nothing !!
+06-09 09:40:54.455  1353  1353 D PowerUI.Notification: showChargingNotice oldChargingType : 8 currentChargingType : 8 oldChargingTime : 11877000 mChargingTime : 11877000
+06-09 09:40:54.456  1353  1353 D PowerUI.Notification: There is no change about charging status, so return!
+06-09 09:40:54.456  1353  1353 D PowerUI : Battery swelling mode - priorBatterySwellingMode = 0 mBatterySwellingMode = 0 mBatteryStatus = 2
+06-09 09:40:54.456  1353  1353 I PowerUI : mBatteryMiscEvent = 65536
+06-09 09:40:54.456  1353  1353 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-09 09:40:54.464  1353  1353 D KeyguardUpdateMonitor: handleBatteryUpdate
+06-09 09:40:54.467   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.469  1353  1353 D QS      : setQSExpansion 0.0 -121.1
+06-09 09:40:54.471  1353  1353 D QS      : setQSExpansion 0.0 -121.1
+06-09 09:40:54.471  1353  1353 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+06-09 09:40:54.471  1353  1353 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-09 09:40:54.471  1353  1353 D QS      : setQSExpansion 0.0 -121.1
+06-09 09:40:54.474  1353  1353 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-09 09:40:54.475  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-09 09:40:54.475  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-09 09:40:54.475  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-09 09:40:54.484   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.500   576   656 I Unihal  : GlobalMonitor.cpp: PrintInfo: 303: S(4) FWK L(  6)    80/M(T)/R(1)/B(1/1),    81/M(F)/R(0)/B(0/1),    82/M(F)/R(0)/B(0/1),    83/M(F)/R(0)/B(0/1),    84/M(F)/R(0)/B(0/1),    85/M(F)/R(0)/B(0/1), 
+06-09 09:40:54.500   576   656 I Unihal  : GlobalMonitor.cpp: PrintInfo: 310:      HAL L(  6)    80/M(T)/R(2)/B(1/1),    81/M(F)/R(0)/B(0/1),    82/M(F)/R(0)/B(0/1),    83/M(F)/R(0)/B(0/1),    84/M(F)/R(0)/B(0/1),    85/M(F)/R(0)/B(0/1), 
+06-09 09:40:54.501   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.537   976  2411 I EDMNativeHelperService: isCameraEnabled
+06-09 09:40:54.537   976  2411 D EDMNativeHelper: isCameraEnabled
+06-09 09:40:54.538   976  2411 D EDMNativeHelper: checking for camera in EnterpriseDeviceManagerService
+06-09 09:40:54.538   976  2411 D EnterpriseDeviceManagerService: isCameraEnabledNative
+06-09 09:40:54.538   976  2411 D EnterpriseDeviceManagerService: checking for camera in restriction policy
+06-09 09:40:54.538   976  2411 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10367) cxtInfo.mContainerId(0)
+06-09 09:40:54.543   739 13061 D CameraDeviceClient: vr service found
+06-09 09:40:54.544   739 13061 I CameraDeviceClient: isCameraBlockedByHMT: usbpd_ids: 0000:0000, is camera blocking device: false
+06-09 09:40:54.551   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.568   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.584   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.646   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:54.651   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.668   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.685   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.751   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.768   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.785   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.852   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.868   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.885   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.935   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.952   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:54.985   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.052   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.069   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.074   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:55.086   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.153   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.169   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.186   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.253   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.270   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.286   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.353   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.370   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.387   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.390 12939 12939 I flutter : Log registered: {message: Runtime role switch requested: {role: slave, preferredMasterIp: 192.168.178.64, forceSlaveMode: true}, timestamp: 2026-06-09 09:40:55.390334, function: null, file: null}
+06-09 09:40:55.414 12939 12939 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (runtime role switch), timestamp: 2026-06-09 09:40:55.414347, function: null, file: null}
+06-09 09:40:55.431 12939 12939 I flutter : Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.64., timestamp: 2026-06-09 09:40:55.431402, function: null, file: null}
+06-09 09:40:55.432 12939 12939 I flutter : Log registered: {message: Connecting to master at IP: 192.168.178.64, timestamp: 2026-06-09 09:40:55.432154, function: null, file: null}
+06-09 09:40:55.504   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:55.554   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.555 12939 12939 I flutter : Log registered: {message: Connection closed, timestamp: 2026-06-09 09:40:55.555063, function: null, file: null}
+06-09 09:40:55.558 12939 12939 I flutter : Log registered: {message: Retrieved existing Device ID: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:55.558064, function: null, file: null}
+06-09 09:40:55.558 12939 12939 I flutter : Log registered: {message: Attempting to connect to master WebSocket at ws://192.168.178.64:4040/ws with Device ID: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:55.558326, function: null, file: null}
+06-09 09:40:55.559 12939 12939 I flutter : Log registered: {message: Connected to WebSocket at ws://192.168.178.64:4040/ws, timestamp: 2026-06-09 09:40:55.559308, function: null, file: null}
+06-09 09:40:55.560 12939 12939 I flutter : Log registered: {message: Camera is already initialized and ready., timestamp: 2026-06-09 09:40:55.560635, function: null, file: null}
+06-09 09:40:55.578   976  2411 D SensorService: Calling activate off 1
+06-09 09:40:55.578   562   562 I Sensors : batch(0) - accelerometer_sensor try to batching with 100000000
+06-09 09:40:55.582 12939 12939 D SensorManager: unregisterListener
+06-09 09:40:55.639 12939 12939 I flutter : Log registered: {message: Flutter framework error: ══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞══════════════════════
+06-09 09:40:55.639 12939 12939 I flutter : The following assertion was thrown during layout:
+06-09 09:40:55.639 12939 12939 I flutter : A RenderFlex overflowed by 26 pixels on the bottom.
+06-09 09:40:55.639 12939 12939 I flutter : 
+06-09 09:40:55.639 12939 12939 I flutter : The relevant error-causing widget was:
+06-09 09:40:55.639 12939 12939 I flutter :   Column
+06-09 09:40:55.639 12939 12939 I flutter :   Column:file:///Users/jose/src/work/hydracamv2/lib/screens/camera_setup_preview_screen.dart:349:16
+06-09 09:40:55.639 12939 12939 I flutter : 
+06-09 09:40:55.639 12939 12939 I flutter : The overflowing RenderFlex has an orientation of Axis.vertical.
+06-09 09:40:55.639 12939 12939 I flutter : The edge of the RenderFlex that is overflowing has been marked in
+06-09 09:40:55.639 12939 12939 I flutter : the rendering with a yellow and black striped pattern. This is
+06-09 09:40:55.639 12939 12939 I flutter : usually caused by the contents being too big for the RenderFlex.
+06-09 09:40:55.639 12939 12939 I flutter : Consider applying a flex factor (e.g. using an Expanded widget)
+06-09 09:40:55.639 12939 12939 I flutter : to force the children of the RenderFlex to fit within the
+06-09 09:40:55.639 12939 12939 I flutter : available space instead of being sized to their natural size.
+06-09 09:40:55.639 12939 12939 I flutter : This is considered an error condition because it indicates that
+06-09 09:40:55.639 12939 12939 I flutter : there is content that cannot be seen. If the content is
+06-09 09:40:55.639 12939 12939 I flutter : legitimately bigger than the available space, consider clipping
+06-09 09:40:55.639 12939 12939 I flutter : it with a ClipRect widget before putting it in the flex, or using
+06-09 09:40:55.639 12939 12939 I flutter : a scrollable container rather than a Flex, like a ListView.
+06-09 09:40:55.639 12939 12939 I flutter : The specific RenderFlex in question is: RenderFlex#83bb4 relayoutBoundary=up9 OVERFLOWING:
+06-09 09:40:55.639 12939 12939 I flutter :   parentData: offset=Offset(16.0, 16.0) (can use size)
+06-09 09:40:55.639 12939 12939 I flutter :   constraints: BoxConstraints(0.0<=w<=288.7, h=111.0)
+06-09 09:40:55.639 12939 12939 I flutter :   size: Size(288.7, 111.0)
+06-09 09:40:55.639 12939 12939 I flutter :   direction: vertical
+06-09 09:40:55.639 12939 12939 I flutter :   mainAxisAlignment: start
+06-09 09:40:55.639 12939 12939 I flutter :   mainAxisSize: max
+06-09 09:40:55.639 12939 12939 I flutter :   crossAxisAlignment: stretch
+06-09 09:40:55.639 12939 12939 I flutter :   verticalDirection: down
+06-09 09:40:55.639 12939 12939 I flutter :   spacing: 0.0
+06-09 09:40:55.639 12939 12939 I flutter : ◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+06-09 09:40:55.639 12939 12939 I flutter : ═════════════════════════════════════════════════════════════════
+06-09 09:40:55.639 12939 12939 I flutter : , timestamp: 2026-06-09 09:40:55.639205, function: null, file: null}
+06-09 09:40:55.654   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.657   976  1599 W ServiceManager: Permission failure: android.permission.HIGH_SAMPLING_RATE_SENSORS from uid=10367 pid=12939
+06-09 09:40:55.658   976  1599 W ServiceManager: Permission failure: android.permission.HIGH_SAMPLING_RATE_SENSORS from uid=10367 pid=12939
+06-09 09:40:55.658   976  1599 D SensorService: Calling batch handle==1 flags=0 rate=180000000 timeout== 0
+06-09 09:40:55.659   562   562 I Sensors : flush accelerometer_sensor
+06-09 09:40:55.662 12939 12939 D SensorManager: registerListener :: 1, LSM6DSO Acceleration Sensor, 200000, 0, 
+06-09 09:40:55.687   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.689   562  1117 E Sensors : Sensor : Meta event
+06-09 09:40:55.713 12939 12939 I flutter : Log registered: {message: Retrieved existing Device ID: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:55.713752, function: null, file: null}
+06-09 09:40:55.721 12939 12939 I flutter : Log registered: {message: Retrieved existing Device ID: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:55.720852, function: null, file: null}
+06-09 09:40:55.771   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.788   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.805   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.838   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.855   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.859 12939 12939 I flutter : Log registered: {message: Command received from master: {"command":"noSession"}, timestamp: 2026-06-09 09:40:55.858729, function: null, file: null}
+06-09 09:40:55.859 12939 12939 I flutter : Log registered: {message: No active session to end., timestamp: 2026-06-09 09:40:55.859236, function: null, file: null}
+06-09 09:40:55.859 12939 12939 I flutter : Log registered: {message: No active session on master., timestamp: 2026-06-09 09:40:55.859602, function: null, file: null}
+06-09 09:40:55.860 12939 12939 I flutter : Log registered: {message: Command received from master: {"command":"noSession"}, timestamp: 2026-06-09 09:40:55.860701, function: null, file: null}
+06-09 09:40:55.861 12939 12939 I flutter : Log registered: {message: No active session to end., timestamp: 2026-06-09 09:40:55.861091, function: null, file: null}
+06-09 09:40:55.861 12939 12939 I flutter : Log registered: {message: No active session on master., timestamp: 2026-06-09 09:40:55.861300, function: null, file: null}
+06-09 09:40:55.938   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.958   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:55.971   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:55.988   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.038   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.041   458   458 D io_stats: !@   8,0 r 6314384 234131960 w 1701498 99905316 d 0 0 f 0 0 iot 1932972 0 th 0 0 0 pt 0 inp 0 0 105945.623
+06-09 09:40:56.055   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.089   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.155   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.175   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.189   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.256   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.269   739 13037 I Camera3-Device: WatchDog...
+06-09 09:40:56.273   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.289   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.357   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.363   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:56.373   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.390   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.440  4976 12861 I NearbyMediums: No BLE Fast/GATT advertisements found in the latest cycle.
+06-09 09:40:56.441  4976 12861 I NearbyMediums: Current Tracked Scanning Clients are : {NearbyConnections.EnvironmentMonitor, NearbySharing, NearbyConnections.TxAdvertisement}
+06-09 09:40:56.456   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.473   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.490   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.556   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.574   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.590   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.641   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.658   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.674   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.690   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.757   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.774   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.790   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.816   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 5.000000, 1.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:56.824   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.841   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.858   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.891   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.958   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:56.975   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.042   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.059   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.092   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.142   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.158   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.172   976  1274 I SemWifiServiceDetector: Traff. tracking resumed
+06-09 09:40:57.192   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.242   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-09 09:40:57.260   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 1.000000, 1.000000, 2.000000, 50000.000000, 64000.000000
+06-09 09:40:57.276   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER

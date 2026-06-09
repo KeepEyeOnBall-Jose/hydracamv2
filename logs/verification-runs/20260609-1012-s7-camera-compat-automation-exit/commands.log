@@ -1,0 +1,343 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 10 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  2201116PG (mobile)           • 575ecf2cbd24                             • android-arm64  • Android 13 (API 33)
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.102
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:1-1 product:starltexx model:SM_G960F device:starlte transport_id:2
+575ecf2cbd24           device usb:2-1 product:veux_p_eea model:2201116PG device:veux transport_id:1
+9885e6503930304946     device usb:0-1.4 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+RF8M21J8XRT            device usb:0-1.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:12
+RF8M90QE7LX            device usb:0-1.3.3 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:10
+
+[exit-code] 0
+
+$ flutter build apk --debug --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             39.1s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ python3 scripts/android_wifi_preflight.py --expected-subnet 192.168.178.0/24 --check-only --device 9885e6503930304946 --timeout 10
+Expected subnet: 192.168.178.0/24
+[OK] 9885e6503930304946 SM-G935F Android 8.0.0 wlan0=192.168.178.64 wifi_on=2
+  wifi: No shell command implementation.
+  routes:
+    192.168.178.0/24 dev wlan0  proto kernel  scope link  src 192.168.178.64
+
+All selected Android devices have wlan0 on the expected subnet.
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 logcat -c
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screencap -p /sdcard/s7-automation-standby-open-button.png
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-automation-standby-open-button.png logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-automation-standby-open-button.png
+
+[stderr]
+/sdcard/s7-automation-standby-open-button.png: 1 file pulled, 0 skipped. 8.6 MB/s (90832 bytes in 0.010s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell uiautomator dump /sdcard/s7-window-standby.xml
+UI hierchary dumped to: /sdcard/s7-window-standby.xml
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-window-standby.xml logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-window-standby.xml
+
+[stderr]
+/sdcard/s7-window-standby.xml: 1 file pulled, 0 skipped. 1.2 MB/s (5058 bytes in 0.004s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell input tap 960 936
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screencap -p /sdcard/s7-open-normal-after-standby-button.png
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-open-normal-after-standby-button.png logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-open-normal-after-standby-button.png
+
+[stderr]
+/sdcard/s7-open-normal-after-standby-button.png: 1 file pulled, 0 skipped. 12.5 MB/s (128330 bytes in 0.010s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell uiautomator dump /sdcard/s7-window-after-open-normal.xml
+UI hierchary dumped to: /sdcard/s7-window-after-open-normal.xml
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-window-after-open-normal.xml logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-window-after-open-normal.xml
+
+[stderr]
+/sdcard/s7-window-after-open-normal.xml: 1 file pulled, 0 skipped. 1.8 MB/s (7300 bytes in 0.004s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screencap -p /sdcard/s7-normal-launch-not-sticky.png
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-normal-launch-not-sticky.png logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-normal-launch-not-sticky.png
+
+[stderr]
+/sdcard/s7-normal-launch-not-sticky.png: 1 file pulled, 0 skipped. 11.5 MB/s (128274 bytes in 0.011s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell uiautomator dump /sdcard/s7-window-normal-launch.xml
+UI hierchary dumped to: /sdcard/s7-window-normal-launch.xml
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-window-normal-launch.xml logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-window-normal-launch.xml
+
+[stderr]
+/sdcard/s7-window-normal-launch.xml: 1 file pulled, 0 skipped. 1.7 MB/s (7300 bytes in 0.004s)
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --no-use-latest-warm-summary --target-id 9885e6503930304946 --expect-target-id 9885e6503930304946 --skip-build --skip-install --record-seconds 2 --timeout 180 --capture-stage-timeout 30 --recording-ready-timeout 30 --stop-recording-timeout 30 --run-dir logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-single-current-compat-capture
++ flutter devices
++ adb devices -l
++ adb -s 9885e6503930304946 forward --remove-all
++ adb -s 9885e6503930304946 shell ip -f inet addr show wlan0
++ adb -s 9885e6503930304946 shell ip route get 1.1.1.1
++ adb -s 9885e6503930304946 forward tcp:6400 tcp:4762
+6400
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
+=== Rotation master 9885e6503930304946 ===
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role master --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-single-current-compat-capture
++ adb -s 9885e6503930304946 forward --remove-all
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 forward --list
+
+[exit-code] 0
+
+$ curl --max-time 5 --silent --show-error http://127.0.0.1:6400/healthz
+
+[stderr]
+curl: (7) Failed to connect to 127.0.0.1 port 6400 after 0 ms: Couldn't connect to server
+[exit-code] 7
+
+$ curl --max-time 5 --silent --show-error http://127.0.0.1:6400/settings
+
+[stderr]
+curl: (7) Failed to connect to 127.0.0.1 port 6400 after 0 ms: Couldn't connect to server
+[exit-code] 7
+
+$ adb -s 9885e6503930304946 forward tcp:6400 tcp:4762
+6400
+[exit-code] 0
+
+$ curl --max-time 5 --silent --show-error http://127.0.0.1:6400/healthz
+
+[stderr]
+curl: (52) Empty reply from server
+[exit-code] 52
+
+$ curl --max-time 5 --silent --show-error http://127.0.0.1:6400/settings
+
+[stderr]
+curl: (52) Empty reply from server
+[exit-code] 52
+
+$ adb -s 9885e6503930304946 logcat -c
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role master --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 forward tcp:6400 tcp:4762
+[exit-code] 0
+
+$ curl --max-time 5 --silent --show-error http://127.0.0.1:6400/healthz
+{"status":"ok","automation":true,"automationTargetId":"9885e6503930304946","commands":["capture_screenshot","connected_clients","end_session","list_cameras","set_role","start_recording","start_session","stop_recording","take_photo"]}
+[exit-code] 0
+
+$ curl --max-time 10 --silent --show-error -H Content-Type:application/json --data masterShouldRecord:true timerDuration:0 cameraLensPreference:autoBack selectedCameraName:null videoCaptureProfile:standard1080p30 http://127.0.0.1:6400/settings
+{"error":"bridge_failure","details":"FormatException: Unexpected character (at character 1)\nmasterShouldRecord:true\n^\n"}
+
+[stderr]
+curl: (6) Could not resolve host: timerDuration
+curl: (3) URL rejected: Port number was not a decimal number between 0 and 65535
+curl: (3) URL rejected: Port number was not a decimal number between 0 and 65535
+curl: (3) URL rejected: Port number was not a decimal number between 0 and 65535
+[exit-code] 0
+
+$ curl --max-time 10 --silent --show-error -H Content-Type:application/json --data {"masterShouldRecord":true,"timerDuration":0,"cameraLensPreference":"autoBack","selectedCameraName":null,"videoCaptureProfile":"standard1080p30"} http://127.0.0.1:6400/settings
+{"status":"ok","settings":{"autoUploadMaterials":true,"masterShouldRecord":true,"deleteLocalAfterUpload":false,"autoplayVideoOnMaster":false,"flashForVideoAnnounce":false,"timerDuration":0,"cameraLensPreference":"autoBack","selectedCameraName":"0","videoCaptureProfile":"standard1080p30","videoCaptureTarget":"1080p at 30 fps"}}
+[exit-code] 0
+
+$ curl --max-time 30 --silent --show-error -H Content-Type:application/json --data {"showCountdown":false} http://127.0.0.1:6400/commands/take_photo
+{"status":"ok","command":"take_photo","result":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}}
+[exit-code] 0
+
+$ curl --max-time 30 --silent --show-error -H Content-Type:application/json --data {} http://127.0.0.1:6400/commands/start_recording
+{"status":"ok","command":"start_recording","result":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":true}}
+[exit-code] 0
+
+$ curl --max-time 45 --silent --show-error -H Content-Type:application/json --data {} http://127.0.0.1:6400/commands/stop_recording
+{"status":"ok","command":"stop_recording","result":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}}
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell mkdir -p /sdcard/hydracam-evidence
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell run-as com.amaia23.hydracam cp /data/user/0/com.amaia23.hydracam/app_flutter/session_null/CAP8599987724898185445.jpg /sdcard/hydracam-evidence/s7-compat-photo.jpg
+
+[stderr]
+cp: /sdcard/hydracam-evidence/s7-compat-photo.jpg: Permission denied
+[exit-code] 1
+
+$ adb -s 9885e6503930304946 shell run-as com.amaia23.hydracam ls -l /data/user/0/com.amaia23.hydracam/app_flutter/session_null
+total 5408
+-rw------- 1 u0_a193 u0_a193  128412 2026-06-09 10:25 CAP8599987724898185445.jpg
+-rw------- 1 u0_a193 u0_a193 5404123 2026-06-09 10:26 REC1850294615405074552.mp4
+[exit-code] 0
+
+$ flutter build apk --debug --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             22.9s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell screencap -p /sdcard/s7-final-current-normal-launch.png
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-final-current-normal-launch.png logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-final-current-normal-launch.png
+
+[stderr]
+/sdcard/s7-final-current-normal-launch.png: 1 file pulled, 0 skipped. 10.0 MB/s (128426 bytes in 0.012s)
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell uiautomator dump /sdcard/s7-final-current-normal-launch.xml
+UI hierchary dumped to: /sdcard/s7-final-current-normal-launch.xml
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 pull /sdcard/s7-final-current-normal-launch.xml logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-final-current-normal-launch.xml
+
+[stderr]
+/sdcard/s7-final-current-normal-launch.xml: 1 file pulled, 0 skipped. 2.7 MB/s (7300 bytes in 0.003s)
+[exit-code] 0

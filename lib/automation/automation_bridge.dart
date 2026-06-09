@@ -16,11 +16,28 @@ typedef AutomationHandler = Future<Map<String, dynamic>> Function(
 /// Exposes a lightweight HTTP endpoint (guarded behind HYDRACAM_AUTOMATION)
 /// so that the Python orchestrator can trigger commands and gather state.
 class AutomationBridge {
-  AutomationBridge._();
+  AutomationBridge._({
+    bool? automationEnabledOverride,
+    int? automationServerPortOverride,
+  })  : _automationEnabled = automationEnabledOverride ?? automationEnabled,
+        _automationServerPort =
+            automationServerPortOverride ?? automationServerPort;
 
   static final AutomationBridge instance = AutomationBridge._();
 
+  factory AutomationBridge.forTesting({
+    required bool automationEnabled,
+    required int automationServerPort,
+  }) {
+    return AutomationBridge._(
+      automationEnabledOverride: automationEnabled,
+      automationServerPortOverride: automationServerPort,
+    );
+  }
+
   final Map<String, AutomationHandler> _handlers = {};
+  final bool _automationEnabled;
+  final int _automationServerPort;
   HttpServer? _server;
   bool _initialized = false;
   String _automationTargetId = automationTargetId;
@@ -28,15 +45,34 @@ class AutomationBridge {
   // Callback to get current recording state from master screen
   bool Function()? getRecordingState;
 
+  bool get isRunning => _server != null;
+
   Future<void> ensureInitialized() async {
-    if (_initialized || !automationEnabled) {
+    if (_initialized || !_automationEnabled) {
       return;
     }
 
-    await _startServer();
     _initialized = true;
+    try {
+      await _startServer();
+    } on SocketException catch (error, stackTrace) {
+      LogService.instance.registerError(
+        "Automation bridge unavailable on port $_automationServerPort",
+        error,
+        stackTrace,
+        function: "ensureInitialized",
+        file: "automation_bridge.dart",
+      );
+      return;
+    }
     LogService.instance.registerLog(
-        "Automation bridge listening on port $automationServerPort");
+        "Automation bridge listening on port $_automationServerPort");
+  }
+
+  Future<void> closeForTesting() async {
+    await _server?.close(force: true);
+    _server = null;
+    _initialized = false;
   }
 
   void registerCommand(String command, AutomationHandler handler) {
@@ -93,7 +129,7 @@ class AutomationBridge {
   Future<void> _startServer() async {
     _server = await HttpServer.bind(
       InternetAddress.anyIPv4,
-      automationServerPort,
+      _automationServerPort,
     );
     _server!.listen(
       _handleRequest,

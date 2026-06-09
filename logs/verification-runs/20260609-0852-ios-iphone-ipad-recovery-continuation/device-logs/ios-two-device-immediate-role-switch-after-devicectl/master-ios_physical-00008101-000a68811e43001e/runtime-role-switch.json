@@ -1,0 +1,52 @@
+{
+  "elapsedMs": 46.067,
+  "maxRequestDurationMs": 25.916,
+  "mode": "master_ready_then_parallel_slaves",
+  "parallelRequestStartSkewMs": 0.0,
+  "requestEndSkewMs": 28.632,
+  "requestStartSkewMs": 20.002,
+  "requestTimings": {
+    "00008101-000A68811E43001E": {
+      "batch": "master",
+      "bridgeUrl": "http://169.254.99.102:4762",
+      "durationMs": 17.286,
+      "endOffsetMs": 17.29,
+      "endedAt": "2026-06-09T09:20:49.905403",
+      "startOffsetMs": 0.004,
+      "startedAt": "2026-06-09T09:20:49.888113"
+    },
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": {
+      "batch": "slaves",
+      "bridgeUrl": "http://192.168.178.104:4762",
+      "durationMs": 25.916,
+      "endOffsetMs": 45.922,
+      "endedAt": "2026-06-09T09:20:49.934037",
+      "startOffsetMs": 20.006,
+      "startedAt": "2026-06-09T09:20:49.908110"
+    }
+  },
+  "responses": {
+    "00008101-000A68811E43001E": {
+      "command": "set_role",
+      "result": {
+        "forceSlaveMode": false,
+        "preferredMasterIp": null,
+        "role": "master",
+        "status": "role_set"
+      },
+      "status": "ok"
+    },
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": {
+      "command": "set_role",
+      "result": {
+        "ackMode": "accepted",
+        "forceSlaveMode": true,
+        "preferredMasterIp": "169.254.99.102",
+        "role": "slave",
+        "status": "role_switch_accepted"
+      },
+      "status": "ok"
+    }
+  },
+  "startedAt": "2026-06-09T09:20:49.888098"
+}

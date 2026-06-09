@@ -1,0 +1,34 @@
+{
+  "error" : {
+    "code" : 3,
+    "domain" : "CoreDevice.ActionError",
+    "userInfo" : {
+      "NSDebugDescription" : {
+        "string" : "This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device."
+      }
+    }
+  },
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "info",
+      "processes",
+      "--device",
+      "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "--filter",
+      "executable.path CONTAINS 'Runner.app'",
+      "--timeout",
+      "20",
+      "--json-output",
+      "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-process-runner.json"
+    ],
+    "commandType" : "devicectl.device.info.processes",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "failed",
+    "version" : "518.31"
+  }
+}

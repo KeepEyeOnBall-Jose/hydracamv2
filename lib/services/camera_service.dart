@@ -12,6 +12,7 @@ import "../constants.dart";
 import "../models/camera_capture_settings.dart";
 import "../models/capture_context_metadata.dart";
 import "../models/captured_video.dart";
+import "camera_compatibility_policy.dart";
 import "camera_setup_service.dart";
 import "device_service.dart";
 import "log_service.dart";
@@ -37,6 +38,8 @@ class CameraService {
   final StorageService _storageService; // Inject StorageService
   final bool _useMockCamera;
   final String _mockMediaSourceDir;
+  final CameraDeviceInfoProvider _deviceInfoProvider;
+  final Duration _cameraOperationTimeout;
 
   CameraController? _controller; // The camera controller instance
   CameraController? get controller =>
@@ -52,8 +55,9 @@ class CameraService {
   bool? _flashAvailable;
   int _mockMediaSequence = 0;
   bool _controllerUsesExplicitFps = true;
+  CameraCompatibilityPolicy? _compatibilityPolicy;
 
-  static const Duration _cameraOperationTimeout = Duration(seconds: 12);
+  static const Duration defaultCameraOperationTimeout = Duration(seconds: 12);
   static const Duration _cameraDisposeSettleDelay = Duration(milliseconds: 400);
 
   DateTime?
@@ -89,9 +93,15 @@ class CameraService {
       this.onPhotoTaken,
       this.onVideoRecorded,
       bool? useMockCamera,
-      String? mockMediaSourceDir})
+      String? mockMediaSourceDir,
+      CameraDeviceInfoProvider? deviceInfoProvider,
+      Duration? cameraOperationTimeout})
       : _storageService = storageService,
         _useMockCamera = useMockCamera ?? false,
+        _deviceInfoProvider =
+            deviceInfoProvider ?? DeviceIdService.getDeviceInfo,
+        _cameraOperationTimeout =
+            cameraOperationTimeout ?? defaultCameraOperationTimeout,
         _mockMediaSourceDir = mockMediaSourceDir ??
             const String.fromEnvironment(
               "HYDRACAM_MOCK_MEDIA_SOURCE_DIR",
@@ -156,10 +166,16 @@ class CameraService {
       requestedIndex: cameraIndex,
     );
     final profile = await _loadVideoCaptureProfile();
+    final policy = await _loadCompatibilityPolicy();
 
     // Dispose any existing controller before creating a new one
     await _disposeController("camera startup");
-    _controller = _createController(cameraDescription, profile);
+    _controller = _createControllerForPolicy(
+      cameraDescription,
+      profile,
+      policy,
+      requireExplicitFps: true,
+    );
     _flashAvailable = null;
 
     try {
@@ -178,7 +194,15 @@ class CameraService {
   }
 
   Future<VideoCaptureProfile> _loadVideoCaptureProfile() async {
-    final profile = await SettingsService.getVideoCaptureProfile();
+    final storedProfile = await SettingsService.getVideoCaptureProfile();
+    final policy = await _loadCompatibilityPolicy();
+    final profile = policy.resolveProfile(storedProfile);
+    if (profile != storedProfile) {
+      LogService.instance.registerLog(
+          "${policy.reason ?? 'Camera compatibility mode'} overriding "
+          "video profile ${storedProfile.storageValue} -> "
+          "${profile.storageValue}.");
+    }
     _currentProfile = profile;
     _currentQuality = switch (profile.resolutionPreset) {
       ResolutionPreset.medium => CameraQuality.low,
@@ -198,6 +222,24 @@ class CameraService {
       profile.resolutionPreset,
       fps: profile.framesPerSecond,
     );
+  }
+
+  CameraController _createControllerForPolicy(
+    CameraDescription cameraDescription,
+    VideoCaptureProfile profile,
+    CameraCompatibilityPolicy policy, {
+    required bool requireExplicitFps,
+  }) {
+    if (!requireExplicitFps || policy.usePresetDefaultFps) {
+      if (policy.usePresetDefaultFps) {
+        LogService.instance.registerLog(
+            "${policy.reason ?? 'Camera compatibility mode'} using platform "
+            "default fps for camera controller.");
+      }
+      return _createControllerUsingPresetDefaults(cameraDescription, profile);
+    }
+
+    return _createController(cameraDescription, profile);
   }
 
   CameraController _createControllerUsingPresetDefaults(
@@ -237,9 +279,13 @@ class CameraService {
       return;
     }
 
+    final policy = await _loadCompatibilityPolicy();
+    final effectiveRequireExplicitFps =
+        requireExplicitFps && !policy.usePresetDefaultFps;
+
     if (_isCameraInitialized &&
         _controller?.value.isInitialized == true &&
-        (!requireExplicitFps || _controllerUsesExplicitFps)) {
+        (!effectiveRequireExplicitFps || _controllerUsesExplicitFps)) {
       LogService.instance
           .registerLog("Camera is already initialized and ready.");
       return; // Camera is already ready
@@ -258,9 +304,12 @@ class CameraService {
     final profile = await _loadVideoCaptureProfile();
 
     await _disposeController("camera readiness initialization");
-    _controller = requireExplicitFps
-        ? _createController(cameraDescription, profile)
-        : _createControllerUsingPresetDefaults(cameraDescription, profile);
+    _controller = _createControllerForPolicy(
+      cameraDescription,
+      profile,
+      policy,
+      requireExplicitFps: effectiveRequireExplicitFps,
+    );
     _flashAvailable = null;
 
     try {
@@ -610,9 +659,15 @@ class CameraService {
     _deviceCameras = cameras;
     final cameraDescription = await _resolveCameraDescription(cameras);
     final profile = await _loadVideoCaptureProfile();
+    final policy = await _loadCompatibilityPolicy();
 
     await _disposeController("camera settings change");
-    _controller = _createController(cameraDescription, profile);
+    _controller = _createControllerForPolicy(
+      cameraDescription,
+      profile,
+      policy,
+      requireExplicitFps: true,
+    );
     _flashAvailable = null;
 
     try {
@@ -690,6 +745,15 @@ class CameraService {
     try {
       return await _controller!.takePicture().timeout(_cameraOperationTimeout);
     } on TimeoutException catch (error, stackTrace) {
+      final didRecover = await _reinitializeAfterTimedOutPhoto(
+        error,
+        stackTrace,
+      );
+      if (didRecover) {
+        return await _controller!
+            .takePicture()
+            .timeout(_cameraOperationTimeout);
+      }
       LogService.instance.registerLog("Camera photo capture timed out after "
           "${_cameraOperationTimeout.inSeconds}s; leaving controller intact. "
           "$error\n$stackTrace");
@@ -726,6 +790,55 @@ class CameraService {
         rethrow;
       }
       await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
+    }
+  }
+
+  Future<bool> _reinitializeAfterTimedOutPhoto(
+    TimeoutException error,
+    StackTrace stackTrace,
+  ) async {
+    final policy = await _loadCompatibilityPolicy();
+    if (!policy.retryTimedOutPhotoAfterReinitialize) {
+      return false;
+    }
+
+    LogService.instance.registerLog("Camera photo capture timed out after "
+        "${_cameraOperationTimeout.inSeconds}s; retrying after controller "
+        "reinitialization for ${policy.reason ?? 'camera compatibility mode'}. "
+        "$error\n$stackTrace");
+
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        LogService.instance.registerLog(
+            "No cameras found while retrying timed-out photo capture.");
+        return false;
+      }
+
+      _deviceCameras = cameras;
+      final cameraDescription = await _resolveCameraDescription(cameras);
+      final profile = await _loadVideoCaptureProfile();
+      await _disposeController("photo timeout compatibility retry");
+      await Future.delayed(_cameraDisposeSettleDelay);
+      _controller = _createControllerUsingPresetDefaults(
+        cameraDescription,
+        profile,
+      );
+      _flashAvailable = null;
+      await _controller?.initialize().timeout(_cameraOperationTimeout);
+      await _setFlashModeIfSupported(
+          FlashMode.off, "photo timeout compatibility retry initialization");
+      _isCameraInitialized = true;
+      LogService.instance.registerLog(
+          "Camera reinitialized after timed-out photo capture: "
+          "camera=${cameraDescription.name}, profile=${profile.storageValue}.");
+      return true;
+    } catch (retryError, retryStackTrace) {
+      _isCameraInitialized = false;
+      LogService.instance
+          .registerLog("Camera timed-out photo compatibility retry failed: "
+              "$retryError\n$retryStackTrace");
+      return false;
     }
   }
 
@@ -773,6 +886,36 @@ class CameraService {
           .registerLog("Camera $operation retry without explicit fps failed: "
               "$retryError\n$retryStackTrace");
       return false;
+    }
+  }
+
+  Future<CameraCompatibilityPolicy> _loadCompatibilityPolicy() async {
+    final cachedPolicy = _compatibilityPolicy;
+    if (cachedPolicy != null) {
+      return cachedPolicy;
+    }
+
+    if (_useMockCamera) {
+      _compatibilityPolicy = CameraCompatibilityPolicy.none;
+      return _compatibilityPolicy!;
+    }
+
+    try {
+      final deviceInfo = await _deviceInfoProvider();
+      final policy =
+          CameraCompatibilityPolicyResolver.fromDeviceInfo(deviceInfo);
+      _compatibilityPolicy = policy;
+      if (policy.isActive) {
+        LogService.instance.registerLog(policy.reason ??
+            "Camera compatibility mode enabled for this device.");
+      }
+      return policy;
+    } catch (error, stackTrace) {
+      _compatibilityPolicy = CameraCompatibilityPolicy.none;
+      LogService.instance.registerLog(
+          "Unable to resolve camera compatibility policy; using defaults: "
+          "$error\n$stackTrace");
+      return _compatibilityPolicy!;
     }
   }
 

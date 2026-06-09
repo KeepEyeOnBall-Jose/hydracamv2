@@ -1,9 +1,12 @@
+require "digest"
+require "fileutils"
 require "shellwords"
 
 default_platform(:ios)
 
 REPO_ROOT = File.expand_path("../..", __dir__)
 IPA_GLOB = File.join(REPO_ROOT, "build/ios/ipa/*.ipa")
+STORE_METADATA_FORMAT = "HydraCamStoreArtifactMetadataV1"
 
 def flutter_bin
   ENV["FLUTTER_BIN"] || "flutter"
@@ -13,10 +16,60 @@ def flutter_build_flags
   flags = []
   flags += ["--build-name", ENV["BUILD_NAME"]] unless ENV["BUILD_NAME"].to_s.empty?
   flags += ["--build-number", ENV["BUILD_NUMBER"]] unless ENV["BUILD_NUMBER"].to_s.empty?
+  unless ENV["HYDRACAM_PRIVACY_POLICY_URL"].to_s.empty?
+    flags += [
+      "--dart-define",
+      "HYDRACAM_PRIVACY_POLICY_URL=#{ENV["HYDRACAM_PRIVACY_POLICY_URL"]}"
+    ]
+  end
+  unless ENV["HYDRACAM_SUPPORT_URL"].to_s.empty?
+    flags += [
+      "--dart-define",
+      "HYDRACAM_SUPPORT_URL=#{ENV["HYDRACAM_SUPPORT_URL"]}"
+    ]
+  end
+  unless ENV["HYDRACAM_ACCOUNT_DELETION_URL"].to_s.empty?
+    flags += [
+      "--dart-define",
+      "HYDRACAM_ACCOUNT_DELETION_URL=#{ENV["HYDRACAM_ACCOUNT_DELETION_URL"]}"
+    ]
+  end
   flags
 end
 
+def write_store_metadata(artifact_path, platform, builder)
+  UI.user_error!("Expected artifact missing or empty: #{artifact_path}") unless File.size?(artifact_path)
+
+  metadata_path = "#{artifact_path}.store-metadata.tsv"
+  metadata = {
+    "format" => STORE_METADATA_FORMAT,
+    "platform" => platform,
+    "artifact_path" => artifact_path,
+    "artifact_sha256" => Digest::SHA256.file(artifact_path).hexdigest,
+    "builder" => builder,
+    "built_at_utc" => Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "build_name" => ENV["BUILD_NAME"].to_s,
+    "build_number" => ENV["BUILD_NUMBER"].to_s,
+    "hydracam_privacy_policy_url" => ENV["HYDRACAM_PRIVACY_POLICY_URL"].to_s,
+    "hydracam_support_url" => ENV["HYDRACAM_SUPPORT_URL"].to_s,
+    "hydracam_account_deletion_url" => ENV["HYDRACAM_ACCOUNT_DELETION_URL"].to_s
+  }
+
+  File.open(metadata_path, "w") do |file|
+    metadata.each do |key, value|
+      file.puts("#{key}\t#{value}")
+    end
+  end
+
+  UI.message("Wrote store metadata: #{metadata_path}")
+end
+
 def build_release_ipa
+  Dir[IPA_GLOB].each do |path|
+    FileUtils.rm_f(path)
+    FileUtils.rm_f("#{path}.store-metadata.tsv")
+  end
+
   command = [
     flutter_bin,
     "build",
@@ -27,6 +80,7 @@ def build_release_ipa
   ] + flutter_build_flags
 
   sh("cd #{Shellwords.escape(REPO_ROOT)} && #{Shellwords.join(command)}")
+  write_store_metadata(latest_ipa, "ios", "ios/fastlane")
 end
 
 def latest_ipa

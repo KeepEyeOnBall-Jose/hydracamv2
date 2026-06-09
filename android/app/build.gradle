@@ -1,4 +1,5 @@
 import java.io.FileInputStream
+import java.util.Locale
 import java.util.Properties
 
 plugins {
@@ -13,10 +14,16 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def releaseStoreFilePath = keystoreProperties["storeFile"]?.toString()
+def releaseStoreFile = releaseStoreFilePath
+    ? (new File(releaseStoreFilePath).isAbsolute()
+        ? file(releaseStoreFilePath)
+        : rootProject.file(releaseStoreFilePath))
+    : null
 def hasReleaseKeystore =
     keystorePropertiesFile.exists() &&
     keystoreProperties["storeFile"] &&
-    file(keystoreProperties["storeFile"]).exists()
+    releaseStoreFile?.exists()
 def hydracamNdkVersion =
     (project.findProperty("hydracamNdkVersion") ?: "28.2.13676358").toString()
 def generatedPluginRegistrantFile = file(
@@ -47,7 +54,7 @@ android {
         targetSdk = 35
         versionCode = flutter.versionCode.toInteger()
         versionName = flutter.versionName
-        manifestPlaceholders["appAuthRedirectScheme"] = "com.hydracam"
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.amaia23.hydracam"
     }
 
     signingConfigs {
@@ -55,7 +62,7 @@ android {
             if (hasReleaseKeystore) {
                 keyAlias = keystoreProperties["keyAlias"]
                 keyPassword = keystoreProperties["keyPassword"]
-                storeFile = file(keystoreProperties["storeFile"])
+                storeFile = releaseStoreFile
                 storePassword = keystoreProperties["storePassword"]
             }
         }
@@ -63,9 +70,24 @@ android {
 
     buildTypes {
         release {
-            // Use a real upload key when android/key.properties is present.
-            signingConfig = hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
+            signingConfig = signingConfigs.release
         }
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def releaseBuildRequested = taskGraph.allTasks.any { task ->
+        def taskName = task.name.toLowerCase(Locale.ROOT)
+        taskName.contains("release") &&
+            (taskName.contains("bundle") ||
+                taskName.contains("assemble") ||
+                taskName.contains("package"))
+    }
+    if (releaseBuildRequested && !hasReleaseKeystore) {
+        throw new GradleException(
+            "Release build requires android/key.properties with a valid storeFile. " +
+                "Debug signing is not allowed for store artifacts."
+        )
     }
 }
 

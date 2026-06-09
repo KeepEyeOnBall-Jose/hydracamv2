@@ -1,0 +1,90 @@
+# HydraCam evidence run command log
+
+$ flutter build apk --debug --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             23.7s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 logcat -c
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role master --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 forward tcp:6400 tcp:4762
+[exit-code] 0
+
+$ curl --max-time 10 --silent --show-error -H Content-Type:application/json --data {"masterShouldRecord":true,"timerDuration":0,"cameraLensPreference":"autoBack","selectedCameraName":null,"videoCaptureProfile":"standard1080p30"} http://127.0.0.1:6400/settings
+{"status":"ok","settings":{"autoUploadMaterials":true,"masterShouldRecord":true,"deleteLocalAfterUpload":false,"autoplayVideoOnMaster":false,"flashForVideoAnnounce":false,"timerDuration":0,"cameraLensPreference":"autoBack","selectedCameraName":"0","videoCaptureProfile":"standard1080p30","videoCaptureTarget":"1080p at 30 fps"}}
+[exit-code] 0
+
+$ curl --max-time 45 --silent --show-error -H Content-Type:application/json --data {"showCountdown":false} http://127.0.0.1:6400/commands/take_photo
+{"status":"ok","command":"take_photo","result":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}}
+[exit-code] 0
+
+$ curl --max-time 45 --silent --show-error -H Content-Type:application/json --data {} http://127.0.0.1:6400/commands/start_recording
+{"status":"ok","command":"start_recording","result":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":true}}
+[exit-code] 0
+
+$ curl --max-time 45 --silent --show-error -H Content-Type:application/json --data {} http://127.0.0.1:6400/commands/stop_recording
+{"status":"ok","command":"stop_recording","result":{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}}
+[exit-code] 0
+
+$ ffprobe -v error -select_streams v:0 -show_entries stream=width,height,avg_frame_rate,duration -of default=noprint_wrappers=1 logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4
+width=1920
+height=1080
+avg_frame_rate=2356875/78541
+duration=13.962844
+[exit-code] 0
+
+$ file logs/verification-runs/20260609-1405-s7-higher-resolution-compat/screenshots/s7-standard1080p30-photo.jpg logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4
+logs/verification-runs/20260609-1405-s7-higher-resolution-compat/screenshots/s7-standard1080p30-photo.jpg: JPEG image data, Exif standard: [TIFF image data, little-endian, direntries=12, yresolution=158, xresolution=166, model=SM-G935F, manufacturer=samsung, software=G935FXXU8EVG3, height=1080, orientation=upper-left, resolutionunit=2, datetime=2026:06:09 14:07:43, width=1920], baseline, precision 8, 1920x1080, components 3
+logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4:       ISO Media, MP4 v2 [ISO 14496-14]
+[exit-code] 0
+
+$ ls -lh logs/verification-runs/20260609-1405-s7-higher-resolution-compat/screenshots/s7-standard1080p30-photo.jpg logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4
+-rw-r--r--@ 1 jose  staff   530K Jun  9 14:08 logs/verification-runs/20260609-1405-s7-higher-resolution-compat/screenshots/s7-standard1080p30-photo.jpg
+-rw-r--r--@ 1 jose  staff    29M Jun  9 14:08 logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4
+[exit-code] 0

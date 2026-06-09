@@ -367,3 +367,541 @@ $ xcrun devicectl device info processes --device 00008101-000A68811E43001E --fil
 [exit-code] 0
 
 $ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --filter bundleIdentifier == 'com.keepeyeonball' --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-process-com-keepeyeonball.json --timeout 20
+06:03:31  Acquired tunnel connection to device.
+06:03:31  Enabling developer disk image services.
+06:03:31  Acquired usage assertion.
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 1
+
+$ curl --max-time 30 -sS -X POST http://192.168.178.168:4762/commands/capture_screenshot -H Content-Type:application/json --data {"name":"iphone-current-not-working","pixelRatio":1} --output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-capture-screenshot-command.json
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --source Documents/automation-screenshots/iphone-current-not-working-2026-06-09T06-04-13-683085.png --destination logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/screenshots/iphone-current-not-working.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-copy-screenshot.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-copy-screenshot.log
+06:04:25  Acquired tunnel connection to device.
+06:04:25  Enabling developer disk image services.
+06:04:25  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/screenshots/iphone-current-not-working.png
+[exit-code] 0
+
+$ xcrun xctrace record --template Time Profiler --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --time-limit 20s --output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-xctrace-launch.trace --env HYDRACAM_AUTOMATION_ROLE=standby --env HYDRACAM_AUTOMATION_TARGET_ID=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --launch -- com.keepeyeonball
+Starting recording with the Time Profiler template. Launching process: com.keepeyeonball. Time limit: 20.0 s
+Ctrl-C to stop the recording
+Reached specified time limit, ending recording...
+Recording completed. Saving output file...
+Output file saved as: ipad-xctrace-launch.trace
+
+[stderr]
+Timeline modification failed -- dylibs overlap by 0xe8000:
+    0x10440c000-0x1044f4000 [0xe8000] (0-2324661635451) /usr/lib/dyld
+    0x10440c000-0x1044f4000 [0xe8000] (0-9223372036854775807) /usr/lib/dyld
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (28) Operation timed out after 5005 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ curl --max-time 5 -sS http://169.254.193.202:4762/healthz
+
+[stderr]
+curl: (28) Operation timed out after 5006 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ python3 scripts/discover_automation_bridge.py --scan-subnet 169.254.193.0/24 --timeout 20 --required-command capture_screenshot
+
+[stderr]
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/discover_automation_bridge.py", line 49, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/jose/src/work/hydracamv2/scripts/discover_automation_bridge.py", line 27, in main
+    bridge_url = discover_bridge(
+        args.port,
+    ...<2 lines>...
+        required_command=args.required_command,
+    )
+  File "/Users/jose/src/work/hydracamv2/scripts/ios_capture_repro.py", line 116, in discover_bridge
+    raise ReproError(
+        f"Automation bridge was not discovered on {subnet} port {port}"
+    )
+ios_capture_repro.ReproError: Automation bridge was not discovered on 169.254.193.0/24 port 4762
+[exit-code] 1
+
+$ python3 scripts/discover_automation_bridge.py --all --scan-subnet 169.254.193.0/24 --timeout 20 --required-command capture_screenshot --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [],
+  "count": 0,
+  "port": 4762,
+  "requiredCommand": "capture_screenshot",
+  "scanSubnet": "169.254.193.0/24",
+  "targetIds": [
+    "00008101-000A68811E43001E",
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 1
+
+$ python3 scripts/discover_automation_bridge.py --all --scan-subnet 192.168.178.0/24 --timeout 20 --required-command capture_screenshot --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [
+    {
+      "automationTargetId": "00008101-000A68811E43001E",
+      "bridgeUrl": "http://192.168.178.168:4762",
+      "health": {
+        "automation": true,
+        "automationTargetId": "00008101-000A68811E43001E",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "host": "192.168.178.168"
+    }
+  ],
+  "count": 1,
+  "port": 4762,
+  "requiredCommand": "capture_screenshot",
+  "scanSubnet": "192.168.178.0/24",
+  "targetIds": [
+    "00008101-000A68811E43001E",
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents --destination logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents.log
+06:08:02  Acquired tunnel connection to device.
+06:08:02  Enabling developer disk image services.
+06:08:02  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents
+[exit-code] 0
+
+$ xcrun devicectl device reboot --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-reboot.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-reboot.log
+06:13:38  Acquired tunnel connection to device.
+06:13:38  Enabling developer disk image services.
+06:13:38  Acquired usage assertion.
+Full reboot requested on device: iPad (5)
+
+[stderr]
+ERROR: Command timeout of 30.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  flutter_secure_storage_windows 4.1.0 (4.2.2 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+62 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building com.keepeyeonball for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 4RRY2QT7H8
+Running Xcode build...
+Xcode build done.                                           46.3s
+✓ Built build/ios/iphoneos/Runner.app (30.9MB)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-devicectl-install.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-devicectl-install.log --timeout 600
+06:16:03  Acquired tunnel connection to device.
+06:16:03  Enabling developer disk image services.
+06:16:03  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/4710F1E4-05CF-4EA5-A9EE-21CEC9BDF5A9/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1408
+• options:
+[exit-code] 0
+
+$ xcrun devicectl device install app --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A build/ios/iphoneos/Runner.app --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-devicectl-install.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-devicectl-install.log --timeout 600
+06:16:06  Acquired tunnel connection to device.
+06:16:06  Enabling developer disk image services.
+06:16:06  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/D119C409-BA8F-434A-9F3A-ED3374BCA04F/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9AE68C29-BCF0-468A-80A2-5D38F03AFCDD
+• databaseSequenceNumber: 1808
+• options:
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 00008101-000A68811E43001E --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"00008101-000A68811E43001E"} --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-launch-com-keepeyeonball.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-launch-com-keepeyeonball.log --timeout 45 com.keepeyeonball
+06:16:23  Acquired tunnel connection to device.
+06:16:23  Enabling developer disk image services.
+06:16:23  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-launch-com-keepeyeonball.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-launch-com-keepeyeonball.log --timeout 45 com.keepeyeonball
+06:16:23  Acquired tunnel connection to device.
+06:16:24  Enabling developer disk image services.
+06:16:24  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ python3 scripts/discover_automation_bridge.py --all --scan-subnet 169.254.193.0/24 --timeout 20 --required-command capture_screenshot --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [],
+  "count": 0,
+  "port": 4762,
+  "requiredCommand": "capture_screenshot",
+  "scanSubnet": "169.254.193.0/24",
+  "targetIds": [
+    "00008101-000A68811E43001E",
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 1
+
+$ python3 scripts/discover_automation_bridge.py --all --scan-subnet 192.168.178.0/24 --timeout 20 --required-command capture_screenshot --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [
+    {
+      "automationTargetId": "00008101-000A68811E43001E",
+      "bridgeUrl": "http://192.168.178.168:4762",
+      "health": {
+        "automation": true,
+        "automationTargetId": "00008101-000A68811E43001E",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "host": "192.168.178.168"
+    }
+  ],
+  "count": 1,
+  "port": 4762,
+  "requiredCommand": "capture_screenshot",
+  "scanSubnet": "192.168.178.0/24",
+  "targetIds": [
+    "00008101-000A68811E43001E",
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://169.254.193.202:4762/healthz
+
+[stderr]
+curl: (28) Operation timed out after 5008 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (28) Operation timed out after 5010 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents --destination logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-launch --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-launch.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-launch.log
+06:17:26  Acquired tunnel connection to device.
+06:17:26  Enabling developer disk image services.
+06:17:26  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-launch
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents --destination logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-settle --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-settle.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-settle.log
+06:18:15  Acquired tunnel connection to device.
+06:18:15  Enabling developer disk image services.
+06:18:15  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-settle
+[exit-code] 0
+
+$ xcrun devicectl device uninstall app --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A com.vectorblanco.hydracam.dev --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-uninstall-old-vectorblanco.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-uninstall-old-vectorblanco.log --timeout 60
+06:19:03  Acquired tunnel connection to device.
+06:19:03  Enabling developer disk image services.
+06:19:03  Acquired usage assertion.
+App uninstalled.
+[exit-code] 0
+
+$ xcrun devicectl device uninstall app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 com.vectorblanco.hydracam.dev --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-uninstall-old-vectorblanco.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-uninstall-old-vectorblanco.log --timeout 60
+06:19:03  Acquired tunnel connection to device.
+06:19:03  Enabling developer disk image services.
+06:19:03  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 60.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4763 -t lib/main.dart
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  async 2.12.0 (2.13.1 available)
+  camera 0.11.4 (0.12.0+1 available)
+  camera_android_camerax 0.6.30 (0.7.2+1 available)
+  camera_avfoundation 0.9.23+2 (0.10.1 available)
+  camera_platform_interface 2.12.0 (2.13.0 available)
+  camera_web 0.3.5 (0.3.5+3 available)
+  checked_yaml 2.0.3 (2.0.4 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.0.0 (7.1.1 available)
+  connectivity_plus_platform_interface 2.0.1 (2.1.0 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  dbus 0.7.11 (0.7.14 available)
+  device_info_plus 12.2.0 (13.1.0 available)
+  device_info_plus_platform_interface 7.0.3 (8.1.0 available)
+  ffi 2.1.4 (2.2.0 available)
+  flutter_appauth 11.0.0 (12.0.1 available)
+  flutter_appauth_platform_interface 11.0.0 (12.0.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.31 (2.0.35 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  flutter_secure_storage_windows 4.1.0 (4.2.2 available)
+  geolocator_linux 0.2.3 (0.2.5 available)
+  geolocator_platform_interface 4.2.6 (4.2.7 available)
+  image 4.5.4 (4.9.1 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  mocktail 1.0.4 (1.0.5 available)
+  network_info_plus 7.0.0 (8.1.0 available)
+  network_info_plus_platform_interface 2.0.2 (3.1.0 available)
+  package_info_plus 8.3.1 (10.1.0 available)
+  package_info_plus_platform_interface 3.2.1 (4.1.0 available)
+  path_provider_android 2.2.19 (2.3.1 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  permission_handler 12.0.1 (12.0.3 available)
+  permission_handler_apple 9.4.7 (9.4.9 available)
+  petitparser 6.1.0 (7.0.2 available)
+  photo_manager 3.7.1 (3.9.0 available)
+  posix 6.0.3 (6.5.0 available)
+  process 5.0.3 (5.0.5 available)
+  shared_preferences 2.5.3 (2.5.5 available)
+  shared_preferences_android 2.4.13 (2.4.25 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.11 (0.7.12 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.10.1 (2.11.1 available)
+  video_player_android 2.8.15 (2.9.6 available)
+  video_player_avfoundation 2.8.4 (2.9.7 available)
+  video_player_platform_interface 6.6.0 (6.7.0 available)
+  vm_service 14.3.1 (15.2.0 available)
+  wakelock_plus 1.3.3 (1.6.1 available)
+  wakelock_plus_platform_interface 1.3.0 (1.5.1 available)
+  webdriver 3.0.4 (3.1.0 available)
+  win32 5.13.0 (6.3.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.5.0 (7.0.1 available)
+Got dependencies!
+62 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building com.keepeyeonball for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 4RRY2QT7H8
+Running Xcode build...
+Xcode build done.                                           23.1s
+✓ Built build/ios/iphoneos/Runner.app (30.9MB)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-devicectl-install.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-devicectl-install.log --timeout 600
+06:21:15  Acquired tunnel connection to device.
+06:21:15  Enabling developer disk image services.
+06:21:15  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/1890F86D-31D2-4AD4-B9EB-E58C755EB764/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1416
+• options:
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-launch-com-keepeyeonball.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-launch-com-keepeyeonball.log --timeout 45 com.keepeyeonball
+06:21:27  Acquired tunnel connection to device.
+06:21:27  Enabling developer disk image services.
+06:21:27  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 45.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ python3 scripts/discover_automation_bridge.py --all --port 4763 --scan-subnet 192.168.178.0/24 --timeout 20 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [],
+  "count": 0,
+  "port": 4763,
+  "requiredCommand": null,
+  "scanSubnet": "192.168.178.0/24",
+  "targetIds": [
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 1
+
+$ python3 scripts/discover_automation_bridge.py --all --port 4763 --scan-subnet 169.254.193.0/24 --timeout 20 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [],
+  "count": 0,
+  "port": 4763,
+  "requiredCommand": null,
+  "scanSubnet": "169.254.193.0/24",
+  "targetIds": [
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 1
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents --destination logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-4763-launch --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-4763-launch.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-4763-launch.log
+06:23:14  Acquired tunnel connection to device.
+06:23:14  Enabling developer disk image services.
+06:23:14  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-4763-launch
+[exit-code] 0
+
+$ xcrun xctrace record --template Time Profiler --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --time-limit 15s --output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-xctrace-launch-4763.trace --env HYDRACAM_AUTOMATION_ROLE=standby --env HYDRACAM_AUTOMATION_TARGET_ID=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --launch -- com.keepeyeonball
+Starting recording with the Time Profiler template. Launching process: com.keepeyeonball. Time limit: 15.0 s
+Ctrl-C to stop the recording
+Reached specified time limit, ending recording...
+Recording completed. Saving output file...
+Output file saved as: ipad-xctrace-launch-4763.trace
+[exit-code] 0
+
+$ python3 scripts/discover_automation_bridge.py --all --port 4763 --scan-subnet 192.168.178.0/24 --timeout 20 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [],
+  "count": 0,
+  "port": 4763,
+  "requiredCommand": null,
+  "scanSubnet": "192.168.178.0/24",
+  "targetIds": [
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 1
+
+$ python3 scripts/discover_automation_bridge.py --all --port 4763 --scan-subnet 169.254.193.0/24 --timeout 20 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+{
+  "bridges": [],
+  "count": 0,
+  "port": 4763,
+  "requiredCommand": null,
+  "scanSubnet": "169.254.193.0/24",
+  "targetIds": [
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+  ]
+}
+[exit-code] 1
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents --destination logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-xctrace-4763 --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-xctrace-4763.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-xctrace-4763.log
+06:25:05  Acquired tunnel connection to device.
+06:25:05  Enabling developer disk image services.
+06:25:05  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-xctrace-4763
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://169.254.193.202:4763/healthz
+
+[stderr]
+curl: (7) Failed to connect to 169.254.193.202 port 4763 after 1003 ms: Couldn't connect to server
+[exit-code] 7
+
+$ curl --max-time 5 -sS http://192.168.178.104:4763/healthz
+
+[stderr]
+curl: (7) Failed to connect to 192.168.178.104 port 4763 after 1179 ms: Couldn't connect to server
+[exit-code] 7
+
+$ curl --max-time 5 -g -sS http://[fd7d:560a:4576::1]:4763/healthz
+
+[stderr]
+curl: (7) Failed to connect to fd7d:560a:4576::1 port 4763 after 3 ms: Couldn't connect to server
+[exit-code] 7

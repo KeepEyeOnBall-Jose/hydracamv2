@@ -156,10 +156,12 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
       _handleSetRuntimeRole;
   late final AutomationHandler _captureScreenshotAutomationHandler =
       AutomationScreenshotService.capture;
+  bool _automationRouteActive = false;
 
   @override
   void initState() {
     super.initState();
+    _automationRouteActive = _isAutomationRouteConfig(widget.launchConfig);
     WidgetsBinding.instance.addObserver(this);
     unawaited(_enableScreenWakeLock("app init"));
     if (automationEnabled) {
@@ -190,6 +192,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       unawaited(_enableScreenWakeLock("app resumed"));
+      unawaited(_openNormalAppAfterManualLauncherStart());
     }
   }
 
@@ -234,6 +237,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
     LogService.instance
         .registerLog("Runtime role switch requested: ${request.toJson()}");
     unawaited(_enableScreenWakeLock("runtime role switch"));
+    _automationRouteActive = true;
     navigator.pushAndRemoveUntil(
       PageRouteBuilder<void>(
         pageBuilder: (_, __, ___) => _screenForRuntimeRole(request),
@@ -256,8 +260,62 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
           forceSlaveMode: request.forceSlaveMode,
         );
       case RuntimeAutomationRole.standby:
-        return const AutomationStandbyScreen();
+        return _automationStandbyScreen();
     }
+  }
+
+  Widget _automationStandbyScreen() {
+    return AutomationStandbyScreen(
+      onOpenNormalApp: () {
+        unawaited(_openNormalApp());
+      },
+    );
+  }
+
+  bool _isAutomationRouteConfig(LaunchConfig? config) {
+    if (!automationEnabled || config == null || config.isManualLaunch) {
+      return false;
+    }
+    return config.wantsMaster ||
+        config.wantsSlave ||
+        config.wantsStandby ||
+        config.wantsSetupPreview ||
+        config.forceSlaveMode;
+  }
+
+  Future<void> _openNormalAppAfterManualLauncherStart() async {
+    if (!automationEnabled || !_automationRouteActive) {
+      return;
+    }
+
+    final LaunchConfig? config = await LaunchConfigService.instance.load();
+    if (!(config?.isManualLaunch ?? false)) {
+      return;
+    }
+
+    LogService.instance.registerLog(
+        "Manual launcher start detected while automation route was active.");
+    await _openNormalApp();
+  }
+
+  Future<void> _openNormalApp() async {
+    await LaunchConfigService.instance.clearSavedAutomationLaunchConfig();
+    if (!mounted) {
+      return;
+    }
+
+    _automationRouteActive = false;
+    LogService.instance
+        .registerLog("Opening normal HydraCam app from automation standby.");
+    _ensureNavigatorReady().pushAndRemoveUntil(
+      PageRouteBuilder<void>(
+        pageBuilder: (_, __, ___) => const SlaveScreen(isAutoMode: true),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+      (_) => false,
+    );
+    await WidgetsBinding.instance.endOfFrame;
   }
 
   Widget _initialScreen() {
@@ -285,7 +343,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
 
     if (automationStandby) {
       LogService.instance.registerLog("Navigating to AutomationStandbyScreen");
-      return const AutomationStandbyScreen();
+      return _automationStandbyScreen();
     }
 
     if (automationSetupPreview) {

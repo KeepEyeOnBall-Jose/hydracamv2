@@ -119,7 +119,31 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   `build/ios/ipa/HydraCam.ipa` with a cloud-managed Apple Distribution
   certificate. The iPad install/launch succeeded, but its automation bridge did
   not answer on `169.254.193.202`, `192.168.178.104`, or scanned LAN/link-local
-  subnets in that run. TestFlight upload still requires App Store Connect upload
+  subnets in that run. Follow-up
+  `20260609-0557-ios-iphone-ipad-not-working` reproduced the user's failure:
+  both physical iOS devices were visible and unlocked, the iPhone
+  `com.keepeyeonball` bridge passed `/healthz` and copied an automation
+  screenshot, but the iPhone also still had the old
+  `com.vectorblanco.hydracam.dev` HydraCam bundle installed with the same
+  visible app name. The iPad `devicectl` launch timed out; `xctrace` reached
+  Dart, and copied iPad traces showed `SocketException: Failed to create server
+  socket ... port = 4762`, meaning a stale process/socket held the automation
+  port. The continuation
+  `20260609-0852-ios-iphone-ipad-recovery-continuation` removed the stale iPhone
+  duplicate, made automation bridge bind failure non-fatal, fixed the real iPad
+  startup stall by timing out stuck startup permission requests after 8 seconds,
+  rebuilt and installed Profile automation apps on iPhone and iPad, restored
+  both identity-matched bridges on the standard port `4762`, copied current
+  standby screenshots from both devices, and passed a selected physical
+  iPhone+iPad immediate role-switch proof with explicit LAN hosts in `0.45s`.
+  The previous iPad recovery blocker is superseded; for selected iPhone+iPad
+  role-switch checks, keep `--no-auto-ios-bridge-hosts` when explicit LAN hosts
+  are supplied so iPhone link-local bridge adoption cannot poison expected
+  remote-client IP checks. The follow-up all-hardware run
+  `20260609-0930-all-hardware-ios-android-update-role-test` kept the physical
+  iPhone and iPad on identity-matched `4762` bridges and included both in the
+  current six-device iOS/Android role-switch proof.
+  TestFlight upload still requires App Store Connect upload
   credentials, for example `APP_STORE_CONNECT_API_KEY_PATH` or Transporter/altool
   API key and issuer. Rerun the full
   selected-set loop before claiming a new six-target role-switch benchmark. The
@@ -131,9 +155,24 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   explicitly reopens legacy-device support. 2026-06-07 post-label evidence
   shows Samsung S10e / Android 12 and SM-G960F / Android 10 baseline 1080p30
   capture passing. A later 2026-06-07 parallel independent-capture matrix
-  confirmed S10e and G960F under a shared command barrier, while Samsung S7 edge
-  still fails before photo save and is classified as
-  `s7_exynos_camera_timeout`.
+  confirmed S10e and G960F under a shared command barrier. The Samsung S7 edge
+  requires a device-specific compatibility mode: current code detects SM-G935F,
+  preserves the requested capture profile, uses preset-default FPS, and retries
+  timed-out still capture after controller reinitialization. The 2026-06-09 S7
+  higher-resolution compatibility run
+  `20260609-1405-s7-higher-resolution-compat` proved a direct S7
+  automation-master `standard1080p30` photo save plus a direct video
+  start/stop/save with copied JPEG/MP4 artifacts at 1920x1080. The earlier
+  `20260609-1012-s7-camera-compat-automation-exit` 720x480 workaround is
+  superseded for camera resolution. A standard backend-session matrix in that
+  earlier run still timed out on `start_session`, so keep S7 camera
+  compatibility separate from backend/session automation health. The 2026-06-09
+  all-hardware update run
+  `20260609-0930-all-hardware-ios-android-update-role-test` built the current
+  automation-enabled Android APK (`1.4.0+16`, minSdk 24), updated Samsung
+  G960F, Samsung S7 edge, and both Samsung S10e devices, and confirmed all five
+  visible Androids were on `192.168.178.0/24`. Xiaomi 2201116PG remained
+  blocked by device-side `INSTALL_FAILED_USER_RESTRICTED`.
 - Multi-device synchronization evidence: the 2026-06-07 parallel matrix was an
   independent local-capture matrix and intentionally launched every
   capture-capable device as a local master. It is not a master/slave discovery
@@ -157,7 +196,14 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
   selected device became master five times. A separate pure-immediate
   warm-summary rerun `20260608-warm-summary-hot-five-repeat` passes the same
   25 rotations in `8.806s` when every selected bridge is already warm, with no
-  discovery, build, install, or launch. The current fastest repeat proof is
+  discovery, build, install, or launch. The current six-device physical
+  iOS/Android proof
+  `20260609-0930-all-hardware-ios-android-update-role-test/device-logs/six-device-current-build-role-switch`
+  passed six role rotations in `43.435s` across Samsung G960F, Samsung S7 edge,
+  two Samsung S10e devices, iPhone 12 Pro, and iPad 5 after updating the four
+  included Android APK installs. Xiaomi was excluded from the rotations only
+  because the Android package update was blocked on-device. The current fastest
+  repeat proof is
   `20260608-latest-cache-shortest-default-staged-five-hot`, which uses the
   automatically persisted latest warm-summary cache with no manual
   `--warm-summary`, no target list, no explicit staged-slave flag, no

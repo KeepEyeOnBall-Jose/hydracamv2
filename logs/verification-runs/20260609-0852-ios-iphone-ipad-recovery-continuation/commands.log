@@ -1,0 +1,774 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+ M AGENTS.md
+ M docs/control/status-and-roadmap.md
+ M lib/automation/automation_bridge.dart
+ M logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/artifacts.json
+ M logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/commands.log
+ M logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/summary.md
+ M scripts/discover_automation_bridge.py
+ M test/automation/automation_bridge_test.dart
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-4763-launch/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-launch/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-patched-settle/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents-after-xctrace-4763/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-documents/
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-4763-launch.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-4763-launch.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-launch.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-launch.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-settle.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-patched-settle.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-xctrace-4763.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents-after-xctrace-4763.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-copy-documents.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-lockstate-after-patched.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-devicectl-install.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-devicectl-install.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-launch-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-4763-launch-com-keepeyeonball.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-devicectl-install.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-devicectl-install.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-launch-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-launch-com-keepeyeonball.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-patched-process-runner.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-process-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-reboot.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-reboot.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-uninstall-old-vectorblanco.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-uninstall-old-vectorblanco.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-capture-screenshot-command.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-copy-screenshot.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-copy-screenshot.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-devicectl-install.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-devicectl-install.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-launch-com-keepeyeonball.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-patched-launch-com-keepeyeonball.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-uninstall-old-vectorblanco.json
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-uninstall-old-vectorblanco.log
+?? logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/git-status-after.txt
+?? logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 10 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  2201116PG (mobile)           • 575ecf2cbd24                             • android-arm64  • Android 13 (API 33)
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.102
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State       Model                                        
+-------------------   -----------------------------------   ------------------------------------   ---------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   connected   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ xcrun xctrace list devices
+== Devices ==
+jose-mbp (E10DDBBD-CE0A-5212-B382-17714EF12A6B)
+José Ramón’s iPhone (26.5) (00008101-000A68811E43001E)
+iPad (5) (17.7.11) (8b406aa5c597eab4c4dfd9908f4a09b10a89ec63)
+
+== Simulators ==
+Apple TV Simulator (18.4) (D43C6B59-90A5-45B2-B036-E82888CD3396)
+Apple TV 4K (3rd generation) Simulator (18.4) (0B98182D-7F16-4881-9075-15CB539C6916)
+Apple TV 4K (3rd generation) (at 1080p) Simulator (18.4) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05)
+Apple Vision Pro (2.4) (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E)
+Apple Watch SE (40mm) (2nd generation) Simulator (11.4) (46A5F0BA-FDC2-4580-9666-32460B4668B4)
+Apple Watch SE (44mm) (2nd generation) Simulator (11.4) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758)
+Apple Watch Series 10 (42mm) Simulator (11.4) (834DA641-E4E1-4017-920C-F24C6190B6BB)
+Apple Watch Series 10 (46mm) Simulator (11.4) (BB392236-84F5-4DFE-8C31-E8258FDF8B39)
+Apple Watch Ultra 2 (49mm) Simulator (11.4) (37E68BED-6456-4102-85BF-BA64F7F4F936)
+iPad (A16) Simulator (18.4) (65B81095-034E-43BD-B725-25D20F633515)
+iPad (A16) Simulator (26.5) (87CD6158-316A-47D7-8CF7-771A8784C5FB)
+iPad Air 11-inch (M3) Simulator (18.4) (3138C415-02AD-4FBE-8325-337E0B1D85A4)
+iPad Air 11-inch (M4) Simulator (26.5) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD)
+iPad Air 13-inch (M3) Simulator (18.4) (F1653079-F410-49D2-A063-1AF6509CA7DF)
+iPad Air 13-inch (M4) Simulator (26.5) (57C9ED10-064A-4596-92B8-94A582FBDE79)
+iPad Pro 11-inch (M4) Simulator (18.4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45)
+iPad Pro 11-inch (M5) Simulator (26.5) (F1AD956F-F029-4ED1-8153-C4D325402AF5)
+iPad Pro 13-inch (M4) Simulator (18.4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E)
+iPad Pro 13-inch (M5) Simulator (26.5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190)
+iPad mini (A17 Pro) Simulator (18.4) (57AF3A1E-667B-4C93-93F4-273BF71F610D)
+iPad mini (A17 Pro) Simulator (26.5) (2105C891-0F6B-4A05-B471-3F589F3319C1)
+iPhone 16 Simulator (18.4) (8803DD22-4646-4C0C-95BD-249D898CF513)
+iPhone 16 Plus Simulator (18.4) (5CF4A12E-A8B5-4285-AE86-407B9067CB5F)
+iPhone 16 Pro Simulator (18.4) (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3)
+iPhone 16 Pro Max Simulator (18.4) (CB509746-6183-4AEC-9FA5-725378C563BF)
+iPhone 16e Simulator (18.4) (E6EC1822-E63D-4034-A308-8B918FE35465)
+iPhone 17 Simulator (26.5) (74BEC426-E51A-460B-8AA3-E8E615CF7444)
+iPhone 17 Pro Simulator (26.5) (45768BC9-71B5-4BBA-9372-EAD4A0234650)
+iPhone 17 Pro Max Simulator (26.5) (D8D3076F-9A3B-431E-9040-444592B8714D)
+iPhone 17e Simulator (26.5) (E9295FDD-2A32-40D9-81CC-DEA8042F3F78)
+iPhone Air Simulator (26.5) (AD4C96F1-9085-4422-993A-1CA9C8458240)
+[exit-code] 0
+
+$ xcrun devicectl device info apps --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --bundle-id com.keepeyeonball
+08:53:36  Acquired tunnel connection to device.
+08:53:36  Enabling developer disk image services.
+08:53:36  Acquired usage assertion.
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 1
+
+$ xcrun devicectl device info apps --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --bundle-id com.keepeyeonball
+08:53:37  Acquired tunnel connection to device.
+08:53:37  Enabling developer disk image services.
+08:53:37  Acquired usage assertion.
+Apps installed:
+Name       Bundle Identifier   Version   Bundle Version
+--------   -----------------   -------   --------------
+HydraCam   com.keepeyeonball   1.4.0     16            
+[exit-code] 0
+
+$ xcrun devicectl device info apps --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --bundle-id com.vectorblanco.hydracam.dev
+08:53:46  Acquired tunnel connection to device.
+08:53:46  Enabling developer disk image services.
+08:53:46  Acquired usage assertion.
+Apps installed:
+[exit-code] 0
+
+$ xcrun devicectl device info apps --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --bundle-id com.vectorblanco.hydracam.dev
+08:53:46  Acquired tunnel connection to device.
+08:53:46  Enabling developer disk image services.
+08:53:46  Acquired usage assertion.
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 1
+
+$ xcrun devicectl device process launch --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --terminate-existing com.keepeyeonball
+08:54:13  Acquired tunnel connection to device.
+08:54:13  Enabling developer disk image services.
+08:54:13  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing com.keepeyeonball
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4762 after 1006 ms: Timeout was reached
+[exit-code] 28
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.104:4763/healthz
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4763 after 1006 ms: Timeout was reached
+[exit-code] 28
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://169.254.193.202:4763/healthz
+
+[stderr]
+curl: (28) Failed to connect to 169.254.193.202 port 4763 after 1001 ms: Timeout was reached
+[exit-code] 28
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball --timeout 20
+09:01:02  Acquired tunnel connection to device.
+09:01:02  Enabling developer disk image services.
+09:01:02  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 20.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ xcrun devicectl device process launch --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"00008101-000A68811E43001E"} com.keepeyeonball --timeout 20
+09:01:22  Acquired tunnel connection to device.
+09:01:22  Enabling developer disk image services.
+09:01:22  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.168:4762/commands/capture_screenshot -H Content-Type: application/json --data {"name":"iphone-recovery-continuation","pixelRatio":1} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-capture-screenshot-command.json
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://169.254.193.202:4763/healthz
+
+[stderr]
+curl: (7) Failed to connect to 169.254.193.202 port 4763 after 1003 ms: Couldn't connect to server
+[exit-code] 7
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.104:4763/healthz
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4763 after 1001 ms: Timeout was reached
+[exit-code] 28
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4762 after 1004 ms: Timeout was reached
+[exit-code] 28
+
+$ xcrun devicectl device copy from --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --source Documents/automation-screenshots/iphone-recovery-continuation-2026-06-09T09-01-44-605311.png --destination logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/iphone-recovery-continuation.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-copy-screenshot.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-copy-screenshot.log
+09:02:23  Acquired tunnel connection to device.
+09:02:23  Enabling developer disk image services.
+09:02:24  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/iphone-recovery-continuation.png
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app --timeout 120 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-install-current-runner.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-install-current-runner.log
+09:02:45  Acquired tunnel connection to device.
+09:02:45  Enabling developer disk image services.
+09:02:45  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/7D151605-CEC1-4382-98C0-190FE2F50ABB/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1464
+• options: 
+[exit-code] 0
+
+$ xcrun devicectl device info apps --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --bundle-id com.keepeyeonball --timeout 30
+09:03:02  Acquired tunnel connection to device.
+09:03:02  Enabling developer disk image services.
+09:03:02  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 30.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball --timeout 30
+09:03:32  Acquired tunnel connection to device.
+09:03:32  Enabling developer disk image services.
+09:03:32  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 30.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.104:4763/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":[]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4762 after 1004 ms: Timeout was reached
+[exit-code] 28
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://169.254.193.202:4763/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":[]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 3 --fail --silent --show-error http://169.254.193.202:4762/healthz
+
+[stderr]
+curl: (7) Failed to connect to 169.254.193.202 port 4762 after 1001 ms: Couldn't connect to server
+[exit-code] 7
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4763/settings
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4763 after 1006 ms: Timeout was reached
+[exit-code] 28
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4763/logs --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-bridge-logs-after-reinstall.json
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4763 after 1004 ms: Timeout was reached
+[exit-code] 28
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.104:4763/healthz
+
+[stderr]
+curl: (28) Failed to connect to 192.168.178.104 port 4763 after 1005 ms: Timeout was reached
+[exit-code] 28
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents --destination logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-app-documents-after-reinstall --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-copy-documents-after-reinstall.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-copy-documents-after-reinstall.log
+09:05:52  Acquired tunnel connection to device.
+09:05:52  Enabling developer disk image services.
+09:05:52  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-app-documents-after-reinstall
+[exit-code] 0
+
+$ flutter build ios --profile --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4763 -t lib/main.dart
+Building com.keepeyeonball for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 4RRY2QT7H8
+Running Xcode build...                                          
+Xcode build done.                                           38.4s
+✓ Built build/ios/iphoneos/Runner.app (30.9MB)
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app --timeout 120 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-install-timeoutfix-4763.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-install-timeoutfix-4763.log
+09:10:03  Acquired tunnel connection to device.
+09:10:03  Enabling developer disk image services.
+09:10:03  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/8B9FEAB2-62F6-4B93-87E6-F7248C70A85E/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1472
+• options: 
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.104:4763/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4763/logs --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-bridge-logs-timeoutfix-4763.json
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4763/settings
+{"autoUploadMaterials":true,"masterShouldRecord":true,"deleteLocalAfterUpload":false,"autoplayVideoOnMaster":false,"flashForVideoAnnounce":false,"timerDuration":3,"cameraLensPreference":"autoBack","selectedCameraName":null,"videoCaptureProfile":"standard1080p30","videoCaptureTarget":"1080p at 30 fps"}
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.104:4763/commands/capture_screenshot -H Content-Type: application/json --data {"name":"ipad-recovery-timeoutfix","pixelRatio":1} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-capture-screenshot-command.json
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://169.254.193.202:4763/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.104:4763/session
+{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents/automation-screenshots/ipad-recovery-timeoutfix-2026-06-09T09-11-17-830249.png --destination logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/ipad-recovery-timeoutfix.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-copy-screenshot-timeoutfix.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-copy-screenshot-timeoutfix.log
+09:11:45  Acquired tunnel connection to device.
+09:11:45  Enabling developer disk image services.
+09:11:45  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/ipad-recovery-timeoutfix.png
+[exit-code] 0
+
+$ flutter build ios --profile --no-pub --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Building com.keepeyeonball for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 4RRY2QT7H8
+Running Xcode build...                                          
+Xcode build done.                                           26.9s
+✓ Built build/ios/iphoneos/Runner.app (30.9MB)
+[exit-code] 0
+
+$ xcrun devicectl device install app --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A build/ios/iphoneos/Runner.app --timeout 120 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-install-timeoutfix-4762.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-install-timeoutfix-4762.log
+09:12:59  Acquired tunnel connection to device.
+09:12:59  Enabling developer disk image services.
+09:12:59  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/2322EEF1-AC13-4195-A67D-64C6FBAF89BD/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9AE68C29-BCF0-468A-80A2-5D38F03AFCDD
+• databaseSequenceNumber: 1816
+• options: 
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"00008101-000A68811E43001E"} com.keepeyeonball --timeout 30
+09:13:00  Acquired tunnel connection to device.
+09:13:00  Enabling developer disk image services.
+09:13:01  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.168:4762/logs --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-bridge-logs-timeoutfix-4762.json
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.168:4762/commands/capture_screenshot -H Content-Type: application/json --data {"name":"iphone-recovery-timeoutfix","pixelRatio":1} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-capture-screenshot-timeoutfix-command.json
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --source Documents/automation-screenshots/iphone-recovery-timeoutfix-2026-06-09T09-13-30-339645.png --destination logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/iphone-recovery-timeoutfix.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-copy-screenshot-timeoutfix.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-copy-screenshot-timeoutfix.log
+09:13:59  Acquired tunnel connection to device.
+09:13:59  Enabling developer disk image services.
+09:13:59  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/iphone-recovery-timeoutfix.png
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.104:4763/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.168:4762/commands/set_role -H Content-Type: application/json --data {"role":"master"} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-set-role-master.json
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.104:4763/commands/set_role -H Content-Type: application/json --data {"role":"slave","preferredMasterIp":"192.168.178.168","forceSlaveMode":true} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-set-role-slave.json
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","connected_clients","end_session","list_cameras","set_role","start_recording","start_session","stop_recording","take_photo"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.168:4762/session
+{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4763/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4763/session
+{"sessionGuid":null,"deviceType":"Unknown","isActive":false,"photoCount":0,"videoCount":0,"queueLength":0,"isUploading":false,"isRecording":false}
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.168:4762/commands/capture_screenshot -H Content-Type: application/json --data {"name":"iphone-master-after-role-switch","pixelRatio":1} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-master-screenshot-command.json
+[exit-code] 0
+
+$ curl --max-time 30 --fail --silent --show-error -X POST http://192.168.178.104:4763/commands/capture_screenshot -H Content-Type: application/json --data {"name":"ipad-slave-after-role-switch","pixelRatio":1} --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-slave-screenshot-command.json
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --source Documents/automation-screenshots/iphone-master-after-role-switch-2026-06-09T09-15-41-831260.png --destination logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/iphone-master-after-role-switch.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-copy-master-screenshot.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/iphone-copy-master-screenshot.log
+09:16:03  Acquired tunnel connection to device.
+09:16:03  Enabling developer disk image services.
+09:16:03  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/iphone-master-after-role-switch.png
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents/automation-screenshots/ipad-slave-after-role-switch-2026-06-09T09-15-42-049165.png --destination logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/ipad-slave-after-role-switch.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-copy-slave-screenshot.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-copy-slave-screenshot.log
+09:16:03  Acquired tunnel connection to device.
+09:16:03  Enabling developer disk image services.
+09:16:03  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/screenshots/ipad-slave-after-role-switch.png
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app --timeout 120 --json-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-install-timeoutfix-4762.json --log-output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-install-timeoutfix-4762.log
+09:17:11  Acquired tunnel connection to device.
+09:17:11  Enabling developer disk image services.
+09:17:11  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/CABF5E44-0C08-42FE-8162-945308546CD0/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1480
+• options: 
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 10 --fail --silent --show-error http://192.168.178.104:4762/logs --output logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ipad-bridge-logs-timeoutfix-4762.json
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://169.254.193.202:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --immediate-role-switch --no-use-latest-warm-summary --no-update-latest-warm-summary --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --ios-host 00008101-000A68811E43001E=192.168.178.168 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104 --physical-ios-port 4762 --run-dir logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch
++ flutter devices
++ flutter devices
++ adb devices -l
+
+[stderr]
+run_rotating_master_slave_matrix failed: Required warm runtime bridge missing: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 (http://192.168.178.104:4762)
+[exit-code] 1
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball --timeout 30
+09:20:01  Acquired tunnel connection to device.
+09:20:01  Enabling developer disk image services.
+09:20:02  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.104:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 --fail --silent --show-error http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","connected_clients","end_session","list_cameras","set_role","start_recording","start_session","stop_recording","take_photo"]}
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --immediate-role-switch --no-use-latest-warm-summary --no-update-latest-warm-summary --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --ios-host 00008101-000A68811E43001E=192.168.178.168 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104 --physical-ios-port 4762 --run-dir logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch-after-devicectl
++ flutter devices
++ flutter devices
++ adb devices -l
+=== Rotation master 00008101-000A68811E43001E ===
+=== Rotation master 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 ===
+logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch-after-devicectl
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --immediate-role-switch --no-auto-ios-bridge-hosts --no-use-latest-warm-summary --no-update-latest-warm-summary --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --ios-host 00008101-000A68811E43001E=192.168.178.168 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104 --physical-ios-port 4762 --run-dir logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch-explicit-lan
++ flutter devices
++ adb devices -l
+=== Rotation master 00008101-000A68811E43001E ===
+=== Rotation master 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 ===
+logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch-explicit-lan
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...                                         
+No issues found! (ran in 7.4s)
+[exit-code] 0
+
+$ flutter test --no-pub test/services/permission_service_test.dart test/automation/automation_bridge_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: (setUpAll)
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions skips unsupported macOS permission handler
+Log registered: {message: Skipping permission_handler startup request on macOS; native platform APIs will request resource access on demand., timestamp: 2026-06-09 09:23:04.306945, function: requestAllPermissions, file: PermissionService}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions skips unsupported Linux permission handler
+Log registered: {message: Skipping permission_handler startup request on linux; native platform APIs will request resource access on demand., timestamp: 2026-06-09 09:23:04.328572, function: requestAllPermissions, file: PermissionService}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions requests location immediately on Android
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone, Permission.locationWhenInUse]
+Denied: [], timestamp: 2026-06-09 09:23:04.339767, function: requestAllPermissions, file: PermissionService}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: requestAllPermissions returns false when platform request stalls
+Log registered: {message: Permission request timed out after 0s: TimeoutException after 0:00:00.010000: Future not completed
+#0      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1042:24)
+<asynchronous suspension>
+#1      PermissionService.requestAllPermissions (package:hydracam/services/permission_service.dart:38:18)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart:79:26)
+<asynchronous suspension>
+#3      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#5      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-09 09:23:04.375254, function: requestAllPermissions, file: PermissionService}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: openAppSettings skips unsupported macOS permission handler
+Log registered: {message: Skipping permission_handler openAppSettings on macOS., timestamp: 2026-06-09 09:23:04.379894, function: openAppSettings, file: PermissionService}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: openAppSettings skips unsupported Linux permission handler
+Log registered: {message: Skipping permission_handler openAppSettings on linux., timestamp: 2026-06-09 09:23:04.389842, function: openAppSettings, file: PermissionService}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/permission_service_test.dart: (tearDownAll)
+00:01 +6: /Users/jose/src/work/hydracamv2/test/automation/automation_bridge_test.dart: health snapshot exposes automation target identity
+00:01 +7: /Users/jose/src/work/hydracamv2/test/automation/automation_bridge_test.dart: stale automation handler unregister does not remove current handler
+00:01 +8: /Users/jose/src/work/hydracamv2/test/automation/automation_bridge_test.dart: automation port collision does not throw during startup
+Log registered: {message: Automation bridge unavailable on port 62217: SocketException: Failed to create server socket (OS Error: The shared flag to bind() needs to be `true` if binding multiple times on the same (address, port) combination.), address = 0.0.0.0, port = 62217
+#0      _NativeSocket.bind (dart:io-patch/socket_patch.dart:1216:7)
+<asynchronous suspension>
+#1      _RawServerSocket.bind.<anonymous closure> (dart:io-patch/socket_patch.dart:2163:12)
+<asynchronous suspension>
+#2      _ServerSocket.bind.<anonymous closure> (dart:io-patch/socket_patch.dart:2483:12)
+<asynchronous suspension>
+#3      _HttpServer.bind.<anonymous closure> (dart:_http/http_impl.dart:3476:24)
+<asynchronous suspension>
+#4      AutomationBridge._startServer (package:hydracam/automation/automation_bridge.dart:130:15)
+<asynchronous suspension>
+#5      AutomationBridge.ensureInitialized (package:hydracam/automation/automation_bridge.dart:57:7)
+<asynchronous suspension>
+#6      _Completes.matchAsync.<anonymous closure> (package:matcher/src/expect/future_matchers.dart:54:22)
+<asynchronous suspension>
+#7      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#8      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#9      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#10     main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/automation/automation_bridge_test.dart:62:5)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#12     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#13     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-09 09:23:06.273660, function: ensureInitialized, file: automation_bridge.dart}
+00:02 +9: All tests passed!
+[exit-code] 0
+
+$ env PYTHONPATH=scripts python3 -m unittest scripts/test_run_rotating_master_slave_matrix.py
+{
+  "captureTargetCount": 1,
+  "repeatRoleSwitchCycles": 1,
+  "roleSwitchOnly": true,
+  "rotationCount": 1,
+  "rotations": [
+    {
+      "clientCount": 0,
+      "clientDeviceIds": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macOS",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macOS"
+      },
+      "masterDeviceId": "macos"
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "sharedBarrierPerRotation": true,
+  "status": "dry_run",
+  "targetCount": 1,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "captureEnabled": true,
+      "deviceId": "macos",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "macOS",
+      "lens": "autoBack",
+      "platform": "macos",
+      "profile": "standard1080p30",
+      "runtime": "macOS"
+    }
+  ]
+}
+{
+  "captureTargetCount": 1,
+  "repeatRoleSwitchCycles": 1,
+  "roleSwitchOnly": true,
+  "rotationCount": 1,
+  "rotations": [
+    {
+      "clientCount": 0,
+      "clientDeviceIds": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:4762",
+        "captureEnabled": true,
+        "deviceId": "macos",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "macos",
+        "lens": "autoBack",
+        "platform": "macos",
+        "profile": "standard1080p30",
+        "runtime": "macos"
+      },
+      "masterDeviceId": "macos"
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "sharedBarrierPerRotation": true,
+  "status": "dry_run",
+  "targetCount": 1,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "captureEnabled": true,
+      "deviceId": "macos",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "macos",
+      "lens": "autoBack",
+      "platform": "macos",
+      "profile": "standard1080p30",
+      "runtime": "macos"
+    }
+  ]
+}
+=== Rotation master iphone ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_ios_profile_install_mvzdak03/run
+=== Rotation master android-a ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_skew_limit_zzipisfw/run
+=== Rotation master android-a ===
+=== Rotation master ipad ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_prime_then_3kooflv2/run
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_prime_then_fail_8brbvbso/run
+{
+  "captureTargetCount": 1,
+  "repeatRoleSwitchCycles": 1,
+  "roleSwitchOnly": true,
+  "rotationCount": 1,
+  "rotations": [
+    {
+      "clientCount": 0,
+      "clientDeviceIds": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6400",
+        "captureEnabled": true,
+        "deviceId": "android-a",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "Android A",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12"
+      },
+      "masterDeviceId": "android-a"
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "sharedBarrierPerRotation": true,
+  "status": "dry_run",
+  "targetCount": 1,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6400",
+      "captureEnabled": true,
+      "deviceId": "android-a",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "Android A",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12"
+    }
+  ]
+}
+=== Cycle 1/3 ===
+=== Rotation master android-a ===
+=== Rotation master macos ===
+=== Cycle 2/3 ===
+=== Rotation master android-a ===
+=== Rotation master macos ===
+=== Cycle 3/3 ===
+=== Rotation master android-a ===
+=== Rotation master macos ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_repeat_role_n16oy0lk/run
+=== Rotation master android-a ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_fast_role_verify_8dpankzj/run
+=== Rotation master android-a ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_fast_standby_luh44rot/run
+=== Rotation master android-a ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_warm_run_lrrop_is/run
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_warm_prime_gzid1w5y/run
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_warm_prime_error_colelj0c/run
+=== Rotation master android-a ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_staged_skip_wait_hwf0q5l8/run
+=== Rotation master macos ===
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_latest_cache_update_1_1gzt_x/run
+/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_warm_prime_install_suawajv9/run
+
+[stderr]
+................................................................................................
+----------------------------------------------------------------------
+Ran 96 tests in 0.740s
+
+OK
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

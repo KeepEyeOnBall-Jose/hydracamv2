@@ -1,0 +1,750 @@
+{
+  "acceptanceChecks": [
+    "The current automation-enabled APK installs on the Samsung S7 edge or records a device-side install blocker.",
+    "Automation standby has a visible user escape path back to the normal app on-device.",
+    "A normal launcher start does not remain stuck in a stale automation standby role.",
+    "The S7 camera run either passes with the compatibility mode or records a fresh S7-specific camera blocker with logs."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:12:53.376939+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:13:12.730842+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--no-pub",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:14:56.224492+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:15:45.513237+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_wifi_preflight.py",
+        "--expected-subnet",
+        "192.168.178.0/24",
+        "--check-only",
+        "--device",
+        "9885e6503930304946",
+        "--timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:16:16.255638+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:16:40.749584+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:16:47.391230+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "standby",
+        "--es",
+        "automationTargetId",
+        "9885e6503930304946"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:16:53.779782+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/s7-automation-standby-open-button.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:17:09.572686+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-automation-standby-open-button.png",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-automation-standby-open-button.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:17:22.515885+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/s7-window-standby.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:17:22.811993+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-window-standby.xml",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-window-standby.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:17:31.146820+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "input",
+        "tap",
+        "960",
+        "936"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:17:53.945957+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/s7-open-normal-after-standby-button.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:18:17.841867+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-open-normal-after-standby-button.png",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-open-normal-after-standby-button.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:18:28.748969+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/s7-window-after-open-normal.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:18:29.351053+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-window-after-open-normal.xml",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-window-after-open-normal.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:18:38.627054+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:18:57.440096+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:19:04.200851+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/s7-normal-launch-not-sticky.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:19:23.817824+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-normal-launch-not-sticky.png",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-normal-launch-not-sticky.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:19:33.663405+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/s7-window-normal-launch.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:19:34.081012+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-window-normal-launch.xml",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-window-normal-launch.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:19:47.183290+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--no-use-latest-warm-summary",
+        "--target-id",
+        "9885e6503930304946",
+        "--expect-target-id",
+        "9885e6503930304946",
+        "--skip-build",
+        "--skip-install",
+        "--record-seconds",
+        "2",
+        "--timeout",
+        "180",
+        "--capture-stage-timeout",
+        "30",
+        "--recording-ready-timeout",
+        "30",
+        "--stop-recording-timeout",
+        "30",
+        "--run-dir",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-single-current-compat-capture"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:20:37.888880+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "forward",
+        "--list"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:23:40.363987+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "--silent",
+        "--show-error",
+        "http://127.0.0.1:6400/healthz"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-09T08:23:40.496120+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "--silent",
+        "--show-error",
+        "http://127.0.0.1:6400/settings"
+      ],
+      "returnCode": 7,
+      "startedAt": "2026-06-09T08:23:40.541663+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "forward",
+        "tcp:6400",
+        "tcp:4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:23:50.793332+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "--silent",
+        "--show-error",
+        "http://127.0.0.1:6400/healthz"
+      ],
+      "returnCode": 52,
+      "startedAt": "2026-06-09T08:24:03.239088+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "--silent",
+        "--show-error",
+        "http://127.0.0.1:6400/settings"
+      ],
+      "returnCode": 52,
+      "startedAt": "2026-06-09T08:24:03.269786+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:24:14.244497+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:24:23.219244+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "master",
+        "--es",
+        "automationTargetId",
+        "9885e6503930304946"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:24:28.450782+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "forward",
+        "tcp:6400",
+        "tcp:4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:24:48.419780+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "--silent",
+        "--show-error",
+        "http://127.0.0.1:6400/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:24:54.215733+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "masterShouldRecord:true",
+        "timerDuration:0",
+        "cameraLensPreference:autoBack",
+        "selectedCameraName:null",
+        "videoCaptureProfile:standard1080p30",
+        "http://127.0.0.1:6400/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:25:09.949056+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{\"masterShouldRecord\":true,\"timerDuration\":0,\"cameraLensPreference\":\"autoBack\",\"selectedCameraName\":null,\"videoCaptureProfile\":\"standard1080p30\"}",
+        "http://127.0.0.1:6400/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:25:26.722155+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{\"showCountdown\":false}",
+        "http://127.0.0.1:6400/commands/take_photo"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:25:41.678078+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{}",
+        "http://127.0.0.1:6400/commands/start_recording"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:26:14.985708+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "45",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{}",
+        "http://127.0.0.1:6400/commands/stop_recording"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:26:27.997788+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "mkdir",
+        "-p",
+        "/sdcard/hydracam-evidence"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:27:04.001505+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "run-as",
+        "com.amaia23.hydracam",
+        "cp",
+        "/data/user/0/com.amaia23.hydracam/app_flutter/session_null/CAP8599987724898185445.jpg",
+        "/sdcard/hydracam-evidence/s7-compat-photo.jpg"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T08:27:13.576078+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "run-as",
+        "com.amaia23.hydracam",
+        "ls",
+        "-l",
+        "/data/user/0/com.amaia23.hydracam/app_flutter/session_null"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:27:24.626776+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--no-pub",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:32:14.042202+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:32:51.243521+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:33:22.985533+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:33:28.686412+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/s7-final-current-normal-launch.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:33:47.564059+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-final-current-normal-launch.png",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/screenshots/s7-final-current-normal-launch.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:33:56.275864+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/s7-final-current-normal-launch.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:33:56.472508+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/s7-final-current-normal-launch.xml",
+        "logs/verification-runs/20260609-1012-s7-camera-compat-automation-exit/device-logs/s7-final-current-normal-launch.xml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T08:34:09.113186+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android physical",
+      "name": "Samsung S7 edge SM-G935F",
+      "notes": [
+        "Known prior blocker: s7_exynos_camera_timeout during photo capture."
+      ],
+      "os": "Android 8.0 API 26",
+      "role": "S7 compatibility and automation escape target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/s7-automation-standby-open-button.png",
+    "screenshots/s7-compat-photo.jpg",
+    "screenshots/s7-final-current-normal-launch.png",
+    "screenshots/s7-normal-launch-not-sticky.png",
+    "screenshots/s7-open-normal-after-standby-button.png",
+    "video/s7-compat-video.mp4",
+    "device-logs/s7-camera-only-logs-after-photo.json",
+    "device-logs/s7-camera-only-logs-after-video.json",
+    "device-logs/s7-final-current-normal-launch.xml",
+    "device-logs/s7-single-current-compat-capture/expected-targets.json",
+    "device-logs/s7-single-current-compat-capture/master-android-9885e6503930304946/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/s7-single-current-compat-capture/master-android-9885e6503930304946/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/s7-single-current-compat-capture/master-android-9885e6503930304946/automation-snapshots.json",
+    "device-logs/s7-single-current-compat-capture/master-android-9885e6503930304946/progress.ndjson",
+    "device-logs/s7-single-current-compat-capture/master-android-9885e6503930304946/summary.json",
+    "device-logs/s7-single-current-compat-capture/master-hosts.json",
+    "device-logs/s7-single-current-compat-capture/summary.json",
+    "device-logs/s7-single-current-compat-capture/summary.md",
+    "device-logs/s7-window-after-open-normal.xml",
+    "device-logs/s7-window-normal-launch.xml",
+    "device-logs/s7-window-standby.xml"
+  ],
+  "item": {
+    "slug": "s7-camera-compat-automation-exit",
+    "source": "docs/control/status-and-roadmap.md",
+    "title": "Samsung S7 camera compatibility mode and automation standby escape"
+  },
+  "notes": [
+    "S7 SM-G935F compatibility mode proved direct photo and video save at 720x480 with copied JPEG/MP4 artifacts; automation standby escape and plain no-extras launch proved non-sticky. Standard backend-session matrix still timed out on start_session and remains separate session/backend automation follow-up.",
+    "S7 SM-G935F compatibility mode proved direct photo and video save at 720x480 with copied JPEG/MP4 artifacts; automation standby escape and plain no-extras launch proved non-sticky. After the final launch-config cache patch, the current APK was rebuilt, reinstalled on the S7, and a no-extras launch again opened normal HydraCam. Standard backend-session matrix still timed out on start_session and remains separate session/backend automation follow-up."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

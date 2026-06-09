@@ -15,4 +15,22 @@ void main() {
     expect(find.text("Automation standby"), findsOneWidget);
     expect(find.text("Waiting for role assignment"), findsOneWidget);
   });
+
+  testWidgets("standby screen can return to the normal app", (tester) async {
+    var openedNormalApp = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: AutomationStandbyScreen(
+          onOpenNormalApp: () {
+            openedNormalApp = true;
+          },
+        ),
+      ),
+    );
+
+    await tester.tap(find.text("Open HydraCam"));
+
+    expect(openedNormalApp, isTrue);
+  });
 }

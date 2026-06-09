@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 
 import "package:flutter/foundation.dart";
@@ -66,6 +67,20 @@ void main() {
         Permission.locationWhenInUse,
       ]),
     );
+  });
+
+  test("requestAllPermissions returns false when platform request stalls",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    PermissionService.configurePermissionRequesterForTesting((permissions) {
+      return Completer<Map<Permission, PermissionStatus>>().future;
+    });
+
+    final bool granted = await PermissionService.requestAllPermissions(
+      timeout: const Duration(milliseconds: 10),
+    );
+
+    expect(granted, isFalse);
   });
 
   test("openAppSettings skips unsupported macOS permission handler", () async {

@@ -1,7 +1,12 @@
+import "dart:io";
+
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/automation/automation_bridge.dart";
+import "package:hydracam/services/log_service.dart";
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test("health snapshot exposes automation target identity", () {
     final health = AutomationBridge.instance.buildHealthSnapshot();
 
@@ -39,5 +44,27 @@ void main() {
     bridge.unregisterCommandsIfCurrent({command: currentHandler});
 
     expect(bridge.isCommandRegistered(command), isFalse);
+  });
+
+  test("automation port collision does not throw during startup", () async {
+    final reservedServer = await HttpServer.bind(InternetAddress.anyIPv4, 0);
+    final bridge = AutomationBridge.forTesting(
+      automationEnabled: true,
+      automationServerPort: reservedServer.port,
+    );
+
+    addTearDown(() async {
+      await bridge.closeForTesting();
+      await reservedServer.close(force: true);
+      LogService.instance.clearLogs();
+    });
+
+    await expectLater(bridge.ensureInitialized(), completes);
+
+    expect(bridge.isRunning, isFalse);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(contains("Automation bridge unavailable")),
+    );
   });
 }

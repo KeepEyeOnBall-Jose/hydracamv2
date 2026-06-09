@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/foundation.dart";
 import "package:permission_handler/permission_handler.dart"
     as permission_handler;
@@ -12,9 +14,12 @@ typedef PermissionRequester
 // ignore: avoid_classes_with_only_static_members
 class PermissionService {
   static PermissionRequester _requestPermissions = _defaultRequestPermissions;
+  static const Duration _startupPermissionTimeout = Duration(seconds: 8);
 
   /// Requests the permissions required for initial app use.
-  static Future<bool> requestAllPermissions() async {
+  static Future<bool> requestAllPermissions({
+    Duration timeout = _startupPermissionTimeout,
+  }) async {
     if (_usesNativeResourcePrompts) {
       LogService.instance.registerLog(
         "Skipping permission_handler startup request on ${defaultTargetPlatform.name}; "
@@ -27,7 +32,20 @@ class PermissionService {
 
     final permissions = _startupPermissionsFor(defaultTargetPlatform);
 
-    final statuses = await _requestPermissions(permissions);
+    final Map<permission_handler.Permission,
+        permission_handler.PermissionStatus> statuses;
+    try {
+      statuses = await _requestPermissions(permissions).timeout(timeout);
+    } on TimeoutException catch (error, stackTrace) {
+      LogService.instance.registerError(
+        "Permission request timed out after ${timeout.inSeconds}s",
+        error,
+        stackTrace,
+        function: "requestAllPermissions",
+        file: "PermissionService",
+      );
+      return false;
+    }
     final grantedPermissions = statuses.entries
         .where((entry) => entry.value.isGranted)
         .map((entry) => entry.key.toString())

@@ -11,6 +11,12 @@ bundle install
 
 # Available Actions
 
+## Repo wrapper
+
+From the repository root, prefer `scripts/android_fastlane.sh android <lane>`
+instead of running `bundle exec fastlane` directly. The wrapper selects the
+Homebrew Ruby/Bundler path used by `android/Gemfile.lock`.
+
 ## Android
 
 ### android build_store

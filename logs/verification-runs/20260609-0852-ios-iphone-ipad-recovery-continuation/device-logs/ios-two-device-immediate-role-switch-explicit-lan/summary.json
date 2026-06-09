@@ -1,0 +1,471 @@
+{
+  "captureTargetCount": 2,
+  "connectedClientRegistrationTimingStats": {
+    "latestClientRegistrationLagMs": {
+      "avgMs": 381.23,
+      "count": 2,
+      "maxMs": 404.189,
+      "minMs": 358.27
+    },
+    "masterServerStartLagMs": {
+      "avgMs": 217.454,
+      "count": 2,
+      "maxMs": 246.539,
+      "minMs": 188.37
+    },
+    "maxClientRegistrationAfterServerStartMs": {
+      "avgMs": 163.775,
+      "count": 2,
+      "maxMs": 215.819,
+      "minMs": 111.731
+    }
+  },
+  "elapsedSeconds": 0.45,
+  "masterHosts": {
+    "00008101-000A68811E43001E": "192.168.178.168",
+    "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": "192.168.178.104"
+  },
+  "phaseTimingStats": {
+    "connected_clients": {
+      "avgMs": 144.889,
+      "count": 2,
+      "maxMs": 221.911,
+      "minMs": 67.868
+    },
+    "set_role": {
+      "avgMs": 77.575,
+      "count": 2,
+      "maxMs": 79.116,
+      "minMs": 76.034
+    }
+  },
+  "repeatRoleSwitchCycles": 1,
+  "roleSwitchOnly": true,
+  "rotationCount": 2,
+  "rotations": [
+    {
+      "clientCount": 1,
+      "clientDeviceIds": [
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 1,
+        "connectedClientIds": [
+          "1b1fd43a-2d15-4cc5-95fa-6780aba3e04a"
+        ],
+        "connectedClients": [
+          {
+            "connectionStatusLabel": "Connected",
+            "deviceId": "1b1fd43a-2d15-4cc5-95fa-6780aba3e04a",
+            "disconnectedAt": null,
+            "identifyStatus": "notRequested",
+            "identifyStatusLabel": "Identify not requested",
+            "isConnected": true,
+            "lastIdentifyAckAt": null,
+            "lastIdentifyRequestId": null,
+            "lastIdentifyRequestedAt": null,
+            "lastSeen": "2026-06-09T09:22:18.315650",
+            "network": null,
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network details pending",
+            "previewStatus": "unavailable",
+            "previewStatusLabel": "Preview unavailable",
+            "previewTransportLabel": "Preview transport not configured",
+            "registeredAt": "2026-06-09T09:22:18.315650",
+            "remoteIp": "192.168.178.104",
+            "reportedSessionGuid": null,
+            "sessionStatus": "unknown",
+            "sessionStatusLabel": "Session not reported",
+            "setupStatus": {
+              "cameraPerspectiveId": "unknown",
+              "cameraPerspectiveLabel": "Unknown",
+              "isLevel": false,
+              "pitchDegrees": 2.010818481643392,
+              "rollDegrees": 61.46404789146999,
+              "sensorAvailable": true
+            },
+            "shortDeviceId": "1b1fd43a"
+          }
+        ],
+        "connectionSummaryLabel": "1 connected \u00b7 0 disconnected",
+        "disconnectedClientCount": 0,
+        "knownClientCount": 1,
+        "masterServerStartedAt": "2026-06-09T09:22:18.203919",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://192.168.178.168:4762",
+        "captureEnabled": true,
+        "deviceId": "00008101-000A68811E43001E",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "Jos\u00e9 Ram\u00f3n\u2019s iPhone (mobile)",
+        "lens": "ultraWide",
+        "platform": "ios_physical",
+        "profile": "sport1080p60",
+        "runtime": "iOS 26.5 23F77"
+      },
+      "masterDeviceId": "00008101-000A68811E43001E",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 67.868,
+          "endedAt": "2026-06-09T09:22:18.104861",
+          "startedAt": "2026-06-09T09:22:18.036979"
+        },
+        "set_role": {
+          "durationMs": 79.116,
+          "endedAt": "2026-06-09T09:22:18.036504",
+          "startedAt": "2026-06-09T09:22:17.957380"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 79.116,
+        "maxRequestDurationMs": 30.786,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.0,
+        "requestEndSkewMs": 50.241,
+        "requestStartSkewMs": 48.142,
+        "requestTimings": {
+          "00008101-000A68811E43001E": {
+            "batch": "master",
+            "bridgeUrl": "http://192.168.178.168:4762",
+            "durationMs": 28.686,
+            "endOffsetMs": 28.691,
+            "endedAt": "2026-06-09T09:22:17.986092",
+            "startOffsetMs": 0.005,
+            "startedAt": "2026-06-09T09:22:17.957401"
+          },
+          "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": {
+            "batch": "slaves",
+            "bridgeUrl": "http://192.168.178.104:4762",
+            "durationMs": 30.786,
+            "endOffsetMs": 78.932,
+            "endedAt": "2026-06-09T09:22:18.036335",
+            "startOffsetMs": 48.147,
+            "startedAt": "2026-06-09T09:22:18.005536"
+          }
+        },
+        "responses": {
+          "00008101-000A68811E43001E": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          },
+          "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.168",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-09T09:22:17.957380"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://192.168.178.168:4762",
+            "captureEnabled": true,
+            "deviceId": "00008101-000A68811E43001E",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "Jos\u00e9 Ram\u00f3n\u2019s iPhone (mobile)",
+            "lens": "ultraWide",
+            "platform": "ios_physical",
+            "profile": "sport1080p60",
+            "runtime": "iOS 26.5 23F77"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://192.168.178.104:4762",
+            "captureEnabled": true,
+            "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "iPad (5) (mobile)",
+            "lens": "autoBack",
+            "platform": "ios_physical",
+            "profile": "standard1080p30",
+            "runtime": "iOS 17.7.11 21H461"
+          }
+        }
+      ]
+    },
+    {
+      "clientCount": 1,
+      "clientDeviceIds": [
+        "00008101-000A68811E43001E"
+      ],
+      "connectedClientsSnapshot": {
+        "connectedClientCount": 1,
+        "connectedClientIds": [
+          "a6864314-aa27-4e0a-9be4-a38fcbff1b93"
+        ],
+        "connectedClients": [
+          {
+            "connectionStatusLabel": "Connected",
+            "deviceId": "a6864314-aa27-4e0a-9be4-a38fcbff1b93",
+            "disconnectedAt": null,
+            "identifyStatus": "notRequested",
+            "identifyStatusLabel": "Identify not requested",
+            "isConnected": true,
+            "lastIdentifyAckAt": null,
+            "lastIdentifyRequestId": null,
+            "lastIdentifyRequestedAt": null,
+            "lastSeen": "2026-06-09T09:22:18.523033",
+            "network": {
+              "bssid": null,
+              "gatewayIp": "192.168.178.1",
+              "ipAddress": "192.168.178.168",
+              "isWifiActive": true,
+              "source": "device",
+              "ssid": null,
+              "subnetMask": "255.255.255.0",
+              "subnetSignature": "192.168.178.0/24",
+              "warnings": [
+                "SSID unavailable; grant location permission and enable Location Services."
+              ]
+            },
+            "networkStatus": "unknown",
+            "networkStatusLabel": "Network details pending",
+            "previewStatus": "unavailable",
+            "previewStatusLabel": "Preview unavailable",
+            "previewTransportLabel": "Preview transport not configured",
+            "registeredAt": "2026-06-09T09:22:18.509814",
+            "remoteIp": "192.168.178.168",
+            "reportedSessionGuid": null,
+            "sessionStatus": "unknown",
+            "sessionStatusLabel": "Session not reported",
+            "setupStatus": {
+              "cameraPerspectiveId": "unknown",
+              "cameraPerspectiveLabel": "Unknown",
+              "isLevel": false,
+              "pitchDegrees": -91.08706093002874,
+              "rollDegrees": 100.1618548029429,
+              "sensorAvailable": true
+            },
+            "shortDeviceId": "a6864314"
+          }
+        ],
+        "connectionSummaryLabel": "1 connected \u00b7 0 disconnected",
+        "disconnectedClientCount": 0,
+        "knownClientCount": 1,
+        "masterServerStartedAt": "2026-06-09T09:22:18.293995",
+        "session": {
+          "deviceType": "Unknown",
+          "isActive": false,
+          "isRecording": false,
+          "isUploading": false,
+          "photoCount": 0,
+          "queueLength": 0,
+          "sessionGuid": null,
+          "videoCount": 0
+        }
+      },
+      "failures": [],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://192.168.178.104:4762",
+        "captureEnabled": true,
+        "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "iPad (5) (mobile)",
+        "lens": "autoBack",
+        "platform": "ios_physical",
+        "profile": "standard1080p30",
+        "runtime": "iOS 17.7.11 21H461"
+      },
+      "masterDeviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "phaseTimings": {
+        "connected_clients": {
+          "durationMs": 221.911,
+          "endedAt": "2026-06-09T09:22:18.403958",
+          "startedAt": "2026-06-09T09:22:18.182041"
+        },
+        "set_role": {
+          "durationMs": 76.034,
+          "endedAt": "2026-06-09T09:22:18.181666",
+          "startedAt": "2026-06-09T09:22:18.105625"
+        }
+      },
+      "roleSwitchOnly": true,
+      "runtimeRoleSwitch": {
+        "elapsedMs": 76.034,
+        "maxRequestDurationMs": 32.129,
+        "mode": "master_ready_then_parallel_slaves",
+        "parallelRequestStartSkewMs": 0.0,
+        "requestEndSkewMs": 43.779,
+        "requestStartSkewMs": 55.566,
+        "requestTimings": {
+          "00008101-000A68811E43001E": {
+            "batch": "slaves",
+            "bridgeUrl": "http://192.168.178.168:4762",
+            "durationMs": 20.342,
+            "endOffsetMs": 75.91,
+            "endedAt": "2026-06-09T09:22:18.181545",
+            "startOffsetMs": 55.568,
+            "startedAt": "2026-06-09T09:22:18.161193"
+          },
+          "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": {
+            "batch": "master",
+            "bridgeUrl": "http://192.168.178.104:4762",
+            "durationMs": 32.129,
+            "endOffsetMs": 32.131,
+            "endedAt": "2026-06-09T09:22:18.137768",
+            "startOffsetMs": 0.002,
+            "startedAt": "2026-06-09T09:22:18.105635"
+          }
+        },
+        "responses": {
+          "00008101-000A68811E43001E": {
+            "command": "set_role",
+            "result": {
+              "ackMode": "accepted",
+              "forceSlaveMode": true,
+              "preferredMasterIp": "192.168.178.104",
+              "role": "slave",
+              "status": "role_switch_accepted"
+            },
+            "status": "ok"
+          },
+          "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63": {
+            "command": "set_role",
+            "result": {
+              "forceSlaveMode": false,
+              "preferredMasterIp": null,
+              "role": "master",
+              "status": "role_set"
+            },
+            "status": "ok"
+          }
+        },
+        "startedAt": "2026-06-09T09:22:18.105625"
+      },
+      "status": "passed",
+      "targetResults": [
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://192.168.178.168:4762",
+            "captureEnabled": true,
+            "deviceId": "00008101-000A68811E43001E",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "Jos\u00e9 Ram\u00f3n\u2019s iPhone (mobile)",
+            "lens": "ultraWide",
+            "platform": "ios_physical",
+            "profile": "sport1080p60",
+            "runtime": "iOS 26.5 23F77"
+          }
+        },
+        {
+          "failures": [],
+          "knownBlocker": null,
+          "status": "role_switched",
+          "target": {
+            "bridgeUrl": "http://192.168.178.104:4762",
+            "captureEnabled": true,
+            "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+            "expectedResult": "capture",
+            "knownBlocker": null,
+            "label": "iPad (5) (mobile)",
+            "lens": "autoBack",
+            "platform": "ios_physical",
+            "profile": "standard1080p30",
+            "runtime": "iOS 17.7.11 21H461"
+          }
+        }
+      ]
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "runtimeRoleSwitchTimingStats": {
+    "maxRequestDurationMs": {
+      "avgMs": 31.457,
+      "count": 2,
+      "maxMs": 32.129,
+      "minMs": 30.786
+    },
+    "parallelRequestStartSkewMs": {
+      "avgMs": 0.0,
+      "count": 2,
+      "maxMs": 0.0,
+      "minMs": 0.0
+    },
+    "requestEndSkewMs": {
+      "avgMs": 47.01,
+      "count": 2,
+      "maxMs": 50.241,
+      "minMs": 43.779
+    },
+    "requestStartSkewMs": {
+      "avgMs": 51.854,
+      "count": 2,
+      "maxMs": 55.566,
+      "minMs": 48.142
+    }
+  },
+  "sharedBarrierPerRotation": true,
+  "stageSlavesAfterMasterReady": true,
+  "startedAt": "2026-06-09T09:22:17.954726",
+  "status": "passed",
+  "targetCount": 2,
+  "targets": [
+    {
+      "bridgeUrl": "http://192.168.178.168:4762",
+      "captureEnabled": true,
+      "deviceId": "00008101-000A68811E43001E",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "Jos\u00e9 Ram\u00f3n\u2019s iPhone (mobile)",
+      "lens": "ultraWide",
+      "platform": "ios_physical",
+      "profile": "sport1080p60",
+      "runtime": "iOS 26.5 23F77"
+    },
+    {
+      "bridgeUrl": "http://192.168.178.104:4762",
+      "captureEnabled": true,
+      "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "iPad (5) (mobile)",
+      "lens": "autoBack",
+      "platform": "ios_physical",
+      "profile": "standard1080p30",
+      "runtime": "iOS 17.7.11 21H461"
+    }
+  ]
+}

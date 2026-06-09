@@ -394,6 +394,63 @@ void main() {
     expect(fakePlatform.lastMediaSettings?.fps, isNull);
   });
 
+  test("Samsung S7 edge keeps requested profile without explicit fps",
+      () async {
+    final fakePlatform = _FakeCameraPlatform();
+    CameraPlatform.instance = fakePlatform;
+    SharedPreferences.setMockInitialValues({
+      "videoCaptureProfile": VideoCaptureProfile.standard1080p30.storageValue,
+    });
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: false,
+      deviceInfoProvider: () async => {
+        "manufacturer": "samsung",
+        "brand": "samsung",
+        "model": "SM-G935F",
+        "version.sdkInt": 26,
+      },
+    );
+
+    await cameraService.ensureCameraIsReady();
+
+    expect(fakePlatform.lastMediaSettings?.resolutionPreset,
+        ResolutionPreset.veryHigh);
+    expect(fakePlatform.lastMediaSettings?.fps, isNull);
+    expect(cameraService.currentProfile, VideoCaptureProfile.standard1080p30);
+    expect(
+      LogService.instance.logs.any((entry) => entry["message"]
+          .toString()
+          .contains("Samsung S7 edge compatibility mode")),
+      isTrue,
+    );
+  });
+
+  test("non-S7 Android keeps requested explicit fps profile", () async {
+    final fakePlatform = _FakeCameraPlatform();
+    CameraPlatform.instance = fakePlatform;
+    SharedPreferences.setMockInitialValues({
+      "videoCaptureProfile": VideoCaptureProfile.standard1080p30.storageValue,
+    });
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: false,
+      deviceInfoProvider: () async => {
+        "manufacturer": "samsung",
+        "brand": "samsung",
+        "model": "SM-G970F",
+        "version.sdkInt": 31,
+      },
+    );
+
+    await cameraService.ensureCameraIsReady();
+
+    expect(fakePlatform.lastMediaSettings?.resolutionPreset,
+        ResolutionPreset.veryHigh);
+    expect(fakePlatform.lastMediaSettings?.fps, 30);
+    expect(cameraService.currentProfile, VideoCaptureProfile.standard1080p30);
+  });
+
   test("recording after setup preview rebuilds the explicit fps controller",
       () async {
     final fakePlatform = _FakeCameraPlatform();

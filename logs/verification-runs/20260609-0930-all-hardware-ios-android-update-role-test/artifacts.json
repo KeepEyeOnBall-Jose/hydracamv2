@@ -1,0 +1,1052 @@
+{
+  "acceptanceChecks": [
+    "All visible supported Android hardware is updated with the current automation-enabled HydraCam APK or records a device-specific install blocker.",
+    "The physical iPhone and iPad remain reachable on identity-matched automation bridges at port 4762.",
+    "All included hardware devices expose warm bridges and complete a selected-set role-switch proof, or every excluded hardware device has a concrete blocker.",
+    "The run captures device inventory, install/version evidence, bridge health, screenshots or screenshot blockers, and logs."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:30:45.020841+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:31:06.969487+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:31:06.987268+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:31:07.054849+00:00"
+    },
+    {
+      "command": [
+        "sed",
+        "-n",
+        "1,80p",
+        "pubspec.yaml"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:05.465833+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:05.652005+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:05.960315+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:06.121451+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:06.260153+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:06.513384+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--no-pub",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:32:34.531902+00:00"
+    },
+    {
+      "command": [
+        "ls",
+        "-lh",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:33:41.124855+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:33:54.877072+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "575ecf2cbd24",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T07:34:23.508568+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:35:48.152635+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:36:30.703595+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:36:54.165610+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:37:33.634509+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:37:33.830740+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:37:33.884929+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:37:33.981381+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:37:34.140697+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_wifi_preflight.py",
+        "--expected-subnet",
+        "192.168.178.0/24",
+        "--check-only",
+        "--device",
+        "29d816ac550b7ece",
+        "--device",
+        "575ecf2cbd24",
+        "--device",
+        "9885e6503930304946",
+        "--device",
+        "RF8M21J8XRT",
+        "--device",
+        "RF8M90QE7LX",
+        "--timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:38:13.260846+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--max-time",
+        "5",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:38:47.326053+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--max-time",
+        "5",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:38:47.435557+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--runtime-role-switch",
+        "--role-switch-only",
+        "--fast-ios-launch",
+        "--skip-build",
+        "--skip-install",
+        "--no-use-latest-warm-summary",
+        "--no-update-latest-warm-summary",
+        "--no-auto-ios-bridge-hosts",
+        "--ios-host",
+        "00008101-000A68811E43001E=192.168.178.168",
+        "--ios-host",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=192.168.178.104",
+        "--physical-ios-port",
+        "4762",
+        "--target-id",
+        "29d816ac550b7ece",
+        "--target-id",
+        "9885e6503930304946",
+        "--target-id",
+        "RF8M21J8XRT",
+        "--target-id",
+        "RF8M90QE7LX",
+        "--target-id",
+        "00008101-000A68811E43001E",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "29d816ac550b7ece",
+        "--expect-target-id",
+        "9885e6503930304946",
+        "--expect-target-id",
+        "RF8M21J8XRT",
+        "--expect-target-id",
+        "RF8M90QE7LX",
+        "--expect-target-id",
+        "00008101-000A68811E43001E",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--standby-launch-timeout",
+        "120",
+        "--role-switch-verify-timeout",
+        "45",
+        "--timeout",
+        "180",
+        "--collect-role-switch-logs",
+        "--stage-slaves-after-master-ready",
+        "--run-dir",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/six-device-current-build-role-switch"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:40:19.557541+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-29d816ac550b7ece.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:43:22.123438+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-9885e6503930304946.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:43:23.989777+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "-X",
+        "POST",
+        "http://192.168.178.168:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "name:iphone-six-device-after-role-switch",
+        "pixelRatio:1",
+        "--output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-six-device-screenshot-command.json"
+      ],
+      "returnCode": 6,
+      "startedAt": "2026-06-09T07:43:24.937426+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:43:26.399921+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "-X",
+        "POST",
+        "http://192.168.178.104:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "name:ipad-six-device-after-role-switch",
+        "pixelRatio:1",
+        "--output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-six-device-screenshot-command.json"
+      ],
+      "returnCode": 6,
+      "startedAt": "2026-06-09T07:43:27.690808+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-RF8M90QE7LX.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:43:27.814089+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "standby",
+        "--es",
+        "automationTargetId",
+        "29d816ac550b7ece"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:44:46.090717+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "standby",
+        "--es",
+        "automationTargetId",
+        "9885e6503930304946"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:44:46.239290+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "standby",
+        "--es",
+        "automationTargetId",
+        "RF8M21J8XRT"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:44:46.476341+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "standby",
+        "--es",
+        "automationTargetId",
+        "RF8M90QE7LX"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:44:46.600409+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"00008101-000A68811E43001E\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:44:46.778106+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--max-time",
+        "10",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:08.260198+00:00"
+    },
+    {
+      "command": [
+        "sleep",
+        "5"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:08.385908+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--max-time",
+        "10",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:13.400145+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-9885e6503930304946.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:51.785802+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-29d816ac550b7ece.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:52.543660+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:52.949060+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "-X",
+        "POST",
+        "http://192.168.178.168:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type: application/json",
+        "--data",
+        "{\"name\":\"iphone-six-device-after-role-switch\",\"pixelRatio\":1}",
+        "--output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-six-device-screenshot-command.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:53.563826+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "screencap",
+        "-p",
+        "/sdcard/hydracam-six-device-RF8M90QE7LX.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:53.857336+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "30",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "-X",
+        "POST",
+        "http://192.168.178.104:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type: application/json",
+        "--data",
+        "{\"name\":\"ipad-six-device-after-role-switch\",\"pixelRatio\":1}",
+        "--output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-six-device-screenshot-command.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:48:54.567080+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "pull",
+        "/sdcard/hydracam-six-device-29d816ac550b7ece.png",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-29d816ac550b7ece-six-device.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:49:26.884067+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "pull",
+        "/sdcard/hydracam-six-device-9885e6503930304946.png",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-9885e6503930304946-six-device.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:49:26.914172+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "pull",
+        "/sdcard/hydracam-six-device-RF8M90QE7LX.png",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-RF8M90QE7LX-six-device.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:49:26.952804+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "pull",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.png",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/android-RF8M21J8XRT-six-device.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:49:27.059543+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--source",
+        "Documents/automation-screenshots/iphone-six-device-after-role-switch-2026-06-09T09-48-54-030423.png",
+        "--destination",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/iphone-six-device-after-role-switch.png",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.keepeyeonball",
+        "--timeout",
+        "30",
+        "--json-output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-copy-six-device-screenshot.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/iphone-copy-six-device-screenshot.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:49:55.698292+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--source",
+        "Documents/automation-screenshots/ipad-six-device-after-role-switch-2026-06-09T09-48-55-128241.png",
+        "--destination",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/screenshots/ipad-six-device-after-role-switch.png",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.keepeyeonball",
+        "--timeout",
+        "30",
+        "--json-output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-copy-six-device-screenshot.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/device-logs/ipad-copy-six-device-screenshot.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:49:55.901337+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "4",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:51:05.698191+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "pull",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.mp4",
+        "logs/verification-runs/20260609-0930-all-hardware-ios-android-update-role-test/video/android-RF8M21J8XRT-six-device-foreground.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:51:21.784506+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-six-device-29d816ac550b7ece.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:51:43.922078+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-six-device-9885e6503930304946.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:51:44.007188+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.png",
+        "/sdcard/hydracam-six-device-RF8M21J8XRT.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:51:44.148949+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "rm",
+        "/sdcard/hydracam-six-device-RF8M90QE7LX.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T07:51:44.332265+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android physical",
+      "name": "SM G960F",
+      "notes": [],
+      "os": "Android 10 API 29",
+      "role": "all-hardware matrix target"
+    },
+    {
+      "identifier": "575ecf2cbd24",
+      "kind": "Android physical",
+      "name": "2201116PG",
+      "notes": [],
+      "os": "Android 13 API 33",
+      "role": "all-hardware matrix target"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android physical",
+      "name": "SM G970F RF8M21J8XRT",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "all-hardware matrix target"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical",
+      "name": "SM G970F RF8M90QE7LX",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "all-hardware matrix target"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS physical",
+      "name": "iPad (5)",
+      "notes": [
+        "CoreDevice 0A947DBD-A462-5BAA-AB84-17F143D41619; known LAN bridge host 192.168.178.104:4762."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "all-hardware matrix target"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS physical",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "CoreDevice AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A; known LAN bridge host 192.168.178.168:4762."
+      ],
+      "os": "iOS 26.5",
+      "role": "all-hardware matrix target"
+    },
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android physical",
+      "name": "SM G935F",
+      "notes": [
+        "Supported by repo floor API 24; prior evidence classified this older S7 edge path as camera-timeout-prone."
+      ],
+      "os": "Android 8.0 API 26",
+      "role": "all-hardware matrix target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/android-29d816ac550b7ece-six-device.png",
+    "screenshots/android-9885e6503930304946-six-device.png",
+    "screenshots/android-RF8M21J8XRT-six-device.png",
+    "screenshots/android-RF8M90QE7LX-six-device.png",
+    "screenshots/ipad-six-device-after-role-switch.png",
+    "screenshots/iphone-six-device-after-role-switch.png",
+    "video/android-RF8M21J8XRT-six-device-foreground.mp4",
+    "device-logs/ipad-copy-six-device-screenshot.json",
+    "device-logs/ipad-copy-six-device-screenshot.log",
+    "device-logs/ipad-six-device-screenshot-command.json",
+    "device-logs/iphone-copy-six-device-screenshot.json",
+    "device-logs/iphone-copy-six-device-screenshot.log",
+    "device-logs/iphone-six-device-screenshot-command.json",
+    "device-logs/six-device-current-build-role-switch/expected-targets.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-29d816ac550b7ece-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-29d816ac550b7ece-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-rf8m21j8xrt-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-rf8m21j8xrt-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-rf8m90qe7lx-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/android-rf8m90qe7lx-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/automation-snapshots.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/phase-timings.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/runtime-role-switch.json",
+    "device-logs/six-device-current-build-role-switch/master-android-29d816ac550b7ece/summary.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-29d816ac550b7ece-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-29d816ac550b7ece-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-rf8m21j8xrt-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-rf8m21j8xrt-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-rf8m90qe7lx-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/android-rf8m90qe7lx-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/automation-snapshots.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/phase-timings.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/runtime-role-switch.json",
+    "device-logs/six-device-current-build-role-switch/master-android-9885e6503930304946/summary.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-29d816ac550b7ece-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-29d816ac550b7ece-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-rf8m21j8xrt-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-rf8m21j8xrt-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-rf8m90qe7lx-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/android-rf8m90qe7lx-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/automation-snapshots.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/phase-timings.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/runtime-role-switch.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m21j8xrt/summary.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-29d816ac550b7ece-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-29d816ac550b7ece-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-rf8m21j8xrt-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-rf8m21j8xrt-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-rf8m90qe7lx-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/android-rf8m90qe7lx-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/automation-snapshots.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/phase-timings.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/runtime-role-switch.json",
+    "device-logs/six-device-current-build-role-switch/master-android-rf8m90qe7lx/summary.json",
+    "device-logs/six-device-current-build-role-switch/master-hosts.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-29d816ac550b7ece-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-29d816ac550b7ece-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-rf8m21j8xrt-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-rf8m21j8xrt-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-rf8m90qe7lx-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/android-rf8m90qe7lx-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/automation-snapshots.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/phase-timings.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/runtime-role-switch.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-00008101-000a68811e43001e/summary.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-29d816ac550b7ece-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-29d816ac550b7ece-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-9885e6503930304946-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-9885e6503930304946-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-rf8m21j8xrt-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-rf8m21j8xrt-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-rf8m90qe7lx-standard1080p30-autoback/logcat-tail.txt",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/android-rf8m90qe7lx-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/automation-snapshots.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/logs.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/phase-timings.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/runtime-role-switch.json",
+    "device-logs/six-device-current-build-role-switch/master-ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63/summary.json",
+    "device-logs/six-device-current-build-role-switch/standby-launch/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/fast-ios-launch.stderr.txt",
+    "device-logs/six-device-current-build-role-switch/standby-launch/ios_physical-00008101-000a68811e43001e-sport1080p60-ultrawide/fast-ios-launch.stdout.txt",
+    "device-logs/six-device-current-build-role-switch/standby-launch/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/fast-ios-launch.stderr.txt",
+    "device-logs/six-device-current-build-role-switch/standby-launch/ios_physical-8b406aa5c597eab4c4dfd9908f4a09b10a89ec63-standard1080p30-autoback/fast-ios-launch.stdout.txt",
+    "device-logs/six-device-current-build-role-switch/summary.json",
+    "device-logs/six-device-current-build-role-switch/summary.md"
+  ],
+  "item": {
+    "slug": "all-hardware-ios-android-update-role-test",
+    "source": "docs/control/status-and-roadmap.md",
+    "title": "Update Android hardware installs and run all-hardware iOS/Android role-switch test"
+  },
+  "notes": [
+    "Current APK 1.4.0+16 installed on four Samsung Android devices; Xiaomi 2201116PG remained blocked by device-side INSTALL_FAILED_USER_RESTRICTED. Six-device current-build role-switch proof passed across four updated Androids plus physical iPhone and iPad; screenshots/logs/video collected."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

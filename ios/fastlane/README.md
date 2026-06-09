@@ -13,6 +13,12 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+## Repo wrapper
+
+From the repository root, prefer `scripts/ios_fastlane.sh ios <lane>` instead
+of running `bundle exec fastlane` directly. The wrapper selects the Homebrew
+Ruby/Bundler path used by `ios/Gemfile.lock`.
+
 ## iOS
 
 ### ios build_store

@@ -58,21 +58,33 @@ class MainActivity: FlutterActivity() {
 	}
 
 	private fun buildLaunchConfig(): Map<String, Any?> {
-		val extras = intent?.extras ?: return emptyMap()
+		val launchIntent = intent ?: return emptyMap()
+		val extras = launchIntent.extras
 		val payload = mutableMapOf<String, Any?>()
 
-		extras.getString("role")?.let { payload["role"] = it }
-		extras.getString("preferredMasterIp")?.let {
-			payload["preferredMasterIp"] = it
+		if (extras != null) {
+			extras.getString("role")?.let { payload["role"] = it }
+			extras.getString("preferredMasterIp")?.let {
+				payload["preferredMasterIp"] = it
+			}
+			extras.getString("automationTargetId")?.let {
+				payload["automationTargetId"] = it
+			}
+			if (extras.containsKey("forceSlaveMode")) {
+				payload["forceSlaveMode"] = extras.getBoolean("forceSlaveMode")
+			}
 		}
-		extras.getString("automationTargetId")?.let {
-			payload["automationTargetId"] = it
-		}
-		if (extras.containsKey("forceSlaveMode")) {
-			payload["forceSlaveMode"] = extras.getBoolean("forceSlaveMode")
+
+		if (payload.isEmpty() && isManualLauncherIntent(launchIntent)) {
+			payload["manualLaunch"] = true
 		}
 
 		return payload
+	}
+
+	private fun isManualLauncherIntent(intent: Intent): Boolean {
+		return intent.action == Intent.ACTION_MAIN &&
+			intent.hasCategory(Intent.CATEGORY_LAUNCHER)
 	}
 
 	private fun buildCameraMetadata(cameraId: String): Map<String, Any?> {

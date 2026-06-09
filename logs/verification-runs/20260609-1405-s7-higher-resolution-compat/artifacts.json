@@ -1,0 +1,223 @@
+{
+  "acceptanceChecks": [
+    "The S7 compatibility policy preserves standard1080p30 resolution instead of forcing 480p.",
+    "The current automation-enabled APK installs on the Samsung S7 edge.",
+    "A direct S7 automation-master photo/video probe at standard1080p30 succeeds or records the exact higher-resolution blocker with logs.",
+    "If capture succeeds, copied JPEG/MP4 artifacts show the achieved resolution."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--no-pub",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:05:25.691331+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:05:58.911266+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "logcat",
+        "-c"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:06:29.165495+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "force-stop",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:06:34.869380+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity",
+        "--es",
+        "role",
+        "master",
+        "--es",
+        "automationTargetId",
+        "9885e6503930304946"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:06:40.849556+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "9885e6503930304946",
+        "forward",
+        "tcp:6400",
+        "tcp:4762"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:07:02.526938+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{\"masterShouldRecord\":true,\"timerDuration\":0,\"cameraLensPreference\":\"autoBack\",\"selectedCameraName\":null,\"videoCaptureProfile\":\"standard1080p30\"}",
+        "http://127.0.0.1:6400/settings"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:07:19.672520+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "45",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{\"showCountdown\":false}",
+        "http://127.0.0.1:6400/commands/take_photo"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:07:40.773698+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "45",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{}",
+        "http://127.0.0.1:6400/commands/start_recording"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:07:50.643786+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "45",
+        "--silent",
+        "--show-error",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "{}",
+        "http://127.0.0.1:6400/commands/stop_recording"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:08:05.869374+00:00"
+    },
+    {
+      "command": [
+        "ffprobe",
+        "-v",
+        "error",
+        "-select_streams",
+        "v:0",
+        "-show_entries",
+        "stream=width,height,avg_frame_rate,duration",
+        "-of",
+        "default=noprint_wrappers=1",
+        "logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:13:25.733506+00:00"
+    },
+    {
+      "command": [
+        "file",
+        "logs/verification-runs/20260609-1405-s7-higher-resolution-compat/screenshots/s7-standard1080p30-photo.jpg",
+        "logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:13:25.834499+00:00"
+    },
+    {
+      "command": [
+        "ls",
+        "-lh",
+        "logs/verification-runs/20260609-1405-s7-higher-resolution-compat/screenshots/s7-standard1080p30-photo.jpg",
+        "logs/verification-runs/20260609-1405-s7-higher-resolution-compat/video/s7-standard1080p30-video.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T12:13:25.842557+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android physical",
+      "name": "Samsung S7 edge SM-G935F",
+      "notes": [
+        "Testing S7 with standard1080p30 preserved and preset-default FPS."
+      ],
+      "os": "Android 8.0 API 26",
+      "role": "higher-resolution S7 compatibility target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/s7-standard1080p30-photo.jpg",
+    "video/s7-standard1080p30-video.mp4",
+    "device-logs/s7-after-1080-photo-video.json",
+    "device-logs/s7-after-1080-settings.json"
+  ],
+  "item": {
+    "slug": "s7-higher-resolution-compat",
+    "source": "docs/control/status-and-roadmap.md",
+    "title": "Samsung S7 higher-resolution compatibility mode"
+  },
+  "notes": [
+    "S7 SM-G935F now preserves standard1080p30 while using preset-default FPS; current APK installed and direct automation-master photo/video probe saved copied 1920x1080 JPEG/MP4 artifacts. Backend-session creation was intentionally bypassed in this camera-only proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

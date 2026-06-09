@@ -214,11 +214,16 @@ class AuthService {
     "offline_access",
   ];
 
-  // Replace with your Auth0 credentials
+  static const String iosRedirectScheme = String.fromEnvironment(
+      "HYDRACAM_IOS_AUTH_REDIRECT_SCHEME",
+      defaultValue: "com.keepeyeonball");
+  static const String androidRedirectScheme = String.fromEnvironment(
+      "HYDRACAM_ANDROID_AUTH_REDIRECT_SCHEME",
+      defaultValue: "com.amaia23.hydracam");
+  static const String authRedirectHost = "login-callback";
+
   final String _clientId = "wChCAH6ZES2UU8sGKRDjgN7JEETblQKf";
   final String _issuer = "https://keepeyeonball.eu.auth0.com";
-  final String _redirectUrl = "com.hydracam://login-callback";
-  final String _postLogoutRedirectUrl = "com.hydracam://login-callback";
 
   // Store access token and email
   String? _accessToken;
@@ -230,6 +235,24 @@ class AuthService {
   String? get email => _email;
 
   String? get profilePicture => _profilePicture;
+
+  String get _redirectScheme {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        return iosRedirectScheme;
+      case TargetPlatform.android:
+        return androidRedirectScheme;
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return androidRedirectScheme;
+    }
+  }
+
+  String get _redirectUrl => "$_redirectScheme://$authRedirectHost";
+
+  String get _postLogoutRedirectUrl => _redirectUrl;
 
   Future<void> login() async {
     if (!_isMobileAuthPlatform) {

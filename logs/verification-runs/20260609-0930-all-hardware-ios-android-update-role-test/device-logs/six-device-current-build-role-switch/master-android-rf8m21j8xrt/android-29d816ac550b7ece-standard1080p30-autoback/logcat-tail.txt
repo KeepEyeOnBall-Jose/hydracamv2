@@ -1,0 +1,402 @@
+--------- beginning of main
+06-09 09:40:58.610   496 12783 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW]-DEBUG(m_setFmt[1213]):type 9, 1280 x 720, format 825380174(N M 2 1), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.610   496 12784 D SensorListener: numSensors=40
+06-09 09:40:58.610   496 12784 D SensorListener: sensor_listener_enable_sensor is called!
+06-09 09:40:58.610   496 12784 D SensorListener: enableSensor is called!(16)
+06-09 09:40:58.610   496 12784 I SensorListener: enableSensor : numSensors=40/40, sen_list = 0xf0753800/0xf0753800
+06-09 09:40:58.610   496 12784 D SensorListener: startLoop is called! (0)
+06-09 09:40:58.610   496 12784 D SensorListener: SensorListenerThread is called!
+06-09 09:40:58.610   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.610   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_PREVIEW_CALLBACK, setFormat(1920, 1080) and reqBuffers(32)
+06-09 09:40:58.610   496 12783 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW_CALLBACK]-DEBUG(setSize[425]):w (1920) h (1080)
+06-09 09:40:58.610   496 12783 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW_CALLBACK]-DEBUG(m_setFmt[1213]):type 9, 1920 x 1080, format 825382478(N V 2 1), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.610   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setPipeInfo[2769]):skip MCSC_RECORDING setNodeInfo, setFormat(0, 0)
+06-09 09:40:58.610   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.610   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_DS, setFormat(640, 480) and reqBuffers(10)
+06-09 09:40:58.610   496 12783 D ExynosCameraNode: [CAM_ID(0)][MCSC_DS]-DEBUG(setSize[425]):w (640) h (480)
+06-09 09:40:58.610   496 12783 W ExynosCameraNode: [CAM_ID(0)][MCSC_DS]-WARN(setFormat[744]):name(MCSC_DS) fd 127, bytesperline(0) < width(640), height(480)
+06-09 09:40:58.610   496 12783 D ExynosCameraNode: [CAM_ID(0)][MCSC_DS]-DEBUG(m_setFmt[1213]):type 9, 640 x 480, format 909203022(N V 1 6), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.611   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(setupPipe[218]):setupPipe() is succeed, Pipe(8), prepare(0)
+06-09 09:40:58.611   496 12783 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-DEBUG(setupPipe[128]):
+06-09 09:40:58.611   496 12783 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-DEBUG(setupPipe[135]):set new sensorIds
+06-09 09:40:58.611   496 12783 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-DEBUG(m_setPipeInfo[1246]):
+06-09 09:40:58.611   496 12783 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-DEBUG(m_setNodeInfo[1282]):
+06-09 09:40:58.611   496 12783 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-DEBUG(m_setNodeInfo[1357]): set pipeInfos on PIPE_VRA : setFormat(640, 480) and reqBuffers(10).
+06-09 09:40:58.611   496 12783 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(setSize[425]):w (640) h (480)
+06-09 09:40:58.611   496 12783 W ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-WARN(setFormat[744]):name(PIPE_VRA) fd 130, bytesperline(0) < width(640), height(480)
+06-09 09:40:58.611   496 12783 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(m_setFmt[1213]):type 10, 640 x 480, format 909203022(N V 1 6), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.611   496 12783 I ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-INFO(setupPipe[165]):setupPipe() is succeed (20) prepare (0)
+06-09 09:40:58.611   496 12783 I ExynosCameraFrameFactory: [CAM_ID(0)][Back_0]-INFO(m_initFlitePipe[195]):
+06-09 09:40:58.611   496 12783 I ExynosCameraFrameFactory: [CAM_ID(0)][Back_0]-INFO(m_initFlitePipe[206]):SensorSize(4032x3024)
+06-09 09:40:58.611   496 12783 I ExynosCameraFrameFactory: [CAM_ID(0)][Back_0]-INFO(m_initFlitePipe[223]):BNS scale down ratio(1.0), size (4032x3024)
+06-09 09:40:58.611   496 12783 I ExynosCameraParameters: [CAM_ID(0)][Back_0]-INFO(updateHwSensorSize[633]):curHwSensor size(4032x3024) newHwSensor size(4032x3024)
+06-09 09:40:58.611   496 12783 I ExynosCameraFrameFactoryPreview: [CAM_ID(0)][Back_0]-INFO(mapBuffers[526]):Map buffer Success!
+06-09 09:40:58.611   496 12783 I ExynosCameraSec: [CAM_ID(0)][Back_0]-INFO(m_initUniPP[21278]):IN
+06-09 09:40:58.611   496 12783 I ExynosCameraSec: [CAM_ID(0)][Back_0]-INFO(m_initUniPP[21319]):OUT
+06-09 09:40:58.611   496 12783 D ExynosCamera: [CAM_ID(0)][Back_0]-DEBUG(m_createPreviewFrameFunc[1285]):[F1]Create Initial Frame
+06-09 09:40:58.611   496   967 W ExynosCameraParameters: [CAM_ID(0)][Back_0]-WARN(getPreviewBayerCropSize[2086]):Invalid scaleRatio 1.000000x1.000000, cropRegion' 0,0 0x0.
+06-09 09:40:58.611   496   967 I chatty  : uid=1047(cameraserver) HwBinder:496_1 identical 1 line
+06-09 09:40:58.611   496   967 W ExynosCameraParameters: [CAM_ID(0)][Back_0]-WARN(getPreviewBayerCropSize[2086]):Invalid scaleRatio 1.000000x1.000000, cropRegion' 0,0 0x0.
+06-09 09:40:58.613   496 12783 D SecCameraUtil: read temperature complete. Temperature is : 287
+06-09 09:40:58.613   496 12783 E SensorListener: Sensor(16) is not enabled yet!
+06-09 09:40:58.613   496 12783 D ExynosCamera: [CAM_ID(0)][Back_0]-DEBUG(m_createPreviewFrameFunc[1285]):[F2]Create Initial Frame
+06-09 09:40:58.614   496 12783 E SensorListener: Sensor(16) is not enabled yet!
+06-09 09:40:58.614   496 12783 D ExynosCamera: [CAM_ID(0)][Back_0]-DEBUG(m_createPreviewFrameFunc[1285]):[F3]Create Initial Frame
+06-09 09:40:58.614   496 12783 E SensorListener: Sensor(16) is not enabled yet!
+06-09 09:40:58.614   496 12783 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_checkRequestStreamChanged[1419]):[R0][Preview Stream] PREVIEW(1), VIDEO(0), CALLBACK(0), ZSL_OUTPUT(0), DEPTHMAP(0)
+06-09 09:40:58.615   496 12783 E SensorListener: Sensor(16) is not enabled yet!
+06-09 09:40:58.616   496 12783 E SensorListener: Sensor(16) is not enabled yet!
+06-09 09:40:58.616   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_startNode[3333]):
+06-09 09:40:58.616   496 12783 D ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-DEBUG(start[837]):skip node start. request buffer is zero
+06-09 09:40:58.616   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(start[273]):start() is succeed, Pipe(8)
+06-09 09:40:58.616   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_startNode[3333]):
+06-09 09:40:58.617   496 12784 D SensorListener: initSensor is called!(16/0)
+06-09 09:40:58.618   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(start[273]):start() is succeed, Pipe(5)
+06-09 09:40:58.618   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(prepare[226]):
+06-09 09:40:58.618   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_putBuffer[1549]):Internal Frame(6), frameCount(1), (1)
+06-09 09:40:58.619   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3423]):(FLITE):vid(0), request(0 -> 1), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-09 09:40:58.620   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3423]):(BAYER):vid(110), request(0 -> 0), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-09 09:40:58.620   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3423]):(3AA_CAPTURE):vid(11), request(0 -> 0), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-09 09:40:58.620   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3423]):(3AA_PREVIEW):vid(12), request(0 -> 0), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 2688, 2016)
+06-09 09:40:58.622   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3423]):(3AA_PREVIEW):vid(12), request(0 -> 1), oldCropSize(0, 0, 4032, 3024 / 0, 0, 2688, 2016) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 2688, 2016)
+06-09 09:40:58.622   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(prepare[245]):prepare() is succeed, Pipe(5), prepare(4/4)
+06-09 09:40:58.622   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(sensorStream[419]):
+06-09 09:40:58.635  2674  6692 D SensorService: Calling batch handle==27 flags=0 rate=10000000 timeout== 0
+06-09 09:40:58.636   491   912 D SensorsBio: BioSensor_common::setDelay, handle : 4 time : 10000000ns
+06-09 09:40:58.637   491   912 D SensorsBio: BioSensor_common::enable, handle : 4, mode : 1, en : 1
+06-09 09:40:58.637   491   912 D SensorsBio: BioSensor_common::getEolStatus, eol status : 0
+06-09 09:40:58.638   491   912 D SensorsBio: BioSensor_common::pushMode, mode : 1, stack index : 0
+06-09 09:40:58.638   491   912 D SensorsBio: BioSensor_common::sendCommand, send enable command (mode:2)
+06-09 09:40:58.646   491   912 I flicker_log: flicker init
+06-09 09:40:58.646   491   912 I flicker_log: lib flicker version : ver02.0908
+06-09 09:40:58.646   491   912 I flicker_log: debug mode : 0
+06-09 09:40:58.646   491   912 I flicker_log: chip name : MAX86915
+06-09 09:40:58.647   496 12784 D SensorListener: HRM sensor type: 7
+06-09 09:40:58.647   496 12784 D SensorListener: sensor_listener_load is called!
+06-09 09:40:58.647   496 12784 D SensorListener: sensorListenerLoad is called! m_sensorListener(0xf0764600)
+06-09 09:40:58.647   496 12784 D SensorListener: sensor_listener_enable_sensor is called!
+06-09 09:40:58.648   496 12784 D SensorListener: enableSensor is called!(8)
+06-09 09:40:58.648   496 12784 I SensorListener: enableSensor : numSensors=40/40, sen_list = 0xf0753800/0xf0753800
+06-09 09:40:58.648   496 12784 D SensorListener: startLoop is called! (16)
+06-09 09:40:58.648   496 12784 D SensorListener: initSensor is called!(8/16)
+06-09 09:40:58.648  2674  6692 D SensorService: Calling batch handle==1600221811 flags=0 rate=100000000 timeout== 0
+06-09 09:40:58.649   491   912 I Sensors : batch(0) - accelerometer_sensor try to batching with 100000000
+06-09 09:40:58.653  2674  6692 D SensorService: [SO] handle [1600221811] setDelay [100000000]
+06-09 09:40:58.655  2674  6692 D SensorService: [SO] activate (ident=0x752a283f00, enabled=1)
+06-09 09:40:58.655  2674  6692 D SensorService: [SO] AR_init
+06-09 09:40:58.655  2674  6692 D SensorService: [SO] Reset Rotation oldrotation [100]
+06-09 09:40:58.655   496 12784 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_sensorListenerThreadFunc[19120]):duration time(   47 msec)
+06-09 09:40:58.667  2674  2810 D SensorService: [SO] currT = 164905747761573, prevT = 164575696919556, diff = 330050842017, [0.596 0.007 9.788]
+06-09 09:40:58.715   496 12764 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultNotifyCallbackThreadFunc[2777]):queue wait timeout
+06-09 09:40:58.716   496 12768 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultMetaCallbackThreadFunc[2951]):queue wait timeout
+06-09 09:40:58.716   496 12767 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultStreamCallbackThreadFunc[2833]):queue wait timeout
+06-09 09:40:58.734   496 12783 I ExynosCameraFrameFactoryPreviewSec: [CAM_ID(0)][Back_0]-INFO(startPipes[660]):Starting Success!
+06-09 09:40:58.734   496 12783 I ExynosCameraFrameFactoryPreview: [CAM_ID(0)][Back_0]-INFO(startInitialThreads[544]):start pre-ordered initial pipe thread
+06-09 09:40:58.734   496 12783 I ExynosCameraFrameFactoryBase: [CAM_ID(0)][Back_0]-INFO(startThread[212]):pipeId=5
+06-09 09:40:58.734   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(startThread[339]):
+06-09 09:40:58.735   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(startThread[356]):startThread is succeed, Pipe(5), standby(0)
+06-09 09:40:58.735   496 12783 I ExynosCameraFrameFactoryBase: [CAM_ID(0)][Back_0]-INFO(startThread[212]):pipeId=8
+06-09 09:40:58.735   496 12783 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(startThread[339]):
+06-09 09:40:58.735   496 12783 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(startThread[356]):startThread is succeed, Pipe(8), standby(0)
+06-09 09:40:58.735   496 12783 I ExynosCameraFrameFactoryBase: [CAM_ID(0)][Back_0]-INFO(startThread[212]):pipeId=20
+06-09 09:40:58.735   496 12783 I ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-INFO(startThread[316]):IN
+06-09 09:40:58.735   496 12783 I ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-INFO(startThread[325]):startThread is succeed Pipe(20)
+06-09 09:40:58.736   496 12783 I ExynosCameraSec: [CAM_ID(0)][Back_0]-INFO(m_frameFactoryStartThreadFunc[1056]):Threads run start
+06-09 09:40:58.736   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setBufferSupplier[938]):
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[69]):
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[124]): MaxPreviewSize(4032x3024), HwPreviewSize(1280x720)
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[125]): MaxPictureSize(4032x3024), HwPictureSize(4032x2268)
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[126]): MaxThumbnailSize(512x384)
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[127]): PreviewBayerCropSize(4032x3024)
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[129]):DS Size 640x480 Format 3631564e Buffer count 10
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[148]):YUV_STALL[3] Size 0x0 Format 3132564e
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[148]):YUV_STALL[4] Size 1920x1080 Format 3132564e
+06-09 09:40:58.736   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(initPipes[148]):YUV_STALL[5] Size 4032x2268 Format 3132564e
+06-09 09:40:58.737   496 12791 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(needSerialization[1149]):PIPE_3AA_REPROCESSING serialized operation enabled
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setupPipe[158]):
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setupPipe[168]):set new sensorIds
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16805377) [src nodeNum : 210][nodeNums : 120][otf : 0][leader : 1][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16782352) [src nodeNum : 120][nodeNums : 121][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16787472) [src nodeNum : 140][nodeNums : 141][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16802832) [src nodeNum : 200][nodeNums : 200][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16802832) [src nodeNum : 200][nodeNums : 200][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16803088) [src nodeNum : 201][nodeNums : 201][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16803088) [src nodeNum : 201][nodeNums : 201][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16792848) [src nodeNum : 161][nodeNums : 170][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16792848) [src nodeNum : 161][nodeNums : 171][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16792848) [src nodeNum : 161][nodeNums : 172][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16792848) [src nodeNum : 161][nodeNums : 173][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16792848) [src nodeNum : 161][nodeNums : 174][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16792848) [src nodeNum : 161][nodeNums : 175][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16782352) [src nodeNum : 120][nodeNums : 122][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16782864) [src nodeNum : 122][nodeNums : 140][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16787472) [src nodeNum : 140][nodeNums : 142][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2725]): setInput(sensorIds : 16787728) [src nodeNum : 141][nodeNums : 161][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setPipeInfo[2746]):
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on REPROCESSING_3AA_OUTPUT, setFormat(4032, 3024) and reqBuffers(32)
+06-09 09:40:58.737   496 12791 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-DEBUG(setSize[425]):w (4032) h (3024)
+06-09 09:40:58.737   496 12791 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-WARN(setFormat[744]):name(REPROCESSING_3AA_OUTPUT) fd 135, bytesperline(0) < width(4032), height(3024)
+06-09 09:40:58.737   496 12791 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-DEBUG(m_setFmt[1213]):type 10, 4032 x 3024, format 842090306(B G 1 2), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.737   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on REPROCESSING_3AA_CAPTURE_OPT, setFormat(4032, 3024) and reqBuffers(32)
+06-09 09:40:58.737   496 12791 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_CAPTURE_OPT]-DEBUG(setSize[425]):w (4032) h (3024)
+06-09 09:40:58.737   496 12791 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_CAPTURE_OPT]-WARN(setFormat[744]):name(REPROCESSING_3AA_CAPTURE_OPT) fd 136, bytesperline(0) < width(4032), height(3024)
+06-09 09:40:58.737   496 12791 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_CAPTURE_OPT]-DEBUG(m_setFmt[1213]):type 9, 4032 x 3024, format 844257602(B Y R 2), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on REPROCESSING_ISP_CAPTURE_M2M, setFormat(4032, 2268) and reqBuffers(9)
+06-09 09:40:58.738   496 12791 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-DEBUG(setSize[425]):w (4032) h (2268)
+06-09 09:40:58.738   496 12791 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-WARN(setFormat[744]):name(REPROCESSING_ISP_CAPTURE_M2M) fd 137, bytesperline(0) < width(4032), height(2268)
+06-09 09:40:58.738   496 12791 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-DEBUG(m_setFmt[1213]):type 9, 4032 x 2268, format 1448695129(Y U Y V), piexeSizeIndex 2, yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on HWFC_JPEG_DST, setFormat(4032, 2268) and reqBuffers(32)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_DST]-DEBUG(setSize[424]):w (4032) h (2268)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_DST]-DEBUG(setColorFormat[306]):format 843534410(J P G 2), yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on HWFC_JPEG_SRC, setFormat(4032, 2268) and reqBuffers(4)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_SRC]-DEBUG(setSize[424]):w (4032) h (2268)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_SRC]-DEBUG(setColorFormat[283]):format 1448695129(Y U Y V), yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on HWFC_THUMBNAIL_SRC, setFormat(512, 384) and reqBuffers(4)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_SRC]-DEBUG(setSize[424]):w (512) h (384)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_SRC]-DEBUG(setColorFormat[283]):format 1448695129(Y U Y V), yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on HWFC_THUMBNAIL_DST, setFormat(512, 384) and reqBuffers(4)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_DST]-DEBUG(setSize[424]):w (512) h (384)
+06-09 09:40:58.738   496 12791 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_DST]-DEBUG(setColorFormat[306]):format 843534410(J P G 2), yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setPipeInfo[2769]):skip MCSC_CAPTURE_YUV_0 setNodeInfo, setFormat(0, 0)
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_CAPTURE_YUV_1, setFormat(1920, 1080) and reqBuffers(32)
+06-09 09:40:58.738   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_1]-DEBUG(setSize[425]):w (1920) h (1080)
+06-09 09:40:58.738   496 12791 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_1]-WARN(setFormat[744]):name(MCSC_CAPTURE_YUV_1) fd 143, bytesperline(0) < width(1920), height(1080)
+06-09 09:40:58.738   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_1]-DEBUG(m_setFmt[1213]):type 9, 1920 x 1080, format 825382478(N V 2 1), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.738   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_CAPTURE_YUV_2, setFormat(4032, 2268) and reqBuffers(32)
+06-09 09:40:58.738   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_2]-DEBUG(setSize[425]):w (4032) h (2268)
+06-09 09:40:58.738   496 12791 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_2]-WARN(setFormat[744]):name(MCSC_CAPTURE_YUV_2) fd 144, bytesperline(0) < width(4032), height(2268)
+06-09 09:40:58.738   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_2]-DEBUG(m_setFmt[1213]):type 9, 4032 x 2268, format 825382478(N V 2 1), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.739   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.739   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_CAPTURE_MAIN, setFormat(4032, 2268) and reqBuffers(4)
+06-09 09:40:58.739   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-DEBUG(setSize[425]):w (4032) h (2268)
+06-09 09:40:58.739   496 12791 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-WARN(setFormat[744]):name(MCSC_CAPTURE_MAIN) fd 145, bytesperline(0) < width(4032), height(2268)
+06-09 09:40:58.739   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-DEBUG(m_setFmt[1213]):type 9, 4032 x 2268, format 1448695129(Y U Y V), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.739   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.739   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_CAPTURE_THUMBNAIL, setFormat(512, 384) and reqBuffers(4)
+06-09 09:40:58.739   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-DEBUG(setSize[425]):w (512) h (384)
+06-09 09:40:58.739   496 12791 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-WARN(setFormat[744]):name(MCSC_CAPTURE_THUMBNAIL) fd 146, bytesperline(0) < width(512), height(384)
+06-09 09:40:58.739   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-DEBUG(m_setFmt[1213]):type 9, 512 x 384, format 1448695129(Y U Y V), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.739   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2841]):
+06-09 09:40:58.739   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2916]):set pipeInfos on MCSC_DS_REPROCESSING, setFormat(640, 480) and reqBuffers(10)
+06-09 09:40:58.739   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_DS_REPROCESSING]-DEBUG(setSize[425]):w (640) h (480)
+06-09 09:40:58.739   496 12791 W ExynosCameraNode: [CAM_ID(0)][MCSC_DS_REPROCESSING]-WARN(setFormat[744]):name(MCSC_DS_REPROCESSING) fd 147, bytesperline(0) < width(640), height(480)
+06-09 09:40:58.739   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_DS_REPROCESSING]-DEBUG(m_setFmt[1213]):type 9, 640 x 480, format 909203022(N V 1 6), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.739   496 12791 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(setupPipe[218]):setupPipe() is succeed, Pipe(202), prepare(0)
+06-09 09:40:58.739   496 12791 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(setupPipe[128]):
+06-09 09:40:58.739   496 12791 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(setupPipe[135]):set new sensorIds
+06-09 09:40:58.739   496 12791 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(m_setInput[1227]):setInput(sensorIds : 16796416) [src nodeNum : 175][nodeNums : 180][otf : 0][leader : 0][reprocessing : 1][unique sensorId : 0]
+06-09 09:40:58.743   496 12795 I ExynosCamera: [CAM_ID(0)][Back_0]-INFO(m_mainPreviewThreadFunc[948]):Wait to run FrameFactory. state(3)
+06-09 09:40:58.745   496 12795 I ExynosCamera: [CAM_ID(0)][Back_0]-INFO(m_mainPreviewThreadFunc[948]):Wait to run FrameFactory. state(3)
+06-09 09:40:58.746   496 12783 D ExynosCameraSec: DEBUG:duration time(  138 msec):(m_frameFactoryStartThreadFunc)
+06-09 09:40:58.747   496 12791 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(m_setPipeInfo[1246]):
+06-09 09:40:58.747   496 12791 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(m_setNodeInfo[1282]):
+06-09 09:40:58.747   496 12791 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(m_setNodeInfo[1357]): set pipeInfos on PIPE_VRA_REPROCESSING : setFormat(640, 480) and reqBuffers(10).
+06-09 09:40:58.747   496 12791 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(setSize[425]):w (640) h (480)
+06-09 09:40:58.747   496 12791 W ExynosCameraNode: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-WARN(setFormat[744]):name(PIPE_VRA_REPROCESSING) fd 152, bytesperline(0) < width(640), height(480)
+06-09 09:40:58.747   496 12791 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-DEBUG(m_setFmt[1213]):type 10, 640 x 480, format 909203022(N V 1 6), piexeSizeIndex 0, yuvRange 7
+06-09 09:40:58.748   496 12791 I ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA_REPROCESSING]-INFO(setupPipe[165]):setupPipe() is succeed (217) prepare (0)
+06-09 09:40:58.748   496 12791 D ExynosCamera: [CAM_ID(0)][Back_0]-DEBUG(m_startReprocessingFrameFactory[4496]):- IN -
+06-09 09:40:58.748   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(startPipes[594]):
+06-09 09:40:58.748   496 12791 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_startNode[3333]):
+06-09 09:40:58.748   496 12791 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_YUV_0]-DEBUG(start[837]):skip node start. request buffer is zero
+06-09 09:40:58.748   496 12791 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(start[273]):start() is succeed, Pipe(202)
+06-09 09:40:58.748   496 12791 I ExynosCameraFrameReprocessingFactory: [CAM_ID(0)][Back_0]-INFO(startPipes[642]):Starting Reprocessing [SCC>ISP] Success!
+06-09 09:40:58.748   496 12791 D ExynosCamera: DEBUG:duration time(    0 msec):(m_startReprocessingFrameFactory)
+06-09 09:40:58.749   496 12785 D SensorListener: Sensor(16) valid data is coming!
+06-09 09:40:58.764   496 12787 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2270]):InternalFrame(6) frameCount(1)                        : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                        so, setFrameState(FRAME_STATE_SKIPPED), (1)
+06-09 09:40:58.854   496 12787 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFStatus[134]):(CMGEFL): 0 0 0 0 0 0 0 0 0 0
+06-09 09:40:58.854   496 12787 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFStatus[141]):(CMGEFL): 0 0 0 0 0 0 0 0 0 0
+06-09 09:40:58.866   496 12764 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultNotifyCallbackThreadFunc[2777]):queue wait timeout
+06-09 09:40:58.867   496 12767 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultStreamCallbackThreadFunc[2833]):queue wait timeout
+06-09 09:40:58.867   496 12768 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultMetaCallbackThreadFunc[2951]):queue wait timeout
+06-09 09:40:58.887   496 12790 W ExynosCameraPipeVRA: [CAM_ID(0)][PIPE_VRA]-WARN(m_putBuffer[137]):wait timeout
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1024]):
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1027]):m_name[PIPE_VRA]
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1029]):m_alias[PIPE_VRA]
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1034]):m_fd[130], width[640], height[480]
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1039]):m_format[909203022], m_planes[2], m_buffers[10], m_memory[4]
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1043]):m_type[10], m_flagStart[1], m_flagCreate[1]
+06-09 09:40:58.887   496 12790 D ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-DEBUG(dumpState[1049]):m_crop type[0], X : Y[0 : 0], W : H[0 : 0]
+06-09 09:40:58.887   496 12790 I ExynosCameraNode: [CAM_ID(0)][PIPE_VRA]-INFO(dumpState[1051]):Node state(1)
+06-09 09:40:58.892   496 12794 W ExynosCamera: [CAM_ID(0)][Back_0]-WARN(m_previewStreamVRAPipeThreadFunc[4147]):wait timeout
+06-09 09:40:58.945   496 12792 D ExynosCameraParametersSec: [CAM_ID(0)][Back_0]-DEBUG(setLLSValue[590]):[7[7][7][7] LLS_value(7)
+06-09 09:40:58.952   496 12796 I ExynosCamera: [CAM_ID(0)][Back_0]-INFO(m_monitorThreadFunc[5586]):@FIMC_IS_SYNC 1645
+06-09 09:40:58.952   496 12796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(syncLog[1189]):
+06-09 09:40:59.016   496 12764 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultNotifyCallbackThreadFunc[2777]):queue wait timeout
+06-09 09:40:59.017   496 12768 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultMetaCallbackThreadFunc[2951]):queue wait timeout
+06-09 09:40:59.017   496 12767 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_resultStreamCallbackThreadFunc[2833]):queue wait timeout
+06-09 09:40:59.046   496 12792 I ExynosCameraSec: [CAM_ID(0)][Back_0]-INFO(m_handlePreviewFrame[10071]):first frame(F4(10) T2) 3AA DONE
+06-09 09:40:59.046   496 12792 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_updateResultShot[5376]):LLS_value(16)
+06-09 09:40:59.046   496 12792 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_updateResultShot[5403]):burstshot_fps(10) / Bv(-1722) / Shutter speed(4)
+06-09 09:40:59.047   496 12788 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3423]):(ISP_OUTPUT):vid(0), request(0 -> 1), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 2688, 2016 / 0, 0, 2688, 2016)
+06-09 09:40:59.048   496 12788 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3423]):(ISP_CAPTURE):vid(31), request(0 -> 0), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 2688, 2016 / 0, 0, 2688, 2016)
+06-09 09:40:59.048   496 12788 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3423]):(MCSC_PREVIEW):vid(70), request(0 -> 1), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 252, 2688, 1512 / 0, 0, 1280, 720)
+06-09 09:40:59.048   496 12788 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3423]):(MCSC_PREVIEW_CALLBACK):vid(71), request(0 -> 0), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 252, 2688, 1512 / 0, 0, 1920, 1080)
+06-09 09:40:59.048   496 12788 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3423]):(MCSC_DS):vid(75), request(0 -> 1), oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 1280, 720 / 0, 0, 640, 360)
+06-09 09:40:59.051  2417 20665 I CameraService: updateProxyDeviceState: notifyCameraState for Camera ID 0,  newState 1, facing 0, clientName com.amaia23.hydracam, apiLevel 2
+06-09 09:40:59.051  3100 21186 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.052 27004 31970 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.053  7721  7752 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.054 27781 23136 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.055 27775 15801 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.055 14170 24283 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.056  4604  6150 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.062 24044 12171 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_ACTIVE for client com.amaia23.hydracam API Level 2
+06-09 09:40:59.069   496 12793 I ExynosCameraSec: [CAM_ID(0)][Back_0]-INFO(m_handlePreviewFrame[10126]):first frame(F4(10 2)) ISP DONE
+06-09 09:40:59.069   496 12793 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_handlePreviewFrame[10340]):m_firstPreviewTimer stop
+06-09 09:40:59.069   496 12793 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_handlePreviewFrame[10342]):============= First Preview time ==================
+06-09 09:40:59.069   496 12793 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_handlePreviewFrame[10343]):= configureStream ~ first frame  : 983 msec
+06-09 09:40:59.069   496 12793 D ExynosCameraSec: [CAM_ID(0)][Back_0]-DEBUG(m_handlePreviewFrame[10344]):===================================================
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[112]):(CMGEFL):==================================================
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[113]):(CMGEFL):0x3
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[114]):(CMGEFL):0x138
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[115]):(CMGEFL):0x314
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[116]):(CMGEFL):0x448
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[117]):(CMGEFL):0x10
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[118]):(CMGEFL):0x138
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[119]):(CMGEFL):0x0
+06-09 09:40:59.069   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[120]):(CMGEFL):0x0
+06-09 09:40:59.070   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[121]):(CMGEFL):0x133ec9f
+06-09 09:40:59.070   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[122]):(CMGEFL):0x0
+06-09 09:40:59.070   496 12793 D ExynosCameraActivityAutofocus: [CAM_ID(0)][]-DEBUG(displayAFInfo[123]):(CMGEFL):==================================================
+06-09 09:40:59.070   496 12793 I ExynosCameraFrameFactoryBase: [CAM_ID(0)][Back_0]-INFO(startThread[212]):pipeId=20
+06-09 09:40:59.070   496 12793 I ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-INFO(startThread[316]):IN
+06-09 09:40:59.070   496 12793 I ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-INFO(startThread[325]):startThread is succeed Pipe(20)
+06-09 09:40:59.070   496 12793 D SecCameraUtil: DEBUG(getSensorFWFromFile[834]):Sensor fw(len:24) is H12LLKF00SM H12LLNG01GM
+06-09 09:40:59.070  2417 20665 D Camera3-OutputStream: returnBufferCheckedLocked: First frame for stream 0, width 1280, height 720, format 34
+06-09 09:40:59.071   496 12797 D ExynosCameraPipe: [CAM_ID(0)][PIPE_VRA]-DEBUG(m_checkNodeGroupInfo[1549]):name PIPE_VRA : PerFrame oldCropSize (0, 0, 0, 0 / 0, 0, 0, 0)-> newCropSize (0, 0, 640, 360 / 0, 0, 640, 360)
+06-09 09:40:59.072   496 12769 I SehCamDevSession@4.0-impl: [CAMKPI] camera3->process_capture_result : E
+06-09 09:40:59.072   496 12769 I SehCamDevSession@4.0-impl: [CAMKPI] camera3->process_capture_result : X
+06-09 09:40:59.198   491   911 D SensorsBio: BioSensor_common::readEvents, FAR = -1
+06-09 09:40:59.249 24044 24044 I flutter : Log registered: {message: Runtime role switch requested: {role: slave, preferredMasterIp: 192.168.178.175, forceSlaveMode: true}, timestamp: 2026-06-09 09:40:59.249422, function: null, file: null}
+06-09 09:40:59.260 24044 24044 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (runtime role switch), timestamp: 2026-06-09 09:40:59.260098, function: null, file: null}
+06-09 09:40:59.266  2674  2810 D SensorService: [SO] 0.613 -0.024 9.797
+06-09 09:40:59.278 24044 24044 I flutter : Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.175., timestamp: 2026-06-09 09:40:59.277793, function: null, file: null}
+06-09 09:40:59.278 24044 24044 I flutter : Log registered: {message: Connecting to master at IP: 192.168.178.175, timestamp: 2026-06-09 09:40:59.278177, function: null, file: null}
+06-09 09:40:59.378 24044 24044 I flutter : Log registered: {message: Connection closed, timestamp: 2026-06-09 09:40:59.378381, function: null, file: null}
+06-09 09:40:59.386 24044 24044 I flutter : Log registered: {message: Retrieved existing Device ID: 87df7992-736e-403b-b803-d80b10efd0b1, timestamp: 2026-06-09 09:40:59.386590, function: null, file: null}
+06-09 09:40:59.387 24044 24044 I flutter : Log registered: {message: Attempting to connect to master WebSocket at ws://192.168.178.175:4040/ws with Device ID: 87df7992-736e-403b-b803-d80b10efd0b1, timestamp: 2026-06-09 09:40:59.387106, function: null, file: null}
+06-09 09:40:59.389 24044 24044 I flutter : Log registered: {message: Connected to WebSocket at ws://192.168.178.175:4040/ws, timestamp: 2026-06-09 09:40:59.389431, function: null, file: null}
+06-09 09:40:59.392 24044 24044 I flutter : Log registered: {message: Camera is already initialized and ready., timestamp: 2026-06-09 09:40:59.392162, function: null, file: null}
+06-09 09:40:59.404  2674  4693 D SensorService: removeConnection, index : 1, size : 2
+06-09 09:40:59.404  2674  4693 D SensorService: # removeConnection, index : 1, size : 1
+06-09 09:40:59.404  2674  4693 D SensorService: Calling activate off 1
+06-09 09:40:59.404   491   912 I Sensors : batch(0) - accelerometer_sensor try to batching with 100000000
+06-09 09:40:59.408 24044 24044 D SensorManager: unregisterListener ::   
+06-09 09:40:59.495 24044 24044 I flutter : Log registered: {message: Flutter framework error: ══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞══════════════════════
+06-09 09:40:59.495 24044 24044 I flutter : The following assertion was thrown during layout:
+06-09 09:40:59.495 24044 24044 I flutter : A RenderFlex overflowed by 17 pixels on the bottom.
+06-09 09:40:59.495 24044 24044 I flutter : 
+06-09 09:40:59.495 24044 24044 I flutter : The relevant error-causing widget was:
+06-09 09:40:59.495 24044 24044 I flutter :   Column
+06-09 09:40:59.495 24044 24044 I flutter :   Column:file:///Users/jose/src/work/hydracamv2/lib/screens/camera_setup_preview_screen.dart:349:16
+06-09 09:40:59.495 24044 24044 I flutter : 
+06-09 09:40:59.495 24044 24044 I flutter : The overflowing RenderFlex has an orientation of Axis.vertical.
+06-09 09:40:59.495 24044 24044 I flutter : The edge of the RenderFlex that is overflowing has been marked in
+06-09 09:40:59.495 24044 24044 I flutter : the rendering with a yellow and black striped pattern. This is
+06-09 09:40:59.495 24044 24044 I flutter : usually caused by the contents being too big for the RenderFlex.
+06-09 09:40:59.495 24044 24044 I flutter : Consider applying a flex factor (e.g. using an Expanded widget)
+06-09 09:40:59.495 24044 24044 I flutter : to force the children of the RenderFlex to fit within the
+06-09 09:40:59.495 24044 24044 I flutter : available space instead of being sized to their natural size.
+06-09 09:40:59.495 24044 24044 I flutter : This is considered an error condition because it indicates that
+06-09 09:40:59.495 24044 24044 I flutter : there is content that cannot be seen. If the content is
+06-09 09:40:59.495 24044 24044 I flutter : legitimately bigger than the available space, consider clipping
+06-09 09:40:59.495 24044 24044 I flutter : it with a ClipRect widget before putting it in the flex, or using
+06-09 09:40:59.495 24044 24044 I flutter : a scrollable container rather than a Flex, like a ListView.
+06-09 09:40:59.496 24044 24044 I flutter : The specific RenderFlex in question is: RenderFlex#1227b relayoutBoundary=up9 OVERFLOWING:
+06-09 09:40:59.496 24044 24044 I flutter :   parentData: offset=Offset(16.0, 16.0) (can use size)
+06-09 09:40:59.496 24044 24044 I flutter :   constraints: BoxConstraints(0.0<=w<=298.0, h=115.0)
+06-09 09:40:59.496 24044 24044 I flutter :   size: Size(298.0, 115.0)
+06-09 09:40:59.496 24044 24044 I flutter :   direction: vertical
+06-09 09:40:59.496 24044 24044 I flutter :   mainAxisAlignment: start
+06-09 09:40:59.496 24044 24044 I flutter :   mainAxisSize: max
+06-09 09:40:59.496 24044 24044 I flutter :   crossAxisAlignment: stretch
+06-09 09:40:59.496 24044 24044 I flutter :   verticalDirection: down
+06-09 09:40:59.496 24044 24044 I flutter :   spacing: 0.0
+06-09 09:40:59.496 24044 24044 I flutter : ◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+06-09 09:40:59.496 24044 24044 I flutter : ═════════════════════════════════════════════════════════════════
+06-09 09:40:59.496 24044 24044 I flutter : , timestamp: 2026-06-09 09:40:59.495111, function: null, file: null}
+06-09 09:40:59.520  2674  4693 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:59.550  2674  4693 D SensorService: Calling batch handle==1 flags=0 rate=180000000 timeout== 0
+06-09 09:40:59.555 24044 24044 D SensorManager: registerListener :: 1, LSM6DSL Acceleration Sensor, 200000, 0,  
+06-09 09:40:59.570   496 12768 D ExynosCameraRequestManager: [CAM_ID(0)][]-DEBUG(m_allMetaCallback[3359]):[R5 F9]. AllMeta result is pushed but not complete output buffer(1 / 0)
+06-09 09:40:59.570  2674  4693 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:59.575  2674  4693 I chatty  : uid=1000(system) Binder:2674_1B identical 2 lines
+06-09 09:40:59.577  2674  4693 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:59.579   491   653 E Sensors : Sensor : Meta event
+06-09 09:40:59.606 24044 24044 I flutter : Log registered: {message: Retrieved existing Device ID: 87df7992-736e-403b-b803-d80b10efd0b1, timestamp: 2026-06-09 09:40:59.605773, function: null, file: null}
+06-09 09:40:59.622 24044 24044 I flutter : Log registered: {message: Command received from master: {"command":"noSession"}, timestamp: 2026-06-09 09:40:59.622567, function: null, file: null}
+06-09 09:40:59.623 24044 24044 I flutter : Log registered: {message: No active session to end., timestamp: 2026-06-09 09:40:59.623050, function: null, file: null}
+06-09 09:40:59.623 24044 24044 I flutter : Log registered: {message: No active session on master., timestamp: 2026-06-09 09:40:59.623452, function: null, file: null}
+06-09 09:40:59.623 24044 24044 I flutter : Log registered: {message: Command received from master: {"command":"noSession"}, timestamp: 2026-06-09 09:40:59.623673, function: null, file: null}
+06-09 09:40:59.623 24044 24044 I flutter : Log registered: {message: No active session to end., timestamp: 2026-06-09 09:40:59.623887, function: null, file: null}
+06-09 09:40:59.624 24044 24044 I flutter : Log registered: {message: No active session on master., timestamp: 2026-06-09 09:40:59.624097, function: null, file: null}
+06-09 09:40:59.626 24044 24044 I flutter : Log registered: {message: Retrieved existing Device ID: 87df7992-736e-403b-b803-d80b10efd0b1, timestamp: 2026-06-09 09:40:59.625913, function: null, file: null}
+06-09 09:40:59.626  2674  4693 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:59.698   491   911 I flicker_log: 7.43, 8.10, 16.11, 11.89
+06-09 09:40:59.698   491   911 I flicker_log: 132, 16.11
+06-09 09:40:59.698   491   911 I flicker_log: 208, 15.26
+06-09 09:40:59.698   491   911 I flicker_log: 133, 14.68
+06-09 09:40:59.698   491   911 D SensorsBio: BioSensor_common::readEvents, FAR = -1
+06-09 09:40:59.747   496 12795 W ExynosCameraSec: [CAM_ID(0)][Back_0]-WARN(m_getSensorListenerData[19830]):skip the Rotation data. ret -11
+--------- beginning of system
+06-09 09:41:00.000  2674  2850 D SamsungAlarmManager: Expired : 8
+06-09 09:41:00.001  2674  2850 D SamsungAlarmManager: setInexact Intent (T:3/F:8/AC:false) 20260609T095340 - CU:1000/CP:2674
+06-09 09:41:00.001  2674  2850 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260609T094643, SetElapsed=165250608, nowELAPSED=164907089
+06-09 09:41:00.002  2674  2850 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260609T094100, SetElapsed=164907088, nowELAPSED=164907090
+06-09 09:41:00.002  2674  2850 V SamsungAlarmManager: Sending to uid : 1000 action=com.android.server.em.EM_SYNC_TOKEN_STATE_TIMER alarm=Alarm{428c6a8 type 3 when 164767635 android}
+06-09 09:41:00.004  2674  2850 V SamsungAlarmManager: Sending to uid : 1000 listener=com.android.server.AlarmManagerService$2@e9f9928 alarm=Alarm{666a166 type 3 when 164907088 android}
+06-09 09:41:00.005  2674  2850 D SamsungAlarmManager: setExact Listener (T:3/F:1/AC:false) 20260609T094200 - CU:1000/CP:2674
+06-09 09:41:00.006  2674  2674 I EngineeringModeService: Broadcast received:com.android.server.em.EM_SYNC_TOKEN_STATE_TIMER
+06-09 09:41:00.006  2674  2850 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260609T094643, SetElapsed=165250608, nowELAPSED=164907094
+06-09 09:41:00.006  2674  2850 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260609T094144, SetElapsed=164951856, nowELAPSED=164907094
+06-09 09:41:00.006  2674  2850 V SamsungAlarmManager: Sending to uid : 10105 action=com.samsung.action.EVERY_MINUTE_CLOCK_UPDATE alarm=Alarm{9c3fca7 type 1 when 1780990860000 com.sec.android.app.launcher}
+06-09 09:41:00.008  2674  2850 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260609T094643, SetElapsed=165250608, nowELAPSED=164907096
+06-09 09:41:00.008  2674  2850 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260609T094144, SetElapsed=164951856, nowELAPSED=164907096
+06-09 09:41:00.016  2674  2674 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1088 com.android.server.EngineeringModeService.notifyTokenStatus:894 com.android.server.EngineeringModeService.access$1000:93 com.android.server.EngineeringModeService$2.onReceive:609 android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0$LoadedApk$ReceiverDispatcher$Args:1648 
+06-09 09:41:00.020  3256  3256 I LiveIconUpdateEventHandler: onReceive: com.samsung.action.EVERY_MINUTE_CLOCK_UPDATE
+06-09 09:41:00.020  3256  3256 D LiveIconUpdateEventHandler: updateClockLiveIcon
+06-09 09:41:00.024  3256  3256 D LiveIconUpdateEventHandler: cancelMinuteChangeAlarm
+06-09 09:41:00.024  2674  4693 D SamsungAlarmManager: Cancel Alarm calling from uid:10105 pid :3256 / op:PendingIntent{ae92cfd: PendingIntentRecord{7bcbc22 com.sec.android.app.launcher broadcastIntent}}
+06-09 09:41:00.025  3256  3256 D LiveIconUpdateEventHandler: setMinuteChangeAlarm
+06-09 09:41:00.029  2674  4693 D SamsungAlarmManager: setInexact Intent (T:1/F:0/AC:false) 20260609T094200 - CU:10105/CP:3256
+06-09 09:41:00.030  2674  4693 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260609T094643, SetElapsed=165250608, nowELAPSED=164907118
+06-09 09:41:00.030  2674  4693 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260609T094144, SetElapsed=164951856, nowELAPSED=164907118
+06-09 09:41:00.035  3100  3100 D KeyguardUpdateMonitor: received broadcast android.intent.action.TIME_TICK
+06-09 09:41:00.036  2674  2674 I PACMService: Broadcast received:com.android.server.em.EM_SYNC_TOKEN_STATE
+06-09 09:41:00.037  3100  3100 D KeyguardUpdateMonitor: handleTimeUpdate
+06-09 09:41:00.039  2674  2674 I EngineeringModeManager: android connects to EngineeringModeService.
+06-09 09:41:00.039  2674  2674 I PACMService: ts : EM
+06-09 09:41:00.045  3100  3100 D FaceWidgetPagesController: onTimeChanged()
+06-09 09:41:00.051  3100  3100 D QSClockBellTower: He is ready to ring the bell. (((timeText:9:41, skipUpdateForDemo:false, dateText:mar., 9 de junio, shortenDateText = mar., 9 jun.)))
+06-09 09:41:00.055  3100  3100 D QSClock : status_bar_clock notifyTimeChanged(currentTime:9:41) mClockVisibleByPolicy:true, mClockVisibleByUser:true, visible?true, parent:android.widget.LinearLayout{cccae53 V.E...... ......ID 0,0-58,48 #7f0a0395 app:id/left_clock_container}
+06-09 09:41:00.058  3100  3100 D QSClockBellTower: Everyone heard the bell. run(currentTime:1780990860049,   getTime():Tue Jun 09 09:41:00 GMT+02:00 2026,   getTimeZone():libcore.util.ZoneInfo[id="Europe/Berlin",mRawOffset=3600000,mEarliestRawOffset=3600000,mUseDst=true,mDstSavings=3600000,transitions=144])
+06-09 09:41:00.082  3100  3100 W GraphicUtils: getTextEmpty : skipped with null text
+06-09 09:41:00.089  3100  3100 D QSContainerImpl: getDisplayHeight portrait? false  displayHeight= 720
+06-09 09:41:00.198   491   911 D SensorsBio: BioSensor_common::readEvents, FAR = -1
+06-09 09:41:00.410  2674  3641 I EDMNativeHelperService: isCameraEnabled
+06-09 09:41:00.411  2674  3641 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10452) cxtInfo.mContainerId(0)
+06-09 09:41:00.412  2417 12763 D CameraDeviceClient: vr service found
+06-09 09:41:00.414  2417 12763 I CameraDeviceClient: isCameraBlockedByHMT: usbpd_ids: 0000:0000, is camera blocking device: false
+06-09 09:41:00.601  3081  3121 I Telephony: SamsungPhoneInterfaceManagerCallHelper: isVideoCall: false
+06-09 09:41:00.698   491   911 I flicker_log: 11.86, 10.66, 26.21, 25.87
+06-09 09:41:00.699   491   911 I flicker_log: 275, 26.21
+06-09 09:41:00.699   491   911 I flicker_log: 307, 25.87
+06-09 09:41:00.699   491   911 I flicker_log: 285, 25.13
+06-09 09:41:00.699   491   911 D SensorsBio: BioSensor_common::readEvents, FAR = -1
+06-09 09:41:00.872  4181  4181 I io_stats: !@   8,0 r 3316542 100561580 w 3308656 34918720 d 205277 43413280 f 921591 924949 iot 2638000 2009391 th 102400 0 0 pt 0 inp 0 0 156171.538
+06-09 09:41:00.954   513   513 I SurfaceFlinger: SFWD update time=156171624560796
+06-09 09:41:01.094  1798  1798 I perfsdkserver: Server: request to connection
+06-09 09:41:01.094  1798  1827 I perfsdkserver: Request connection
+06-09 09:41:01.094  1798  1827 E perfsdkserver: [Interface] BpPerfSDKService::connectionRequest() 
+06-09 09:41:01.094  1798  1827 I perfsdkserver: serviceConnection is done
+06-09 09:41:01.198   491   911 D SensorsBio: BioSensor_common::readEvents, FAR = -1

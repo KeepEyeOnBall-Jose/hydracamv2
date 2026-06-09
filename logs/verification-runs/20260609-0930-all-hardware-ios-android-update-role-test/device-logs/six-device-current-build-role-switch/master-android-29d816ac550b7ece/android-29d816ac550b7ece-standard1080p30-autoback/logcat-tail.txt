@@ -1,0 +1,402 @@
+--------- beginning of main
+06-09 09:40:46.767 12662 12662 D SamsungAnalytics:DQA: [Tracker] Tracker start:DQA_v0.1
+06-09 09:40:46.770 12662 12662 D DQA     : create DQA mode: USR
+06-09 09:40:46.771 12662 12662 D DQA     : get data intent
+06-09 09:40:46.771 12662 12662 D DQA     : [Manager] Manager Instance is created - UseDatabase true
+06-09 09:40:46.777  2431 12696 D keystore: [getKeyCharacteristics::end]
+06-09 09:40:46.778 12662 12662 D DQA     : key found:true
+06-09 09:40:46.784  2431 12697 D keystore: [getKeyCharacteristics::end]
+06-09 09:40:46.787   439   439 W keymaster_tee: [WRN]start nwd_get_key_characteristics
+06-09 09:40:46.789   439   439 W keymaster_tee: [WRN]ret OK PARAMS: A32 P0 P1 B2 P64 NAR1 S256 2020.08.01,20:31:49.984 
+06-09 09:40:46.789   439   439 W keymaster_tee: [WRN]begin req PARAMS: A32 B2 P64 
+06-09 09:40:46.790  2431 12698 D keystore: [BEGIN::end]
+06-09 09:40:46.793  2431 12699 D keystore: [UPDATE::end]
+06-09 09:40:46.795  2431 12700 D keystore: [FINISH::end]
+06-09 09:40:46.831 12662 12662 D DQA     : [SemDBOpenHelper] db success
+06-09 09:40:46.831 12662 12662 D DQA     : [SemDBOpenHelper] Getting DB object succeeded
+06-09 09:40:46.831 12662 12662 D DQA     : [Manager] Manager Instance is not null
+06-09 09:40:46.831 12662 12662 D DQA     : save data
+06-09 09:40:46.836 12662 12662 D SamsungAnalytics:DQA: [Log Sender] insert
+06-09 09:40:47.286 12562 12638 I BCL@Common: (CommonUtils) isProcessName, processName: com.samsung.android.bixby.agent
+06-09 09:40:47.287 12562 12638 I BCL@Common: (PushManager) PushManager()
+06-09 09:40:47.292 12562 12638 I BCL@Common: (SmpTool) initialize()
+06-09 09:40:47.292 12562 12638 I BCL@Common: (SmpTool) initSmp()
+06-09 09:40:47.297  2431  2431 D keystore: get : result (7)
+06-09 09:40:47.298 12562 12638 W KeyStore: get() : not found key : USRCERT_com.samsung.android.bixby.agentAES
+06-09 09:40:47.298  2431  2431 D keystore: get : result (7)
+06-09 09:40:47.298 12562 12638 W KeyStore: get() : not found key : CACERT_com.samsung.android.bixby.agentAES
+06-09 09:40:47.302  2431 12703 D keystore: [getKeyCharacteristics::end]
+06-09 09:40:47.304   439   439 W keymaster_tee: [WRN]start nwd_get_key_characteristics
+06-09 09:40:47.307   439   439 W keymaster_tee: [WRN]ret OK PARAMS: A32 P0 P1 B32 P1 CN1 NAR1 S256 2020.08.31,07:35:15.242 
+06-09 09:40:47.307   439   439 W keymaster_tee: [WRN]begin req PARAMS: A32 B32 P1 
+06-09 09:40:47.308  2431 12704 D keystore: [BEGIN::end]
+06-09 09:40:47.311  2431 12705 D keystore: [UPDATE::end]
+06-09 09:40:47.313  2431 12706 D keystore: [FINISH::end]
+06-09 09:40:47.319 12562 12638 I SmpLog  : [SMP] set uid
+06-09 09:40:47.322 12562 12638 I SmpLog  : [SMP] init. U:true S:true M:true P:FCM_PRIMARY_MODE A:a
+06-09 09:40:47.330 12562 12708 I SmpLog  : [SMP] Test mode: false, v:3.3.7.0, com.samsung.android.bixby.agent
+06-09 09:40:47.337 12562 12708 I SmpLog  : [SMP] ptype:fcm, token:...ZVU48 (142), D:null, U:true, S:false, M:true, P:FCM_PRIMARY_MODE
+06-09 09:40:47.337 12562 12647 I BCL@Common: (CallUiUtils) changeInCallServiceComponent
+--------- beginning of system
+06-09 09:40:47.345  2674  3644 I Telecom:SamsungTelecomServiceImpl: getDefaultDialerPackage - callingPid : 12562 / processName : sts
+06-09 09:40:47.346 12562 12647 I BCL@Common: (CallUiUtils) Default call app : com.samsung.android.dialer
+06-09 09:40:47.346 12562 12647 I BCL@Common: (CallUiUtils) provision need [false], BixbyInCallUi supported [false]
+06-09 09:40:47.346 12562 12647 I BCL@Common: (CallUiUtils) com.samsung.android.bixby.agent.appbridge.clientaction.incallservice.BixbyInCallService to : false
+06-09 09:40:47.347  2674  3644 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.bixby.agent cmp = com.samsung.android.bixby.agent.appbridge.clientaction.incallservice.BixbyInCallService newState = 2 callingPackage = 5018/com.samsung.android.bixby.agent
+06-09 09:40:47.349 12562 12647 I BCL@Common: (CallUiUtils) changeCallStateReceiverComponent
+06-09 09:40:47.351  2674  3644 I Telecom:SamsungTelecomServiceImpl: getDefaultDialerPackage - callingPid : 12562 / processName : sts
+06-09 09:40:47.352 12562 12647 I BCL@Common: (CallUiUtils) Default call app : com.samsung.android.dialer
+06-09 09:40:47.354 12562 12647 D IWakeUpSetting: Ph_getInstalledWakeupVersionCode : 235300018 [RxComputationThreadPool-3] 
+06-09 09:40:47.356 12562 12647 D WakeUpSettingUtil: Ph_getBargeInConfig:0 [RxComputationThreadPool-3] 
+06-09 09:40:47.362 12562 12708 I SmpLog  : [SMP] SEND BR : smp init success
+06-09 09:40:47.363 12562 12647 I BCL@Common: (CallUiUtils) provision need [false], isSamsungCallUi [true], wlc [false]
+06-09 09:40:47.363 12562 12647 I BCL@Common: (CallUiUtils) com.samsung.android.bixby.agent.receivers.RingingEventReceiver to : false
+06-09 09:40:47.371 12562 12638 I BCL@Common: (PushManager) startIfNotStarted - instance: androidx.appcompat.app.z@feb4d9
+06-09 09:40:47.371 12562 12638 I BCL@Common: (BixbyApplications) startDiagMon
+06-09 09:40:47.373 12562 12638 D DIAGMON_SDK: dma pkg:670401000
+06-09 09:40:47.373 12562 12638 I DIAGMON_SDK[605051]: DiagMonAgent type: 2
+06-09 09:40:47.373 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : setConfiguration type : CUSTOM
+06-09 09:40:47.373 12562 12638 I DIAGMON_SDK[605051][bp23rgegzo] : generated SR object
+06-09 09:40:47.374 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : Diagmon Logger Init
+06-09 09:40:47.374 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : CRASH_LOG_PATH : /data/user/0/com.samsung.android.bixby.agent/exception/diagmon.log
+06-09 09:40:47.374 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : EVENT_LOG_PATH : /data/user/0/com.samsung.android.bixby.agent/exception/diagmon_event.log
+06-09 09:40:47.374 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : THREAD_STACK_LOG_PATH : /data/user/0/com.samsung.android.bixby.agent/exception/diagmon_thread.log
+06-09 09:40:47.374 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : MEMORY_LOG_PATH : /data/user/0/com.samsung.android.bixby.agent/exception/diagmon_memory.log
+06-09 09:40:47.374 12562 12638 D DIAGMON_SDK[605051][bp23rgegzo] : STORAGE_LOG_PATH : /data/user/0/com.samsung.android.bixby.agent/exception/diagmon_storage.log
+06-09 09:40:47.375  2674  4693 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.bixby.agent cmp = com.samsung.android.bixby.agent.receivers.RingingEventReceiver newState = 2 callingPackage = 5018/com.samsung.android.bixby.agent
+06-09 09:40:47.377 12562 12638 I BCL@Vendor: (SecPropertyService) SEC_FLOATING_FEATURE_BIXBY_CONFIG_HWKEY: 
+06-09 09:40:47.377 12562 12638 I BCL@Vendor: (SecPropertyService) Bixby config SideKey : false
+06-09 09:40:47.384 12562 12638 I BCL@Settings: (ShowAppIconInitializer) updateSystemSetting 0
+06-09 09:40:47.384  2674  4693 D SettingsProvider: isChangeAllowed() : name = bixby_setting_show_app_icon_enabled
+06-09 09:40:47.384  2674  4693 D SettingsProvider: edmUri: content://com.sec.knox.provider/RestrictionPolicy3
+06-09 09:40:47.384  2674  4693 D SettingsProvider: projectionArgs: isSettingsChangesAllowed
+06-09 09:40:47.384  2674  4693 D SettingsProvider: selectionArgs: false
+06-09 09:40:47.384  2674  4693 D SettingsProvider: selectionArgs: 5018
+06-09 09:40:47.385  2674  4693 D SecContentProvider: query(), uri = 17 selection = isSettingsChangesAllowed
+06-09 09:40:47.385  2674  4693 D SecContentProvider: called from android.uid.bixby.client:5018
+06-09 09:40:47.385  2674  4693 D RestrictionPolicy: isSettingsChangesAllowedAsUser, userId 0 : true
+06-09 09:40:47.385  2674  4693 D SettingsProvider: ret = 1
+06-09 09:40:47.393 12562 12638 I BCL@Common: (CommonUtils) isProcessName, processName: com.samsung.android.bixby.agent
+06-09 09:40:47.393 12562 12638 I BCL@Settings: (SamsungTtsRemovedReceiver) register
+06-09 09:40:47.395 12562 12638 I BCL@AssiHome: (AutoDisposable) AutoDisposable()
+06-09 09:40:47.401 12562 12638 I BCL@Common: (CommonUtils) isProcessName, processName: com.samsung.android.bixby.agent
+06-09 09:40:47.405 12562 12638 I BCL@AssiHome: (PromotionProcessHandler) signInInfoUpdate
+06-09 09:40:47.406 12562 12638 I BCL@AssiHome: (SmcsManager) registerOuterEventObserver()
+06-09 09:40:47.412 12562 12637 I SmpLog  : [SMP] get push type : fcm
+06-09 09:40:47.412 12562 12638 I BCL@Common: (CommonUtils) isProcessName, processName: com.samsung.android.bixby.agent
+06-09 09:40:47.412 12562 12638 I BCL@RepositoryM: (ConversationHistoryUpdater) ConversationHistoryRepository
+06-09 09:40:47.412 12562 12637 I SmpLog  : [SMP] get push type : fcm
+06-09 09:40:47.413 12562 12637 I SmpLog  : [SMP] get token : ...ZVU48 (142)
+06-09 09:40:47.416  3081  5897 E PhoneInterfaceManager: [PhoneIntfMgr] getIccId: No UICC
+06-09 09:40:47.420 12562 12637 I BCL@AssiHome: (PromotionProcessHandler) mSignInInfo was created
+06-09 09:40:47.420 12562 12637 I BCL@AssiHome: (SmcsManager) initSmcs()
+06-09 09:40:47.429 12562 12637 I BCL@Common: (DeviceInfoUtils) Failed to get sim info
+06-09 09:40:47.430  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_listeners
+06-09 09:40:47.431  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_assistant
+06-09 09:40:47.431  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_assistant
+06-09 09:40:47.431  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_policy_access_packages
+06-09 09:40:47.431  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_policy_access_packages
+06-09 09:40:47.437 12562 12638 I BCL@QuickCommandProvider: (QuickCommandDatabase) migrateDatabase()
+06-09 09:40:47.441 12562 12638 I BCL@Common: (BixbyApplications) deleteGeneratedFilesByDexMaker
+06-09 09:40:47.451  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_listeners
+06-09 09:40:47.451  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_assistant
+06-09 09:40:47.452  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_assistant
+06-09 09:40:47.452  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_policy_access_packages
+06-09 09:40:47.452  2674  2708 D SettingsProvider: isChangeAllowed() : name = enabled_notification_policy_access_packages
+06-09 09:40:47.883 12477 12511 I BSL@BixbySearch: (FeedbackManager) [FeedbackManager] entering in analyzeFeedback():  analyzeFeedback Start
+06-09 09:40:47.883 12477 12511 I BSL@BixbySearch: (IndexSearcherManager) SearcherMap already set for pkg com.samsung.android.apps
+06-09 09:40:47.917 12477 12511 I BSL@BixbySearch: (IndexSearcherManager) SearcherMap already set for pkg synonym
+06-09 09:40:47.920 12477 12511 D SamsungAnalytics605026: user do not agree
+06-09 09:40:47.920 12477 12511 I BSL@BixbySearch: (FeedbackManager) [FeedbackManager] leaving from analyzeFeedback():  
+06-09 09:40:48.176  2674  2933 D ConnectivityService: updateCapabilities: oldCap = [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps Specifier: <WifiNetworkAgentSpecifier [WifiConfiguration=, SSID="FRITZ!Box 6591 Cable TZ", BSSID=2c:91:ab:8b:a3:07, mOriginalRequestorUid=-1, mOriginalRequestorPackageName=]> SignalStrength: -64 SSID: "FRITZ!Box 6591 Cable TZ"], newCap = [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_ROAMING&NOT_CONGESTED LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps Specifier: <WifiNetworkAgentSpecifier [WifiConfiguration=, SSID="FRITZ!Box 6591 Cable TZ", BSSID=2c:91:ab:8b:a3:07, mOriginalRequestorUid=-1, mOriginalRequestorPackageName=]> SignalStrength: -63 SSID: "FRITZ!Box 6591 Cable TZ"]
+06-09 09:40:48.178  2674  2933 D ConnectivityService: notifyType CALLBACK_CAP_CHANGED for NetworkAgentInfo [WIFI () - 601]
+06-09 09:40:48.178  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ REQUEST id=1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-09 09:40:48.178  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=4, [ Capabilities: FOREGROUND] ]
+06-09 09:40:48.178  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=4, [ Capabilities: FOREGROUND] ]
+06-09 09:40:48.178  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=5, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1000] ]
+06-09 09:40:48.178  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=5, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1000] ]
+06-09 09:40:48.178  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=6, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1000] ]
+06-09 09:40:48.178  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=6, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1000] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=7, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1000] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=7, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1000] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ REQUEST id=8, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ REQUEST id=8, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=11, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=11, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=12, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=12, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=13, [ Transports: WIFI Capabilities: NOT_VPN] ]
+06-09 09:40:48.179  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=13, [ Transports: WIFI Capabilities: NOT_VPN] ]
+06-09 09:40:48.180  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=14, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10007] ]
+06-09 09:40:48.180  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=14, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10007] ]
+06-09 09:40:48.180  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=15, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&VALIDATED Uid: 1000] ]
+06-09 09:40:48.180  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=15, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&VALIDATED Uid: 1000] ]
+06-09 09:40:48.180  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=16, [ Transports: WIFI Capabilities: INTERNET&TRUSTED&NOT_VPN Uid: 1001] ]
+06-09 09:40:48.180  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=16, [ Transports: WIFI Capabilities: INTERNET&TRUSTED&NOT_VPN Uid: 1001] ]
+06-09 09:40:48.181  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=17, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.181  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=17, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.181  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=18, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.181  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=18, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=19, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=19, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=20, [] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=20, [] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=22, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=22, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=23, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.182  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=23, [ Transports: WIFI Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.183  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=24, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.183  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=24, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.183  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=27, [ Capabilities: INTERNET&TRUSTED Uid: 10042] ]
+06-09 09:40:48.183  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=27, [ Capabilities: INTERNET&TRUSTED Uid: 10042] ]
+06-09 09:40:48.183  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=28, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=28, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=29, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=29, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ REQUEST id=30, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ REQUEST id=30, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 1000] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=32, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=32, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1000] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=33, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 10315] ]
+06-09 09:40:48.184  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=33, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 10315] ]
+06-09 09:40:48.185  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=34, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.185  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=34, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.185  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=35, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.185  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=35, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.185  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=37, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.185  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=37, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.186  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=38, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10315] ]
+06-09 09:40:48.186  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=38, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10315] ]
+06-09 09:40:48.186  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=39, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 10315] ]
+06-09 09:40:48.186  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=39, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 10315] ]
+06-09 09:40:48.186  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=40, [ Transports: CELLULAR|WIFI|ETHERNET Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 10036] ]
+06-09 09:40:48.187  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=40, [ Transports: CELLULAR|WIFI|ETHERNET Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 10036] ]
+06-09 09:40:48.187  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=70, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.188  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=70, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.188  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=71, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.188  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=71, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.188  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=96, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 5013] ]
+06-09 09:40:48.188  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=96, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 5013] ]
+06-09 09:40:48.189  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=110, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.189  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=110, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.189  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=111, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.189  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=111, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.190  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=112, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.190  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=112, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.190  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=113, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.190  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=113, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.190  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=205, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.190  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=205, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.191  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=208, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.191  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=208, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.191  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=229, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.191  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=229, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.191  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=326, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.191  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=326, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.192  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=327, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.192  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=327, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.192  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=338, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.192  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=338, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN Uid: 10042] ]
+06-09 09:40:48.192  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=340, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.192  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=340, [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.193  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=904, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10123] ]
+06-09 09:40:48.193  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=904, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10123] ]
+06-09 09:40:48.193  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN_MDO id=905, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 10123] ]
+06-09 09:40:48.193  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN_MDO id=905, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 10123] ]
+06-09 09:40:48.193  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=907, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10123] ]
+06-09 09:40:48.194  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=907, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10123] ]
+06-09 09:40:48.194  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN_MDO id=908, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 10123] ]
+06-09 09:40:48.194  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN_MDO id=908, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 10123] ]
+06-09 09:40:48.194  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1073, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10108] ]
+06-09 09:40:48.194  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1073, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10108] ]
+06-09 09:40:48.194  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1074, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10108] ]
+06-09 09:40:48.195  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=1074, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10108] ]
+06-09 09:40:48.195  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1213, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.195  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1213, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.195  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1214, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.195  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=1214, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.195  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1284, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_SUSPENDED Uid: 10108] ]
+06-09 09:40:48.196  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=1284, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_SUSPENDED Uid: 10108] ]
+06-09 09:40:48.196  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1285, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10108] ]
+06-09 09:40:48.196  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1285, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10108] ]
+06-09 09:40:48.196  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1347, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.197  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1347, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.197  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1348, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.197  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=1348, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10042] ]
+06-09 09:40:48.197  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1418, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.197  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1418, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.198  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1419, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.198  5913  7074 I HONEYBOARD: c onCapabilitiesChanged network : 601 current network state : 1 
+06-09 09:40:48.198  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=1419, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.198  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1512, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.198  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1512, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010042] ]
+06-09 09:40:48.198  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=1513, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.198  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=1513, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&FOREGROUND Uid: 1010042] ]
+06-09 09:40:48.199  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1522, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.199  2674  2932 I WifiConnectivityMonitor.NetworkCallbackController: mNetworkCallback onCapabilitiesChanged: 601[ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -63 SSID: "FRITZ!Box 6591 Cable TZ"]
+06-09 09:40:48.203  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1522, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.205  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN_MDO id=1523, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.207  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN_MDO id=1523, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.208  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1524, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.210  3100  3100 D SecStatusBarWifiView: updateState: WifiIconState(resId=2131232731, visible=true, activityId=2131232737)
+06-09 09:40:48.211  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1524, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.211  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1525, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1525, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN_MDO id=1526, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN_MDO id=1526, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1527, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1527, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN_MDO id=1528, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.212  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN_MDO id=1528, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.213  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1529, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.213  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1529, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.213  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN_MDO id=1530, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.213  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN_MDO id=1530, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.213  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1531, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.213  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1531, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.214  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1532, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.214  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1532, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10065] ]
+06-09 09:40:48.214  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1533, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.214  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1533, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 1010065] ]
+06-09 09:40:48.214  2674  2933 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=1534, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10206] ]
+06-09 09:40:48.214  2674  2933 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=1534, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10206] ]
+06-09 09:40:48.215  2674  2933 D ConnectivityService: Connectivity-MDO processListenRequests: mdoNetId = 0 nr.requestId = 905
+06-09 09:40:48.215  2674  2933 D ConnectivityService: Connectivity-MDO processListenRequests: mdoNetId = 0 nr.requestId = 1523
+06-09 09:40:48.215  2674  2933 D ConnectivityService: Connectivity-MDO processListenRequests: mdoNetId = 0 nr.requestId = 1528
+06-09 09:40:48.215  2674  2933 D ConnectivityService: Connectivity-MDO processListenRequests: mdoNetId = 0 nr.requestId = 908
+06-09 09:40:48.215  2674  2933 D ConnectivityService: Connectivity-MDO processListenRequests: mdoNetId = 0 nr.requestId = 1530
+06-09 09:40:48.215  2674  2933 D ConnectivityService: Connectivity-MDO processListenRequests: mdoNetId = 0 nr.requestId = 1526
+06-09 09:40:48.232   513   513 I SurfaceFlinger: SFWD update time=156158903264997
+06-09 09:40:48.299  5913  5913 I HONEYBOARD: c onCapabilityChanged network = 601 
+06-09 09:40:48.299  5913  5913 I HONEYBOARD: c onCapabilityChanged  resetStates 
+06-09 09:40:48.303  5913  5913 I HONEYBOARD: c onCapabilityChanged setNetworkState currentNetworkState : 1, currentActiveNetwork : 601 ,currentNetworkCapabilities : [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -63] 
+06-09 09:40:48.657  2674 12718 D WifiConnectivityMonitor.DnsPingerHandler: setCurrentLinkProperties: lp={InterfaceName: wlan0 LinkAddresses: [ fe80::86a:8eff:fed3:5bf0/64,192.168.178.153/24,fd4e:301d:1ba7:0:86a:8eff:fed3:5bf0/64,fd4e:301d:1ba7:0:2919:cbc7:f58c:1fcd/64,fd4e:301d:1ba7:0:1d15:f417:21d1:64f8/64,2001:9e8:1655:2000:86a:8eff:fed3:5bf0/64,2001:9e8:1655:2000:1d15:f417:21d1:64f8/64 ] DnsAddresses: [ /2001:9e8:1655:2000:464e:6dff:febe:f3dc,/fd4e:301d:1ba7:0:464e:6dff:febe:f3dc,/192.168.178.1 ] Domains: fritz.box MTU: 1500 TcpBufferSizes: 524288,1048576,4194304,524288,1048576,4194304 Routes: [ fe80::/64 -> :: wlan0,fd4e:301d:1ba7::/64 -> fe80::464e:6dff:febe:f3dc wlan0,fd4e:301d:1ba7::/64 -> :: wlan0,2001:9e8:167c:7600::/64 -> fe80::464e:6dff:febe:f3dc wlan0,2001:9e8:1647:f100::/64 -> fe80::464e:6dff:febe:f3dc wlan0,::/0 -> fe80::464e:6dff:febe:f3dc wlan0,2001:9e8:1655:2000::/56 -> fe80::464e:6dff:febe:f3dc wlan0,2001:9e8:1655:2000::/64 -> :: wlan0,192.168.178.0/24 -> 0.0.0.0 wlan0,0.0.0.0/0 -> 192.168.178.1 wlan0 ]}
+06-09 09:40:48.712  3316  3316 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+06-09 09:40:48.718  3316 17506 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+06-09 09:40:48.895 12430 12457 I nder:appservic: Waiting for a blocking GC ProfileSaver
+06-09 09:40:48.918 12430 12457 I nder:appservic: WaitForGcToComplete blocked ProfileSaver on AddRemoveAppImageSpace for 23.888ms
+06-09 09:40:48.991  2674 12719 D WifiConnectivityMonitor.DnsThread:  [|222] [] []
+06-09 09:40:48.996  2674  3017 D WifiConnectivityMonitor: DNS resultType : 0, responseTime : 222
+06-09 09:40:48.998  2674  3016 D WifiConnectivityMonitor: updateBssidLatestDnsResultType - result: 0
+06-09 09:40:49.292 24044 24044 I flutter : Log registered: {message: Runtime role switch requested: {role: master, preferredMasterIp: null, forceSlaveMode: false}, timestamp: 2026-06-09 09:40:49.292225, function: null, file: null}
+06-09 09:40:49.345 24044 24044 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (runtime role switch), timestamp: 2026-06-09 09:40:49.344734, function: null, file: null}
+06-09 09:40:49.371 12477 12496 I d.bixby.servic: Waiting for a blocking GC ProfileSaver
+06-09 09:40:49.423 12477 12496 I d.bixby.servic: WaitForGcToComplete blocked ProfileSaver on AddRemoveAppImageSpace for 51.509ms
+06-09 09:40:50.189 24044 24044 I flutter : Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-09 09:40:50.189180, function: null, file: null}
+06-09 09:40:50.248  2674  4690 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:50.266  2674  4690 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:50.340 24044 24044 I flutter : Log registered: {message: Retrieved existing Device ID: 87df7992-736e-403b-b803-d80b10efd0b1, timestamp: 2026-06-09 09:40:50.339612, function: null, file: null}
+06-09 09:40:50.556 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:50.556190, function: null, file: null}
+06-09 09:40:50.566 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:50.566083, function: null, file: null}
+06-09 09:40:50.603 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:50.603364, function: null, file: null}
+06-09 09:40:50.618 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93}, timestamp: 2026-06-09 09:40:50.618669, function: null, file: null}
+06-09 09:40:50.619 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.619120, function: null, file: null}
+06-09 09:40:50.641 24044 24044 I flutter : Log registered: {message: Sent noSession to a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.641453, function: null, file: null}
+06-09 09:40:50.649 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.648769, function: null, file: null}
+06-09 09:40:50.649 24044 24044 I flutter : Log registered: {message: Sent noSession to a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.649210, function: null, file: null}
+06-09 09:40:50.672 24044 24044 I flutter : Log registered: {message: Retrieved existing Device ID: 87df7992-736e-403b-b803-d80b10efd0b1, timestamp: 2026-06-09 09:40:50.671730, function: null, file: null}
+06-09 09:40:50.691 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:50.691344, function: null, file: null}
+06-09 09:40:50.697 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:50.696841, function: null, file: null}
+06-09 09:40:50.725 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:50.724997, function: null, file: null}
+06-09 09:40:50.727 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93}, timestamp: 2026-06-09 09:40:50.726908, function: null, file: null}
+06-09 09:40:50.727 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.727211, function: null, file: null}
+06-09 09:40:50.728 24044 24044 I flutter : Log registered: {message: Sent noSession to a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.728342, function: null, file: null}
+06-09 09:40:50.731 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: heartbeat, deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93, sessionGuid: null, timestamp: 2026-06-09T09:40:51.038349, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: true, rollDegrees: 98.4410433709583, pitchDegrees: -90.90946460967623}, network: {isWifiActive: true, ipAddress: 192.168.178.168, ssid: null, bssid: null, gatewayIp: 192.168.178.1, subnetMask: 255.255.255.0, subnetSignature: 192.168.178.0/24, source: device, warnings: [SSID unavailable; grant location permission and enable Location Services.]}}, timestamp: 2026-06-09 09:40:50.731448, function: null, file: null}
+06-09 09:40:50.735 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.735273, function: null, file: null}
+06-09 09:40:50.736 24044 24044 I flutter : Log registered: {message: Sent noSession to a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.736281, function: null, file: null}
+06-09 09:40:50.736 24044 24044 I flutter : Log registered: {message: Received heartbeat from a6864314-aa27-4e0a-9be4-a38fcbff1b93, timestamp: 2026-06-09 09:40:50.736637, function: null, file: null}
+06-09 09:40:50.740 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:50.740246, function: null, file: null}
+06-09 09:40:50.742 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a}, timestamp: 2026-06-09 09:40:50.741946, function: null, file: null}
+06-09 09:40:50.742 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.742229, function: null, file: null}
+06-09 09:40:50.743 24044 24044 I flutter : Log registered: {message: Sent noSession to 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.743442, function: null, file: null}
+06-09 09:40:50.744 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.744132, function: null, file: null}
+06-09 09:40:50.744 24044 24044 I flutter : Log registered: {message: Sent noSession to 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.744405, function: null, file: null}
+06-09 09:40:50.746 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:50.746042, function: null, file: null}
+06-09 09:40:50.746  2674  4690 D SamsungAlarmManager: Cancel Alarm calling from uid:10042 pid :3316 / op:PendingIntent{cecd8e2: PendingIntentRecord{bb96473 com.google.android.gms startService}}
+06-09 09:40:50.747 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a}, timestamp: 2026-06-09 09:40:50.747459, function: null, file: null}
+06-09 09:40:50.747 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.747682, function: null, file: null}
+06-09 09:40:50.748  2674  4690 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260609T094643, SetElapsed=165250608, nowELAPSED=164897836
+06-09 09:40:50.749  2674  4690 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260609T094100, SetElapsed=164907088, nowELAPSED=164897837
+06-09 09:40:50.753 24044 24044 I flutter : Log registered: {message: Sent noSession to 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.752984, function: null, file: null}
+06-09 09:40:50.754 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: heartbeat, deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, sessionGuid: null, timestamp: 2026-06-09T09:40:51.241243, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: true, rollDegrees: 61.488887982316704, pitchDegrees: 2.051354364561958}, network: {isWifiActive: true, ipAddress: 192.168.178.104, ssid: null, bssid: null, gatewayIp: 192.168.178.1, subnetMask: 255.255.255.0, subnetSignature: 192.168.178.0/24, source: device, warnings: [SSID unavailable; grant location permission and enable Location Services.]}}, timestamp: 2026-06-09 09:40:50.754488, function: null, file: null}
+06-09 09:40:50.756 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.755980, function: null, file: null}
+06-09 09:40:50.757 24044 24044 I flutter : Log registered: {message: Sent noSession to 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.756816, function: null, file: null}
+06-09 09:40:50.757 24044 24044 I flutter : Log registered: {message: Received heartbeat from 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a, timestamp: 2026-06-09 09:40:50.757109, function: null, file: null}
+06-09 09:40:50.769 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:50.769261, function: null, file: null}
+06-09 09:40:50.780 12562 12589 I oid.bixby.agen: Waiting for a blocking GC ProfileSaver
+06-09 09:40:50.784  2674  4690 D SamsungAlarmManager: Cancel Alarm calling from uid:10042 pid :9155 / op:PendingIntent{e7cff30: PendingIntentRecord{1977a9 com.google.android.gms startService}}
+06-09 09:40:50.785  2674  4690 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260609T094643, SetElapsed=165250608, nowELAPSED=164897873
+06-09 09:40:50.785  2674  4690 I SamsungAlarmManager: setLocked to kernel - T:3 / 20260609T094100, SetElapsed=164907088, nowELAPSED=164897873
+06-09 09:40:50.792  2674  4678 I ActivityManager: Killing 11231:com.samsung.android.bbc.bbcagent/1000 (adj 999): empty #25
+06-09 09:40:50.835 12562 12589 I oid.bixby.agen: WaitForGcToComplete blocked ProfileSaver on ClassLinker for 54.763ms
+06-09 09:40:50.854  2414  2414 I Zygote  : Process 11231 exited due to signal 9 (Killed)
+06-09 09:40:50.856  2674  2717 I libprocessgroup: Successfully killed process cgroup uid 1000 pid 11231 in 54ms
+06-09 09:40:50.864  4181  4181 I io_stats: !@   8,0 r 3315777 100520732 w 3308095 34915096 d 205274 43413176 f 921452 924810 iot 2637484 2009007 th 102400 0 0 pt 0 inp 0 0 156161.534
+06-09 09:40:51.034  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.062  2674  4678 I chatty  : uid=1000(system) Binder:2674_13 identical 13 lines
+06-09 09:40:51.069  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.085  1798  1798 I perfsdkserver: Server: request to connection
+06-09 09:40:51.086  1798  1827 I perfsdkserver: Request connection
+06-09 09:40:51.086  1798  1827 E perfsdkserver: [Interface] BpPerfSDKService::connectionRequest() 
+06-09 09:40:51.086  1798  1827 I perfsdkserver: serviceConnection is done
+06-09 09:40:51.097  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.102 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: c92dc796-b612-4ff4-95ee-81715b124560, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:51.101884, function: null, file: null}
+06-09 09:40:51.104 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: c92dc796-b612-4ff4-95ee-81715b124560}, timestamp: 2026-06-09 09:40:51.103841, function: null, file: null}
+06-09 09:40:51.104 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.104211, function: null, file: null}
+06-09 09:40:51.105 24044 24044 I flutter : Log registered: {message: Sent noSession to c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.105401, function: null, file: null}
+06-09 09:40:51.106 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.106201, function: null, file: null}
+06-09 09:40:51.106 24044 24044 I flutter : Log registered: {message: Sent noSession to c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.106512, function: null, file: null}
+06-09 09:40:51.117  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.129 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:51.129437, function: null, file: null}
+06-09 09:40:51.135  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.265 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: c92dc796-b612-4ff4-95ee-81715b124560, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:51.264750, function: null, file: null}
+06-09 09:40:51.266 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: c92dc796-b612-4ff4-95ee-81715b124560}, timestamp: 2026-06-09 09:40:51.266357, function: null, file: null}
+06-09 09:40:51.266 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.266583, function: null, file: null}
+06-09 09:40:51.268 24044 24044 I flutter : Log registered: {message: Sent noSession to c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.267613, function: null, file: null}
+06-09 09:40:51.268 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.268220, function: null, file: null}
+06-09 09:40:51.268 24044 24044 I flutter : Log registered: {message: Sent noSession to c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.268669, function: null, file: null}
+06-09 09:40:51.272  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.283 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:51.282845, function: null, file: null}
+06-09 09:40:51.287 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:51.286838, function: null, file: null}
+06-09 09:40:51.295  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.303  2674  4678 I chatty  : uid=1000(system) Binder:2674_13 identical 1 line
+06-09 09:40:51.310  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.372 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: heartbeat, deviceId: c92dc796-b612-4ff4-95ee-81715b124560, sessionGuid: null, timestamp: 2026-06-09T09:40:50.941275, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}, network: {isWifiActive: true, ipAddress: 192.168.178.175, ssid: FRITZ!Box 6591 Cable TZ, bssid: 2c:91:ab:8b:a3:07, gatewayIp: 192.168.178.1, subnetMask: 255.255.255.0, subnetSignature: 192.168.178.0/24, source: device, warnings: []}}, timestamp: 2026-06-09 09:40:51.371845, function: null, file: null}
+06-09 09:40:51.373 24044 24044 I flutter : Log registered: {message: Received heartbeat from c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-09 09:40:51.373484, function: null, file: null}
+06-09 09:40:51.381 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:51.381438, function: null, file: null}
+06-09 09:40:51.387  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.398  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.472 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:51.471903, function: null, file: null}
+06-09 09:40:51.473 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd}, timestamp: 2026-06-09 09:40:51.473344, function: null, file: null}
+06-09 09:40:51.473 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.473564, function: null, file: null}
+06-09 09:40:51.474 24044 24044 I flutter : Log registered: {message: Sent noSession to b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.474704, function: null, file: null}
+06-09 09:40:51.475 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.475374, function: null, file: null}
+06-09 09:40:51.475 24044 24044 I flutter : Log registered: {message: Sent noSession to b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.475600, function: null, file: null}
+06-09 09:40:51.477 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:51.477159, function: null, file: null}
+06-09 09:40:51.478 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd}, timestamp: 2026-06-09 09:40:51.478233, function: null, file: null}
+06-09 09:40:51.478 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.478414, function: null, file: null}
+06-09 09:40:51.479 24044 24044 I flutter : Log registered: {message: Sent noSession to b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.479344, function: null, file: null}
+06-09 09:40:51.479 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.479590, function: null, file: null}
+06-09 09:40:51.480 24044 24044 I flutter : Log registered: {message: Sent noSession to b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.479981, function: null, file: null}
+06-09 09:40:51.488  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.707  2674  4678 I chatty  : uid=1000(system) Binder:2674_13 identical 6 lines
+06-09 09:40:51.769  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.774 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: heartbeat, deviceId: b59b5fe8-6a61-4387-8617-181f3a5111cd, sessionGuid: null, timestamp: 2026-06-09T09:40:51.604014, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}, network: {isWifiActive: true, ipAddress: 192.168.178.160, ssid: FRITZ!Box 6591 Cable TZ, bssid: 2c:91:ab:8b:a3:07, gatewayIp: 192.168.178.1, subnetMask: 255.255.255.0, subnetSignature: 192.168.178.0/24, source: device, warnings: []}}, timestamp: 2026-06-09 09:40:51.774065, function: null, file: null}
+06-09 09:40:51.776 24044 24044 I flutter : Log registered: {message: Received heartbeat from b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-09 09:40:51.776621, function: null, file: null}
+06-09 09:40:51.781  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.865  2674  4678 I chatty  : uid=1000(system) Binder:2674_13 identical 5 lines
+06-09 09:40:51.874  2674  4678 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.880  2674  3228 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.886 12562 12726 D ProfileInstaller: Skipping profile installation for com.samsung.android.bixby.agent
+06-09 09:40:51.889  2674  3228 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:51.913  2674  3228 I chatty  : uid=1000(system) Binder:2674_8 identical 2 lines
+06-09 09:40:51.921  2674  3228 E WifiService: 10452 has no permission about LOCAL_MAC_ADDRESS
+06-09 09:40:52.116 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: deviceId, deviceId: 27e50aac-36e8-44d0-91f7-970bdbc526b5, sessionGuid: null, setupStatus: {cameraPerspectiveId: unknown, cameraPerspectiveLabel: Unknown, isLevel: false, sensorAvailable: false}}, timestamp: 2026-06-09 09:40:52.116654, function: null, file: null}
+06-09 09:40:52.118 24044 24044 I flutter : Log registered: {message: Data received from slave: {type: getSessionStatus, deviceId: 27e50aac-36e8-44d0-91f7-970bdbc526b5}, timestamp: 2026-06-09 09:40:52.118112, function: null, file: null}
+06-09 09:40:52.118 24044 24044 I flutter : Log registered: {message: Received getSessionStatus from 27e50aac-36e8-44d0-91f7-970bdbc526b5, timestamp: 2026-06-09 09:40:52.118449, function: null, file: null}
+06-09 09:40:52.119 24044 24044 I flutter : Log registered: {message: Sent noSession to 27e50aac-36e8-44d0-91f7-970bdbc526b5, timestamp: 2026-06-09 09:40:52.119627, function: null, file: null}
+06-09 09:40:52.120 24044 24044 I flutter : Log registered: {message: Registered new slave with deviceId: 27e50aac-36e8-44d0-91f7-970bdbc526b5, timestamp: 2026-06-09 09:40:52.120060, function: null, file: null}
+06-09 09:40:52.120 24044 24044 I flutter : Log registered: {message: Sent noSession to 27e50aac-36e8-44d0-91f7-970bdbc526b5, timestamp: 2026-06-09 09:40:52.120543, function: null, file: null}
+06-09 09:40:52.217 24044 24044 I flutter : Log registered: {message: Client 27e50aac-36e8-44d0-91f7-970bdbc526b5 disconnected. Total clients: 4, timestamp: 2026-06-09 09:40:52.217560, function: null, file: null}
+06-09 09:40:52.306   513   513 I SurfaceFlinger: SFWD update time=156162976812533
+06-09 09:40:52.307 24044 24044 I flutter : Log registered: {message: New WebSocket client connected., timestamp: 2026-06-09 09:40:52.306954, function: null, file: null}
