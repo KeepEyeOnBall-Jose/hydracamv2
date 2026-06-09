@@ -91,9 +91,11 @@ void main() {
     await tester.tap(find.text("Polish").last);
     await tester.pumpAndSettle();
 
-    expect(await SharedPreferences.getInstance().then(
-      (prefs) => prefs.getString("localeOverride"),
-    ), "pl");
+    expect(
+        await SharedPreferences.getInstance().then(
+          (prefs) => prefs.getString("localeOverride"),
+        ),
+        "pl");
     expect(localeService.localeOverrideCode, "pl");
   });
 }

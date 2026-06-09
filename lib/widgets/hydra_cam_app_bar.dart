@@ -155,8 +155,7 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _settingsMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.settings,
-                            color: AppTheme.accentColor),
+                        const Icon(Icons.settings, color: AppTheme.accentColor),
                         const SizedBox(width: 8),
                         Text(l10n.appShellSettings),
                       ],
@@ -188,8 +187,7 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _logsMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.list_alt,
-                            color: AppTheme.accentColor),
+                        const Icon(Icons.list_alt, color: AppTheme.accentColor),
                         const SizedBox(width: 8),
                         Text(l10n.appShellLogs),
                       ],

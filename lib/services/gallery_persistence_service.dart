@@ -62,7 +62,8 @@ class GalleryPersistenceService {
     }
 
     try {
-      final PermissionState state = await PhotoManager.requestPermissionExtend();
+      final PermissionState state =
+          await PhotoManager.requestPermissionExtend();
       _hasPermission = state.hasAccess;
     } on MissingPluginException catch (error) {
       LogService.instance.registerLog(

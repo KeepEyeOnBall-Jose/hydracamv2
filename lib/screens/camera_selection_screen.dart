@@ -47,7 +47,8 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
       final cameras = cameraService.deviceCameras;
       final metadataEntries = await Future.wait(
         cameras.map((camera) async {
-          final metadata = await CameraHardwareMetadataService.getCameraMetadata(
+          final metadata =
+              await CameraHardwareMetadataService.getCameraMetadata(
             camera.name,
           );
           return MapEntry(camera.name, metadata);

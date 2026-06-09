@@ -15,7 +15,6 @@ import "log_service.dart";
 ///
 /// This service is implemented as a singleton to ensure consistent location data across the app.
 class LocationService {
-
   /// The current GPS position.
   Position? _currentPosition;
 
@@ -37,14 +36,16 @@ class LocationService {
   /// - Tries to obtain the current GPS location.
   Future<void> initialize() async {
     try {
-      LogService.instance.registerLog("Checking and requesting permissions", file:"location_service.dart", function: "initialize");
+      LogService.instance.registerLog("Checking and requesting permissions",
+          file: "location_service.dart", function: "initialize");
       await _checkAndRequestPermissions();
-      LogService.instance.registerLog("Attempt to Get Location", file:"location_service.dart", function: "initialize");
+      LogService.instance.registerLog("Attempt to Get Location",
+          file: "location_service.dart", function: "initialize");
       await _attemptToGetLocation();
     } catch (e) {
-      LogService.instance.registerLog("Error initializing location service: $e", file:"location_service.dart", function: "initialize");
+      LogService.instance.registerLog("Error initializing location service: $e",
+          file: "location_service.dart", function: "initialize");
     }
-
   }
 
   /// Checks and requests location permissions.
@@ -61,10 +62,10 @@ class LocationService {
         await Geolocator.openLocationSettings();
       }
     } catch (e) {
-      LogService.instance.registerLog("Error checking or opening location settings: $e");
+      LogService.instance
+          .registerLog("Error checking or opening location settings: $e");
       serviceEnabled = false; // Assume disabled to proceed safely
     }
-
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -72,7 +73,8 @@ class LocationService {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      LogService.instance.registerLog("Location permissions are permanently denied.");
+      LogService.instance
+          .registerLog("Location permissions are permanently denied.");
     }
   }
 

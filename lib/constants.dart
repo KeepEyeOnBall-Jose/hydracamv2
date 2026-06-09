@@ -26,7 +26,10 @@ final Map<String, List<Map<String, String>>> groupedCourts = {
   "Polideportivo La Luz": [
     {"name": "Pista 1", "guid": "a65cf467-ad7d-449b-b2b3-085960f65423"},
     {"name": "Pista 2", "guid": "e3be2c57-de99-48bb-9433-4cde72b39223"},
-    {"name": "Pista de Cristal", "guid": "df2ea7c3-ad0f-409a-887c-9c7f782c676a"},
+    {
+      "name": "Pista de Cristal",
+      "guid": "df2ea7c3-ad0f-409a-887c-9c7f782c676a"
+    },
     {"name": "Pista 3", "guid": "800088cf-8883-45bf-aaf5-13f2a84c5b0b"},
   ],
   "Hasta La Vista Wroclaw": [
@@ -67,9 +70,13 @@ final Map<String, List<Map<String, String>>> groupedCourts = {
 /// Enum to represent available quality settings.
 enum CameraQuality { high, medium, low }
 
-const int secondsToClosePhoto = 3; // Seconds after photo taken pop up automatically closes
-const int timeToStopSearching = 3; // Seconds after slave automatically stops trying to find master and becomes master
+const int secondsToClosePhoto =
+    3; // Seconds after photo taken pop up automatically closes
+const int timeToStopSearching =
+    3; // Seconds after slave automatically stops trying to find master and becomes master
 
-const int inactivityThreshold = 10; // Inactivity time before disconnecting slave client in seconds
+const int inactivityThreshold =
+    10; // Inactivity time before disconnecting slave client in seconds
 
-const int locationTimeout = 5; // Maximum number of seconds for location service to try get location before timeout
+const int locationTimeout =
+    5; // Maximum number of seconds for location service to try get location before timeout

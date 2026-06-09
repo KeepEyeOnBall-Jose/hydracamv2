@@ -372,7 +372,8 @@ class SlaveClient implements SlaveConnectionClient {
 
   /// Schedules the execution of a command for a specific time.
   /// This ensures synchronized execution across devices.
-  Future<void> _scheduleExecution(String command, DateTime scheduledTime) async {
+  Future<void> _scheduleExecution(
+      String command, DateTime scheduledTime) async {
     // Find how much time left for scheduled execution
     final scheduledTasks = _scheduledTaskService;
     final Duration delay = scheduledTasks.delayUntil(scheduledTime);

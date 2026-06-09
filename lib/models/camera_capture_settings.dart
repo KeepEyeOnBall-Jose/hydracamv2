@@ -23,15 +23,12 @@ enum LensPreference {
     return switch (this) {
       LensPreference.autoBack =>
         camera.lensDirection == CameraLensDirection.back,
-      LensPreference.ultraWide =>
-        camera.lensType == CameraLensType.ultraWide,
+      LensPreference.ultraWide => camera.lensType == CameraLensType.ultraWide,
       LensPreference.wide => camera.lensType == CameraLensType.wide ||
           (camera.lensDirection == CameraLensDirection.back &&
               camera.lensType == CameraLensType.unknown),
-      LensPreference.telephoto =>
-        camera.lensType == CameraLensType.telephoto,
-      LensPreference.front =>
-        camera.lensDirection == CameraLensDirection.front,
+      LensPreference.telephoto => camera.lensType == CameraLensType.telephoto,
+      LensPreference.front => camera.lensDirection == CameraLensDirection.front,
     };
   }
 }

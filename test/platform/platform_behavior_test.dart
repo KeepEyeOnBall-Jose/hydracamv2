@@ -16,7 +16,8 @@ void main() {
       // In production code, wrap these in a PlatformService for easier testing
 
       final isMobile = Platform.isAndroid || Platform.isIOS;
-      final isDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+      final isDesktop =
+          Platform.isMacOS || Platform.isWindows || Platform.isLinux;
 
       // At least one should be true
       expect(isMobile || isDesktop, true);
@@ -56,7 +57,8 @@ void main() {
 
     group("Desktop-specific features", () {
       test("Desktop may have limited camera support", () {
-        final isDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+        final isDesktop =
+            Platform.isMacOS || Platform.isWindows || Platform.isLinux;
 
         if (isDesktop) {
           // Desktop camera support varies by hardware
@@ -66,7 +68,8 @@ void main() {
       });
 
       test("Desktop uses file system directly", () {
-        final isDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+        final isDesktop =
+            Platform.isMacOS || Platform.isWindows || Platform.isLinux;
 
         if (isDesktop) {
           // No gallery on desktop, save to file system
@@ -76,7 +79,8 @@ void main() {
       });
 
       test("Desktop may not need runtime permissions", () {
-        final isDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+        final isDesktop =
+            Platform.isMacOS || Platform.isWindows || Platform.isLinux;
 
         if (isDesktop) {
           // Some permissions handled at OS level
@@ -107,4 +111,3 @@ void main() {
     });
   });
 }
-

@@ -20,11 +20,10 @@ class RoleSelectionScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start, // Center
             children: [
-
               // Display session active status at the top
               const Padding(
                 padding: EdgeInsets.all(8.0),
-                child:  SessionInfoWidget(
+                child: SessionInfoWidget(
                   sessionDisplay: "No active session",
                 ),
               ),
@@ -39,7 +38,8 @@ class RoleSelectionScreen extends StatelessWidget {
                       // Navigate to MasterScreen when the Master role is selected
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const MasterScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const MasterScreen()),
                       );
                     },
                     child: const Text("Master Mode"),
@@ -50,7 +50,8 @@ class RoleSelectionScreen extends StatelessWidget {
                       // Navigate to SlaveScreen when the Slave role is selected
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SlaveScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const SlaveScreen()),
                       );
                     },
                     child: const Text("Slave Mode"),

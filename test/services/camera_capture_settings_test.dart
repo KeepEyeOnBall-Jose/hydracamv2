@@ -41,7 +41,8 @@ void main() {
       expect(CameraLensLabels.describe(camera), "Ultra Wide (0.5x)");
     });
 
-    test("labels Android back cameras by camera id when lens type is unknown", () {
+    test("labels Android back cameras by camera id when lens type is unknown",
+        () {
       const camera = CameraDescription(
         name: "0",
         lensDirection: CameraLensDirection.back,

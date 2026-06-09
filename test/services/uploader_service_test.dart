@@ -117,7 +117,8 @@ void main() {
     );
   });
 
-  test("startUploadingManually can be awaited until the queue drains", () async {
+  test("startUploadingManually can be awaited until the queue drains",
+      () async {
     HydraCamApiService.configureHttpClient(
       MockClient.streaming((request, bodyStream) async {
         await bodyStream.drain<void>();

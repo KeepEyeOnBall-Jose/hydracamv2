@@ -5,7 +5,8 @@ import "../services/log_service.dart";
 /// Calls onMasterDiscovered with the master's IP once discovered.
 class MasterDiscovery {
   static const int broadcastPort = 4041;
-  final Function(String) onMasterDiscovered; // Callback function implemented by slave
+  final Function(String)
+      onMasterDiscovered; // Callback function implemented by slave
   RawDatagramSocket? _socket; // Store the socket as a member variable
   bool _isListening = false;
 
@@ -20,12 +21,13 @@ class MasterDiscovery {
 
     _isListening = true;
 
-
     // Close any existing socket before creating a new one
     await stopListening();
 
-    _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, broadcastPort);
-    LogService.instance.registerLog("Listening for master broadcast on port $broadcastPort...");
+    _socket =
+        await RawDatagramSocket.bind(InternetAddress.anyIPv4, broadcastPort);
+    LogService.instance.registerLog(
+        "Listening for master broadcast on port $broadcastPort...");
 
     // Get current IP to avoid connecting to myself
     final localIp = await _getLocalIp();
@@ -35,19 +37,21 @@ class MasterDiscovery {
         final datagram = _socket?.receive();
         if (datagram != null) {
           final message = String.fromCharCodes(datagram.data);
-          LogService.instance.registerLog("Received broadcast message: $message from ${datagram.address.address}");
+          LogService.instance.registerLog(
+              "Received broadcast message: $message from ${datagram.address.address}");
           if (message == "MASTER_DISCOVERY") {
-
             final masterIp = datagram.address.address;
 
             // Avoid connecting to myself
             if (masterIp == localIp) {
-              LogService.instance.registerLog("WARNING!: Ignored self-broadcast from $masterIp");
+              LogService.instance.registerLog(
+                  "WARNING!: Ignored self-broadcast from $masterIp");
 
               return; // Ignore if it is local IP
             }
 
-            LogService.instance.registerLog("Master discovered at IP: $masterIp");
+            LogService.instance
+                .registerLog("Master discovered at IP: $masterIp");
             onMasterDiscovered(masterIp);
 
             // Stop listening after discovering the master
@@ -74,13 +78,13 @@ class MasterDiscovery {
     return InternetAddress.anyIPv4.address;
   }
 
-
   /// Stops listening for the master broadcast message and closes the socket.
   Future<void> stopListening() async {
     if (_socket != null) {
       _socket?.close();
       _socket = null;
-      LogService.instance.registerLog("Stopped listening for master broadcast.");
+      LogService.instance
+          .registerLog("Stopped listening for master broadcast.");
     }
     _isListening = false;
   }

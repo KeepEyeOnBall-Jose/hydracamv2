@@ -5,11 +5,11 @@ import "package:permission_handler/permission_handler.dart"
     as permission_handler;
 import "log_service.dart";
 
-typedef PermissionRequester
-    = Future<Map<permission_handler.Permission,
-        permission_handler.PermissionStatus>> Function(
-      List<permission_handler.Permission> permissions,
-    );
+typedef PermissionRequester = Future<
+        Map<permission_handler.Permission, permission_handler.PermissionStatus>>
+    Function(
+  List<permission_handler.Permission> permissions,
+);
 
 // ignore: avoid_classes_with_only_static_members
 class PermissionService {

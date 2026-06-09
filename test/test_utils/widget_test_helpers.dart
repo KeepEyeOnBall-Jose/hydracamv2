@@ -50,4 +50,3 @@ Future<void> pumpTestableWidget(
     ),
   );
 }
-
