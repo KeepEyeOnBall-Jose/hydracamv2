@@ -61,6 +61,251 @@
       ],
       "returnCode": 1,
       "startedAt": "2026-06-09T03:58:27.207851+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "apps",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--bundle-id",
+        "com.vectorblanco.hydracam.dev",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-com-vectorblanco-hydracam-dev.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-09T03:58:27.629606+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "apps",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--bundle-id",
+        "com.vectorblanco.hydracam.dev",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-app-com-vectorblanco-hydracam-dev.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:58:47.694945+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-details.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:59:08.943206+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-details.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:59:09.069142+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "00008101-000A68811E43001E",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"00008101-000A68811E43001E\"}",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-launch-com-keepeyeonball.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-launch-com-keepeyeonball.log",
+        "--timeout",
+        "45",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:59:51.384191+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-launch-com-keepeyeonball.json",
+        "--log-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-launch-com-keepeyeonball.log",
+        "--timeout",
+        "45",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-09T03:59:51.778341+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.168:4762/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T04:01:06.592281+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-09T04:01:06.727426+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://169.254.193.202:4762/healthz"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-09T04:01:11.745148+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "20",
+        "--required-command",
+        "capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T04:01:31.749271+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--run-dir",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/runner-ios-warm-prime-selected",
+        "--warm-prime-only",
+        "--fast-ios-launch",
+        "--auto-ios-bridge-hosts",
+        "--ios-bridge-scan-subnet",
+        "192.168.178.0/24",
+        "--ios-bridge-scan-subnet",
+        "169.254.193.0/24",
+        "--no-use-latest-warm-summary",
+        "--no-update-latest-warm-summary",
+        "--target-id",
+        "00008101-000A68811E43001E",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--expect-target-id",
+        "00008101-000A68811E43001E",
+        "--expect-target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T04:01:54.370618+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "00008101-000A68811E43001E",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-lockstate.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T04:03:30.876631+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-lockstate.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T04:03:30.965511+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "processes",
+        "--device",
+        "00008101-000A68811E43001E",
+        "--filter",
+        "bundleIdentifier == 'com.keepeyeonball'",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-process-com-keepeyeonball.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T04:03:31.067929+00:00"
     }
   ],
   "devices": [

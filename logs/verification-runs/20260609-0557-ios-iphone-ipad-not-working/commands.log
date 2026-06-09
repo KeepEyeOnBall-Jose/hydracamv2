@@ -46,3 +46,324 @@ ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
 [exit-code] 1
 
 $ xcrun devicectl device info apps --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --bundle-id com.vectorblanco.hydracam.dev --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-com-vectorblanco-hydracam-dev.json --timeout 20
+05:58:27  Acquired tunnel connection to device.
+05:58:27  Enabling developer disk image services.
+05:58:27  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 20.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ xcrun devicectl device info apps --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --bundle-id com.vectorblanco.hydracam.dev --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-app-com-vectorblanco-hydracam-dev.json --timeout 20
+05:58:47  Acquired tunnel connection to device.
+05:58:47  Enabling developer disk image services.
+05:58:47  Acquired usage assertion.
+Apps installed:
+Name       Bundle Identifier               Version   Bundle Version
+--------   -----------------------------   -------   --------------
+HydraCam   com.vectorblanco.hydracam.dev   1.4.0     16
+[exit-code] 0
+
+$ xcrun devicectl device info details --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-details.json --timeout 20
+Gathering device information…
+Current device information:
+• identifier: AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A
+• tags:
+▿ hardwareProperties:
+    • cpuType: arm64e (type: 16777228, subtype: 2)
+    • deviceType: iPhone
+    • ecid: 2929653534883870
+    • hardwareModel: D53pAP
+    • internalStorageCapacity: 128000000000
+    • isProductionFused: true
+    • marketingName: iPhone 12 Pro
+    • platform: iOS
+    • productType: iPhone13,3
+    • reality: physical
+    • serialNumber: DNPG14XM0D8X
+    ▿ supportedCPUTypes:
+        • arm64e (type: 16777228, subtype: 2)
+        • arm64 (type: 16777228, subtype: 0)
+    • supportedDeviceFamilies: [1]
+    • thinningProductType: iPhone13,3
+    • udid: 00008101-000A68811E43001E
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: true
+    • developerModeStatus: enabled
+    • hasInternalOSBuild: false
+    • name: José Ramón’s iPhone
+    • osBuildUpdate: 23F77
+    • osVersionNumber: 26.5
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+    • rootFileSystemIsWritable: false
+    • screenViewingURL: devices://device/open?id=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A
+    • bootedFromSnapshot: true
+    • bootedSnapshotName: com.apple.os.update-0EAA0C08366E211502996BFB5CE48855904691C0E958C22BF9DC668F0184F9B7
+    • supportsCheckedAllocations: false
+▿ connectionProperties:
+    • authenticationType: manualPairing
+    • isMobileDeviceOnly: false
+    • lastConnectionDate: 2026-06-09 03:59:00 +0000
+    ▿ localHostnames:
+        • Jose-Ramons-iPhone.coredevice.local
+        • AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A.coredevice.local
+        • 00008101-000A68811E43001E.coredevice.local
+    ▿ potentialHostnames:
+        • Jose-Ramons-iPhone.coredevice.local
+        • AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A.coredevice.local
+        • 00008101-000A68811E43001E.coredevice.local
+    • pairingState: paired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelIPAddress: fd06:fed7:3f84::1
+    • tunnelState: connected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Application Control (com.apple.coredevice.feature.applicationcontrol)
+    • Capture Sysdiagnose (com.apple.coredevice.feature.capturesysdiagnose)
+    • Create Service Connection (com.apple.dt.serviceconnection.create)
+    • Create Service Socket (com.apple.dt.servicesocket.create)
+    • Disable Developer Disk Image Services (com.apple.coredevice.feature.disableddiservices)
+    • Disconnect from Device (com.apple.coredevice.feature.disconnectdevice)
+    • Fetch Application Icons (com.apple.coredevice.feature.fetchappicons)
+    • Fetch AuthListing Identifiers (com.apple.coredevice.feature.getauthlistingidentifiers)
+    • Fetch Developer Disk Image Services Metadata (com.apple.coredevice.feature.fetchddimetadata)
+    • Fetch Extended Device Info (com.apple.coredevice.feature.getdeviceinfo)
+    • Get Display Information (com.apple.coredevice.feature.getdisplayinfo)
+    • Get Lock State (com.apple.coredevice.feature.getlockstate)
+    • Install Application (com.apple.coredevice.feature.installapp)
+    • Install Root (com.apple.coredevice.feature.installroot)
+    • Launch Application (com.apple.coredevice.feature.launchapplication)
+    • List Files (com.apple.coredevice.feature.listFiles)
+    • List Roots (com.apple.coredevice.feature.listroots)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+    • Monitor Process for Termination (com.apple.coredevice.feature.monitorprocesstermination)
+    • Post Darwin Notification (com.apple.dt.customer.postdarwinnotification)
+    • Process Control (com.apple.coredevice.feature.processcontrol)
+    • Query MobileGestalt (com.apple.coredevice.feature.querymobilegestalt)
+    • Reboot Device (com.apple.coredevice.feature.rebootdevice)
+    • Send Memory Warning to Process (com.apple.coredevice.feature.sendmemorywarningtoprocess)
+    • Send Signal to Process (com.apple.coredevice.feature.sendsignaltoprocess)
+    • Service Hub Profile (com.apple.dt.profile)
+    • Spawn Executable (com.apple.coredevice.feature.spawnexecutable)
+    • Stream Application List (com.apple.coredevice.feature.streamapplist)
+    • Stream Process List (com.apple.coredevice.feature.streamprocesslist)
+    • Transfer Files (com.apple.coredevice.feature.transferFiles)
+    • Uninstall Application (com.apple.coredevice.feature.uninstallapp)
+    • Uninstall Root (com.apple.coredevice.feature.uninstallroot)
+    • Unpair Device (com.apple.coredevice.feature.unpairdevice)
+    • View Device Screen (com.apple.coredevice.feature.viewdevicescreen)
+• visibilityClass: default
+[exit-code] 0
+
+$ xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-details.json --timeout 20
+Gathering device information…
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags:
+▿ hardwareProperties:
+    • cpuType: arm64 (type: 16777228, subtype: 0)
+    • deviceType: iPad
+    • ecid: 4003463842304166
+    • hardwareModel: J71bAP
+    • internalStorageCapacity: 32000000000
+    • isProductionFused: true
+    • marketingName: iPad (6th generation) (Model A1893)
+    • platform: iOS
+    • productType: iPad7,5
+    • reality: physical
+    • serialNumber: DMPW528HJF8K
+    ▿ supportedCPUTypes:
+        • arm64 (type: 16777228, subtype: 0)
+        • unknown-12-13 (type: 12, subtype: 13)
+    • supportedDeviceFamilies: [1, 2]
+    • thinningProductType: iPad7,5
+    • udid: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: true
+    • developerModeStatus: enabled
+    • hasInternalOSBuild: false
+    • name: iPad (5)
+    • osBuildUpdate: 21H461
+    • osVersionNumber: 17.7.11
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+    • rootFileSystemIsWritable: false
+    • bootedFromSnapshot: true
+    • bootedSnapshotName: com.apple.os.update-87253FEA1A5E1C6202739DA5112B7F7F03A085FE06EEA031E7CF9B829F4E11AE
+    • supportsCheckedAllocations: false
+▿ connectionProperties:
+    • authenticationType: manualPairing
+    • isMobileDeviceOnly: false
+    • lastConnectionDate: 2026-06-09 03:59:00 +0000
+    ▿ localHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    ▿ potentialHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    • pairingState: paired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelIPAddress: fd7d:560a:4576::1
+    • tunnelState: connected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Application Control (com.apple.coredevice.feature.applicationcontrol)
+    • Capture Sysdiagnose (com.apple.coredevice.feature.capturesysdiagnose)
+    • Create Service Connection (com.apple.dt.serviceconnection.create)
+    • Create Service Socket (com.apple.dt.servicesocket.create)
+    • Disable Developer Disk Image Services (com.apple.coredevice.feature.disableddiservices)
+    • Disconnect from Device (com.apple.coredevice.feature.disconnectdevice)
+    • Fetch Application Icons (com.apple.coredevice.feature.fetchappicons)
+    • Fetch AuthListing Identifiers (com.apple.coredevice.feature.getauthlistingidentifiers)
+    • Fetch Developer Disk Image Services Metadata (com.apple.coredevice.feature.fetchddimetadata)
+    • Fetch Extended Device Info (com.apple.coredevice.feature.getdeviceinfo)
+    • Get Display Information (com.apple.coredevice.feature.getdisplayinfo)
+    • Get Lock State (com.apple.coredevice.feature.getlockstate)
+    • Install Application (com.apple.coredevice.feature.installapp)
+    • Install Root (com.apple.coredevice.feature.installroot)
+    • Launch Application (com.apple.coredevice.feature.launchapplication)
+    • List Files (com.apple.coredevice.feature.listFiles)
+    • List Roots (com.apple.coredevice.feature.listroots)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+    • Monitor Process for Termination (com.apple.coredevice.feature.monitorprocesstermination)
+    • Post Darwin Notification (com.apple.dt.customer.postdarwinnotification)
+    • Process Control (com.apple.coredevice.feature.processcontrol)
+    • Query MobileGestalt (com.apple.coredevice.feature.querymobilegestalt)
+    • Reboot Device (com.apple.coredevice.feature.rebootdevice)
+    • Send Memory Warning to Process (com.apple.coredevice.feature.sendmemorywarningtoprocess)
+    • Send Signal to Process (com.apple.coredevice.feature.sendsignaltoprocess)
+    • Service Hub Profile (com.apple.dt.profile)
+    • Spawn Executable (com.apple.coredevice.feature.spawnexecutable)
+    • Stream Application List (com.apple.coredevice.feature.streamapplist)
+    • Stream Process List (com.apple.coredevice.feature.streamprocesslist)
+    • Transfer Files (com.apple.coredevice.feature.transferFiles)
+    • Uninstall Application (com.apple.coredevice.feature.uninstallapp)
+    • Uninstall Root (com.apple.coredevice.feature.uninstallroot)
+    • Unpair Device (com.apple.coredevice.feature.unpairdevice)
+• visibilityClass: default
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 00008101-000A68811E43001E --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"00008101-000A68811E43001E"} --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-launch-com-keepeyeonball.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-launch-com-keepeyeonball.log --timeout 45 com.keepeyeonball
+05:59:51  Acquired tunnel connection to device.
+05:59:51  Enabling developer disk image services.
+05:59:51  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"standby","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-launch-com-keepeyeonball.json --log-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-launch-com-keepeyeonball.log --timeout 45 com.keepeyeonball
+05:59:51  Acquired tunnel connection to device.
+05:59:51  Enabling developer disk image services.
+05:59:51  Acquired usage assertion.
+
+[stderr]
+ERROR: Command timeout of 45.0 seconds exceeded. Assuming command got stuck and aborting.
+[exit-code] 2
+
+$ curl --max-time 5 -sS http://192.168.178.168:4762/healthz
+{"status":"ok","automation":true,"automationTargetId":"00008101-000A68811E43001E","commands":["capture_screenshot","set_role"]}
+[exit-code] 0
+
+$ curl --max-time 5 -sS http://192.168.178.104:4762/healthz
+
+[stderr]
+curl: (28) Operation timed out after 5006 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ curl --max-time 5 -sS http://169.254.193.202:4762/healthz
+
+[stderr]
+curl: (28) Operation timed out after 5004 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ python3 scripts/discover_automation_bridge.py --scan-subnet 192.168.178.0/24 --timeout 20 --required-command capture_screenshot
+{
+  "bridgeUrl": "http://192.168.178.168:4762",
+  "port": 4762,
+  "requiredCommand": "capture_screenshot",
+  "scanSubnet": "192.168.178.0/24"
+}
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --run-dir logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/runner-ios-warm-prime-selected --warm-prime-only --fast-ios-launch --auto-ios-bridge-hosts --ios-bridge-scan-subnet 192.168.178.0/24 --ios-bridge-scan-subnet 169.254.193.0/24 --no-use-latest-warm-summary --no-update-latest-warm-summary --target-id 00008101-000A68811E43001E --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
++ flutter devices
++ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
+
+[stderr]
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/run_rotating_master_slave_matrix.py", line 4093, in <module>
+    raise SystemExit(main(sys.argv[1:]))
+                     ~~~~^^^^^^^^^^^^^^
+  File "/Users/jose/src/work/hydracamv2/scripts/run_rotating_master_slave_matrix.py", line 4086, in main
+    return run_matrix(parse_args(argv))
+  File "/Users/jose/src/work/hydracamv2/scripts/run_rotating_master_slave_matrix.py", line 3276, in run_matrix
+    prefill_ios_hosts_from_running_bridges(args, run_dir)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/jose/src/work/hydracamv2/scripts/run_rotating_master_slave_matrix.py", line 1254, in prefill_ios_hosts_from_running_bridges
+    fast_launch_ios_for_host_discovery(device, args, run_dir),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jose/src/work/hydracamv2/scripts/run_rotating_master_slave_matrix.py", line 1187, in fast_launch_ios_for_host_discovery
+    result = run_command(
+        build_ios_fast_launch_command(target, role="standby", master_ip=None),
+    ...<2 lines>...
+        timeout=45,
+    )
+  File "/Users/jose/src/work/hydracamv2/scripts/run_parallel_device_matrix.py", line 358, in run_command
+    return subprocess.run(
+           ~~~~~~~~~~~~~~^
+        list(command),
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        env=env,
+        ^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1219, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2123, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1263, in _check_timeout
+    raise TimeoutExpired(
+    ...<2 lines>...
+            stderr=b''.join(stderr_seq) if stderr_seq else None)
+subprocess.TimeoutExpired: Command '['xcrun', 'devicectl', 'device', 'process', 'launch', '--device', '8b406aa5c597eab4c4dfd9908f4a09b10a89ec63', '--terminate-existing', '--environment-variables', '{"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"}', 'com.keepeyeonball']' timed out after 45 seconds
+[exit-code] 1
+
+$ xcrun devicectl device info lockState --device 00008101-000A68811E43001E --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-lockstate.json --timeout 20
+06:03:30  Acquired tunnel connection to device.
+06:03:30  Acquired usage assertion.
+Current device lock state:
+• deviceIdentifier: AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A
+• passcodeRequired: false
+• unlockedSinceBoot: true
+[exit-code] 0
+
+$ xcrun devicectl device info lockState --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-lockstate.json --timeout 20
+06:03:31  Acquired tunnel connection to device.
+06:03:31  Acquired usage assertion.
+Current device lock state:
+• deviceIdentifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• passcodeRequired: false
+• unlockedSinceBoot: true
+[exit-code] 0
+
+$ xcrun devicectl device info processes --device 00008101-000A68811E43001E --filter bundleIdentifier == 'com.keepeyeonball' --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-process-com-keepeyeonball.json --timeout 20
+06:03:31  Acquired tunnel connection to device.
+06:03:31  Enabling developer disk image services.
+06:03:31  Acquired usage assertion.
+[exit-code] 0
+
+$ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --filter bundleIdentifier == 'com.keepeyeonball' --json-output logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-process-com-keepeyeonball.json --timeout 20
