@@ -3,7 +3,66 @@
     "Connected iPhone/iPad launch state is classified as app pass, bridge failure, signing/trust failure, locked-device failure, or tooling failure",
     "A run-specific evidence pack records current commands and blockers"
   ],
-  "commands": [],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:57:30.499104+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:57:42.940709+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "apps",
+        "--device",
+        "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+        "--bundle-id",
+        "com.keepeyeonball",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/iphone-app-com-keepeyeonball.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-09T03:58:26.998033+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "apps",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--bundle-id",
+        "com.keepeyeonball",
+        "--json-output",
+        "logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working/device-logs/ipad-app-com-keepeyeonball.json",
+        "--timeout",
+        "20"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-09T03:58:27.207851+00:00"
+    }
+  ],
   "devices": [
     {
       "identifier": "00008101-000A68811E43001E",
