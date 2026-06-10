@@ -9,6 +9,7 @@ import "../automation/automation_config.dart";
 import "../constants.dart" as constants;
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/sync_metadata.dart";
 import "../screens/camera_setup_preview_screen.dart";
 import "../screens/master_video_recording_screen.dart";
 import "../screens/previous_sessions_screen.dart";
@@ -478,6 +479,8 @@ class MasterScreenState extends State<MasterScreen> {
       endRecordingDate: endRecordingDate,
       receivedDate: receivedDate,
       captureContext: _server.cameraService.recordingCaptureContext,
+      // The master defines the shared clock, so its captures are the anchor.
+      syncMetadata: SyncMetadata.masterAnchor(at: startRecordingDate),
     );
 
     await SessionManager.instance.addVideo(capturedVideo);
@@ -565,13 +568,16 @@ class MasterScreenState extends State<MasterScreen> {
           final String photoPath = await _server.cameraService.takePhoto();
           final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
+          final masterCaptureDate = DateTime.now();
           final capturedPhoto = CapturedPhoto(
             photoData: null,
             photoPath: photoPath,
-            captureDate: DateTime.now(),
-            receivedDate: DateTime.now(),
+            captureDate: masterCaptureDate,
+            receivedDate: masterCaptureDate,
             slaveDeviceId: deviceId,
             captureContext: _server.cameraService.lastPhotoCaptureContext,
+            // The master defines the shared clock, so its captures are the anchor.
+            syncMetadata: SyncMetadata.masterAnchor(at: masterCaptureDate),
           );
 
           await SessionManager.instance.addPhoto(capturedPhoto);

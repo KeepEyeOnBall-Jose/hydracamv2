@@ -2,6 +2,7 @@ import "dart:io";
 import "dart:typed_data";
 
 import "capture_context_metadata.dart";
+import "sync_metadata.dart";
 
 /// CapturedVideo - Represents a video captured by a slave device.
 /// This class holds the binary data of the video (temporarily), the file path where it's stored,
@@ -28,6 +29,11 @@ class CapturedVideo {
 
   /// Setup metadata captured from the local device before recording began.
   final MediaCaptureContext? captureContext;
+
+  /// Clock-synchronization quality at the moment recording started, used to
+  /// align this video against other devices' media. Null when no calibration is
+  /// available.
+  final SyncMetadata? syncMetadata;
 
   /// Flag to track upload status
   bool isUploaded;
@@ -56,6 +62,7 @@ class CapturedVideo {
     required this.endRecordingDate,
     required this.receivedDate,
     this.captureContext,
+    this.syncMetadata,
     this.isUploaded = false,
     this.uploadDuration,
     this.uploadStartTime,

@@ -7,6 +7,7 @@ import "../globals.dart";
 import "../models/capture_context_metadata.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/sync_metadata.dart";
 import "../services/camera_service.dart";
 import "../services/log_service.dart";
 import "../services/network_info_service.dart";
@@ -469,6 +470,9 @@ class MasterServer {
     required String? remoteIp,
     required String? currentDeviceId,
   }) async {
+    // Capture the master receive time as early as possible so the round-trip
+    // estimate is not polluted by decode/dispatch latency.
+    final t1 = DateTime.now().toUtc();
     var deviceId = currentDeviceId;
     try {
       final decodedData = jsonDecode(data as String);
@@ -510,6 +514,8 @@ class MasterServer {
         LogService.instance
             .registerLog("Received getSessionStatus from $deviceId");
         _sendSessionStatusResponse(socket, deviceId);
+      } else if (messageType == "timeSyncRequest") {
+        _handleTimeSyncRequest(decodedData, socket: socket, t1: t1);
       } else if (messageType == "forcedStop") {
         _handleForcedStopMessage(decodedData);
       }
@@ -562,6 +568,7 @@ class MasterServer {
         captureContext: MediaCaptureContext.fromJson(
           _mapValue(decodedData["captureContext"]),
         ),
+        syncMetadata: SyncMetadata.fromJson(decodedData["syncMetadata"]),
       );
       await SessionManager.instance.addPhoto(receivedPhoto);
 
@@ -585,6 +592,7 @@ class MasterServer {
       captureContext: MediaCaptureContext.fromJson(
         _mapValue(decodedData["captureContext"]),
       ),
+      syncMetadata: SyncMetadata.fromJson(decodedData["syncMetadata"]),
     );
     await SessionManager.instance.addVideo(receivedVideo);
     onMediaReceived?.call(receivedVideo);
@@ -651,6 +659,25 @@ class MasterServer {
 
     LogService.instance
         .registerLog("Sent sessionStatus to $deviceId: $message");
+  }
+
+  /// Replies to a slave's clock-sync probe with the master's receive ([t1]) and
+  /// send ([t2]) timestamps, echoing the request id and the slave's send time so
+  /// the slave can compute offset and round-trip. The master clock is the shared
+  /// reference, so no state is kept here.
+  void _handleTimeSyncRequest(
+    Map<String, dynamic> decodedData, {
+    required WebSocket socket,
+    required DateTime t1,
+  }) {
+    final response = jsonEncode({
+      "type": "timeSyncResponse",
+      "id": decodedData["id"],
+      "t0": decodedData["t0"],
+      "t1": t1.toIso8601String(),
+      "t2": DateTime.now().toUtc().toIso8601String(),
+    });
+    socket.add(response);
   }
 
   Future<void> _registerOrUpdateClient({

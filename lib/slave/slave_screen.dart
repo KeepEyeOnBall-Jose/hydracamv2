@@ -9,12 +9,14 @@ import "../screens/uploader_info_screen.dart";
 import "../globals.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/sync_metadata.dart";
 import "../services/alert_utils.dart";
 import "../services/device_service.dart";
 import "../services/log_service.dart";
 import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
+import "../services/time_sync_service.dart";
 import "slave_client.dart";
 import "master_discovery.dart";
 import "../widgets/add_gallery_media_button.dart";
@@ -545,6 +547,49 @@ class SlaveScreenState extends State<SlaveScreen> {
     super.dispose();
   }
 
+  /// Compact clock-sync status indicator driven by the latest calibration.
+  Widget _buildSyncStatusChip() {
+    return ValueListenableBuilder<TimeSyncResult?>(
+      valueListenable: TimeSyncService.instance.latest,
+      builder: (context, result, child) {
+        const Map<TimeSyncConfidence, Color> colors = {
+          TimeSyncConfidence.green: Colors.green,
+          TimeSyncConfidence.yellow: Colors.amber,
+          TimeSyncConfidence.red: Colors.red,
+        };
+        final Color color;
+        final String label;
+        if (result == null) {
+          color = Colors.grey;
+          label = "Clock sync: calibrating…";
+        } else {
+          color = colors[result.confidence] ?? Colors.grey;
+          label = "Clock sync: ±${result.uncertainty.inMilliseconds} ms · "
+              "RTT ${result.minRoundTrip.inMilliseconds} ms · "
+              "${result.sampleCount} samples";
+        }
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                style: const TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildStatusMessage() {
     return Center(
       child: Column(
@@ -705,6 +750,10 @@ class SlaveScreenState extends State<SlaveScreen> {
             sessionDisplay:
                 SessionManager.instance.sessionGuid ?? "No active session",
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: _buildSyncStatusChip(),
         ),
         AddGalleryMediaButton(enabled: !isRecording),
         const SizedBox(height: 10),

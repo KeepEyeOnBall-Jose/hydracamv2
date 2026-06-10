@@ -80,3 +80,18 @@ const int inactivityThreshold =
 
 const int locationTimeout =
     5; // Maximum number of seconds for location service to try get location before timeout
+
+// --- Clock synchronization (NTP-style handshake with the master) ---
+
+const int timeSyncSampleCount =
+    8; // Requests fired per calibration burst before aggregating
+const int timeSyncIntervalSeconds =
+    30; // How often a connected slave re-calibrates its clock offset
+const int timeSyncGreenUncertaintyMs =
+    25; // <= this uncertainty (and fresh) classifies as green confidence
+const int timeSyncYellowUncertaintyMs =
+    100; // <= this uncertainty classifies as yellow confidence
+const int timeSyncFreshSeconds =
+    60; // Calibration older than this can no longer be green
+const double timeSyncOutlierFactor =
+    1.5; // Samples with round-trip above median * factor are discarded

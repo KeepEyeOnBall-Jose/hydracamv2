@@ -9,6 +9,7 @@ import "../models/capture_context_metadata.dart";
 import "../models/capture_session.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/sync_metadata.dart";
 import "device_service.dart";
 import "hydracam_api_service.dart" as api;
 import "log_service.dart";
@@ -141,6 +142,17 @@ class SessionManager extends ChangeNotifier {
     // Update metadata
     await updateMetadata();
 
+    // Write the per-clip sync sidecar so a later import tool can align media.
+    if (photo.syncMetadata != null) {
+      await _writeSyncSidecar(photo.photoPath, {
+        "mediaPath": photo.photoPath,
+        "deviceId": photo.slaveDeviceId,
+        "captureDate": photo.captureDate.toIso8601String(),
+        "sessionGuid": _sessionGuid,
+        "sync": photo.syncMetadata!.toJson(),
+      });
+    }
+
     // Add photo to uploader queue
     await UploaderService().addMediaToQueue(photo);
   }
@@ -156,6 +168,18 @@ class SessionManager extends ChangeNotifier {
 
     // Update metadata
     await updateMetadata();
+
+    // Write the per-clip sync sidecar so a later import tool can align media.
+    if (video.syncMetadata != null) {
+      await _writeSyncSidecar(video.videoPath, {
+        "mediaPath": video.videoPath,
+        "deviceId": video.slaveDeviceId,
+        "startRecordingDate": video.startRecordingDate.toIso8601String(),
+        "endRecordingDate": video.endRecordingDate.toIso8601String(),
+        "sessionGuid": _sessionGuid,
+        "sync": video.syncMetadata!.toJson(),
+      });
+    }
 
     // Add video to uploader queue
     await UploaderService().addMediaToQueue(video);
@@ -537,6 +561,20 @@ class SessionManager extends ChangeNotifier {
     }
   }
 
+  /// Writes a `<mediaPath>.sync.json` sidecar next to a captured media file.
+  /// This is the per-clip sync contract from the spec; `metadata.json` remains
+  /// the in-app source of truth.
+  Future<void> _writeSyncSidecar(
+      String mediaPath, Map<String, dynamic> payload) async {
+    try {
+      final sidecar = File("$mediaPath.sync.json");
+      await sidecar.writeAsString(jsonEncode(payload), flush: true);
+      LogService.instance.registerLog("Sync sidecar saved to ${sidecar.path}");
+    } catch (e) {
+      LogService.instance.registerLog("Error saving sync sidecar: $e");
+    }
+  }
+
   Map<String, dynamic> _buildMetadataJson() {
     return {
       "sessionId": _currentSession!.sessionId,
@@ -561,6 +599,8 @@ class SessionManager extends ChangeNotifier {
         "uploadFailureReason": photo.uploadFailureReason,
       if (photo.captureContext != null)
         "captureContext": photo.captureContext!.toJson(),
+      if (photo.syncMetadata != null)
+        "syncMetadata": photo.syncMetadata!.toJson(),
     };
   }
 
@@ -576,6 +616,8 @@ class SessionManager extends ChangeNotifier {
         "uploadFailureReason": video.uploadFailureReason,
       if (video.captureContext != null)
         "captureContext": video.captureContext!.toJson(),
+      if (video.syncMetadata != null)
+        "syncMetadata": video.syncMetadata!.toJson(),
     };
   }
 
@@ -593,6 +635,7 @@ class SessionManager extends ChangeNotifier {
       uploadFailureReason: photo["uploadFailureReason"]?.toString(),
       captureContext:
           MediaCaptureContext.fromJson(_asNullableMap(photo["captureContext"])),
+      syncMetadata: SyncMetadata.fromJson(photo["syncMetadata"]),
     );
   }
 
@@ -612,6 +655,7 @@ class SessionManager extends ChangeNotifier {
       uploadFailureReason: video["uploadFailureReason"]?.toString(),
       captureContext:
           MediaCaptureContext.fromJson(_asNullableMap(video["captureContext"])),
+      syncMetadata: SyncMetadata.fromJson(video["syncMetadata"]),
     );
   }
 

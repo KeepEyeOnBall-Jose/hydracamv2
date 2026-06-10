@@ -4,8 +4,10 @@ import "package:camera/camera.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:web_socket_channel/io.dart";
+import "../constants.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/sync_metadata.dart";
 import "../services/camera_service.dart";
 import "../services/camera_service_singleton.dart";
 import "../services/camera_setup_service.dart";
@@ -16,6 +18,7 @@ import "../services/network_info_service.dart";
 import "../services/scheduled_task_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
+import "../services/time_sync_service.dart";
 import "../services/uploader_service.dart";
 
 abstract class SlaveConnectionClient {
@@ -61,6 +64,22 @@ class SlaveClient implements SlaveConnectionClient {
 
   /// Timer for sending periodic heartbeats.
   Timer? _heartbeatTimer;
+
+  /// Periodic clock re-calibration against the master.
+  Timer? _timeSyncTimer;
+
+  /// Safety timer that finalizes a calibration burst if some replies are lost.
+  Timer? _timeSyncBurstTimeout;
+
+  /// Monotonically increasing id of the in-flight calibration burst.
+  int _activeTimeSyncBurst = 0;
+
+  /// Send timestamps (t0) of outstanding requests in the active burst, keyed by
+  /// request id.
+  final Map<String, DateTime> _pendingTimeSyncSends = {};
+
+  /// Samples collected so far for the active burst.
+  final List<TimeSyncSample> _timeSyncSamples = [];
 
   /// Device ID for identifying the slave to the master.
   String? _deviceId;
@@ -194,8 +213,32 @@ class SlaveClient implements SlaveConnectionClient {
       // Start sending heartbeat messages
       _startHeartbeat();
 
+      // Begin NTP-style clock calibration against the master.
+      _startTimeSync();
+
       _channel?.stream.listen(
         (message) async {
+          // Record the local receive time before any work so the round-trip
+          // estimate excludes decode/dispatch latency.
+          final DateTime t3 = _now().toUtc();
+
+          // Clock-sync replies arrive in bursts; handle them first and quietly
+          // so they do not flood the log or the status stream.
+          if (message is String &&
+              message.trimLeft().startsWith("{") &&
+              message.contains("\"timeSyncResponse\"")) {
+            try {
+              final decoded = jsonDecode(message);
+              if (decoded is Map<String, dynamic> &&
+                  decoded["type"] == "timeSyncResponse") {
+                _handleTimeSyncResponse(decoded, t3);
+                return;
+              }
+            } catch (_) {
+              // Not a usable sync reply; fall through to normal handling.
+            }
+          }
+
           LogService.instance
               .registerLog("Command received from master: $message");
           _statusStreamController.add("Received command: $message");
@@ -257,6 +300,7 @@ class SlaveClient implements SlaveConnectionClient {
           _connectionStatusStreamController
               .add(false); // Notify UI of connection status
           _stopHeartbeat();
+          _stopTimeSync();
           _attemptReconnect();
         },
         onDone: () {
@@ -267,6 +311,7 @@ class SlaveClient implements SlaveConnectionClient {
           _connectionStatusStreamController
               .add(false); // Notify UI of connection status
           _stopHeartbeat();
+          _stopTimeSync();
           _attemptReconnect();
         },
       );
@@ -401,6 +446,13 @@ class SlaveClient implements SlaveConnectionClient {
   }
 
   void _updateClockOffsetFromMasterTime(Object? masterTimeValue) {
+    // The NTP-style handshake is authoritative once it has produced a
+    // calibration. The single-sample master timestamp is only a coarse
+    // fallback for the very first scheduled command before the first burst
+    // completes, so it must not overwrite a measured offset.
+    if (TimeSyncService.instance.latest.value != null) {
+      return;
+    }
     if (masterTimeValue is! String || masterTimeValue.isEmpty) {
       return;
     }
@@ -414,9 +466,9 @@ class SlaveClient implements SlaveConnectionClient {
 
     final offset = masterTime.difference(_now());
     _scheduledTaskService.updateClockOffset(offset);
-    LogService.instance
-        .registerLog("Updated slave scheduled clock offset from master: "
-            "${offset.inMilliseconds} ms.");
+    LogService.instance.registerLog(
+        "Applied coarse fallback clock offset from master timestamp: "
+        "${offset.inMilliseconds} ms.");
   }
 
   /// Executes the received command.
@@ -438,6 +490,7 @@ class SlaveClient implements SlaveConnectionClient {
           receivedDate: receivedDate,
           slaveDeviceId: deviceId,
           captureContext: _cameraService.lastPhotoCaptureContext,
+          syncMetadata: _syncMetadataAt(photoCaptureDate!),
         );
         await SessionManager.instance.addPhoto(capturedPhoto);
 
@@ -502,6 +555,7 @@ class SlaveClient implements SlaveConnectionClient {
           endRecordingDate: endRecordingDate,
           receivedDate: receivedDate,
           captureContext: _cameraService.recordingCaptureContext,
+          syncMetadata: _syncMetadataAt(startRecordingDate),
         );
         await SessionManager.instance.addVideo(capturedVideo);
 
@@ -618,6 +672,120 @@ class SlaveClient implements SlaveConnectionClient {
     }
   }
 
+  /// Snapshot of the current clock calibration for a capture at instant [at],
+  /// or null if the device has never synchronized.
+  SyncMetadata? _syncMetadataAt(DateTime at) =>
+      TimeSyncService.instance.latest.value?.toSyncMetadata(at);
+
+  /// Starts NTP-style clock calibration: one burst immediately, then on a timer.
+  void _startTimeSync() {
+    _stopTimeSync();
+    _sendTimeSyncBurst();
+    _timeSyncTimer = Timer.periodic(
+      const Duration(seconds: timeSyncIntervalSeconds),
+      (_) => _sendTimeSyncBurst(),
+    );
+  }
+
+  /// Cancels calibration timers and clears any in-flight burst state.
+  void _stopTimeSync() {
+    _timeSyncTimer?.cancel();
+    _timeSyncTimer = null;
+    _timeSyncBurstTimeout?.cancel();
+    _timeSyncBurstTimeout = null;
+    _pendingTimeSyncSends.clear();
+    _timeSyncSamples.clear();
+  }
+
+  /// Fires a burst of [timeSyncSampleCount] clock-sync probes at the master.
+  void _sendTimeSyncBurst() {
+    if (!_isConnected || _deviceId == null || _channel == null) {
+      return;
+    }
+
+    final burstId = ++_activeTimeSyncBurst;
+    _pendingTimeSyncSends.clear();
+    _timeSyncSamples.clear();
+
+    for (var seq = 0; seq < timeSyncSampleCount; seq++) {
+      final id = "$burstId:$seq";
+      final t0 = _now().toUtc();
+      _pendingTimeSyncSends[id] = t0;
+      _channel?.sink.add(jsonEncode({
+        "type": "timeSyncRequest",
+        "deviceId": _deviceId,
+        "id": id,
+        "t0": t0.toIso8601String(),
+      }));
+    }
+
+    _timeSyncBurstTimeout?.cancel();
+    _timeSyncBurstTimeout = Timer(
+      const Duration(seconds: 3),
+      () => _finalizeTimeSyncBurst(burstId),
+    );
+  }
+
+  /// Matches a master reply to its outstanding request, builds a sample, and
+  /// finalizes the burst once every probe has been answered.
+  void _handleTimeSyncResponse(Map<String, dynamic> decoded, DateTime t3) {
+    final id = decoded["id"]?.toString();
+    if (id == null) {
+      return;
+    }
+    final t0 = _pendingTimeSyncSends.remove(id);
+    if (t0 == null) {
+      // Stale reply from a previous burst, or unknown id.
+      return;
+    }
+    final t1Raw = decoded["t1"];
+    final t2Raw = decoded["t2"];
+    final t1 = t1Raw is String ? DateTime.tryParse(t1Raw) : null;
+    final t2 = t2Raw is String ? DateTime.tryParse(t2Raw) : null;
+    if (t1 == null || t2 == null) {
+      return;
+    }
+
+    _timeSyncSamples.add(
+      TimeSyncService.computeSample(t0: t0, t1: t1, t2: t2, t3: t3),
+    );
+
+    if (_timeSyncSamples.length >= timeSyncSampleCount) {
+      _finalizeTimeSyncBurst(_activeTimeSyncBurst);
+    }
+  }
+
+  /// Aggregates the collected samples for [burstId] and applies the calibration.
+  void _finalizeTimeSyncBurst(int burstId) {
+    if (burstId != _activeTimeSyncBurst) {
+      return; // Already finalized or superseded by a newer burst.
+    }
+    _timeSyncBurstTimeout?.cancel();
+    _timeSyncBurstTimeout = null;
+
+    final samples = List<TimeSyncSample>.of(_timeSyncSamples);
+    _timeSyncSamples.clear();
+    _pendingTimeSyncSends.clear();
+    // Bump so any late replies or the cancelled timeout cannot finalize again.
+    _activeTimeSyncBurst++;
+
+    final result =
+        TimeSyncService.aggregate(samples, calibratedAt: _now().toUtc());
+    if (result == null) {
+      LogService.instance
+          .registerLog("Clock sync burst produced no usable samples.");
+      return;
+    }
+
+    TimeSyncService.instance.record(result);
+    _scheduledTaskService.updateClockOffset(result.offset);
+    LogService.instance.registerLog(
+        "Clock synced to master: offset ${result.offset.inMilliseconds} ms, "
+        "uncertainty ${result.uncertainty.inMilliseconds} ms, "
+        "RTT ${result.minRoundTrip.inMilliseconds} ms, "
+        "${result.sampleCount} samples, ${result.confidence.name}.");
+  }
+
   /// Attempts to reconnect to the WebSocket server.
   void _attemptReconnect() {
     if (_reconnectTimer != null && _reconnectTimer!.isActive) {
@@ -645,6 +813,7 @@ class SlaveClient implements SlaveConnectionClient {
         .add(false); // Notify UI of connection status
     _reconnectTimer?.cancel();
     _stopHeartbeat();
+    _stopTimeSync();
   }
 
   Future<Map<String, dynamic>?> _currentNetworkPayload() async {
