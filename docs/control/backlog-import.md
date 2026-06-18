@@ -266,6 +266,14 @@ Default issue schema:
   master connected-client diagnostics after an operator identify request. Keep
   this issue open for real master/slave reconnect reproduction and cross-device
   metadata comparison.
+- 2026-06-18 stale session-media diagnostics note:
+  `logs/verification-runs/20260618-1522-stale-session-media-diagnostics/`
+  adds a regression for a slave heartbeat that previously reported an active
+  session with `sessionMedia`, then later reports no active session. Master
+  connected-client diagnostics now clear the cached media summary instead of
+  showing stale pending/uploaded counts beside a null reported session. Keep
+  this issue open for real master/slave reconnect reproduction and cross-device
+  metadata comparison.
 - 2026-06-17 reported-session modal diagnostics note:
   focused `MasterScreen` coverage now proves the known-device modal shows the
   exact slave-reported session GUID beside the status label, so operators can

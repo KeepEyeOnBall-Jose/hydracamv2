@@ -1,0 +1,154 @@
+{
+  "acceptanceChecks": [
+    "Master connected-client diagnostics clear a slave sessionMedia summary when the same slave no longer reports an active session",
+    "Existing session-media heartbeat diagnostics remain preserved while a slave reports the active session"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:23:00.876364+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:23:06.052159+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "incoming heartbeat clears stale slave session media diagnostics"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T13:23:28.369189+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "incoming heartbeat clears stale slave session media diagnostics"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T13:23:53.240579+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "incoming heartbeat clears stale slave session media diagnostics"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T13:24:21.064575+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "incoming heartbeat clears stale slave session media diagnostics"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:24:32.527899+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:24:38.433950+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/connected_client_automation_payload_test.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:25:13.616135+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub",
+        "lib/master/master_server.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:25:21.408198+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:25:26.859104+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:25:36.750552+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:26:21.140447+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "stale-session-media-diagnostics",
+    "source": "docs/control/backlog-import.md#2-preserve-session-state-across-master-reconnect",
+    "title": "Clear stale slave session-media diagnostics"
+  },
+  "notes": [
+    "Red regression reproduced stale slave sessionMedia after the slave stopped reporting an active session.",
+    "Focused tests, related master/slave diagnostics tests, full analyzer, and full Flutter test suite passed.",
+    "ADB reported no attached Android devices; Flutter wireless iOS discovery hung and was interrupted, so this remained Tier D service/model proof."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

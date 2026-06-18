@@ -800,7 +800,9 @@ class MasterServer {
     final effectiveAppBuildNumber =
         appBuildNumber ?? previousInfo?.appBuildNumber;
     final effectiveHardwareLabel = hardwareLabel ?? previousInfo?.hardwareLabel;
-    final effectiveSessionMedia = sessionMedia ?? previousInfo?.sessionMedia;
+    final hasReportedSession = reportedSessionGuid?.trim().isNotEmpty ?? false;
+    final effectiveSessionMedia =
+        hasReportedSession ? sessionMedia ?? previousInfo?.sessionMedia : null;
     final now = DateTime.now();
 
     _clients[deviceId] = socket;
