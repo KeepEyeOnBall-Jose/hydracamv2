@@ -179,7 +179,7 @@ void main() {
 - [x] If Android hardware is connected and responsive, run:
 
 ```bash
-python3 scripts/run_hardware_ui_e2e.py --route setup --route standby --output-dir logs/verification-runs/20260612-visual-makeover-setup-standby
+python3 scripts/run_hardware_ui_e2e.py --route setup --route standby --run-dir logs/verification-runs/20260612-visual-makeover-setup-standby
 ```
 
 Expected: screenshots and logs under the run directory, no Flutter overflow markers.

@@ -2,36 +2,69 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "HydraCam (Android Emulator)",
+      "name": "HydraCam (pick current device)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "HydraCam (Android emulator-5554)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "deviceId": "emulator-5554"
     },
     {
-      "name": "HydraCam (iPhone Simulator)",
+      "name": "HydraCam (iPhone 16 Plus simulator)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F"
     },
     {
-      "name": "HydraCam (Physical iPhone)",
+      "name": "HydraCam (connected iPad)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "deviceId": "00008101-000A68811E43001E"
+      "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
     },
     {
-      "name": "Flutter (profile mode)",
+      "name": "HydraCam (macOS desktop)",
       "request": "launch",
       "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "macos"
+    },
+    {
+      "name": "HydraCam (Chrome web)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "chrome"
+    },
+    {
+      "name": "HydraCam automation (Android emulator-5554)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "emulator-5554",
+      "toolArgs": [
+        "--dart-define",
+        "HYDRACAM_AUTOMATION=true"
+      ]
+    },
+    {
+      "name": "HydraCam profile (pick current device)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
       "flutterMode": "profile"
     },
     {
-      "name": "Flutter (release mode)",
+      "name": "HydraCam release (pick current device)",
       "request": "launch",
       "type": "dart",
+      "program": "lib/main.dart",
       "flutterMode": "release"
     },
     {

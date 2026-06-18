@@ -2,71 +2,235 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "flutter: Clean All",
+      "label": "flutter: Doctor",
       "type": "shell",
       "command": "flutter",
-      "args": ["clean"],
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      }
+      "args": ["doctor", "-v"],
+      "problemMatcher": []
     },
     {
       "label": "flutter: Get Dependencies",
       "type": "shell",
       "command": "flutter",
       "args": ["pub", "get"],
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      }
+      "problemMatcher": []
     },
     {
-      "label": "flutter: Build Android APK",
+      "label": "flutter: Analyze",
       "type": "shell",
       "command": "flutter",
-      "args": ["build", "apk", "--debug"],
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      }
+      "args": ["analyze", "--no-pub"],
+      "problemMatcher": ["$dart-analyzer"]
     },
     {
-      "label": "flutter: Run All Tests",
+      "label": "flutter: Test Full",
       "type": "shell",
       "command": "flutter",
-      "args": ["test"],
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      }
+      "args": ["test", "--no-pub"],
+      "problemMatcher": []
     },
     {
-      "label": "iOS: Grant Full Disk Access Instructions",
+      "label": "flutter: Test Focused",
       "type": "shell",
-      "command": "echo",
+      "command": "flutter",
+      "args": ["test", "--no-pub", "${input:flutterTestTarget}"],
+      "problemMatcher": []
+    },
+    {
+      "label": "devices: Flutter Devices",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["devices", "--device-timeout", "10"],
+      "problemMatcher": []
+    },
+    {
+      "label": "devices: Android ADB Devices",
+      "type": "shell",
+      "command": "adb",
+      "args": ["devices", "-l"],
+      "problemMatcher": []
+    },
+    {
+      "label": "devices: iOS CoreDevice List",
+      "type": "shell",
+      "command": "xcrun",
+      "args": ["devicectl", "list", "devices"],
+      "problemMatcher": []
+    },
+    {
+      "label": "emulator: List Flutter Emulators",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["emulators"],
+      "problemMatcher": []
+    },
+    {
+      "label": "emulator: Boot Pixel_7",
+      "type": "shell",
+      "command": "python3",
       "args": [
-        "To fix iOS build issues:\n1. Open System Settings → Privacy & Security → Full Disk Access\n2. Add Terminal and/or Xcode\n3. Alternatively, open ios/Runner.xcworkspace in Xcode and build from there\n4. Or move project to ~/Projects/ if it's in a protected location"
+        "scripts/boot_and_verify_emulators.py",
+        "--count",
+        "1",
+        "--avd-base",
+        "Pixel_7",
+        "--start",
+        "--timeout",
+        "180"
       ],
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "dedicated"
-      }
+      "problemMatcher": []
+    },
+    {
+      "label": "emulator: Boot Hydra Cluster",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "scripts/boot_and_verify_emulators.py",
+        "--hydra-cluster",
+        "--start",
+        "--timeout",
+        "180"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "emulator: Stop All",
+      "type": "shell",
+      "command": "python3",
+      "args": ["scripts/stop_and_verify_all_emulators.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "ios: List Simulators",
+      "type": "shell",
+      "command": "xcrun",
+      "args": ["simctl", "list", "devices", "available"],
+      "problemMatcher": []
+    },
+    {
+      "label": "ios: Open Xcode Workspace",
+      "type": "shell",
+      "command": "open",
+      "args": ["ios/Runner.xcworkspace"],
+      "problemMatcher": []
+    },
+    {
+      "label": "android: Open Android Studio Project",
+      "type": "shell",
+      "command": "open",
+      "args": ["-a", "Android Studio", "."],
+      "problemMatcher": []
+    },
+    {
+      "label": "evidence: Start Pack",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "scripts/evidence_pack.py",
+        "start",
+        "--item",
+        "${input:evidenceItem}",
+        "--slug",
+        "${input:evidenceSlug}",
+        "--source",
+        "${input:evidenceSource}",
+        "--tier",
+        "${input:evidenceTier}",
+        "--acceptance",
+        "${input:evidenceAcceptance}",
+        "--require-screenshots",
+        "--require-device-logs"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "evidence: Check Pack",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "scripts/evidence_pack.py",
+        "check",
+        "${input:evidenceRunDir}"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "release: Store Readiness Local",
+      "type": "shell",
+      "command": "scripts/check_store_readiness.sh",
+      "args": ["local"],
+      "problemMatcher": []
+    },
+    {
+      "label": "release: Build Android Store AAB",
+      "type": "shell",
+      "command": "scripts/build_store_artifacts.sh",
+      "args": ["android"],
+      "problemMatcher": []
+    },
+    {
+      "label": "release: Build iOS Store IPA",
+      "type": "shell",
+      "command": "scripts/build_store_artifacts.sh",
+      "args": ["ios"],
+      "problemMatcher": []
+    },
+    {
+      "label": "deploy: Android Google Play Internal",
+      "type": "shell",
+      "command": "scripts/android_fastlane.sh",
+      "args": ["internal"],
+      "problemMatcher": []
+    },
+    {
+      "label": "deploy: iOS TestFlight Beta",
+      "type": "shell",
+      "command": "scripts/ios_fastlane.sh",
+      "args": ["beta"],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "flutterTestTarget",
+      "type": "promptString",
+      "description": "Flutter test target",
+      "default": "test/"
+    },
+    {
+      "id": "evidenceItem",
+      "type": "promptString",
+      "description": "Existing control-plane item being verified"
+    },
+    {
+      "id": "evidenceSlug",
+      "type": "promptString",
+      "description": "Short evidence run slug",
+      "default": "local-ide-emulator-deploy"
+    },
+    {
+      "id": "evidenceSource",
+      "type": "promptString",
+      "description": "Control-plane source path",
+      "default": "docs/control/regular-evaluation-plan.md"
+    },
+    {
+      "id": "evidenceTier",
+      "type": "pickString",
+      "description": "Evidence tier",
+      "options": ["A", "B", "C", "D"],
+      "default": "B"
+    },
+    {
+      "id": "evidenceAcceptance",
+      "type": "promptString",
+      "description": "Observable acceptance check"
+    },
+    {
+      "id": "evidenceRunDir",
+      "type": "promptString",
+      "description": "Evidence run directory",
+      "default": "logs/verification-runs/<run>"
     }
   ]
 }
