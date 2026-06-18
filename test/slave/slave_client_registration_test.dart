@@ -1127,6 +1127,83 @@ void main() {
       await server.close(force: true);
     }
   });
+
+  test("disconnect cancels pending scheduled slave commands", () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+
+    final slaveNow = DateTime.utc(2026, 6, 18, 20, 7);
+    final scheduledTime = slaveNow.add(const Duration(seconds: 30));
+    final taskId = "slave:takePhoto:${scheduledTime.toIso8601String()}";
+    final scheduledTaskService = ScheduledTaskService(now: () => slaveNow);
+    final scheduledCallback = Completer<void>();
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final sockets = <WebSocket>[];
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = jsonDecode(data as String);
+        if (decoded is Map<String, dynamic> && decoded["type"] == "deviceId") {
+          socket.add(jsonEncode({
+            "type": "scheduledCommand",
+            "command": "takePhoto",
+            "scheduledTime": scheduledTime.toIso8601String(),
+          }));
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () async => null,
+      scheduledTaskService: scheduledTaskService,
+      now: () => slaveNow,
+      onScheduledCommand: (command, scheduledTime) {
+        if (!scheduledCallback.isCompleted) {
+          scheduledCallback.complete();
+        }
+      },
+    );
+
+    try {
+      await client.connect();
+      await scheduledCallback.future.timeout(const Duration(seconds: 1));
+
+      expect(scheduledTaskService.isTaskScheduled(taskId), isTrue);
+
+      client.disconnect();
+
+      expect(scheduledTaskService.isTaskScheduled(taskId), isFalse);
+    } finally {
+      scheduledTaskService.cancelTask(taskId);
+      client.disconnect();
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await server.close(force: true);
+    }
+  });
 }
 
 class _JsonMessageCollector {

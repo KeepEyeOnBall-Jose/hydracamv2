@@ -1,0 +1,108 @@
+{
+  "acceptanceChecks": [
+    "SlaveClient.disconnect cancels pending scheduled capture commands",
+    "Scheduled-command countdown behavior still applies master clock offset while connected",
+    "Focused slave client test, analyzer, full Flutter suite, and diff hygiene pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "disconnect cancels pending scheduled slave commands"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:38:49.904136+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "disconnect cancels pending scheduled slave commands"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:39:11.087277+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "scheduled command"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:39:20.334523+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:39:27.265940+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:39:35.317517+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:39:45.433385+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:40:09.500211+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:40:33.079417+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-disconnect-cancels-scheduled-commands",
+    "source": "docs/control/backlog-import.md#support-synchronized-time-accurately-enough-for-capture",
+    "title": "Cancel pending scheduled slave commands on disconnect"
+  },
+  "notes": [
+    "SlaveClient.disconnect now cancels pending scheduled slave command timers so stale delayed capture commands do not execute after the slave leaves a master. Red/green focused scheduled-command test, full slave registration file, analyzer, full Flutter suite, and diff hygiene passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

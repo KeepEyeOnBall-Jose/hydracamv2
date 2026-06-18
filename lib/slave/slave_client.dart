@@ -92,6 +92,8 @@ class SlaveClient implements SlaveConnectionClient {
   /// Samples collected so far for the active burst.
   final List<TimeSyncSample> _timeSyncSamples = [];
 
+  final Set<String> _scheduledCommandTaskIds = <String>{};
+
   /// Device ID for identifying the slave to the master.
   String? _deviceId;
 
@@ -553,11 +555,23 @@ class SlaveClient implements SlaveConnectionClient {
       // Notify the UI to handle the countdown
       onScheduledCommand?.call(command, scheduledTime);
 
-      unawaited(scheduledTasks.scheduleTask(
-        "slave:$command:${scheduledTime.toIso8601String()}",
-        scheduledTime,
-        () => _executeCommand(command),
-      ));
+      final taskId = "slave:$command:${scheduledTime.toIso8601String()}";
+      _scheduledCommandTaskIds.add(taskId);
+      unawaited(scheduledTasks
+          .scheduleTask(
+            taskId,
+            scheduledTime,
+            () => _executeCommand(command),
+          )
+          .whenComplete(() => _scheduledCommandTaskIds.remove(taskId)));
+    }
+  }
+
+  void _cancelScheduledCommands() {
+    final taskIds = List<String>.of(_scheduledCommandTaskIds);
+    _scheduledCommandTaskIds.clear();
+    for (final taskId in taskIds) {
+      _scheduledTaskService.cancelTask(taskId);
     }
   }
 
@@ -934,6 +948,7 @@ class SlaveClient implements SlaveConnectionClient {
     _reconnectTimer?.cancel();
     _stopHeartbeat();
     _stopTimeSync();
+    _cancelScheduledCommands();
     _unregisterRecordingInterruptListener();
   }
 

@@ -787,6 +787,12 @@ Default issue schema:
   a closed stream controller. The focused cleanup regression and combined slave
   registration/time-sync command passed. Keep this issue open for real-device
   offset estimation and capture start-skew evidence.
+- 2026-06-18 scheduled-command disconnect cleanup note:
+  `logs/verification-runs/20260618-2007-slave-disconnect-cancels-scheduled-commands/`
+  adds red/green coverage so `SlaveClient.disconnect()` cancels pending
+  scheduled slave command timers. A slave that leaves the master no longer
+  executes stale delayed capture commands after disconnect. Keep this issue open
+  for real-device offset estimation and capture start-skew evidence.
 
 ### 8. Implement auto-record mode
 
