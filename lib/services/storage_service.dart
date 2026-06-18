@@ -1,6 +1,7 @@
 import "dart:async";
 import "package:flutter/material.dart";
 import "package:disk_space_plus/disk_space_plus.dart";
+import "../app_theme.dart";
 import "log_service.dart";
 
 /// StorageService monitors the device's available storage and shows a warning
@@ -73,6 +74,8 @@ class StorageService {
     if (availableStorageGB < _criticalStorageThreshold) {
       if (!_blockRecording) {
         _blockRecording = true;
+        LogService.instance.registerLog(
+            "Critical storage: triggering recording stop at ${availableStorageGB.toStringAsFixed(2)} GB.");
         unawaited(_runCriticalStorageCallback());
       }
     } else {
@@ -115,18 +118,18 @@ class StorageService {
         children: [
           Icon(
             Icons.sd_storage,
-            color: Colors.red.shade700,
+            color: AppTheme.danger,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               "Low storage available: ${availableStorage.toStringAsFixed(1)} GB. Free up space.",
-              style: TextStyle(color: Colors.red.shade900),
+              style: const TextStyle(color: AppTheme.danger),
             ),
           ),
         ],
       ),
-      backgroundColor: Colors.red.shade100,
+      backgroundColor: AppTheme.dangerSurface,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 5),
     );
@@ -138,8 +141,8 @@ class StorageService {
     if (_messengerState == null) return;
     _messengerState!.showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(color: Colors.black)),
-        backgroundColor: Colors.red.shade100,
+        content: Text(message, style: const TextStyle(color: AppTheme.danger)),
+        backgroundColor: AppTheme.dangerSurface,
         duration: const Duration(seconds: 5),
       ),
     );

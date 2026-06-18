@@ -447,6 +447,13 @@ Default issue schema:
   forced-stop callback, matching the battery autostop trigger diagnostics. Keep
   this issue open for real-device or emulator recording proof from platform
   battery/storage events.
+- 2026-06-18 resource warning diagnostics note:
+  `logs/verification-runs/20260618-1342-resource-warning-diagnostics/` reruns
+  focused storage coverage, analyzer, and the full Flutter test suite after
+  keeping the critical-storage trigger value in `LogService` and aligning the
+  battery/storage/alert warning snackbars with the shared HydraCam warning and
+  danger surfaces. Keep this issue open for real-device or emulator recording
+  proof from platform battery/storage events.
 
 ### 6. Make network/device identity visible
 

@@ -2,6 +2,7 @@ import "dart:async";
 import "package:battery_plus/battery_plus.dart";
 import "package:flutter/material.dart";
 
+import "../app_theme.dart";
 import "linux_dbus_availability.dart";
 import "log_service.dart";
 
@@ -158,18 +159,18 @@ class BatteryService {
         children: [
           Icon(
             Icons.battery_alert,
-            color: Colors.orange.shade700,
+            color: AppTheme.accent,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               "Battery is low ($currentLevel%). Consider plugging in.",
-              style: TextStyle(color: Colors.orange.shade900),
+              style: const TextStyle(color: AppTheme.textPrimary),
             ),
           ),
         ],
       ),
-      backgroundColor: Colors.yellow.shade100,
+      backgroundColor: AppTheme.accentSurface,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 5),
     );
@@ -185,18 +186,18 @@ class BatteryService {
         children: [
           Icon(
             Icons.battery_alert,
-            color: Colors.red.shade900,
+            color: AppTheme.danger,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               "Recording stopped due to critical battery ($currentLevel%).",
-              style: TextStyle(color: Colors.red.shade900),
+              style: const TextStyle(color: AppTheme.danger),
             ),
           ),
         ],
       ),
-      backgroundColor: Colors.red.shade100,
+      backgroundColor: AppTheme.dangerSurface,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 8),
     );

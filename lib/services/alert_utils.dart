@@ -26,7 +26,7 @@ class AlertUtils {
         return PopScope(
           canPop: false, // Prevent closing with the back button
           child: Dialog(
-            backgroundColor: Colors.white
+            backgroundColor: AppTheme.surface
                 .withValues(alpha: 0.9), // White translucent background
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
@@ -353,8 +353,11 @@ class AlertUtils {
     messengerState.clearSnackBars();
     messengerState.showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(color: Colors.black)),
-        backgroundColor: Colors.red.shade100,
+        content: Text(
+          message,
+          style: const TextStyle(color: AppTheme.danger),
+        ),
+        backgroundColor: AppTheme.dangerSurface,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 5),
       ),

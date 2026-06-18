@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/storage_service.dart";
 import "../test_utils/mock_services.dart";
 
@@ -8,6 +9,14 @@ import "../test_utils/mock_services.dart";
 /// These tests verify storage threshold logic and recording block behavior.
 
 void main() {
+  setUp(() {
+    LogService.instance.clearLogs();
+  });
+
+  tearDown(() {
+    LogService.instance.clearLogs();
+  });
+
   group("StorageService", () {
     late FakeStorageService storageService;
 
@@ -80,6 +89,13 @@ void main() {
 
       expect(storageService.isRecordingBlocked, true);
       expect(criticalCallbackTriggered, true);
+      expect(
+        LogService.instance.logs.any((entry) => entry["message"]
+            .toString()
+            .contains(
+                "Critical storage: triggering recording stop at 0.39 GB.")),
+        isTrue,
+      );
     });
 
     testWidgets(

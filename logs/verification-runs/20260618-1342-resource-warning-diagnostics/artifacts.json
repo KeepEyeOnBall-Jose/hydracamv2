@@ -1,0 +1,63 @@
+{
+  "acceptanceChecks": [
+    "StorageService focused coverage proves the critical storage forced-stop trigger logs the available GB value, analyzer passes, and the full Flutter test suite remains green after shared warning-surface theme updates."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/storage_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:42:50.688426+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:42:57.402607+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:43:08.193011+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "No platform battery/storage event was fired; this is static/service/widget validation."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local Flutter test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "resource-warning-diagnostics",
+    "source": "docs/control/backlog-import.md#5-add-critical-battery-autostop",
+    "title": "Log critical storage trigger and align resource warnings"
+  },
+  "notes": [
+    "Focused StorageService test, analyzer, and full Flutter test suite passed. No platform battery/storage event was fired in this Tier D run."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
