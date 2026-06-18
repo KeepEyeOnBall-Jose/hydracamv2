@@ -254,6 +254,13 @@ Default issue schema:
   silently switching the slave into the other session. `sessionEnded` remains
   the explicit destructive authority. Keep this issue open for real
   master/slave reconnect reproduction and cross-device metadata comparison.
+- 2026-06-18 session-ended authority note:
+  `logs/verification-runs/20260618-1717-stale-session-ended-preserves-slave-session/`
+  scopes destructive `sessionEnded` messages to the ended session GUID. The
+  master now broadcasts that GUID when ending a session, and the slave ignores
+  unscoped or different-session end messages while preserving its active
+  session and queued upload media. Keep this issue open for real master/slave
+  reconnect reproduction and cross-device metadata comparison.
 - 2026-06-17 slave session-media heartbeat diagnostics note:
   focused slave and master-parser coverage now proves slave heartbeats include
   a compact `sessionMedia` summary (`photoCount`, `videoCount`,

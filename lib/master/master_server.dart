@@ -1096,9 +1096,11 @@ class MasterServer {
 
   Future<void> endCurrentSession() async {
     if (SessionManager.instance.currentSession != null) {
+      final endedSessionGuid = SessionManager.instance.sessionGuid;
+
       // Register logs
       LogService.instance.registerLog(
-          "Capture session with GUID: ${SessionManager.instance.sessionGuid} ended and stored in history.");
+          "Capture session with GUID: $endedSessionGuid ended and stored in history.");
 
       // End session through SessionManager
       await SessionManager.instance.endSession();
@@ -1106,6 +1108,8 @@ class MasterServer {
       // Notify slaves that session ended
       final sessionEndedCommand = jsonEncode({
         "command": "sessionEnded",
+        if (endedSessionGuid != null && endedSessionGuid.isNotEmpty)
+          "sessionGuid": endedSessionGuid,
       });
       sendCommandToAll(sessionEndedCommand);
     } else {

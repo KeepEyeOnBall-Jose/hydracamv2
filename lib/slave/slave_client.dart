@@ -276,10 +276,9 @@ class SlaveClient implements SlaveConnectionClient {
                   LogService.instance.registerLog("Network mismatch: $message");
                   _statusStreamController.add(message.toString());
                 } else if (command == "sessionEnded") {
-                  // End session
-                  await SessionManager.instance.endSession();
-                  LogService.instance
-                      .registerLog("Session ended as per master command.");
+                  await _handleSessionEndedFromMaster(
+                    _stringValue(decodedMessage, "sessionGuid"),
+                  );
                 } else if (command == "noSession") {
                   _handleNoSessionFromMaster();
                 } else {
@@ -362,9 +361,9 @@ class SlaveClient implements SlaveConnectionClient {
             _handleSessionAvailable(sessionGuid);
           } else if (type == "sessionEnded") {
             // Handle session end
-            await SessionManager.instance.endSession();
-            LogService.instance
-                .registerLog("Session ended as per master command.");
+            await _handleSessionEndedFromMaster(
+              _stringValue(decodedMessage, "sessionGuid"),
+            );
           } else if (type == "noSession") {
             _handleNoSessionFromMaster();
           } else if (command == "identifySlave") {
@@ -388,6 +387,11 @@ class SlaveClient implements SlaveConnectionClient {
       // Not a JSON, continue executing raw command
       await _executeCommand(message);
     }
+  }
+
+  String? _stringValue(Map<String, dynamic> payload, String key) {
+    final value = payload[key];
+    return value is String ? value : null;
   }
 
   void _handleSessionAvailable(String sessionGuid) {
@@ -414,6 +418,34 @@ class SlaveClient implements SlaveConnectionClient {
     }
     notifyReadyToTransmit(sessionGuid);
     unawaited(_maybeStartAutoRecordRecording(sessionGuid));
+  }
+
+  Future<void> _handleSessionEndedFromMaster(String? endedSessionGuid) async {
+    final activeSessionGuid = SessionManager.instance.sessionGuid;
+    if (SessionManager.instance.isSessionActive &&
+        activeSessionGuid != null &&
+        activeSessionGuid.isNotEmpty) {
+      final normalizedEndedGuid = endedSessionGuid?.trim();
+      if (normalizedEndedGuid == null || normalizedEndedGuid.isEmpty) {
+        LogService.instance.registerLog(
+            "Ignoring sessionEnded without sessionGuid; active session "
+            "$activeSessionGuid kept.");
+        _statusStreamController
+            .add("Master session end ignored. Active session kept.");
+        return;
+      }
+      if (normalizedEndedGuid != activeSessionGuid) {
+        LogService.instance.registerLog(
+            "Ignoring sessionEnded for $normalizedEndedGuid; active session "
+            "$activeSessionGuid kept.");
+        _statusStreamController
+            .add("Master ended a different session. Active session kept.");
+        return;
+      }
+    }
+
+    await SessionManager.instance.endSession();
+    LogService.instance.registerLog("Session ended as per master command.");
   }
 
   void _handleNoSessionFromMaster() {

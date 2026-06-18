@@ -1102,6 +1102,48 @@ void main() {
     expect(payload["requestId"], "identify-stale-session");
   });
 
+  test("ending master session broadcasts the ended session guid", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+    SessionManager.instance.startSession(
+      "master-session-guid",
+      "master-session-id",
+      deviceType: "Master",
+    );
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "matching-slave",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "master-session-guid",
+    );
+
+    await server.endCurrentSession();
+
+    final sentMessage =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    final payload = jsonDecode(sentMessage) as Map<String, dynamic>;
+    expect(payload, {
+      "command": "sessionEnded",
+      "sessionGuid": "master-session-guid",
+    });
+    expect(SessionManager.instance.isSessionActive, isFalse);
+  });
+
   test("pending identify becomes unavailable when the slave disconnects",
       () async {
     final server = MasterServer(
