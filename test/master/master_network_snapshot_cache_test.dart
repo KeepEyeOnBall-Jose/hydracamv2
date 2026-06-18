@@ -523,6 +523,59 @@ void main() {
     }
   });
 
+  test("incoming photo media with malformed timestamp is ignored before save",
+      () async {
+    final galleryCalls = <SessionMediaType>[];
+    final storageRoot =
+        Directory.systemTemp.createTempSync("master_malformed_media");
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+      sessionMediaStorage: SessionMediaStorage(
+        documentsDirectoryProvider: () async => storageRoot,
+        galleryMediaPersistor: (filePath, mediaType) async {
+          galleryCalls.add(mediaType);
+        },
+        now: () => DateTime.fromMillisecondsSinceEpoch(1770000000789),
+      ),
+    );
+    SessionManager.instance.startSession(
+      "malformed-master-session",
+      "malformed-master-id",
+      deviceType: "Master",
+    );
+
+    try {
+      await server.handleIncomingMessageForTest(
+        jsonEncode({
+          "type": "photo",
+          "deviceId": "slave-a",
+          "data": [0xFF, 0xD8, 0xFF],
+          "captureDate": "not-a-date",
+        }),
+        socket: MockWebSocket(),
+      );
+
+      final photos =
+          SessionManager.instance.currentSession?.capturedPhotos ?? [];
+      expect(photos, isEmpty);
+      expect(galleryCalls, isEmpty);
+      expect(
+        Directory("${storageRoot.path}/session_malformed-master-session")
+            .existsSync(),
+        isFalse,
+      );
+    } finally {
+      storageRoot.deleteSync(recursive: true);
+    }
+  });
+
   test("stale socket close does not remove current client registration",
       () async {
     final server = MasterServer(

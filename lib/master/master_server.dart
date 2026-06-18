@@ -639,6 +639,15 @@ class MasterServer {
       return;
     }
 
+    final DateTime? captureDate = messageType == "photo"
+        ? DateTime.parse(decodedData["captureDate"] as String)
+        : null;
+    final DateTime? startRecordingDate = messageType == "video"
+        ? DateTime.parse(decodedData["startRecordingDate"] as String)
+        : null;
+    final DateTime? endRecordingDate = messageType == "video"
+        ? DateTime.parse(decodedData["endRecordingDate"] as String)
+        : null;
     final Uint8List binaryData =
         Uint8List.fromList(List<int>.from(decodedData["data"]));
     final String filePath =
@@ -646,11 +655,10 @@ class MasterServer {
     final DateTime receivedDate = DateTime.now();
 
     if (messageType == "photo") {
-      final DateTime captureDate = DateTime.parse(decodedData["captureDate"]);
       final receivedPhoto = CapturedPhoto(
         photoData: null,
         photoPath: filePath,
-        captureDate: captureDate,
+        captureDate: captureDate!,
         receivedDate: receivedDate,
         slaveDeviceId: deviceId,
         captureContext: MediaCaptureContext.fromJson(
@@ -666,16 +674,12 @@ class MasterServer {
       return;
     }
 
-    final DateTime startRecordingDate =
-        DateTime.parse(decodedData["startRecordingDate"]);
-    final DateTime endRecordingDate =
-        DateTime.parse(decodedData["endRecordingDate"]);
     final receivedVideo = CapturedVideo(
       videoData: null,
       videoPath: filePath,
       slaveDeviceId: deviceId,
-      startRecordingDate: startRecordingDate,
-      endRecordingDate: endRecordingDate,
+      startRecordingDate: startRecordingDate!,
+      endRecordingDate: endRecordingDate!,
       receivedDate: receivedDate,
       captureContext: MediaCaptureContext.fromJson(
         _mapValue(decodedData["captureContext"]),

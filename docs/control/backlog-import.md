@@ -303,6 +303,13 @@ Default issue schema:
   current master session; unreported legacy media remains accepted. Keep this
   issue open for real master/slave reconnect reproduction and cross-device
   metadata comparison.
+- 2026-06-18 malformed inbound media preflight note:
+  `logs/verification-runs/20260618-1733-malformed-inbound-media-preflight/`
+  adds a regression for malformed inbound media timestamps. The master now
+  parses required photo/video timestamps before writing received media, so a
+  bad slave payload cannot leave orphan files or gallery artifacts outside
+  session metadata. Keep this issue open for real master/slave reconnect
+  reproduction and cross-device metadata comparison.
 
 ### 3. Prevent stale uploads from crossing sessions
 

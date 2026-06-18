@@ -1,0 +1,110 @@
+{
+  "acceptanceChecks": [
+    "Malformed inbound photo timestamps do not add media to the master session",
+    "Malformed inbound photo timestamps do not write received media files or gallery artifacts"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:27:35.189206+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:27:35.317463+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:27:53.651041+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:28:20.698170+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:28:36.999333+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:28:41.034537+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:28:46.394600+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:28:46.445304+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:29:09.064267+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "malformed-inbound-media-preflight",
+    "source": "docs/control/backlog-import.md#2-preserve-captured-materials-through-reconnect",
+    "title": "Reject malformed inbound media before persistence"
+  },
+  "notes": [
+    "Master validates inbound media timestamps before writing received media, avoiding orphan files for malformed slave payloads."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
