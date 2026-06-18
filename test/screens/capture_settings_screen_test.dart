@@ -121,6 +121,31 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets("settings screen ignores locale update completion after dispose",
+      (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final localeService = _BlockingLocaleUpdateService();
+
+    await _pumpSettingsScreen(tester, localeService: localeService);
+
+    final languageDropdown =
+        find.byKey(const ValueKey("localeOverrideDropdown"));
+    await tester.ensureVisible(languageDropdown);
+    await tester.pumpAndSettle();
+    await tester.tap(languageDropdown);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("Polish").last);
+    await localeService.setStarted;
+
+    expect(localeService.requestedLocaleCode, "pl");
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    localeService.completeSet();
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+  });
 }
 
 class _BlockingLocaleService extends AppLocaleService {
@@ -140,6 +165,33 @@ class _BlockingLocaleService extends AppLocaleService {
   void completeLoad() {
     if (!_loadCompleter.isCompleted) {
       _loadCompleter.complete();
+    }
+  }
+}
+
+class _BlockingLocaleUpdateService extends AppLocaleService {
+  final _setStarted = Completer<void>();
+  final _setCompleter = Completer<void>();
+
+  String? requestedLocaleCode;
+
+  Future<void> get setStarted => _setStarted.future;
+
+  @override
+  Future<void> load() async {}
+
+  @override
+  Future<void> setLocaleOverride(String? languageCode) async {
+    requestedLocaleCode = languageCode;
+    if (!_setStarted.isCompleted) {
+      _setStarted.complete();
+    }
+    await _setCompleter.future;
+  }
+
+  void completeSet() {
+    if (!_setCompleter.isCompleted) {
+      _setCompleter.complete();
     }
   }
 }

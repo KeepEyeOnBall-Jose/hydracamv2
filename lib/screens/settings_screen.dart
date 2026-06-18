@@ -85,6 +85,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateMasterRecording(bool value) async {
     await SettingsService.setMasterShouldRecord(value);
+    if (!mounted) return;
     setState(() {
       _masterShouldRecord = value;
     });
@@ -92,6 +93,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateLensPreference(LensPreference preference) async {
     await SettingsService.setCameraLensPreference(preference);
+    if (!mounted) return;
     setState(() {
       _lensPreference = preference;
     });
@@ -103,6 +105,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateVideoCaptureProfile(VideoCaptureProfile profile) async {
     await SettingsService.setVideoCaptureProfile(profile);
+    if (!mounted) return;
     setState(() {
       _videoCaptureProfile = profile;
     });
@@ -114,6 +117,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateDeleteLocalAfterUpload(bool value) async {
     await SettingsService.setDeleteLocalAfterUpload(value);
+    if (!mounted) return;
     setState(() {
       _deleteLocalAfterUpload = value;
     });
@@ -121,6 +125,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateAutoUploadMaterials(bool value) async {
     await SettingsService.setAutoUploadMaterials(value);
+    if (!mounted) return;
     setState(() {
       _autoUploadMaterials = value;
     });
@@ -128,6 +133,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateAutoplayVideoOnMaster(bool value) async {
     await SettingsService.setAutoplayVideoOnMaster(value);
+    if (!mounted) return;
     setState(() {
       _autoplayVideoOnMaster = value;
     });
@@ -135,6 +141,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateAutoRecordMode(bool value) async {
     await SettingsService.setAutoRecordMode(value);
+    if (!mounted) return;
     setState(() {
       _autoRecordMode = value;
     });
@@ -143,6 +150,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   Future<void> _updateTimerDuration(double value) async {
     final newDuration = value.toInt();
     await SettingsService.setTimerDuration(newDuration);
+    if (!mounted) return;
     setState(() {
       _timerDuration = newDuration;
     });
@@ -150,6 +158,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _updateScreenAutoOff(bool value) async {
     await SettingsService.setScreenAutoOff(value);
+    if (!mounted) return;
     setState(() {
       _screenAutoOff = value;
     });
@@ -158,6 +167,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   Future<void> _updateLocaleOverride(String value) async {
     final overrideCode = value == _systemLocaleCode ? null : value;
     await _localeService.setLocaleOverride(overrideCode);
+    if (!mounted) return;
     setState(() {
       _selectedLocaleCode = value;
     });
@@ -388,6 +398,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 value: _flashForVideoAnnounce,
                 onChanged: (value) async {
                   await SettingsService.setFlashForVideoAnnounce(value);
+                  if (!mounted) return;
                   setState(() {
                     _flashForVideoAnnounce = value;
                   });
