@@ -1,0 +1,303 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1625-fleet-heartbeat-provider-failure-warnings/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ flutter test --no-pub test/services/fleet_heartbeat_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart
+00:00 +0: FleetHeartbeatSnapshot builds ready lab-managed heartbeat payload
+00:00 +1: FleetHeartbeatSnapshot marks heartbeat blocked when network battery and storage are unsafe
+00:00 +2: FleetHeartbeatSnapshot uses stable network warning codes in heartbeat payload
+00:00 +3: FleetHeartbeatCollector uses injected providers to collect one heartbeat
+00:00 +4: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Log registered: {message: FleetHeartbeatCollector: failed to read network snapshot: Bad state: network plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:186:11)
+#1      FleetHeartbeatCollector._safeNetworkSnapshotProvider (package:hydracam/services/fleet_heartbeat_service.dart:400:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:330:35)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:199:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:25:38.931816, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read package info: Bad state: package plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:189:11)
+#1      FleetHeartbeatCollector._safePackageInfoProvider (package:hydracam/services/fleet_heartbeat_service.dart:420:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:335:31)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:199:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:25:38.934618, function: null, file: null}
+00:00 +5: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/fleet_heartbeat_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart
+00:00 +0: FleetHeartbeatSnapshot builds ready lab-managed heartbeat payload
+00:00 +1: FleetHeartbeatSnapshot marks heartbeat blocked when network battery and storage are unsafe
+00:00 +2: FleetHeartbeatSnapshot uses stable network warning codes in heartbeat payload
+00:00 +3: FleetHeartbeatCollector uses injected providers to collect one heartbeat
+00:00 +4: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Log registered: {message: FleetHeartbeatCollector: failed to read network snapshot: Bad state: network plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:186:11)
+#1      FleetHeartbeatCollector._safeNetworkSnapshotProvider (package:hydracam/services/fleet_heartbeat_service.dart:400:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:330:35)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:199:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:11.188103, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read package info: Bad state: package plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:189:11)
+#1      FleetHeartbeatCollector._safePackageInfoProvider (package:hydracam/services/fleet_heartbeat_service.dart:420:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:335:31)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:199:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:11.192998, function: null, file: null}
+00:00 +5: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+00:00 +5: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +5: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+Log registered: {message: FleetHeartbeatCollector: failed to read battery: Bad state: battery plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:238:11)
+#1      FleetHeartbeatCollector._safeNullableProvider (package:hydracam/services/fleet_heartbeat_service.dart:387:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:340:34)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:246:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:11.195110, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read free storage: Bad state: storage plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:241:11)
+#1      FleetHeartbeatCollector._safeNullableProvider (package:hydracam/services/fleet_heartbeat_service.dart:387:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:344:33)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:246:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:11.195340, function: null, file: null}
+00:00 +5 -1: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings [E]
+  Expected: contains 'battery:unavailable'
+    Actual: ['battery:unknown', 'storage:unknown']
+     Which: does not contain 'battery:unavailable'
+
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/services/fleet_heartbeat_service_test.dart 255:7  main.<fn>.<fn>
+
+00:00 +5 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+[exit-code] 1
+
+$ flutter test --no-pub test/services/fleet_heartbeat_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart
+00:00 +0: FleetHeartbeatSnapshot builds ready lab-managed heartbeat payload
+00:00 +1: FleetHeartbeatSnapshot marks heartbeat blocked when network battery and storage are unsafe
+00:00 +2: FleetHeartbeatSnapshot uses stable network warning codes in heartbeat payload
+00:00 +3: FleetHeartbeatCollector uses injected providers to collect one heartbeat
+00:00 +4: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Log registered: {message: FleetHeartbeatCollector: failed to read network snapshot: Bad state: network plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:186:11)
+#1      FleetHeartbeatCollector._safeNetworkSnapshotProvider (package:hydracam/services/fleet_heartbeat_service.dart:413:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:334:35)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:199:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:44.985585, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read package info: Bad state: package plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:189:11)
+#1      FleetHeartbeatCollector._safePackageInfoProvider (package:hydracam/services/fleet_heartbeat_service.dart:433:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:339:31)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:199:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:44.990364, function: null, file: null}
+00:00 +5: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+00:00 +5: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +5: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+Log registered: {message: FleetHeartbeatCollector: failed to read battery: Bad state: battery plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:239:11)
+#1      FleetHeartbeatCollector._safeNullableProvider (package:hydracam/services/fleet_heartbeat_service.dart:397:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:344:34)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:247:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:44.992023, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read free storage: Bad state: storage plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:242:11)
+#1      FleetHeartbeatCollector._safeNullableProvider (package:hydracam/services/fleet_heartbeat_service.dart:397:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:350:33)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:247:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:26:44.992185, function: null, file: null}
+00:00 +6: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/fleet_heartbeat_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart
+00:00 +0: FleetHeartbeatSnapshot builds ready lab-managed heartbeat payload
+00:00 +1: FleetHeartbeatSnapshot marks heartbeat blocked when network battery and storage are unsafe
+00:00 +2: FleetHeartbeatSnapshot uses stable network warning codes in heartbeat payload
+00:00 +3: FleetHeartbeatSnapshot uses unknown warnings for absent battery and storage readings
+00:00 +4: FleetHeartbeatCollector uses injected providers to collect one heartbeat
+00:00 +5: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Log registered: {message: FleetHeartbeatCollector: failed to read network snapshot: Bad state: network plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:215:11)
+#1      FleetHeartbeatCollector._safeNetworkSnapshotProvider (package:hydracam/services/fleet_heartbeat_service.dart:413:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:334:35)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:228:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:27:07.900233, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read package info: Bad state: package plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:218:11)
+#1      FleetHeartbeatCollector._safePackageInfoProvider (package:hydracam/services/fleet_heartbeat_service.dart:433:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:339:31)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:228:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:27:07.905657, function: null, file: null}
+00:00 +6: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+00:00 +6: FleetHeartbeatCollector returns degraded heartbeat when network and package providers fail
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +6: FleetHeartbeatCollector distinguishes failed battery and storage providers from unknown readings
+Log registered: {message: FleetHeartbeatCollector: failed to read battery: Bad state: battery plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:268:11)
+#1      FleetHeartbeatCollector._safeNullableProvider (package:hydracam/services/fleet_heartbeat_service.dart:397:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:344:34)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:276:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:27:07.908098, function: null, file: null}
+Log registered: {message: FleetHeartbeatCollector: failed to read free storage: Bad state: storage plugin unavailable
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:271:11)
+#1      FleetHeartbeatCollector._safeNullableProvider (package:hydracam/services/fleet_heartbeat_service.dart:397:28)
+#2      FleetHeartbeatCollector.collect (package:hydracam/services/fleet_heartbeat_service.dart:350:33)
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/fleet_heartbeat_service_test.dart:276:24)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:27:07.908434, function: null, file: null}
+00:00 +7: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 5.1s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

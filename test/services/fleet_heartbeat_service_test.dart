@@ -130,6 +130,35 @@ void main() {
       expect(snapshot.warnings, ["network:ssid-unavailable"]);
       expect(snapshot.toJson()["warnings"], ["network:ssid-unavailable"]);
     });
+
+    test("uses unknown warnings for absent battery and storage readings", () {
+      final snapshot = FleetHeartbeatSnapshot.build(
+        deviceId: "device-missing-readings",
+        labLabel: "HydraCam-S10e-04",
+        generatedAtUtc: DateTime.utc(2026, 6, 18, 16, 25),
+        appVersion: "1.4.0",
+        buildNumber: "16",
+        packageName: "com.amaia23.hydracam",
+        runtimeRole: "standby",
+        fleetMode: "lab-managed",
+        networkSnapshot: const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.44",
+          source: "test",
+        ),
+        batteryLevelPercent: null,
+        batteryState: null,
+        freeStorageGb: null,
+        isRecording: false,
+        uploadQueueDepth: 0,
+      );
+
+      expect(snapshot.health, FleetHeartbeatHealth.warning);
+      expect(snapshot.warnings, contains("battery:unknown"));
+      expect(snapshot.warnings, contains("storage:unknown"));
+      expect(snapshot.warnings, isNot(contains("battery:unavailable")));
+      expect(snapshot.warnings, isNot(contains("storage:unavailable")));
+    });
   });
 
   group("FleetHeartbeatCollector", () {
@@ -213,6 +242,50 @@ void main() {
       expect(snapshot.blockers, contains("network:wifi-disabled"));
       expect(snapshot.warnings, contains("network:unavailable"));
       expect(snapshot.warnings, contains("app:package-info-unavailable"));
+    });
+
+    test(
+        "distinguishes failed battery and storage providers from unknown readings",
+        () async {
+      final collector = FleetHeartbeatCollector(
+        deviceIdProvider: () async => "provider-failure-device",
+        deviceInfoProvider: () async => const {
+          "model": "SM-G970F",
+        },
+        networkSnapshotProvider: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.50.25",
+          ssid: "HydraCamLab",
+          subnetMask: "255.255.255.0",
+          source: "test",
+        ),
+        packageInfoProvider: () async => const FleetPackageDetails(
+          appVersion: "1.4.0",
+          buildNumber: "16",
+          packageName: "com.amaia23.hydracam",
+        ),
+        batteryReadingProvider: () async {
+          throw StateError("battery plugin unavailable");
+        },
+        freeStorageGbProvider: () async {
+          throw StateError("storage plugin unavailable");
+        },
+        clock: () => DateTime.utc(2026, 6, 18, 16, 25),
+      );
+
+      final snapshot = await collector.collect(
+        labLabel: "HydraCam-S10e-01",
+        runtimeRole: "standby",
+        fleetMode: "lab-managed",
+        isRecording: false,
+        uploadQueueDepth: 0,
+      );
+
+      expect(snapshot.health, FleetHeartbeatHealth.warning);
+      expect(snapshot.warnings, contains("battery:unavailable"));
+      expect(snapshot.warnings, contains("storage:unavailable"));
+      expect(snapshot.warnings, isNot(contains("battery:unknown")));
+      expect(snapshot.warnings, isNot(contains("storage:unknown")));
     });
   });
 }

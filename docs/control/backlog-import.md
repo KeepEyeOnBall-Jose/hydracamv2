@@ -569,6 +569,13 @@ Default issue schema:
   disconnected identify and preview labels, and stale-session capture filtering.
   Keep this issue open for real-device network smoke evidence and multi-group
   network UX.
+- 2026-06-18 fleet heartbeat provider-failure note:
+  `logs/verification-runs/20260618-1625-fleet-heartbeat-provider-failure-warnings/`
+  adds focused heartbeat coverage that distinguishes failed battery/storage
+  providers from successful-but-empty readings. Provider exceptions now emit
+  `battery:unavailable` and `storage:unavailable`, while absent values still use
+  the existing `battery:unknown` and `storage:unknown` warnings. Keep this issue
+  open for real-device network smoke evidence and multi-group network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 

@@ -171,7 +171,9 @@ class FleetHeartbeatSnapshot {
 
     final batteryLevel = batteryLevelPercent;
     if (batteryLevel == null) {
-      warnings.add("battery:unknown");
+      if (!warnings.contains("battery:unavailable")) {
+        warnings.add("battery:unknown");
+      }
     } else if (batteryLevel <= 10) {
       blockers.add("battery:critical");
     } else if (batteryLevel < 25) {
@@ -180,7 +182,9 @@ class FleetHeartbeatSnapshot {
 
     final storageGb = freeStorageGb;
     if (storageGb == null) {
-      warnings.add("storage:unknown");
+      if (!warnings.contains("storage:unavailable")) {
+        warnings.add("storage:unknown");
+      }
     } else if (storageGb < 0.5) {
       blockers.add("storage:critical");
     } else if (storageGb < 2.0) {
@@ -340,10 +344,14 @@ class FleetHeartbeatCollector {
     final batteryReading = await _safeNullableProvider(
       "FleetHeartbeatCollector: failed to read battery",
       _batteryReadingProvider,
+      additionalWarnings,
+      "battery:unavailable",
     );
     final freeStorageGb = await _safeNullableProvider(
       "FleetHeartbeatCollector: failed to read free storage",
       _freeStorageGbProvider,
+      additionalWarnings,
+      "storage:unavailable",
     );
 
     return FleetHeartbeatSnapshot.build(
@@ -382,11 +390,16 @@ class FleetHeartbeatCollector {
   static Future<T?> _safeNullableProvider<T>(
     String message,
     Future<T?> Function() provider,
+    List<String>? warnings,
+    String? failureWarning,
   ) async {
     try {
       return await provider();
     } catch (error, stackTrace) {
       LogService.instance.registerError(message, error, stackTrace);
+      if (failureWarning != null) {
+        warnings?.add(failureWarning);
+      }
       return null;
     }
   }
