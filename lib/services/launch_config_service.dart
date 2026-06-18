@@ -79,11 +79,11 @@ class LaunchConfigService {
       await clearSavedAutomationLaunchConfig();
 
       _cached = LaunchConfig(
-        role: platformResult["role"] as String?,
-        preferredMasterIp: platformResult["preferredMasterIp"] as String?,
-        targetId: platformResult["automationTargetId"] as String?,
-        forceSlaveMode: platformResult["forceSlaveMode"] as bool? ?? false,
-        isManualLaunch: platformResult["manualLaunch"] as bool? ?? false,
+        role: _optionalString(platformResult["role"]),
+        preferredMasterIp: _optionalString(platformResult["preferredMasterIp"]),
+        targetId: _optionalString(platformResult["automationTargetId"]),
+        forceSlaveMode: _optionalBool(platformResult["forceSlaveMode"]),
+        isManualLaunch: _optionalBool(platformResult["manualLaunch"]),
       );
       return _cached;
     }
@@ -157,5 +157,17 @@ class LaunchConfigService {
               "$_platformConfigAttempts attempts: $lastMissingPluginError");
     }
     return null;
+  }
+
+  String? _optionalString(Object? value) {
+    if (value is! String) {
+      return null;
+    }
+    final trimmedValue = value.trim();
+    return trimmedValue.isEmpty ? null : trimmedValue;
+  }
+
+  bool _optionalBool(Object? value) {
+    return value is bool && value;
   }
 }

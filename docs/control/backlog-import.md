@@ -152,6 +152,13 @@ Default issue schema:
   and passed `flutter analyze --no-pub` plus focused widget/app-shell tests.
   Keep this issue open only for the intended-team icon launch and at least one
   two-device iOS master/slave smoke run.
+- 2026-06-18 malformed-platform-launch-config note:
+  `logs/verification-runs/20260618-1743-launch-config-malformed-platform-values/`
+  hardens `LaunchConfigService` so non-string platform values from the native
+  launch-config map are ignored instead of crashing profile/runtime automation
+  startup, while valid boolean `manualLaunch` values still apply. This is a
+  local parser guard only; keep the issue open for the intended-team icon launch
+  and two-device iOS master/slave smoke run.
 
 ### 2. Preserve session state across master reconnect
 

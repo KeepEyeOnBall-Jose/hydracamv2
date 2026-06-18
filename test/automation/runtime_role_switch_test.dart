@@ -108,6 +108,28 @@ void main() {
     expect(config?.forceSlaveMode, isFalse);
   });
 
+  test("launch config ignores malformed platform value types", () async {
+    SharedPreferences.setMockInitialValues({});
+    final service = LaunchConfigService.forTesting(
+      automationEnabled: true,
+      platformConfigLoader: () async => {
+        "role": 42,
+        "preferredMasterIp": ["192.168.178.153"],
+        "automationTargetId": {"id": "s7"},
+        "forceSlaveMode": "true",
+        "manualLaunch": true,
+      },
+    );
+
+    final config = await service.load();
+
+    expect(config?.role, isNull);
+    expect(config?.preferredMasterIp, isNull);
+    expect(config?.targetId, isNull);
+    expect(config?.forceSlaveMode, isFalse);
+    expect(config?.isManualLaunch, isTrue);
+  });
+
   test("launch config clear removes cached automation role", () async {
     SharedPreferences.setMockInitialValues({});
     final service = LaunchConfigService.forTesting(

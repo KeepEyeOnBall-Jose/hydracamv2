@@ -1,0 +1,110 @@
+{
+  "acceptanceChecks": [
+    "Malformed non-string platform launch config values do not throw during load",
+    "Valid boolean manual launch values remain honored"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:35:42.623543+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/runtime_role_switch_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:35:42.720368+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/runtime_role_switch_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:35:59.184189+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/runtime_role_switch_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:36:18.256555+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:36:25.741222+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:36:46.138188+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:36:56.408964+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:36:59.679007+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:37:21.320927+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "launch-config-malformed-platform-values",
+    "source": "docs/control/backlog-import.md#1-validate-ios-releaseprofile-launch-and-capture-readiness",
+    "title": "Ignore malformed platform launch config values"
+  },
+  "notes": [
+    "Malformed platform launch-config value types now load without startup casts while valid manualLaunch booleans remain honored. Focused automation tests, automation suite, analyzer, diff check, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
