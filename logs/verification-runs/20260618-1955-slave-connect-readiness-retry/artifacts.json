@@ -1,0 +1,72 @@
+{
+  "acceptanceChecks": [
+    "Regression test proves a transient readiness failure does not wedge slave discovery reconnect attempts."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "--name",
+        "discovery retries after transient readiness failure"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:56:37.608025+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "--name",
+        "discovery retries after transient readiness failure"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:57:04.859943+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave/slave_screen_fast_connect_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:57:15.127102+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:57:18.920421+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/slave"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:57:37.541168+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-connect-readiness-retry",
+    "source": "docs/control/backlog-import.md#network-device-identity",
+    "title": "Slave connect readiness retry"
+  },
+  "notes": [
+    "Red-to-green regression covered transient readiness failure during slave discovery connect; targeted test, fast-connect widget suite, slave test suite, and analyzer passed. Hardware smoke skipped because no mobile devices are currently attached/responsive."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

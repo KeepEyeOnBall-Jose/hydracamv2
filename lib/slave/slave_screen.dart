@@ -316,7 +316,24 @@ class SlaveScreenState extends State<SlaveScreen> {
     _isConnectingToMaster = true;
     _connectingMasterIp = masterIp;
     if (!skipNetworkReadiness) {
-      final readiness = await _loadNetworkReadiness();
+      late final NetworkReadinessResult readiness;
+      try {
+        readiness = await _loadNetworkReadiness();
+      } catch (error, stackTrace) {
+        _isConnectingToMaster = false;
+        _connectingMasterIp = null;
+        LogService.instance.registerError(
+          "Connection to master at IP $masterIp failed during network readiness",
+          error,
+          stackTrace,
+        );
+        if (mounted && !_isConnected) {
+          setState(() {
+            statusMessage = "Unable to check Wi-Fi readiness: $error";
+          });
+        }
+        return;
+      }
       _networkReadiness = readiness;
       if (!readiness.canUseLocalControl) {
         _isConnectingToMaster = false;

@@ -512,6 +512,74 @@ void main() {
     }
   });
 
+  testWidgets("discovery retries after transient readiness failure",
+      (tester) async {
+    late FakeMasterDiscovery discovery;
+    final clients = <FakeSlaveConnectionClient>[];
+    var failNextReadinessCheck = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          connectivityChanges: const Stream<List<ConnectivityResult>>.empty(),
+          masterDiscoveryFactory: (onMasterDiscovered) {
+            discovery = FakeMasterDiscovery(onMasterDiscovered);
+            return discovery;
+          },
+          networkReadinessLoader: () async {
+            if (failNextReadinessCheck) {
+              failNextReadinessCheck = false;
+              throw const SocketException("transient route lookup failure");
+            }
+            return const NetworkReadinessResult(
+              canUseLocalControl: true,
+              blockingReason: NetworkReadinessBlockingReason.none,
+              message: "network ready",
+              snapshot: NetworkSnapshot(
+                isWifiActive: true,
+                ipAddress: "192.168.178.72",
+                subnetMask: "255.255.255.0",
+                source: "test",
+              ),
+            );
+          },
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    failNextReadinessCheck = true;
+    discovery.discover("192.168.178.153");
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(clients, isEmpty);
+
+    discovery.discover("192.168.178.153");
+    await tester.pump();
+
+    expect(clients, hasLength(1));
+    expect(clients.single.serverAddress, "ws://192.168.178.153:4040/ws");
+    expect(clients.single.connected, isTrue);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
   testWidgets(
       "auto-mode slave with active session does not promote on discovery timeout",
       (tester) async {
