@@ -425,6 +425,7 @@ class MasterServer {
   /// Camera service is used for capturing media directly on the master device
   final CameraService cameraService;
   late final SessionMediaStorage _sessionMediaStorage;
+  final DateTime Function() _now;
 
   /// Optional constructor for MasterServer. Probably will be deleted
   ///
@@ -434,7 +435,8 @@ class MasterServer {
     MasterNetworkSnapshotCache? masterNetworkSnapshotCache,
     SessionMediaStorage? sessionMediaStorage,
     MasterSocketBinder? bindMasterSocket,
-  }) {
+    @visibleForTesting DateTime Function()? now,
+  }) : _now = now ?? DateTime.now {
     _sessionMediaStorage = sessionMediaStorage ?? SessionMediaStorage();
     _bindMasterSocket = bindMasterSocket ?? MasterServer.bindMasterSocket;
     _masterNetworkSnapshotCache = masterNetworkSnapshotCache ??
@@ -543,7 +545,7 @@ class MasterServer {
   }) async {
     // Capture the master receive time as early as possible so the round-trip
     // estimate is not polluted by decode/dispatch latency.
-    final t1 = DateTime.now().toUtc();
+    final t1 = _now().toUtc();
     var deviceId = currentDeviceId;
     try {
       final decodedData = jsonDecode(data as String);
@@ -774,7 +776,7 @@ class MasterServer {
       "id": decodedData["id"],
       "t0": decodedData["t0"],
       "t1": t1.toIso8601String(),
-      "t2": DateTime.now().toUtc().toIso8601String(),
+      "t2": _now().toUtc().toIso8601String(),
     });
     socket.add(response);
   }

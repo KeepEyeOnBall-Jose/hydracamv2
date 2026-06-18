@@ -11,6 +11,8 @@ import "../test_utils/mock_services.dart";
 class MockWebSocket extends Mock implements WebSocket {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test("master answers a timeSyncRequest with echoed id/t0 and its t1/t2",
       () async {
     final server = MasterServer(MockCameraService());
@@ -42,5 +44,38 @@ void main() {
     expect(t1.isBefore(before), isFalse);
     expect(t2.isAfter(after), isFalse);
     expect(t2.isBefore(t1), isFalse);
+  });
+
+  test("master timeSyncResponse uses the injected master clock", () async {
+    final clockStamps = <DateTime>[
+      DateTime.utc(2026, 6, 18, 15, 30, 0, 123),
+      DateTime.utc(2026, 6, 18, 15, 30, 0, 456),
+    ];
+    final server = MasterServer(
+      MockCameraService(),
+      now: () => clockStamps.removeAt(0),
+    );
+    final socket = MockWebSocket();
+
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "timeSyncRequest",
+        "deviceId": "slave-deterministic",
+        "id": "7:2",
+        "t0": "2026-06-18T15:29:59.900Z",
+      }),
+      socket: socket,
+    );
+
+    final sent =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    final decoded = jsonDecode(sent) as Map<String, dynamic>;
+
+    expect(decoded["type"], "timeSyncResponse");
+    expect(decoded["id"], "7:2");
+    expect(decoded["t0"], "2026-06-18T15:29:59.900Z");
+    expect(decoded["t1"], "2026-06-18T15:30:00.123Z");
+    expect(decoded["t2"], "2026-06-18T15:30:00.456Z");
+    expect(clockStamps, isEmpty);
   });
 }

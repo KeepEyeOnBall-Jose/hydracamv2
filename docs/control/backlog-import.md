@@ -590,6 +590,13 @@ Default issue schema:
   replacement callback runs. Focused scheduler coverage first reproduced the
   hanging stale future, then passed with the unified replacement path. Keep this
   issue open for real-device offset estimation and capture start-skew evidence.
+- 2026-06-18 master time-sync clock injection note:
+  `logs/verification-runs/20260618-1453-master-time-sync-clock-injection/`
+  injects the master clock used for `timeSyncResponse` receive/send timestamps,
+  adds deterministic `t1`/`t2` coverage for the master response path, and reruns
+  focused master/slave/scheduler/integration time-sync tests plus full analyzer
+  and full Flutter tests. Keep this issue open for real-device offset
+  estimation and capture start-skew evidence.
 
 ### 8. Implement auto-record mode
 
