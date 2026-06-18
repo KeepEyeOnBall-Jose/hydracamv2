@@ -269,6 +269,56 @@ void main() {
     expect(photoFile.existsSync(), isFalse);
   });
 
+  test("failed backend upload stores backend response detail on media",
+      () async {
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "backend-failure-detail-guid",
+        sessionId: "backend-failure-detail-session",
+      ),
+      deviceType: "Master",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([
+            utf8.encode(
+              jsonEncode({
+                "success": false,
+                "message": "Rejected corrupt media",
+              }),
+            ),
+          ]),
+          200,
+        );
+      }),
+    );
+    final photoFile = File("${tempDir.path}/backend-failure-detail.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "backend-failure-device",
+      captureDate: DateTime(2026, 6, 18, 16, 30),
+      receivedDate: DateTime(2026, 6, 18, 16, 30, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    await uploaderService.startUploadingManually();
+
+    const expectedFailure =
+        'Upload failed: HTTP 200 backend response reported failure - {"success":false,"message":"Rejected corrupt media"}';
+    expect(photo.isUploaded, isFalse);
+    expect(photo.uploadFailureReason, expectedFailure);
+    expect(
+      await _readPersistedPhotoFailureReason(
+        documentsDir: pathProvider.documentsDir,
+        sessionGuid: "backend-failure-detail-guid",
+      ),
+      expectedFailure,
+    );
+  });
+
   test("cancelQueuedMedia removes a pending item without touching others",
       () async {
     final firstFile = File("${tempDir.path}/first.jpg")

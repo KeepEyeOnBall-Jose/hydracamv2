@@ -224,6 +224,7 @@ class UploaderService {
     media.uploadStartTime = _now();
 
     bool success = false;
+    String? uploadFailureReason;
 
     // Get session GUID
     final String? sessionGuid = SessionManager.instance.sessionGuid;
@@ -292,6 +293,9 @@ class UploaderService {
         (progress) {
           uploadProgressNotifier.value = progress; // Notify progress
         },
+        onFailureReason: (reason) {
+          uploadFailureReason = reason;
+        },
       );
     } else if (media is CapturedVideo) {
       slaveDeviceId = media.slaveDeviceId;
@@ -310,6 +314,9 @@ class UploaderService {
         recordingEndDate: media.endRecordingDate,
         recordingDuration:
             media.endRecordingDate.difference(media.startRecordingDate),
+        onFailureReason: (reason) {
+          uploadFailureReason = reason;
+        },
       );
     }
 
@@ -340,7 +347,7 @@ class UploaderService {
       await SessionManager.instance.deleteFileIfAllowed(media.mediaPath);
     } else {
       media.isUploaded = false;
-      media.uploadFailureReason =
+      media.uploadFailureReason = uploadFailureReason ??
           "Upload failed; check logs for webservice response.";
       LogService.instance
           .registerLog("Failed to upload media: ${media.mediaPath}");

@@ -428,6 +428,13 @@ Default issue schema:
   is ignored. `UploaderService.reset()` remains a hard stop and clears the
   resume marker. Keep production closure gated on a real-device plus
   live-backend upload smoke run.
+- 2026-06-18 backend failure detail note:
+  `logs/verification-runs/20260618-1630-uploader-backend-failure-reason-detail/`
+  adds red/green coverage for backend-reported upload failures. The upload API
+  now reports a bounded failure reason to `UploaderService`, which stores it on
+  the failed media and current session metadata instead of replacing the backend
+  detail with the generic check-logs message. Keep production closure gated on a
+  real-device plus live-backend upload smoke run.
 
 ### 5. Add critical battery autostop
 

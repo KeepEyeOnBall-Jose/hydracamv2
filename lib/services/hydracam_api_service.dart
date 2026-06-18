@@ -520,18 +520,25 @@ class HydraCamApiService {
     Function(double)? onProgress, {
     DateTime? recordingEndDate,
     Duration? recordingDuration,
+    Function(String)? onFailureReason,
   }) async {
     try {
       if (!file.existsSync()) {
-        LogService.instance
-            .registerLog("Upload file does not exist: ${file.path}");
-        return false;
+        return _failUpload(
+          "Upload file does not exist: ${file.path}",
+          onFailureReason: onFailureReason,
+          mediaFailureReason:
+              "Upload failed: file does not exist: ${file.path}",
+        );
       }
 
       final fileLength = await file.length();
       if (fileLength == 0) {
-        LogService.instance.registerLog("Upload file is empty: ${file.path}");
-        return false;
+        return _failUpload(
+          "Upload file is empty: ${file.path}",
+          onFailureReason: onFailureReason,
+          mediaFailureReason: "Upload failed: file is empty: ${file.path}",
+        );
       }
 
       final validationFailure = await _uploadMediaValidationFailure(
@@ -539,8 +546,11 @@ class HydraCamApiService {
         isPhoto: isPhoto,
       );
       if (validationFailure != null) {
-        LogService.instance.registerLog(validationFailure);
-        return false;
+        return _failUpload(
+          validationFailure,
+          onFailureReason: onFailureReason,
+          mediaFailureReason: "Upload failed: $validationFailure",
+        );
       }
 
       final Duration? effectiveVideoDuration;
@@ -551,9 +561,13 @@ class HydraCamApiService {
             recordingEndDate?.difference(captureDate) ?? recordingDuration;
         if (effectiveVideoDuration != null &&
             effectiveVideoDuration.isNegative) {
-          LogService.instance.registerLog(
-              "Upload video duration is invalid: recordingEndDate is before captureDate for ${file.path}");
-          return false;
+          final failureReason =
+              "Upload video duration is invalid: recordingEndDate is before captureDate for ${file.path}";
+          return _failUpload(
+            failureReason,
+            onFailureReason: onFailureReason,
+            mediaFailureReason: "Upload failed: $failureReason",
+          );
         }
       }
 
@@ -617,21 +631,42 @@ class HydraCamApiService {
       if (response.statusCode ==
           HydraCamUploadMediaContract.successStatusCode) {
         if (_uploadResponseReportsFailure(response.body)) {
-          LogService.instance.registerLog(
-              "Failed to upload media: HTTP ${response.statusCode} backend response reported failure - ${_uploadFailureResponseBodySnippet(response.body)}");
-          return false;
+          final failureReason =
+              "HTTP ${response.statusCode} backend response reported failure - ${_uploadFailureResponseBodySnippet(response.body)}";
+          return _failUpload(
+            "Failed to upload media: $failureReason",
+            onFailureReason: onFailureReason,
+            mediaFailureReason: "Upload failed: $failureReason",
+          );
         }
         LogService.instance.registerLog("Media uploaded successfully");
         return true;
       } else {
-        LogService.instance.registerLog(
-            "Failed to upload media: HTTP ${response.statusCode} - ${_uploadFailureResponseBodySnippet(response.body)}");
-        return false;
+        final failureReason =
+            "HTTP ${response.statusCode} - ${_uploadFailureResponseBodySnippet(response.body)}";
+        return _failUpload(
+          "Failed to upload media: $failureReason",
+          onFailureReason: onFailureReason,
+          mediaFailureReason: "Upload failed: $failureReason",
+        );
       }
     } catch (e) {
-      LogService.instance.registerLog("Error uploading media: $e");
-      return false;
+      return _failUpload(
+        "Error uploading media: $e",
+        onFailureReason: onFailureReason,
+        mediaFailureReason: "Upload failed: $e",
+      );
     }
+  }
+
+  bool _failUpload(
+    String logMessage, {
+    Function(String)? onFailureReason,
+    String? mediaFailureReason,
+  }) {
+    LogService.instance.registerLog(logMessage);
+    onFailureReason?.call(mediaFailureReason ?? logMessage);
+    return false;
   }
 
   Future<String?> _uploadMediaValidationFailure({

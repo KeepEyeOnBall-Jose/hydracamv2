@@ -1,0 +1,103 @@
+{
+  "acceptanceChecks": [
+    "UploaderService stores a bounded backend upload failure reason on failed media",
+    "Focused uploader and API service tests pass after the failure-detail propagation"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:30:08.972795+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:30:18.913979+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T14:31:03.330150+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:32:03.583099+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:32:13.188538+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:32:31.114247+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:32:37.446274+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:33:05.091779+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "uploader-backend-failure-reason-detail",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Propagate upload backend failure details into media state"
+  },
+  "notes": [
+    "UploaderService now persists bounded backend upload failure details on failed media."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
