@@ -1012,13 +1012,14 @@ pulled into active mobile work:
   `flutter test` now passes with `284` tests and `1` skipped. The follow-up
   also replaced the default pubspec description, removed Android release
   debug-signing fallback, added `url_launcher` for the pre-login account
-  privacy/support/deletion URL handoff, pins `url_launcher_android` to `6.3.23`
-  for the current AGP `8.7.3` release stack, and added preflight checks for
-  preserved app IDs, fastlane Appfile targets, Android SDK floor, Android
-  target/compile SDK policy, Login screen privacy/support/account-deletion
-  paths and Dart defines, configured upload
-  keystore, AAB signer fingerprint, `url_launcher_android` pin,
-  app-specific Auth0 redirect schemes, and HydraCam-branded web metadata. The
+  privacy/support/deletion URL handoff, declared `url_launcher_android`
+  `^6.3.32` for the current AGP `8.11.1` release stack, and added preflight
+  checks for preserved app IDs, fastlane Appfile targets, Android SDK floor,
+  Android target/compile SDK policy, Login screen
+  privacy/support/account-deletion paths and Dart defines, configured upload
+  keystore, AAB signer fingerprint, AGP-aware `url_launcher_android`
+  compatibility, app-specific Auth0 redirect schemes, and HydraCam-branded web
+  metadata. The
   current code/manifest path uses `com.keepeyeonball://login-callback` on iOS
   and the Gradle `appAuthRedirectScheme` placeholder resolves to
   `com.amaia23.hydracam://login-callback` on Android, replacing the old generic
@@ -1050,14 +1051,13 @@ pulled into active mobile work:
   `vectorblanco@gmail.com`, request/upload-key reset with the recorded
   certificate fingerprint, or create the organization developer profile and
   register `com.amaia23.hydracam`.
-- Android toolchain future-compatibility is a known follow-up, not a current
-  beta artifact blocker: Flutter 3.44 warns that Gradle `8.10.2`, Android
-  Gradle Plugin `8.7.3`, Kotlin `2.1.0`, and legacy Kotlin Gradle Plugin usage
-  will be unsupported in future Flutter releases. A 2026-06-09 direct bump to
-  Gradle `8.14.5`, AGP `8.11.1`, and Kotlin `2.2.20` was tested but did not
-  finish the release AAB build in the validation window; it was terminated after
-  `652.2s` with exit `143`, so the repo is intentionally kept on the last
-  proven Android store-build stack for the beta-first path.
+- Android toolchain future-compatibility is no longer a source-update blocker:
+  the tracked Android toolchain is now Gradle `8.14.5`, Android Gradle Plugin
+  `8.11.1`, Kotlin `2.2.20`, and the settings-based Flutter Gradle plugin
+  loader. The remaining release concern is artifact proof after the toolchain
+  bump: rebuild the signed Android AAB and rerun
+  `scripts/check_store_readiness.sh local` before treating the current Android
+  source as beta-upload ready.
 - iOS local signing/build is no longer the primary blocker: current evidence
   proves the Keepeyeonball team, bundle, App Store IPA export, and recovered
   physical iPhone+iPad Profile automation lane. Remaining iOS store work is

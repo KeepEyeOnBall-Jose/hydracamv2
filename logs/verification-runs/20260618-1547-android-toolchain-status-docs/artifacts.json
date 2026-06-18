@@ -1,0 +1,69 @@
+{
+  "acceptanceChecks": [
+    "Status docs reflect current tracked Android Gradle, AGP, Kotlin, and url_launcher_android versions",
+    "No stale wording claims the dependency upgrade is unfinished when tracked files show it landed"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:47:25.230239+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:48:25.438705+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "Gradle |Android Gradle Plugin|Kotlin |url_launcher_android",
+        "docs/control/status-and-roadmap.md",
+        "pubspec.yaml",
+        "android/settings.gradle",
+        "android/gradle/wrapper/gradle-wrapper.properties"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:48:25.459353+00:00"
+    },
+    {
+      "command": [
+        "rg",
+        "-n",
+        "8\\.14\\.5|8\\.11\\.1|2\\.2\\.20|url_launcher_android",
+        "docs/control/status-and-roadmap.md",
+        "pubspec.yaml",
+        "android/settings.gradle",
+        "android/gradle/wrapper/gradle-wrapper.properties"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:48:36.450105+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "android-toolchain-status-docs",
+    "source": "docs/control/status-and-roadmap.md#android-toolchain-status",
+    "title": "Reconcile Android toolchain status docs"
+  },
+  "notes": [
+    "Docs now reflect the tracked Android Gradle 8.14.5, AGP 8.11.1, Kotlin 2.2.20, and url_launcher_android ^6.3.32 state."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1,0 +1,59 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1547-android-toolchain-status-docs/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ rg -n Gradle |Android Gradle Plugin|Kotlin |url_launcher_android docs/control/status-and-roadmap.md pubspec.yaml android/settings.gradle android/gradle/wrapper/gradle-wrapper.properties
+pubspec.yaml:50:  # gallery_saver: ^2.3.2  # Removed - incompatible with current Android Gradle plugin, use photo_manager instead
+pubspec.yaml:61:  # battery_info: ^1.1.1  # Removed - incompatible with current Android Gradle plugin
+pubspec.yaml:69:  # url_launcher_android 6.3.29+ pulls AndroidX Core 1.17/Browser 1.9, so keep
+pubspec.yaml:71:  url_launcher_android: ^6.3.32
+docs/control/status-and-roadmap.md:1015:  privacy/support/deletion URL handoff, declared `url_launcher_android`
+docs/control/status-and-roadmap.md:1020:  keystore, AAB signer fingerprint, AGP-aware `url_launcher_android`
+docs/control/status-and-roadmap.md:1024:  and the Gradle `appAuthRedirectScheme` placeholder resolves to
+docs/control/status-and-roadmap.md:1055:  the tracked Android toolchain is now Gradle `8.14.5`, Android Gradle Plugin
+docs/control/status-and-roadmap.md:1056:  `8.11.1`, Kotlin `2.2.20`, and the settings-based Flutter Gradle plugin
+[exit-code] 0
+
+$ rg -n 8\.14\.5|8\.11\.1|2\.2\.20|url_launcher_android docs/control/status-and-roadmap.md pubspec.yaml android/settings.gradle android/gradle/wrapper/gradle-wrapper.properties
+android/gradle/wrapper/gradle-wrapper.properties:3:distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.5-all.zip
+pubspec.yaml:69:  # url_launcher_android 6.3.29+ pulls AndroidX Core 1.17/Browser 1.9, so keep
+pubspec.yaml:71:  url_launcher_android: ^6.3.32
+android/settings.gradle:21:    id "com.android.application" version "8.11.1" apply false
+android/settings.gradle:22:    id "org.jetbrains.kotlin.android" version "2.2.20" apply false
+docs/control/status-and-roadmap.md:1015:  privacy/support/deletion URL handoff, declared `url_launcher_android`
+docs/control/status-and-roadmap.md:1016:  `^6.3.32` for the current AGP `8.11.1` release stack, and added preflight
+docs/control/status-and-roadmap.md:1020:  keystore, AAB signer fingerprint, AGP-aware `url_launcher_android`
+docs/control/status-and-roadmap.md:1055:  the tracked Android toolchain is now Gradle `8.14.5`, Android Gradle Plugin
+docs/control/status-and-roadmap.md:1056:  `8.11.1`, Kotlin `2.2.20`, and the settings-based Flutter Gradle plugin
+[exit-code] 0
