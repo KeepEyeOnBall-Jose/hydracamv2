@@ -20,6 +20,7 @@ class UploaderService {
   final Queue<dynamic> _completedUploadSamples = Queue();
   bool _isUploading = false;
   int _uploadGeneration = 0;
+  int? _resumeQueueAfterCancelledUploadGeneration;
   DateTime Function() _now = DateTime.now;
   Future<void>? _activeUploadDrain;
 
@@ -176,10 +177,13 @@ class UploaderService {
     }
 
     final wasUploading = _isUploading;
+    final cancelledUploadGeneration = _uploadGeneration;
     if (wasUploading) {
       _apiService.cancelInFlightRequests();
     }
     _uploadGeneration += 1;
+    _resumeQueueAfterCancelledUploadGeneration =
+        _uploadQueue.isEmpty ? null : cancelledUploadGeneration;
     _isUploading = false;
     currentlyUploadingNotifier.value = null;
     uploadProgressNotifier.value = 0.0;
@@ -312,6 +316,12 @@ class UploaderService {
     if (uploadGeneration != _uploadGeneration) {
       LogService.instance.registerLog(
           "Ignoring stale upload completion after uploader reset or cancellation: ${media.mediaPath}");
+      if (_resumeQueueAfterCancelledUploadGeneration == uploadGeneration) {
+        _resumeQueueAfterCancelledUploadGeneration = null;
+        if (!_isUploading && _uploadQueue.isNotEmpty) {
+          await _processNextItem();
+        }
+      }
       return;
     }
 
@@ -460,6 +470,7 @@ class UploaderService {
     final hadActiveUpload =
         _isUploading || currentlyUploadingNotifier.value != null;
     _uploadGeneration += 1;
+    _resumeQueueAfterCancelledUploadGeneration = null;
     if (hadActiveUpload) {
       _apiService.cancelInFlightRequests();
     }

@@ -654,6 +654,79 @@ void main() {
     expect(uploaderService.isUploading, isFalse);
   });
 
+  test("cancelCurrentUpload continues draining queued media", () async {
+    final releaseFirstUpload = Completer<void>();
+    final firstRequestStarted = Completer<void>();
+    var resumedRequestCount = 0;
+    var requestCount = 0;
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requestCount += 1;
+        if (requestCount == 1) {
+          if (!firstRequestStarted.isCompleted) {
+            firstRequestStarted.complete();
+          }
+          await releaseFirstUpload.future;
+        }
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    SessionManager.instance.startSession(
+      "cancel-drain-session-guid",
+      "cancel-drain-session",
+      deviceType: "Master",
+    );
+    final cancelledFile = File("${tempDir.path}/cancel-drain-first.jpg")
+      ..writeAsBytesSync(_validJpegBytes(fill: 1));
+    final queuedFile = File("${tempDir.path}/cancel-drain-second.jpg")
+      ..writeAsBytesSync(_validJpegBytes(fill: 2));
+    final cancelledPhoto = CapturedPhoto(
+      photoPath: cancelledFile.path,
+      slaveDeviceId: "cancel-drain-first",
+      captureDate: DateTime(2026, 6, 18, 15, 8),
+      receivedDate: DateTime(2026, 6, 18, 15, 8, 1),
+    );
+    final queuedPhoto = CapturedPhoto(
+      photoPath: queuedFile.path,
+      slaveDeviceId: "cancel-drain-second",
+      captureDate: DateTime(2026, 6, 18, 15, 9),
+      receivedDate: DateTime(2026, 6, 18, 15, 9, 1),
+    );
+
+    await uploaderService.addMediaToQueue(cancelledPhoto);
+    await uploaderService.addMediaToQueue(queuedPhoto);
+    final uploadFuture = uploaderService.startUploadingManually();
+    await firstRequestStarted.future.timeout(const Duration(seconds: 1));
+
+    expect(await uploaderService.cancelCurrentUpload(), isTrue);
+
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        resumedRequestCount += 1;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+    releaseFirstUpload.complete();
+    await uploadFuture;
+
+    expect(cancelledPhoto.isUploaded, isFalse);
+    expect(cancelledPhoto.uploadFailureReason, "Upload cancelled.");
+    expect(queuedPhoto.isUploaded, isTrue);
+    expect(queuedPhoto.uploadFailureReason, isNull);
+    expect(uploaderService.queueLength, 0);
+    expect(uploaderService.isUploading, isFalse);
+    expect(resumedRequestCount, 1);
+  });
+
   test("reset closes the active HTTP client", () async {
     final releaseResponse = Completer<void>();
     final client = _CloseTrackingClient(releaseResponse: releaseResponse);

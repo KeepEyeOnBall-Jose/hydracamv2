@@ -412,6 +412,14 @@ Default issue schema:
   session end, so retryable cancellation state survives screen changes and
   restore paths. Keep production closure gated on a real-device upload smoke
   run.
+- 2026-06-18 cancel-resumes-queue note:
+  `logs/verification-runs/20260618-1447-uploader-cancel-resumes-queue/`
+  adds a regression for a manual upload drain with two queued media items:
+  cancelling the active upload now leaves the cancelled item retryable and
+  continues uploading the remaining queued item after the stale HTTP completion
+  is ignored. `UploaderService.reset()` remains a hard stop and clears the
+  resume marker. Keep production closure gated on a real-device plus
+  live-backend upload smoke run.
 
 ### 5. Add critical battery autostop
 
