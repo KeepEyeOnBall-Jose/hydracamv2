@@ -435,6 +435,14 @@ Default issue schema:
   the failed media and current session metadata instead of replacing the backend
   detail with the generic check-logs message. Keep production closure gated on a
   real-device plus live-backend upload smoke run.
+- 2026-06-18 retry-clears-failure metadata note:
+  `logs/verification-runs/20260618-1655-uploader-requeue-clears-failure-metadata/`
+  adds red/green coverage for retrying a queued media item after cancellation.
+  `UploaderService.addMediaToQueue()` now persists the cleared
+  `uploadFailureReason` before leaving the item pending or starting auto-upload,
+  so restored metadata no longer reports `Upload cancelled.` for media that has
+  been requeued. Keep production closure gated on a real-device plus
+  live-backend upload smoke run.
 
 ### 5. Add critical battery autostop
 

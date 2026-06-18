@@ -380,6 +380,46 @@ void main() {
     expect(failureReason, "Upload cancelled.");
   });
 
+  test("addMediaToQueue persists cleared failure reason when retrying",
+      () async {
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "retry-clear-failure-guid",
+        sessionId: "retry-clear-failure-session",
+      ),
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/retry-clear-failure.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "retry-clear-failure-device",
+      captureDate: DateTime(2026, 6, 18, 16, 55),
+      receivedDate: DateTime(2026, 6, 18, 16, 55, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    expect(await uploaderService.cancelQueuedMedia(photo), isTrue);
+    expect(
+      await _readPersistedPhotoFailureReason(
+        documentsDir: pathProvider.documentsDir,
+        sessionGuid: "retry-clear-failure-guid",
+      ),
+      "Upload cancelled.",
+    );
+
+    await uploaderService.addMediaToQueue(photo);
+
+    expect(uploaderService.queueLength, 1);
+    expect(photo.uploadFailureReason, isNull);
+    final photoMetadata = await _readPersistedSinglePhotoMetadata(
+      documentsDir: pathProvider.documentsDir,
+      sessionGuid: "retry-clear-failure-guid",
+    );
+    expect(photoMetadata, isNotNull);
+    expect(photoMetadata!.containsKey("uploadFailureReason"), isFalse);
+  });
+
   test("addMediaToQueue ignores retry for media already uploading", () async {
     final photoFile = File("${tempDir.path}/currently-uploading.jpg")
       ..writeAsBytesSync(_validJpegBytes());
@@ -858,6 +898,32 @@ Future<String?> _readPersistedPhotoFailureReason({
     await Future<void>.delayed(const Duration(milliseconds: 10));
   }
   return lastFailureReason;
+}
+
+Future<Map<String, dynamic>?> _readPersistedSinglePhotoMetadata({
+  required Directory documentsDir,
+  required String sessionGuid,
+}) async {
+  final metadataFile = File(
+    "${documentsDir.path}/session_$sessionGuid/metadata.json",
+  );
+  final deadline = DateTime.now().add(const Duration(milliseconds: 500));
+  Map<String, dynamic>? lastPhoto;
+  while (DateTime.now().isBefore(deadline)) {
+    if (metadataFile.existsSync()) {
+      final metadata =
+          jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
+      final photos = metadata["photos"] as List<dynamic>? ?? const [];
+      if (photos.isNotEmpty) {
+        lastPhoto = (photos.single as Map).map(
+          (key, value) => MapEntry(key.toString(), value),
+        );
+        return lastPhoto;
+      }
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
+  return lastPhoto;
 }
 
 class _CloseTrackingClient extends http.BaseClient {

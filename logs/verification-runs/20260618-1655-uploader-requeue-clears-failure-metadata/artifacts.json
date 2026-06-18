@@ -1,0 +1,111 @@
+{
+  "acceptanceChecks": [
+    "Retrying a failed or cancelled media item clears uploadFailureReason in persisted metadata",
+    "Requeued media remains pending and auto-upload disabled behavior stays unchanged"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:56:05.755706+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:56:05.852770+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T14:57:05.545247+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:57:52.910982+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/uploader_service_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:58:13.510640+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:58:15.593542+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:58:21.169810+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:58:28.812913+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:58:59.918751+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "uploader-requeue-clears-failure-metadata",
+    "source": "docs/control/backlog-import.md#4-improve-upload-failure-cancel-requeue-and-progress-ui",
+    "title": "Persist cleared upload failure reason when requeueing media"
+  },
+  "notes": [
+    "Retrying cancelled media persists the cleared uploadFailureReason before pending or auto-upload state continues."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

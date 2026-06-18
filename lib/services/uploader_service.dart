@@ -81,9 +81,15 @@ class UploaderService {
       }
 
       // Add media to queue
+      final clearedFailureReason = media.uploadFailureReason != null;
       media.uploadFailureReason = null;
       _uploadQueue.add(media);
       estimatedTimeNotifier.value = estimateTotalTimeRemaining();
+      if (clearedFailureReason) {
+        await _persistUploadStateNow();
+        // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+        SessionManager.instance.notifyListeners();
+      }
       LogService.instance
           .registerLog("Media added to upload queue: ${media.mediaPath}");
 
