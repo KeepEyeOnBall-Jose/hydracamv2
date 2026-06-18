@@ -279,6 +279,40 @@ void main() {
     expect(authService.email, "restored@example.com");
   });
 
+  test("Auth0 startup restore ignores non-string optional picture claim",
+      () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "stored-access-token",
+        idToken: _idTokenFromPayload({
+          "email": "restored@example.com",
+          "picture": 123,
+        }),
+        refreshToken: "stored-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: _FakeAuthClient(
+        response: const AuthLoginResponse(
+          accessToken: null,
+          idToken: null,
+          refreshToken: null,
+          accessTokenExpiresAt: null,
+        ),
+      ),
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isTrue);
+    expect(credentialStore.clearCalls, 0);
+    expect(authService.accessToken, "stored-access-token");
+    expect(authService.email, "restored@example.com");
+    expect(authService.profilePicture, isNull);
+  });
+
   test("Auth0 startup restore refreshes expired credentials", () async {
     final refreshedExpiresAt = DateTime.now().add(const Duration(hours: 2));
     final credentialStore = _RecordingAuthCredentialStore(
@@ -784,6 +818,14 @@ String _idTokenWithoutEmail({required String picture}) {
   return [
     "eyJhbGciOiJub25lIn0",
     _base64UrlNoPadding('{"picture":"$picture"}'),
+    "signature",
+  ].join(".");
+}
+
+String _idTokenFromPayload(Map<String, Object?> payload) {
+  return [
+    "eyJhbGciOiJub25lIn0",
+    _base64UrlNoPadding(jsonEncode(payload)),
     "signature",
   ].join(".");
 }

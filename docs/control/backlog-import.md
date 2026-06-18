@@ -1023,6 +1023,14 @@ Default issue schema:
   and non-blocking backend warm-up. Keep this issue open for Android plus iOS
   mobile smoke evidence, Android process-death validation, and account-switch
   validation.
+- 2026-06-18 non-string picture claim note:
+  `logs/verification-runs/20260618-1700-auth0-restore-nonstring-picture-claim/`
+  adds red/green coverage for stored Auth0 credentials whose ID token has a
+  valid email but a non-string optional `picture` claim. Startup restore now
+  accepts the credentials, exposes the normalized email, leaves profile picture
+  null, and does not clear the secure credential store. Keep this issue open
+  for Android plus iOS mobile smoke evidence, Android process-death validation,
+  and account-switch validation.
 
 ### 12. Decide and implement Android-native account-picker sign-in
 

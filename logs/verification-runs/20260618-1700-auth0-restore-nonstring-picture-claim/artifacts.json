@@ -1,0 +1,111 @@
+{
+  "acceptanceChecks": [
+    "Stored credentials with a valid email and non-string optional picture restore without throwing",
+    "Profile picture is null when the ID token picture claim is not a string"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:00:21.176921+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:00:21.273362+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:01:09.454973+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:01:30.915893+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart",
+        "test/services/user_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:02:15.211409+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:02:18.261441+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:02:24.935212+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:02:34.399506+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:03:22.720440+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "auth0-restore-nonstring-picture-claim",
+    "source": "docs/control/backlog-import.md#T-001-auth0-login-startup-restore-android-process-death-recovery-logout-and-account-switch-regression-tests",
+    "title": "Ignore non-string Auth0 picture claims during restore"
+  },
+  "notes": [
+    "Auth0 restore accepts valid stored email credentials with non-string optional picture claims and leaves profile picture null."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

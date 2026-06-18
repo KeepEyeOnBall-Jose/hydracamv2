@@ -490,7 +490,11 @@ class AuthService {
     if (idToken == null) return null;
 
     final payloadMap = _parseIdTokenPayload(idToken);
-    return payloadMap?["picture"] as String?;
+    final pictureClaim = payloadMap?["picture"];
+    if (pictureClaim is! String) return null;
+
+    final normalizedPicture = pictureClaim.trim();
+    return normalizedPicture.isEmpty ? null : normalizedPicture;
   }
 
   Map<String, dynamic>? _parseIdTokenPayload(String idToken) {
