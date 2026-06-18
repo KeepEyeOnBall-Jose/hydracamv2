@@ -215,6 +215,39 @@ is_public_https_url() {
   return 0
 }
 
+asc_env_value() {
+  local value
+
+  for value in "$@"; do
+    if [[ -n "$value" ]]; then
+      printf '%s\n' "$value"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+has_direct_asc_key_triplet() {
+  local key_path key_id issuer_id
+  key_path="$(asc_env_value \
+    "${APP_STORE_CONNECT_API_KEY_P8_PATH:-}" \
+    "${APP_STORE_CONNECT_API_KEY_KEY_FILEPATH:-}" || true)"
+  key_id="$(asc_env_value \
+    "${APP_STORE_CONNECT_API_KEY_ID:-}" \
+    "${APP_STORE_CONNECT_API_KEY_KEY_ID:-}" || true)"
+  issuer_id="$(asc_env_value \
+    "${APP_STORE_CONNECT_API_ISSUER_ID:-}" \
+    "${APP_STORE_CONNECT_API_KEY_ISSUER_ID:-}" || true)"
+
+  [[ -n "$key_path" && -f "$key_path" && -n "$key_id" && -n "$issuer_id" ]]
+}
+
+has_app_store_connect_api_key() {
+  [[ -n "${APP_STORE_CONNECT_API_KEY_PATH:-}" && -f "${APP_STORE_CONNECT_API_KEY_PATH:-}" ]] ||
+    has_direct_asc_key_triplet
+}
+
 find_aapt2() {
   local sdk_root candidate
 
@@ -462,10 +495,12 @@ if [[ "$(uname -s)" == "Darwin" ]] &&
     if security find-identity -v -p codesigning 2>/dev/null | \
       grep -Eq '"(Apple Distribution|iOS Distribution):'; then
       pass "iOS distribution signing identity is available"
+    elif has_app_store_connect_api_key; then
+      pass "App Store Connect API key is available for automatic iOS signing/provisioning"
     elif [[ "$MODE" == "local" ]] || requires_ios_upload; then
-      fail "iOS distribution signing identity is unavailable"
+      fail "iOS distribution signing identity and App Store Connect API signing credential are unavailable"
     else
-      warn "iOS distribution signing identity is unavailable"
+      warn "iOS distribution signing identity and App Store Connect API signing credential are unavailable"
     fi
   elif [[ "$MODE" == "local" ]] || requires_ios_upload; then
     fail "command missing: security"
@@ -974,10 +1009,10 @@ if [[ "$check_ios_artifact" == "1" ]]; then
 fi
 
 if [[ "$MODE" == "local" ]] || requires_ios_upload; then
-  if [[ -n "${APP_STORE_CONNECT_API_KEY_PATH:-}" && -f "${APP_STORE_CONNECT_API_KEY_PATH:-}" ]]; then
-    pass "APP_STORE_CONNECT_API_KEY_PATH points to a file"
+  if has_app_store_connect_api_key; then
+    pass "App Store Connect API key is configured"
   else
-    warn "APP_STORE_CONNECT_API_KEY_PATH is not set to a readable file"
+    warn "App Store Connect API key is not configured"
   fi
 fi
 
@@ -1011,15 +1046,15 @@ case "$MODE" in
   local)
     ;;
   upload)
-    [[ -n "${APP_STORE_CONNECT_API_KEY_PATH:-}" && -f "${APP_STORE_CONNECT_API_KEY_PATH:-}" ]] || \
-      fail "upload mode requires APP_STORE_CONNECT_API_KEY_PATH"
+    has_app_store_connect_api_key || \
+      fail "upload mode requires an App Store Connect API key"
     [[ -n "${GOOGLE_PLAY_JSON_KEY:-}" && -f "${GOOGLE_PLAY_JSON_KEY:-}" ]] || \
       fail "upload mode requires GOOGLE_PLAY_JSON_KEY"
     require_public_store_urls
     ;;
   upload-ios | ios-upload | testflight-upload)
-    [[ -n "${APP_STORE_CONNECT_API_KEY_PATH:-}" && -f "${APP_STORE_CONNECT_API_KEY_PATH:-}" ]] || \
-      fail "$MODE mode requires APP_STORE_CONNECT_API_KEY_PATH"
+    has_app_store_connect_api_key || \
+      fail "$MODE mode requires an App Store Connect API key"
     require_public_store_urls
     ;;
   upload-android | android-upload | play-upload)

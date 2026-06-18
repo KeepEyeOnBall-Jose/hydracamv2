@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HydraCam Privacy Policy</title>
+  <meta name="description" content="HydraCam privacy policy.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main>
+    <h1>HydraCam Privacy Policy</h1>
+    <p class="updated">Last updated: 2026-06-15</p>
+
+    <h2>App</h2>
+    <p>
+      HydraCam is a mobile application for synchronized sports-event photo and
+      video capture across nearby devices.
+    </p>
+
+    <h2>Data We Collect Or Process</h2>
+    <ul>
+      <li>Account data from Auth0 login, such as email or profile information returned by the identity provider.</li>
+      <li>Device and session identifiers, including device ID, session GUID, app version, build number, and local network role state.</li>
+      <li>Photos, videos, microphone audio, and user-selected gallery media captured or attached by the user.</li>
+      <li>Optional venue/location data and Wi-Fi/network information needed for local device discovery and troubleshooting.</li>
+      <li>App logs generated locally to diagnose capture, upload, network, storage, battery, and permission issues.</li>
+    </ul>
+
+    <h2>How We Use Data</h2>
+    <p>
+      HydraCam uses this data to create and manage recording sessions,
+      coordinate master/slave device capture on a local network or hotspot,
+      save media locally, upload selected session media to the configured
+      backend, restore signed-in sessions, and diagnose user-reported problems.
+    </p>
+
+    <h2>Sharing And Storage</h2>
+    <p>
+      Media and session metadata may be uploaded to the configured HydraCam
+      backend when upload is enabled or manually requested. Local WebSocket
+      messages are exchanged only between nearby devices on the same local
+      network or hotspot. Authentication is handled through Auth0. HydraCam does
+      not use this data for third-party advertising.
+    </p>
+
+    <h2>Retention And Deletion</h2>
+    <p>
+      Session media remains on the device unless the user deletes it or enables
+      a delete-after-upload setting. Account-linked backend data can be deleted
+      through the account and data deletion process.
+    </p>
+    <p>
+      <a href="/account-deletion.html">Request account and data deletion</a>
+    </p>
+
+    <h2>Security</h2>
+    <p>
+      HydraCam uses HTTPS for backend API calls outside local discovery and
+      stores Auth0 credentials using secure platform storage. Local device
+      synchronization uses WebSockets on the user's trusted local network or
+      hotspot.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Privacy and support contact:
+      <a href="mailto:jose@keepeyeonball.com">jose@keepeyeonball.com</a>
+    </p>
+  </main>
+</body>
+</html>

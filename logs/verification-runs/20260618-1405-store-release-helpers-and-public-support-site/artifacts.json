@@ -1,0 +1,133 @@
+{
+  "acceptanceChecks": [
+    "Release helper shell scripts and Fastfile parse cleanly",
+    "Public privacy support and account-deletion URLs return HTTP 200",
+    "Readiness preflight reports missing credentials and unrelated dependency-pin blocker truthfully"
+  ],
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/build_store_artifacts.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:17.627824+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/check_store_readiness.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:21.388115+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/google_play_internal_release.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:24.930151+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/testflight_release_and_invite.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:29.160392+00:00"
+    },
+    {
+      "command": [
+        "ruby",
+        "-c",
+        "ios/fastlane/Fastfile"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:35.994021+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "--fail",
+        "--head",
+        "https://store-site-ten.vercel.app/privacy.html"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:43.412543+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "--fail",
+        "--head",
+        "https://store-site-ten.vercel.app/support.html"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:47.793930+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "15",
+        "--fail",
+        "--head",
+        "https://store-site-ten.vercel.app/account-deletion.html"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:05:52.087295+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check_store_readiness.sh",
+        "local"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T12:05:58.396247+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "docs/control/store-privacy-and-metadata.md",
+        "ios/fastlane/Fastfile",
+        "scripts/build_store_artifacts.sh",
+        "scripts/check_store_readiness.sh",
+        "scripts/google_play_internal_release.sh",
+        "scripts/testflight_release_and_invite.sh",
+        "store-site"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:06:05.784216+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "store-release-helpers-and-public-support-site",
+    "source": "docs/control/store-privacy-and-metadata.md",
+    "title": "Store release helpers and public support site"
+  },
+  "notes": [
+    "Release helper syntax and public URLs passed. Full upload readiness is blocked by missing store credentials and separate unstaged pubspec/toolchain pin drift."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

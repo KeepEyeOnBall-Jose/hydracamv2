@@ -86,8 +86,15 @@ Do not mark beta submission ready until:
 - Privacy Policy and Support URLs are publicly reachable.
 - Apple privacy labels and Google Data Safety answers match this data surface.
 - App Store Connect app record and Play Console app ownership are confirmed.
-- `APP_STORE_CONNECT_API_KEY_PATH` and `GOOGLE_PLAY_JSON_KEY` are configured
-  outside the repo or a manual upload owner is assigned.
+- App Store Connect API credentials are configured outside the repo or a manual
+  upload owner is assigned. The release scripts accept either
+  `APP_STORE_CONNECT_API_KEY_PATH` pointing to a Fastlane JSON key file or
+  Apple's `.p8` triplet:
+  `APP_STORE_CONNECT_API_KEY_P8_PATH`,
+  `APP_STORE_CONNECT_API_KEY_ID`, and
+  `APP_STORE_CONNECT_API_ISSUER_ID`.
+- `GOOGLE_PLAY_JSON_KEY` is configured outside the repo or a manual upload
+  owner is assigned.
 - `HYDRACAM_ACCOUNT_DELETION_URL` points to a public deletion-request page, and
   the in-app Login screen account-deletion request flow has been smoke-tested
   from a release/Profile build made with that Dart define.
@@ -99,3 +106,32 @@ Do not mark beta submission ready until:
   submission preflight.
 - The pragmatic hardware gate passes: iPhone, iPad, and at least two supported
   Android devices.
+
+## Current Public Store URLs
+
+Preview deployment created for beta-readiness work:
+
+- Privacy Policy: `https://store-site-ten.vercel.app/privacy.html`
+- Support: `https://store-site-ten.vercel.app/support.html`
+- Account and Data Deletion:
+  `https://store-site-ten.vercel.app/account-deletion.html`
+
+Use these URLs as the `HYDRACAM_PRIVACY_POLICY_URL`,
+`HYDRACAM_SUPPORT_URL`, and `HYDRACAM_ACCOUNT_DELETION_URL` Dart defines until
+a permanent keepeyeonball-owned domain replaces them.
+
+## Release Submission Helpers
+
+- `scripts/testflight_release_and_invite.sh`: after App Store Connect API
+  credentials are available, builds the iOS artifact, uploads/distributes
+  the exact IPA to TestFlight, and adds the default external testers after the
+  upload lane succeeds. If no local iOS
+  Distribution identity is installed, `scripts/build_store_artifacts.sh ios`
+  can pass the same API key to `xcodebuild -allowProvisioningUpdates` for
+  automatic signing/provisioning.
+- `scripts/google_play_internal_release.sh`: after `GOOGLE_PLAY_JSON_KEY` is
+  available, verifies the Android upload gate and uploads the current release to
+  the Google Play internal testing track.
+
+Use explicit `bash scripts/...` invocations for the release helpers on this Mac;
+that also matches the helper-to-helper calls inside the scripts.

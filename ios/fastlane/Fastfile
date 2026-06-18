@@ -65,22 +65,7 @@ def write_store_metadata(artifact_path, platform, builder)
 end
 
 def build_release_ipa
-  Dir[IPA_GLOB].each do |path|
-    FileUtils.rm_f(path)
-    FileUtils.rm_f("#{path}.store-metadata.tsv")
-  end
-
-  command = [
-    flutter_bin,
-    "build",
-    "ipa",
-    "--release",
-    "--export-method",
-    "app-store"
-  ] + flutter_build_flags
-
-  sh("cd #{Shellwords.escape(REPO_ROOT)} && #{Shellwords.join(command)}")
-  write_store_metadata(latest_ipa, "ios", "ios/fastlane")
+  sh("cd #{Shellwords.escape(REPO_ROOT)} && SKIP_CHECKS=1 bash scripts/build_store_artifacts.sh ios")
 end
 
 def latest_ipa
@@ -91,9 +76,52 @@ end
 
 def app_store_connect_options
   api_key_path = ENV["APP_STORE_CONNECT_API_KEY_PATH"]
-  return {} if api_key_path.to_s.empty?
+  return { api_key_path: api_key_path } if File.file?(api_key_path.to_s)
 
-  { api_key_path: api_key_path }
+  key_filepath = ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"].to_s.empty? ?
+    ENV["APP_STORE_CONNECT_API_KEY_KEY_FILEPATH"] :
+    ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"]
+  key_id = ENV["APP_STORE_CONNECT_API_KEY_ID"].to_s.empty? ?
+    ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"] :
+    ENV["APP_STORE_CONNECT_API_KEY_ID"]
+  issuer_id = ENV["APP_STORE_CONNECT_API_ISSUER_ID"].to_s.empty? ?
+    ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"] :
+    ENV["APP_STORE_CONNECT_API_ISSUER_ID"]
+
+  return {} unless File.file?(key_filepath.to_s) && !key_id.to_s.empty? && !issuer_id.to_s.empty?
+
+  {
+    api_key: app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: key_filepath,
+      duration: 1200,
+      in_house: false
+    )
+  }
+end
+
+def testflight_groups
+  ENV["TESTFLIGHT_GROUPS"].to_s
+    .split(",")
+    .map(&:strip)
+    .reject(&:empty?)
+end
+
+def testflight_upload_options(ipa_path)
+  options = app_store_connect_options.merge(
+    ipa: ipa_path,
+    changelog: ENV["TESTFLIGHT_CHANGELOG"],
+    skip_waiting_for_build_processing: false
+  )
+
+  if ENV["TESTFLIGHT_DISTRIBUTE_EXTERNAL"] == "true"
+    options[:distribute_external] = true
+    groups = testflight_groups
+    options[:groups] = groups unless groups.empty?
+  end
+
+  options
 end
 
 platform :ios do
@@ -106,34 +134,12 @@ platform :ios do
   lane :beta do
     build_release_ipa
 
-    groups = ENV["TESTFLIGHT_GROUPS"].to_s
-      .split(",")
-      .map(&:strip)
-      .reject(&:empty?)
-
-    options = app_store_connect_options.merge(
-      ipa: latest_ipa,
-      changelog: ENV["TESTFLIGHT_CHANGELOG"],
-      skip_waiting_for_build_processing: false
-    )
-
-    if ENV["TESTFLIGHT_DISTRIBUTE_EXTERNAL"] == "true"
-      options[:distribute_external] = true
-      options[:groups] = groups unless groups.empty?
-    end
-
-    upload_to_testflight(options)
+    upload_to_testflight(testflight_upload_options(latest_ipa))
   end
 
   desc "Upload the latest local IPA to TestFlight without rebuilding"
   lane :upload_latest_beta do
-    upload_to_testflight(
-      app_store_connect_options.merge(
-        ipa: latest_ipa,
-        changelog: ENV["TESTFLIGHT_CHANGELOG"],
-        skip_waiting_for_build_processing: false
-      )
-    )
+    upload_to_testflight(testflight_upload_options(latest_ipa))
   end
 
   desc "Build an icon-launchable Profile app for physical iPhone development"

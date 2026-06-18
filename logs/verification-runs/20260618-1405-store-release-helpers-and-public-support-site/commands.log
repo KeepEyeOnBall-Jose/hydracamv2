@@ -1,0 +1,300 @@
+# HydraCam evidence run command log
+
+$ bash -n scripts/build_store_artifacts.sh
+[exit-code] 0
+
+$ bash -n scripts/check_store_readiness.sh
+[exit-code] 0
+
+$ bash -n scripts/google_play_internal_release.sh
+[exit-code] 0
+
+$ bash -n scripts/testflight_release_and_invite.sh
+[exit-code] 0
+
+$ ruby -c ios/fastlane/Fastfile
+Syntax OK
+[exit-code] 0
+
+$ curl --max-time 15 --fail --head https://store-site-ten.vercel.app/privacy.html
+HTTP/2 200
+accept-ranges: bytes
+access-control-allow-origin: *
+age: 155
+cache-control: public, max-age=0, must-revalidate
+content-disposition: inline; filename="privacy.html"
+content-type: text/html; charset=utf-8
+date: Thu, 18 Jun 2026 12:05:43 GMT
+etag: "ef221c126a2072b71d40340911a86967"
+last-modified: Thu, 18 Jun 2026 12:03:08 GMT
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-vercel-cache: HIT
+x-vercel-id: fra1::tfpsx-1781784343547-7c73abef3c86
+content-length: 2814
+
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0  2814    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+[exit-code] 0
+
+$ curl --max-time 15 --fail --head https://store-site-ten.vercel.app/support.html
+HTTP/2 200
+accept-ranges: bytes
+access-control-allow-origin: *
+age: 159
+cache-control: public, max-age=0, must-revalidate
+content-disposition: inline; filename="support.html"
+content-type: text/html; charset=utf-8
+date: Thu, 18 Jun 2026 12:05:47 GMT
+etag: "330fc151b1aa05f2405ef9893d8287a5"
+last-modified: Thu, 18 Jun 2026 12:03:08 GMT
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-vercel-cache: HIT
+x-vercel-id: fra1::8985p-1781784347923-e7f276ff731c
+content-length: 2106
+
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0  2106    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+[exit-code] 0
+
+$ curl --max-time 15 --fail --head https://store-site-ten.vercel.app/account-deletion.html
+HTTP/2 200
+accept-ranges: bytes
+access-control-allow-origin: *
+age: 163
+cache-control: public, max-age=0, must-revalidate
+content-disposition: inline; filename="account-deletion.html"
+content-type: text/html; charset=utf-8
+date: Thu, 18 Jun 2026 12:05:52 GMT
+etag: "544da66f1f005ef09e0eb4269186c934"
+last-modified: Thu, 18 Jun 2026 12:03:08 GMT
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-vercel-cache: HIT
+x-vercel-id: fra1::pr2rb-1781784352298-7c78acb07ab3
+content-length: 2043
+
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0  2043    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+[exit-code] 0
+
+$ bash scripts/check_store_readiness.sh local
+PASS: command available: plutil
+PASS: command available: grep
+PASS: command available: shasum
+PASS: command available: file
+PASS: command available: keytool
+PASS: command available: unzip
+PASS: command available: zip
+PASS: command available: security
+FAIL: iOS distribution signing identity and App Store Connect API signing credential are unavailable
+PASS: iOS Info.plist exists
+PASS: iOS privacy manifest exists
+PASS: iOS Xcode project exists
+PASS: iOS app icon manifest exists
+PASS: iOS fastlane Appfile exists
+PASS: iOS fastlane Fastfile exists
+PASS: iOS fastlane README exists
+PASS: Android manifest exists
+PASS: Android app build.gradle exists
+PASS: Android upload certificate exists
+PASS: Android fastlane Appfile exists
+PASS: Android fastlane Fastfile exists
+PASS: Android fastlane README exists
+PASS: pubspec.yaml exists
+PASS: Login screen exists
+PASS: Auth0 service exists
+PASS: store privacy checklist exists
+PASS: store privacy policy draft exists
+PASS: store support page draft exists
+PASS: store account deletion page draft exists
+PASS: web index exists
+PASS: web manifest exists
+PASS: store artifact build script exists
+PASS: iOS fastlane wrapper exists
+PASS: Android fastlane wrapper exists
+PASS: iOS Info.plist is valid
+PASS: iOS display name is HydraCam
+PASS: iOS camera usage description present
+PASS: iOS microphone usage description present
+PASS: iOS photo library usage description present
+PASS: iOS photo library add usage description present
+PASS: iOS location usage description present
+PASS: iOS local network usage description present
+PASS: iOS Auth0 redirect scheme is com.keepeyeonball
+PASS: iOS Auth0 redirect scheme is not the generic com.hydracam
+PASS: iOS export compliance declares no non-exempt encryption
+PASS: iOS Info.plist omits Dart VM Bonjour services
+PASS: iOS privacy manifest is valid
+PASS: iOS privacy manifest declares UserDefaults access
+PASS: iOS privacy manifest declares UserDefaults reason CA92.1
+PASS: iOS privacy manifest declares file timestamp access
+PASS: iOS privacy manifest declares file timestamp reason C617.1
+PASS: iOS privacy manifest declares disk space access
+PASS: iOS privacy manifest declares low/sufficient disk-space reason E174.1
+PASS: iOS privacy manifest declares display disk-space reason 85F4.1
+PASS: iOS privacy manifest declares photo/video collection
+PASS: iOS privacy manifest declares audio collection
+PASS: iOS privacy manifest declares precise location collection
+PASS: iOS privacy manifest declares email collection
+PASS: iOS privacy manifest declares user ID collection
+PASS: iOS privacy manifest declares device ID collection
+PASS: iOS privacy manifest declares app functionality purpose
+PASS: iOS privacy manifest declares no tracking
+PASS: iOS bundle identifier is com.keepeyeonball
+PASS: iOS privacy manifest is bundled in Runner resources
+PASS: iOS fastlane Appfile targets com.keepeyeonball
+PASS: iOS fastlane builds include the privacy policy URL when configured
+PASS: iOS fastlane builds include the support URL when configured
+PASS: iOS fastlane builds include the account deletion URL when configured
+PASS: iOS fastlane writes store artifact metadata
+PASS: iOS fastlane README points to the repo wrapper
+PASS: Android package is com.amaia23.hydracam
+PASS: Android display name is HydraCam
+PASS: Android camera permission present
+PASS: Android microphone permission present
+PASS: Android internet permission present
+PASS: Android Wi-Fi state permission present
+PASS: Android fine location permission present
+PASS: Android image media permission present
+PASS: Android video media permission present
+PASS: Android Auth0 redirect scheme comes from the appAuthRedirectScheme placeholder
+PASS: Android Auth0 redirect host is login-callback
+PASS: Android Auth0 redirect scheme is not the generic com.hydracam
+PASS: Android namespace is com.amaia23.hydracam
+PASS: Android applicationId is com.amaia23.hydracam
+PASS: Android AppAuth manifest placeholder is com.amaia23.hydracam
+PASS: Android minSdk is 24
+PASS: Android targetSdk is 35 (minimum 35)
+PASS: Android compileSdk is 36 (minimum 35)
+PASS: Android release build uses release signing config
+PASS: Android release build has no debug signing fallback
+PASS: Android fastlane Appfile targets com.amaia23.hydracam
+PASS: Android fastlane builds include the privacy policy URL when configured
+PASS: Android fastlane builds include the support URL when configured
+PASS: Android fastlane builds include the account deletion URL when configured
+PASS: Android fastlane writes store artifact metadata
+PASS: Android fastlane README points to the repo wrapper
+PASS: Android key.properties exists
+PASS: Android key.properties has keyAlias
+PASS: Android upload keystore exists
+PASS: Android key.properties has storePassword
+PASS: Android key.properties has keyPassword
+PASS: pubspec version is 1.4.0+16
+PASS: pubspec description is release-appropriate
+PASS: pubspec includes url_launcher for account deletion URL handoff
+FAIL: pubspec pins url_launcher_android 6.3.23 for the current Android toolchain
+PASS: Login screen exposes an in-app privacy policy path
+PASS: Login screen exposes an in-app support path
+PASS: Login screen exposes an account deletion request path
+PASS: Login screen reads the privacy policy URL Dart define
+PASS: Login screen reads the support URL Dart define
+PASS: Login screen reads the account deletion URL Dart define
+PASS: Auth0 service defaults iOS redirect scheme to com.keepeyeonball
+PASS: Auth0 service defaults Android redirect scheme to com.amaia23.hydracam
+PASS: Auth0 service uses login-callback redirect host
+PASS: Auth0 service omits the generic com.hydracam redirect URI
+PASS: store checklist tracks the privacy policy URL
+PASS: store checklist tracks the support URL
+PASS: store checklist tracks the account deletion URL Dart define
+PASS: store checklist covers media and audio data
+PASS: store checklist covers Auth0 identity data
+PASS: store checklist covers local-network WebSocket behavior
+PASS: privacy policy draft covers Auth0 identity
+PASS: privacy policy draft covers captured media and audio
+PASS: privacy policy draft covers location and network context
+PASS: privacy policy draft covers diagnostics
+PASS: privacy policy draft links account/data deletion expectations
+PASS: support draft covers same-network setup
+PASS: support draft covers camera and microphone permissions
+PASS: support draft covers iOS local network permission
+PASS: support draft covers account/data deletion
+PASS: account deletion draft matches the release Dart define
+PASS: account deletion draft covers Auth0 account data
+PASS: account deletion draft covers backend user records
+PASS: account deletion draft covers uploaded session data
+PASS: account deletion draft covers requester verification
+PASS: account deletion draft covers retention exceptions
+PASS: store build script supports Dart defines
+PASS: store build script compiles the privacy policy URL when configured
+PASS: store build script compiles the support URL when configured
+PASS: store build script compiles the account deletion URL when configured
+PASS: store build script writes store artifact metadata
+PASS: web manifest name is HydraCam
+PASS: web manifest short_name is HydraCam
+PASS: web manifest description is release-appropriate
+PASS: web manifest omits Flutter template metadata
+PASS: web index title is HydraCam
+PASS: web index Apple title is HydraCam
+PASS: web index description is release-appropriate
+PASS: web index omits Flutter template metadata
+PASS: LaunchImage.png is branded-sized (19404 bytes)
+PASS: LaunchImage@2x.png is branded-sized (52222 bytes)
+PASS: LaunchImage@3x.png is branded-sized (83801 bytes)
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@3x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@3x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@3x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@1x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@3x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@1x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@1x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@1x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@2x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@1x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@2x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@1x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@2x.png is a PNG
+PASS: iOS app icon Icon-App-83.5x83.5@2x.png is a PNG
+PASS: iOS app icon Icon-App-1024x1024@1x.png is a PNG
+PASS: iOS app icon manifest references 25 icon files
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-hdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-mdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon set includes 5 densities
+WARN: Android AAB may be stale: /Users/jose/src/work/hydracamv2/pubspec.yaml is newer than the artifact
+PASS: Android AAB store metadata sidecar exists
+WARN: Android AAB store metadata mismatch: HYDRACAM_PRIVACY_POLICY_URL HYDRACAM_SUPPORT_URL HYDRACAM_ACCOUNT_DELETION_URL
+PASS: Android AAB packages the AppAuth redirect receiver
+PASS: Android AAB packages the Auth0 redirect host
+PASS: Android AAB packages Auth0 redirect scheme com.amaia23.hydracam
+PASS: Android AAB omits the generic com.hydracam redirect scheme
+PASS: Android AAB is signed with expected upload certificate
+WARN: iOS IPA missing; run scripts/build_store_artifacts.sh ios
+WARN: App Store Connect API key is not configured
+WARN: GOOGLE_PLAY_JSON_KEY is not set to a readable file
+WARN: HYDRACAM_PRIVACY_POLICY_URL is not set to a public HTTPS URL
+WARN: HYDRACAM_SUPPORT_URL is not set to a public HTTPS URL
+WARN: HYDRACAM_ACCOUNT_DELETION_URL is not set to a public HTTPS URL
+Summary: 2 failure(s), 8 warning(s)
+[exit-code] 1
+
+$ git diff --check -- docs/control/store-privacy-and-metadata.md ios/fastlane/Fastfile scripts/build_store_artifacts.sh scripts/check_store_readiness.sh scripts/google_play_internal_release.sh scripts/testflight_release_and_invite.sh store-site
+[exit-code] 0
