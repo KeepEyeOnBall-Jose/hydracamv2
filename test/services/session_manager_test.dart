@@ -121,6 +121,19 @@ void main() {
         );
       });
 
+      test("joinSession rejects sentinel service GUIDs", () {
+        for (final sessionGuid in ["null", " undefined "]) {
+          expect(
+            () => sessionManager.joinSession(
+              sessionGuid,
+              "slave-session",
+              deviceType: "Slave",
+            ),
+            throwsArgumentError,
+          );
+        }
+      });
+
       test("canUploadCurrentSession requires an active service GUID", () {
         sessionManager.startSession(
           "service-session-guid",

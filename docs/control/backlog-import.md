@@ -1677,6 +1677,15 @@ failed status values used by upload/shared POST response handling before
 building a `HydraCamBackendSession`. Keep broader contract coverage open for
 live backend response-shape confirmation and endpoint-specific failure handling.
 
+2026-06-18 T-016 malformed session GUID note:
+`logs/verification-runs/20260618-1902-reject-malformed-backend-session-guids/`
+adds red/green coverage for `createSession()` responses with non-string backend
+GUID values and sentinel GUID strings such as `null`, and for `SessionManager`
+join paths receiving sentinel service-session IDs. These malformed identifiers
+now fail before a false uploadable session can be created. Keep broader
+contract coverage open for live backend response-shape confirmation and
+endpoint-specific failure handling.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

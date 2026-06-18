@@ -65,15 +65,7 @@ class HydraCamBackendSession {
     required String requestedSessionId,
   }) {
     final rawGuid = response["guid"] ?? response["Guid"];
-    final guid = rawGuid?.toString().trim() ?? "";
-    if (guid.isEmpty) {
-      throw const FormatException(
-          "Session create response did not include a backend GUID.");
-    }
-    if (guid.startsWith("local-")) {
-      throw FormatException(
-          "Session create response returned a non-uploadable local GUID: $guid");
-    }
+    final guid = _parseBackendGuid(rawGuid);
 
     final rawId = response["id"] ?? response["Id"];
     final numericId =
@@ -85,6 +77,32 @@ class HydraCamBackendSession {
       sessionId: rawSessionId.toString(),
       numericId: numericId,
     );
+  }
+
+  static String _parseBackendGuid(Object? rawGuid) {
+    if (rawGuid == null) {
+      throw const FormatException(
+          "Session create response did not include a backend GUID.");
+    }
+    if (rawGuid is! String) {
+      throw const FormatException(
+          "Session create response returned a non-string backend GUID.");
+    }
+
+    final guid = rawGuid.trim();
+    if (guid.isEmpty) {
+      throw const FormatException(
+          "Session create response did not include a backend GUID.");
+    }
+
+    final normalizedGuid = guid.toLowerCase();
+    if (normalizedGuid.startsWith("local-") ||
+        normalizedGuid == "null" ||
+        normalizedGuid == "undefined") {
+      throw FormatException(
+          "Session create response returned an invalid backend GUID: $guid");
+    }
+    return guid;
   }
 
   @override

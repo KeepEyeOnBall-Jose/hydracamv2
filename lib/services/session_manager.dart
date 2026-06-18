@@ -54,8 +54,11 @@ class SessionManager extends ChangeNotifier {
 
   static bool isServiceSessionGuid(String? sessionGuid) {
     final normalizedSessionGuid = sessionGuid?.trim() ?? "";
+    final lowerSessionGuid = normalizedSessionGuid.toLowerCase();
     return normalizedSessionGuid.isNotEmpty &&
-        !normalizedSessionGuid.startsWith("local-");
+        !lowerSessionGuid.startsWith("local-") &&
+        lowerSessionGuid != "null" &&
+        lowerSessionGuid != "undefined";
   }
 
   void startCreatedSession(

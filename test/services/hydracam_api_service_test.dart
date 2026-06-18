@@ -383,6 +383,64 @@ void main() {
     expect(requestBody, containsPair("SessionId", "friendly-session"));
   });
 
+  test("createSession rejects non-string backend GUID values", () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response(
+          '{"guid":42,"sessionId":"friendly-session","id":42}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().createSession(
+      "friendly-session",
+    );
+
+    expect(result, isNull);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        predicate<Object?>(
+          (message) =>
+              message is String &&
+              message.contains(
+                "Session create response returned a non-string backend GUID.",
+              ),
+        ),
+      ),
+    );
+  });
+
+  test("createSession rejects sentinel backend GUID strings", () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response(
+          '{"guid":" null ","sessionId":"friendly-session","id":42}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().createSession(
+      "friendly-session",
+    );
+
+    expect(result, isNull);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        predicate<Object?>(
+          (message) =>
+              message is String &&
+              message.contains(
+                "Session create response returned an invalid backend GUID: null",
+              ),
+        ),
+      ),
+    );
+  });
+
   test("createSession rejects JSON failure response with backend guid",
       () async {
     HydraCamApiService.configureHttpClient(

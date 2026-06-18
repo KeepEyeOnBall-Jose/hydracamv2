@@ -1,0 +1,86 @@
+{
+  "acceptanceChecks": [
+    "createSession rejects non-string backend GUID values",
+    "createSession rejects sentinel backend GUID strings",
+    "SessionManager rejects sentinel service session GUIDs before capture/upload state"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:16:06.727654+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:16:36.337063+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:17:15.476580+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:17:32.816741+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:17:42.894046+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:18:05.492273+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "reject-malformed-backend-session-guids",
+    "source": "docs/control/backlog-import.md#t-016-photo-video-upload-api-test-with-invalid-files",
+    "title": "Reject malformed backend session GUIDs"
+  },
+  "notes": [
+    "Malformed backend session GUIDs are rejected before creating uploadable session state."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
