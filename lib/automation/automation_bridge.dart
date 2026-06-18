@@ -221,6 +221,16 @@ class AutomationBridge {
         },
         statusCode: HttpStatus.notFound,
       );
+    } on FormatException catch (error) {
+      LogService.instance.registerLog("Automation request invalid: $error");
+      await _respond(
+        request,
+        {
+          "error": "invalid_request",
+          "details": error.toString(),
+        },
+        statusCode: HttpStatus.badRequest,
+      );
     } catch (error, stackTrace) {
       LogService.instance
           .registerLog("Automation request failure: $error\n$stackTrace");

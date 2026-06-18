@@ -1,3 +1,4 @@
+import "dart:convert";
 import "dart:io";
 
 import "package:flutter_test/flutter_test.dart";
@@ -67,4 +68,85 @@ void main() {
       contains(contains("Automation bridge unavailable")),
     );
   });
+
+  test("malformed command JSON returns bad request without invoking handler",
+      () async {
+    final reservedServer =
+        await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final port = reservedServer.port;
+    await reservedServer.close(force: true);
+
+    final bridge = AutomationBridge.forTesting(
+      automationEnabled: true,
+      automationServerPort: port,
+    );
+    var handlerInvoked = false;
+    const command = "malformed_body_test";
+    bridge.registerCommand(command, (payload) async {
+      handlerInvoked = true;
+      return {"ok": true};
+    });
+    addTearDown(() async {
+      bridge.unregisterCommands([command]);
+      await bridge.closeForTesting();
+      LogService.instance.clearLogs();
+    });
+
+    await bridge.ensureInitialized();
+
+    const body = "{malformed-json";
+    final bodyBytes = utf8.encode(body);
+    final requestBytes = utf8.encode(
+      "POST /commands/$command HTTP/1.1\r\n"
+      "Host: 127.0.0.1:$port\r\n"
+      "Content-Type: application/json\r\n"
+      "Content-Length: ${bodyBytes.length}\r\n"
+      "Connection: close\r\n"
+      "\r\n",
+    );
+    final socket = await Socket.connect(InternetAddress.loopbackIPv4, port);
+    socket.add(requestBytes);
+    socket.add(bodyBytes);
+    await socket.flush();
+    final rawResponse = await utf8.decoder.bind(socket).join();
+    final responseParts = rawResponse.split("\r\n\r\n");
+    final payload = jsonDecode(_decodeHttpResponseBody(rawResponse))
+        as Map<String, dynamic>;
+
+    expect(
+        responseParts.first, startsWith("HTTP/1.1 ${HttpStatus.badRequest}"));
+    expect(payload["error"], "invalid_request");
+    expect(handlerInvoked, isFalse);
+  });
+}
+
+String _decodeHttpResponseBody(String rawResponse) {
+  final responseParts = rawResponse.split("\r\n\r\n");
+  final headers = responseParts.first.toLowerCase();
+  final body = responseParts.sublist(1).join("\r\n\r\n");
+  if (!headers.contains("transfer-encoding: chunked")) {
+    return body;
+  }
+
+  var remainingBody = body;
+  final decodedBody = StringBuffer();
+  while (remainingBody.isNotEmpty) {
+    final sizeLineEnd = remainingBody.indexOf("\r\n");
+    if (sizeLineEnd < 0) {
+      break;
+    }
+    final chunkSize = int.parse(
+      remainingBody.substring(0, sizeLineEnd).trim(),
+      radix: 16,
+    );
+    if (chunkSize == 0) {
+      break;
+    }
+    final chunkStart = sizeLineEnd + 2;
+    decodedBody.write(
+      remainingBody.substring(chunkStart, chunkStart + chunkSize),
+    );
+    remainingBody = remainingBody.substring(chunkStart + chunkSize + 2);
+  }
+  return decodedBody.toString();
 }

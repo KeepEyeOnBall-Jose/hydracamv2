@@ -1,0 +1,140 @@
+{
+  "acceptanceChecks": [
+    "Malformed command JSON returns HTTP 400 instead of bridge failure",
+    "Malformed command JSON does not invoke the registered automation handler"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:39:20.348126+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/automation_bridge_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:39:20.447890+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/automation_bridge_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:39:46.564142+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/automation_bridge_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:40:36.959622+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/automation_bridge_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:41:05.611052+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/automation_bridge_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:41:28.473997+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation/automation_bridge_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:41:39.020939+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/automation"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:41:47.252999+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:42:11.193555+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:42:24.503357+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:42:31.465223+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:42:53.661540+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "automation-bridge-malformed-request",
+    "source": "docs/control/status-and-roadmap.md#latest-runtime-role-switch-matrix",
+    "title": "Return client error for malformed automation bridge requests"
+  },
+  "notes": [
+    "Malformed automation bridge command JSON now returns HTTP 400 invalid_request without invoking the registered handler. Focused bridge test, automation suite, analyzer, diff check, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

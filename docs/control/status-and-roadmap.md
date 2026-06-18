@@ -653,6 +653,11 @@ Current runtime-switch result:
   `--record-seconds 2` run into multi-minute video. That run still failed
   because macOS did not produce slave media and one Android slave missed
   `isRecording`; treat it as acceleration/debug evidence, not capture proof.
+- `20260618-1750-automation-bridge-malformed-request` hardens the automation
+  bridge command endpoint so malformed JSON request bodies return
+  `400 invalid_request` and do not invoke the registered command handler instead
+  of being logged as generic `500 bridge_failure`. This is Tier D HTTP-boundary
+  unit coverage; keep live role-switch and capture proof separate.
 - Reusing an already-running stale iPad bridge proved the parallel `set_role`
   calls work (`456.621 ms` and `284.267 ms`), but iPad-as-master failed because
   the stale app exposed only `set_role` and not `connected_clients`. Relaunching
