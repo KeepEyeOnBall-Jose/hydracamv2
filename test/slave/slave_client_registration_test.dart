@@ -21,6 +21,17 @@ import "package:shared_preferences/shared_preferences.dart";
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test("message collector ignores socket messages after close", () async {
+    final messages = _JsonMessageCollector();
+
+    await messages.close();
+
+    expect(
+      () => messages.addJsonMessage(jsonEncode({"type": "deviceId"})),
+      returnsNormally,
+    );
+  });
+
   test("slave registers before waiting for network payload", () async {
     SharedPreferences.setMockInitialValues({
       "device_id": "test-device",
@@ -38,7 +49,7 @@ void main() {
       );
     }
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final messages = _JsonMessageCollector();
     final networkPayload = Completer<Map<String, dynamic>?>();
     final sockets = <WebSocket>[];
 
@@ -52,10 +63,7 @@ void main() {
       final socket = await WebSocketTransformer.upgrade(request);
       sockets.add(socket);
       socket.listen((data) {
-        final decoded = jsonDecode(data as String);
-        if (decoded is Map<String, dynamic>) {
-          messages.add(decoded);
-        }
+        messages.addJsonMessage(data as String);
       });
     });
 
@@ -119,7 +127,7 @@ void main() {
       );
     }
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final messages = _JsonMessageCollector();
     final sockets = <WebSocket>[];
 
     server.listen((request) async {
@@ -132,10 +140,7 @@ void main() {
       final socket = await WebSocketTransformer.upgrade(request);
       sockets.add(socket);
       socket.listen((data) {
-        final decoded = jsonDecode(data as String);
-        if (decoded is Map<String, dynamic>) {
-          messages.add(decoded);
-        }
+        messages.addJsonMessage(data as String);
       });
     });
 
@@ -191,7 +196,7 @@ void main() {
     );
 
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final messages = _JsonMessageCollector();
     final sockets = <WebSocket>[];
 
     server.listen((request) async {
@@ -204,10 +209,7 @@ void main() {
       final socket = await WebSocketTransformer.upgrade(request);
       sockets.add(socket);
       socket.listen((data) {
-        final decoded = jsonDecode(data as String);
-        if (decoded is Map<String, dynamic>) {
-          messages.add(decoded);
-        }
+        messages.addJsonMessage(data as String);
       });
     });
 
@@ -276,7 +278,7 @@ void main() {
     await SessionManager.instance.addPhoto(photo);
 
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final messages = _JsonMessageCollector();
     final sockets = <WebSocket>[];
 
     server.listen((request) async {
@@ -289,10 +291,7 @@ void main() {
       final socket = await WebSocketTransformer.upgrade(request);
       sockets.add(socket);
       socket.listen((data) {
-        final decoded = jsonDecode(data as String);
-        if (decoded is Map<String, dynamic>) {
-          messages.add(decoded);
-        }
+        messages.addJsonMessage(data as String);
       });
     });
 
@@ -945,7 +944,7 @@ void main() {
     await SessionManager.instance.addPhoto(photo);
 
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final messages = _JsonMessageCollector();
     final sockets = <WebSocket>[];
     var identifySent = false;
 
@@ -959,9 +958,8 @@ void main() {
       final socket = await WebSocketTransformer.upgrade(request);
       sockets.add(socket);
       socket.listen((data) {
-        final decoded = jsonDecode(data as String);
-        if (decoded is Map<String, dynamic>) {
-          messages.add(decoded);
+        final decoded = messages.addJsonMessage(data as String);
+        if (decoded != null) {
           if (decoded["type"] == "deviceId" && !identifySent) {
             identifySent = true;
             socket.add(jsonEncode({
@@ -1103,6 +1101,31 @@ void main() {
       await server.close(force: true);
     }
   });
+}
+
+class _JsonMessageCollector {
+  final StreamController<Map<String, dynamic>> _controller =
+      StreamController<Map<String, dynamic>>.broadcast();
+  var _isClosed = false;
+
+  Stream<Map<String, dynamic>> get stream => _controller.stream;
+
+  Map<String, dynamic>? addJsonMessage(String data) {
+    if (_isClosed) {
+      return null;
+    }
+    final decoded = jsonDecode(data);
+    if (decoded is Map<String, dynamic> && !_isClosed) {
+      _controller.add(decoded);
+      return decoded;
+    }
+    return null;
+  }
+
+  Future<void> close() {
+    _isClosed = true;
+    return _controller.close();
+  }
 }
 
 bool _logContains(String text) {

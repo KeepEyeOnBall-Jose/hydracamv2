@@ -749,6 +749,13 @@ Default issue schema:
   before removing the pending request, so one malformed reply cannot consume the
   sample and block calibration. Keep this issue open for real-device offset
   estimation and capture start-skew evidence.
+- 2026-06-18 slave registration/time-sync cleanup-race note:
+  `logs/verification-runs/20260618-1901-slave-registration-time-sync-cleanup-race/`
+  adds a guarded JSON message collector for loopback slave registration tests
+  so late socket messages after test cleanup are ignored instead of writing to
+  a closed stream controller. The focused cleanup regression and combined slave
+  registration/time-sync command passed. Keep this issue open for real-device
+  offset estimation and capture start-skew evidence.
 
 ### 8. Implement auto-record mode
 
