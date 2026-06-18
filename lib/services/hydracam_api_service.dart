@@ -667,8 +667,9 @@ class HydraCamApiService {
 
       final successValue =
           decoded["success"] ?? decoded["succeeded"] ?? decoded["isSuccess"];
-      if (successValue is bool) {
-        return !successValue;
+      final parsedSuccessValue = _parseUploadSuccessValue(successValue);
+      if (parsedSuccessValue != null) {
+        return !parsedSuccessValue;
       }
 
       final errorValue = decoded["error"] ?? decoded["errors"];
@@ -685,6 +686,35 @@ class HydraCamApiService {
           .registerLog("Malformed upload response body: $trimmedBody ($e)");
       return true;
     }
+  }
+
+  bool? _parseUploadSuccessValue(Object? value) {
+    if (value is bool) {
+      return value;
+    }
+    if (value is num) {
+      return value != 0;
+    }
+    if (value is String) {
+      switch (value.trim().toLowerCase()) {
+        case "true":
+        case "1":
+        case "yes":
+        case "y":
+        case "success":
+        case "succeeded":
+          return true;
+        case "false":
+        case "0":
+        case "no":
+        case "n":
+        case "failed":
+        case "failure":
+        case "error":
+          return false;
+      }
+    }
+    return null;
   }
 
   bool _hasMeaningfulErrorValue(Object? value) {

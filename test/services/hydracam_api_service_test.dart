@@ -628,6 +628,50 @@ void main() {
     }
   });
 
+  test("uploadMedia rejects textual false success aliases", () async {
+    final failureBodies = [
+      {"success": "false"},
+      {"succeeded": "0"},
+      {"isSuccess": "no"},
+    ];
+
+    for (var index = 0; index < failureBodies.length; index += 1) {
+      LogService.instance.clearLogs();
+      final mediaFile = File("${tempDir.path}/json-text-failure-$index.mp4")
+        ..writeAsBytesSync(_validMp4Bytes);
+
+      HydraCamApiService.configureHttpClient(
+        MockClient.streaming((request, bodyStream) async {
+          await bodyStream.drain<void>();
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode(failureBodies[index])),
+            ]),
+            200,
+          );
+        }),
+      );
+
+      final result = await HydraCamApiService().uploadMedia(
+        "session-guid",
+        mediaFile,
+        false,
+        "slave-device",
+        DateTime.utc(2026, 6, 18, 17, index),
+        DateTime.utc(2026, 6, 18, 17, index, 1),
+        null,
+      );
+
+      expect(result, isFalse);
+      expect(
+        LogService.instance.logs.map((entry) => entry["message"]),
+        contains(
+          "Failed to upload media: HTTP 200 backend response reported failure - ${jsonEncode(failureBodies[index])}",
+        ),
+      );
+    }
+  });
+
   test("uploadMedia rejects malformed backend success bodies", () async {
     final mediaFile = File("${tempDir.path}/malformed-response.mp4")
       ..writeAsBytesSync(_validMp4Bytes);

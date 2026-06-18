@@ -1412,6 +1412,15 @@ HTTP 200 upload responses as failed uploads, matching the existing
 contract coverage open for live backend response-shape confirmation and any
 camera-plugin format added later.
 
+2026-06-18 T-016 textual-success response note:
+`logs/verification-runs/20260618-1512-upload-textual-false-response-guard/`
+extends upload response-shape handling so boolean-like text/numeric success
+aliases are parsed before accepting HTTP 200 uploads. Focused coverage now
+rejects `success: "false"`, `succeeded: "0"`, and `isSuccess: "no"` response
+bodies instead of logging them as successful uploads. Keep broader contract
+coverage open for live backend response-shape confirmation and any
+camera-plugin format added later.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is
