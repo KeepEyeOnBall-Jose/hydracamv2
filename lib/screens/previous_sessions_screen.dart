@@ -17,13 +17,16 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
   Future<List<_StoredSessionListItem>> _availableSessions =
       Future<List<_StoredSessionListItem>>.value([]);
 
-  Future<void> _handleSessionTap(BuildContext context, String sessionId) async {
+  Future<void> _handleSessionTap(
+    BuildContext context,
+    String storageIdentifier,
+  ) async {
     // Store a reference to the current context
     final currentContext = context;
 
     // Load session metadata
     final session =
-        await SessionManager.instance.loadSessionMetadata(sessionId);
+        await SessionManager.instance.loadSessionMetadata(storageIdentifier);
 
     // Check if the context is still valid and the widget is mounted
     if (currentContext.mounted) {
@@ -33,7 +36,7 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
           MaterialPageRoute(
             builder: (context) => SessionDetailsScreen(
               session: session,
-              storageIdentifier: sessionId,
+              storageIdentifier: storageIdentifier,
             ),
           ),
         );
@@ -68,14 +71,15 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
   }
 
   Future<List<_StoredSessionListItem>> _loadStoredSessions() async {
-    final sessionIds = await SessionManager.instance.getAvailableSessions();
+    final storageIdentifiers =
+        await SessionManager.instance.getAvailableSessions();
     final storedSessions = <_StoredSessionListItem>[];
-    for (final sessionId in sessionIds) {
-      final session =
-          await SessionManager.instance.loadSessionMetadataSnapshot(sessionId);
+    for (final storageIdentifier in storageIdentifiers) {
+      final session = await SessionManager.instance
+          .loadSessionMetadataSnapshot(storageIdentifier);
       storedSessions.add(
         _StoredSessionListItem(
-          storageIdentifier: sessionId,
+          storageIdentifier: storageIdentifier,
           session: session,
         ),
       );

@@ -43,13 +43,15 @@ void main() {
   });
 
   Future<void> writeSessionMetadata({
+    String? storageIdentifier,
     required String sessionGuid,
     required String sessionId,
     required DateTime start,
     required DateTime end,
   }) async {
-    final sessionDir =
-        Directory("${testPathProvider.documentsDir.path}/session_$sessionGuid");
+    final directoryIdentifier = storageIdentifier ?? sessionGuid;
+    final sessionDir = Directory(
+        "${testPathProvider.documentsDir.path}/session_$directoryIdentifier");
     sessionDir.createSync(recursive: true);
     await File("${sessionDir.path}/metadata.json").writeAsString(
       jsonEncode({
@@ -92,6 +94,24 @@ void main() {
     expect(candidates.first.sessionId, "active-id");
     expect(SessionManager.instance.sessionGuid, "active-guid");
     expect(SessionManager.instance.deviceType, "Master");
+  });
+
+  test("loads historical candidates by storage key but preserves metadata GUID",
+      () async {
+    await writeSessionMetadata(
+      storageIdentifier: "directory-reference-guid",
+      sessionGuid: "backend-session-guid",
+      sessionId: "legacy-session-id",
+      start: DateTime.utc(2026, 6, 18, 16),
+      end: DateTime.utc(2026, 6, 18, 17),
+    );
+
+    final candidates = await const GallerySessionCandidateSource().load();
+
+    expect(candidates, hasLength(1));
+    expect(candidates.single.sessionGuid, "backend-session-guid");
+    expect(candidates.single.sessionId, "legacy-session-id");
+    expect(candidates.single.preferredIdentifier, "backend-session-guid");
   });
 }
 

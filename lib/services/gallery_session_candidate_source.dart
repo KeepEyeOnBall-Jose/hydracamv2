@@ -13,10 +13,10 @@ class GallerySessionCandidateSource {
       _addSession(candidatesByKey, activeSession);
     }
 
-    final availableSessionIds = await sessionManager.getAvailableSessions();
-    for (final sessionId in availableSessionIds) {
+    final storageIdentifiers = await sessionManager.getAvailableSessions();
+    for (final storageIdentifier in storageIdentifiers) {
       final snapshot =
-          await sessionManager.loadSessionMetadataSnapshot(sessionId);
+          await sessionManager.loadSessionMetadataSnapshot(storageIdentifier);
       if (snapshot != null) {
         _addSession(candidatesByKey, snapshot);
       }

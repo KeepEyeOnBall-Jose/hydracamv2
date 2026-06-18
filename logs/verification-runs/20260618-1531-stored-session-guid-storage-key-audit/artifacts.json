@@ -1,0 +1,102 @@
+{
+  "acceptanceChecks": [
+    "Previous-session and gallery candidate code keep metadata GUIDs distinct from local storage directory keys",
+    "Existing restore and candidate-source tests preserve behavior while ambiguous controller/view identifiers are clarified"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:31:45.213158+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/screens/previous_sessions_screen_test.dart",
+        "test/services/gallery_session_candidate_source_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:32:04.359372+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_session_candidate_source_test.dart",
+        "--plain-name",
+        "loads historical candidates by storage key but preserves metadata GUID"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:32:29.720068+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/screens/previous_sessions_screen_test.dart",
+        "test/services/gallery_session_candidate_source_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:32:59.323444+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub",
+        "lib/screens/previous_sessions_screen.dart",
+        "lib/services/gallery_session_candidate_source.dart",
+        "test/services/gallery_session_candidate_source_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:33:07.096621+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:33:13.678938+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:33:23.655067+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "stored-session-guid-storage-key-audit",
+    "source": "docs/control/backlog-import.md#historical-javi-immediate-backlog-row-35",
+    "title": "Audit stored-session GUID and storage-key naming"
+  },
+  "notes": [
+    "Characterization coverage proves gallery candidates load by storage key while preserving metadata GUID.",
+    "Ambiguous previous-session controller/source identifiers were renamed to storageIdentifier without behavior changes.",
+    "Focused tests, full analyzer, and full Flutter tests passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

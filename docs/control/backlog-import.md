@@ -1327,6 +1327,17 @@ and storage-key restore, and the full Flutter analyzer/test suite passed. Keep
 row 35 open for real old-media attachment smoke evidence and any remaining
 controller/view GUID audit not covered by local widget/model tests.
 
+2026-06-18 row 35 storage-key naming audit note:
+`logs/verification-runs/20260618-1531-stored-session-guid-storage-key-audit/`
+adds gallery candidate coverage for loading metadata by a local storage
+directory key while preserving the backend `sessionGuid`, then renames ambiguous
+previous-session controller/source locals from `sessionId` to
+`storageIdentifier` where they refer to folder keys. Focused previous-session,
+gallery candidate-source, and session-manager tests passed, as did full analyzer
+and full Flutter tests. Keep row 35 open for real old-media attachment smoke
+evidence and any remaining controller/view GUID audit not covered by local
+widget/model tests.
+
 2026-06-08 row 111 note:
 `logs/verification-runs/20260608-1901-upload-app-version-metadata/` adds
 `appVersion` and `appBuildNumber` multipart fields to media uploads and proves
