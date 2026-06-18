@@ -1,0 +1,132 @@
+{
+  "acceptanceChecks": [
+    "CameraService refuses mock photo capture when no active session exists",
+    "CameraService refuses mock video save when no active session exists",
+    "No session_null media directory is created by refused capture paths"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:55:57.757576+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:55:57.853520+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:56:22.608320+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:56:53.680871+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:57:23.938929+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:57:36.898418+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/camera_service_failure_test.dart",
+        "test/services/session_manager_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:57:59.138172+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:58:07.332908+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:58:18.206346+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:58:22.450794+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:58:46.021682+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "camera-block-session-null-capture",
+    "source": "docs/control/backlog-import.md#0-asap-validate-camera-lens-and-video-profile-settings-on-iphonesamsung",
+    "title": "Block capture writes without active service session"
+  },
+  "notes": [
+    "Camera media path generation now refuses photo/video saves without an active service session, blocking session_null artifacts. Focused red/green camera regression, related service tests, analyzer, diff check, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1095,9 +1095,13 @@ class CameraService {
   /// Function to find session directory to store files
   /// Directory would be something like `/data/user/0/com.amaia23.hydracam/session_<sessionGuid>/...` in Android.
   Future<String> _getSessionMediaPath(String fileName) async {
+    final sessionGuid = SessionManager.instance.sessionGuid?.trim();
+    if (sessionGuid == null || sessionGuid.isEmpty) {
+      throw Exception(
+          "No active service session available for captured media.");
+    }
     final directory = await getApplicationDocumentsDirectory();
-    final sessionDir = Directory(
-        "${directory.path}/session_${SessionManager.instance.sessionGuid}");
+    final sessionDir = Directory("${directory.path}/session_$sessionGuid");
     if (!sessionDir.existsSync()) {
       sessionDir.createSync(recursive: true);
     }

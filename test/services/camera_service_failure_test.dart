@@ -165,21 +165,75 @@ void main() {
 
   test("mock camera writes placeholder media without a platform camera",
       () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.startSession(
+      "mock-camera-session",
+      "mock-camera-session",
+      deviceType: "Master",
+    );
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: true,
+    );
+
+    try {
+      await cameraService.initAvailableCameras();
+      final photoPath = await cameraService.takePhoto();
+      await cameraService.startRecordingVideo();
+      final videoPath = await cameraService.stopRecordingVideo();
+
+      expect(cameraService.isUsingMockCamera, isTrue);
+      expect(cameraService.controller, isNull);
+      expect(cameraService.deviceCameras, hasLength(1));
+      expect(File(photoPath).existsSync(), isTrue);
+      expect(File(videoPath).existsSync(), isTrue);
+      expect(cameraService.isRecording, isFalse);
+    } finally {
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+    }
+  });
+
+  test("mock camera refuses to write media without an active service session",
+      () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
     final cameraService = CameraService(
       storageService: storageService,
       useMockCamera: true,
     );
 
     await cameraService.initAvailableCameras();
-    final photoPath = await cameraService.takePhoto();
-    await cameraService.startRecordingVideo();
-    final videoPath = await cameraService.stopRecordingVideo();
 
-    expect(cameraService.isUsingMockCamera, isTrue);
-    expect(cameraService.controller, isNull);
-    expect(cameraService.deviceCameras, hasLength(1));
-    expect(File(photoPath).existsSync(), isTrue);
-    expect(File(videoPath).existsSync(), isTrue);
+    await expectLater(
+      cameraService.takePhoto(),
+      throwsA(
+        isA<Exception>().having(
+          (error) => error.toString(),
+          "message",
+          contains("No active service session"),
+        ),
+      ),
+    );
+    await cameraService.startRecordingVideo();
+    await expectLater(
+      cameraService.stopRecordingVideo(),
+      throwsA(
+        isA<Exception>().having(
+          (error) => error.toString(),
+          "message",
+          contains("No active service session"),
+        ),
+      ),
+    );
+
+    final documentsPath = await pathProvider.getApplicationDocumentsPath();
+    final sessionNullDirectory = Directory("$documentsPath/session_null");
+    expect(sessionNullDirectory.existsSync(), isFalse);
     expect(cameraService.isRecording, isFalse);
   });
 

@@ -54,6 +54,13 @@ Default issue schema:
   metadata unavailable. At that time, iPhone 12 Pro remained blocked by
   Xcode/debug launch plus locked-device direct launch. Xiaomi remains blocked by
   `INSTALL_FAILED_USER_RESTRICTED`. Keep this issue open.
+- 2026-06-18 session-null-capture guard note:
+  `logs/verification-runs/20260618-1818-camera-block-session-null-capture/`
+  adds focused camera-service coverage so mock/real media path generation
+  refuses photo or video saves without a nonblank active service session GUID.
+  This blocks new `session_null` artifacts locally; keep this issue open for a
+  fresh S7/Samsung capture rerun proving media lands under a real service
+  session.
 - 2026-06-07 one-by-one rerun note:
   `logs/verification-runs/20260607-all-devices-one-by-one-rerun/summary.md`
   records a fresh per-device pass. macOS, physical iPad, and Samsung S10e have
