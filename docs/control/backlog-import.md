@@ -214,6 +214,12 @@ Default issue schema:
   aborting heartbeat processing and leaving an old reported session attached.
   Keep this issue open for real master/slave reconnect reproduction and
   cross-device metadata comparison.
+- 2026-06-18 inactive-session-media-reject note:
+  `logs/verification-runs/20260618-1826-session-manager-reject-inactive-media/`
+  hardens `SessionManager.addPhoto()` and `addVideo()` so media cannot be added,
+  metadata-written, sidecar-written, or queued for upload when there is no
+  active nonblank session GUID. Keep this issue open for real master/slave
+  reconnect reproduction and cross-device metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing

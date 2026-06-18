@@ -743,6 +743,59 @@ void main() {
         expect(sessionManager.currentSession?.capturedVideos.first, video);
       });
 
+      test("addPhoto rejects media when no session is active", () async {
+        await sessionManager.endSession();
+        final photoPath = createTempMediaFile("inactive_photo.jpg");
+        final photo = CapturedPhoto(
+          photoPath: photoPath,
+          photoData: null,
+          captureDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+          slaveDeviceId: "device-1",
+        );
+
+        await expectLater(
+          sessionManager.addPhoto(photo),
+          throwsA(
+            isA<StateError>().having(
+              (error) => error.message,
+              "message",
+              contains("No active session"),
+            ),
+          ),
+        );
+
+        expect(sessionManager.currentSession, isNull);
+        expect(uploaderService.queueLength, 0);
+      });
+
+      test("addVideo rejects media when no session is active", () async {
+        await sessionManager.endSession();
+        final videoPath = createTempMediaFile("inactive_video.mp4");
+        final video = CapturedVideo(
+          videoPath: videoPath,
+          videoData: null,
+          slaveDeviceId: "device-1",
+          startRecordingDate: DateTime.now(),
+          endRecordingDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+        );
+
+        await expectLater(
+          sessionManager.addVideo(video),
+          throwsA(
+            isA<StateError>().having(
+              (error) => error.message,
+              "message",
+              contains("No active session"),
+            ),
+          ),
+        );
+
+        expect(sessionManager.currentSession, isNull);
+        expect(uploaderService.queueLength, 0);
+      });
+
       test("video capture context persists and reloads from metadata",
           () async {
         final videoPath = createTempMediaFile("context_video.mp4");

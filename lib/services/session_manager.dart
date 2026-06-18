@@ -152,8 +152,10 @@ class SessionManager extends ChangeNotifier {
 
   /// Add a captured photo to the current session.
   Future<void> addPhoto(CapturedPhoto photo) async {
+    final session = _requireActiveSessionForMedia(photo.photoPath);
+
     // Add photo to session and notify listeners
-    _currentSession?.addPhoto(photo);
+    session.addPhoto(photo);
     notifyListeners();
 
     LogService.instance
@@ -179,8 +181,10 @@ class SessionManager extends ChangeNotifier {
 
   /// Add a captured video to the current session.
   Future<void> addVideo(CapturedVideo video) async {
+    final session = _requireActiveSessionForMedia(video.videoPath);
+
     // Add video to session and notify listeners
-    _currentSession?.addVideo(video);
+    session.addVideo(video);
     notifyListeners();
 
     LogService.instance
@@ -203,6 +207,17 @@ class SessionManager extends ChangeNotifier {
 
     // Add video to uploader queue
     await UploaderService().addMediaToQueue(video);
+  }
+
+  CaptureSession _requireActiveSessionForMedia(String mediaPath) {
+    final session = _currentSession;
+    final normalizedGuid = _sessionGuid?.trim();
+    if (session == null || normalizedGuid == null || normalizedGuid.isEmpty) {
+      LogService.instance.registerLog(
+          "Rejected captured media without active session: $mediaPath");
+      throw StateError("No active session available for captured media.");
+    }
+    return session;
   }
 
   /// Deletes a file if the setting to delete local files is enabled.
