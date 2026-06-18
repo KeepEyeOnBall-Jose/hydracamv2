@@ -246,6 +246,13 @@ Default issue schema:
   Local/static validation passed; keep this issue open for live debug
   capture/upload deletion proof plus real master/slave reconnect reproduction
   and cross-device metadata comparison.
+- 2026-06-18 debug registry corrupt-entry guard note:
+  `logs/verification-runs/20260618-1738-debug-session-registry-corrupt-entry-guard/`
+  adds focused registry coverage so one malformed persisted debug-session
+  entry cannot break cleanup listing. The registry now skips corrupt or
+  incomplete entries while still returning valid saved debug session refs.
+  Keep this issue open for live debug capture/upload deletion proof plus real
+  master/slave reconnect reproduction and cross-device metadata comparison.
 - 2026-06-17 slave no-session authority note:
   focused `SlaveClient` coverage now proves a master's `noSession` response
   preserves an active slave service session and queued media instead of

@@ -52,11 +52,7 @@ class DebugSessionRegistry {
   Future<List<DebugSessionRef>> list() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getStringList(_key) ?? const <String>[];
-    return raw
-        .map((entry) => DebugSessionRef.fromJson(
-              jsonDecode(entry) as Map<String, dynamic>,
-            ))
-        .toList();
+    return raw.map(_parseEntry).whereType<DebugSessionRef>().toList();
   }
 
   Future<void> record(DebugSessionRef ref) async {
@@ -81,5 +77,34 @@ class DebugSessionRegistry {
       _key,
       refs.map((item) => jsonEncode(item.toJson())).toList(),
     );
+  }
+
+  DebugSessionRef? _parseEntry(String entry) {
+    try {
+      final decoded = jsonDecode(entry);
+      if (decoded is! Map<String, dynamic>) {
+        return null;
+      }
+      final sessionGuid = _nonBlankString(decoded["sessionGuid"]);
+      final sessionId = _nonBlankString(decoded["sessionId"]);
+      if (sessionGuid == null || sessionId == null) {
+        return null;
+      }
+      final rawNumericId = decoded["serviceNumericId"];
+      return DebugSessionRef(
+        sessionGuid: sessionGuid,
+        sessionId: sessionId,
+        serviceNumericId: rawNumericId is int
+            ? rawNumericId
+            : int.tryParse(rawNumericId?.toString() ?? ""),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String? _nonBlankString(Object? value) {
+    final text = value?.toString().trim();
+    return text == null || text.isEmpty ? null : text;
   }
 }

@@ -1,3 +1,5 @@
+import "dart:convert";
+
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/debug_session_registry.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -29,5 +31,27 @@ void main() {
     await registry.remove("debug-guid");
 
     expect(await registry.list(), isEmpty);
+  });
+
+  test("skips corrupt stored debug session entries", () async {
+    SharedPreferences.setMockInitialValues({
+      "debugSessionRegistry": [
+        "not-json",
+        jsonEncode({
+          "sessionGuid": "valid-debug-guid",
+          "sessionId": "debug-android-20260618T173800Z",
+          "serviceNumericId": 789,
+        }),
+      ],
+    });
+    final registry = DebugSessionRegistry();
+
+    expect(await registry.list(), [
+      const DebugSessionRef(
+        sessionGuid: "valid-debug-guid",
+        sessionId: "debug-android-20260618T173800Z",
+        serviceNumericId: 789,
+      ),
+    ]);
   });
 }
