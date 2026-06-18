@@ -39,14 +39,16 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
+  late int _duration;
   late int _remainingTime; // Remaining time in milliseconds
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
 
-    _remainingTime = widget.duration;
+    _duration = widget.duration <= 0 ? 0 : widget.duration;
+    _remainingTime = _duration;
 
     // Initialize animation controller for scaling effect
     _controller = AnimationController(
@@ -65,28 +67,44 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     _controller.dispose();
     super.dispose();
   }
 
   void _startCountdown() {
+    if (_duration <= 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          widget.onComplete();
+        }
+      });
+      return;
+    }
+
     const int tickInterval = 10; // Update every 10ms for smoother animations
     _timer =
         Timer.periodic(const Duration(milliseconds: tickInterval), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      final isComplete = _remainingTime <= tickInterval;
       setState(() {
-        _remainingTime -= tickInterval;
-        if (_remainingTime <= 0) {
-          _timer.cancel();
-          widget.onComplete(); // Trigger the callback
-        }
+        _remainingTime = isComplete ? 0 : _remainingTime - tickInterval;
       });
+      if (isComplete) {
+        timer.cancel();
+        widget.onComplete(); // Trigger the callback
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final double progress = _remainingTime / widget.duration;
+    final double rawProgress =
+        _duration <= 0 ? 0.0 : _remainingTime / _duration;
+    final double progress = rawProgress.clamp(0.0, 1.0).toDouble();
 
     return Center(
       child: Stack(

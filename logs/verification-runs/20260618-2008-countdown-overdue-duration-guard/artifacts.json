@@ -1,0 +1,58 @@
+{
+  "acceptanceChecks": [
+    "Countdown timer handles zero or overdue durations without NaN progress or disposed-context errors."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/animated_countdown_timer_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:08:26.395663+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/animated_countdown_timer_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:09:05.953974+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:09:23.837787+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:09:30.392563+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "countdown-overdue-duration-guard",
+    "source": "docs/control/backlog-import.md#time-sync-and-scheduled-commands",
+    "title": "Countdown timer overdue duration guard"
+  },
+  "notes": [
+    "Red-to-green widget regression covered zero and overdue countdown durations. Timer now renders final state, completes on the next frame, clamps progress, and guards timer callbacks after disposal. flutter analyze and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
