@@ -117,6 +117,46 @@ void main() {
     expect(stopCount, 2);
   });
 
+  testWidgets("BatteryService logs critical callback failures", (tester) async {
+    final messengerKey = GlobalKey<ScaffoldMessengerState>();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        scaffoldMessengerKey: messengerKey,
+        home: const Scaffold(body: SizedBox.shrink()),
+      ),
+    );
+
+    BatteryService.configureMonitoring(enabled: false);
+
+    final batteryService = BatteryService(
+      messengerState: messengerKey.currentState!,
+      lowBatteryThreshold: 40,
+      criticalBatteryThreshold: 10,
+      onCriticalBatteryCallback: (level) {
+        throw StateError("forced battery stop failed at $level%");
+      },
+    );
+
+    addTearDown(() {
+      batteryService.dispose();
+      BatteryService.configureMonitoring(enabled: true);
+    });
+
+    batteryService.simulateBatteryLevel(8);
+    await tester.pump();
+
+    expect(
+      LogService.instance.logs.any((entry) {
+        final message = entry["message"].toString();
+        return message.contains(
+                "BatteryService: critical battery callback failed") &&
+            message.contains("forced battery stop failed at 8%");
+      }),
+      isTrue,
+    );
+  });
+
   testWidgets("BatteryService throttles repeated low-battery warnings",
       (tester) async {
     final messengerKey = GlobalKey<ScaffoldMessengerState>();

@@ -484,6 +484,12 @@ Default issue schema:
   non-escaping failure contract. This is test-harness cleanup only; keep this
   issue open for real-device or emulator recording proof from platform
   battery/storage events.
+- 2026-06-18 critical-battery callback log test cleanup note:
+  `logs/verification-runs/20260618-1600-battery-critical-callback-log-test-cleanup/`
+  strengthens the battery critical-callback failure test by asserting the
+  guarded `LogService` diagnostic for callback exceptions. This is test-harness
+  cleanup only; keep this issue open for real-device or emulator recording
+  proof from platform battery/storage events.
 
 ### 6. Make network/device identity visible
 

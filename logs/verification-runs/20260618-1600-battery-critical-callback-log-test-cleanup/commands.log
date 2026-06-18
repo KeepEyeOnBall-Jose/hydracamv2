@@ -1,0 +1,94 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1600-battery-critical-callback-log-test-cleanup/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ flutter test --no-pub test/services/battery_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart
+00:00 +0: skips linux battery plugin when DBus system bus is missing
+00:00 +1: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:10.051869, function: null, file: null}
+00:00 +2: BatteryService triggers one autostop when battery becomes critical
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:10.126688, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-18 16:00:10.127056, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-18 16:00:10.143842, function: null, file: null}
+00:00 +3: BatteryService throttles repeated low-battery warnings
+00:00 +3: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService: Error reading battery level: MissingPluginException(No implementation found for method getBatteryLevel on channel dev.fluttercommunity.plus/battery), timestamp: 2026-06-18 16:00:10.164759, function: null, file: null}
+00:00 +3: BatteryService throttles repeated low-battery warnings
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:10.181238, function: null, file: null}
+00:00 +4: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/battery_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart
+00:00 +0: skips linux battery plugin when DBus system bus is missing
+00:00 +1: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:43.063830, function: null, file: null}
+00:00 +2: BatteryService triggers one autostop when battery becomes critical
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:43.142427, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-18 16:00:43.142687, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-18 16:00:43.156978, function: null, file: null}
+00:00 +3: BatteryService logs critical callback failures
+00:00 +3: BatteryService shows warning when battery level is low
+Log registered: {message: BatteryService: Error reading battery level: MissingPluginException(No implementation found for method getBatteryLevel on channel dev.fluttercommunity.plus/battery), timestamp: 2026-06-18 16:00:43.179985, function: null, file: null}
+00:00 +3: BatteryService logs critical callback failures
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:43.191413, function: null, file: null}
+Log registered: {message: Critical battery: triggering recording stop at 8%., timestamp: 2026-06-18 16:00:43.191590, function: null, file: null}
+Log registered: {message: BatteryService: critical battery callback failed: Bad state: forced battery stop failed at 8%
+#0      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart:137:9)
+#1      BatteryService._runCriticalBatteryCallback (package:hydracam/services/battery_service.dart:128:21)
+#2      BatteryService._handleCriticalBatteryLevel (package:hydracam/services/battery_service.dart:119:17)
+#3      BatteryService._handleBatteryLevel (package:hydracam/services/battery_service.dart:86:7)
+#4      BatteryService.simulateBatteryLevel (package:hydracam/services/battery_service.dart:217:5)
+#5      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/battery_service_test.dart:146:20)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#8      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-18 16:00:43.192078, function: null, file: null}
+00:00 +4: BatteryService throttles repeated low-battery warnings
+00:00 +4: BatteryService triggers one autostop when battery becomes critical
+Log registered: {message: BatteryService: Error reading battery level: MissingPluginException(No implementation found for method getBatteryLevel on channel dev.fluttercommunity.plus/battery), timestamp: 2026-06-18 16:00:43.202065, function: null, file: null}
+00:00 +4: BatteryService throttles repeated low-battery warnings
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 16:00:43.216203, function: null, file: null}
+00:00 +5: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 6.3s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
