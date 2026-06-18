@@ -525,6 +525,14 @@ Default issue schema:
   each slave's registered and last-seen timestamps alongside app, hardware,
   network, preview, session, and media diagnostics. Keep this issue open for
   real-device network smoke evidence and multi-group network UX.
+- 2026-06-18 master diagnostics coverage note:
+  `logs/verification-runs/20260618-1349-master-device-diagnostics-coverage/`
+  reruns focused `MasterServer` coverage, analyzer, and the full Flutter test
+  suite for app/hardware registration diagnostics, heartbeat session-media
+  payloads, identify acknowledgement network/session/media updates,
+  disconnected identify and preview labels, and stale-session capture filtering.
+  Keep this issue open for real-device network smoke evidence and multi-group
+  network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 

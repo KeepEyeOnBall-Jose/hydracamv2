@@ -8,6 +8,7 @@ import "package:mocktail/mocktail.dart";
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
+import "package:hydracam/master/connected_client_automation_payload.dart";
 import "package:hydracam/master/master_server.dart";
 import "package:hydracam/services/network_info_service.dart";
 import "package:hydracam/services/session_manager.dart";
@@ -145,7 +146,7 @@ void main() {
       networkSnapshot: const NetworkSnapshot(
         isWifiActive: true,
         ipAddress: "192.168.178.62",
-        source: "slave-test",
+        source: "registration-test",
       ),
     );
 
@@ -238,6 +239,85 @@ void main() {
     final sentMessage =
         verify(() => socket.add(captureAny())).captured.single as String;
     expect(jsonDecode(sentMessage), {"command": "noSession"});
+  });
+
+  test("incoming device registration exposes app and hardware diagnostics",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "deviceId",
+        "deviceId": "slave-a",
+        "appVersion": "1.4.0",
+        "appBuildNumber": "16",
+        "hardware": "Samsung Galaxy S10e",
+      }),
+      socket: socket,
+      remoteIp: "192.168.178.62",
+    );
+
+    final payload =
+        buildConnectedClientAutomationPayload(server.getConnectedDeviceInfos());
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["appVersion"], "1.4.0");
+    expect(client["appBuildNumber"], "16");
+    expect(client["hardwareLabel"], "Samsung Galaxy S10e");
+  });
+
+  test("incoming heartbeat preserves slave session media diagnostics",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "heartbeat",
+        "deviceId": "slave-a",
+        "sessionGuid": "slave-session-guid",
+        "sessionMedia": {
+          "photoCount": 1,
+          "videoCount": 0,
+          "pendingUploadCount": 1,
+          "uploadedCount": 0,
+        },
+      }),
+      socket: MockWebSocket(),
+      remoteIp: "192.168.178.62",
+    );
+
+    final payload =
+        buildConnectedClientAutomationPayload(server.getConnectedDeviceInfos());
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["reportedSessionGuid"], "slave-session-guid");
+    expect(client["sessionMedia"], {
+      "photoCount": 1,
+      "videoCount": 0,
+      "pendingUploadCount": 1,
+      "uploadedCount": 0,
+    });
   });
 
   test("incoming photo media is saved through session media storage", () async {
@@ -757,6 +837,55 @@ void main() {
     verify(() => socketB.add("stopRecordingVideo")).called(1);
   });
 
+  test("broadcast command skips slaves reporting a different session",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final matchingSocket = MockWebSocket();
+    final staleSessionSocket = MockWebSocket();
+    SessionManager.instance.startSession(
+      "master-session-guid",
+      "master-session-id",
+      deviceType: "Master",
+    );
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "matching-slave",
+      socket: matchingSocket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "master-session-guid",
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "stale-session-slave",
+      socket: staleSessionSocket,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "other-session-guid",
+    );
+
+    server.sendCommand("takePhoto");
+
+    verify(() => matchingSocket.add("takePhoto")).called(1);
+    verifyNever(() => staleSessionSocket.add(any()));
+  });
+
   test("master sends identify command and records ack diagnostics", () async {
     final server = MasterServer(
       MockCameraService(),
@@ -799,10 +928,27 @@ void main() {
       "requestedAt": requestedAt.toIso8601String(),
     });
 
-    server.recordIdentifyAckForTest(
-      deviceId: "slave-a",
-      requestId: "identify-test",
-      acknowledgedAt: acknowledgedAt,
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "identifyAck",
+        "deviceId": "slave-a",
+        "requestId": "identify-test",
+        "timestamp": acknowledgedAt.toIso8601String(),
+        "sessionGuid": "slave-session-guid",
+        "network": {
+          "isWifiActive": true,
+          "ipAddress": "192.168.178.64",
+          "source": "identify-ack-test",
+        },
+        "sessionMedia": {
+          "photoCount": 2,
+          "videoCount": 1,
+          "pendingUploadCount": 1,
+          "uploadedCount": 2,
+        },
+      }),
+      socket: socket,
+      remoteIp: "192.168.178.62",
     );
 
     final client = server.getConnectedDeviceInfos().single;
@@ -811,6 +957,124 @@ void main() {
     expect(client.lastIdentifyRequestId, "identify-test");
     expect(client.lastIdentifyRequestedAt, requestedAt);
     expect(client.lastIdentifyAckAt, acknowledgedAt);
+    expect(client.reportedSessionGuid, "slave-session-guid");
+    expect(client.networkSnapshot?.ipAddress, "192.168.178.64");
+    expect(client.networkSnapshot?.source, "identify-ack-test");
+    expect(client.sessionMedia, {
+      "photoCount": 2,
+      "videoCount": 1,
+      "pendingUploadCount": 1,
+      "uploadedCount": 2,
+    });
+  });
+
+  test("identify command still reaches slaves reporting a different session",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+    final requestedAt = DateTime.utc(2026, 6, 17, 19, 5);
+    SessionManager.instance.startSession(
+      "master-session-guid",
+      "master-session-id",
+      deviceType: "Master",
+    );
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "stale-session-slave",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "other-session-guid",
+    );
+
+    final sent = server.sendIdentifyCommand(
+      deviceId: "stale-session-slave",
+      requestId: "identify-stale-session",
+      requestedAt: requestedAt,
+    );
+
+    expect(sent, isTrue);
+    final sentMessage =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    final payload = jsonDecode(sentMessage) as Map<String, dynamic>;
+    expect(payload["command"], "identifySlave");
+    expect(payload["requestId"], "identify-stale-session");
+  });
+
+  test("pending identify becomes unavailable when the slave disconnects",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+    final requestedAt = DateTime.utc(2026, 6, 17, 18, 10);
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "slave-a",
+      socket: socket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+    );
+
+    final sent = server.sendIdentifyCommand(
+      deviceId: "slave-a",
+      requestId: "identify-before-disconnect",
+      requestedAt: requestedAt,
+    );
+    expect(sent, isTrue);
+
+    server.removeClientIfCurrentForTest(
+      deviceId: "slave-a",
+      socket: socket,
+    );
+
+    final client = server.getConnectedDeviceInfos().single;
+    expect(client.isConnected, isFalse);
+    expect(client.identifyStatus, "unavailable");
+    expect(client.identifyStatusLabel, "Identify unavailable: disconnected");
+    expect(client.lastIdentifyRequestId, "identify-before-disconnect");
+    expect(client.lastIdentifyRequestedAt, requestedAt);
+    expect(client.lastIdentifyAckAt, isNull);
+  });
+
+  test("disconnected device reports preview unavailable by disconnection",
+      () async {
+    final client = ConnectedDeviceInfo(
+      deviceId: "stale-preview-slave",
+      networkStatus: ConnectedDeviceNetworkStatus.ready,
+      registeredAt: DateTime.utc(2026, 6, 17, 18, 30),
+      lastSeen: DateTime.utc(2026, 6, 17, 18, 30, 5),
+      isConnected: false,
+      disconnectedAt: DateTime.utc(2026, 6, 17, 18, 30, 5),
+    );
+
+    expect(client.previewStatus, "unavailableDisconnected");
+    expect(client.previewStatusLabel, "Preview unavailable: disconnected");
+    expect(client.previewTransportLabel, "Slave disconnected");
   });
 }
 

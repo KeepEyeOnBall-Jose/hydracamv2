@@ -1,0 +1,63 @@
+{
+  "acceptanceChecks": [
+    "Focused MasterServer coverage proves slave app/hardware registration, heartbeat session media, stale-session capture filtering, identify acknowledgement diagnostics, disconnected identify state, and disconnected preview labels; analyzer and full Flutter tests pass."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:49:54.244248+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:50:08.114002+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:50:17.379074+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "No real LAN master/slave smoke was run; this pack is focused MasterServer coverage."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local Flutter test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-device-diagnostics-coverage",
+    "source": "docs/control/backlog-import.md#6-make-networkdevice-identity-visible",
+    "title": "Lock master connected-device diagnostics coverage"
+  },
+  "notes": [
+    "Focused MasterServer diagnostics test, analyzer, and full Flutter test suite passed. No real LAN master/slave smoke was run in this Tier D slice."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
