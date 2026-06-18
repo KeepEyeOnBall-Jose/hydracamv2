@@ -1,0 +1,344 @@
+# HydraCam evidence run command log
+
+$ python3 scripts/test_store_readiness_mode_scope.py
+
+[stderr]
+FF
+======================================================================
+FAIL: test_upload_android_does_not_emit_ios_only_failures (__main__.StoreReadinessModeScopeTest.test_upload_android_does_not_emit_ios_only_failures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/test_store_readiness_mode_scope.py", line 41, in test_upload_android_does_not_emit_ios_only_failures
+    self.assertNotIn("iOS Info.plist", result.output)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'iOS Info.plist' unexpectedly found in 'PASS: command available: plutil\nPASS: command available: grep\nPASS: command available: shasum\nPASS: command available: file\nPASS: command available: keytool\nPASS: command available: unzip\nPASS: command available: zip\nFAIL: iOS Info.plist missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/Runner/Info.plist\nFAIL: iOS privacy manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/Runner/PrivacyInfo.xcprivacy\nFAIL: iOS Xcode project missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/Runner.xcodeproj/project.pbxproj\nFAIL: iOS app icon manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json\nFAIL: iOS fastlane Appfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/fastlane/Appfile\nFAIL: iOS fastlane Fastfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/fastlane/Fastfile\nFAIL: iOS fastlane README missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/ios/fastlane/README.md\nFAIL: Android manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/android/app/src/main/AndroidManifest.xml\nFAIL: Android app build.gradle missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/android/app/build.gradle\nFAIL: Android upload certificate missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/android/amaia23-hydracam-upload-certificate-20260609.pem\nFAIL: Android fastlane Appfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/android/fastlane/Appfile\nFAIL: Android fastlane Fastfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/android/fastlane/Fastfile\nFAIL: Android fastlane README missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/android/fastlane/README.md\nFAIL: pubspec.yaml missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/pubspec.yaml\nFAIL: Login screen missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/lib/screens/login_screen.dart\nFAIL: Auth0 service missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/lib/services/auth0_service.dart\nFAIL: store privacy checklist missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/docs/control/store-privacy-and-metadata.md\nFAIL: store privacy policy draft missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/docs/store/hydracam-privacy-policy.md\nFAIL: store support page draft missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/docs/store/hydracam-support.md\nFAIL: store account deletion page draft missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/docs/store/hydracam-account-deletion.md\nFAIL: web index missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/web/index.html\nFAIL: web manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/web/manifest.json\nFAIL: store artifact build script missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/scripts/build_store_artifacts.sh\nFAIL: iOS fastlane wrapper missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/scripts/ios_fastlane.sh\nFAIL: Android fastlane wrapper missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmp0pub944n/scripts/android_fastlane.sh\nFAIL: Android key.properties missing; release builds must use the upload key\nFAIL: LaunchImage.png missing or empty\nFAIL: LaunchImage@2x.png missing or empty\nFAIL: LaunchImage@3x.png missing or empty\nFAIL: Android launcher icon set is missing\nFAIL: Android AAB missing; run scripts/build_store_artifacts.sh android\nPASS: GOOGLE_PLAY_JSON_KEY points to a file\nPASS: HYDRACAM_PRIVACY_POLICY_URL is set to a public HTTPS URL\nPASS: HYDRACAM_SUPPORT_URL is set to a public HTTPS URL\nPASS: HYDRACAM_ACCOUNT_DELETION_URL is set to a public HTTPS URL\nSummary: 31 failure(s), 0 warning(s)\n'
+
+======================================================================
+FAIL: test_upload_ios_does_not_emit_android_only_failures (__main__.StoreReadinessModeScopeTest.test_upload_ios_does_not_emit_android_only_failures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/test_store_readiness_mode_scope.py", line 26, in test_upload_ios_does_not_emit_android_only_failures
+    self.assertNotIn("Android manifest", result.output)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Android manifest' unexpectedly found in 'PASS: command available: plutil\nPASS: command available: grep\nPASS: command available: shasum\nPASS: command available: file\nPASS: command available: keytool\nPASS: command available: unzip\nPASS: command available: zip\nPASS: command available: security\nPASS: App Store Connect API key is available for automatic iOS signing/provisioning\nFAIL: iOS Info.plist missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/Runner/Info.plist\nFAIL: iOS privacy manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/Runner/PrivacyInfo.xcprivacy\nFAIL: iOS Xcode project missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/Runner.xcodeproj/project.pbxproj\nFAIL: iOS app icon manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json\nFAIL: iOS fastlane Appfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/fastlane/Appfile\nFAIL: iOS fastlane Fastfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/fastlane/Fastfile\nFAIL: iOS fastlane README missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/ios/fastlane/README.md\nFAIL: Android manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/android/app/src/main/AndroidManifest.xml\nFAIL: Android app build.gradle missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/android/app/build.gradle\nFAIL: Android upload certificate missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/android/amaia23-hydracam-upload-certificate-20260609.pem\nFAIL: Android fastlane Appfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/android/fastlane/Appfile\nFAIL: Android fastlane Fastfile missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/android/fastlane/Fastfile\nFAIL: Android fastlane README missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/android/fastlane/README.md\nFAIL: pubspec.yaml missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/pubspec.yaml\nFAIL: Login screen missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/lib/screens/login_screen.dart\nFAIL: Auth0 service missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/lib/services/auth0_service.dart\nFAIL: store privacy checklist missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/docs/control/store-privacy-and-metadata.md\nFAIL: store privacy policy draft missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/docs/store/hydracam-privacy-policy.md\nFAIL: store support page draft missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/docs/store/hydracam-support.md\nFAIL: store account deletion page draft missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/docs/store/hydracam-account-deletion.md\nFAIL: web index missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/web/index.html\nFAIL: web manifest missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/web/manifest.json\nFAIL: store artifact build script missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/scripts/build_store_artifacts.sh\nFAIL: iOS fastlane wrapper missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/scripts/ios_fastlane.sh\nFAIL: Android fastlane wrapper missing at /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/tmpfzwhszqf/scripts/android_fastlane.sh\nFAIL: Android key.properties missing; release builds must use the upload key\nFAIL: LaunchImage.png missing or empty\nFAIL: LaunchImage@2x.png missing or empty\nFAIL: LaunchImage@3x.png missing or empty\nFAIL: Android launcher icon set is missing\nFAIL: iOS IPA missing; run scripts/build_store_artifacts.sh ios\nPASS: App Store Connect API key is configured\nPASS: HYDRACAM_PRIVACY_POLICY_URL is set to a public HTTPS URL\nPASS: HYDRACAM_SUPPORT_URL is set to a public HTTPS URL\nPASS: HYDRACAM_ACCOUNT_DELETION_URL is set to a public HTTPS URL\nSummary: 31 failure(s), 0 warning(s)\n'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.069s
+
+FAILED (failures=2)
+[exit-code] 1
+
+$ python3 scripts/test_store_readiness_mode_scope.py
+
+[stderr]
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.051s
+
+OK
+[exit-code] 0
+
+$ bash -n scripts/check_store_readiness.sh
+[exit-code] 0
+
+$ bash -lc set +e; bash scripts/check_store_readiness.sh upload-ios; status=$?; printf "upload-ios-exit=%s\n" "$status"; exit 0
+PASS: command available: grep
+PASS: command available: shasum
+PASS: command available: file
+PASS: command available: plutil
+PASS: command available: security
+FAIL: iOS distribution signing identity and App Store Connect API signing credential are unavailable
+PASS: iOS Info.plist exists
+PASS: iOS privacy manifest exists
+PASS: iOS Xcode project exists
+PASS: iOS app icon manifest exists
+PASS: iOS fastlane Appfile exists
+PASS: iOS fastlane Fastfile exists
+PASS: iOS fastlane README exists
+PASS: iOS fastlane wrapper exists
+PASS: pubspec.yaml exists
+PASS: Login screen exists
+PASS: Auth0 service exists
+PASS: store privacy checklist exists
+PASS: store privacy policy draft exists
+PASS: store support page draft exists
+PASS: store account deletion page draft exists
+PASS: web index exists
+PASS: web manifest exists
+PASS: store artifact build script exists
+PASS: iOS Info.plist is valid
+PASS: iOS display name is HydraCam
+PASS: iOS camera usage description present
+PASS: iOS microphone usage description present
+PASS: iOS photo library usage description present
+PASS: iOS photo library add usage description present
+PASS: iOS location usage description present
+PASS: iOS local network usage description present
+PASS: iOS Auth0 redirect scheme is com.keepeyeonball
+PASS: iOS Auth0 redirect scheme is not the generic com.hydracam
+PASS: iOS export compliance declares no non-exempt encryption
+PASS: iOS Info.plist omits Dart VM Bonjour services
+PASS: iOS privacy manifest is valid
+PASS: iOS privacy manifest declares UserDefaults access
+PASS: iOS privacy manifest declares UserDefaults reason CA92.1
+PASS: iOS privacy manifest declares file timestamp access
+PASS: iOS privacy manifest declares file timestamp reason C617.1
+PASS: iOS privacy manifest declares disk space access
+PASS: iOS privacy manifest declares low/sufficient disk-space reason E174.1
+PASS: iOS privacy manifest declares display disk-space reason 85F4.1
+PASS: iOS privacy manifest declares photo/video collection
+PASS: iOS privacy manifest declares audio collection
+PASS: iOS privacy manifest declares precise location collection
+PASS: iOS privacy manifest declares email collection
+PASS: iOS privacy manifest declares user ID collection
+PASS: iOS privacy manifest declares device ID collection
+PASS: iOS privacy manifest declares app functionality purpose
+PASS: iOS privacy manifest declares no tracking
+PASS: iOS bundle identifier is com.keepeyeonball
+PASS: iOS privacy manifest is bundled in Runner resources
+PASS: iOS fastlane Appfile targets com.keepeyeonball
+PASS: iOS fastlane builds include the privacy policy URL when configured
+PASS: iOS fastlane builds include the support URL when configured
+PASS: iOS fastlane builds include the account deletion URL when configured
+PASS: iOS fastlane writes store artifact metadata
+PASS: iOS fastlane README points to the repo wrapper
+PASS: pubspec version is 1.4.0+16
+PASS: pubspec description is release-appropriate
+PASS: pubspec includes url_launcher for account deletion URL handoff
+PASS: pubspec declares url_launcher_android for Android Gradle Plugin 8.11.1
+PASS: Login screen exposes an in-app privacy policy path
+PASS: Login screen exposes an in-app support path
+PASS: Login screen exposes an account deletion request path
+PASS: Login screen reads the privacy policy URL Dart define
+PASS: Login screen reads the support URL Dart define
+PASS: Login screen reads the account deletion URL Dart define
+PASS: Auth0 service defaults iOS redirect scheme to com.keepeyeonball
+PASS: Auth0 service defaults Android redirect scheme to com.amaia23.hydracam
+PASS: Auth0 service uses login-callback redirect host
+PASS: Auth0 service omits the generic com.hydracam redirect URI
+PASS: store checklist tracks the privacy policy URL
+PASS: store checklist tracks the support URL
+PASS: store checklist tracks the account deletion URL Dart define
+PASS: store checklist covers media and audio data
+PASS: store checklist covers Auth0 identity data
+PASS: store checklist covers local-network WebSocket behavior
+PASS: privacy policy draft covers Auth0 identity
+PASS: privacy policy draft covers captured media and audio
+PASS: privacy policy draft covers location and network context
+PASS: privacy policy draft covers diagnostics
+PASS: privacy policy draft links account/data deletion expectations
+PASS: support draft covers same-network setup
+PASS: support draft covers camera and microphone permissions
+PASS: support draft covers iOS local network permission
+PASS: support draft covers account/data deletion
+PASS: account deletion draft matches the release Dart define
+PASS: account deletion draft covers Auth0 account data
+PASS: account deletion draft covers backend user records
+PASS: account deletion draft covers uploaded session data
+PASS: account deletion draft covers requester verification
+PASS: account deletion draft covers retention exceptions
+PASS: store build script supports Dart defines
+PASS: store build script compiles the privacy policy URL when configured
+PASS: store build script compiles the support URL when configured
+PASS: store build script compiles the account deletion URL when configured
+PASS: store build script writes store artifact metadata
+PASS: web manifest name is HydraCam
+PASS: web manifest short_name is HydraCam
+PASS: web manifest description is release-appropriate
+PASS: web manifest omits Flutter template metadata
+PASS: web index title is HydraCam
+PASS: web index Apple title is HydraCam
+PASS: web index description is release-appropriate
+PASS: web index omits Flutter template metadata
+PASS: LaunchImage.png is branded-sized (19404 bytes)
+PASS: LaunchImage@2x.png is branded-sized (52222 bytes)
+PASS: LaunchImage@3x.png is branded-sized (83801 bytes)
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@3x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@3x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@3x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@1x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@3x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@1x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@1x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@1x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@2x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@1x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@2x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@1x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@2x.png is a PNG
+PASS: iOS app icon Icon-App-83.5x83.5@2x.png is a PNG
+PASS: iOS app icon Icon-App-1024x1024@1x.png is a PNG
+PASS: iOS app icon manifest references 25 icon files
+FAIL: iOS IPA missing; run scripts/build_store_artifacts.sh ios
+WARN: App Store Connect API key is not configured
+WARN: HYDRACAM_PRIVACY_POLICY_URL is not set to a public HTTPS URL
+WARN: HYDRACAM_SUPPORT_URL is not set to a public HTTPS URL
+WARN: HYDRACAM_ACCOUNT_DELETION_URL is not set to a public HTTPS URL
+FAIL: upload-ios mode requires an App Store Connect API key
+FAIL: upload-ios mode requires HYDRACAM_PRIVACY_POLICY_URL as a public HTTPS URL
+FAIL: upload-ios mode requires HYDRACAM_SUPPORT_URL as a public HTTPS URL
+FAIL: upload-ios mode requires HYDRACAM_ACCOUNT_DELETION_URL as a public HTTPS URL
+Summary: 6 failure(s), 4 warning(s)
+upload-ios-exit=1
+[exit-code] 0
+
+$ bash -lc set +e; bash scripts/check_store_readiness.sh upload-android; status=$?; printf "upload-android-exit=%s\n" "$status"; exit 0
+PASS: command available: grep
+PASS: command available: shasum
+PASS: command available: file
+PASS: command available: keytool
+PASS: command available: unzip
+PASS: command available: zip
+PASS: Android manifest exists
+PASS: Android app build.gradle exists
+PASS: Android upload certificate exists
+PASS: Android fastlane Appfile exists
+PASS: Android fastlane Fastfile exists
+PASS: Android fastlane README exists
+PASS: Android fastlane wrapper exists
+PASS: pubspec.yaml exists
+PASS: Login screen exists
+PASS: Auth0 service exists
+PASS: store privacy checklist exists
+PASS: store privacy policy draft exists
+PASS: store support page draft exists
+PASS: store account deletion page draft exists
+PASS: web index exists
+PASS: web manifest exists
+PASS: store artifact build script exists
+PASS: Android package is com.amaia23.hydracam
+PASS: Android display name is HydraCam
+PASS: Android camera permission present
+PASS: Android microphone permission present
+PASS: Android internet permission present
+PASS: Android Wi-Fi state permission present
+PASS: Android fine location permission present
+PASS: Android image media permission present
+PASS: Android video media permission present
+PASS: Android Auth0 redirect scheme comes from the appAuthRedirectScheme placeholder
+PASS: Android Auth0 redirect host is login-callback
+PASS: Android Auth0 redirect scheme is not the generic com.hydracam
+PASS: Android namespace is com.amaia23.hydracam
+PASS: Android applicationId is com.amaia23.hydracam
+PASS: Android AppAuth manifest placeholder is com.amaia23.hydracam
+PASS: Android minSdk is 24
+PASS: Android targetSdk is 35 (minimum 35)
+PASS: Android compileSdk is 36 (minimum 35)
+PASS: Android release build uses release signing config
+PASS: Android release build has no debug signing fallback
+PASS: Android fastlane Appfile targets com.amaia23.hydracam
+PASS: Android fastlane builds include the privacy policy URL when configured
+PASS: Android fastlane builds include the support URL when configured
+PASS: Android fastlane builds include the account deletion URL when configured
+PASS: Android fastlane writes store artifact metadata
+PASS: Android fastlane README points to the repo wrapper
+PASS: Android key.properties exists
+PASS: Android key.properties has keyAlias
+PASS: Android upload keystore exists
+PASS: Android key.properties has storePassword
+PASS: Android key.properties has keyPassword
+PASS: pubspec version is 1.4.0+16
+PASS: pubspec description is release-appropriate
+PASS: pubspec includes url_launcher for account deletion URL handoff
+PASS: pubspec declares url_launcher_android for Android Gradle Plugin 8.11.1
+PASS: Login screen exposes an in-app privacy policy path
+PASS: Login screen exposes an in-app support path
+PASS: Login screen exposes an account deletion request path
+PASS: Login screen reads the privacy policy URL Dart define
+PASS: Login screen reads the support URL Dart define
+PASS: Login screen reads the account deletion URL Dart define
+PASS: Auth0 service defaults iOS redirect scheme to com.keepeyeonball
+PASS: Auth0 service defaults Android redirect scheme to com.amaia23.hydracam
+PASS: Auth0 service uses login-callback redirect host
+PASS: Auth0 service omits the generic com.hydracam redirect URI
+PASS: store checklist tracks the privacy policy URL
+PASS: store checklist tracks the support URL
+PASS: store checklist tracks the account deletion URL Dart define
+PASS: store checklist covers media and audio data
+PASS: store checklist covers Auth0 identity data
+PASS: store checklist covers local-network WebSocket behavior
+PASS: privacy policy draft covers Auth0 identity
+PASS: privacy policy draft covers captured media and audio
+PASS: privacy policy draft covers location and network context
+PASS: privacy policy draft covers diagnostics
+PASS: privacy policy draft links account/data deletion expectations
+PASS: support draft covers same-network setup
+PASS: support draft covers camera and microphone permissions
+PASS: support draft covers iOS local network permission
+PASS: support draft covers account/data deletion
+PASS: account deletion draft matches the release Dart define
+PASS: account deletion draft covers Auth0 account data
+PASS: account deletion draft covers backend user records
+PASS: account deletion draft covers uploaded session data
+PASS: account deletion draft covers requester verification
+PASS: account deletion draft covers retention exceptions
+PASS: store build script supports Dart defines
+PASS: store build script compiles the privacy policy URL when configured
+PASS: store build script compiles the support URL when configured
+PASS: store build script compiles the account deletion URL when configured
+PASS: store build script writes store artifact metadata
+PASS: web manifest name is HydraCam
+PASS: web manifest short_name is HydraCam
+PASS: web manifest description is release-appropriate
+PASS: web manifest omits Flutter template metadata
+PASS: web index title is HydraCam
+PASS: web index Apple title is HydraCam
+PASS: web index description is release-appropriate
+PASS: web index omits Flutter template metadata
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-hdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-mdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon /Users/jose/src/work/hydracamv2/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png is a PNG
+PASS: Android launcher icon set includes 5 densities
+FAIL: Android AAB is stale: /Users/jose/src/work/hydracamv2/lib/l10n/app_localizations.dart is newer than the artifact
+PASS: Android AAB store metadata sidecar exists
+FAIL: Android AAB store metadata mismatch: artifact_sha256 HYDRACAM_PRIVACY_POLICY_URL HYDRACAM_SUPPORT_URL HYDRACAM_ACCOUNT_DELETION_URL
+PASS: Android AAB packages the AppAuth redirect receiver
+PASS: Android AAB packages the Auth0 redirect host
+PASS: Android AAB packages Auth0 redirect scheme com.amaia23.hydracam
+PASS: Android AAB omits the generic com.hydracam redirect scheme
+PASS: Android AAB is signed with expected upload certificate
+WARN: GOOGLE_PLAY_JSON_KEY is not set to a readable file
+WARN: HYDRACAM_PRIVACY_POLICY_URL is not set to a public HTTPS URL
+WARN: HYDRACAM_SUPPORT_URL is not set to a public HTTPS URL
+WARN: HYDRACAM_ACCOUNT_DELETION_URL is not set to a public HTTPS URL
+FAIL: upload-android mode requires GOOGLE_PLAY_JSON_KEY
+FAIL: upload-android mode requires HYDRACAM_PRIVACY_POLICY_URL as a public HTTPS URL
+FAIL: upload-android mode requires HYDRACAM_SUPPORT_URL as a public HTTPS URL
+FAIL: upload-android mode requires HYDRACAM_ACCOUNT_DELETION_URL as a public HTTPS URL
+Summary: 6 failure(s), 4 warning(s)
+upload-android-exit=1
+[exit-code] 0
+
+$ python3 scripts/test_store_readiness_mode_scope.py
+
+[stderr]
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.058s
+
+OK
+[exit-code] 0
+
+$ python3 -m py_compile scripts/test_store_readiness_mode_scope.py
+[exit-code] 0
+
+$ bash -n scripts/check_store_readiness.sh
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

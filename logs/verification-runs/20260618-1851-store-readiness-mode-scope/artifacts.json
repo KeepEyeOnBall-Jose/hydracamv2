@@ -1,0 +1,114 @@
+{
+  "acceptanceChecks": [
+    "upload-ios preflight does not emit Android-only failures",
+    "upload-android preflight does not emit iOS-only failures",
+    "Real upload-ios/upload-android preflights still run lane-specific gates"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/test_store_readiness_mode_scope.py"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:51:36.978402+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/test_store_readiness_mode_scope.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:52:58.515069+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/check_store_readiness.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:13.469069+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set +e; bash scripts/check_store_readiness.sh upload-ios; status=$?; printf \"upload-ios-exit=%s\\n\" \"$status\"; exit 0"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:18.147727+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set +e; bash scripts/check_store_readiness.sh upload-android; status=$?; printf \"upload-android-exit=%s\\n\" \"$status\"; exit 0"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:23.273573+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/test_store_readiness_mode_scope.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:42.616974+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "scripts/test_store_readiness_mode_scope.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:42.718115+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/check_store_readiness.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:42.750110+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:53:47.747969+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:54:18.244281+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "store-readiness-mode-scope",
+    "source": "docs/control/status-and-roadmap.md#store-distribution",
+    "title": "Scope store readiness checks to selected upload lane"
+  },
+  "notes": [
+    "Store readiness upload lane checks now skip opposite-platform static, command, icon, signing, and artifact gates. Fixture regressions pass for upload-ios/upload-android; live diagnostics report only lane-appropriate remaining blockers."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

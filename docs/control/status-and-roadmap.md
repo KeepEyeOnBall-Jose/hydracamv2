@@ -1054,6 +1054,15 @@ pulled into active mobile work:
   compiled store URLs do not match the artifact and current environment. Auth0
   Allowed Callback URLs and Allowed Logout URLs must also be updated to include
   the two app-specific callback URLs before beta login testing.
+- 2026-06-18 store-readiness mode-scope note:
+  `logs/verification-runs/20260618-1851-store-readiness-mode-scope/` adds a
+  fixture regression for `scripts/check_store_readiness.sh upload-ios` and
+  `upload-android` so TestFlight-only checks do not emit Android-only blockers
+  and Google Play-only checks do not emit iOS-only blockers. The live
+  diagnostics still fail on lane-appropriate blockers: iOS lacks a current IPA,
+  local Distribution/App Store Connect upload credentials, and public store
+  URLs; Android reports stale/mismatched AAB metadata plus missing
+  `GOOGLE_PLAY_JSON_KEY` and public store URLs.
 - 2026-06-18 skipped singleton-test cleanup:
   `logs/verification-runs/20260618-1620-camera-singleton-reset-test-hook/`
   removes the remaining skipped `CameraServiceSingleton` uninitialized-guard

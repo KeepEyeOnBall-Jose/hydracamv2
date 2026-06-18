@@ -118,6 +118,14 @@ requires_android_upload() {
   esac
 }
 
+checks_ios_lane() {
+  [[ "$MODE" == "local" ]] || requires_ios_upload
+}
+
+checks_android_lane() {
+  [[ "$MODE" == "local" ]] || requires_android_upload
+}
+
 require_file() {
   local path="$1"
   local label="$2"
@@ -500,7 +508,18 @@ require_png_file() {
   fi
 }
 
-for required_command in plutil grep shasum file keytool unzip zip; do
+required_commands=(grep shasum)
+if checks_ios_lane || checks_android_lane; then
+  required_commands+=(file)
+fi
+if checks_ios_lane; then
+  required_commands+=(plutil)
+fi
+if checks_android_lane; then
+  required_commands+=(keytool unzip zip)
+fi
+
+for required_command in "${required_commands[@]}"; do
   if command -v "$required_command" >/dev/null 2>&1; then
     pass "command available: $required_command"
   else
@@ -509,7 +528,7 @@ for required_command in plutil grep shasum file keytool unzip zip; do
 done
 
 if [[ "$(uname -s)" == "Darwin" ]] &&
-  { [[ "$MODE" == "local" ]] || requires_ios_upload; }; then
+  checks_ios_lane; then
   if command -v security >/dev/null 2>&1; then
     pass "command available: security"
     if security find-identity -v -p codesigning 2>/dev/null | \
@@ -529,19 +548,25 @@ if [[ "$(uname -s)" == "Darwin" ]] &&
   fi
 fi
 
-require_file "$IOS_INFO_PLIST" "iOS Info.plist"
-require_file "$IOS_PRIVACY_MANIFEST" "iOS privacy manifest"
-require_file "$IOS_PROJECT_FILE" "iOS Xcode project"
-require_file "$IOS_APP_ICON_CONTENTS" "iOS app icon manifest"
-require_file "$IOS_FASTLANE_APPFILE" "iOS fastlane Appfile"
-require_file "$IOS_FASTLANE_FASTFILE" "iOS fastlane Fastfile"
-require_file "$IOS_FASTLANE_README" "iOS fastlane README"
-require_file "$ANDROID_MANIFEST" "Android manifest"
-require_file "$ANDROID_BUILD_GRADLE" "Android app build.gradle"
-require_file "$ANDROID_UPLOAD_CERT" "Android upload certificate"
-require_file "$ANDROID_FASTLANE_APPFILE" "Android fastlane Appfile"
-require_file "$ANDROID_FASTLANE_FASTFILE" "Android fastlane Fastfile"
-require_file "$ANDROID_FASTLANE_README" "Android fastlane README"
+if checks_ios_lane; then
+  require_file "$IOS_INFO_PLIST" "iOS Info.plist"
+  require_file "$IOS_PRIVACY_MANIFEST" "iOS privacy manifest"
+  require_file "$IOS_PROJECT_FILE" "iOS Xcode project"
+  require_file "$IOS_APP_ICON_CONTENTS" "iOS app icon manifest"
+  require_file "$IOS_FASTLANE_APPFILE" "iOS fastlane Appfile"
+  require_file "$IOS_FASTLANE_FASTFILE" "iOS fastlane Fastfile"
+  require_file "$IOS_FASTLANE_README" "iOS fastlane README"
+  require_file "$ROOT_DIR/scripts/ios_fastlane.sh" "iOS fastlane wrapper"
+fi
+if checks_android_lane; then
+  require_file "$ANDROID_MANIFEST" "Android manifest"
+  require_file "$ANDROID_BUILD_GRADLE" "Android app build.gradle"
+  require_file "$ANDROID_UPLOAD_CERT" "Android upload certificate"
+  require_file "$ANDROID_FASTLANE_APPFILE" "Android fastlane Appfile"
+  require_file "$ANDROID_FASTLANE_FASTFILE" "Android fastlane Fastfile"
+  require_file "$ANDROID_FASTLANE_README" "Android fastlane README"
+  require_file "$ROOT_DIR/scripts/android_fastlane.sh" "Android fastlane wrapper"
+fi
 require_file "$PUBSPEC" "pubspec.yaml"
 require_file "$LOGIN_SCREEN" "Login screen"
 require_file "$AUTH0_SERVICE" "Auth0 service"
@@ -552,10 +577,8 @@ require_file "$STORE_DELETION_DRAFT" "store account deletion page draft"
 require_file "$WEB_INDEX" "web index"
 require_file "$WEB_MANIFEST" "web manifest"
 require_file "$ROOT_DIR/scripts/build_store_artifacts.sh" "store artifact build script"
-require_file "$ROOT_DIR/scripts/ios_fastlane.sh" "iOS fastlane wrapper"
-require_file "$ROOT_DIR/scripts/android_fastlane.sh" "Android fastlane wrapper"
 
-if [[ -f "$IOS_INFO_PLIST" ]]; then
+if checks_ios_lane && [[ -f "$IOS_INFO_PLIST" ]]; then
   if plutil -lint "$IOS_INFO_PLIST" >/dev/null; then
     pass "iOS Info.plist is valid"
   else
@@ -595,7 +618,7 @@ if [[ -f "$IOS_INFO_PLIST" ]]; then
   fi
 fi
 
-if [[ -f "$IOS_PRIVACY_MANIFEST" ]]; then
+if checks_ios_lane && [[ -f "$IOS_PRIVACY_MANIFEST" ]]; then
   if plutil -lint "$IOS_PRIVACY_MANIFEST" >/dev/null; then
     pass "iOS privacy manifest is valid"
   else
@@ -637,19 +660,19 @@ if [[ -f "$IOS_PRIVACY_MANIFEST" ]]; then
   fi
 fi
 
-if [[ -f "$IOS_PROJECT_FILE" ]]; then
+if checks_ios_lane && [[ -f "$IOS_PROJECT_FILE" ]]; then
   require_text "$IOS_PROJECT_FILE" "PRODUCT_BUNDLE_IDENTIFIER = ${EXPECTED_IOS_BUNDLE_ID};" \
     "iOS bundle identifier is ${EXPECTED_IOS_BUNDLE_ID}"
   require_text "$IOS_PROJECT_FILE" "PrivacyInfo\\.xcprivacy in Resources" \
     "iOS privacy manifest is bundled in Runner resources"
 fi
 
-if [[ -f "$IOS_FASTLANE_APPFILE" ]]; then
+if checks_ios_lane && [[ -f "$IOS_FASTLANE_APPFILE" ]]; then
   require_text "$IOS_FASTLANE_APPFILE" "app_identifier\\(\"${EXPECTED_IOS_BUNDLE_ID}\"\\)" \
     "iOS fastlane Appfile targets ${EXPECTED_IOS_BUNDLE_ID}"
 fi
 
-if [[ -f "$IOS_FASTLANE_FASTFILE" ]]; then
+if checks_ios_lane && [[ -f "$IOS_FASTLANE_FASTFILE" ]]; then
   require_text "$IOS_FASTLANE_FASTFILE" "HYDRACAM_PRIVACY_POLICY_URL" \
     "iOS fastlane builds include the privacy policy URL when configured"
   require_text "$IOS_FASTLANE_FASTFILE" "HYDRACAM_SUPPORT_URL" \
@@ -660,12 +683,12 @@ if [[ -f "$IOS_FASTLANE_FASTFILE" ]]; then
     "iOS fastlane writes store artifact metadata"
 fi
 
-if [[ -f "$IOS_FASTLANE_README" ]]; then
+if checks_ios_lane && [[ -f "$IOS_FASTLANE_README" ]]; then
   require_text "$IOS_FASTLANE_README" "scripts/ios_fastlane\\.sh" \
     "iOS fastlane README points to the repo wrapper"
 fi
 
-if [[ -f "$ANDROID_MANIFEST" ]]; then
+if checks_android_lane && [[ -f "$ANDROID_MANIFEST" ]]; then
   require_text "$ANDROID_MANIFEST" "package=\"${EXPECTED_ANDROID_PACKAGE}\"" \
     "Android package is ${EXPECTED_ANDROID_PACKAGE}"
   require_text "$ANDROID_MANIFEST" "android:label=\"${EXPECTED_DISPLAY_NAME}\"" \
@@ -695,7 +718,7 @@ if [[ -f "$ANDROID_MANIFEST" ]]; then
   fi
 fi
 
-if [[ -f "$ANDROID_BUILD_GRADLE" ]]; then
+if checks_android_lane && [[ -f "$ANDROID_BUILD_GRADLE" ]]; then
   require_text "$ANDROID_BUILD_GRADLE" "namespace = \"${EXPECTED_ANDROID_PACKAGE}\"" \
     "Android namespace is ${EXPECTED_ANDROID_PACKAGE}"
   require_text "$ANDROID_BUILD_GRADLE" "applicationId = \"${EXPECTED_ANDROID_PACKAGE}\"" \
@@ -731,12 +754,12 @@ if [[ -f "$ANDROID_BUILD_GRADLE" ]]; then
   fi
 fi
 
-if [[ -f "$ANDROID_FASTLANE_APPFILE" ]]; then
+if checks_android_lane && [[ -f "$ANDROID_FASTLANE_APPFILE" ]]; then
   require_text "$ANDROID_FASTLANE_APPFILE" "package_name\\(\"${EXPECTED_ANDROID_PACKAGE}\"\\)" \
     "Android fastlane Appfile targets ${EXPECTED_ANDROID_PACKAGE}"
 fi
 
-if [[ -f "$ANDROID_FASTLANE_FASTFILE" ]]; then
+if checks_android_lane && [[ -f "$ANDROID_FASTLANE_FASTFILE" ]]; then
   require_text "$ANDROID_FASTLANE_FASTFILE" "HYDRACAM_PRIVACY_POLICY_URL" \
     "Android fastlane builds include the privacy policy URL when configured"
   require_text "$ANDROID_FASTLANE_FASTFILE" "HYDRACAM_SUPPORT_URL" \
@@ -747,46 +770,48 @@ if [[ -f "$ANDROID_FASTLANE_FASTFILE" ]]; then
     "Android fastlane writes store artifact metadata"
 fi
 
-if [[ -f "$ANDROID_FASTLANE_README" ]]; then
+if checks_android_lane && [[ -f "$ANDROID_FASTLANE_README" ]]; then
   require_text "$ANDROID_FASTLANE_README" "scripts/android_fastlane\\.sh" \
     "Android fastlane README points to the repo wrapper"
 fi
 
 android_store_file=""
-if [[ -f "$ANDROID_KEY_PROPERTIES" ]]; then
-  pass "Android key.properties exists"
-  android_key_alias="$(key_property "$ANDROID_KEY_PROPERTIES" "keyAlias")"
-  android_store_file_config="$(key_property "$ANDROID_KEY_PROPERTIES" "storeFile")"
-  android_store_password="$(key_property "$ANDROID_KEY_PROPERTIES" "storePassword")"
-  android_key_password="$(key_property "$ANDROID_KEY_PROPERTIES" "keyPassword")"
+if checks_android_lane; then
+  if [[ -f "$ANDROID_KEY_PROPERTIES" ]]; then
+    pass "Android key.properties exists"
+    android_key_alias="$(key_property "$ANDROID_KEY_PROPERTIES" "keyAlias")"
+    android_store_file_config="$(key_property "$ANDROID_KEY_PROPERTIES" "storeFile")"
+    android_store_password="$(key_property "$ANDROID_KEY_PROPERTIES" "storePassword")"
+    android_key_password="$(key_property "$ANDROID_KEY_PROPERTIES" "keyPassword")"
 
-  if [[ -n "$android_key_alias" ]]; then
-    pass "Android key.properties has keyAlias"
-  else
-    fail "Android key.properties missing keyAlias"
-  fi
-  if [[ -n "$android_store_file_config" ]]; then
-    android_store_file="$(resolve_android_store_file "$android_store_file_config")"
-    if [[ -f "$android_store_file" ]]; then
-      pass "Android upload keystore exists"
+    if [[ -n "$android_key_alias" ]]; then
+      pass "Android key.properties has keyAlias"
     else
-      fail "Android upload keystore missing at configured storeFile"
+      fail "Android key.properties missing keyAlias"
+    fi
+    if [[ -n "$android_store_file_config" ]]; then
+      android_store_file="$(resolve_android_store_file "$android_store_file_config")"
+      if [[ -f "$android_store_file" ]]; then
+        pass "Android upload keystore exists"
+      else
+        fail "Android upload keystore missing at configured storeFile"
+      fi
+    else
+      fail "Android key.properties missing storeFile"
+    fi
+    if [[ -n "$android_store_password" ]]; then
+      pass "Android key.properties has storePassword"
+    else
+      fail "Android key.properties missing storePassword"
+    fi
+    if [[ -n "$android_key_password" ]]; then
+      pass "Android key.properties has keyPassword"
+    else
+      fail "Android key.properties missing keyPassword"
     fi
   else
-    fail "Android key.properties missing storeFile"
+    fail "Android key.properties missing; release builds must use the upload key"
   fi
-  if [[ -n "$android_store_password" ]]; then
-    pass "Android key.properties has storePassword"
-  else
-    fail "Android key.properties missing storePassword"
-  fi
-  if [[ -n "$android_key_password" ]]; then
-    pass "Android key.properties has keyPassword"
-  else
-    fail "Android key.properties missing keyPassword"
-  fi
-else
-  fail "Android key.properties missing; release builds must use the upload key"
 fi
 
 if [[ -f "$PUBSPEC" ]]; then
@@ -935,23 +960,25 @@ if [[ -f "$WEB_INDEX" ]]; then
   fi
 fi
 
-for launch_image in \
-  "$ROOT_DIR/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" \
-  "$ROOT_DIR/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" \
-  "$ROOT_DIR/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png"; do
-  if [[ -s "$launch_image" ]]; then
-    size_bytes="$(wc -c < "$launch_image" | tr -d ' ')"
-    if [[ "$size_bytes" -gt 1000 ]]; then
-      pass "$(basename "$launch_image") is branded-sized (${size_bytes} bytes)"
+if checks_ios_lane; then
+  for launch_image in \
+    "$ROOT_DIR/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" \
+    "$ROOT_DIR/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" \
+    "$ROOT_DIR/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png"; do
+    if [[ -s "$launch_image" ]]; then
+      size_bytes="$(wc -c < "$launch_image" | tr -d ' ')"
+      if [[ "$size_bytes" -gt 1000 ]]; then
+        pass "$(basename "$launch_image") is branded-sized (${size_bytes} bytes)"
+      else
+        fail "$(basename "$launch_image") still looks like a placeholder (${size_bytes} bytes)"
+      fi
     else
-      fail "$(basename "$launch_image") still looks like a placeholder (${size_bytes} bytes)"
+      fail "$(basename "$launch_image") missing or empty"
     fi
-  else
-    fail "$(basename "$launch_image") missing or empty"
-  fi
-done
+  done
+fi
 
-if [[ -f "$IOS_APP_ICON_CONTENTS" ]]; then
+if checks_ios_lane && [[ -f "$IOS_APP_ICON_CONTENTS" ]]; then
   ios_icon_count=0
   while IFS= read -r icon_entry; do
     icon_file="${icon_entry#\"filename\":\"}"
@@ -969,17 +996,19 @@ if [[ -f "$IOS_APP_ICON_CONTENTS" ]]; then
   fi
 fi
 
-android_icon_count=0
-for launcher_icon in "$ROOT_DIR"/android/app/src/main/res/mipmap-*/ic_launcher.png; do
-  [[ -e "$launcher_icon" ]] || continue
-  android_icon_count=$((android_icon_count + 1))
-  require_png_file "$launcher_icon" "Android launcher icon $launcher_icon"
-done
+if checks_android_lane; then
+  android_icon_count=0
+  for launcher_icon in "$ROOT_DIR"/android/app/src/main/res/mipmap-*/ic_launcher.png; do
+    [[ -e "$launcher_icon" ]] || continue
+    android_icon_count=$((android_icon_count + 1))
+    require_png_file "$launcher_icon" "Android launcher icon $launcher_icon"
+  done
 
-if [[ "$android_icon_count" -gt 0 ]]; then
-  pass "Android launcher icon set includes $android_icon_count densities"
-else
-  fail "Android launcher icon set is missing"
+  if [[ "$android_icon_count" -gt 0 ]]; then
+    pass "Android launcher icon set includes $android_icon_count densities"
+  else
+    fail "Android launcher icon set is missing"
+  fi
 fi
 
 check_android_artifact=0
