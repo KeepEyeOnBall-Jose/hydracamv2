@@ -1,3 +1,5 @@
+import "package:flutter/foundation.dart";
+
 import "camera_service.dart";
 import "storage_service.dart";
 
@@ -29,5 +31,10 @@ class CameraServiceSingleton {
       useMockCamera: useMockCamera,
     );
     return _instance!;
+  }
+
+  @visibleForTesting
+  static void resetForTesting() {
+    _instance = null;
   }
 }

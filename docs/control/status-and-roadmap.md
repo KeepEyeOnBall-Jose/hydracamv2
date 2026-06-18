@@ -1041,6 +1041,12 @@ pulled into active mobile work:
   compiled store URLs do not match the artifact and current environment. Auth0
   Allowed Callback URLs and Allowed Logout URLs must also be updated to include
   the two app-specific callback URLs before beta login testing.
+- 2026-06-18 skipped singleton-test cleanup:
+  `logs/verification-runs/20260618-1620-camera-singleton-reset-test-hook/`
+  removes the remaining skipped `CameraServiceSingleton` uninitialized-guard
+  test by adding a testing-only singleton reset hook. Focused singleton coverage,
+  analyzer, and the full `flutter test --no-pub` suite passed with `431` tests
+  and no skipped tests.
 - Android local distribution signing/build is no longer the blocker:
   `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md`
   proves a signed AAB built with the recreated AMAIA23/HydraCam upload

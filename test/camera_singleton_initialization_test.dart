@@ -69,10 +69,34 @@ void main() {
     });
 
     test("CameraServiceSingleton.instance throws when not initialized", () {
-      // This test requires a way to reset the singleton
-      // In production, we prevent this by initializing in main()
-      // Skip this test since singleton is already initialized
-    }, skip: true);
+      CameraServiceSingleton.resetForTesting();
+      addTearDown(() {
+        if (!CameraServiceSingleton.isInitialized) {
+          final storageService = StorageService(
+            messengerState: null,
+            lowStorageThreshold: 1.5,
+            criticalStorageThreshold: 0.5,
+            onCriticalStorageCallback: () async {},
+          );
+          CameraServiceSingleton.initialize(
+            storageService,
+            useMockCamera: true,
+          );
+        }
+      });
+
+      expect(CameraServiceSingleton.isInitialized, isFalse);
+      expect(
+        () => CameraServiceSingleton.instance,
+        throwsA(
+          isA<Exception>().having(
+            (error) => error.toString(),
+            "message",
+            contains("CameraServiceSingleton not initialized"),
+          ),
+        ),
+      );
+    });
 
     testWidgets(
         "MasterScreen can be created when CameraServiceSingleton is initialized",

@@ -1,0 +1,91 @@
+{
+  "acceptanceChecks": [
+    "CameraServiceSingleton has a testing-only reset hook",
+    "The uninitialized instance guard is covered by an active test instead of a skipped test"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:20:49.895869+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/camera_singleton_initialization_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:20:54.668874+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/camera_singleton_initialization_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T14:21:30.417938+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/camera_singleton_initialization_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:22:01.207293+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:22:12.611115+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:22:23.751693+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:23:29.702786+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "camera-singleton-reset-test-hook",
+    "source": "docs/control/status-and-roadmap.md#store-distribution-readiness",
+    "title": "Activate CameraServiceSingleton uninitialized guard test"
+  },
+  "notes": [
+    "CameraServiceSingleton uninitialized guard is now covered by an active test, and the full Flutter suite has no skipped tests."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
