@@ -771,7 +771,7 @@ class SlaveClient implements SlaveConnectionClient {
     if (id == null) {
       return;
     }
-    final t0 = _pendingTimeSyncSends.remove(id);
+    final t0 = _pendingTimeSyncSends[id];
     if (t0 == null) {
       // Stale reply from a previous burst, or unknown id.
       return;
@@ -783,6 +783,7 @@ class SlaveClient implements SlaveConnectionClient {
     if (t1 == null || t2 == null) {
       return;
     }
+    _pendingTimeSyncSends.remove(id);
 
     _timeSyncSamples.add(
       TimeSyncService.computeSample(t0: t0, t1: t1, t2: t2, t3: t3),

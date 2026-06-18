@@ -1,0 +1,362 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1634-time-sync-malformed-reply-preserves-sample/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ flutter test --no-pub test/slave/slave_client_time_sync_test.dart test/services/time_sync_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: slave calibrates its clock from the master's timeSyncResponse replies
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:35:13.046309, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:54632/ws with Device ID: test-device, timestamp: 2026-06-18 16:35:13.048595, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:35:13.056014, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:35:13.061418, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:54632/ws, timestamp: 2026-06-18 16:35:13.063006, function: null, file: null}
+Log registered: {message: Clock synced to master: offset 0 ms, uncertainty 2 ms, RTT 4 ms, 8 samples, green., timestamp: 2026-06-18 16:35:13.070653, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:35:13.073211, function: null, file: null}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: computeSample computes offset and round-trip from the four NTP timestamps
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate returns null when there are no samples
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate returns null when every sample has an impossible round-trip
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate drops high-RTT outliers and picks the minimum-delay offset
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate classifies a tight, fresh calibration as green
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor green requires tight uncertainty and a fresh calibration
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor a stale but tight calibration degrades to yellow
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor moderate uncertainty is yellow
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor large uncertainty is red
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: TimeSyncResult ageAt clamps negative ages to zero
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: TimeSyncResult toSyncMetadata recomputes confidence with the capture-time age
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: SyncMetadata serialization round-trips through JSON
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: SyncMetadata serialization masterAnchor is a zero-offset green anchor
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: SyncMetadata serialization fromJson returns null for malformed input
+00:00 +15: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/slave/slave_client_time_sync_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart
+00:00 +0: slave calibrates its clock from the master's timeSyncResponse replies
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:35:54.791574, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57338/ws with Device ID: test-device, timestamp: 2026-06-18 16:35:54.793521, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:35:54.800567, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:35:54.806926, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57338/ws, timestamp: 2026-06-18 16:35:54.808643, function: null, file: null}
+Log registered: {message: Clock synced to master: offset 0 ms, uncertainty 2 ms, RTT 4 ms, 8 samples, green., timestamp: 2026-06-18 16:35:54.815821, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:35:54.818332, function: null, file: null}
+00:00 +1: malformed timeSyncResponse does not consume a pending sample
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:35:54.824541, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57340/ws with Device ID: test-device, timestamp: 2026-06-18 16:35:54.824640, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:35:54.825227, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:35:54.826618, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57340/ws, timestamp: 2026-06-18 16:35:54.826787, function: null, file: null}
+Log registered: {message: Clock sync burst produced no usable samples., timestamp: 2026-06-18 16:35:57.831987, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:35:59.834289, function: null, file: null}
+00:05 +1 -1: malformed timeSyncResponse does not consume a pending sample [E]
+  TimeoutException after 0:00:05.000000: Future not completed
+  dart:async  _startMicrotaskLoop
+
+00:05 +1 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+[exit-code] 1
+
+$ flutter test --no-pub test/slave/slave_client_time_sync_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart
+00:00 +0: slave calibrates its clock from the master's timeSyncResponse replies
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:34.546123, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57929/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:34.548084, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:34.554743, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:34.559799, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57929/ws, timestamp: 2026-06-18 16:36:34.561260, function: null, file: null}
+Log registered: {message: Clock synced to master: offset 0 ms, uncertainty 2 ms, RTT 3 ms, 8 samples, green., timestamp: 2026-06-18 16:36:34.568075, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:34.570521, function: null, file: null}
+00:00 +1: malformed timeSyncResponse does not consume a pending sample
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:34.576156, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57931/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:34.576232, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:34.576818, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:34.578152, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57931/ws, timestamp: 2026-06-18 16:36:34.578327, function: null, file: null}
+Log registered: {message: Clock synced to master: offset 12 ms, uncertainty 12 ms, RTT 25 ms, 1 samples, green., timestamp: 2026-06-18 16:36:37.583032, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:37.584577, function: null, file: null}
+00:03 +2: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/time_sync_service_test.dart test/services/scheduled_task_service_test.dart test/slave/slave_client_time_sync_test.dart test/slave/slave_client_registration_test.dart test/master/master_time_sync_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: computeSample computes offset and round-trip from the four NTP timestamps
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate returns null when there are no samples
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate returns null when every sample has an impossible round-trip
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate drops high-RTT outliers and picks the minimum-delay offset
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: aggregate classifies a tight, fresh calibration as green
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor green requires tight uncertainty and a fresh calibration
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor a stale but tight calibration degrades to yellow
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor moderate uncertainty is yellow
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: confidenceFor large uncertainty is red
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: TimeSyncResult ageAt clamps negative ages to zero
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: TimeSyncResult toSyncMetadata recomputes confidence with the capture-time age
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: SyncMetadata serialization round-trips through JSON
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: SyncMetadata serialization masterAnchor is a zero-offset green anchor
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/time_sync_service_test.dart: SyncMetadata serialization fromJson returns null for malformed input
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: computes delay from corrected local time
+00:00 +15: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: runs scheduled tasks immediately when corrected time has passed
+00:00 +16: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: past-due async scheduled tasks can be awaited
+00:00 +17: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: keeps future corrected-time tasks cancellable
+00:00 +18: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: cancelled scheduled tasks settle the returned future
+00:00 +19: /Users/jose/src/work/hydracamv2/test/services/scheduled_task_service_test.dart: past-due replacement cancels same-id pending task
+00:01 +20: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: slave calibrates its clock from the master's timeSyncResponse replies
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:46.865839, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57979/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:46.867714, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:46.880736, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:46.881909, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57979/ws, timestamp: 2026-06-18 16:36:46.883473, function: null, file: null}
+Log registered: {message: Clock synced to master: offset 0 ms, uncertainty 2 ms, RTT 3 ms, 8 samples, green., timestamp: 2026-06-18 16:36:46.890605, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:46.893141, function: null, file: null}
+00:01 +21: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:46.898685, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57981/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:46.898775, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:46.899946, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:46.901390, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57981/ws, timestamp: 2026-06-18 16:36:46.901826, function: null, file: null}
+00:01 +21: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave registers before waiting for network payload
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.181960, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57985/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.183957, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.196298, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.197585, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57985/ws, timestamp: 2026-06-18 16:36:47.199288, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.205282, function: null, file: null}
+00:01 +22: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +22: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave registration includes app and hardware diagnostics
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.210919, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57987/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.211017, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57987/ws, timestamp: 2026-06-18 16:36:47.211453, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.214942, function: null, file: null}
+00:01 +23: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +23: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat includes camera setup status when available
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.217345, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57989/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.217435, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.218454, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.219761, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57989/ws, timestamp: 2026-06-18 16:36:47.220102, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.221289, function: null, file: null}
+00:01 +24: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +24: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: slave heartbeat reports active session guid
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.226957, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.227578, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-18 16:36:47.227869, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave-heartbeat7KdlFV/photo.jpg, timestamp: 2026-06-18 16:36:47.231224, function: null, file: null}
+Log registered: {message: Error saving session metadata: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider), timestamp: 2026-06-18 16:36:47.232397, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:36:47.233229, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave-heartbeat7KdlFV/photo.jpg, timestamp: 2026-06-18 16:36:47.233357, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:36:47.233560, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.233863, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57991/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.233922, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.235026, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.236502, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57991/ws, timestamp: 2026-06-18 16:36:47.236817, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.238045, function: null, file: null}
+Log registered: {message: Error saving session metadata: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider), timestamp: 2026-06-18 16:36:47.239155, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.239237, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.239299, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:36:47.239342, function: null, file: null}
+00:01 +25: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +25: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: noSession preserves an active slave session and upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.242371, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.242442, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.242554, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.242598, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-active-session on device type: Slave, timestamp: 2026-06-18 16:36:47.242641, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:36:47.243069, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_no_sessionAwhNa1/queued-photo.jpg, timestamp: 2026-06-18 16:36:47.243126, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:36:47.243291, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.243660, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57993/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.243730, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.245054, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.246161, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57993/ws, timestamp: 2026-06-18 16:36:47.246446, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"noSession"}, timestamp: 2026-06-18 16:36:47.250038, function: null, file: null}
+Log registered: {message: Master reported no active session; keeping active session slave-active-session until explicit sessionEnded., timestamp: 2026-06-18 16:36:47.250655, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.261324, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.261510, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.261564, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docskf68IE/session_slave-active-session/metadata.json, timestamp: 2026-06-18 16:36:47.262677, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.262755, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.262801, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:36:47.262844, function: null, file: null}
+00:01 +26: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +26: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: noSession preserves an active slave session and upload queue
+Trace persistence retry scheduled: PathNotFoundException: Cannot open file, path = '/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docskf68IE/logs/hydracam-trace-2026-06-18T16-36-47-247755.ndjson' (OS Error: No such file or directory, errno = 2)
+00:01 +26: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: conflicting sessionStatus preserves active slave session and queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.265280, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.265339, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.265388, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.265429, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-active-session on device type: Slave, timestamp: 2026-06-18 16:36:47.265467, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:36:47.265786, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_conflictoa453E/queued-photo.jpg, timestamp: 2026-06-18 16:36:47.265838, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:36:47.265976, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.266244, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57995/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.266296, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.267429, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.268436, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57995/ws, timestamp: 2026-06-18 16:36:47.268722, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"sessionStatus","sessionGuid":"master-other-session"}, timestamp: 2026-06-18 16:36:47.270149, function: null, file: null}
+Log registered: {message: Command: {"command":"sessionStatus","sessionGuid":"master-other-session"}, timestamp: 2026-06-18 16:36:47.270254, function: null, file: null}
+Log registered: {message: Session guid: master-other-session, timestamp: 2026-06-18 16:36:47.270310, function: null, file: null}
+Log registered: {message: Master session conflict: keeping active session slave-active-session instead of joining master-other-session., timestamp: 2026-06-18 16:36:47.270449, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.282650, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.282884, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.282936, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docszdqSfx/session_slave-active-session/metadata.json, timestamp: 2026-06-18 16:36:47.283930, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.284001, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.284047, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:36:47.284113, function: null, file: null}
+00:01 +27: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +27: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: conflicting sessionStatus preserves active slave session and queue
+Trace persistence retry scheduled: PathNotFoundException: Cannot open file, path = '/var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docszdqSfx/logs/hydracam-trace-2026-06-18T16-36-47-270707.ndjson' (OS Error: No such file or directory, errno = 2)
+00:01 +27: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: auto-record starts recording when sessionStarted arrives
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.286460, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57997/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.286533, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.287547, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.288932, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57997/ws, timestamp: 2026-06-18 16:36:47.289198, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"sessionStarted","sessionGuid":"auto-record-session"}, timestamp: 2026-06-18 16:36:47.290271, function: null, file: null}
+Log registered: {message: Command: {"command":"sessionStarted","sessionGuid":"auto-record-session"}, timestamp: 2026-06-18 16:36:47.290356, function: null, file: null}
+Log registered: {message: Session guid: auto-record-session, timestamp: 2026-06-18 16:36:47.290405, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.290457, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.290502, function: null, file: null}
+Log registered: {message: Session started with GUID: auto-record-session on device type: Slave, timestamp: 2026-06-18 16:36:47.290542, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:36:47.291030, function: null, file: null}
+Log registered: {message: Fetch token, timestamp: 2026-06-18 16:36:47.291246, function: null, file: null}
+Log registered: {message: Auto-record starting recording for active session auto-record-session., timestamp: 2026-06-18 16:36:47.296436, function: null, file: null}
+Log registered: {message: Starting video recording, timestamp: 2026-06-18 16:36:47.296888, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-18 16:36:47.297222, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.299601, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-18 16:36:47.299899, function: null, file: null}
+Log registered: {message: Failed to fetch M2M token: , timestamp: 2026-06-18 16:36:47.300474, function: null, file: null}
+Log registered: {message: Error on POST device/ReadyToTransmit: Exception: Failed to retrieve M2M token, timestamp: 2026-06-18 16:36:47.300638, function: null, file: null}
+Log registered: {message: Failed to notify server: No response, timestamp: 2026-06-18 16:36:47.300691, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.300824, function: null, file: null}
+Log registered: {message: Mock video saved to session path: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsvbO0Se/session_auto-record-session/mock_1_2026-06-18T16-36-47-301661.mp4, timestamp: 2026-06-18 16:36:47.302860, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsvbO0Se/session_auto-record-session/metadata.json, timestamp: 2026-06-18 16:36:47.303492, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.303556, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.303600, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:36:47.303637, function: null, file: null}
+00:01 +28: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +28: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: startUploadingAll command starts pending upload queue
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.305144, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.305202, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.305249, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.305287, function: null, file: null}
+Log registered: {message: Session started with GUID: backend-upload-session on device type: Slave, timestamp: 2026-06-18 16:36:47.305348, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:36:47.305684, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_upload_commandbA4MHg/queued-photo.jpg, timestamp: 2026-06-18 16:36:47.305734, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:36:47.305926, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.306197, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:57999/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.306243, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.307285, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.308387, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:57999/ws, timestamp: 2026-06-18 16:36:47.308680, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"startUploadingAll"}, timestamp: 2026-06-18 16:36:47.309948, function: null, file: null}
+Log registered: {message: Start-upload-all command received from master., timestamp: 2026-06-18 16:36:47.310194, function: null, file: null}
+Log registered: {message: Manual upload initiated., timestamp: 2026-06-18 16:36:47.310304, function: null, file: null}
+Log registered: {message: UploaderService: _startUploading called. _isUploading=false, queue length=1, timestamp: 2026-06-18 16:36:47.310452, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=1, timestamp: 2026-06-18 16:36:47.310820, function: null, file: null}
+Log registered: {message: UploaderService: sessionGuid=backend-upload-session, timestamp: 2026-06-18 16:36:47.310969, function: null, file: null}
+Log registered: {message: Upload file is not valid photo media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_upload_commandbA4MHg/queued-photo.jpg, timestamp: 2026-06-18 16:36:47.312496, function: null, file: null}
+Log registered: {message: Failed to upload media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_upload_commandbA4MHg/queued-photo.jpg, timestamp: 2026-06-18 16:36:47.312638, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsvbO0Se/session_backend-upload-session/metadata.json, timestamp: 2026-06-18 16:36:47.313448, function: null, file: null}
+Log registered: {message: [UploaderService] Queue is empty. Returning zero duration., timestamp: 2026-06-18 16:36:47.313529, function: null, file: null}
+Log registered: {message: UploaderService: _processNextItem called. Queue length=0, timestamp: 2026-06-18 16:36:47.313578, function: null, file: null}
+Log registered: {message: UploaderService: Queue is empty. Uploading stopped., timestamp: 2026-06-18 16:36:47.313626, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.321733, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.321904, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.321951, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsvbO0Se/session_backend-upload-session/metadata.json, timestamp: 2026-06-18 16:36:47.322966, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.323043, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.323083, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:36:47.323117, function: null, file: null}
+00:01 +29: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +29: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: identifySlave command replies with identifyAck
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.324284, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.324341, function: null, file: null}
+Log registered: {message: Session started with GUID: slave-session-guid on device type: Slave, timestamp: 2026-06-18 16:36:47.324386, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave-identifyX44s86/photo.jpg, timestamp: 2026-06-18 16:36:47.324701, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsvbO0Se/session_slave-session-guid/metadata.json, timestamp: 2026-06-18 16:36:47.325236, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:36:47.325302, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave-identifyX44s86/photo.jpg, timestamp: 2026-06-18 16:36:47.325342, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:36:47.325432, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.325646, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:58001/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.325691, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.326631, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.327702, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:58001/ws, timestamp: 2026-06-18 16:36:47.327960, function: null, file: null}
+Log registered: {message: Command received from master: {"command":"identifySlave","requestId":"identify-test"}, timestamp: 2026-06-18 16:36:47.329150, function: null, file: null}
+Log registered: {message: Sent identifyAck notification to master, timestamp: 2026-06-18 16:36:47.329552, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.329840, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_client_docsvbO0Se/session_slave-session-guid/metadata.json, timestamp: 2026-06-18 16:36:47.330900, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:36:47.330959, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:36:47.331002, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:36:47.331040, function: null, file: null}
+00:01 +30: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +30: /Users/jose/src/work/hydracamv2/test/slave/slave_client_registration_test.dart: scheduled command applies master clock offset before countdown
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-18 16:36:47.332691, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:58003/ws with Device ID: test-device, timestamp: 2026-06-18 16:36:47.332763, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-18 16:36:47.333821, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-18 16:36:47.335044, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:58003/ws, timestamp: 2026-06-18 16:36:47.335364, function: null, file: null}
+Log registered: {message: Command received from master: {"type":"scheduledCommand","command":"takePhoto","scheduledTime":"2026-06-08T20:35:05.000Z","masterTime":"2026-06-08T20:35:02.000Z"}, timestamp: 2026-06-18 16:36:47.336652, function: null, file: null}
+Log registered: {message: Applied coarse fallback clock offset from master timestamp: 2000 ms., timestamp: 2026-06-18 16:36:47.337428, function: null, file: null}
+Log registered: {message: Command 'takePhoto' scheduled for 2026-06-08 20:35:05.000Z., timestamp: 2026-06-18 16:36:47.337691, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:47.338242, function: null, file: null}
+00:01 +31: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +31: /Users/jose/src/work/hydracamv2/test/master/master_time_sync_test.dart: master answers a timeSyncRequest with echoed id/t0 and its t1/t2
+Log registered: {message: Data received from slave: {type: timeSyncRequest, deviceId: slave-a, id: 3:5, t0: 2026-01-01T00:00:00.000Z}, timestamp: 2026-06-18 16:36:47.446968, function: null, file: null}
+00:01 +32: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +32: /Users/jose/src/work/hydracamv2/test/master/master_time_sync_test.dart: master timeSyncResponse uses the injected master clock
+Log registered: {message: Data received from slave: {type: timeSyncRequest, deviceId: slave-deterministic, id: 7:2, t0: 2026-06-18T15:29:59.900Z}, timestamp: 2026-06-18 16:36:47.458099, function: null, file: null}
+00:01 +33: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+Log registered: {message: Clock synced to master: offset 12 ms, uncertainty 12 ms, RTT 24 ms, 1 samples, green., timestamp: 2026-06-18 16:36:49.907271, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-18 16:36:49.909914, function: null, file: null}
+00:04 +34: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 5.6s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

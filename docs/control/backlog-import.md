@@ -639,6 +639,13 @@ Default issue schema:
   focused master/slave/scheduler/integration time-sync tests plus full analyzer
   and full Flutter tests. Keep this issue open for real-device offset
   estimation and capture start-skew evidence.
+- 2026-06-18 malformed time-sync reply note:
+  `logs/verification-runs/20260618-1634-time-sync-malformed-reply-preserves-sample/`
+  adds loopback slave coverage for a malformed `timeSyncResponse` followed by a
+  valid response with the same request id. The slave now validates `t1`/`t2`
+  before removing the pending request, so one malformed reply cannot consume the
+  sample and block calibration. Keep this issue open for real-device offset
+  estimation and capture start-skew evidence.
 
 ### 8. Implement auto-record mode
 

@@ -1,0 +1,106 @@
+{
+  "acceptanceChecks": [
+    "Malformed timeSyncResponse replies do not remove the matching pending request",
+    "A later valid reply for the same id can still produce a calibration sample"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:35:05.397239+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_time_sync_test.dart",
+        "test/services/time_sync_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:35:10.406688+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_time_sync_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T14:35:52.511810+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_time_sync_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:36:32.566368+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/time_sync_service_test.dart",
+        "test/services/scheduled_task_service_test.dart",
+        "test/slave/slave_client_time_sync_test.dart",
+        "test/slave/slave_client_registration_test.dart",
+        "test/master/master_time_sync_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:36:43.900493+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:37:00.415200+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:37:06.780987+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:37:27.141914+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "time-sync-malformed-reply-preserves-sample",
+    "source": "docs/control/backlog-import.md#7-support-synchronized-time-accurately-enough-for-capture",
+    "title": "Ignore malformed time-sync replies without consuming pending samples"
+  },
+  "notes": [
+    "Malformed time-sync replies no longer consume pending request ids before a valid response can arrive."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
