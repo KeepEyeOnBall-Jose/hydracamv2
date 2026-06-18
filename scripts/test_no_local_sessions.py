@@ -61,11 +61,11 @@ class NoLocalRuntimeSessionTests(unittest.TestCase):
                 self.assertNotIn('"autoUploadMaterials": False', text)
                 self.assertNotIn("'autoUploadMaterials': False", text)
 
-    def test_master_rejects_legacy_local_only_payload_explicitly(self):
+    def test_master_does_not_reference_local_only_payloads(self):
         text = (REPO_ROOT / "lib/master/master_screen.dart").read_text()
 
-        self.assertIn('"localOnly"', text)
-        self.assertIn("backend sessions are mandatory", text)
+        self.assertNotIn('"localOnly"', text)
+        self.assertNotIn("backend sessions are mandatory", text)
 
 
 if __name__ == "__main__":

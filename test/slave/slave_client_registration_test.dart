@@ -7,6 +7,7 @@ import "package:hydracam/models/capture_context_metadata.dart";
 import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/services/camera_setup_service.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
+import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/scheduled_task_service.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/settings_service.dart";
@@ -101,6 +102,74 @@ void main() {
     }
   });
 
+  test("slave registration includes app and hardware diagnostics", () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final messages = StreamController<Map<String, dynamic>>.broadcast();
+    final sockets = <WebSocket>[];
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = jsonDecode(data as String);
+        if (decoded is Map<String, dynamic>) {
+          messages.add(decoded);
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () async => null,
+      identityPayloadLoader: () async => {
+        "appVersion": "1.4.0",
+        "appBuildNumber": "16",
+        "hardware": "Samsung Galaxy S10e",
+      },
+    );
+
+    try {
+      await client.connect();
+      final first = await messages.stream.first.timeout(
+        const Duration(milliseconds: 200),
+      );
+
+      expect(first["type"], "deviceId");
+      expect(first["deviceId"], "test-device");
+      expect(first["appVersion"], "1.4.0");
+      expect(first["appBuildNumber"], "16");
+      expect(first["hardware"], "Samsung Galaxy S10e");
+    } finally {
+      client.disconnect();
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await messages.close();
+      await server.close(force: true);
+    }
+  });
+
   test("slave heartbeat includes camera setup status when available", () async {
     SharedPreferences.setMockInitialValues({
       "device_id": "test-device",
@@ -173,6 +242,7 @@ void main() {
   test("slave heartbeat reports active session guid", () async {
     SharedPreferences.setMockInitialValues({
       "device_id": "test-device",
+      "autoUploadMaterials": false,
     });
     if (!CameraServiceSingleton.isInitialized) {
       final storageService = StorageService(
@@ -194,6 +264,16 @@ void main() {
       "slave-session-id",
       deviceType: "Slave",
     );
+    final photoFile = File(
+        "${Directory.systemTemp.createTempSync("slave-heartbeat").path}/photo.jpg")
+      ..writeAsBytesSync([0xff, 0xd8, 0xff, 0xd9]);
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "test-device",
+      captureDate: DateTime.utc(2026, 6, 17, 15),
+      receivedDate: DateTime.utc(2026, 6, 17, 15, 0, 1),
+    );
+    await SessionManager.instance.addPhoto(photo);
 
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     final messages = StreamController<Map<String, dynamic>>.broadcast();
@@ -228,16 +308,228 @@ void main() {
           .timeout(const Duration(seconds: 1));
 
       expect(heartbeat["sessionGuid"], "slave-session-guid");
+      expect(heartbeat["sessionMedia"], {
+        "photoCount": 1,
+        "videoCount": 0,
+        "pendingUploadCount": 1,
+        "uploadedCount": 0,
+      });
     } finally {
       client.disconnect();
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+      await photoFile.parent.delete(recursive: true);
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await messages.close();
+      await server.close(force: true);
+    }
+  });
+
+  test("noSession preserves an active slave session and upload queue",
+      () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+      "autoUploadMaterials": false,
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+
+    LogService.instance.clearLogs();
+    final pathProvider = _TestPathProviderPlatform();
+    PathProviderPlatform.instance = pathProvider;
+    final uploaderService = UploaderService();
+    uploaderService.reset();
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.joinSession(
+      "slave-active-session",
+      "slave-active-session-id",
+      deviceType: "Slave",
+    );
+
+    final tempDir = Directory.systemTemp.createTempSync("slave_no_session");
+    final photoFile = File("${tempDir.path}/queued-photo.jpg")
+      ..writeAsBytesSync([1, 2, 3, 4]);
+    final capturedPhoto = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "queued-slave",
+      captureDate: DateTime(2026, 6, 17, 16),
+      receivedDate: DateTime(2026, 6, 17, 16, 0, 1),
+    );
+    await uploaderService.addMediaToQueue(capturedPhoto);
+    expect(SessionManager.instance.sessionGuid, "slave-active-session");
+    expect(uploaderService.queueLength, 1);
+
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final sockets = <WebSocket>[];
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = jsonDecode(data as String);
+        if (decoded is Map<String, dynamic> && decoded["type"] == "deviceId") {
+          socket.add(jsonEncode({
+            "command": "noSession",
+          }));
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () async => null,
+    );
+
+    try {
+      await client.connect();
+      await _waitFor(
+        () =>
+            _logContains("No active session on master") ||
+            _logContains("Master reported no active session"),
+        timeout: const Duration(seconds: 1),
+      );
+
+      expect(SessionManager.instance.sessionGuid, "slave-active-session");
+      expect(SessionManager.instance.isSessionActive, isTrue);
+      expect(uploaderService.queueLength, 1);
+    } finally {
+      client.disconnect();
+      uploaderService.reset();
       if (SessionManager.instance.isSessionActive) {
         await SessionManager.instance.endSession();
       }
       for (final socket in sockets) {
         await socket.close();
       }
-      await messages.close();
       await server.close(force: true);
+      if (tempDir.existsSync()) {
+        tempDir.deleteSync(recursive: true);
+      }
+      pathProvider.dispose();
+    }
+  });
+
+  test("conflicting sessionStatus preserves active slave session and queue",
+      () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+      "autoUploadMaterials": false,
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+
+    LogService.instance.clearLogs();
+    final pathProvider = _TestPathProviderPlatform();
+    PathProviderPlatform.instance = pathProvider;
+    final uploaderService = UploaderService();
+    uploaderService.reset();
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.joinSession(
+      "slave-active-session",
+      "slave-active-session-id",
+      deviceType: "Slave",
+    );
+
+    final tempDir = Directory.systemTemp.createTempSync("slave_conflict");
+    final photoFile = File("${tempDir.path}/queued-photo.jpg")
+      ..writeAsBytesSync([1, 2, 3, 4]);
+    final capturedPhoto = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "queued-slave",
+      captureDate: DateTime(2026, 6, 17, 16, 15),
+      receivedDate: DateTime(2026, 6, 17, 16, 15, 1),
+    );
+    await uploaderService.addMediaToQueue(capturedPhoto);
+    expect(SessionManager.instance.sessionGuid, "slave-active-session");
+    expect(uploaderService.queueLength, 1);
+
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final sockets = <WebSocket>[];
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = jsonDecode(data as String);
+        if (decoded is Map<String, dynamic> && decoded["type"] == "deviceId") {
+          socket.add(jsonEncode({
+            "command": "sessionStatus",
+            "sessionGuid": "master-other-session",
+          }));
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () async => null,
+    );
+
+    try {
+      await client.connect();
+      await _waitFor(
+        () =>
+            _logContains("Session guid: master-other-session") ||
+            _logContains("Master session conflict"),
+        timeout: const Duration(seconds: 1),
+      );
+
+      expect(SessionManager.instance.sessionGuid, "slave-active-session");
+      expect(SessionManager.instance.isSessionActive, isTrue);
+      expect(uploaderService.queueLength, 1);
+    } finally {
+      client.disconnect();
+      uploaderService.reset();
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await server.close(force: true);
+      if (tempDir.existsSync()) {
+        tempDir.deleteSync(recursive: true);
+      }
+      pathProvider.dispose();
     }
   });
 
@@ -336,7 +628,7 @@ void main() {
     if (SessionManager.instance.isSessionActive) {
       await SessionManager.instance.endSession();
     }
-    SessionManager.instance.joinBackendSession(
+    SessionManager.instance.joinSession(
       "backend-upload-session",
       "backend-upload-session-id",
       deviceType: "Slave",
@@ -409,6 +701,7 @@ void main() {
   test("identifySlave command replies with identifyAck", () async {
     SharedPreferences.setMockInitialValues({
       "device_id": "test-device",
+      "autoUploadMaterials": false,
     });
     if (!CameraServiceSingleton.isInitialized) {
       final storageService = StorageService(
@@ -430,6 +723,16 @@ void main() {
       "slave-session-id",
       deviceType: "Slave",
     );
+    final photoFile = File(
+        "${Directory.systemTemp.createTempSync("slave-identify").path}/photo.jpg")
+      ..writeAsBytesSync([0xff, 0xd8, 0xff, 0xd9]);
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "test-device",
+      captureDate: DateTime.utc(2026, 6, 17, 15),
+      receivedDate: DateTime.utc(2026, 6, 17, 15, 0, 1),
+    );
+    await SessionManager.instance.addPhoto(photo);
 
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     final messages = StreamController<Map<String, dynamic>>.broadcast();
@@ -479,6 +782,12 @@ void main() {
       expect(ack["requestId"], "identify-test");
       expect(ack["status"], "alive");
       expect(ack["sessionGuid"], "slave-session-guid");
+      expect(ack["sessionMedia"], {
+        "photoCount": 1,
+        "videoCount": 0,
+        "pendingUploadCount": 1,
+        "uploadedCount": 0,
+      });
       expect(ack["network"], {
         "isWifiActive": true,
         "ipAddress": "192.168.178.62",
@@ -489,6 +798,7 @@ void main() {
       if (SessionManager.instance.isSessionActive) {
         await SessionManager.instance.endSession();
       }
+      await photoFile.parent.delete(recursive: true);
       for (final socket in sockets) {
         await socket.close();
       }
@@ -583,6 +893,12 @@ void main() {
       await server.close(force: true);
     }
   });
+}
+
+bool _logContains(String text) {
+  return LogService.instance.logs.any(
+    (log) => log["message"]?.toString().contains(text) ?? false,
+  );
 }
 
 class _TestPathProviderPlatform extends PathProviderPlatform {

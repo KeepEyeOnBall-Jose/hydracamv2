@@ -82,8 +82,8 @@ void main() {
         expect(sessionManager.sessionGuid, "test-guid");
       });
 
-      test("startBackendSession marks session as backend created", () {
-        sessionManager.startBackendSession(
+      test("startCreatedSession starts a service-created session", () {
+        sessionManager.startCreatedSession(
           const HydraCamBackendSession(
             guid: "backend-guid",
             sessionId: "backend-session",
@@ -93,15 +93,15 @@ void main() {
 
         expect(sessionManager.isSessionActive, true);
         expect(sessionManager.sessionGuid, "backend-guid");
-        expect(sessionManager.isCurrentSessionBackendCreated, isTrue);
+        expect(sessionManager.canUploadCurrentSession, isTrue);
       });
 
-      test("startBackendSession rejects local session GUIDs", () {
+      test("startCreatedSession rejects non-service GUIDs", () {
         expect(
-          () => sessionManager.startBackendSession(
+          () => sessionManager.startCreatedSession(
             const HydraCamBackendSession(
               guid: "local-backend-guid",
-              sessionId: "backend-session",
+              sessionId: "debug-request",
             ),
             deviceType: "Master",
           ),
@@ -109,15 +109,25 @@ void main() {
         );
       });
 
-      test("joinBackendSession rejects local session GUIDs", () {
+      test("joinSession rejects non-service GUIDs", () {
         expect(
-          () => sessionManager.joinBackendSession(
+          () => sessionManager.joinSession(
             "local-slave-guid",
             "slave-session",
             deviceType: "Slave",
           ),
           throwsArgumentError,
         );
+      });
+
+      test("canUploadCurrentSession requires an active service GUID", () {
+        sessionManager.startSession(
+          "service-session-guid",
+          "session-id",
+          deviceType: "Master",
+        );
+
+        expect(sessionManager.canUploadCurrentSession, isTrue);
       });
 
       test("endSession clears session state", () async {
@@ -216,6 +226,92 @@ void main() {
         expect(sessionManager.currentSession?.sessionGuid, "active-guid");
       });
 
+      test("loadSessionMetadata previews without replacing active session",
+          () async {
+        sessionManager.startSession("active-preview-guid", "active-preview-id",
+            deviceType: "Master");
+
+        final oldSessionDir = Directory(
+            "${testPathProvider.documentsDir.path}/session_previous-preview-guid");
+        oldSessionDir.createSync(recursive: true);
+        await File("${oldSessionDir.path}/metadata.json").writeAsString(
+          jsonEncode({
+            "sessionId": "previous-preview-id",
+            "sessionGuid": "previous-preview-guid",
+            "startTime": DateTime.utc(2026, 6, 17, 10).toIso8601String(),
+            "endTime": DateTime.utc(2026, 6, 17, 10, 30).toIso8601String(),
+            "deviceType": "Slave",
+            "photos": [],
+            "videos": [],
+          }),
+        );
+
+        final preview =
+            await sessionManager.loadSessionMetadata("previous-preview-guid");
+
+        expect(preview?.sessionId, "previous-preview-id");
+        expect(preview?.sessionGuid, "previous-preview-guid");
+        expect(sessionManager.sessionGuid, "active-preview-guid");
+        expect(
+          sessionManager.currentSession?.sessionGuid,
+          "active-preview-guid",
+        );
+        expect(sessionManager.deviceType, "Master");
+      });
+
+      test("loadSessionMetadataSnapshot tolerates cleaned-up media files",
+          () async {
+        final cleanedSessionDir = Directory(
+            "${testPathProvider.documentsDir.path}/session_cleaned-media-guid");
+        cleanedSessionDir.createSync(recursive: true);
+        final missingPhotoPath = "${cleanedSessionDir.path}/deleted-photo.jpg";
+        final missingVideoPath = "${cleanedSessionDir.path}/deleted-video.mp4";
+        await File("${cleanedSessionDir.path}/metadata.json").writeAsString(
+          jsonEncode({
+            "sessionId": "cleaned-media-id",
+            "sessionGuid": "cleaned-media-guid",
+            "startTime": DateTime.utc(2026, 6, 17, 16).toIso8601String(),
+            "endTime": DateTime.utc(2026, 6, 17, 16, 30).toIso8601String(),
+            "deviceType": "Master",
+            "photos": [
+              {
+                "photoPath": missingPhotoPath,
+                "slaveDeviceId": "photo-device",
+                "captureDate":
+                    DateTime.utc(2026, 6, 17, 16, 1).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 17, 16, 2).toIso8601String(),
+                "isUploaded": true,
+                "fileSizeInBytes": 1234,
+              },
+            ],
+            "videos": [
+              {
+                "videoPath": missingVideoPath,
+                "slaveDeviceId": "video-device",
+                "startRecordingDate":
+                    DateTime.utc(2026, 6, 17, 16, 3).toIso8601String(),
+                "endRecordingDate":
+                    DateTime.utc(2026, 6, 17, 16, 4).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 17, 16, 5).toIso8601String(),
+                "isUploaded": true,
+                "fileSizeInBytes": 5678,
+              },
+            ],
+          }),
+        );
+
+        final snapshot = await sessionManager.loadSessionMetadataSnapshot(
+          "cleaned-media-guid",
+        );
+
+        expect(snapshot?.capturedPhotos.single.photoPath, missingPhotoPath);
+        expect(snapshot?.capturedPhotos.single.fileSizeInBytes, 1234);
+        expect(snapshot?.capturedVideos.single.videoPath, missingVideoPath);
+        expect(snapshot?.capturedVideos.single.fileSizeInBytes, 5678);
+      });
+
       test("rejoining same active session preserves media and upload queue",
           () async {
         sessionManager.startSession("same-guid", "same-id",
@@ -287,6 +383,7 @@ void main() {
             as Map<String, dynamic>;
         expect(metadata["photos"], hasLength(1));
         expect(metadata["photos"].single["photoPath"], photoPath);
+        expect(metadata["photos"].single["fileSizeInBytes"], 5);
         expect(uploaderService.queueLength, 1);
       });
 
@@ -313,6 +410,7 @@ void main() {
             as Map<String, dynamic>;
         expect(metadata["videos"], hasLength(1));
         expect(metadata["videos"].single["videoPath"], videoPath);
+        expect(metadata["videos"].single["fileSizeInBytes"], 5);
         expect(uploaderService.queueLength, 1);
       });
 
@@ -371,6 +469,61 @@ void main() {
         expect(sessionManager.currentSession?.capturedVideos.single.videoPath,
             restoredVideoPath);
         expect(uploaderService.queueLength, 2);
+      });
+
+      test("restoreSessionFromMetadata does not requeue uploaded media",
+          () async {
+        final restoredPhotoPath = createTempMediaFile("uploaded_photo.jpg");
+        final restoredVideoPath = createTempMediaFile("uploaded_video.mp4");
+        final sessionDirectory = Directory(
+            "${testPathProvider.documentsDir.path}/session_uploaded-restore-guid");
+        sessionDirectory.createSync(recursive: true);
+        await File("${sessionDirectory.path}/metadata.json").writeAsString(
+          jsonEncode({
+            "sessionId": "uploaded-restore-id",
+            "sessionGuid": "uploaded-restore-guid",
+            "startTime": DateTime.utc(2026, 6, 17, 17).toIso8601String(),
+            "endTime": null,
+            "deviceType": "Master",
+            "photos": [
+              {
+                "photoPath": restoredPhotoPath,
+                "slaveDeviceId": "uploaded-photo-device",
+                "captureDate":
+                    DateTime.utc(2026, 6, 17, 17, 1).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 17, 17, 2).toIso8601String(),
+                "isUploaded": true,
+                "fileSizeInBytes": 5,
+              },
+            ],
+            "videos": [
+              {
+                "videoPath": restoredVideoPath,
+                "slaveDeviceId": "uploaded-video-device",
+                "startRecordingDate":
+                    DateTime.utc(2026, 6, 17, 17, 3).toIso8601String(),
+                "endRecordingDate":
+                    DateTime.utc(2026, 6, 17, 17, 4).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 17, 17, 5).toIso8601String(),
+                "isUploaded": true,
+                "fileSizeInBytes": 5,
+              },
+            ],
+          }),
+        );
+
+        await sessionManager.restoreSessionFromMetadata(
+          "uploaded-restore-guid",
+          deviceType: "Master",
+        );
+
+        expect(sessionManager.currentSession?.capturedPhotos.single.isUploaded,
+            isTrue);
+        expect(sessionManager.currentSession?.capturedVideos.single.isUploaded,
+            isTrue);
+        expect(uploaderService.queueLength, 0);
       });
     });
 

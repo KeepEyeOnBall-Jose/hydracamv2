@@ -1,0 +1,116 @@
+{
+  "acceptanceChecks": [
+    "No runtime automation path exposes local-only sessions",
+    "Flutter analyzer passes",
+    "Focused session/upload/debug cleanup tests pass",
+    "Full Flutter test suite passes"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/test_no_local_sessions.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:14:34.350790+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:14:37.892055+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/models/session_upload_state_test.dart",
+        "test/services/session_manager_test.dart",
+        "test/services/uploader_service_test.dart",
+        "test/services/debug_session_policy_test.dart",
+        "test/services/debug_session_registry_test.dart",
+        "test/services/hydracam_api_service_test.dart",
+        "test/master/master_screen_test.dart",
+        "test/slave/slave_client_registration_test.dart",
+        "test/screens/previous_sessions_screen_test.dart",
+        "test/screens/session_details_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:14:51.103688+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:15:01.037325+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:15:28.862284+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:15:33.004405+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [],
+      "os": "macOS 26.4.1",
+      "role": "local test host"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS physical",
+      "name": "iPad (5) wireless",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "visible but not launched in this Tier D rerun"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS physical",
+      "name": "Jose Ramon iPhone wireless",
+      "notes": [],
+      "os": "iOS 26.5",
+      "role": "visible but not launched in this Tier D rerun"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "session-upload-state-debug-cleanup",
+    "source": "docs/superpowers/plans/2026-06-18-session-upload-state-debug-cleanup.md",
+    "title": "Remove local-session runtime split and add debug session cleanup contract"
+  },
+  "notes": [
+    "No-local-session static guard, flutter analyze --no-pub, focused session/upload/debug cleanup tests, and full flutter test --no-pub all passed. ADB reported no attached Android devices; Flutter saw wireless iPad/iPhone, but physical iOS launch was not rerun because this session exposes only simulator Xcode MCP capabilities and the repo marks no-tooling debug iOS launch as unreliable. Same-day Android setup UI smoke remains in logs/verification-runs/20260618-0953-session-concepts-android-ui/."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

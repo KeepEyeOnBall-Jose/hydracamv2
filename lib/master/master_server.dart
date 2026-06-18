@@ -36,6 +36,10 @@ class ConnectedDeviceInfo {
   final bool isConnected;
   final DateTime? disconnectedAt;
   final String? reportedSessionGuid;
+  final String? appVersion;
+  final String? appBuildNumber;
+  final String? hardwareLabel;
+  final Map<String, int>? sessionMedia;
   final String? lastIdentifyRequestId;
   final DateTime? lastIdentifyRequestedAt;
   final DateTime? lastIdentifyAckAt;
@@ -53,6 +57,10 @@ class ConnectedDeviceInfo {
     this.networkSnapshot,
     this.setupStatus,
     this.reportedSessionGuid,
+    this.appVersion,
+    this.appBuildNumber,
+    this.hardwareLabel,
+    this.sessionMedia,
     this.lastIdentifyRequestId,
     this.lastIdentifyRequestedAt,
     this.lastIdentifyAckAt,
@@ -69,16 +77,42 @@ class ConnectedDeviceInfo {
     return isConnected ? "Connected" : "Disconnected";
   }
 
+  String get networkStatusLabel {
+    if (!isConnected) {
+      return "Last reported: ${networkStatus.label}";
+    }
+    return networkStatus.label;
+  }
+
   String get previewStatus {
+    if (!isConnected) {
+      return "unavailableDisconnected";
+    }
     return "unavailable";
   }
 
   String get previewStatusLabel {
+    if (!isConnected) {
+      return "Preview unavailable: disconnected";
+    }
     return "Preview unavailable";
   }
 
   String get previewTransportLabel {
+    if (!isConnected) {
+      return "Slave disconnected";
+    }
     return "Preview transport not configured";
+  }
+
+  String get setupStatusLabel {
+    final status = setupStatus;
+    if (status == null) {
+      return "Setup: not reported";
+    }
+    final prefix = isConnected ? "Setup" : "Last reported setup";
+    final levelLabel = status.isLevel ? "Level" : "Tilted";
+    return "$prefix: ${status.cameraPerspectiveLabel} | $levelLabel";
   }
 
   String get identifyStatus {
@@ -88,6 +122,9 @@ class ConnectedDeviceInfo {
         (requestedAt == null || !ackAt.isBefore(requestedAt))) {
       return "acknowledged";
     }
+    if (!isConnected && requestedAt != null) {
+      return "unavailable";
+    }
     if (requestedAt != null) {
       return "requested";
     }
@@ -95,15 +132,19 @@ class ConnectedDeviceInfo {
   }
 
   String get identifyStatusLabel {
-    switch (identifyStatus) {
-      case "acknowledged":
-        return "Identify acknowledged";
-      case "requested":
-        return "Identify requested";
-      case "notRequested":
-      default:
-        return "Identify not requested";
+    final status = identifyStatus;
+    final label = switch (status) {
+      "acknowledged" => "Identify acknowledged",
+      "unavailable" => "Identify unavailable: disconnected",
+      "requested" => "Identify requested",
+      _ => "Identify not requested",
+    };
+
+    if (!isConnected && status == "acknowledged") {
+      return "Last reported: $label";
     }
+
+    return label;
   }
 
   String sessionStatus({String? masterSessionGuid}) {
@@ -118,17 +159,19 @@ class ConnectedDeviceInfo {
   }
 
   String sessionStatusLabel({String? masterSessionGuid}) {
-    switch (sessionStatus(masterSessionGuid: masterSessionGuid)) {
-      case "matching":
-        return "Same session";
-      case "different":
-        return "Different session";
-      case "masterUnavailable":
-        return "Master session unavailable";
-      case "unknown":
-      default:
-        return "Session not reported";
+    final status = sessionStatus(masterSessionGuid: masterSessionGuid);
+    final label = switch (status) {
+      "matching" => "Same session",
+      "different" => "Different session",
+      "masterUnavailable" => "Master session unavailable",
+      _ => "Session not reported",
+    };
+
+    if (!isConnected && (status == "matching" || status == "different")) {
+      return "Last reported: $label";
     }
+
+    return label;
   }
 
   ConnectedDeviceInfo copyWith({
@@ -141,6 +184,10 @@ class ConnectedDeviceInfo {
     bool? isConnected,
     Object? disconnectedAt = _unchanged,
     String? reportedSessionGuid,
+    String? appVersion,
+    String? appBuildNumber,
+    String? hardwareLabel,
+    Map<String, int>? sessionMedia,
     String? lastIdentifyRequestId,
     DateTime? lastIdentifyRequestedAt,
     DateTime? lastIdentifyAckAt,
@@ -158,6 +205,10 @@ class ConnectedDeviceInfo {
           ? this.disconnectedAt
           : disconnectedAt as DateTime?,
       reportedSessionGuid: reportedSessionGuid ?? this.reportedSessionGuid,
+      appVersion: appVersion ?? this.appVersion,
+      appBuildNumber: appBuildNumber ?? this.appBuildNumber,
+      hardwareLabel: hardwareLabel ?? this.hardwareLabel,
+      sessionMedia: sessionMedia ?? this.sessionMedia,
       lastIdentifyRequestId:
           lastIdentifyRequestId ?? this.lastIdentifyRequestId,
       lastIdentifyRequestedAt:
@@ -295,6 +346,26 @@ Map<String, dynamic>? _mapValue(Object? value) {
     return value.map((key, value) => MapEntry(key.toString(), value));
   }
   return null;
+}
+
+Map<String, int>? _intMapValue(Object? value) {
+  final map = _mapValue(value);
+  if (map == null) {
+    return null;
+  }
+  return map.map((key, value) {
+    final parsedValue =
+        value is int ? value : int.tryParse(value?.toString() ?? "");
+    return MapEntry(key, parsedValue ?? 0);
+  });
+}
+
+String? _stringValue(Object? value) {
+  final normalized = value?.toString().trim();
+  if (normalized == null || normalized.isEmpty) {
+    return null;
+  }
+  return normalized;
 }
 
 class MasterNetworkSnapshotCache {
@@ -509,7 +580,12 @@ class MasterServer {
           deviceId: messageDeviceId,
         );
       } else if (messageType == "identifyAck") {
-        _handleIdentifyAckMessage(decodedData, deviceId: messageDeviceId);
+        await _handleIdentifyAckMessage(
+          decodedData,
+          socket: socket,
+          remoteIp: remoteIp,
+          deviceId: messageDeviceId,
+        );
       } else if (messageType == "getSessionStatus") {
         LogService.instance
             .registerLog("Received getSessionStatus from $deviceId");
@@ -539,6 +615,10 @@ class MasterServer {
       setupStatus:
           ConnectedDeviceSetupStatus.tryFromJson(decodedData["setupStatus"]),
       reportedSessionGuid: decodedData["sessionGuid"] as String?,
+      appVersion: _stringValue(decodedData["appVersion"]),
+      appBuildNumber: _stringValue(decodedData["appBuildNumber"]),
+      hardwareLabel: _stringValue(decodedData["hardware"]),
+      sessionMedia: _intMapValue(decodedData["sessionMedia"]),
     );
     LogService.instance
         .registerLog("Registered new slave with deviceId: $deviceId");
@@ -615,18 +695,37 @@ class MasterServer {
       setupStatus:
           ConnectedDeviceSetupStatus.tryFromJson(decodedData["setupStatus"]),
       reportedSessionGuid: decodedData["sessionGuid"] as String?,
+      appVersion: _stringValue(decodedData["appVersion"]),
+      appBuildNumber: _stringValue(decodedData["appBuildNumber"]),
+      hardwareLabel: _stringValue(decodedData["hardware"]),
+      sessionMedia: _intMapValue(decodedData["sessionMedia"]),
     );
     LogService.instance.registerLog("Received heartbeat from $deviceId");
   }
 
-  void _handleIdentifyAckMessage(
+  Future<void> _handleIdentifyAckMessage(
     Map<String, dynamic> decodedData, {
+    required WebSocket socket,
+    required String? remoteIp,
     required String deviceId,
-  }) {
+  }) async {
     final acknowledgedAt = DateTime.tryParse(
           decodedData["timestamp"]?.toString() ?? "",
         ) ??
         DateTime.now();
+    await _registerOrUpdateClient(
+      deviceId: deviceId,
+      socket: socket,
+      remoteIp: remoteIp,
+      networkSnapshot: NetworkSnapshot.tryFromJson(decodedData["network"]),
+      setupStatus:
+          ConnectedDeviceSetupStatus.tryFromJson(decodedData["setupStatus"]),
+      reportedSessionGuid: decodedData["sessionGuid"] as String?,
+      appVersion: _stringValue(decodedData["appVersion"]),
+      appBuildNumber: _stringValue(decodedData["appBuildNumber"]),
+      hardwareLabel: _stringValue(decodedData["hardware"]),
+      sessionMedia: _intMapValue(decodedData["sessionMedia"]),
+    );
     _recordIdentifyAck(
       deviceId: deviceId,
       requestId: decodedData["requestId"]?.toString(),
@@ -687,10 +786,19 @@ class MasterServer {
     required NetworkSnapshot? networkSnapshot,
     required ConnectedDeviceSetupStatus? setupStatus,
     required String? reportedSessionGuid,
+    required String? appVersion,
+    required String? appBuildNumber,
+    required String? hardwareLabel,
+    required Map<String, int>? sessionMedia,
   }) {
     final previousInfo = _clientInfo[deviceId];
     final effectiveSnapshot = networkSnapshot ?? previousInfo?.networkSnapshot;
     final effectiveSetupStatus = setupStatus ?? previousInfo?.setupStatus;
+    final effectiveAppVersion = appVersion ?? previousInfo?.appVersion;
+    final effectiveAppBuildNumber =
+        appBuildNumber ?? previousInfo?.appBuildNumber;
+    final effectiveHardwareLabel = hardwareLabel ?? previousInfo?.hardwareLabel;
+    final effectiveSessionMedia = sessionMedia ?? previousInfo?.sessionMedia;
     final now = DateTime.now();
 
     _clients[deviceId] = socket;
@@ -703,6 +811,10 @@ class MasterServer {
           previousInfo?.networkStatus ?? ConnectedDeviceNetworkStatus.unknown,
       setupStatus: effectiveSetupStatus,
       reportedSessionGuid: reportedSessionGuid,
+      appVersion: effectiveAppVersion,
+      appBuildNumber: effectiveAppBuildNumber,
+      hardwareLabel: effectiveHardwareLabel,
+      sessionMedia: effectiveSessionMedia,
       lastIdentifyRequestId: previousInfo?.lastIdentifyRequestId,
       lastIdentifyRequestedAt: previousInfo?.lastIdentifyRequestedAt,
       lastIdentifyAckAt: previousInfo?.lastIdentifyAckAt,
@@ -748,6 +860,10 @@ class MasterServer {
       networkStatus: networkStatus,
       setupStatus: previousInfo?.setupStatus,
       reportedSessionGuid: previousInfo?.reportedSessionGuid,
+      appVersion: previousInfo?.appVersion,
+      appBuildNumber: previousInfo?.appBuildNumber,
+      hardwareLabel: previousInfo?.hardwareLabel,
+      sessionMedia: previousInfo?.sessionMedia,
       lastIdentifyRequestId: previousInfo?.lastIdentifyRequestId,
       lastIdentifyRequestedAt: previousInfo?.lastIdentifyRequestedAt,
       lastIdentifyAckAt: previousInfo?.lastIdentifyAckAt,
@@ -828,6 +944,10 @@ class MasterServer {
     required NetworkSnapshot? networkSnapshot,
     ConnectedDeviceSetupStatus? setupStatus,
     String? reportedSessionGuid,
+    String? appVersion,
+    String? appBuildNumber,
+    String? hardwareLabel,
+    Map<String, int>? sessionMedia,
   }) {
     return _registerOrUpdateClient(
       deviceId: deviceId,
@@ -836,6 +956,10 @@ class MasterServer {
       networkSnapshot: networkSnapshot,
       setupStatus: setupStatus,
       reportedSessionGuid: reportedSessionGuid,
+      appVersion: appVersion,
+      appBuildNumber: appBuildNumber,
+      hardwareLabel: hardwareLabel,
+      sessionMedia: sessionMedia,
     );
   }
 
@@ -945,7 +1069,7 @@ class MasterServer {
   void startNewSession(String sessionGuid) {
     // Init new session through SessionManager
     SessionManager.instance
-        .joinBackendSession(sessionGuid, null, deviceType: "Master");
+        .joinSession(sessionGuid, null, deviceType: "Master");
 
     // Register logs
     LogService.instance
@@ -961,9 +1085,9 @@ class MasterServer {
 
   /// Sends a command to all connected slave devices.
   void sendCommandToAll(String message) {
-    _sendCommandToEligibleClients(message);
-    LogService.instance
-        .registerLog("Command sent to all connected slaves: $message");
+    final sentCount = _sendCommandToEligibleClients(message);
+    LogService.instance.registerLog(
+        "Command sent to $sentCount eligible connected slave(s): $message");
   }
 
   Future<void> endCurrentSession() async {
@@ -1002,19 +1126,26 @@ class MasterServer {
         return;
       }
 
-      final sentCount =
-          _sendCommandToEligibleClients(command, deviceId: deviceId);
+      final sentCount = _sendCommandToEligibleClients(
+        command,
+        deviceId: deviceId,
+        commandLabel: command,
+      );
       if (sentCount == 0) {
+        final reason = _commandIneligibleReason(deviceId) ?? "eligibility";
         LogService.instance.registerLog(
-            "Command '$command' blocked for slave $deviceId due to network mismatch.");
+            "Command '$command' blocked for slave $deviceId due to $reason.");
       } else {
         LogService.instance.registerLog(
             "Command '$command' sent to slave with deviceId: $deviceId.");
       }
     } else {
-      _sendCommandToEligibleClients(command);
-      LogService.instance
-          .registerLog("Command '$command' sent to all connected slaves.");
+      final sentCount = _sendCommandToEligibleClients(
+        command,
+        commandLabel: command,
+      );
+      LogService.instance.registerLog(
+          "Command '$command' sent to $sentCount eligible connected slave(s).");
     }
   }
 
@@ -1028,7 +1159,7 @@ class MasterServer {
           "Identify command not sent. Slave $deviceId is not connected.");
       return false;
     }
-    if (!_isCommandEligible(deviceId)) {
+    if (!_isNetworkEligible(deviceId)) {
       LogService.instance.registerLog(
           "Identify command blocked for slave $deviceId due to network mismatch.");
       return false;
@@ -1094,18 +1225,23 @@ class MasterServer {
       final sentCount = _sendCommandToEligibleClients(
         scheduledCommandMessage,
         deviceId: deviceId,
+        commandLabel: command,
       );
       if (sentCount == 0) {
+        final reason = _commandIneligibleReason(deviceId) ?? "eligibility";
         LogService.instance.registerLog(
-            "Scheduled command '$command' blocked for slave $deviceId due to network mismatch.");
+            "Scheduled command '$command' blocked for slave $deviceId due to $reason.");
       } else {
         LogService.instance.registerLog(
             "Scheduled command '$command' sent to slave with deviceId: $deviceId.");
       }
     } else {
-      _sendCommandToEligibleClients(scheduledCommandMessage);
+      final sentCount = _sendCommandToEligibleClients(
+        scheduledCommandMessage,
+        commandLabel: command,
+      );
       LogService.instance.registerLog(
-          "Scheduled command '$command' sent to all connected slaves.");
+          "Scheduled command '$command' sent to $sentCount eligible connected slave(s).");
     }
   }
 
@@ -1131,11 +1267,11 @@ class MasterServer {
     _notifyClientCount();
   }
 
-  Iterable<MapEntry<String, WebSocket>> _commandEligibleClients() {
-    return _clients.entries.where((entry) => _isCommandEligible(entry.key));
-  }
-
-  int _sendCommandToEligibleClients(String message, {String? deviceId}) {
+  int _sendCommandToEligibleClients(
+    String message, {
+    String? deviceId,
+    String? commandLabel,
+  }) {
     if (deviceId != null) {
       final client = _clients[deviceId];
       if (client == null || !_isCommandEligible(deviceId)) {
@@ -1147,7 +1283,14 @@ class MasterServer {
     }
 
     var sentCount = 0;
-    for (var entry in _commandEligibleClients()) {
+    for (var entry in _clients.entries) {
+      final reason = _commandIneligibleReason(entry.key);
+      if (reason != null) {
+        LogService.instance.registerLog(
+            "Command '${commandLabel ?? message}' skipped for slave ${entry.key} due to $reason.");
+        continue;
+      }
+
       entry.value.add(message);
       sentCount += 1;
     }
@@ -1155,7 +1298,27 @@ class MasterServer {
   }
 
   bool _isCommandEligible(String deviceId) {
+    return _commandIneligibleReason(deviceId) == null;
+  }
+
+  bool _isNetworkEligible(String deviceId) {
     final info = _clientInfo[deviceId];
     return info?.networkStatus != ConnectedDeviceNetworkStatus.wrongNetwork;
+  }
+
+  String? _commandIneligibleReason(String deviceId) {
+    if (!_isNetworkEligible(deviceId)) {
+      return "network mismatch";
+    }
+
+    final info = _clientInfo[deviceId];
+    final sessionStatus = info?.sessionStatus(
+      masterSessionGuid: SessionManager.instance.sessionGuid,
+    );
+    if (sessionStatus == "different") {
+      return "session mismatch";
+    }
+
+    return null;
   }
 }

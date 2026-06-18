@@ -10,6 +10,7 @@ import "../models/capture_session.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../models/sync_metadata.dart";
+import "debug_session_policy.dart";
 import "device_service.dart";
 import "hydracam_api_service.dart" as api;
 import "log_service.dart";
@@ -27,6 +28,8 @@ class SessionManager extends ChangeNotifier {
   /// Accessor for singleton instance
   static SessionManager get instance => _instance;
 
+  final DebugSessionPolicy _debugSessionPolicy = DebugSessionPolicy();
+
   /// The unique identifier for the current session (GUID).
   String? _sessionGuid;
 
@@ -35,8 +38,6 @@ class SessionManager extends ChangeNotifier {
 
   /// The type of device (Master or Slave) for this instance.
   String _deviceType = "Unknown";
-
-  bool _isBackendCreated = false;
 
   final Queue<_SessionMetadataSnapshot> _metadataWriteQueue = Queue();
   bool _isMetadataWriteRunning = false;
@@ -47,38 +48,58 @@ class SessionManager extends ChangeNotifier {
   CaptureSession? get currentSession => _currentSession;
   String get deviceType => _deviceType;
   bool get isSessionActive => _currentSession != null;
-  bool get isCurrentSessionBackendCreated => _isBackendCreated;
   bool get canUploadCurrentSession =>
-      _currentSession != null && _isBackendCreated;
+      _currentSession != null && isServiceSessionGuid(_sessionGuid);
+  bool get isCurrentSessionDebug => _currentSession?.debugSession ?? false;
 
-  void startBackendSession(api.HydraCamBackendSession session,
-      {required String deviceType}) {
+  static bool isServiceSessionGuid(String? sessionGuid) {
+    final normalizedSessionGuid = sessionGuid?.trim() ?? "";
+    return normalizedSessionGuid.isNotEmpty &&
+        !normalizedSessionGuid.startsWith("local-");
+  }
+
+  void startCreatedSession(
+    api.HydraCamBackendSession session, {
+    required String deviceType,
+    bool debugSession = false,
+  }) {
     startSession(
       session.guid,
       session.sessionId,
       deviceType: deviceType,
-      backendCreated: true,
+      debugSession: debugSession,
+      serviceNumericId: session.numericId,
     );
   }
 
-  void joinBackendSession(String sessionGuid, String? sessionId,
-      {required String deviceType}) {
+  void joinSession(
+    String sessionGuid,
+    String? sessionId, {
+    required String deviceType,
+    bool debugSession = false,
+    int? serviceNumericId,
+  }) {
     startSession(
       sessionGuid,
       sessionId ?? sessionGuid,
       deviceType: deviceType,
-      backendCreated: true,
+      debugSession: debugSession,
+      serviceNumericId: serviceNumericId,
     );
   }
 
   /// Set the session GUID and initialize a new `CaptureSession`.
   @visibleForTesting
-  void startSession(String sessionGuid, String? sessionId,
-      {required String deviceType, bool backendCreated = true}) {
-    final normalizedSessionGuid = _validateSessionGuid(sessionGuid);
+  void startSession(
+    String sessionGuid,
+    String? sessionId, {
+    required String deviceType,
+    bool debugSession = false,
+    int? serviceNumericId,
+  }) {
+    final normalizedSessionGuid = _validateServiceSessionGuid(sessionGuid);
     if (_currentSession != null && _sessionGuid == normalizedSessionGuid) {
       _deviceType = deviceType;
-      _isBackendCreated = _isBackendCreated || backendCreated;
       LogService.instance.registerLog(
           "Session already active with GUID: $_sessionGuid. Preserving existing media on rejoin as $_deviceType.");
       notifyListeners();
@@ -91,12 +112,12 @@ class SessionManager extends ChangeNotifier {
     // Set the session GUID and initialize a new session object
     _sessionGuid = normalizedSessionGuid;
     _deviceType = deviceType;
-    _isBackendCreated = backendCreated;
     _currentSession = CaptureSession(
       sessionId: sessionId ?? normalizedSessionGuid,
       sessionGuid: normalizedSessionGuid,
       startTime: DateTime.now(),
-      backendCreated: backendCreated,
+      debugSession: debugSession,
+      serviceNumericId: serviceNumericId,
     );
 
     // Log session start and notify listeners
@@ -120,7 +141,6 @@ class SessionManager extends ChangeNotifier {
     // Clean variables
     _currentSession = null;
     _sessionGuid = null;
-    _isBackendCreated = false;
 
     // Reset the uploader to clear any pending operations
     UploaderService().reset();
@@ -187,22 +207,33 @@ class SessionManager extends ChangeNotifier {
 
   /// Deletes a file if the setting to delete local files is enabled.
   Future<void> deleteFileIfAllowed(String filePath) async {
-    final shouldDelete = await SettingsService.getDeleteLocalAfterUpload();
-    if (shouldDelete) {
-      final file = File(filePath);
-      if (await file.exists()) {
-        try {
-          await file.delete();
-          LogService.instance.registerLog("Deleted local file: $filePath");
-        } catch (e) {
-          LogService.instance
-              .registerLog("Failed to delete file: $filePath, error: $e");
-        }
-      } else {
-        LogService.instance
-            .registerLog("File not found for deletion: $filePath");
-      }
+    final shouldDelete = await shouldDeleteUploadedFile();
+    if (!shouldDelete) {
+      return;
     }
+    final file = File(filePath);
+    if (await file.exists()) {
+      try {
+        await file.delete();
+        LogService.instance
+            .registerLog("Deleted uploaded local file: $filePath");
+      } catch (e) {
+        LogService.instance.registerLog(
+            "Failed to delete uploaded local file: $filePath, error: $e");
+      }
+    } else {
+      LogService.instance
+          .registerLog("Uploaded local file already missing: $filePath");
+    }
+  }
+
+  Future<bool> shouldDeleteUploadedFile() async {
+    if (_debugSessionPolicy.shouldDeleteUploadedLocalMedia(
+      debugSession: isCurrentSessionDebug,
+    )) {
+      return true;
+    }
+    return SettingsService.getDeleteLocalAfterUpload();
   }
 
   /// --------------------------------
@@ -220,7 +251,7 @@ class SessionManager extends ChangeNotifier {
     return _enqueueMetadataWrite(snapshot);
   }
 
-  // For loading session metadata
+  // For previewing stored session metadata without changing the active session.
   Future<CaptureSession?> loadSessionMetadata(String sessionGuid) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
@@ -249,6 +280,8 @@ class SessionManager extends ChangeNotifier {
         capturedVideos: (metadata["videos"] as List<dynamic>? ?? const [])
             .map((video) => _parseVideo(video, deviceId))
             .toList(),
+        debugSession: metadata["debugSession"] == true,
+        serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
       );
 
       // Correct sessionguid if null
@@ -258,15 +291,6 @@ class SessionManager extends ChangeNotifier {
         LogService.instance.registerLog(
             "Session GUID was null. Corrected to $sessionGuid and saved.");
       }
-
-      _sessionGuid = restoredSessionGuid;
-      _deviceType = metadata["deviceType"] ?? "Unknown";
-      _isBackendCreated = _metadataMarksBackendCreated(
-        metadata,
-        restoredSessionGuid,
-      );
-
-      notifyListeners();
 
       LogService.instance
           .registerLog("Session metadata loaded for session $sessionGuid");
@@ -304,6 +328,8 @@ class SessionManager extends ChangeNotifier {
         capturedVideos: (metadata["videos"] as List<dynamic>? ?? const [])
             .map((video) => _parseVideo(video, deviceId))
             .toList(),
+        debugSession: metadata["debugSession"] == true,
+        serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
       );
 
       LogService.instance
@@ -327,17 +353,16 @@ class SessionManager extends ChangeNotifier {
     }
 
     final restoredSessionGuid = loadedSession.sessionGuid ?? sessionIdentifier;
-    final backendCreated =
-        await _metadataSessionIsBackendCreated(sessionIdentifier);
-    if (!backendCreated) {
+    if (!isServiceSessionGuid(restoredSessionGuid)) {
       throw StateError(
-          "Stored session $restoredSessionGuid is not backend-created and cannot be restored for upload.");
+          "Stored media $restoredSessionGuid is not attached to a service session and cannot be restored for upload.");
     }
     startSession(
       restoredSessionGuid,
       loadedSession.sessionId,
       deviceType: deviceType,
-      backendCreated: true,
+      debugSession: loadedSession.debugSession,
+      serviceNumericId: loadedSession.serviceNumericId,
     );
 
     for (final photo in loadedSession.capturedPhotos) {
@@ -358,6 +383,7 @@ class SessionManager extends ChangeNotifier {
         .where((entity) =>
             entity is Directory && _entityName(entity).startsWith("session_"))
         .map(_sessionIdentifierFromDirectory)
+        .where(isServiceSessionGuid)
         .toList();
 
     return sessionDirs;
@@ -370,8 +396,6 @@ class SessionManager extends ChangeNotifier {
     final previousSession = _currentSession;
     final previousSessionGuid = _sessionGuid;
     final previousDeviceType = _deviceType;
-    final previousBackendCreated = _isBackendCreated;
-
     final directory = await getApplicationDocumentsDirectory();
     final sessionDirs = Directory(directory.path)
         .listSync()
@@ -386,6 +410,12 @@ class SessionManager extends ChangeNotifier {
       final metadataFile = File("${dir.path}/metadata.json");
 
       try {
+        if (!isServiceSessionGuid(sessionGuid)) {
+          LogService.instance.registerLog(
+              "Skipping legacy device media folder while scanning service sessions: $sessionGuid");
+          continue;
+        }
+
         // Skip if metadata already exists
         if (metadataFile.existsSync()) {
           final metadata = jsonDecode(await metadataFile.readAsString());
@@ -397,10 +427,6 @@ class SessionManager extends ChangeNotifier {
             LogService.instance.registerLog(
                 "Session GUID in metadata was null. Corrected to $sessionGuid and saved.");
           }
-          metadata["backendCreated"] = _metadataMarksBackendCreated(
-            metadata,
-            sessionGuid,
-          );
           await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
 
           reconstructedSessions.add(sessionGuid);
@@ -465,7 +491,6 @@ class SessionManager extends ChangeNotifier {
         // Save metadata
         _currentSession = session;
         _sessionGuid = sessionGuid;
-        _isBackendCreated = false;
 
         await saveSessionMetadata();
         reconstructedSessions.add(sessionGuid);
@@ -482,7 +507,6 @@ class SessionManager extends ChangeNotifier {
     _currentSession = previousSession;
     _sessionGuid = previousSessionGuid;
     _deviceType = previousDeviceType;
-    _isBackendCreated = previousBackendCreated;
 
     return reconstructedSessions;
   }
@@ -579,7 +603,8 @@ class SessionManager extends ChangeNotifier {
     return {
       "sessionId": _currentSession!.sessionId,
       "sessionGuid": _sessionGuid,
-      "backendCreated": _isBackendCreated,
+      "debugSession": _currentSession!.debugSession,
+      "serviceNumericId": _currentSession!.serviceNumericId,
       "startTime": _currentSession!.startTime.toIso8601String(),
       "endTime": _currentSession!.endTime?.toIso8601String(),
       "deviceType": _deviceType,
@@ -595,6 +620,7 @@ class SessionManager extends ChangeNotifier {
       "captureDate": photo.captureDate.toIso8601String(),
       "receivedDate": photo.receivedDate.toIso8601String(),
       "isUploaded": photo.isUploaded,
+      "fileSizeInBytes": photo.fileSizeInBytes,
       if (photo.uploadFailureReason != null)
         "uploadFailureReason": photo.uploadFailureReason,
       if (photo.captureContext != null)
@@ -612,6 +638,7 @@ class SessionManager extends ChangeNotifier {
       "endRecordingDate": video.endRecordingDate.toIso8601String(),
       "receivedDate": video.receivedDate.toIso8601String(),
       "isUploaded": video.isUploaded,
+      "fileSizeInBytes": video.fileSizeInBytes,
       if (video.uploadFailureReason != null)
         "uploadFailureReason": video.uploadFailureReason,
       if (video.captureContext != null)
@@ -633,6 +660,7 @@ class SessionManager extends ChangeNotifier {
       receivedDate: DateTime.parse(photo["receivedDate"].toString()),
       isUploaded: photo["isUploaded"] == true,
       uploadFailureReason: photo["uploadFailureReason"]?.toString(),
+      fileSizeInBytes: _asNullableInt(photo["fileSizeInBytes"]),
       captureContext:
           MediaCaptureContext.fromJson(_asNullableMap(photo["captureContext"])),
       syncMetadata: SyncMetadata.fromJson(photo["syncMetadata"]),
@@ -653,68 +681,30 @@ class SessionManager extends ChangeNotifier {
       receivedDate: DateTime.parse(video["receivedDate"].toString()),
       isUploaded: video["isUploaded"] == true,
       uploadFailureReason: video["uploadFailureReason"]?.toString(),
+      fileSizeInBytes: _asNullableInt(video["fileSizeInBytes"]),
       captureContext:
           MediaCaptureContext.fromJson(_asNullableMap(video["captureContext"])),
       syncMetadata: SyncMetadata.fromJson(video["syncMetadata"]),
     );
   }
 
-  String _validateSessionGuid(String sessionGuid) {
+  String _validateServiceSessionGuid(String sessionGuid) {
     final normalizedSessionGuid = sessionGuid.trim();
     if (normalizedSessionGuid.isEmpty) {
       throw ArgumentError.value(
         sessionGuid,
         "sessionGuid",
-        "Backend session GUID is required.",
+        "Service session GUID is required.",
       );
     }
-    if (normalizedSessionGuid.startsWith("local-")) {
+    if (!isServiceSessionGuid(normalizedSessionGuid)) {
       throw ArgumentError.value(
         sessionGuid,
         "sessionGuid",
-        "Local sessions are not uploadable; create or join a backend session first.",
+        "A service-created session is required before capture or upload.",
       );
     }
     return normalizedSessionGuid;
-  }
-
-  Future<bool> _metadataSessionIsBackendCreated(String sessionGuid) async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final metadataFile =
-          File("${directory.path}/session_$sessionGuid/metadata.json");
-      if (!metadataFile.existsSync()) {
-        return _looksLikeBackendSessionGuid(sessionGuid);
-      }
-      final metadata = _asMap(jsonDecode(await metadataFile.readAsString()));
-      return _metadataMarksBackendCreated(metadata, sessionGuid);
-    } catch (e) {
-      LogService.instance.registerLog(
-          "Failed to inspect backend-created metadata for $sessionGuid: $e");
-      return false;
-    }
-  }
-
-  bool _metadataMarksBackendCreated(
-    Map<String, dynamic> metadata,
-    String fallbackSessionGuid,
-  ) {
-    final sessionGuid =
-        (metadata["sessionGuid"] ?? fallbackSessionGuid).toString();
-    if (!_looksLikeBackendSessionGuid(sessionGuid)) {
-      return false;
-    }
-    final explicitBackendCreated = metadata["backendCreated"];
-    if (explicitBackendCreated is bool) {
-      return explicitBackendCreated;
-    }
-    return true;
-  }
-
-  bool _looksLikeBackendSessionGuid(String sessionGuid) {
-    final normalizedSessionGuid = sessionGuid.trim();
-    return normalizedSessionGuid.isNotEmpty &&
-        !normalizedSessionGuid.startsWith("local-");
   }
 
   Map<String, dynamic> _asMap(Object? value) {
@@ -732,6 +722,19 @@ class SessionManager extends ChangeNotifier {
       return null;
     }
     return _asMap(value);
+  }
+
+  int? _asNullableInt(Object? value) {
+    if (value is int) {
+      return value;
+    }
+    if (value is num) {
+      return value.toInt();
+    }
+    if (value is String) {
+      return int.tryParse(value);
+    }
+    return null;
   }
 }
 

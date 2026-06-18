@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:convert";
 import "dart:io";
 
 import "package:flutter_test/flutter_test.dart";
@@ -8,12 +9,24 @@ import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/services/auth0_m2m_service.dart";
 import "package:hydracam/services/hydracam_api_service.dart";
 import "package:hydracam/services/log_service.dart";
+import "package:hydracam/services/settings_service.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/uploader_service.dart";
 import "package:package_info_plus/package_info_plus.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
+
+const List<int> _validJpegHeader = [0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10];
+const int _validJpegHeaderLength = 6;
+
+List<int> _validJpegBytes({int length = _validJpegHeaderLength, int fill = 0}) {
+  final paddingLength = length - _validJpegHeader.length;
+  return <int>[
+    ..._validJpegHeader,
+    ...List<int>.filled(paddingLength, fill),
+  ];
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -73,7 +86,7 @@ void main() {
   test("reset clears stale queue, current upload state, and progress",
       () async {
     final photoFile = File("${tempDir.path}/photo.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "old-session-device",
@@ -98,7 +111,7 @@ void main() {
 
   test("addMediaToQueue can be awaited through settings evaluation", () async {
     final photoFile = File("${tempDir.path}/awaitable-enqueue.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "awaitable-device",
@@ -130,9 +143,9 @@ void main() {
     );
 
     final firstFile = File("${tempDir.path}/await-manual-first.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes(fill: 1));
     final secondFile = File("${tempDir.path}/await-manual-second.jpg")
-      ..writeAsBytesSync([5, 6, 7, 8]);
+      ..writeAsBytesSync(_validJpegBytes(fill: 2));
     final firstPhoto = CapturedPhoto(
       photoPath: firstFile.path,
       slaveDeviceId: "await-manual-first",
@@ -158,41 +171,110 @@ void main() {
     expect(uploaderService.currentlyUploadingNotifier.value, isNull);
   });
 
-  test("addMediaToQueue refuses media when session is not backend-created",
+  test("addMediaToQueue refuses media when no service session is active",
       () async {
     await SessionManager.instance.endSession();
-    SessionManager.instance.startSession(
-      "diagnostic-session-guid",
-      "diagnostic-session",
-      deviceType: "Master",
-      backendCreated: false,
-    );
-    final photoFile = File("${tempDir.path}/diagnostic-session.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+    final photoFile = File("${tempDir.path}/unattached-media.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "diagnostic-device",
-      captureDate: DateTime(2026, 6, 9, 3, 0),
-      receivedDate: DateTime(2026, 6, 9, 3, 0, 1),
+      captureDate: DateTime(2026, 6, 18, 3),
+      receivedDate: DateTime(2026, 6, 18, 3, 0, 1),
     );
 
     await uploaderService.addMediaToQueue(photo);
 
     expect(uploaderService.queueLength, 0);
     expect(photo.isUploaded, isFalse);
-    expect(photo.uploadFailureReason, contains("not backend-created"));
+    expect(photo.uploadFailureReason, contains("no active service session"));
     expect(
       LogService.instance.logs.map((entry) => entry["message"]),
-      contains(contains("session is not backend-created")),
+      contains(contains("no active service session")),
     );
+  });
+
+  test("startUploadingManually marks missing queued file as failed", () async {
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "missing-file-session-guid",
+        sessionId: "missing-file-session",
+      ),
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/deleted-before-upload.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "deleted-file-device",
+      captureDate: DateTime(2026, 6, 17, 15, 20),
+      receivedDate: DateTime(2026, 6, 17, 15, 20, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    await photoFile.delete();
+
+    await uploaderService.startUploadingManually();
+
+    expect(uploaderService.queueLength, 0);
+    expect(uploaderService.isUploading, isFalse);
+    expect(photo.isUploaded, isFalse);
+    expect(photo.uploadFailureReason, contains("file does not exist"));
+
+    final metadataFile = File(
+      "${pathProvider.documentsDir.path}/session_missing-file-session-guid/metadata.json",
+    );
+    final metadata =
+        jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
+    final photos = metadata["photos"] as List<dynamic>;
+    expect(photos, hasLength(1));
+    expect(
+      photos.single,
+      containsPair(
+        "uploadFailureReason",
+        "Upload failed: file does not exist on disk.",
+      ),
+    );
+  });
+
+  test(
+      "debug session upload deletes local media even when user setting is false",
+      () async {
+    HydraCamApiService.configureHttpClient(MockClient((request) async {
+      if (request.method == "POST") {
+        return http.Response("{}", 200);
+      }
+      return http.Response("{}", 200);
+    }));
+    await SettingsService.setDeleteLocalAfterUpload(false);
+    SessionManager.instance.startSession(
+      "debug-service-session-guid",
+      "debug-android-20260618T123456Z",
+      deviceType: "Master",
+      debugSession: true,
+    );
+    final photoFile = File("${tempDir.path}/debug-photo.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "debug-device",
+      captureDate: DateTime(2026, 6, 18, 12, 35),
+      receivedDate: DateTime(2026, 6, 18, 12, 35, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    await uploaderService.startUploadingManually();
+
+    expect(photo.isUploaded, isTrue);
+    expect(photoFile.existsSync(), isFalse);
   });
 
   test("cancelQueuedMedia removes a pending item without touching others",
       () async {
     final firstFile = File("${tempDir.path}/first.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes(fill: 1));
     final secondFile = File("${tempDir.path}/second.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes(fill: 2));
     final firstPhoto = CapturedPhoto(
       photoPath: firstFile.path,
       slaveDeviceId: "first-device",
@@ -210,15 +292,47 @@ void main() {
     await uploaderService.addMediaToQueue(secondPhoto);
 
     expect(uploaderService.queueLength, 2);
-    expect(uploaderService.cancelQueuedMedia(firstPhoto), isTrue);
+    expect(await uploaderService.cancelQueuedMedia(firstPhoto), isTrue);
     expect(uploaderService.queueLength, 1);
-    expect(uploaderService.cancelQueuedMedia(firstPhoto), isFalse);
+    expect(firstPhoto.isUploaded, isFalse);
+    expect(firstPhoto.uploadStartTime, isNotNull);
+    expect(firstPhoto.uploadFailureReason, "Upload cancelled.");
+    expect(secondPhoto.uploadFailureReason, isNull);
+    expect(await uploaderService.cancelQueuedMedia(firstPhoto), isFalse);
     expect(uploaderService.queueLength, 1);
+  });
+
+  test("cancelQueuedMedia persists queued cancellation metadata", () async {
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "queued-cancel-metadata-guid",
+        sessionId: "queued-cancel-metadata-session",
+      ),
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/queued-cancel-metadata.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "queued-cancel-metadata-device",
+      captureDate: DateTime(2026, 6, 17, 15, 45),
+      receivedDate: DateTime(2026, 6, 17, 15, 45, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+
+    expect(await uploaderService.cancelQueuedMedia(photo), isTrue);
+
+    final failureReason = await _readPersistedPhotoFailureReason(
+      documentsDir: pathProvider.documentsDir,
+      sessionGuid: "queued-cancel-metadata-guid",
+    );
+    expect(failureReason, "Upload cancelled.");
   });
 
   test("addMediaToQueue ignores retry for media already uploading", () async {
     final photoFile = File("${tempDir.path}/currently-uploading.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "uploading-device",
@@ -258,9 +372,9 @@ void main() {
       deviceType: "Master",
     );
     final completedFile = File("${tempDir.path}/completed-estimate.jpg")
-      ..writeAsBytesSync(List<int>.filled(100, 1));
+      ..writeAsBytesSync(_validJpegBytes(length: 100, fill: 1));
     final pendingFile = File("${tempDir.path}/pending-estimate.jpg")
-      ..writeAsBytesSync(List<int>.filled(200, 1));
+      ..writeAsBytesSync(_validJpegBytes(length: 200, fill: 1));
     final completedPhoto = CapturedPhoto(
       photoPath: completedFile.path,
       slaveDeviceId: "estimate-completed",
@@ -311,9 +425,9 @@ void main() {
       deviceType: "Master",
     );
     final completedFile = File("${tempDir.path}/subsecond-completed.jpg")
-      ..writeAsBytesSync(List<int>.filled(100, 1));
+      ..writeAsBytesSync(_validJpegBytes(length: 100, fill: 1));
     final pendingFile = File("${tempDir.path}/subsecond-pending.jpg")
-      ..writeAsBytesSync(List<int>.filled(200, 1));
+      ..writeAsBytesSync(_validJpegBytes(length: 200, fill: 1));
     final completedPhoto = CapturedPhoto(
       photoPath: completedFile.path,
       slaveDeviceId: "subsecond-completed",
@@ -365,7 +479,7 @@ void main() {
       deviceType: "Master",
     );
     final photoFile = File("${tempDir.path}/inflight.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "old-session-device",
@@ -423,7 +537,7 @@ void main() {
       deviceType: "Master",
     );
     final photoFile = File("${tempDir.path}/cancel-inflight.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "cancel-device",
@@ -437,10 +551,11 @@ void main() {
 
     uploaderService.uploadProgressNotifier.value = 0.5;
 
-    expect(uploaderService.cancelCurrentUpload(), isTrue);
+    expect(await uploaderService.cancelCurrentUpload(), isTrue);
     expect(uploaderService.isUploading, isFalse);
     expect(uploaderService.currentlyUploadingNotifier.value, isNull);
     expect(uploaderService.uploadProgressNotifier.value, 0.0);
+    expect(photo.uploadFailureReason, "Upload cancelled.");
 
     releaseUpload.complete();
     await requestFinished.future.timeout(const Duration(seconds: 1));
@@ -450,6 +565,60 @@ void main() {
     expect(uploaderService.isUploading, isFalse);
     expect(uploaderService.currentlyUploadingNotifier.value, isNull);
     expect(uploaderService.queueLength, 0);
+  });
+
+  test("cancelCurrentUpload persists active cancellation metadata", () async {
+    final releaseUpload = Completer<void>();
+    final requestStarted = Completer<void>();
+    final requestFinished = Completer<void>();
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        if (!requestStarted.isCompleted) {
+          requestStarted.complete();
+        }
+        await releaseUpload.future;
+        await bodyStream.drain<void>();
+        if (!requestFinished.isCompleted) {
+          requestFinished.complete();
+        }
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "active-cancel-metadata-guid",
+        sessionId: "active-cancel-metadata-session",
+      ),
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/active-cancel-metadata.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "active-cancel-metadata-device",
+      captureDate: DateTime(2026, 6, 17, 15, 50),
+      receivedDate: DateTime(2026, 6, 17, 15, 50, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    final uploadFuture = uploaderService.startUploadingManually();
+    await requestStarted.future.timeout(const Duration(seconds: 1));
+
+    expect(await uploaderService.cancelCurrentUpload(), isTrue);
+
+    final failureReason = await _readPersistedPhotoFailureReason(
+      documentsDir: pathProvider.documentsDir,
+      sessionGuid: "active-cancel-metadata-guid",
+    );
+    expect(failureReason, "Upload cancelled.");
+
+    releaseUpload.complete();
+    await requestFinished.future.timeout(const Duration(seconds: 1));
+    await uploadFuture;
   });
 
   test("cancelCurrentUpload closes the active HTTP client", () async {
@@ -462,7 +631,7 @@ void main() {
       deviceType: "Master",
     );
     final photoFile = File("${tempDir.path}/cancel-http.jpg")
-      ..writeAsBytesSync([1, 2, 3, 4]);
+      ..writeAsBytesSync(_validJpegBytes());
     final photo = CapturedPhoto(
       photoPath: photoFile.path,
       slaveDeviceId: "cancel-http-device",
@@ -475,9 +644,48 @@ void main() {
     await client.requestStarted.future.timeout(const Duration(seconds: 1));
 
     expect(client.closeCount, 0);
-    expect(uploaderService.cancelCurrentUpload(), isTrue);
+    expect(await uploaderService.cancelCurrentUpload(), isTrue);
     expect(client.closeCount, 1);
 
+    await client.requestFinished.future.timeout(const Duration(seconds: 1));
+    await uploadFuture;
+
+    expect(photo.isUploaded, isFalse);
+    expect(uploaderService.isUploading, isFalse);
+  });
+
+  test("reset closes the active HTTP client", () async {
+    final releaseResponse = Completer<void>();
+    final client = _CloseTrackingClient(releaseResponse: releaseResponse);
+    HydraCamApiService.configureHttpClient(client);
+
+    SessionManager.instance.startSession(
+      "reset-http-session-guid",
+      "reset-http-session",
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/reset-http.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "reset-http-device",
+      captureDate: DateTime(2026, 6, 17, 19, 30),
+      receivedDate: DateTime(2026, 6, 17, 19, 30, 1),
+    );
+
+    await uploaderService.addMediaToQueue(photo);
+    final uploadFuture = uploaderService.startUploadingManually();
+    await client.requestStarted.future.timeout(const Duration(seconds: 1));
+
+    expect(client.closeCount, 0);
+
+    uploaderService.reset();
+
+    expect(client.closeCount, 1);
+    expect(uploaderService.isUploading, isFalse);
+    expect(uploaderService.currentlyUploadingNotifier.value, isNull);
+
+    releaseResponse.complete();
     await client.requestFinished.future.timeout(const Duration(seconds: 1));
     await uploadFuture;
 
@@ -502,7 +710,38 @@ class _TestPathProviderPlatform extends PathProviderPlatform {
   }
 }
 
+Future<String?> _readPersistedPhotoFailureReason({
+  required Directory documentsDir,
+  required String sessionGuid,
+}) async {
+  final metadataFile = File(
+    "${documentsDir.path}/session_$sessionGuid/metadata.json",
+  );
+  final deadline = DateTime.now().add(const Duration(milliseconds: 500));
+  String? lastFailureReason;
+  while (DateTime.now().isBefore(deadline)) {
+    if (metadataFile.existsSync()) {
+      final metadata =
+          jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
+      final photos = metadata["photos"] as List<dynamic>? ?? const [];
+      if (photos.isNotEmpty) {
+        final photo = photos.single as Map<String, dynamic>;
+        lastFailureReason = photo["uploadFailureReason"]?.toString();
+        if (lastFailureReason != null) {
+          return lastFailureReason;
+        }
+      }
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
+  return lastFailureReason;
+}
+
 class _CloseTrackingClient extends http.BaseClient {
+  _CloseTrackingClient({Completer<void>? releaseResponse})
+      : _releaseResponse = releaseResponse;
+
+  final Completer<void>? _releaseResponse;
   final Completer<void> requestStarted = Completer<void>();
   final Completer<void> requestFinished = Completer<void>();
   int closeCount = 0;
@@ -513,6 +752,7 @@ class _CloseTrackingClient extends http.BaseClient {
       requestStarted.complete();
     }
     await request.finalize().drain<void>();
+    await _releaseResponse?.future;
     if (!requestFinished.isCompleted) {
       requestFinished.complete();
     }

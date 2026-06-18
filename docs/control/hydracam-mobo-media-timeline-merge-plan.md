@@ -1,6 +1,6 @@
 # HydraCam, MoBo, And Media Timeline Merge Plan
 
-Last reviewed: 2026-06-08.
+Last reviewed: 2026-06-12.
 
 This plan covers three active codebases:
 
@@ -14,6 +14,11 @@ This plan covers three active codebases:
 
 Interpretation note: "hydrcam" is treated here as the active Flutter repo,
 `/Users/jose/src/work/hydracamv2`.
+
+For diagrams of the API calls, endpoint families, data stores, and cutover
+boundaries, see `cross-project-api-data-map.md`.
+For the corresponding user-flow and cross-system FSMs, see
+`user-flow-fsm-diagrams.md`.
 
 ## Executive Decision
 
@@ -44,8 +49,8 @@ HydraCam mobile:
   app-facing session/upload/user/court methods.
 - `lib/services/uploader_service.dart`: local queue and auto/manual upload
   behavior.
-- `lib/services/session_manager.dart`: local session metadata, media tracking,
-  and upload queue handoff.
+- `lib/services/session_manager.dart`: device-stored service-session metadata,
+  media tracking, and upload queue handoff.
 - `docs/control/status-and-roadmap.md`: current mobile status and real-device
   validation posture.
 
@@ -82,6 +87,50 @@ Media-timeline:
 - `docs/specs/EVENT_TIMELINE_HYDRACAM_SPEC.md`: event umbrella model.
 - `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-hydracam-bridge-integration.md`:
   existing implementation plan for the media-timeline bridge.
+
+## Recovered Attempt And Chat Ledger
+
+This section recovers the previous Codex chats, repo efforts, and durable
+artifacts found while trying to connect HydraCam mobile, MoBo webservice, and
+media-timeline.
+
+| Date | Chat / rollout | What was recovered | Durable result |
+| --- | --- | --- | --- |
+| 2026-06-03 | `019e8d51-8f19-7b61-bcec-0927ff7d877a` | Found HydraCam as an active media-timeline workstream, not only a separate app. Checked Service Monitor, active routes, UI, and live local APIs. | media-timeline already exposed `/api/hydracam/*`, `/api/hydra/*`, `HydraCamExplorer`, and 113 indexed sessions, but only 8 had local event-media rows at that time. |
+| 2026-06-03 | `019e8d52-ef73-70e3-8cd8-f87e2ce15723` | Recovered the original upstream HydraCam links rather than deployed mirror links. | Source pages use `https://hydracam.azurewebsites.net/HydraCam/Details/<sessionId>` and media files live under `https://keob2.blob.core.windows.net/hydracam/<session-guid>/...`; the bounded check found all 113 indexed sessions live by detail-page plus first-blob probe. |
+| 2026-06-04 | `019e92e2-57dc-7f70-ac96-52092cfd903d` | Located the actual project roots and separated active repos from obsolete copies. | Active roots are `/Users/jose/src/work/hydracamv2` and `/Users/jose/src/work/mobo`; `allKEOB/projects/hydracam-mobile` and `allKEOB/projects/mobo` point to them. Obsolete mobile copies were removed only after ancestry/content checks. |
+| 2026-06-05 | `019e96df-ee6a-7e62-bf19-96f4af48a0d4` | Explored the `Alicia video-store API` concept against the HydraCam/KEOB workspace. | Confirmed the concept is a retrieval/video-store API (`POST /streams`, `POST /downloads`, `GET /downloads/{downloadId}`), not a mobile recording feature. Initial MoBo/KEOB fit was blocked on whether `from`/`to` means exact clipping, existing-file overlap, or hybrid. |
+| 2026-06-05 | `019e96dd-d358-7860-bdaa-9b45d52eb699` | Mapped the Alicia concept into media-timeline and prepared implementation. | Saved `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-video-store-api.md` and created branch `codex/video-store-api`; implementation workers were not completed in that chat. As of 2026-06-12, no `backend/src/**/videoStore*.ts` files are present. |
+| 2026-06-05 | `019e97d2-ef0a-7210-bd77-5919f5bd4298` | Planned HydraCam app plus MoBo webservice ingestion into media-timeline. | Saved `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-hydracam-bridge-integration.md`; chose a hybrid bridge, not a repo merge. The plan identified hardcoded mobile credentials/config as a rotation and replacement requirement. |
+| 2026-06-05 | `019e97d1-f7e2-7a22-b746-9b8749a1a01a` | Folded the bridge plan into the large media-timeline branch snapshot. | The bridge plan was included in the unified branch snapshot after Service Monitor and end-of-turn lint checks. |
+| 2026-06-05 | `019e97dc-ea8c-77c2-b6c1-cddf896d5d12` | Explored streaming, progressive ingest, and near-live AI options across HydraCam and media-timeline. | Kept media-timeline as backend owner for new capture/streaming control. Concluded the current Flutter app is file-recording-centric; near-live AI needs either a sampled frame/proxy side-channel, WebRTC/LiveKit, or a native segmented recorder. |
+| 2026-06-09 | `019eaa8b-faab-70f1-b707-e01d3843c661` | Ran a concrete end-to-end ingest using the existing phone-intake / HydraCam bridge workflow for Airport Squash Court 4. | Created legacy session `482` with GUID `3c49d227-fbfb-4b59-8087-29dbe2484de1`, ingested 12 videos into media-timeline, and processed 72/72 required stages. The legacy HydraCam page existed but its Videos table stayed empty, so media-timeline was the complete processed record. |
+
+## Current Recovery Snapshot
+
+As of 2026-06-12, the actual source trees show this state:
+
+- HydraCam mobile remains on the legacy Azure app-service API path. The current
+  app code still has `lib/services/hydracam_api_service.dart` pointing at
+  `https://hydracam.azurewebsites.net/api`, and repo flow `UF-13` is still
+  marked `future` in `docs/control/user-flow-tracker.md`.
+- MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is currently
+  detached at `HEAD`, has no media-timeline bridge or video-store references,
+  and still exposes the legacy `api/hydracam` controller methods such as
+  `CreateSession`, `UploadMedia`, `EndSession`, `device/ReadyToTransmit`,
+  `courts`, and `sportscenters`.
+- media-timeline is the only repo with bridge implementation code. On branch
+  `codex/video-store-api`, commits `735367d65`, `5b3854fb1`, and merge commit
+  `f41f99338` added portable bridge storage, bridge service/routes/tests, and
+  route mounting under `/api/hydracam-bridge`.
+- media-timeline is still not clean. Bridge-related uncommitted state includes
+  a modified `backend/src/services/hydraCamBridgeService.ts` plus untracked
+  `frontend/src/services/hydraCamBridgeApi.ts`,
+  `frontend/src/services/hydraCamBridgeApi.test.ts`, and
+  `e2e/hydracam-bridge-upload.spec.ts`.
+- The recovered video-store API is still a saved plan, not source code. The
+  plan remains at
+  `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-video-store-api.md`.
 
 ## Overlap Map
 
@@ -219,6 +268,20 @@ Actions:
 - Keep a controlled legacy-MoBo fallback only as a setting or build-time
   configuration during migration.
 
+### Debug Session Cleanup Contract
+
+Debug builds create service sessions whose requested `SessionId` starts with
+`debug-<platform>-<utc timestamp>`. The mobile app stores the service GUID,
+display session id, and numeric MoBo id when the create response includes one.
+Uploaded debug media is deleted from the device after successful upload even
+when the normal release setting keeps local files.
+
+The service cleanup lane is
+`POST /api/sessions/debug/delete?sessionGuid=<guid>&id=<numericId>`.
+Mobile clients record cleanup candidates and can drain that registry through
+`DebugSessionCleanupService`. Until MoBo or media-timeline exposes the endpoint,
+live deletion is an integration contract rather than proven service behavior.
+
 Exit gate:
 
 - Flutter tests cover target selection, bridge create-session response parsing,
@@ -303,6 +366,11 @@ The first slice should be media-timeline only:
    mirror tables.
 6. A small route-level test proving a fake current-app upload appears in the
    event umbrella/timeline inputs.
+
+Progress note as of 2026-06-12: this first slice is partially implemented in
+media-timeline, not in HydraCam mobile. The bridge has backend service, storage,
+identity, auth, route, and reference-doc coverage, but the current branch still
+has uncommitted/untracked bridge work and the Flutter app has not been cut over.
 
 Do not touch the Flutter app until this slice passes. That prevents a mobile
 cutover from depending on unproven backend behavior.

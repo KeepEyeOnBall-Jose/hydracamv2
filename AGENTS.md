@@ -60,12 +60,43 @@ durable project context and working agreements.
 - For Dart or Flutter code changes, run `flutter analyze` and the most relevant
   `flutter test` target. Use the full `flutter test` suite for shared services,
   session state, WebSocket behavior, or app startup changes.
+- For user-requested app behavior or UI changes, the change must manifest on
+  connected devices in the same turn whenever the relevant hardware is attached
+  and responsive. After analyzer/unit/widget tests pass, build/install/launch
+  the current checkout on the connected target devices and cross-check the
+  affected route in the running app. Do not report device-facing UI work as done
+  from local tests alone when the user has connected hardware available.
+- Use `scripts/run_hardware_ui_e2e.py` as the default same-turn hardware UI
+  smoke for Android devices. Select the affected devices with repeated
+  `--device <adb-serial>` flags, select routes with repeated `--route setup` or
+  `--route standby`, and store results under `logs/verification-runs/<run>/`.
+  The script builds the current app with `HYDRACAM_AUTOMATION=true`, installs it
+  on selected hardware, launches the requested app routes, captures in-app
+  screenshots through `capture_screenshot`, performs a real device swipe plus a
+  second screenshot for scroll-checked routes such as `setup`, collects logs,
+  and fails on Flutter overflow markers.
 - For every recurring project-advancement iteration, follow
   `docs/control/evidence-first-loop.md`. Device-facing, UI, release, session,
   network, capture, battery, storage, and upload work requires a run-specific
   evidence pack under `logs/verification-runs/` with screenshots/video/logs from
   real or emulated hardware. Analyzer and unit tests are supporting evidence
   only, except for pure service/model logic.
+- For regular app-change evaluation, use
+  `docs/control/regular-evaluation-plan.md` to choose the static, emulator,
+  hardware, multi-device, and release gates. Re-inventory devices every run and
+  do not treat emulator/simulator output as camera, gallery, local-network, or
+  release/profile proof.
+- Before hardware role-switch or capture checks in a new or changed venue,
+  verify that every selected device is on the same reachable LAN. For attached
+  Android devices, run `scripts/android_wifi_preflight.py` with
+  `HYDRACAM_WIFI_SSID` and `HYDRACAM_WIFI_PASSWORD` supplied from the local
+  shell environment or keychain, use `--expected-subnet auto` or
+  `--expected-host <known-bridge-ip>`, and never write Wi-Fi passphrases into
+  repository files or evidence logs. iOS devices usually
+  cannot be silently provisioned by Codex unless they are supervised or receive
+  an approved configuration profile; verify iOS network readiness through the
+  automation bridge `/healthz`, visible local IP/subnet, or on-device Wi-Fi
+  settings.
 - For docs-only or instruction-only changes, run `git diff --check` as the
   minimum validation.
 - If a check cannot run because a device, SDK, signing identity, backend, or

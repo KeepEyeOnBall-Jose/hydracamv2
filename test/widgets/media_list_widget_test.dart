@@ -2,6 +2,7 @@ import "dart:io";
 
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/models/captured_video.dart";
 import "package:hydracam/services/uploader_service.dart";
 import "package:hydracam/widgets/media_list_widget.dart";
@@ -235,6 +236,55 @@ void main() {
     await tester.tap(find.byTooltip("Queue upload"));
 
     expect(requeued, ["failed-action-device", "pending-action-device"]);
+  });
+
+  testWidgets("missing local media rows suppress upload actions",
+      (tester) async {
+    final capturedAt = DateTime(2026, 6, 17, 10, 22);
+    final missingPhoto = CapturedPhoto(
+      photoPath: "${tempDir.path}/missing-photo.jpg",
+      slaveDeviceId: "missing-photo-device",
+      captureDate: capturedAt,
+      receivedDate: capturedAt.add(const Duration(seconds: 1)),
+    );
+    final missingVideo = CapturedVideo(
+      videoPath: "${tempDir.path}/missing-video.mp4",
+      slaveDeviceId: "missing-video-device",
+      startRecordingDate: capturedAt,
+      endRecordingDate: capturedAt.add(const Duration(seconds: 5)),
+      receivedDate: capturedAt.add(const Duration(seconds: 6)),
+    );
+
+    final requeued = <String>[];
+    final cancelled = <String>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            height: 240,
+            child: MediaListWidget(
+              photos: [missingPhoto],
+              videos: [missingVideo],
+              onRetryPhotoUpload: (photo) => requeued.add(photo.slaveDeviceId),
+              onRetryVideoUpload: (video) => requeued.add(video.slaveDeviceId),
+              onCancelPhotoUpload: (photo) =>
+                  cancelled.add(photo.slaveDeviceId),
+              onCancelVideoUpload: (video) =>
+                  cancelled.add(video.slaveDeviceId),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text("Local file missing"), findsNWidgets(2));
+    expect(find.bySemanticsLabel("Upload status: Local file missing"),
+        findsNWidgets(2));
+    expect(find.byTooltip("Queue upload"), findsNothing);
+    expect(find.byTooltip("Retry upload"), findsNothing);
+    expect(find.byTooltip("Cancel upload"), findsNothing);
+    expect(requeued, isEmpty);
+    expect(cancelled, isEmpty);
   });
 
   testWidgets("pending upload can be cancelled from the media row",

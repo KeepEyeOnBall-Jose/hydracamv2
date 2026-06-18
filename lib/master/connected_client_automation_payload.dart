@@ -1,5 +1,4 @@
 import "master_server.dart";
-import "../services/network_info_service.dart";
 
 Map<String, dynamic> buildConnectedClientAutomationPayload(
   List<ConnectedDeviceInfo> clients, {
@@ -25,11 +24,15 @@ Map<String, dynamic> buildConnectedClientAutomationPayload(
               "connectionStatusLabel": client.connectionStatusLabel,
               "remoteIp": client.remoteIp,
               "networkStatus": client.networkStatus.name,
-              "networkStatusLabel": client.networkStatus.label,
+              "networkStatusLabel": client.networkStatusLabel,
               "previewStatus": client.previewStatus,
               "previewStatusLabel": client.previewStatusLabel,
               "previewTransportLabel": client.previewTransportLabel,
+              "appVersion": client.appVersion,
+              "appBuildNumber": client.appBuildNumber,
+              "hardwareLabel": client.hardwareLabel,
               "reportedSessionGuid": client.reportedSessionGuid,
+              "sessionMedia": client.sessionMedia,
               "sessionStatus":
                   client.sessionStatus(masterSessionGuid: masterSessionGuid),
               "sessionStatusLabel": client.sessionStatusLabel(
@@ -44,6 +47,7 @@ Map<String, dynamic> buildConnectedClientAutomationPayload(
               "lastSeen": client.lastSeen.toIso8601String(),
               "disconnectedAt": client.disconnectedAt?.toIso8601String(),
               "network": client.networkSnapshot?.toJson(),
+              "setupStatusLabel": client.setupStatusLabel,
               "setupStatus": client.setupStatus?.toJson(),
             })
         .toList(),

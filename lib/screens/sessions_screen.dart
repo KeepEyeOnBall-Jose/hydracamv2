@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
 import "../services/session_manager.dart";
+import "../widgets/hydracam_surface.dart";
 
 class SessionsScreen extends StatelessWidget {
   final String courtGuid;
@@ -35,8 +36,8 @@ class SessionsScreen extends StatelessWidget {
 
     final sessionReference = _primarySessionReference(session);
 
-    // Join an existing backend session with SessionManager
-    SessionManager.instance.joinBackendSession(
+    // Join an existing service session with SessionManager
+    SessionManager.instance.joinSession(
         sessionReference, session["sessionId"]?.toString(),
         deviceType: "Master");
     ScaffoldMessenger.of(context).showSnackBar(
@@ -58,13 +59,17 @@ class SessionsScreen extends StatelessWidget {
           }
 
           final sessions = snapshot.data!;
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.all(12),
             itemCount: sessions.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final session = sessions[index];
               final legacySessionId = _legacySessionId(session);
-              return Card(
+              return HydraCamSurface(
+                padding: EdgeInsets.zero,
                 child: ListTile(
+                  leading: const Icon(Icons.event_available_outlined),
                   title: Text("Session: ${_primarySessionReference(session)}"),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +82,7 @@ class SessionsScreen extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.download),
+                    tooltip: "Load session",
                     onPressed: () {
                       _loadSession(context, session);
                       Navigator.pop(context); // Return to Courts

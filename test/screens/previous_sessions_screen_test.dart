@@ -16,8 +16,29 @@ void main() {
     PathProviderPlatform.instance = pathProvider;
   });
 
+  setUp(() {
+    pathProvider.resetDocumentsDir();
+  });
+
+  tearDown(() {
+    pathProvider.resetDocumentsDir();
+  });
+
   tearDownAll(() {
     pathProvider.dispose();
+  });
+
+  testWidgets("stored media screen avoids local-session language",
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: PreviousSessionsScreen(),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text("Stored Media"), findsOneWidget);
+    expect(find.textContaining("Local"), findsNothing);
   });
 
   testWidgets("late refresh completion after dispose does not throw",
@@ -63,6 +84,13 @@ class _PreviousSessionsPathProvider extends PathProviderPlatform {
       await blocker;
     }
     return documentsDir.path;
+  }
+
+  void resetDocumentsDir() {
+    if (documentsDir.existsSync()) {
+      documentsDir.deleteSync(recursive: true);
+    }
+    documentsDir.createSync(recursive: true);
   }
 
   void dispose() {

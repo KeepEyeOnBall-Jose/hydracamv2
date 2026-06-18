@@ -3,6 +3,7 @@ import "dart:convert"; // Import for jsonEncode
 import "package:camera/camera.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:package_info_plus/package_info_plus.dart";
 import "package:web_socket_channel/io.dart";
 import "../constants.dart";
 import "../models/captured_photo.dart";
@@ -133,6 +134,8 @@ class SlaveClient implements SlaveConnectionClient {
   /// Callback for scheduled tasks that typically notifies UI to show countdown.
   final Function(String command, DateTime scheduledTime)? onScheduledCommand;
   final Future<Map<String, dynamic>?> Function()? _networkPayloadLoader;
+  final Future<Map<String, dynamic>> Function()? _identityPayloadLoader;
+  Future<Map<String, dynamic>>? _identityPayloadFuture;
   final ScheduledTaskService _scheduledTaskService;
   final DateTime Function() _now;
 
@@ -151,9 +154,12 @@ class SlaveClient implements SlaveConnectionClient {
     this.onRecordingStopped,
     @visibleForTesting
     Future<Map<String, dynamic>?> Function()? networkPayloadLoader,
+    @visibleForTesting
+    Future<Map<String, dynamic>> Function()? identityPayloadLoader,
     @visibleForTesting ScheduledTaskService? scheduledTaskService,
     @visibleForTesting DateTime Function()? now,
   })  : _networkPayloadLoader = networkPayloadLoader,
+        _identityPayloadLoader = identityPayloadLoader,
         _scheduledTaskService =
             scheduledTaskService ?? ScheduledTaskService.instance,
         _now = now ?? DateTime.now,
@@ -191,13 +197,16 @@ class SlaveClient implements SlaveConnectionClient {
       _connectionStatusStreamController
           .add(true); // Notify UI of connection status
 
-      // Register immediately; the network snapshot follows asynchronously so
-      // role switches are not blocked by platform network probes.
+      final identityPayload = await _currentIdentityPayload();
+
+      // Register with static app/device identity; the network snapshot follows
+      // asynchronously so role switches are not blocked by platform probes.
       _channel?.sink.add(jsonEncode({
         "type": "deviceId",
         "deviceId": _deviceId,
         "sessionGuid": SessionManager.instance.sessionGuid,
         "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
+        ...identityPayload,
       }));
 
       // Also ask status of session
@@ -272,10 +281,7 @@ class SlaveClient implements SlaveConnectionClient {
                   LogService.instance
                       .registerLog("Session ended as per master command.");
                 } else if (command == "noSession") {
-                  // No active session on master
-                  await SessionManager.instance.endSession();
-                  LogService.instance
-                      .registerLog("No active session on master.");
+                  _handleNoSessionFromMaster();
                 } else {
                   // Process rest of json commands
                   await _processCommand(message);
@@ -360,9 +366,7 @@ class SlaveClient implements SlaveConnectionClient {
             LogService.instance
                 .registerLog("Session ended as per master command.");
           } else if (type == "noSession") {
-            // Handle no active session
-            await SessionManager.instance.endSession();
-            LogService.instance.registerLog("No active session on master.");
+            _handleNoSessionFromMaster();
           } else if (command == "identifySlave") {
             await _sendIdentifyAck(decodedMessage);
           } else if (command != null) {
@@ -387,9 +391,22 @@ class SlaveClient implements SlaveConnectionClient {
   }
 
   void _handleSessionAvailable(String sessionGuid) {
+    final activeSessionGuid = SessionManager.instance.sessionGuid;
+    if (SessionManager.instance.isSessionActive &&
+        activeSessionGuid != null &&
+        activeSessionGuid.isNotEmpty &&
+        activeSessionGuid != sessionGuid) {
+      LogService.instance
+          .registerLog("Master session conflict: keeping active session "
+              "$activeSessionGuid instead of joining $sessionGuid.");
+      _statusStreamController
+          .add("Master reported a different session. Active session kept.");
+      return;
+    }
+
     try {
       SessionManager.instance
-          .joinBackendSession(sessionGuid, null, deviceType: "Slave");
+          .joinSession(sessionGuid, null, deviceType: "Slave");
     } catch (error) {
       LogService.instance.registerLog(
           "Rejected non-backend session from master: $sessionGuid, error: $error");
@@ -397,6 +414,23 @@ class SlaveClient implements SlaveConnectionClient {
     }
     notifyReadyToTransmit(sessionGuid);
     unawaited(_maybeStartAutoRecordRecording(sessionGuid));
+  }
+
+  void _handleNoSessionFromMaster() {
+    final activeSessionGuid = SessionManager.instance.sessionGuid;
+    if (SessionManager.instance.isSessionActive &&
+        activeSessionGuid != null &&
+        activeSessionGuid.isNotEmpty) {
+      LogService.instance.registerLog(
+          "Master reported no active session; keeping active session "
+          "$activeSessionGuid until explicit sessionEnded.");
+      _statusStreamController
+          .add("Master has no active session. Active session kept.");
+      return;
+    }
+
+    LogService.instance.registerLog("No active session on master.");
+    _statusStreamController.add("No active session on master.");
   }
 
   Future<void> _maybeStartAutoRecordRecording(String sessionGuid) async {
@@ -598,6 +632,8 @@ class SlaveClient implements SlaveConnectionClient {
     }
 
     final networkPayload = await _currentNetworkPayload();
+    final identityPayload = await _currentIdentityPayload();
+    final sessionMediaPayload = _sessionMediaPayload();
     final payload = {
       "type": "identifyAck",
       "deviceId": _deviceId,
@@ -606,6 +642,8 @@ class SlaveClient implements SlaveConnectionClient {
       "sessionGuid": SessionManager.instance.sessionGuid,
       "timestamp": DateTime.now().toIso8601String(),
       "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
+      if (sessionMediaPayload != null) "sessionMedia": sessionMediaPayload,
+      ...identityPayload,
       if (networkPayload != null) "network": networkPayload,
     };
     _channel!.sink.add(jsonEncode(payload));
@@ -829,18 +867,109 @@ class SlaveClient implements SlaveConnectionClient {
     }
   }
 
+  Future<Map<String, dynamic>> _currentIdentityPayload() {
+    return _identityPayloadFuture ??= _loadIdentityPayload();
+  }
+
+  Future<Map<String, dynamic>> _loadIdentityPayload() async {
+    final loader = _identityPayloadLoader;
+    if (loader != null) {
+      return await loader();
+    }
+
+    final payload = <String, dynamic>{};
+
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      _putIfNonBlank(payload, "appVersion", packageInfo.version);
+      _putIfNonBlank(payload, "appBuildNumber", packageInfo.buildNumber);
+    } catch (e) {
+      LogService.instance
+          .registerLog("Could not read slave app version diagnostics: $e");
+    }
+
+    try {
+      final deviceInfo = await DeviceIdService.getDeviceInfo();
+      _putIfNonBlank(
+        payload,
+        "hardware",
+        _hardwareLabelFromDeviceInfo(deviceInfo),
+      );
+    } catch (e) {
+      LogService.instance
+          .registerLog("Could not read slave hardware diagnostics: $e");
+    }
+
+    return payload;
+  }
+
+  void _putIfNonBlank(
+    Map<String, dynamic> payload,
+    String key,
+    Object? value,
+  ) {
+    final text = value?.toString().trim();
+    if (text != null && text.isNotEmpty) {
+      payload[key] = text;
+    }
+  }
+
+  String? _hardwareLabelFromDeviceInfo(Map<String, dynamic> deviceInfo) {
+    return _firstNonBlank([
+      deviceInfo["modelName"],
+      deviceInfo["model"],
+      deviceInfo["name"],
+      deviceInfo["platform"],
+    ]);
+  }
+
+  String? _firstNonBlank(Iterable<dynamic> values) {
+    for (final value in values) {
+      final text = value?.toString().trim();
+      if (text != null && text.isNotEmpty) {
+        return text;
+      }
+    }
+    return null;
+  }
+
   Future<void> _sendNetworkHeartbeat() async {
     final networkPayload = await _currentNetworkPayload();
+    final identityPayload = await _currentIdentityPayload();
     if (!_isConnected || _deviceId == null) {
       return;
     }
+    final sessionMediaPayload = _sessionMediaPayload();
     _channel?.sink.add(jsonEncode({
       "type": "heartbeat",
       "deviceId": _deviceId,
       "sessionGuid": SessionManager.instance.sessionGuid,
       "timestamp": DateTime.now().toIso8601String(),
       "setupStatus": CameraSetupService.instance.buildSetupStatusPayload(),
+      if (sessionMediaPayload != null) "sessionMedia": sessionMediaPayload,
+      ...identityPayload,
       if (networkPayload != null) "network": networkPayload,
     }));
+  }
+
+  Map<String, int>? _sessionMediaPayload() {
+    final session = SessionManager.instance.currentSession;
+    if (session == null) {
+      return null;
+    }
+
+    final photos = session.capturedPhotos;
+    final videos = session.capturedVideos;
+    final uploadedPhotoCount = photos.where((photo) => photo.isUploaded).length;
+    final uploadedVideoCount = videos.where((video) => video.isUploaded).length;
+    final mediaCount = photos.length + videos.length;
+    final uploadedCount = uploadedPhotoCount + uploadedVideoCount;
+
+    return {
+      "photoCount": photos.length,
+      "videoCount": videos.length,
+      "pendingUploadCount": mediaCount - uploadedCount,
+      "uploadedCount": uploadedCount,
+    };
   }
 }

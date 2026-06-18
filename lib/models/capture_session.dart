@@ -22,8 +22,11 @@ class CaptureSession {
   /// A list of videos captured during this session.
   final List<CapturedVideo> capturedVideos;
 
-  /// Whether this session is backed by a server/API-created session.
-  final bool backendCreated;
+  /// Whether this service-created session is a debug build artifact.
+  final bool debugSession;
+
+  /// Numeric service id returned by the current MoBo API when available.
+  final int? serviceNumericId;
 
   /// Constructor to initialize a CaptureSession with a unique ID, start time,
   /// and optional lists of captured photos and videos.
@@ -36,7 +39,8 @@ class CaptureSession {
     this.endTime,
     List<CapturedPhoto>? capturedPhotos,
     List<CapturedVideo>? capturedVideos,
-    this.backendCreated = true,
+    this.debugSession = false,
+    this.serviceNumericId,
   })  : capturedPhotos = capturedPhotos ?? [],
         capturedVideos = capturedVideos ?? [];
 

@@ -1,9 +1,11 @@
 import "dart:async";
 import "dart:io";
 import "package:flutter/material.dart";
+import "../app_theme.dart";
 import "../models/capture_session.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/session_upload_state.dart";
 import "../services/alert_utils.dart";
 import "../services/session_manager.dart";
 import "../services/uploader_service.dart";
@@ -72,6 +74,7 @@ class SessionDetailsScreen extends StatelessWidget {
                 Text("Start Time: ${session.startTime}"),
                 if (session.endTime != null)
                   Text("End Time: ${session.endTime}"),
+                Text("Upload State: ${summarizeSessionUpload(session).label}"),
                 Text("Total Photos: ${session.capturedPhotos.length}"),
                 Text("Total Videos: ${session.capturedVideos.length}"),
                 const SizedBox(height: 12),
@@ -82,12 +85,14 @@ class SessionDetailsScreen extends StatelessWidget {
           // Compact button with icon
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: AppTheme.border),
               borderRadius: BorderRadius.circular(8),
             ),
             child: IconButton(
-              icon:
-                  const Icon(Icons.file_download_outlined, color: Colors.blue),
+              icon: const Icon(
+                Icons.file_download_outlined,
+                color: AppTheme.accent,
+              ),
               tooltip: "Load Session",
               onPressed: () => unawaited(_loadSessionWithoutUploading(context)),
             ),
@@ -102,7 +107,7 @@ class SessionDetailsScreen extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 420),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppTheme.border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -122,9 +127,13 @@ class SessionDetailsScreen extends StatelessWidget {
           const SizedBox(height: 8),
           const Text("Source: backend not configured"),
           const SizedBox(height: 4),
+          const Text("Import source: waiting for session-player API"),
+          const SizedBox(height: 4),
+          const Text("Mid-session additions unavailable until FR-061 exists"),
+          const SizedBox(height: 4),
           Text(
             "Player assignment unavailable",
-            style: TextStyle(color: Colors.grey.shade700),
+            style: const TextStyle(color: AppTheme.textSecondary),
           ),
         ],
       ),
@@ -165,7 +174,7 @@ class SessionDetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           "No $title in this session.",
-          style: const TextStyle(fontSize: 16, color: Colors.grey),
+          style: const TextStyle(fontSize: 16, color: AppTheme.textSecondary),
         ),
       );
     }
@@ -191,26 +200,35 @@ class SessionDetailsScreen extends StatelessWidget {
     final isPhoto = media is CapturedPhoto;
     final title = isPhoto ? "Photo" : "Video";
     final path = media.mediaPath;
+    final file = File(path);
+    final fileExists = file.existsSync();
     final uploadStatus = media.isUploaded ? "Uploaded" : "Not Uploaded";
+    final fileType = isPhoto ? "Photo" : "Video";
 
     return ListTile(
-      leading: isPhoto
-          ? Image.file(File(path), width: 50, height: 50, fit: BoxFit.cover)
-          : const Icon(Icons.videocam, size: 50, color: Colors.blue),
+      leading: _buildMediaLeading(
+          isPhoto: isPhoto, fileExists: fileExists, path: path),
       title: Text("$title from ${media.slaveDeviceId}"),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Path: $path"),
           Text("Status: $uploadStatus"),
+          if (!fileExists)
+            const Text(
+              "Local file missing",
+              style: TextStyle(color: AppTheme.danger),
+            ),
         ],
       ),
       trailing: IconButton(
         icon: media.isUploaded
-            ? const Icon(Icons.cloud_done, color: Colors.blue)
-            : const Icon(Icons.cloud_upload_outlined, color: Colors.red),
+            ? const Icon(Icons.cloud_done, color: AppTheme.textPrimary)
+            : const Icon(Icons.cloud_upload_outlined, color: AppTheme.danger),
         onPressed: () {
-          if (media.isUploaded) {
+          if (!fileExists) {
+            AlertUtils.showFileMissingDialog(fileType, context);
+          } else if (media.isUploaded) {
             // Show info alert for already uploaded media
             AlertUtils.showUploadedMediaAlert(context, path);
           } else {
@@ -223,13 +241,30 @@ class SessionDetailsScreen extends StatelessWidget {
         },
       ),
       onTap: () {
-        if (isPhoto) {
+        if (!fileExists) {
+          AlertUtils.showFileMissingDialog(fileType, context);
+        } else if (isPhoto) {
           _showPhotoDialog(context, media);
         } else {
           _showVideoDialog(context, media);
         }
       },
     );
+  }
+
+  Widget _buildMediaLeading({
+    required bool isPhoto,
+    required bool fileExists,
+    required String path,
+  }) {
+    if (isPhoto && fileExists) {
+      return Image.file(File(path), width: 50, height: 50, fit: BoxFit.cover);
+    }
+    if (isPhoto) {
+      return const Icon(Icons.broken_image_outlined,
+          size: 50, color: AppTheme.danger);
+    }
+    return const Icon(Icons.videocam, size: 50, color: AppTheme.accent);
   }
 
   void _showPhotoDialog(BuildContext context, CapturedPhoto photo) {
@@ -250,19 +285,10 @@ class SessionDetailsScreen extends StatelessWidget {
   }
 
   void _showVideoDialog(BuildContext context, CapturedVideo video) {
-    showDialog(
+    AlertUtils.showMediaDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: const Text("Video playback is not implemented yet."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Close"),
-            ),
-          ],
-        );
-      },
+      media: video,
+      isAutoCloseEnabled: false,
     );
   }
 

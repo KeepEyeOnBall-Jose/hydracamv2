@@ -62,8 +62,19 @@ class CapturedPhoto {
     this.uploadDuration,
     this.uploadStartTime,
     this.uploadFailureReason,
-  }) : fileSizeInBytes = File(photoPath).lengthSync().toInt();
+    int? fileSizeInBytes,
+  }) : fileSizeInBytes = fileSizeInBytes ?? _safeFileSize(photoPath);
 
   /// Getter for media path (used by UploaderService)
   String get mediaPath => photoPath;
+
+  static int _safeFileSize(String path) {
+    try {
+      final file = File(path);
+      if (file.existsSync()) {
+        return file.lengthSync();
+      }
+    } catch (_) {}
+    return 0;
+  }
 }

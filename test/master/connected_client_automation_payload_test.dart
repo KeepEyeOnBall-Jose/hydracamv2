@@ -34,7 +34,11 @@ void main() {
         "previewStatus": "unavailable",
         "previewStatusLabel": "Preview unavailable",
         "previewTransportLabel": "Preview transport not configured",
+        "appVersion": null,
+        "appBuildNumber": null,
+        "hardwareLabel": null,
         "reportedSessionGuid": null,
+        "sessionMedia": null,
         "sessionStatus": "unknown",
         "sessionStatusLabel": "Session not reported",
         "identifyStatus": "notRequested",
@@ -56,6 +60,7 @@ void main() {
           "source": "test",
           "warnings": [],
         },
+        "setupStatusLabel": "Setup: not reported",
         "setupStatus": null,
       },
     ]);
@@ -92,6 +97,14 @@ void main() {
     expect(
       (payload["connectedClients"] as List).last,
       containsPair("disconnectedAt", "2026-06-07T12:01:00.000Z"),
+    );
+    expect(
+      (payload["connectedClients"] as List).last,
+      containsPair("networkStatus", "ready"),
+    );
+    expect(
+      (payload["connectedClients"] as List).last,
+      containsPair("networkStatusLabel", "Last reported: Ready"),
     );
   });
 
@@ -150,6 +163,27 @@ void main() {
     expect(client["sessionStatusLabel"], "Different session");
   });
 
+  test("connected client automation payload labels stale session state", () {
+    final payload = buildConnectedClientAutomationPayload([
+      ConnectedDeviceInfo(
+        deviceId: "stale-session-slave",
+        remoteIp: "192.168.178.65",
+        networkStatus: ConnectedDeviceNetworkStatus.ready,
+        registeredAt: DateTime.utc(2026, 6, 17, 19),
+        lastSeen: DateTime.utc(2026, 6, 17, 19, 0, 5),
+        isConnected: false,
+        disconnectedAt: DateTime.utc(2026, 6, 17, 19, 0, 5),
+        reportedSessionGuid: "slave-other-session",
+      ),
+    ], masterSessionGuid: "master-active-session");
+
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["sessionStatus"], "different");
+    expect(client["sessionStatusLabel"], "Last reported: Different session");
+  });
+
   test("connected client automation payload exposes identify ack diagnostics",
       () {
     final payload = buildConnectedClientAutomationPayload([
@@ -176,5 +210,119 @@ void main() {
       "2026-06-08T21:35:00.000Z",
     );
     expect(client["lastIdentifyAckAt"], "2026-06-08T21:35:01.000Z");
+  });
+
+  test("connected client automation payload labels stale identify ack", () {
+    final payload = buildConnectedClientAutomationPayload([
+      ConnectedDeviceInfo(
+        deviceId: "stale-identify-slave",
+        remoteIp: "192.168.178.66",
+        networkStatus: ConnectedDeviceNetworkStatus.ready,
+        registeredAt: DateTime.utc(2026, 6, 17, 19, 20),
+        lastSeen: DateTime.utc(2026, 6, 17, 19, 20, 5),
+        isConnected: false,
+        disconnectedAt: DateTime.utc(2026, 6, 17, 19, 20, 5),
+        lastIdentifyRequestId: "identify-before-stale",
+        lastIdentifyRequestedAt: DateTime.utc(2026, 6, 17, 19, 20),
+        lastIdentifyAckAt: DateTime.utc(2026, 6, 17, 19, 20, 1),
+      ),
+    ]);
+
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["identifyStatus"], "acknowledged");
+    expect(
+      client["identifyStatusLabel"],
+      "Last reported: Identify acknowledged",
+    );
+    expect(client["lastIdentifyRequestId"], "identify-before-stale");
+    expect(client["lastIdentifyAckAt"], "2026-06-17T19:20:01.000Z");
+  });
+
+  test("connected client automation payload exposes unavailable identify state",
+      () {
+    final payload = buildConnectedClientAutomationPayload([
+      ConnectedDeviceInfo(
+        deviceId: "slave-device-a",
+        remoteIp: "192.168.178.62",
+        networkStatus: ConnectedDeviceNetworkStatus.ready,
+        registeredAt: DateTime.utc(2026, 6, 17, 18, 10),
+        lastSeen: DateTime.utc(2026, 6, 17, 18, 10, 5),
+        isConnected: false,
+        disconnectedAt: DateTime.utc(2026, 6, 17, 18, 10, 5),
+        lastIdentifyRequestId: "identify-before-disconnect",
+        lastIdentifyRequestedAt: DateTime.utc(2026, 6, 17, 18, 10),
+      ),
+    ]);
+
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["identifyStatus"], "unavailable");
+    expect(
+      client["identifyStatusLabel"],
+      "Identify unavailable: disconnected",
+    );
+    expect(client["lastIdentifyRequestId"], "identify-before-disconnect");
+    expect(client["lastIdentifyAckAt"], isNull);
+  });
+
+  test("connected client automation payload distinguishes disconnected preview",
+      () {
+    final payload = buildConnectedClientAutomationPayload([
+      ConnectedDeviceInfo(
+        deviceId: "stale-preview-slave",
+        remoteIp: "192.168.178.62",
+        networkStatus: ConnectedDeviceNetworkStatus.ready,
+        registeredAt: DateTime.utc(2026, 6, 17, 18, 30),
+        lastSeen: DateTime.utc(2026, 6, 17, 18, 30, 5),
+        isConnected: false,
+        disconnectedAt: DateTime.utc(2026, 6, 17, 18, 30, 5),
+      ),
+    ]);
+
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["previewStatus"], "unavailableDisconnected");
+    expect(
+      client["previewStatusLabel"],
+      "Preview unavailable: disconnected",
+    );
+    expect(client["previewTransportLabel"], "Slave disconnected");
+  });
+
+  test("connected client automation payload marks disconnected setup as stale",
+      () {
+    final payload = buildConnectedClientAutomationPayload([
+      ConnectedDeviceInfo(
+        deviceId: "stale-setup-slave",
+        remoteIp: "192.168.178.64",
+        networkStatus: ConnectedDeviceNetworkStatus.ready,
+        registeredAt: DateTime.utc(2026, 6, 17, 18, 45),
+        lastSeen: DateTime.utc(2026, 6, 17, 18, 45, 5),
+        isConnected: false,
+        disconnectedAt: DateTime.utc(2026, 6, 17, 18, 45, 5),
+        setupStatus: const ConnectedDeviceSetupStatus(
+          cameraPerspectiveId: "right_backglass_parallel",
+          cameraPerspectiveLabel: "Right back glass",
+          isLevel: true,
+          sensorAvailable: true,
+        ),
+      ),
+    ]);
+
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["setupStatusLabel"],
+        "Last reported setup: Right back glass | Level");
+    expect(client["setupStatus"], {
+      "cameraPerspectiveId": "right_backglass_parallel",
+      "cameraPerspectiveLabel": "Right back glass",
+      "isLevel": true,
+      "sensorAvailable": true,
+    });
   });
 }

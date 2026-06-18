@@ -30,8 +30,11 @@ class UploaderService {
   // Reference to the API service
   final HydraCamApiService _apiService = HydraCamApiService();
 
-  static const String _backendSessionRequiredMessage =
-      "Upload blocked: session is not backend-created; create the session through the webservice before capture.";
+  static const String _serviceSessionRequiredMessage =
+      "Upload blocked: no active service session is available for this media.";
+  static const String _missingUploadFileMessage =
+      "Upload failed: file does not exist on disk.";
+  static const String _cancelledUploadMessage = "Upload cancelled.";
 
   // To track and notify process upload
   ValueNotifier<double> uploadProgressNotifier = ValueNotifier(0.0);
@@ -47,9 +50,15 @@ class UploaderService {
   /// Processes a media file (photo or video) and adds it to the queue
   Future<void> addMediaToQueue(dynamic media) async {
     if (media is CapturedPhoto || media is CapturedVideo) {
+      if (media.isUploaded) {
+        LogService.instance
+            .registerLog("Media already uploaded: ${media.mediaPath}");
+        return;
+      }
+
       if (!SessionManager.instance.canUploadCurrentSession) {
-        _markUploadBlocked(media, _backendSessionRequiredMessage);
-        LogService.instance.registerLog(_backendSessionRequiredMessage);
+        _markUploadBlocked(media, _serviceSessionRequiredMessage);
+        LogService.instance.registerLog(_serviceSessionRequiredMessage);
         await SessionManager.instance.updateMetadata();
         // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
         SessionManager.instance.notifyListeners();
@@ -128,7 +137,7 @@ class UploaderService {
     }
   }
 
-  bool cancelQueuedMedia(dynamic media) {
+  Future<bool> cancelQueuedMedia(dynamic media) async {
     final mediaPath = media.mediaPath;
     dynamic pendingItem;
     for (final item in _uploadQueue) {
@@ -144,12 +153,14 @@ class UploaderService {
     }
 
     _uploadQueue.remove(pendingItem);
+    _markUploadBlocked(pendingItem, _cancelledUploadMessage);
+    await _persistUploadStateNow();
     estimatedTimeNotifier.value = estimateTotalTimeRemaining();
     LogService.instance.registerLog("Cancelled pending upload: $mediaPath");
     return true;
   }
 
-  bool cancelMediaUpload(dynamic media) {
+  Future<bool> cancelMediaUpload(dynamic media) {
     final currentUpload = currentlyUploadingNotifier.value;
     if (currentUpload != null && currentUpload.mediaPath == media.mediaPath) {
       return cancelCurrentUpload();
@@ -157,14 +168,15 @@ class UploaderService {
     return cancelQueuedMedia(media);
   }
 
-  bool cancelCurrentUpload() {
+  Future<bool> cancelCurrentUpload() async {
     final currentUpload = currentlyUploadingNotifier.value;
     if (currentUpload == null) {
       LogService.instance.registerLog("No active upload to cancel.");
       return false;
     }
 
-    if (_isUploading) {
+    final wasUploading = _isUploading;
+    if (wasUploading) {
       _apiService.cancelInFlightRequests();
     }
     _uploadGeneration += 1;
@@ -173,6 +185,10 @@ class UploaderService {
     uploadProgressNotifier.value = 0.0;
     estimatedTimeNotifier.value = estimateTotalTimeRemaining();
     currentUpload.isUploaded = false;
+    currentUpload.uploadFailureReason = _cancelledUploadMessage;
+    if (wasUploading) {
+      await _persistUploadStateNow();
+    }
 
     LogService.instance
         .registerLog("Cancelled active upload: ${currentUpload.mediaPath}");
@@ -222,8 +238,8 @@ class UploaderService {
     }
 
     if (!SessionManager.instance.canUploadCurrentSession) {
-      _markUploadBlocked(media, _backendSessionRequiredMessage);
-      LogService.instance.registerLog(_backendSessionRequiredMessage);
+      _markUploadBlocked(media, _serviceSessionRequiredMessage);
+      LogService.instance.registerLog(_serviceSessionRequiredMessage);
       await SessionManager.instance.updateMetadata();
       _isUploading = false;
       currentlyUploadingNotifier.value = null;
@@ -241,9 +257,13 @@ class UploaderService {
     if (!file.existsSync()) {
       LogService.instance
           .registerLog("UploaderService: File does not exist: ${file.path}");
-      media.isUploaded = false;
+      _markUploadBlocked(media, _missingUploadFileMessage);
+      await SessionManager.instance.updateMetadata();
       _isUploading = false;
       currentlyUploadingNotifier.value = null;
+      estimatedTimeNotifier.value = estimateTotalTimeRemaining();
+      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+      SessionManager.instance.notifyListeners();
       await _processNextItem();
       return;
     }
@@ -337,6 +357,10 @@ class UploaderService {
     media.isUploaded = false;
     media.uploadStartTime ??= _now();
     media.uploadFailureReason = reason;
+  }
+
+  Future<void> _persistUploadStateNow() async {
+    await SessionManager.instance.updateMetadata();
   }
 
   void _recordCompletedUploadSample(dynamic media) {
@@ -433,7 +457,12 @@ class UploaderService {
   void reset() {
     LogService.instance
         .registerLog("UploaderService: Resetting upload queue and state.");
+    final hadActiveUpload =
+        _isUploading || currentlyUploadingNotifier.value != null;
     _uploadGeneration += 1;
+    if (hadActiveUpload) {
+      _apiService.cancelInFlightRequests();
+    }
 
     // Clear the upload queue to remove any pending media from the previous session
     _uploadQueue.clear();

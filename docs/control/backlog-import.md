@@ -46,7 +46,7 @@ Default issue schema:
   Samsung/Exynos Camera3 buffer errors. Keep this issue open.
 - 2026-06-07 rerun note:
   `logs/verification-runs/20260607-camera-settings-device-matrix-rerun/summary.md`
-  records the latest matrix after automation batching, local session-end, and
+  records the latest matrix after automation batching, active session-end, and
   camera timeout fixes. S10e `standard1080p30` now passes including session end,
   including a final current-build smoke after reinstalling the debug APK. S10e
   `sport1080p60`, S7 `standard1080p30`, and S7 `compat720p30` fail with bounded
@@ -177,6 +177,14 @@ Default issue schema:
   as `Different session` when their reported session differs from the master
   session. Keep this issue open for real master/slave reconnect reproduction
   and cross-device metadata comparison.
+- 2026-06-17 stale-session-label diagnostics note:
+  focused connected-client automation coverage now keeps the machine-readable
+  stale slave session comparison as `different` or `matching`, but labels
+  disconnected rows as historical, for example
+  `Last reported: Different session`, instead of presenting stale session
+  state as live. The master known-device modal uses the same shared label. Keep
+  this issue open for real master/slave reconnect reproduction and cross-device
+  metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing
@@ -224,13 +232,54 @@ Default issue schema:
   screen disposal until `endCurrentSession()` runs explicitly. Keep this issue
   open for real master/slave reconnect reproduction and cross-device metadata
   comparison.
-- 2026-06-09 automation local-only guard cleanup note:
+- 2026-06-09 automation service-session cleanup note:
   `logs/verification-runs/20260609-0517-automation-local-only-guard-cleanup/`
-  makes the `start_session` automation legacy `localOnly` rejection explicit
-  instead of hiding the key behind string-literal concatenation, and tightens the
-  no-local-session script contract so capture scripts still cannot send
-  `localOnly` or disable uploads. Keep this issue open for real master/slave
+  removed the former local-only automation path and tightened the static
+  service-session script contract so capture scripts still cannot disable
+  uploads. Keep this issue open for real master/slave
   reconnect reproduction and cross-device metadata comparison.
+- 2026-06-18 session/upload-state cleanup note:
+  `logs/verification-runs/20260618-1314-session-upload-state-debug-cleanup/`
+  proves the runtime local-session split has been removed behind one
+  service-session model with computed upload state, debug-session labeling,
+  debug cleanup registry/client contracts, and a no-local-session static guard.
+  Local/static validation passed; keep this issue open for live debug
+  capture/upload deletion proof plus real master/slave reconnect reproduction
+  and cross-device metadata comparison.
+- 2026-06-17 slave no-session authority note:
+  focused `SlaveClient` coverage now proves a master's `noSession` response
+  preserves an active slave service session and queued media instead of
+  silently ending the active session. Additional conflict coverage proves a
+  master-reported different session GUID is surfaced and rejected instead of
+  silently switching the slave into the other session. `sessionEnded` remains
+  the explicit destructive authority. Keep this issue open for real
+  master/slave reconnect reproduction and cross-device metadata comparison.
+- 2026-06-17 slave session-media heartbeat diagnostics note:
+  focused slave and master-parser coverage now proves slave heartbeats include
+  a compact `sessionMedia` summary (`photoCount`, `videoCount`,
+  `pendingUploadCount`, `uploadedCount`) and the master preserves that summary
+  in connected-client automation payloads. Keep this issue open for real
+  master/slave reconnect reproduction and cross-device metadata comparison.
+- 2026-06-17 identify session-media diagnostics note:
+  focused slave and master-parser coverage now proves `identifyAck` carries
+  the same compact `sessionMedia` summary as heartbeat and refreshes the
+  master connected-client diagnostics after an operator identify request. Keep
+  this issue open for real master/slave reconnect reproduction and cross-device
+  metadata comparison.
+- 2026-06-17 reported-session modal diagnostics note:
+  focused `MasterScreen` coverage now proves the known-device modal shows the
+  exact slave-reported session GUID beside the status label, so operators can
+  compare master/slave metadata without relying only on `Same session` or
+  `Different session`. Keep this issue open for real master/slave reconnect
+  reproduction and cross-device metadata comparison.
+- 2026-06-17 master stale-session command guard note:
+  focused `MasterServer` coverage now proves broadcast capture commands skip
+  connected slaves that explicitly report a different active session GUID while
+  still reaching matching-session slaves. Identify remains available for those
+  stale-session slaves so operators can refresh diagnostics and recover the
+  device without first sending capture/upload commands into the wrong session.
+  Keep this issue open for real master/slave reconnect reproduction and
+  cross-device metadata comparison.
 
 ### 3. Prevent stale uploads from crossing sessions
 
@@ -253,6 +302,13 @@ Default issue schema:
   completion is ignored after `UploaderService.reset()`, leaving the old media
   unuploaded and the new session metadata untouched. Keep this issue open for
   server-side race proof.
+- 2026-06-17 reset transport cancellation note:
+  `logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/`
+  proves `UploaderService.reset()` closes the active `HydraCamApiService` HTTP
+  client while an upload request is in flight, then keeps the existing
+  upload-generation guard so the stale completion cannot mark old media
+  uploaded after session reset. Keep this issue open for live server-side race
+  proof.
 
 ### 4. Improve upload failure, cancel, requeue, and progress UI
 
@@ -316,6 +372,46 @@ Default issue schema:
   and proves late upload completion cannot mark the media uploaded after
   cancellation. This completes the listed mobile-side upload UI slices for item
   4; keep production closure gated on a real-device upload smoke run.
+- 2026-06-17 master-start-uploads control note:
+  focused `MasterScreen` coverage now proves the active master session exposes
+  a `Start Uploads` control that dispatches `startUploadingAll` to slaves and
+  drains the master's local uploader queue through the same manual upload path.
+  Keep production closure gated on a real-device plus live-backend upload smoke
+  run.
+- 2026-06-17 active-cancel reason note:
+  focused `UploaderService` coverage now proves active upload cancellation sets
+  a specific retryable media failure reason, `Upload cancelled.`, instead of
+  leaving the media in a generic failed state after current/progress transport
+  state is cleared. Keep production closure gated on a real-device upload smoke
+  run.
+- 2026-06-17 queued-cancel reason note:
+  focused `UploaderService` coverage now proves queued upload cancellation also
+  stamps the media as `Upload cancelled.` and sets failure-state timing before
+  removing it from the pending queue, so the media list can present retryable
+  cancellation instead of leaving it as an ordinary pending upload. Keep
+  production closure gated on a real-device upload smoke run.
+- 2026-06-17 queued-cancel UI refresh note:
+  focused `UploaderInfoScreen` coverage now proves tapping cancel on a queued
+  media row immediately re-renders the row as retryable `Upload cancelled.`
+  state and removes the cancel action, instead of waiting for another unrelated
+  notifier rebuild. Keep production closure gated on a real-device upload smoke
+  run.
+- 2026-06-17 uploader-summary state note:
+  focused `UploaderInfoScreen` coverage now proves the uploader screen surfaces
+  pending queue depth and the current upload filename in the summary area,
+  alongside uploaded photo/video counts and estimated remaining time. Keep
+  production closure gated on a real-device plus live-backend upload smoke run.
+- 2026-06-17 uploader-screen start action note:
+  focused `UploaderInfoScreen` coverage now proves the uploader status surface
+  can start all pending uploads directly, awaits the manual upload drain, and
+  refreshes the queue summary after the pending queue reaches zero. Keep
+  production closure gated on a real-device plus live-backend upload smoke run.
+- 2026-06-17 cancellation metadata durability note:
+  focused `UploaderService` coverage now proves both queued and active upload
+  cancellation write `Upload cancelled.` into current session metadata before
+  session end, so retryable cancellation state survives screen changes and
+  restore paths. Keep production closure gated on a real-device upload smoke
+  run.
 
 ### 5. Add critical battery autostop
 
@@ -345,6 +441,12 @@ Default issue schema:
   guarded fire-and-forget helper so callback failures are logged instead of
   escaping storage-level handling. Keep this issue open for real-device or
   emulator recording proof from platform battery/storage events.
+- 2026-06-17 storage critical trigger log note:
+  focused `StorageService` coverage now proves the service logs the available
+  storage value when critical storage first blocks recording and triggers the
+  forced-stop callback, matching the battery autostop trigger diagnostics. Keep
+  this issue open for real-device or emulator recording proof from platform
+  battery/storage events.
 
 ### 6. Make network/device identity visible
 
@@ -359,7 +461,7 @@ Default issue schema:
   APIs cannot expose SSID.
 - 2026-06-08 implementation note:
   `logs/verification-runs/20260608-1751-device-identity-diagnostics/` adds
-  local session diagnostics for network/IP, short device ID, app version
+  active session diagnostics for network/IP, short device ID, app version
   fallback, and hardware identity fallback, with widget tests plus screenshot
   and video proof. Keep this issue open for disconnected-device state and
   broader master device-list UX refinements.
@@ -383,6 +485,39 @@ Default issue schema:
   error does not prevent later ticks. Keep this issue open for actual LAN
   discovery behavior, real-device network smoke evidence, and multi-group
   network UX.
+- 2026-06-17 disconnected-identify diagnostics note:
+  focused `MasterServer` and automation-payload coverage now proves a pending
+  `identifySlave` request becomes `Identify unavailable: disconnected` when the
+  slave disconnects before acknowledging, instead of leaving the stale row at
+  `Identify requested` indefinitely. Follow-up coverage also proves a
+  previously acknowledged identify request on a disconnected row is labeled
+  `Last reported: Identify acknowledged` instead of presenting the
+  acknowledgement as live. Keep this issue open for real-device network smoke
+  evidence and multi-group network UX.
+- 2026-06-17 stale-network-label diagnostics note:
+  focused connected-client automation coverage now proves disconnected devices
+  keep their machine-readable last network status but label it as historical,
+  for example `Last reported: Ready`, instead of presenting stale readiness as
+  current. The master known-device modal uses the same label. Keep this issue
+  open for real-device network smoke evidence and multi-group network UX.
+- 2026-06-17 slave-app-hardware-registration note:
+  focused master/slave coverage now proves slave registration can carry
+  `appVersion`, `appBuildNumber`, and `hardware` into master connected-device
+  diagnostics; the automation payload exposes `appVersion`, `appBuildNumber`,
+  and `hardwareLabel`, and the known-device modal shows App/Hardware rows with
+  fallbacks. Keep this issue open for real-device network smoke evidence and
+  multi-group network UX.
+- 2026-06-17 known-device session-media modal note:
+  focused `MasterScreen` coverage now proves the known-device modal surfaces
+  each slave's compact session media summary, for example
+  `Media: 2 photos, 1 video, 1 pending, 2 uploaded`, and the diagnostics sheet
+  scrolls instead of overflowing as rows grow. Keep this issue open for
+  real-device network smoke evidence and multi-group network UX.
+- 2026-06-17 known-device recency modal note:
+  focused `MasterScreen` coverage now proves the known-device modal surfaces
+  each slave's registered and last-seen timestamps alongside app, hardware,
+  network, preview, session, and media diagnostics. Keep this issue open for
+  real-device network smoke evidence and multi-group network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 
@@ -548,6 +683,61 @@ Default issue schema:
   `PreviousSessionsScreen` is disposed, then guards the post-scan `setState`
   path and makes init, refresh, and tap async dispatch explicit. Keep this
   issue open for real gallery attachment smoke evidence.
+- 2026-06-17 previous-session preview metadata note:
+  focused `SessionManager` coverage now proves `loadSessionMetadata()` previews
+  historical metadata without replacing the active session GUID, current
+  session, or device role. Explicit previous-session restore and upload still
+  go through `restoreSessionFromMetadata()`. Keep this issue open for real
+  gallery attachment smoke evidence.
+- 2026-06-17 session-details video playback note:
+  focused `SessionDetailsScreen` coverage now proves tapping a saved video opens
+  the existing `VideoPlayerScreen` media dialog instead of the placeholder
+  `Video playback is not implemented yet.` message. Keep this issue open for
+  real gallery attachment smoke evidence.
+- 2026-06-17 gallery candidate timing label note:
+  focused `MediaSelectionScreen` coverage now proves video candidate labels show
+  both the matched session identifier and the timing relationship, for example
+  `Candidate: guid-court-1 - 4 min after session`, so operators can see why old
+  media is near a previous session before selecting it. Keep this issue open for
+  real gallery attachment smoke evidence.
+- 2026-06-17 missing-local-media details note:
+  focused `SessionDetailsScreen` coverage now proves historical media rows show
+  `Local file missing` when the local path no longer exists and route the upload
+  action to the existing missing-file dialog instead of offering the normal
+  upload confirmation. Keep this issue open for real gallery attachment smoke
+  evidence.
+- 2026-06-17 missing-local-media list note:
+  focused `MediaListWidget` coverage now proves reusable upload/media rows mark
+  missing local photo and video files as `Local file missing` and suppress the
+  dead-end queue, retry, and cancel upload actions before the uploader attempts
+  an impossible local-file upload. Keep this issue open for real gallery
+  attachment smoke evidence.
+- 2026-06-17 gallery-attachment copy note:
+  focused service and widget coverage now proves selected gallery media is
+  copied into the active session directory before session registration, so
+  metadata and uploader state point at HydraCam-owned files instead of the
+  original gallery asset path. Keep this issue open for real gallery attachment
+  smoke evidence.
+- 2026-06-17 duplicate-gallery-attachment guard note:
+  focused `GallerySessionAttachmentService` coverage now proves re-attaching
+  the same selected gallery photo to the same active session leaves exactly one
+  session metadata entry for the copied session file, preventing duplicate
+  uploader/session records for a repeated gallery import. The same coverage
+  also proves duplicate imports and direct copy retries reuse the existing
+  session copy instead of overwriting it. Keep this issue open for real gallery
+  attachment smoke evidence.
+- 2026-06-17 no-op gallery import feedback note:
+  focused `AddGalleryMediaButton` coverage now proves selected gallery assets
+  with no available local file do not call the attachment service, do not mutate
+  session media, and show `No gallery media was added` instead of the normal
+  success message. Follow-up coverage proves mixed selections report the number
+  of imported items and skipped assets instead of hiding skipped media behind a
+  generic success message. Additional coverage proves a failed per-asset
+  attachment is logged, counted as skipped, and does not abort later selected
+  media in the same import. Gallery provider query failures are now logged and
+  reported as `Could not load gallery media` without navigating to selection or
+  touching session media. Keep this issue open for real gallery attachment smoke
+  evidence.
 
 ### 10. Add user/player assignment to sessions
 
@@ -567,6 +757,12 @@ Default issue schema:
   session-player API contract is present. Keep this issue open for real backend
   contract selection, player import source, mid-session assignment, and mobile
   integration proof.
+- 2026-06-17 player-import-source copy note:
+  focused `SessionDetailsScreen` coverage now makes the missing player import
+  path explicit by showing `Import source: waiting for session-player API` and
+  `Mid-session additions unavailable until FR-061 exists` in the Players panel.
+  Keep this issue open for real backend contract selection, player import
+  source wiring, mid-session assignment, and mobile integration proof.
 
 ### 11. Make mobile Auth0 login recoverable and release-safe
 
@@ -645,6 +841,75 @@ Default issue schema:
   targets show `Auth0 interactive login is only supported on Android and iOS.`
   Keep this issue open for Android plus iOS mobile smoke evidence and Android
   process-death/account-switch validation.
+- 2026-06-17 unsupported-logout credential cleanup note:
+  focused `AuthService` unit coverage now proves unsupported desktop logout
+  avoids the Auth0 browser end-session call while still clearing stored secure
+  credentials and in-memory session state. Keep this issue open for Android plus
+  iOS mobile smoke evidence and Android process-death/account-switch validation.
+- 2026-06-17 missing-email restore cleanup note:
+  focused `AuthService` unit coverage now proves stored Auth0 credentials with
+  no email claim are rejected, cleared from secure storage, and removed from
+  in-memory auth state before `UserService` can mark a HydraCam user restored.
+  Keep this issue open for Android plus iOS mobile smoke evidence and Android
+  process-death/account-switch validation.
+- 2026-06-17 missing-email login cleanup note:
+  focused `AuthService` unit coverage now proves interactive Auth0 login
+  rejects returned ID tokens without an email claim, clears stale secure
+  credentials, and leaves no in-memory access token or profile before the app
+  can treat that Auth0 response as a HydraCam user. Keep this issue open for
+  Android plus iOS mobile smoke evidence, Android process-death validation, and
+  account-switch validation.
+- 2026-06-17 failed-login stale-user cleanup note:
+  focused `UserService` unit coverage now proves a failed second Auth0 login
+  attempt clears the previously logged-in HydraCam email, profile picture, GUID,
+  and logged-in state instead of leaving the prior account visible after the
+  error. Keep this issue open for Android plus iOS mobile smoke evidence,
+  Android process-death validation, and account-switch validation.
+- 2026-06-17 expired-restore credential cleanup note:
+  focused `AuthService` unit coverage now proves expired stored Auth0
+  credentials are removed from secure storage when they cannot be restored
+  directly, lack a refresh token, or refresh into unusable credentials. Keep this
+  issue open for Android plus iOS mobile smoke evidence, Android process-death
+  validation, and account-switch validation.
+- 2026-06-17 malformed-token restore cleanup note:
+  `logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/`
+  proves startup restore treats malformed stored Auth0 ID tokens as invalid
+  credentials instead of throwing or preserving partial access-token state:
+  secure credentials are cleared, in-memory auth state is empty, and restore
+  returns the normal login-required result. Keep this issue open for Android
+  plus iOS mobile smoke evidence, Android process-death validation, and
+  account-switch validation.
+- 2026-06-17 blank-email restore guard note:
+  `logs/verification-runs/20260617-1938-user-restore-blank-email-guard/`
+  proves `UserService.restoreStoredSession()` rejects a blank restored Auth0
+  email before HydraCam GUID lookup, clears local user state, and avoids marking
+  the app logged in from an empty identity. Keep this issue open for Android
+  plus iOS mobile smoke evidence, Android process-death validation, and
+  account-switch validation.
+- 2026-06-17 blank-email login guard note:
+  `logs/verification-runs/20260617-1941-user-login-blank-email-guard/` proves
+  `UserService.login()` rejects a blank Auth0 email before HydraCam GUID lookup,
+  clears local user state, and avoids marking the app logged in from an empty
+  identity. Keep this issue open for Android plus iOS mobile smoke evidence,
+  Android process-death validation, and account-switch validation.
+- 2026-06-17 email-claim normalization note:
+  `logs/verification-runs/20260617-1944-auth0-email-claim-normalization/`
+  proves `AuthService` trims Auth0 email claims before exposing login or restored
+  session state, so surrounding whitespace cannot leak into HydraCam GUID lookup
+  or account display. Keep this issue open for Android plus iOS mobile smoke
+  evidence, Android process-death validation, and account-switch validation.
+- 2026-06-17 login-failure stale-session cleanup note:
+  `logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/`
+  proves a failed interactive Auth0 login clears stale secure credentials and
+  in-memory Auth0 state instead of leaving the previous session available for
+  silent reuse. Keep this issue open for Android plus iOS mobile smoke evidence,
+  Android process-death validation, and account-switch validation.
+- 2026-06-17 blank stored token guard note:
+  `logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/`
+  proves startup restore rejects whitespace-only stored access tokens and does
+  not attempt token refresh with a whitespace-only refresh token. Keep this
+  issue open for Android plus iOS mobile smoke evidence, Android process-death
+  validation, and account-switch validation.
 
 ### 12. Decide and implement Android-native account-picker sign-in
 
@@ -665,6 +930,15 @@ Default issue schema:
   backend/Auth0 user linking is proven for an existing Android user's account;
   logout and account switching are tested on a real Android device; privacy/data
   safety notes are updated if additional identity data is collected.
+- 2026-06-17 decision note:
+  `docs/control/android-auth-sign-in-decision.md` compares the current
+  `flutter_appauth` path, `auth0_flutter`, and Android Credential Manager /
+  Sign in with Google. The current release-lane decision is to keep Auth0
+  Universal Login behind the existing `AuthService` abstraction and defer native
+  Credential Manager until backend/Auth0 account linking is specified. Keep this
+  issue open only if product explicitly reopens native Android account-picker
+  implementation; mobile login smoke and account-switch proof remain tracked by
+  issue 11.
 
 ### 13. Desktop/webcam scope decision completed
 
@@ -691,6 +965,61 @@ Default issue schema:
   and shows `Preview unavailable (Preview transport not configured)` in the
   master known-device modal. Keep this issue open for actual preview transport
   design, bandwidth limits, and real multi-device preview evidence.
+- 2026-06-17 disconnected-preview-state note:
+  focused `ConnectedDeviceInfo` and automation-payload coverage now separates
+  disconnected slave preview state from missing transport: stale rows report
+  `Preview unavailable: disconnected (Slave disconnected)` instead of implying
+  the only blocker is unconfigured preview transport. Keep this issue open for
+  actual preview transport design, bandwidth limits, and real multi-device
+  preview evidence.
+- 2026-06-17 stale-setup-readiness note:
+  focused connected-client automation coverage now exposes `setupStatusLabel`
+  and labels disconnected slave setup state as historical, for example
+  `Last reported setup: Right back glass | Level`. The master known-device
+  modal uses the same label so placement/leveling readiness is not presented as
+  live after a slave disconnects. Keep this issue open for actual preview
+  transport design, bandwidth limits, and real multi-device preview evidence.
+
+### 15. Add consistent club and court photos to venue selection
+
+- Source: product idea, 2026-06-17.
+- Labels: `hydracam`, `mobile`, `ux`, `venues`, `courts`, `visual-assets`.
+- Priority: Medium.
+- Disposition: Planned only; do not implement until the image source, backend
+  contract, and asset-quality standard are decided.
+- Body: Support sports center and court selection with a consistent set of
+  high-quality pictures for each club and each court. The pictures should help
+  operators visually confirm they picked the right venue/court before creating
+  a capture session, especially in clubs with similar court names or repeated
+  numbered courts. This is selection support, not a gallery or marketing
+  feature.
+- Implementation plan:
+  1. Define the asset standard: required shots per club and court, aspect
+     ratio, minimum resolution, lighting/framing rules, naming convention,
+     review owner, and fallback policy when a venue lacks approved photos.
+  2. Decide the source of truth: extend the sports center/court API contract
+     with stable image URLs and metadata, or ship a temporary local asset
+     manifest only for approved pilot clubs.
+  3. Add data models and caching: parse club/court image metadata, cache
+     thumbnails safely for offline or weak-network setup, and keep missing or
+     stale images explicit in diagnostics/logging.
+  4. Update `SportsCentersScreen` and `CourtsScreen`: show compact thumbnails
+     or photo-backed rows/cards that preserve fast scanning, visible selected
+     state, court name/location text, and accessible labels.
+  5. Add validation: focused widget tests for image/fallback/selection states,
+     a no-overflow route smoke on phone-sized viewports, and a real-device UI
+     screenshot pack before marking the feature complete.
+- Acceptance checks: every returned sports center and court either shows an
+  approved photo or a clear non-photo fallback; visual treatment is consistent
+  across clubs/courts; selection remains unambiguous from text plus selected
+  state; missing/slow images do not block venue selection or session creation;
+  photos have accessible labels; focused widget tests and `flutter analyze`
+  pass; hardware UI screenshots prove the selection routes render without
+  overflow on at least one supported Android device and one iOS target when
+  available.
+- Non-goals: do not change session creation, court GUID handling, upload
+  behavior, or master/slave capture flow as part of this item. Do not add
+  unsourced stock imagery or one-off decorative backgrounds.
 
 ## Open Bug/Improvement Rows From `FALLOS Y MEJORAS`
 
@@ -732,6 +1061,29 @@ mobile-side video timing metadata to multipart uploads: `recordingEndDate` and
 `durationMs` are included for videos while photo uploads remain unchanged.
 Keep row 17 open for backend/API contract confirmation and proof that MoBo no
 longer displays the 357-second duration incorrectly.
+
+2026-06-17 row 17 timestamp-derived duration note:
+focused upload API coverage now proves `durationMs` is derived from
+`recordingEndDate - captureDate` when those timestamps are present, even if a
+caller supplies a conflicting `recordingDuration`. This keeps mobile multipart
+video timing fields internally consistent before backend duration calculation.
+Keep row 17 open for backend/API contract confirmation and proof that MoBo no
+longer displays the 357-second duration incorrectly.
+
+2026-06-17 row 17 inverted-duration guard note:
+focused upload API coverage now rejects video uploads whose recording end
+timestamp is earlier than the capture/start timestamp, logs the invalid
+duration before token/header setup, and avoids sending a multipart request with
+a negative `durationMs`.
+Keep row 17 open for backend/API contract confirmation and proof that MoBo no
+longer displays the 357-second duration incorrectly.
+
+2026-06-17 row 26 regression note:
+`RoleSelectionScreen` already disables the visual back affordance and blocks
+route-root popping through `PopScope(canPop: false)`. Focused widget coverage
+now proves there is no back arrow on the entry surface and that a system back
+route leaves the role-selection screen mounted. Treat row 26 as locally covered
+unless a fresh physical iOS reproduction shows a different navigation path.
 
 2026-06-08 row 36 note:
 `logs/verification-runs/20260608-2125-forced-stop-missing-start-timestamp/`
@@ -892,6 +1244,21 @@ preserving the full identifier and writing metadata back under the original
 directory. Keep row 35 open for real old-media attachment smoke evidence and any
 remaining controller/view GUID audit not covered by local widget/model tests.
 
+2026-06-17 row 35 cleaned-media metadata note:
+focused `SessionManager` and media-model coverage now proves previous-session
+metadata can be loaded after local photo/video files have been cleaned up, while
+persisting and restoring `fileSizeInBytes` from metadata instead of requiring
+the path to still exist. Keep row 35 open for real old-media attachment smoke
+evidence and any remaining controller/view GUID audit not covered by local
+widget/model tests.
+
+2026-06-17 row 35 uploaded-restore queue note:
+focused `SessionManager` coverage now proves restoring historical metadata does
+not requeue photo/video records that are already marked uploaded; the uploader
+boundary logs already-uploaded media as a no-op instead of duplicating upload
+work. Keep row 35 open for real old-media attachment smoke evidence and any
+remaining controller/view GUID audit not covered by local widget/model tests.
+
 2026-06-08 row 111 note:
 `logs/verification-runs/20260608-1901-upload-app-version-metadata/` adds
 `appVersion` and `appBuildNumber` multipart fields to media uploads and proves
@@ -962,6 +1329,29 @@ Empty 200 bodies remain accepted for the current backend-compatible success
 path. Keep broader invalid-file/API contract coverage open for true corrupt
 media handling and live backend response-shape confirmation.
 
+2026-06-17 T-016 malformed-response guard note:
+focused upload API coverage now rejects non-empty malformed HTTP 200 bodies
+instead of treating them as successful uploads. Empty 200 bodies remain accepted
+for the current backend-compatible path, and valid object bodies still fail only
+when they explicitly report failure. Keep broader invalid-file/API contract
+coverage open for true corrupt media handling and live backend response-shape
+confirmation.
+
+2026-06-17 T-016 corrupt-local-media guard note:
+focused upload API coverage now rejects obvious corrupt local media before HTTP
+send by checking photo/video file signatures. JPEG/PNG/HEIC-style photo inputs
+and MP4/MOV-style video inputs remain accepted, while invalid bytes in `.jpg`
+and `.mp4` paths return false, log the specific invalid media type, and avoid
+building multipart requests. Keep broader contract coverage open for live
+backend response-shape confirmation and any camera-plugin format added later.
+
+2026-06-17 T-016 backend-error response note:
+focused upload API coverage now treats non-empty `error` or `errors` fields in
+HTTP 200 upload responses as failed uploads, matching the existing
+`success: false`, failed `status`, and malformed-body guards. Keep broader
+contract coverage open for live backend response-shape confirmation and any
+camera-plugin format added later.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is
@@ -1001,6 +1391,13 @@ still execute at their scheduled time through `ScheduledTaskService`. Focused
 slave-command, slave-screen, and scheduled-task tests plus full repo gates pass.
 Keep broader mobile upload path closure gated on real-device/backend upload
 smoke evidence.
+
+2026-06-17 T-018 missing-file queue failure note:
+focused `UploaderService` coverage now proves a media file that disappears after
+queueing but before manual upload is marked with `Upload failed: file does not
+exist on disk.`, persisted into `metadata.json`, clears the active uploader
+state, and lets the queue drain. Keep broader mobile upload path closure gated
+on real-device/backend upload smoke evidence.
 
 2026-06-08 T-020 note:
 `logs/verification-runs/20260608-2136-uploader-estimate-completed-samples/`

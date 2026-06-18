@@ -4,6 +4,7 @@ import "dart:io";
 import "package:flutter/material.dart";
 import "package:video_player/video_player.dart"; // Add video_player dependency in pubspec.yaml
 
+import "../app_theme.dart";
 import "../automation/automation_bridge.dart";
 import "../automation/automation_config.dart";
 import "../constants.dart" as constants;
@@ -17,6 +18,8 @@ import "../screens/role_selection_screen.dart";
 import "../screens/sports_centers_screen.dart";
 import "../services/alert_utils.dart";
 import "../services/camera_service_singleton.dart";
+import "../services/debug_session_policy.dart";
+import "../services/debug_session_registry.dart";
 import "../services/device_service.dart";
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
@@ -24,12 +27,14 @@ import "../services/network_info_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
 import "../services/storage_service.dart";
+import "../services/uploader_service.dart";
 import "../services/user_service.dart";
 import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
 import "../widgets/camera_preview_widget.dart";
 import "../widgets/court_selection_widget.dart";
 import "../widgets/hydra_cam_app_bar.dart";
+import "../widgets/hydracam_surface.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
 import "master_announcer.dart";
@@ -56,6 +61,7 @@ class MasterScreenState extends State<MasterScreen> {
   late final MasterAnnouncer _announcer; // Broadcast announcer
   final HydraCamApiService _apiService =
       HydraCamApiService(); // API service instance
+  final DebugSessionPolicy _debugSessionPolicy = DebugSessionPolicy();
   final Map<String, AutomationHandler> _automationHandlers = {};
 
   int connectedClients = 0; // To display connected clients count
@@ -164,6 +170,11 @@ class MasterScreenState extends State<MasterScreen> {
 
   void _handleToggleRecordingButton() {
     unawaited(_toggleRecording());
+  }
+
+  Future<void> _startAllUploads() async {
+    _server.sendCommand("startUploadingAll");
+    await UploaderService().startUploadingManually();
   }
 
   Future<void> _toggleRecording({
@@ -315,11 +326,6 @@ class MasterScreenState extends State<MasterScreen> {
 
     final handlers = <String, AutomationHandler>{
       "start_session": (payload) async {
-        const legacyLocalOnlyKey = "localOnly";
-        if (payload.containsKey(legacyLocalOnlyKey)) {
-          throw ArgumentError(
-              "Local-only automation sessions are disabled; backend sessions are mandatory.");
-        }
         await _createSession(
           suppressSnackbars: true,
           skipCourtSelectionWarning: true,
@@ -640,13 +646,12 @@ class MasterScreenState extends State<MasterScreen> {
   Widget _connectedDevicesWidget() {
     return GestureDetector(
       onTap: () => _showConnectedDevicesModal(context),
-      child: Column(
-        children: [
-          Text(
-            "Connected clients: $connectedClients",
-            style: const TextStyle(fontSize: 16, color: Colors.blue),
-          ),
-        ],
+      child: HydraCamStatusChip(
+        status: connectedClients > 0
+            ? HydraCamStatusTone.active
+            : HydraCamStatusTone.neutral,
+        icon: connectedClients > 0 ? Icons.devices : Icons.devices_outlined,
+        label: "Connected clients: $connectedClients",
       ),
     );
   }
@@ -664,7 +669,10 @@ class MasterScreenState extends State<MasterScreen> {
     });
 
     try {
-      final sessionId = overrideSessionId ?? DateTime.now().toIso8601String();
+      final sessionId =
+          overrideSessionId ?? _debugSessionPolicy.defaultSessionId();
+      final debugSession =
+          overrideSessionId == null && _debugSessionPolicy.debugBuild;
 
       if (!skipCourtSelectionWarning && selectedCourtGuid == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -689,24 +697,35 @@ class MasterScreenState extends State<MasterScreen> {
 
       if (backendSession != null) {
         final String sessionGuid = backendSession.guid;
-        SessionManager.instance.startBackendSession(
+        SessionManager.instance.startCreatedSession(
           backendSession,
           deviceType: "Master",
+          debugSession: debugSession,
         );
+        if (debugSession) {
+          await DebugSessionRegistry().record(
+            DebugSessionRef(
+              sessionGuid: backendSession.guid,
+              sessionId: backendSession.sessionId,
+              serviceNumericId: backendSession.numericId,
+            ),
+          );
+          if (!mounted) return;
+        }
         _server.startNewSession(sessionGuid);
 
         LogService.instance
             .registerLog("Session created with GUID: $sessionGuid");
 
         setState(() {});
-        if (!suppressSnackbars && context.mounted) {
+        if (!suppressSnackbars && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text("Session created successfully: $sessionGuid")),
           );
         }
       } else {
-        if (!suppressSnackbars && context.mounted) {
+        if (!suppressSnackbars && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Failed to create session")),
           );
@@ -824,81 +843,122 @@ class MasterScreenState extends State<MasterScreen> {
       builder: (context) {
         final List<ConnectedDeviceInfo> devices = getConnectedDeviceInfos();
         final summary = summarizeConnectedDeviceInfos(devices);
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Known Devices",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text(summary.label),
-              const SizedBox(height: 10),
-              if (devices.isNotEmpty)
-                ...devices.map((device) {
-                  final network = device.networkSnapshot;
-                  final ssid = NetworkInfoService.formatSsidLabel(network);
-                  final localIp = network?.ipAddress ?? "No reported IP";
-                  final subnet =
-                      network?.effectiveSubnetSignature ?? "Subnet unknown";
-                  final remoteIp = device.remoteIp ?? "Remote IP unknown";
-                  final setupStatus = device.setupStatus;
-                  final setupLine = setupStatus == null
-                      ? "Setup: not reported"
-                      : "Setup: ${setupStatus.cameraPerspectiveLabel} | "
-                          "${setupStatus.isLevel ? 'Level' : 'Tilted'}";
-                  final isDisconnected = !device.isConnected;
-                  final disconnectedLine = device.disconnectedAt == null
-                      ? ""
-                      : "Disconnected: ${device.disconnectedAt!.toLocal()}\n";
-                  final sessionLine =
-                      "Session: ${device.sessionStatusLabel(masterSessionGuid: SessionManager.instance.sessionGuid)}";
-                  final identifyLine =
-                      "Identify: ${device.identifyStatusLabel}";
-                  return ListTile(
-                    title: Text("${device.shortDeviceId} · "
-                        "${device.connectionStatusLabel} · "
-                        "${device.networkStatus.label}"),
-                    subtitle: Text(
-                      "Device ID: ${device.deviceId}\n"
-                      "SSID: $ssid\n"
-                      "Device IP: $localIp | Remote: $remoteIp\n"
-                      "Subnet: $subnet\n"
-                      "Preview: ${device.previewStatusLabel} "
-                      "(${device.previewTransportLabel})\n"
-                      "$sessionLine\n"
-                      "$identifyLine\n"
-                      "$disconnectedLine"
-                      "$setupLine",
-                    ),
-                    isThreeLine: true,
-                    leading: Icon(
-                      isDisconnected
-                          ? Icons.link_off
-                          : device.networkStatus ==
-                                  ConnectedDeviceNetworkStatus.wrongNetwork
-                              ? Icons.warning
-                              : Icons.wifi,
-                      color: isDisconnected
-                          ? Colors.grey
-                          : device.networkStatus ==
-                                  ConnectedDeviceNetworkStatus.wrongNetwork
-                              ? Colors.red
-                              : Colors.green,
-                    ),
-                  );
-                })
-              else if (getConnectedDevices().isNotEmpty)
-                ...getConnectedDevices().map((deviceId) => ListTile(
-                      title: Text("Device ID: $deviceId"),
-                      subtitle: const Text("Network details unavailable"),
-                    ))
-              else
-                const Center(child: Text("No connected devices")),
-            ],
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Known Devices",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(summary.label),
+                  const SizedBox(height: 10),
+                  if (devices.isNotEmpty)
+                    ...devices.map((device) {
+                      final network = device.networkSnapshot;
+                      final ssid = NetworkInfoService.formatSsidLabel(network);
+                      final localIp = network?.ipAddress ?? "No reported IP";
+                      final subnet =
+                          network?.effectiveSubnetSignature ?? "Subnet unknown";
+                      final remoteIp = device.remoteIp ?? "Remote IP unknown";
+                      final appVersion =
+                          device.appVersion ?? "App version not reported";
+                      final appBuildNumber = device.appBuildNumber;
+                      final appLine = appBuildNumber == null
+                          ? "App: $appVersion"
+                          : "App: $appVersion+$appBuildNumber";
+                      final hardwareLine =
+                          "Hardware: ${device.hardwareLabel ?? 'not reported'}";
+                      final isDisconnected = !device.isConnected;
+                      final registeredLine =
+                          "Registered: ${device.registeredAt.toLocal()}";
+                      final lastSeenLine =
+                          "Last seen: ${device.lastSeen.toLocal()}";
+                      final disconnectedLine = device.disconnectedAt == null
+                          ? ""
+                          : "Disconnected: ${device.disconnectedAt!.toLocal()}\n";
+                      final sessionLine =
+                          "Session: ${device.sessionStatusLabel(masterSessionGuid: SessionManager.instance.sessionGuid)}";
+                      final reportedSessionLine =
+                          "Reported session: ${device.reportedSessionGuid ?? 'not reported'}";
+                      final mediaLine =
+                          _formatSessionMediaLine(device.sessionMedia);
+                      final identifyLine =
+                          "Identify: ${device.identifyStatusLabel}";
+                      return ListTile(
+                        title: Text("${device.shortDeviceId} · "
+                            "${device.connectionStatusLabel} · "
+                            "${device.networkStatusLabel}"),
+                        subtitle: Text(
+                          "Device ID: ${device.deviceId}\n"
+                          "$appLine\n"
+                          "$hardwareLine\n"
+                          "SSID: $ssid\n"
+                          "Device IP: $localIp | Remote: $remoteIp\n"
+                          "Subnet: $subnet\n"
+                          "$registeredLine\n"
+                          "$lastSeenLine\n"
+                          "Preview: ${device.previewStatusLabel} "
+                          "(${device.previewTransportLabel})\n"
+                          "$sessionLine\n"
+                          "$reportedSessionLine\n"
+                          "$mediaLine\n"
+                          "$identifyLine\n"
+                          "$disconnectedLine"
+                          "${device.setupStatusLabel}",
+                        ),
+                        isThreeLine: true,
+                        leading: Icon(
+                          isDisconnected
+                              ? Icons.link_off
+                              : device.networkStatus ==
+                                      ConnectedDeviceNetworkStatus.wrongNetwork
+                                  ? Icons.warning
+                                  : Icons.wifi,
+                          color: isDisconnected
+                              ? AppTheme.textTertiary
+                              : device.networkStatus ==
+                                      ConnectedDeviceNetworkStatus.wrongNetwork
+                                  ? AppTheme.danger
+                                  : AppTheme.accent,
+                        ),
+                      );
+                    })
+                  else if (getConnectedDevices().isNotEmpty)
+                    ...getConnectedDevices().map((deviceId) => ListTile(
+                          title: Text("Device ID: $deviceId"),
+                          subtitle: const Text("Network details unavailable"),
+                        ))
+                  else
+                    const Center(child: Text("No connected devices")),
+                ],
+              ),
+            ),
           ),
         );
       },
     );
+  }
+
+  String _formatSessionMediaLine(Map<String, int>? sessionMedia) {
+    if (sessionMedia == null) {
+      return "Media: not reported";
+    }
+
+    final photos = sessionMedia["photoCount"] ?? 0;
+    final videos = sessionMedia["videoCount"] ?? 0;
+    final pending = sessionMedia["pendingUploadCount"] ?? 0;
+    final uploaded = sessionMedia["uploadedCount"] ?? 0;
+
+    return "Media: ${_formatCount(photos, "photo")}, "
+        "${_formatCount(videos, "video")}, "
+        "$pending pending, $uploaded uploaded";
+  }
+
+  String _formatCount(int count, String singular) {
+    return "$count $singular${count == 1 ? "" : "s"}";
   }
 
   // Build the initial UI when no session is active
@@ -921,77 +981,92 @@ class MasterScreenState extends State<MasterScreen> {
     return SingleChildScrollView(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height, // Full screen height
-            minWidth: MediaQuery.of(context).size.width),
-        child: IntrinsicHeight(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Connected devices widget at the top
-                _connectedDevicesWidget(),
-                const SizedBox(height: 20),
-                // Court selection widget with consistent width
-                SizedBox(
-                  width: buttonWidth,
-                  child: CourtSelectionWidget(
-                    groupedCourts: sortedGroupedCourts,
-                    onCourtSelected: (selectedName, selectedGuid) {
-                      setState(() {
-                        selectedCourtName = selectedName;
-                        selectedCourtGuid = selectedGuid;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Buttons with consistent width and spacing
-                SizedBox(
-                  width: buttonWidth,
-                  child: ElevatedButton(
-                    onPressed: isProcessingStartSession
-                        ? null
-                        : () => unawaited(_startOrEndSession()),
-                    child: isProcessingStartSession
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 2),
-                          )
-                        : const Text("Start Session"),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: buttonWidth,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SportsCentersScreen()),
+          minHeight: MediaQuery.of(context).size.height,
+          minWidth: MediaQuery.of(context).size.width,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: buttonWidth),
+              child: HydraCamSurface(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        _connectedDevicesWidget(),
+                        const HydraCamStatusChip(
+                          status: HydraCamStatusTone.neutral,
+                          icon: Icons.event_busy_outlined,
+                          label: "No active session",
+                        ),
+                      ],
                     ),
-                    child: const Text("Or... Load a Previous One"),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: buttonWidth,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    const SizedBox(height: 20),
+                    CourtSelectionWidget(
+                      groupedCourts: sortedGroupedCourts,
+                      onCourtSelected: (selectedName, selectedGuid) {
+                        setState(() {
+                          selectedCourtName = selectedName;
+                          selectedCourtGuid = selectedGuid;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      icon: isProcessingStartSession
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: AppTheme.inverseText,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Icon(Icons.play_arrow_outlined),
+                      label: Text(
+                        isProcessingStartSession
+                            ? "Starting session"
+                            : "Start Session",
+                      ),
+                      onPressed: isProcessingStartSession
+                          ? null
+                          : () => unawaited(_startOrEndSession()),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.folder_open_outlined),
+                      label: const Text("Join Existing Session"),
+                      onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
+                          builder: (context) => SportsCentersScreen(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.history_outlined),
+                      label: const Text("Review Stored Media"),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) =>
-                                const PreviousSessionsScreen()),
-                      );
-                    },
-                    child: const Text("View Local Sessions"),
-                  ),
+                                const PreviousSessionsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -1013,67 +1088,109 @@ class MasterScreenState extends State<MasterScreen> {
         MediaQuery.of(context).orientation == Orientation.portrait ? 10 : 5;
 
     // Buttons and connected devices widget
-    final Widget controls = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Connected devices widget
-        _connectedDevicesWidget(),
-        SizedBox(height: buttonDistance * 2),
-        // Buttons
-        SizedBox(
-          width: buttonWidth,
-          child: ElevatedButton(
-            onPressed: sessionGuid != null && !isProcessingTakePhoto
-                ? _handleTakePhotoButton
-                : null,
-            child: isProcessingTakePhoto
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                        color: Colors.white, strokeWidth: 2),
-                  )
-                : const Text("Take Photo"),
+    final Widget controls = HydraCamSurface(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: [
+              _connectedDevicesWidget(),
+              HydraCamStatusChip(
+                status: _recordingActive
+                    ? HydraCamStatusTone.recording
+                    : HydraCamStatusTone.active,
+                icon: _recordingActive
+                    ? Icons.fiber_manual_record
+                    : Icons.event_available_outlined,
+                label: _recordingActive ? "Recording" : "Session active",
+              ),
+            ],
           ),
-        ),
-        SizedBox(height: buttonDistance),
-        SizedBox(
-          width: buttonWidth,
-          child: ElevatedButton(
-            onPressed:
-                sessionGuid != null ? _handleToggleRecordingButton : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _recordingActive ? Colors.red : Colors.green,
+          SizedBox(height: buttonDistance * 2),
+          // Buttons
+          SizedBox(
+            width: buttonWidth,
+            child: ElevatedButton.icon(
+              icon: isProcessingTakePhoto
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          color: AppTheme.inverseText, strokeWidth: 2),
+                    )
+                  : const Icon(Icons.camera_alt_outlined),
+              label:
+                  Text(isProcessingTakePhoto ? "Taking photo" : "Take Photo"),
+              onPressed: sessionGuid != null && !isProcessingTakePhoto
+                  ? _handleTakePhotoButton
+                  : null,
             ),
-            child:
-                Text(_recordingActive ? "Stop Recording" : "Start Recording"),
           ),
-        ),
-        SizedBox(height: buttonDistance),
-        SizedBox(
-          width: buttonWidth,
-          child: ElevatedButton(
-            onPressed: isProcessingEndSession || sessionGuid == null
-                ? null
-                : () => unawaited(_endCurrentSession()),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: isProcessingEndSession
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                        color: Colors.white, strokeWidth: 2),
-                  )
-                : const Text("End Session"),
+          SizedBox(height: buttonDistance),
+          SizedBox(
+            width: buttonWidth,
+            child: ElevatedButton.icon(
+              icon: Icon(
+                _recordingActive
+                    ? Icons.stop_circle_outlined
+                    : Icons.videocam_outlined,
+              ),
+              label:
+                  Text(_recordingActive ? "Stop Recording" : "Start Recording"),
+              onPressed:
+                  sessionGuid != null ? _handleToggleRecordingButton : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    _recordingActive ? AppTheme.danger : AppTheme.accent,
+                foregroundColor: _recordingActive
+                    ? AppTheme.inverseText
+                    : AppTheme.textOnAccent,
+              ),
+            ),
           ),
-        ),
-        SizedBox(height: buttonDistance),
-        SizedBox(
-          width: buttonWidth,
-          child: AddGalleryMediaButton(enabled: !_recordingActive),
-        ),
-      ],
+          SizedBox(height: buttonDistance),
+          SizedBox(
+            width: buttonWidth,
+            child: ElevatedButton.icon(
+              icon: isProcessingEndSession
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          color: AppTheme.inverseText, strokeWidth: 2),
+                    )
+                  : const Icon(Icons.stop_outlined),
+              label: Text(
+                isProcessingEndSession ? "Ending session" : "End Session",
+              ),
+              onPressed: isProcessingEndSession || sessionGuid == null
+                  ? null
+                  : () => unawaited(_endCurrentSession()),
+              style: AppTheme.dangerButtonStyle(),
+            ),
+          ),
+          SizedBox(height: buttonDistance),
+          SizedBox(
+            width: buttonWidth,
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.cloud_upload_outlined),
+              label: const Text("Start Uploads"),
+              onPressed: sessionGuid != null
+                  ? () => unawaited(_startAllUploads())
+                  : null,
+            ),
+          ),
+          SizedBox(height: buttonDistance),
+          SizedBox(
+            width: buttonWidth,
+            child: AddGalleryMediaButton(enabled: !_recordingActive),
+          ),
+        ],
+      ),
     );
 
     // Media list widget

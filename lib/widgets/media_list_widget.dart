@@ -1,8 +1,11 @@
+import "dart:async";
+import "dart:io";
+
 import "package:flutter/material.dart";
+import "../app_theme.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../services/uploader_service.dart";
-import "dart:io";
 
 /// Reusable widget to show list of recorded photos and videos for a device (both slave or master)
 /// Used both in uploader screen and master/slave screens, with different functionalities in each case
@@ -13,8 +16,8 @@ class MediaListWidget extends StatelessWidget {
   final Function(CapturedVideo)? onVideoTap;
   final Function(CapturedPhoto)? onRetryPhotoUpload;
   final Function(CapturedVideo)? onRetryVideoUpload;
-  final Function(CapturedPhoto)? onCancelPhotoUpload;
-  final Function(CapturedVideo)? onCancelVideoUpload;
+  final FutureOr<void> Function(CapturedPhoto)? onCancelPhotoUpload;
+  final FutureOr<void> Function(CapturedVideo)? onCancelVideoUpload;
   final DateTime Function()? now;
   final bool
       showPlaceholder; // Show or not a placeholder image and text if there is still no media
@@ -39,22 +42,22 @@ class MediaListWidget extends StatelessWidget {
 
     // Show placeholder if enabled and there are no media items
     if (showPlaceholder && totalItems == 0) {
-      return const SingleChildScrollView(
+      return SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
               Icon(
                 Icons.perm_media_outlined, // Multimedia icon
                 size: 100, // Adjust the size as needed
-                color: Colors.grey, // Set the icon color
+                color: AppTheme.textTertiary,
               ),
               SizedBox(height: 20),
               Text(
                 "No media available",
                 style: TextStyle(
                   fontSize: 18, // Text size
-                  color: Colors.grey, // Text color
+                  color: AppTheme.textTertiary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -63,7 +66,7 @@ class MediaListWidget extends StatelessWidget {
                 "Photos and videos will appear here once captured.",
                 style: TextStyle(
                   fontSize: 14, // Smaller text size
-                  color: Colors.grey, // Text color
+                  color: AppTheme.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -83,20 +86,27 @@ class MediaListWidget extends StatelessWidget {
           return ValueListenableBuilder<dynamic>(
             valueListenable: UploaderService().currentlyUploadingNotifier,
             builder: (context, currentlyUploading, _) {
+              final missingLocalFile =
+                  _isLocalFileMissing(photo, currentlyUploading);
               return ListTile(
-                leading:
-                    Image.file(File(photo.photoPath), width: 50, height: 50),
+                leading: _buildPhotoLeading(photo, missingLocalFile),
                 title: Text("Photo from: ${photo.slaveDeviceId}"),
                 subtitle: _buildSubtitle(
                   primary: "Captured: ${photo.captureDate}",
                   media: photo,
                   currentlyUploading: currentlyUploading,
+                  missingLocalFile: missingLocalFile,
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildUploadStatusIndicator(photo, currentlyUploading),
-                    if (!_isCurrentUpload(photo, currentlyUploading) &&
+                    _buildUploadStatusIndicator(
+                      photo,
+                      currentlyUploading,
+                      missingLocalFile: missingLocalFile,
+                    ),
+                    if (!missingLocalFile &&
+                        !_isCurrentUpload(photo, currentlyUploading) &&
                         !photo.isUploaded &&
                         onRetryPhotoUpload != null)
                       IconButton(
@@ -104,19 +114,25 @@ class MediaListWidget extends StatelessWidget {
                           photo,
                           currentlyUploading,
                         ),
-                        icon: const Icon(Icons.refresh, color: Colors.green),
+                        icon: const Icon(
+                          Icons.refresh,
+                          color: AppTheme.accent,
+                        ),
                         onPressed: () {
                           onRetryPhotoUpload!(photo);
                         },
                       ),
-                    if (_canCancelUpload(photo, currentlyUploading) &&
+                    if (!missingLocalFile &&
+                        _canCancelUpload(photo, currentlyUploading) &&
                         onCancelPhotoUpload != null)
                       IconButton(
                         tooltip: "Cancel upload",
-                        icon: const Icon(Icons.cancel_outlined,
-                            color: Colors.orange),
-                        onPressed: () {
-                          onCancelPhotoUpload!(photo);
+                        icon: const Icon(
+                          Icons.cancel_outlined,
+                          color: AppTheme.danger,
+                        ),
+                        onPressed: () async {
+                          await onCancelPhotoUpload!(photo);
                         },
                       ),
                   ],
@@ -134,19 +150,27 @@ class MediaListWidget extends StatelessWidget {
           return ValueListenableBuilder<dynamic>(
             valueListenable: UploaderService().currentlyUploadingNotifier,
             builder: (context, currentlyUploading, _) {
+              final missingLocalFile =
+                  _isLocalFileMissing(video, currentlyUploading);
               return ListTile(
-                leading: const Icon(Icons.videocam, size: 50),
+                leading: _buildVideoLeading(missingLocalFile),
                 title: Text("Video from: ${video.slaveDeviceId}"),
                 subtitle: _buildSubtitle(
                   primary: "Started: ${video.startRecordingDate}",
                   media: video,
                   currentlyUploading: currentlyUploading,
+                  missingLocalFile: missingLocalFile,
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildUploadStatusIndicator(video, currentlyUploading),
-                    if (!_isCurrentUpload(video, currentlyUploading) &&
+                    _buildUploadStatusIndicator(
+                      video,
+                      currentlyUploading,
+                      missingLocalFile: missingLocalFile,
+                    ),
+                    if (!missingLocalFile &&
+                        !_isCurrentUpload(video, currentlyUploading) &&
                         !video.isUploaded &&
                         onRetryVideoUpload != null)
                       IconButton(
@@ -154,19 +178,25 @@ class MediaListWidget extends StatelessWidget {
                           video,
                           currentlyUploading,
                         ),
-                        icon: const Icon(Icons.refresh, color: Colors.green),
+                        icon: const Icon(
+                          Icons.refresh,
+                          color: AppTheme.accent,
+                        ),
                         onPressed: () {
                           onRetryVideoUpload!(video);
                         },
                       ),
-                    if (_canCancelUpload(video, currentlyUploading) &&
+                    if (!missingLocalFile &&
+                        _canCancelUpload(video, currentlyUploading) &&
                         onCancelVideoUpload != null)
                       IconButton(
                         tooltip: "Cancel upload",
-                        icon: const Icon(Icons.cancel_outlined,
-                            color: Colors.orange),
-                        onPressed: () {
-                          onCancelVideoUpload!(video);
+                        icon: const Icon(
+                          Icons.cancel_outlined,
+                          color: AppTheme.danger,
+                        ),
+                        onPressed: () async {
+                          await onCancelVideoUpload!(video);
                         },
                       ),
                   ],
@@ -186,7 +216,21 @@ class MediaListWidget extends StatelessWidget {
 
   /// Builds a non-interactive upload status indicator.
   Widget _buildUploadStatusIndicator(
-      dynamic media, dynamic currentlyUploading) {
+    dynamic media,
+    dynamic currentlyUploading, {
+    required bool missingLocalFile,
+  }) {
+    if (missingLocalFile) {
+      return _buildStatusPill(
+        icon: Icons.error_outline,
+        label: "Missing",
+        semanticsLabel: "Upload status: Local file missing",
+        foregroundColor: AppTheme.danger,
+        backgroundColor: AppTheme.dangerSurface,
+        borderColor: AppTheme.danger,
+      );
+    }
+
     if (media == currentlyUploading) {
       // Show circular progress with percentage
       return Semantics(
@@ -205,18 +249,23 @@ class MediaListWidget extends StatelessWidget {
                       CircularProgressIndicator(
                         value: progress, // Progress from 0.0 to 1.0
                         strokeWidth: 2,
-                        color: Colors.blue,
+                        color: AppTheme.accent,
                       ),
                       Text(
                         "${(progress * 100).toInt()}%", // Percentage text
-                        style:
-                            const TextStyle(fontSize: 10, color: Colors.black),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: AppTheme.textPrimary,
+                        ),
                       ),
                     ],
                   ),
                   Text(
                     _formatByteProgress(media, progress),
-                    style: const TextStyle(fontSize: 10, color: Colors.black),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppTheme.textPrimary,
+                    ),
                   ),
                 ],
               );
@@ -229,9 +278,9 @@ class MediaListWidget extends StatelessWidget {
         icon: Icons.cloud_done,
         label: "Uploaded",
         semanticsLabel: "Upload status: Uploaded",
-        foregroundColor: Colors.blue.shade700,
-        backgroundColor: Colors.blue.shade50,
-        borderColor: Colors.blue.shade200,
+        foregroundColor: AppTheme.textPrimary,
+        backgroundColor: AppTheme.surfaceMuted,
+        borderColor: AppTheme.border,
       );
     } else if (_hasUploadFailed(media, currentlyUploading)) {
       final uploadFailureReason = _uploadFailureReason(media);
@@ -241,18 +290,18 @@ class MediaListWidget extends StatelessWidget {
         semanticsLabel: uploadFailureReason == null
             ? "Upload status: Upload failed"
             : "Upload status: $uploadFailureReason",
-        foregroundColor: Colors.red.shade700,
-        backgroundColor: Colors.red.shade50,
-        borderColor: Colors.red.shade200,
+        foregroundColor: AppTheme.danger,
+        backgroundColor: AppTheme.dangerSurface,
+        borderColor: AppTheme.danger,
       );
     } else {
       return _buildStatusPill(
         icon: Icons.cloud_upload_outlined,
         label: "Pending",
         semanticsLabel: "Upload status: Pending upload",
-        foregroundColor: Colors.grey.shade800,
-        backgroundColor: Colors.grey.shade100,
-        borderColor: Colors.grey.shade300,
+        foregroundColor: AppTheme.textSecondary,
+        backgroundColor: AppTheme.surfaceMuted,
+        borderColor: AppTheme.border,
       );
     }
   }
@@ -303,17 +352,23 @@ class MediaListWidget extends StatelessWidget {
     required String primary,
     required dynamic media,
     required dynamic currentlyUploading,
+    required bool missingLocalFile,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(primary),
         Text(
-          _uploadStatusLabel(media, currentlyUploading),
+          _uploadStatusLabel(
+            media,
+            currentlyUploading,
+            missingLocalFile: missingLocalFile,
+          ),
           style: TextStyle(
-            color: _hasUploadFailed(media, currentlyUploading)
-                ? Colors.red
-                : Colors.grey.shade700,
+            color:
+                missingLocalFile || _hasUploadFailed(media, currentlyUploading)
+                    ? AppTheme.danger
+                    : AppTheme.textSecondary,
             fontSize: 12,
           ),
         ),
@@ -330,8 +385,8 @@ class MediaListWidget extends StatelessWidget {
               }
               return Text(
                 timeRemaining,
-                style: TextStyle(
-                  color: Colors.grey.shade700,
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
                   fontSize: 12,
                 ),
               );
@@ -341,7 +396,14 @@ class MediaListWidget extends StatelessWidget {
     );
   }
 
-  String _uploadStatusLabel(dynamic media, dynamic currentlyUploading) {
+  String _uploadStatusLabel(
+    dynamic media,
+    dynamic currentlyUploading, {
+    required bool missingLocalFile,
+  }) {
+    if (missingLocalFile) {
+      return "Local file missing";
+    }
     if (media == currentlyUploading) {
       return "Uploading";
     }
@@ -352,6 +414,55 @@ class MediaListWidget extends StatelessWidget {
       return _uploadFailureReason(media) ?? "Upload failed";
     }
     return "Pending upload";
+  }
+
+  Widget _buildPhotoLeading(CapturedPhoto photo, bool missingLocalFile) {
+    if (missingLocalFile) {
+      return _buildMissingLocalFileLeading(Icons.broken_image_outlined);
+    }
+    return Image.file(
+      File(photo.photoPath),
+      width: 50,
+      height: 50,
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _buildVideoLeading(bool missingLocalFile) {
+    if (missingLocalFile) {
+      return _buildMissingLocalFileLeading(Icons.videocam_off);
+    }
+    return const Icon(Icons.videocam, size: 50);
+  }
+
+  Widget _buildMissingLocalFileLeading(IconData icon) {
+    return Container(
+      width: 50,
+      height: 50,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: AppTheme.dangerSurface,
+        border: Border.all(color: AppTheme.danger),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(
+        icon,
+        color: AppTheme.danger,
+        size: 28,
+      ),
+    );
+  }
+
+  bool _isLocalFileMissing(dynamic media, dynamic currentlyUploading) {
+    if (_isCurrentUpload(media, currentlyUploading) || media.isUploaded) {
+      return false;
+    }
+
+    try {
+      return !File(media.mediaPath as String).existsSync();
+    } catch (_) {
+      return true;
+    }
   }
 
   bool _hasUploadFailed(dynamic media, dynamic currentlyUploading) {

@@ -3,6 +3,7 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "session_details_screen.dart";
 import "../services/session_manager.dart";
+import "../widgets/hydracam_surface.dart";
 
 class PreviousSessionsScreen extends StatefulWidget {
   const PreviousSessionsScreen({super.key});
@@ -71,7 +72,7 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Previous Sessions"),
+        title: const Text("Stored Media"),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -95,19 +96,26 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
           if (snapshot.data == null || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No previous sessions found."));
+            return const Center(child: Text("No stored media found."));
           }
 
           final sessions = snapshot.data!;
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.all(12),
             itemCount: sessions.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final sessionId = sessions[index];
-              return ListTile(
-                title: Text("Session: $sessionId"),
-                onTap: () {
-                  unawaited(_handleSessionTap(context, sessionId));
-                },
+              return HydraCamSurface(
+                padding: EdgeInsets.zero,
+                child: ListTile(
+                  leading: const Icon(Icons.history_outlined),
+                  title: Text("Service session: $sessionId"),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    unawaited(_handleSessionTap(context, sessionId));
+                  },
+                ),
               );
             },
           );

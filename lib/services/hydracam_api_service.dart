@@ -34,11 +34,18 @@ class HydraCamSessionContract {
   static const String sessionsEndpoint = "sessions";
   static const String createSessionEndpoint = "sessions/create";
   static const String endSessionEndpoint = "sessions/end";
+  static const String deleteDebugSessionEndpoint = "sessions/debug/delete";
   static const String readyToTransmitEndpoint = "device/ReadyToTransmit";
   static const String querySportsCenterGuid = "sportsCenterGuid";
   static const String queryCourtGuid = "courtGuid";
   static const String queryUserGuid = "userGuid";
   static const String querySessionGuid = "sessionGuid";
+  static const String querySessionNumericId = "id";
+}
+
+class HydraCamStartupWarmUpContract {
+  static const String endpoint = HydraCamSessionContract.sportsCentersEndpoint;
+  static const Duration timeout = Duration(seconds: 5);
 }
 
 @immutable
@@ -117,6 +124,9 @@ class HydraCamApiService {
   factory HydraCamApiService() => _instance;
 
   HydraCamApiService._internal();
+
+  static const String _legacyUploadSuccessBody = "Media uploaded successfully.";
+  static const int _uploadFailureResponseBodyLogLimit = 300;
 
   // Base URL for the API
   final String _baseUrl = "https://hydracam.azurewebsites.net/api";
@@ -327,6 +337,28 @@ class HydraCamApiService {
     }
   }
 
+  Future<bool> warmUpBackend({
+    Duration timeout = HydraCamStartupWarmUpContract.timeout,
+  }) async {
+    try {
+      final response =
+          await _get(HydraCamStartupWarmUpContract.endpoint).timeout(timeout);
+      final warmed = response != null;
+      LogService.instance.registerLog(
+        warmed
+            ? "Backend warm-up completed."
+            : "Backend warm-up did not return a usable response.",
+      );
+      return warmed;
+    } on TimeoutException {
+      LogService.instance.registerLog("Backend warm-up timed out.");
+      return false;
+    } catch (e) {
+      LogService.instance.registerLog("Backend warm-up failed: $e");
+      return false;
+    }
+  }
+
   /// Create a new capture session
   Future<HydraCamBackendSession?> createSession(String sessionId,
       {String? courtGuid, String? userGuid}) async {
@@ -402,6 +434,37 @@ class HydraCamApiService {
     }
   }
 
+  Future<bool> deleteDebugSession({
+    required String sessionGuid,
+    int? serviceNumericId,
+  }) async {
+    try {
+      final response = await _post(
+        hydracamApiEndpoint(
+          HydraCamSessionContract.deleteDebugSessionEndpoint,
+          queryParameters: {
+            HydraCamSessionContract.querySessionGuid: sessionGuid,
+            HydraCamSessionContract.querySessionNumericId:
+                serviceNumericId?.toString(),
+          },
+        ),
+        {},
+      );
+      if (response != null) {
+        LogService.instance
+            .registerLog("Debug session deleted from service: $sessionGuid");
+        return true;
+      }
+      LogService.instance.registerLog(
+          "Failed to delete debug session from service: $sessionGuid");
+      return false;
+    } catch (e) {
+      LogService.instance
+          .registerLog("Error deleting debug session from service: $e");
+      return false;
+    }
+  }
+
   /// Upload media
   Future<bool> uploadMedia(
     String sessionGuid,
@@ -425,6 +488,29 @@ class HydraCamApiService {
       if (fileLength == 0) {
         LogService.instance.registerLog("Upload file is empty: ${file.path}");
         return false;
+      }
+
+      final validationFailure = await _uploadMediaValidationFailure(
+        file: file,
+        isPhoto: isPhoto,
+      );
+      if (validationFailure != null) {
+        LogService.instance.registerLog(validationFailure);
+        return false;
+      }
+
+      final Duration? effectiveVideoDuration;
+      if (isPhoto) {
+        effectiveVideoDuration = null;
+      } else {
+        effectiveVideoDuration =
+            recordingEndDate?.difference(captureDate) ?? recordingDuration;
+        if (effectiveVideoDuration != null &&
+            effectiveVideoDuration.isNegative) {
+          LogService.instance.registerLog(
+              "Upload video duration is invalid: recordingEndDate is before captureDate for ${file.path}");
+          return false;
+        }
       }
 
       final headers = await _getHeaders();
@@ -452,15 +538,13 @@ class HydraCamApiService {
         ..fields.addAll(appMetadata);
 
       if (!isPhoto) {
-        final effectiveDuration =
-            recordingDuration ?? recordingEndDate?.difference(captureDate);
         if (recordingEndDate != null) {
           request.fields[HydraCamUploadMediaContract.fieldRecordingEndDate] =
               recordingEndDate.toUtc().toIso8601String();
         }
-        if (effectiveDuration != null) {
+        if (effectiveVideoDuration != null) {
           request.fields[HydraCamUploadMediaContract.fieldDurationMs] =
-              effectiveDuration.inMilliseconds.toString();
+              effectiveVideoDuration.inMilliseconds.toString();
         }
       }
 
@@ -490,14 +574,14 @@ class HydraCamApiService {
           HydraCamUploadMediaContract.successStatusCode) {
         if (_uploadResponseReportsFailure(response.body)) {
           LogService.instance.registerLog(
-              "Failed to upload media: backend response reported failure - ${response.body}");
+              "Failed to upload media: HTTP ${response.statusCode} backend response reported failure - ${_uploadFailureResponseBodySnippet(response.body)}");
           return false;
         }
         LogService.instance.registerLog("Media uploaded successfully");
         return true;
       } else {
         LogService.instance.registerLog(
-            "Failed to upload media: ${response.statusCode} - ${response.body}");
+            "Failed to upload media: HTTP ${response.statusCode} - ${_uploadFailureResponseBodySnippet(response.body)}");
         return false;
       }
     } catch (e) {
@@ -506,16 +590,79 @@ class HydraCamApiService {
     }
   }
 
+  Future<String?> _uploadMediaValidationFailure({
+    required File file,
+    required bool isPhoto,
+  }) async {
+    final header = await _readFileHeader(file, 16);
+    final isValidMedia = isPhoto
+        ? _hasPhotoMediaSignature(header)
+        : _hasVideoMediaSignature(header);
+    if (isValidMedia) {
+      return null;
+    }
+
+    final mediaType = isPhoto ? "photo" : "video";
+    return "Upload file is not valid $mediaType media: ${file.path}";
+  }
+
+  Future<List<int>> _readFileHeader(File file, int byteCount) async {
+    final randomAccessFile = await file.open();
+    try {
+      return await randomAccessFile.read(byteCount);
+    } finally {
+      await randomAccessFile.close();
+    }
+  }
+
+  bool _hasPhotoMediaSignature(List<int> header) {
+    return _hasJpegSignature(header) ||
+        _hasPngSignature(header) ||
+        _hasIsoBaseMediaSignature(header);
+  }
+
+  bool _hasVideoMediaSignature(List<int> header) {
+    return _hasIsoBaseMediaSignature(header);
+  }
+
+  bool _hasJpegSignature(List<int> header) {
+    return header.length >= 2 && header[0] == 0xff && header[1] == 0xd8;
+  }
+
+  bool _hasPngSignature(List<int> header) {
+    const pngSignature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+    if (header.length < pngSignature.length) {
+      return false;
+    }
+    for (var index = 0; index < pngSignature.length; index += 1) {
+      if (header[index] != pngSignature[index]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool _hasIsoBaseMediaSignature(List<int> header) {
+    return header.length >= 8 &&
+        header[4] == 0x66 &&
+        header[5] == 0x74 &&
+        header[6] == 0x79 &&
+        header[7] == 0x70;
+  }
+
   bool _uploadResponseReportsFailure(String responseBody) {
     final trimmedBody = responseBody.trim();
     if (trimmedBody.isEmpty) {
+      return false;
+    }
+    if (trimmedBody == _legacyUploadSuccessBody) {
       return false;
     }
 
     try {
       final decoded = jsonDecode(trimmedBody);
       if (decoded is! Map) {
-        return false;
+        return true;
       }
 
       final successValue =
@@ -524,13 +671,50 @@ class HydraCamApiService {
         return !successValue;
       }
 
+      final errorValue = decoded["error"] ?? decoded["errors"];
+      if (_hasMeaningfulErrorValue(errorValue)) {
+        return true;
+      }
+
       final statusValue = decoded["status"]?.toString().toLowerCase();
       return statusValue == "failed" ||
           statusValue == "failure" ||
           statusValue == "error";
-    } catch (_) {
+    } catch (e) {
+      LogService.instance
+          .registerLog("Malformed upload response body: $trimmedBody ($e)");
+      return true;
+    }
+  }
+
+  bool _hasMeaningfulErrorValue(Object? value) {
+    if (value == null) {
       return false;
     }
+    if (value is String) {
+      return value.trim().isNotEmpty;
+    }
+    if (value is Iterable) {
+      return value.isNotEmpty;
+    }
+    if (value is Map) {
+      return value.isNotEmpty;
+    }
+    return true;
+  }
+
+  String _uploadFailureResponseBodySnippet(String responseBody) {
+    final normalizedBody = responseBody.trim().replaceAll(
+          RegExp(r"\s+"),
+          " ",
+        );
+    if (normalizedBody.isEmpty) {
+      return "<empty>";
+    }
+    if (normalizedBody.length <= _uploadFailureResponseBodyLogLimit) {
+      return normalizedBody;
+    }
+    return "${normalizedBody.substring(0, _uploadFailureResponseBodyLogLimit)}...";
   }
 
   Future<Map<String, String>> _getUploadAppMetadata() async {
