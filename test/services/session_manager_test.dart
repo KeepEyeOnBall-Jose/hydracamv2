@@ -6,6 +6,7 @@ import "package:hydracam/models/capture_context_metadata.dart";
 import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/models/captured_video.dart";
 import "package:hydracam/services/hydracam_api_service.dart";
+import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/uploader_service.dart";
 // ignore: depend_on_referenced_packages
@@ -342,6 +343,103 @@ void main() {
         expect(snapshot?.capturedPhotos.single.fileSizeInBytes, 1234);
         expect(snapshot?.capturedVideos.single.videoPath, missingVideoPath);
         expect(snapshot?.capturedVideos.single.fileSizeInBytes, 5678);
+      });
+
+      test("loadSessionMetadataSnapshot skips malformed media rows", () async {
+        LogService.instance.clearLogs();
+        sessionManager.startSession("active-metadata-guid", "active-id",
+            deviceType: "Master");
+
+        final mixedSessionDir = Directory(
+            "${testPathProvider.documentsDir.path}/session_mixed-media-guid");
+        mixedSessionDir.createSync(recursive: true);
+        final validPhotoPath = createTempMediaFile("valid_history_photo.jpg");
+        final validVideoPath = createTempMediaFile("valid_history_video.mp4");
+        await File("${mixedSessionDir.path}/metadata.json").writeAsString(
+          jsonEncode({
+            "sessionId": "mixed-media-id",
+            "sessionGuid": "mixed-media-guid",
+            "startTime": DateTime.utc(2026, 6, 18, 12).toIso8601String(),
+            "endTime": DateTime.utc(2026, 6, 18, 12, 30).toIso8601String(),
+            "deviceType": "Master",
+            "photos": [
+              {
+                "photoPath": validPhotoPath,
+                "slaveDeviceId": "valid-photo-device",
+                "captureDate":
+                    DateTime.utc(2026, 6, 18, 12, 1).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 18, 12, 2).toIso8601String(),
+                "isUploaded": true,
+              },
+              {
+                "photoPath": "bad-photo.jpg",
+                "slaveDeviceId": "bad-photo-device",
+                "captureDate": "not-a-date",
+                "receivedDate":
+                    DateTime.utc(2026, 6, 18, 12, 3).toIso8601String(),
+              },
+            ],
+            "videos": [
+              {
+                "videoPath": "bad-video.mp4",
+                "slaveDeviceId": "bad-video-device",
+                "startRecordingDate":
+                    DateTime.utc(2026, 6, 18, 12, 4).toIso8601String(),
+                "endRecordingDate": "not-a-date",
+                "receivedDate":
+                    DateTime.utc(2026, 6, 18, 12, 5).toIso8601String(),
+              },
+              {
+                "videoPath": validVideoPath,
+                "slaveDeviceId": "valid-video-device",
+                "startRecordingDate":
+                    DateTime.utc(2026, 6, 18, 12, 6).toIso8601String(),
+                "endRecordingDate":
+                    DateTime.utc(2026, 6, 18, 12, 7).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 18, 12, 8).toIso8601String(),
+                "isUploaded": true,
+              },
+            ],
+          }),
+        );
+
+        final snapshot = await sessionManager.loadSessionMetadataSnapshot(
+          "mixed-media-guid",
+        );
+
+        expect(snapshot?.capturedPhotos, hasLength(1));
+        expect(snapshot?.capturedPhotos.single.photoPath, validPhotoPath);
+        expect(snapshot?.capturedVideos, hasLength(1));
+        expect(snapshot?.capturedVideos.single.videoPath, validVideoPath);
+        expect(sessionManager.sessionGuid, "active-metadata-guid");
+        expect(
+          LogService.instance.logs.map((entry) => entry["message"]),
+          contains(
+            predicate<Object?>(
+              (message) =>
+                  message is String &&
+                  message.startsWith(
+                    "Skipped invalid stored photo metadata for session "
+                    "mixed-media-guid at index 1:",
+                  ),
+            ),
+          ),
+        );
+        expect(
+          LogService.instance.logs.map((entry) => entry["message"]),
+          contains(
+            predicate<Object?>(
+              (message) =>
+                  message is String &&
+                  message.startsWith(
+                    "Skipped invalid stored video metadata for session "
+                    "mixed-media-guid at index 0:",
+                  ),
+            ),
+          ),
+        );
       });
 
       test("rejoining same active session preserves media and upload queue",

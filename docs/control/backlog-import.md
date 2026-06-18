@@ -1407,6 +1407,17 @@ Focused session-manager and gallery candidate tests plus analyzer passed. Keep
 row 35 open for real old-media attachment smoke evidence and any remaining
 controller/view GUID audit not covered by local widget/model tests.
 
+2026-06-18 row 35 invalid stored-media row note:
+`logs/verification-runs/20260618-1649-session-metadata-skip-invalid-media-rows/`
+adds a red/green regression for historical metadata containing a malformed
+photo or video row beside valid media. `SessionManager` now logs and skips only
+the invalid stored media row while still loading the valid media and preserving
+the current active session during preview/snapshot loads. Focused
+session-manager, gallery/session restore tests, analyzer, `git diff --check`,
+and the full Flutter test suite passed. Keep row 35 open for real old-media
+attachment smoke evidence and any remaining controller/view GUID audit not
+covered by local widget/model tests.
+
 2026-06-08 row 111 note:
 `logs/verification-runs/20260608-1901-upload-app-version-metadata/` adds
 `appVersion` and `appBuildNumber` multipart fields to media uploads and proves

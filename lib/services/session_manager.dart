@@ -274,12 +274,10 @@ class SessionManager extends ChangeNotifier {
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
             : null,
-        capturedPhotos: (metadata["photos"] as List<dynamic>? ?? const [])
-            .map((photo) => _parsePhoto(photo, deviceId))
-            .toList(),
-        capturedVideos: (metadata["videos"] as List<dynamic>? ?? const [])
-            .map((video) => _parseVideo(video, deviceId))
-            .toList(),
+        capturedPhotos: _parseStoredPhotos(
+            metadata["photos"], deviceId, restoredSessionGuid),
+        capturedVideos: _parseStoredVideos(
+            metadata["videos"], deviceId, restoredSessionGuid),
         debugSession: metadata["debugSession"] == true,
         serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
       );
@@ -316,12 +314,10 @@ class SessionManager extends ChangeNotifier {
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
             : null,
-        capturedPhotos: (metadata["photos"] as List<dynamic>? ?? const [])
-            .map((photo) => _parsePhoto(photo, deviceId))
-            .toList(),
-        capturedVideos: (metadata["videos"] as List<dynamic>? ?? const [])
-            .map((video) => _parseVideo(video, deviceId))
-            .toList(),
+        capturedPhotos: _parseStoredPhotos(
+            metadata["photos"], deviceId, restoredSessionGuid),
+        capturedVideos: _parseStoredVideos(
+            metadata["videos"], deviceId, restoredSessionGuid),
         debugSession: metadata["debugSession"] == true,
         serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
       );
@@ -416,7 +412,8 @@ class SessionManager extends ChangeNotifier {
         // Skip if metadata already exists
         if (metadataFile.existsSync()) {
           final metadata = jsonDecode(await metadataFile.readAsString());
-          await _normalizedStoredSessionGuid(metadataFile, metadata, sessionGuid);
+          await _normalizedStoredSessionGuid(
+              metadataFile, metadata, sessionGuid);
           await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
 
           reconstructedSessions.add(sessionGuid);
@@ -657,6 +654,30 @@ class SessionManager extends ChangeNotifier {
     );
   }
 
+  List<CapturedPhoto> _parseStoredPhotos(
+    Object? rawPhotos,
+    String fallbackDeviceId,
+    String sessionGuid,
+  ) {
+    if (rawPhotos != null && rawPhotos is! List) {
+      LogService.instance.registerLog(
+          "Skipped invalid stored photos metadata for session $sessionGuid: expected a list.");
+      return <CapturedPhoto>[];
+    }
+
+    final photos = rawPhotos as List<dynamic>? ?? const <dynamic>[];
+    final parsedPhotos = <CapturedPhoto>[];
+    for (var index = 0; index < photos.length; index += 1) {
+      try {
+        parsedPhotos.add(_parsePhoto(photos[index], fallbackDeviceId));
+      } catch (e) {
+        LogService.instance.registerLog(
+            "Skipped invalid stored photo metadata for session $sessionGuid at index $index: $e");
+      }
+    }
+    return parsedPhotos;
+  }
+
   CapturedVideo _parseVideo(Object? rawVideo, String fallbackDeviceId) {
     final video = _asMap(rawVideo);
     final slaveDeviceId = video["slaveDeviceId"]?.toString();
@@ -676,6 +697,30 @@ class SessionManager extends ChangeNotifier {
           MediaCaptureContext.fromJson(_asNullableMap(video["captureContext"])),
       syncMetadata: SyncMetadata.fromJson(video["syncMetadata"]),
     );
+  }
+
+  List<CapturedVideo> _parseStoredVideos(
+    Object? rawVideos,
+    String fallbackDeviceId,
+    String sessionGuid,
+  ) {
+    if (rawVideos != null && rawVideos is! List) {
+      LogService.instance.registerLog(
+          "Skipped invalid stored videos metadata for session $sessionGuid: expected a list.");
+      return <CapturedVideo>[];
+    }
+
+    final videos = rawVideos as List<dynamic>? ?? const <dynamic>[];
+    final parsedVideos = <CapturedVideo>[];
+    for (var index = 0; index < videos.length; index += 1) {
+      try {
+        parsedVideos.add(_parseVideo(videos[index], fallbackDeviceId));
+      } catch (e) {
+        LogService.instance.registerLog(
+            "Skipped invalid stored video metadata for session $sessionGuid at index $index: $e");
+      }
+    }
+    return parsedVideos;
   }
 
   String _validateServiceSessionGuid(String sessionGuid) {
