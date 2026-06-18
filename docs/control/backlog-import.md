@@ -910,6 +910,15 @@ Default issue schema:
   not attempt token refresh with a whitespace-only refresh token. Keep this
   issue open for Android plus iOS mobile smoke evidence, Android process-death
   validation, and account-switch validation.
+- 2026-06-18 auth runtime recoverability rollup:
+  `logs/verification-runs/20260618-1321-auth0-runtime-recoverability/` reran
+  the focused Auth0, UserService, startup widget, and LoginScreen coverage plus
+  `flutter analyze --no-pub` after the session-model cleanup landed. The local
+  contract now covers malformed/missing/blank identity rejection, stale
+  credential cleanup, blank-email GUID lookup guards, desktop logout cleanup,
+  and non-blocking backend warm-up. Keep this issue open for Android plus iOS
+  mobile smoke evidence, Android process-death validation, and account-switch
+  validation.
 
 ### 12. Decide and implement Android-native account-picker sign-in
 

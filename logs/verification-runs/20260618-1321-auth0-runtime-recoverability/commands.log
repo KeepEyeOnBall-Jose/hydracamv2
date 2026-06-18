@@ -1,0 +1,120 @@
+# HydraCam evidence run command log
+
+$ flutter test --no-pub test/services/auth0_service_test.dart test/services/user_service_test.dart test/widget_test.dart test/screens/login_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login requests refresh-capable scopes
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login uses Android package redirect URI
+Log registered: {message: Profile set: https://example.com/android.png, timestamp: 2026-06-18 13:21:38.024376, function: login, file: auth0_service.dart}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login uses iOS bundle redirect URI
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login uses Android package redirect URI
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login uses iOS bundle redirect URI
+Log registered: {message: Profile set: https://example.com/ios.png, timestamp: 2026-06-18 13:21:38.032314, function: login, file: auth0_service.dart}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login persists returned credentials through secure store
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-18 13:21:38.034318, function: login, file: auth0_service.dart}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login trims returned email claim
+Log registered: {message: Profile set: https://example.com/player.png, timestamp: 2026-06-18 13:21:38.036407, function: login, file: auth0_service.dart}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login rejects returned credentials without email
+Log registered: {message: Rejected Auth0 session without an email claim., timestamp: 2026-06-18 13:21:38.040014, function: login, file: auth0_service.dart}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login failure clears stale session state
+Log registered: {message: Profile set: https://example.com/stale.png, timestamp: 2026-06-18 13:21:38.043960, function: login, file: auth0_service.dart}
+00:00 +7: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore uses valid stored credentials
+Log registered: {message: Restored Auth0 session from secure store., timestamp: 2026-06-18 13:21:38.046519, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore trims stored email claim
+Log registered: {message: Restored Auth0 session from secure store., timestamp: 2026-06-18 13:21:38.048119, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +9: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore refreshes expired credentials
+Log registered: {message: Refreshed Auth0 session from secure store., timestamp: 2026-06-18 13:21:38.050020, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +10: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore clears stale credentials after failed refresh
+00:00 +11: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore rejects expired stored credentials
+00:00 +12: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore rejects blank stored access token
+00:00 +13: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore ignores blank refresh token
+00:00 +14: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore rejects stored credentials without email
+Log registered: {message: Rejected Auth0 session without an email claim., timestamp: 2026-06-18 13:21:38.056160, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +15: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore clears malformed stored credentials
+Log registered: {message: Failed to parse Auth0 ID token: FormatException: Invalid character (at character 1)
+%%%%
+^
+, timestamp: 2026-06-18 13:21:38.057956, function: parseIdTokenPayload, file: auth0_service.dart}
+Log registered: {message: Failed to parse Auth0 ID token: FormatException: Invalid character (at character 1)
+%%%%
+^
+, timestamp: 2026-06-18 13:21:38.058475, function: parseIdTokenPayload, file: auth0_service.dart}
+Log registered: {message: Rejected Auth0 session without an email claim., timestamp: 2026-06-18 13:21:38.058662, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +16: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 logout clears secure credentials and browser session
+Log registered: {message: Profile set: https://example.com/logout.png, timestamp: 2026-06-18 13:21:38.060295, function: login, file: auth0_service.dart}
+Log registered: {message: Cleared Auth0 session., timestamp: 2026-06-18 13:21:38.060818, function: logout, file: auth0_service.dart}
+00:00 +17: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 startup restore skips unsupported desktop platforms
+Log registered: {message: Skipped Auth0 restore on unsupported platform., timestamp: 2026-06-18 13:21:38.061971, function: restoreStoredSession, file: auth0_service.dart}
+00:00 +18: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 login rejects unsupported desktop platforms
+00:00 +19: /Users/jose/src/work/hydracamv2/test/services/auth0_service_test.dart: Auth0 logout clears stored credentials on unsupported desktop platforms
+Log registered: {message: Cleared stored Auth0 session on unsupported platform., timestamp: 2026-06-18 13:21:38.064259, function: logout, file: auth0_service.dart}
+00:00 +20: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService restores HydraCam GUID after Auth0 restore
+Log registered: {message: Fetching restored GUID for email: restored@example.com, timestamp: 2026-06-18 13:21:38.190650, function: null, file: null}
+Log registered: {message: User session restored. GUID: hydracam-user-guid, timestamp: 2026-06-18 13:21:38.193920, function: null, file: null}
+00:00 +21: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService restore clears state when Auth0 restore fails
+00:00 +22: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService restore rejects blank restored email
+00:00 +22: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService restores HydraCam GUID after Auth0 restore
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +23: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService login rejects blank Auth0 email
+Log registered: {message: Profile set from user service: https://example.com/blank-login.png, timestamp: 2026-06-18 13:21:38.201718, function: login, file: user_service.dart}
+00:00 +24: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService login clears stale GUID when switched account is unmapped
+Log registered: {message: Profile set from user service: https://example.com/first.png, timestamp: 2026-06-18 13:21:38.204161, function: login, file: user_service.dart}
+Log registered: {message: Fetching GUID for email: first@example.com, timestamp: 2026-06-18 13:21:38.204292, function: null, file: null}
+Log registered: {message: User logged in successfully. GUID: first-guid, timestamp: 2026-06-18 13:21:38.204488, function: null, file: null}
+Log registered: {message: Profile set from user service: https://example.com/missing.png, timestamp: 2026-06-18 13:21:38.204701, function: login, file: user_service.dart}
+Log registered: {message: Fetching GUID for email: missing@example.com, timestamp: 2026-06-18 13:21:38.204902, function: null, file: null}
+Log registered: {message: Failed to fetch GUID: User not found for missing@example.com, timestamp: 2026-06-18 13:21:38.205045, function: null, file: null}
+00:00 +25: /Users/jose/src/work/hydracamv2/test/services/user_service_test.dart: UserService login clears stale user when Auth0 login fails
+Log registered: {message: Profile set from user service: https://example.com/first.png, timestamp: 2026-06-18 13:21:38.206724, function: login, file: user_service.dart}
+Log registered: {message: Fetching GUID for email: first@example.com, timestamp: 2026-06-18 13:21:38.206857, function: null, file: null}
+Log registered: {message: User logged in successfully. GUID: first-guid, timestamp: 2026-06-18 13:21:38.206970, function: null, file: null}
+Log registered: {message: Error during login: Exception: Auth0 session failed, timestamp: 2026-06-18 13:21:38.209994, function: null, file: null}
+00:00 +26: /Users/jose/src/work/hydracamv2/test/widget_test.dart: (setUpAll)
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 13:21:38.440397, function: null, file: null}
+00:00 +26: /Users/jose/src/work/hydracamv2/test/widget_test.dart: HydraCamApp builds without crashing
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-18 13:21:38.599749, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-18 13:21:38.600099, function: null, file: null}
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 13:21:38.952719, function: null, file: null}
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 13:21:38.953303, function: null, file: null}
+00:00 +26: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: desktop Auth0 login failure explains mobile-only support
+Log registered: {message: Error during login: Unsupported operation: Auth0 interactive login is only supported on Android and iOS., timestamp: 2026-06-18 13:21:38.955251, function: null, file: null}
+00:00 +27: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: desktop Auth0 login failure explains mobile-only support
+00:00 +27: /Users/jose/src/work/hydracamv2/test/widget_test.dart: (setUpAll)
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +27: /Users/jose/src/work/hydracamv2/test/widget_test.dart: automation screenshot boundary survives route replacement
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-18 13:21:38.990169, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-18 13:21:38.990433, function: null, file: null}
+00:01 +28: /Users/jose/src/work/hydracamv2/test/widget_test.dart: automation screenshot boundary survives route replacement
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 13:21:39.025294, function: null, file: null}
+Log registered: {message: BatteryService monitoring disabled - timer not started., timestamp: 2026-06-18 13:21:39.025539, function: null, file: null}
+00:01 +29: /Users/jose/src/work/hydracamv2/test/widget_test.dart: automation screenshot boundary survives route replacement
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-18 13:21:39.127807, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-18 13:21:39.128253, function: null, file: null}
+00:01 +30: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: account deletion request dialog is available before login
+00:01 +31: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: account deletion request dialog is available before login
+00:01 +32: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: account deletion dialog opens configured deletion URL
+00:01 +33: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: privacy and support actions are available before login
+00:01 +34: /Users/jose/src/work/hydracamv2/test/screens/login_screen_test.dart: privacy action shows local policy text when URL is unset
+00:01 +35: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 5.4s)
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 2 connected devices:
+  macOS (desktop) • macos  • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)    • chrome • web-javascript • Google Chrome 149.0.7827.115
+
+Error: Browsing on the local area network for iPad (5). Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0

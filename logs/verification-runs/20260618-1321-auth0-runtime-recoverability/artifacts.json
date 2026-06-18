@@ -1,0 +1,83 @@
+{
+  "acceptanceChecks": [
+    "Auth0 login rejects missing or malformed identity without retaining stale credentials",
+    "User restore/login rejects blank email before GUID lookup",
+    "Startup backend warm-up is non-blocking and covered by tests"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart",
+        "test/services/user_service_test.dart",
+        "test/widget_test.dart",
+        "test/screens/login_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:21:35.106239+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:21:43.622303+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:21:54.305727+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [],
+      "os": "macOS 26.4.1",
+      "role": "local test host"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS physical",
+      "name": "iPad (5) wireless",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "visible but not launched in this Tier D auth rerun"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS physical",
+      "name": "Jose Ramon iPhone wireless",
+      "notes": [],
+      "os": "iOS 26.5",
+      "role": "visible but not launched in this Tier D auth rerun"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "auth0-runtime-recoverability",
+    "source": "docs/control/backlog-import.md#11-make-mobile-auth0-login-recoverable-and-release-safe",
+    "title": "Harden Auth0 restore/login cleanup and startup backend warm-up"
+  },
+  "notes": [
+    "Focused Auth0/UserService/LoginScreen/startup widget tests and flutter analyze --no-pub passed. Flutter device inventory saw macOS plus wireless iPad/iPhone, but no interactive mobile Auth0 browser smoke was attempted in this Tier D run."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

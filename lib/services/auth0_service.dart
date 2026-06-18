@@ -221,6 +221,8 @@ class AuthService {
       "HYDRACAM_ANDROID_AUTH_REDIRECT_SCHEME",
       defaultValue: "com.amaia23.hydracam");
   static const String authRedirectHost = "login-callback";
+  static const String _missingEmailClaimMessage =
+      "Auth0 ID token did not include an email claim.";
 
   final String _clientId = "wChCAH6ZES2UU8sGKRDjgN7JEETblQKf";
   final String _issuer = "https://keepeyeonball.eu.auth0.com";
@@ -262,6 +264,7 @@ class AuthService {
       );
     }
 
+    var clearedRejectedCredentials = false;
     try {
       final result = await _authClient.login(
         clientId: _clientId,
@@ -270,36 +273,43 @@ class AuthService {
         scopes: authorizationScopes,
       );
 
-      _accessToken = result.accessToken;
-      final idToken = result.idToken; // Can parse for additional claims
-      _idToken = idToken;
-      final email = _parseEmailFromIdToken(idToken);
-      final profile = _parseProfileFromIdToken(idToken);
-      _email = email;
-      _profilePicture = profile;
-      await _credentialStore.save(
-        AuthCredentials(
-          accessToken: result.accessToken,
-          idToken: result.idToken,
-          refreshToken: result.refreshToken,
-          accessTokenExpiresAt: result.accessTokenExpiresAt,
-        ),
+      final credentials = AuthCredentials(
+        accessToken: result.accessToken,
+        idToken: result.idToken,
+        refreshToken: result.refreshToken,
+        accessTokenExpiresAt: result.accessTokenExpiresAt,
       );
+      _applyCredentials(credentials);
+      if (!_hasEmailClaim) {
+        await _rejectCredentialsWithoutEmail(function: "login");
+        clearedRejectedCredentials = true;
+        throw const FormatException(_missingEmailClaimMessage);
+      }
 
-      LogService.instance.registerLog("Profile set: $profile",
+      await _credentialStore.save(credentials);
+
+      LogService.instance.registerLog("Profile set: $_profilePicture",
           function: "login", file: "auth0_service.dart");
     } catch (e) {
+      if (!clearedRejectedCredentials) {
+        await _credentialStore.clear();
+        _clearInMemorySession();
+      }
       throw Exception("Failed to log in: $e");
     }
   }
 
   Future<void> logout() async {
     if (!_isMobileAuthPlatform) {
-      _clearInMemorySession();
-      LogService.instance.registerLog(
-          "Skipped Auth0 logout on unsupported platform.",
-          function: "logout",
-          file: "auth0_service.dart");
+      try {
+        await _credentialStore.clear();
+      } finally {
+        _clearInMemorySession();
+        LogService.instance.registerLog(
+            "Cleared stored Auth0 session on unsupported platform.",
+            function: "logout",
+            file: "auth0_service.dart");
+      }
       return;
     }
 
@@ -334,7 +344,9 @@ class AuthService {
 
     final credentials = await _credentialStore.load();
     if (_canRestore(credentials)) {
-      _applyCredentials(credentials!);
+      if (!await _applyStoredCredentials(credentials!)) {
+        return false;
+      }
       LogService.instance.registerLog(
           "Restored Auth0 session from secure store.",
           function: "restoreStoredSession",
@@ -346,12 +358,16 @@ class AuthService {
       return _refreshStoredSession(credentials!);
     }
 
+    if (credentials != null) {
+      await _credentialStore.clear();
+    }
     _clearInMemorySession();
     return false;
   }
 
   bool _canRestore(AuthCredentials? credentials) {
-    if (credentials?.accessToken == null || credentials?.idToken == null) {
+    if (!_hasCredentialValue(credentials?.accessToken) ||
+        !_hasCredentialValue(credentials?.idToken)) {
       return false;
     }
     final expiresAt = credentials?.accessTokenExpiresAt;
@@ -362,8 +378,10 @@ class AuthService {
   }
 
   bool _canRefresh(AuthCredentials? credentials) {
-    return credentials?.refreshToken != null;
+    return _hasCredentialValue(credentials?.refreshToken);
   }
+
+  bool _hasCredentialValue(String? value) => value?.trim().isNotEmpty ?? false;
 
   Future<bool> _refreshStoredSession(AuthCredentials credentials) async {
     try {
@@ -379,18 +397,22 @@ class AuthService {
         result,
       );
       if (!_canRestore(refreshedCredentials)) {
+        await _credentialStore.clear();
         _clearInMemorySession();
         return false;
       }
 
       await _credentialStore.save(refreshedCredentials);
-      _applyCredentials(refreshedCredentials);
+      if (!await _applyStoredCredentials(refreshedCredentials)) {
+        return false;
+      }
       LogService.instance.registerLog(
           "Refreshed Auth0 session from secure store.",
           function: "restoreStoredSession",
           file: "auth0_service.dart");
       return true;
     } catch (e) {
+      await _credentialStore.clear();
       _clearInMemorySession();
       LogService.instance.registerLog("Failed to refresh Auth0 session: $e",
           function: "restoreStoredSession", file: "auth0_service.dart");
@@ -411,6 +433,16 @@ class AuthService {
     );
   }
 
+  Future<bool> _applyStoredCredentials(AuthCredentials credentials) async {
+    _applyCredentials(credentials);
+    if (_hasEmailClaim) {
+      return true;
+    }
+
+    await _rejectCredentialsWithoutEmail(function: "restoreStoredSession");
+    return false;
+  }
+
   void _applyCredentials(AuthCredentials credentials) {
     _accessToken = credentials.accessToken;
     _idToken = credentials.idToken;
@@ -425,6 +457,19 @@ class AuthService {
     _profilePicture = null;
   }
 
+  bool get _hasEmailClaim => _email?.trim().isNotEmpty ?? false;
+
+  Future<void> _rejectCredentialsWithoutEmail({
+    required String function,
+  }) async {
+    await _credentialStore.clear();
+    _clearInMemorySession();
+    LogService.instance.registerLog(
+        "Rejected Auth0 session without an email claim.",
+        function: function,
+        file: "auth0_service.dart");
+  }
+
   bool get _isMobileAuthPlatform {
     return defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
@@ -433,48 +478,40 @@ class AuthService {
   String? _parseEmailFromIdToken(String? idToken) {
     if (idToken == null) return null;
 
-    // Split the token into its components
-    final parts = idToken.split(".");
-    if (parts.length != 3) return null;
+    final payloadMap = _parseIdTokenPayload(idToken);
+    final emailClaim = payloadMap?["email"];
+    if (emailClaim is! String) return null;
 
-    // Fix the padding issue for Base64
-    String normalizedPayload = parts[1];
-    normalizedPayload +=
-        List.filled((4 - normalizedPayload.length % 4) % 4, "=").join();
-
-    // Decode the payload
-    final payload = utf8.decode(base64Url.decode(normalizedPayload));
-
-    // Parse the JSON payload
-    final payloadMap = json.decode(payload) as Map<String, dynamic>;
-
-    // Extract email and profile picture URL
-    _email = payloadMap["email"] as String?;
-
-    return _email;
+    final normalizedEmail = emailClaim.trim();
+    return normalizedEmail.isEmpty ? null : normalizedEmail;
   }
 
   String? _parseProfileFromIdToken(String? idToken) {
     if (idToken == null) return null;
 
+    final payloadMap = _parseIdTokenPayload(idToken);
+    return payloadMap?["picture"] as String?;
+  }
+
+  Map<String, dynamic>? _parseIdTokenPayload(String idToken) {
     // Split the token into its components
     final parts = idToken.split(".");
     if (parts.length != 3) return null;
 
-    // Fix the padding issue for Base64
-    String normalizedPayload = parts[1];
-    normalizedPayload +=
-        List.filled((4 - normalizedPayload.length % 4) % 4, "=").join();
+    try {
+      // Fix the padding issue for Base64
+      String normalizedPayload = parts[1];
+      normalizedPayload +=
+          List.filled((4 - normalizedPayload.length % 4) % 4, "=").join();
 
-    // Decode the payload
-    final payload = utf8.decode(base64Url.decode(normalizedPayload));
-
-    // Parse the JSON payload
-    final payloadMap = json.decode(payload) as Map<String, dynamic>;
-
-    // Extract profile picture URL
-    _profilePicture = payloadMap["picture"] as String?;
-
-    return _profilePicture;
+      // Decode and parse the JSON payload
+      final payload = utf8.decode(base64Url.decode(normalizedPayload));
+      final decoded = json.decode(payload);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } catch (e) {
+      LogService.instance.registerLog("Failed to parse Auth0 ID token: $e",
+          function: "parseIdTokenPayload", file: "auth0_service.dart");
+      return null;
+    }
   }
 }

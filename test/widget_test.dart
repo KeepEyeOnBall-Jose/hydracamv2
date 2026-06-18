@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 
@@ -61,5 +63,23 @@ void main() {
       AutomationScreenshotService.repaintBoundaryKey.currentContext,
       isNotNull,
     );
+  });
+
+  test("startBackendWarmUp launches the warm-up without waiting", () async {
+    final completer = Completer<bool>();
+    var warmUpCalls = 0;
+
+    startBackendWarmUp(
+      warmUpBackend: () {
+        warmUpCalls += 1;
+        return completer.future;
+      },
+    );
+
+    expect(warmUpCalls, 1);
+    expect(completer.isCompleted, isFalse);
+
+    completer.complete(true);
+    await completer.future;
   });
 }

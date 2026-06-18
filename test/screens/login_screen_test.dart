@@ -2,6 +2,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/screens/login_screen.dart";
+import "package:hydracam/widgets/hydracam_surface.dart";
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,28 @@ void main() {
     );
     expect(find.text("Failed to log in. Please try again."), findsNothing);
     debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets(
+      "logged-out login screen uses operational surface without overflow",
+      (tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+    await tester.binding.setSurfaceSize(const Size(320, 420));
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: LoginScreen(),
+      ),
+    );
+
+    expect(find.byType(HydraCamSurface), findsOneWidget);
+    expect(find.text("Login"), findsOneWidget);
+    expect(find.text("Privacy Policy"), findsOneWidget);
+    expect(find.text("Support"), findsOneWidget);
+    expect(find.text("Request Account Deletion"), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets("account deletion request dialog is available before login",

@@ -100,6 +100,123 @@ void main() {
     expect(credentialStore.savedCredentials?.accessTokenExpiresAt, expiresAt);
   });
 
+  test("Auth0 login trims returned email claim", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final credentialStore = _RecordingAuthCredentialStore();
+    final authService = AuthService(
+      authClient: _FakeAuthClient(
+        response: AuthLoginResponse(
+          accessToken: "access-token",
+          idToken: _idToken(
+            email: "  player@example.com  ",
+            picture: "https://example.com/player.png",
+          ),
+          refreshToken: "refresh-token",
+          accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+        ),
+      ),
+      credentialStore: credentialStore,
+    );
+
+    await authService.login();
+
+    expect(authService.email, "player@example.com");
+  });
+
+  test("Auth0 login rejects returned credentials without email", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "stale-access-token",
+        idToken: _idToken(
+          email: "stale@example.com",
+          picture: "https://example.com/stale.png",
+        ),
+        refreshToken: "stale-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authClient = _FakeAuthClient(
+      response: AuthLoginResponse(
+        accessToken: "no-email-access-token",
+        idToken: _idTokenWithoutEmail(
+          picture: "https://example.com/no-email-login.png",
+        ),
+        refreshToken: "no-email-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: credentialStore,
+    );
+
+    await expectLater(
+      authService.login(),
+      throwsA(
+        isA<Exception>().having(
+          (error) => error.toString(),
+          "message",
+          contains("email claim"),
+        ),
+      ),
+    );
+
+    expect(authClient.loginCalls, 1);
+    expect(credentialStore.clearCalls, 1);
+    expect(credentialStore.savedCredentials, isNull);
+    expect(credentialStore.storedCredentials, isNull);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
+  test("Auth0 login failure clears stale session state", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final credentialStore = _RecordingAuthCredentialStore();
+    final authClient = _FakeAuthClient(
+      response: AuthLoginResponse(
+        accessToken: "stale-access-token",
+        idToken: _idToken(
+          email: "stale@example.com",
+          picture: "https://example.com/stale.png",
+        ),
+        refreshToken: "stale-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: credentialStore,
+    );
+
+    await authService.login();
+
+    expect(authService.accessToken, "stale-access-token");
+    expect(authService.email, "stale@example.com");
+
+    authClient.loginError = StateError("browser login failed");
+
+    await expectLater(
+      authService.login(),
+      throwsA(
+        isA<Exception>().having(
+          (error) => error.toString(),
+          "message",
+          contains("browser login failed"),
+        ),
+      ),
+    );
+
+    expect(authClient.loginCalls, 2);
+    expect(credentialStore.clearCalls, 1);
+    expect(credentialStore.savedCredentials, isNull);
+    expect(credentialStore.storedCredentials, isNull);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
   test("Auth0 startup restore uses valid stored credentials", () async {
     final credentialStore = _RecordingAuthCredentialStore(
       storedCredentials: AuthCredentials(
@@ -130,6 +247,36 @@ void main() {
     expect(authService.accessToken, "stored-access-token");
     expect(authService.email, "restored@example.com");
     expect(authService.profilePicture, "https://example.com/restored.png");
+  });
+
+  test("Auth0 startup restore trims stored email claim", () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "stored-access-token",
+        idToken: _idToken(
+          email: "  restored@example.com  ",
+          picture: "https://example.com/restored.png",
+        ),
+        refreshToken: "stored-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: _FakeAuthClient(
+        response: const AuthLoginResponse(
+          accessToken: null,
+          idToken: null,
+          refreshToken: null,
+          accessTokenExpiresAt: null,
+        ),
+      ),
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isTrue);
+    expect(authService.email, "restored@example.com");
   });
 
   test("Auth0 startup restore refreshes expired credentials", () async {
@@ -189,6 +336,51 @@ void main() {
     );
   });
 
+  test("Auth0 startup restore clears stale credentials after failed refresh",
+      () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "expired-access-token",
+        idToken: _idToken(
+          email: "expired@example.com",
+          picture: "https://example.com/expired.png",
+        ),
+        refreshToken: "stored-refresh-token",
+        accessTokenExpiresAt:
+            DateTime.now().subtract(const Duration(minutes: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: _FakeAuthClient(
+        response: const AuthLoginResponse(
+          accessToken: null,
+          idToken: null,
+          refreshToken: null,
+          accessTokenExpiresAt: null,
+        ),
+        refreshResponse: AuthLoginResponse(
+          accessToken: null,
+          idToken: _idToken(
+            email: "refreshed@example.com",
+            picture: "https://example.com/refreshed.png",
+          ),
+          refreshToken: "new-refresh-token",
+          accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+        ),
+      ),
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(credentialStore.clearCalls, 1);
+    expect(credentialStore.storedCredentials, isNull);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
   test("Auth0 startup restore rejects expired stored credentials", () async {
     final credentialStore = _RecordingAuthCredentialStore(
       storedCredentials: AuthCredentials(
@@ -217,6 +409,142 @@ void main() {
     final restored = await authService.restoreStoredSession();
 
     expect(restored, isFalse);
+    expect(credentialStore.clearCalls, 1);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
+  test("Auth0 startup restore rejects blank stored access token", () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "   ",
+        idToken: _idToken(
+          email: "stored@example.com",
+          picture: "https://example.com/stored.png",
+        ),
+        refreshToken: null,
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authClient = _FakeAuthClient(
+      response: const AuthLoginResponse(
+        accessToken: null,
+        idToken: null,
+        refreshToken: null,
+        accessTokenExpiresAt: null,
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(authClient.refreshCalls, 0);
+    expect(credentialStore.clearCalls, 1);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
+  test("Auth0 startup restore ignores blank refresh token", () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "expired-access-token",
+        idToken: _idToken(
+          email: "expired@example.com",
+          picture: "https://example.com/expired.png",
+        ),
+        refreshToken: "   ",
+        accessTokenExpiresAt:
+            DateTime.now().subtract(const Duration(minutes: 1)),
+      ),
+    );
+    final authClient = _FakeAuthClient(
+      response: const AuthLoginResponse(
+        accessToken: null,
+        idToken: null,
+        refreshToken: null,
+        accessTokenExpiresAt: null,
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(authClient.refreshCalls, 0);
+    expect(credentialStore.clearCalls, 1);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
+  test("Auth0 startup restore rejects stored credentials without email",
+      () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "stored-access-token",
+        idToken: _idTokenWithoutEmail(
+          picture: "https://example.com/no-email.png",
+        ),
+        refreshToken: "stored-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: _FakeAuthClient(
+        response: const AuthLoginResponse(
+          accessToken: null,
+          idToken: null,
+          refreshToken: null,
+          accessTokenExpiresAt: null,
+        ),
+      ),
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(credentialStore.clearCalls, 1);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
+
+  test("Auth0 startup restore clears malformed stored credentials", () async {
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "stored-access-token",
+        idToken: "header.%%%%.signature",
+        refreshToken: "stored-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authService = AuthService(
+      authClient: _FakeAuthClient(
+        response: const AuthLoginResponse(
+          accessToken: null,
+          idToken: null,
+          refreshToken: null,
+          accessTokenExpiresAt: null,
+        ),
+      ),
+      credentialStore: credentialStore,
+    );
+
+    final restored = await authService.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(credentialStore.clearCalls, 1);
+    expect(credentialStore.storedCredentials, isNull);
     expect(authService.accessToken, isNull);
     expect(authService.email, isNull);
     expect(authService.profilePicture, isNull);
@@ -317,11 +645,49 @@ void main() {
     expect(authService.accessToken, isNull);
     expect(authService.email, isNull);
   });
+
+  test(
+      "Auth0 logout clears stored credentials on unsupported desktop platforms",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    final credentialStore = _RecordingAuthCredentialStore(
+      storedCredentials: AuthCredentials(
+        accessToken: "stored-access-token",
+        idToken: _idToken(
+          email: "desktop@example.com",
+          picture: "https://example.com/desktop.png",
+        ),
+        refreshToken: "stored-refresh-token",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
+    final authClient = _FakeAuthClient(
+      response: const AuthLoginResponse(
+        accessToken: null,
+        idToken: null,
+        refreshToken: null,
+        accessTokenExpiresAt: null,
+      ),
+    );
+    final authService = AuthService(
+      authClient: authClient,
+      credentialStore: credentialStore,
+    );
+
+    await authService.logout();
+
+    expect(authClient.logoutCalls, 0);
+    expect(credentialStore.clearCalls, 1);
+    expect(authService.accessToken, isNull);
+    expect(authService.email, isNull);
+    expect(authService.profilePicture, isNull);
+  });
 }
 
 class _FakeAuthClient implements AuthClient {
   final AuthLoginResponse response;
   final AuthLoginResponse? refreshResponse;
+  Object? loginError;
   int refreshCalls = 0;
   int loginCalls = 0;
   int logoutCalls = 0;
@@ -342,6 +708,10 @@ class _FakeAuthClient implements AuthClient {
   }) async {
     loginCalls += 1;
     lastLoginRedirectUrl = redirectUrl;
+    final error = loginError;
+    if (error != null) {
+      throw error;
+    }
     return response;
   }
 
@@ -406,6 +776,14 @@ String _idToken({required String email, required String picture}) {
       "email": email,
       "picture": picture,
     }),
+    "signature",
+  ].join(".");
+}
+
+String _idTokenWithoutEmail({required String picture}) {
+  return [
+    "eyJhbGciOiJub25lIn0",
+    _base64UrlNoPadding('{"picture":"$picture"}'),
     "signature",
   ].join(".");
 }

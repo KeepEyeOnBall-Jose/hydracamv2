@@ -49,6 +49,53 @@ void main() {
     expect(service.guid, isNull);
   });
 
+  test("UserService restore rejects blank restored email", () async {
+    var lookupCalls = 0;
+    final service = UserService.forTesting(
+      authService: _FakeAuthService(
+        restoreResult: true,
+        restoredEmail: "   ",
+        restoredProfilePicture: "https://example.com/blank.png",
+      ),
+      getUserGuidByEmail: (_) async {
+        lookupCalls += 1;
+        return "unexpected-guid";
+      },
+    );
+
+    final restored = await service.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(lookupCalls, 0);
+    expect(service.isLoggedIn, isFalse);
+    expect(service.email, isNull);
+    expect(service.profilePicture, isNull);
+    expect(service.guid, isNull);
+  });
+
+  test("UserService login rejects blank Auth0 email", () async {
+    var lookupCalls = 0;
+    final service = UserService.forTesting(
+      authService: _FakeAuthService(
+        restoreResult: false,
+        loginEmail: "   ",
+        loginProfilePicture: "https://example.com/blank-login.png",
+      ),
+      getUserGuidByEmail: (_) async {
+        lookupCalls += 1;
+        return "unexpected-guid";
+      },
+    );
+
+    await service.login();
+
+    expect(lookupCalls, 0);
+    expect(service.isLoggedIn, isFalse);
+    expect(service.email, isNull);
+    expect(service.profilePicture, isNull);
+    expect(service.guid, isNull);
+  });
+
   test("UserService login clears stale GUID when switched account is unmapped",
       () async {
     final authService = _FakeAuthService(
@@ -83,6 +130,38 @@ void main() {
     expect(service.profilePicture, isNull);
     expect(service.guid, isNull);
   });
+
+  test("UserService login clears stale user when Auth0 login fails", () async {
+    final authService = _FakeAuthService(
+      restoreResult: false,
+      loginEmail: "first@example.com",
+      loginProfilePicture: "https://example.com/first.png",
+    );
+    final service = UserService.forTesting(
+      authService: authService,
+      getUserGuidByEmail: (email) async {
+        if (email == "first@example.com") {
+          return "first-guid";
+        }
+        return null;
+      },
+    );
+
+    await service.login();
+
+    expect(service.isLoggedIn, isTrue);
+    expect(service.email, "first@example.com");
+    expect(service.guid, "first-guid");
+
+    authService.loginError = Exception("Auth0 session failed");
+
+    await expectLater(service.login(), throwsException);
+
+    expect(service.isLoggedIn, isFalse);
+    expect(service.email, isNull);
+    expect(service.profilePicture, isNull);
+    expect(service.guid, isNull);
+  });
 }
 
 class _FakeAuthService extends AuthService {
@@ -91,6 +170,7 @@ class _FakeAuthService extends AuthService {
   final String? restoredProfilePicture;
   String? loginEmail;
   String? loginProfilePicture;
+  Object? loginError;
 
   _FakeAuthService({
     required this.restoreResult,
@@ -101,7 +181,12 @@ class _FakeAuthService extends AuthService {
   });
 
   @override
-  Future<void> login() async {}
+  Future<void> login() async {
+    final error = loginError;
+    if (error != null) {
+      throw error;
+    }
+  }
 
   @override
   Future<bool> restoreStoredSession() async => restoreResult;

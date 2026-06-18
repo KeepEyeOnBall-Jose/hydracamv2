@@ -19,6 +19,7 @@ import "services/battery_service.dart";
 import "services/camera_service_singleton.dart";
 import "services/device_id_provider.dart";
 import "services/device_service.dart";
+import "services/hydracam_api_service.dart";
 import "services/launch_config_service.dart";
 import "services/linux_dbus_availability.dart";
 import "services/log_service.dart";
@@ -26,6 +27,13 @@ import "services/permission_service.dart";
 import "services/storage_service.dart";
 import "services/user_service.dart";
 import "slave/slave_screen.dart";
+
+typedef BackendWarmUpCallback = Future<bool> Function();
+
+@visibleForTesting
+void startBackendWarmUp({BackendWarmUpCallback? warmUpBackend}) {
+  unawaited((warmUpBackend ?? HydraCamApiService().warmUpBackend)());
+}
 
 void main() {
   runZonedGuarded(() async {
@@ -42,6 +50,8 @@ void main() {
           "Uncaught platform dispatcher error", error, stackTrace);
       return false;
     };
+
+    startBackendWarmUp();
 
     final LaunchConfig? launchConfig =
         await LaunchConfigService.instance.load();
@@ -349,7 +359,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
     if (automationSetupPreview) {
       LogService.instance
           .registerLog("Navigating to CameraSetupStandaloneScreen");
-      return const CameraSetupStandaloneScreen();
+      return CameraSetupStandaloneScreen(onOpenNormalApp: _openNormalApp);
     }
 
     LogService.instance

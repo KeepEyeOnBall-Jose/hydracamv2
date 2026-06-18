@@ -42,20 +42,20 @@ class UserService {
 
   /// Log in the user using Auth0 and fetch their GUID.
   Future<void> login() async {
+    _clearUserState();
     try {
       await _authService.login();
       _email = _authService.email;
       _profilePicture = _authService.profilePicture;
-      _guid = null;
-      _isLoggedIn = false;
 
       LogService.instance.registerLog(
           "Profile set from user service: $_profilePicture",
           function: "login",
           file: "user_service.dart");
 
-      final loginEmail = _email;
-      if (loginEmail != null) {
+      final loginEmail = _email?.trim();
+      if (loginEmail != null && loginEmail.isNotEmpty) {
+        _email = loginEmail;
         LogService.instance.registerLog("Fetching GUID for email: $loginEmail");
         final fetchedGuid = await _getUserGuidByEmail(loginEmail);
 
@@ -73,6 +73,7 @@ class UserService {
         _clearUserState();
       }
     } catch (e) {
+      _clearUserState();
       LogService.instance.registerLog("Error during login: $e");
       rethrow;
     }
@@ -88,14 +89,15 @@ class UserService {
 
       _email = _authService.email;
       _profilePicture = _authService.profilePicture;
-      if (_email == null) {
+      final restoredEmail = _email?.trim();
+      if (restoredEmail == null || restoredEmail.isEmpty) {
         _clearUserState();
         return false;
       }
 
+      _email = restoredEmail;
       LogService.instance
-          .registerLog("Fetching restored GUID for email: $_email");
-      final restoredEmail = _email!;
+          .registerLog("Fetching restored GUID for email: $restoredEmail");
       final fetchedGuid = await _getUserGuidByEmail(restoredEmail);
       if (fetchedGuid == null) {
         _clearUserState();

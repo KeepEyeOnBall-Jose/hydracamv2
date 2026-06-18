@@ -73,4 +73,10 @@ class M2MAuthService {
     _instance._accessToken = token;
     _instance._expiresAt = DateTime.now().add(const Duration(hours: 1));
   }
+
+  @visibleForTesting
+  static void clearTokenOverrideForTests() {
+    _instance._accessToken = null;
+    _instance._expiresAt = null;
+  }
 }

@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:url_launcher/url_launcher.dart";
+import "../app_theme.dart";
 import "../services/log_service.dart";
 import "../services/user_service.dart";
+import "../widgets/hydracam_surface.dart";
 
 typedef StoreUrlLauncher = Future<bool> Function(Uri uri);
 typedef AccountDeletionLauncher = StoreUrlLauncher;
@@ -318,86 +320,99 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoggedOutView() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 45,
-          backgroundColor: Colors.grey.shade300,
-          child: const Icon(
-            Icons.person,
-            size: 60,
-            color: Colors.white,
-          ),
+    return HydraCamSurface(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              radius: 45,
+              backgroundColor: AppTheme.border,
+              child: const Icon(
+                Icons.person,
+                size: 60,
+                color: AppTheme.inverseText,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Welcome! Please log in to continue.",
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _login,
+              child: const Text("Login"),
+            ),
+            const SizedBox(height: 12),
+            _buildStorePolicyActions(),
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 20),
+              Text(
+                _errorMessage!,
+                style: const TextStyle(color: AppTheme.danger),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ],
         ),
-        const SizedBox(height: 20),
-        Text(
-          "Welcome! Please log in to continue.",
-          style: Theme.of(context).textTheme.bodyLarge,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _login,
-          child: const Text("Login"),
-        ),
-        const SizedBox(height: 12),
-        _buildStorePolicyActions(),
-        if (_errorMessage != null) ...[
-          const SizedBox(height: 20),
-          Text(
-            _errorMessage!,
-            style: const TextStyle(color: Colors.red),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ],
+      ),
     );
   }
 
   Widget _buildLoggedInView() {
     final profilePictureUrl = _userService.profilePicture;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 50,
-          backgroundImage: profilePictureUrl != null
-              ? NetworkImage(profilePictureUrl)
-              : null,
-          backgroundColor:
-              Colors.grey.shade300, // Show default icon if no profile picture
-          child: profilePictureUrl == null
-              ? const Icon(Icons.person, size: 50, color: Colors.white)
-              : null,
+    return HydraCamSurface(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: profilePictureUrl != null
+                  ? NetworkImage(profilePictureUrl)
+                  : null,
+              backgroundColor: AppTheme.border,
+              child: profilePictureUrl == null
+                  ? const Icon(
+                      Icons.person,
+                      size: 50,
+                      color: AppTheme.inverseText,
+                    )
+                  : null,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              _userService.email ?? "Unknown User",
+              style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'GUID: ${_userService.guid ?? 'N/A'}',
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _logout,
+              child: const Text("Logout"),
+            ),
+            const SizedBox(height: 12),
+            _buildStorePolicyActions(),
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 10),
+            _userDetails == null
+                ? const Text("Loading user details...")
+                : _buildUserDetailsView(), // Display user details once loaded
+          ],
         ),
-        const SizedBox(height: 20),
-        Text(
-          _userService.email ?? "Unknown User",
-          style: Theme.of(context).textTheme.headlineSmall,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 10),
-        Text(
-          'GUID: ${_userService.guid ?? 'N/A'}',
-          style: Theme.of(context).textTheme.bodyMedium,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _logout,
-          child: const Text("Logout"),
-        ),
-        const SizedBox(height: 12),
-        _buildStorePolicyActions(),
-        const SizedBox(height: 20),
-        const Divider(),
-        const SizedBox(height: 10),
-        _userDetails == null
-            ? const Text("Loading user details...")
-            : _buildUserDetailsView(), // Display user details once loaded
-      ],
+      ),
     );
   }
 
