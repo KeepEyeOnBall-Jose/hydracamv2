@@ -94,6 +94,9 @@ class SlaveScreenState extends State<SlaveScreen> {
   bool _isCheckingNetwork = false;
   bool _isPreparingPreview = false;
   bool _isStoppingRecording = false;
+  bool _isConnectingToMaster = false;
+  String? _connectingMasterIp;
+  String? _connectedMasterIp;
   NetworkReadinessResult? _networkReadiness;
 
   // Getters for SessionManager photos and videos
@@ -297,10 +300,27 @@ class SlaveScreenState extends State<SlaveScreen> {
     if (!mounted) {
       return;
     }
+    if (_isConnectingToMaster && _connectingMasterIp == masterIp) {
+      LogService.instance.registerLog(
+        "Ignoring duplicate connection attempt to master at IP: $masterIp",
+      );
+      return;
+    }
+    if (_isConnected && _connectedMasterIp == masterIp) {
+      LogService.instance.registerLog(
+        "Already connected to master at IP: $masterIp",
+      );
+      return;
+    }
+
+    _isConnectingToMaster = true;
+    _connectingMasterIp = masterIp;
     if (!skipNetworkReadiness) {
       final readiness = await _loadNetworkReadiness();
       _networkReadiness = readiness;
       if (!readiness.canUseLocalControl) {
+        _isConnectingToMaster = false;
+        _connectingMasterIp = null;
         if (mounted) {
           setState(() {
             statusMessage = readiness.message;
@@ -313,6 +333,12 @@ class SlaveScreenState extends State<SlaveScreen> {
     } else {
       LogService.instance.registerLog(
           "Skipping slave network readiness for forced preferred master $masterIp.");
+    }
+
+    if (!mounted) {
+      _isConnectingToMaster = false;
+      _connectingMasterIp = null;
+      return;
     }
 
     LogService.instance.registerLog("Connecting to master at IP: $masterIp");
@@ -362,6 +388,12 @@ class SlaveScreenState extends State<SlaveScreen> {
         });
       }
 
+      if (isConnected) {
+        _connectedMasterIp = masterIp;
+        _isConnectingToMaster = false;
+        _connectingMasterIp = null;
+      }
+
       if (isConnected && !isRecording) {
         unawaited(_prepareCameraPreview());
       }
@@ -372,6 +404,9 @@ class SlaveScreenState extends State<SlaveScreen> {
         }
         LogService.instance
             .registerLog("Connection lost. Restarting discovery.");
+        _isConnectingToMaster = false;
+        _connectingMasterIp = null;
+        _connectedMasterIp = null;
         _client?.disconnect();
         _client = null;
         _startNetworkAwareDiscovery();
@@ -526,6 +561,9 @@ class SlaveScreenState extends State<SlaveScreen> {
     _networkSubscription?.cancel();
     _client?.disconnect();
     _client = null;
+    _isConnectingToMaster = false;
+    _connectingMasterIp = null;
+    _connectedMasterIp = null;
     autoModeTimer?.cancel();
     autoModeTimer = null;
     _identifyFrameTimer?.cancel();
@@ -563,6 +601,9 @@ class SlaveScreenState extends State<SlaveScreen> {
       _networkSubscription?.cancel();
       _client?.disconnect();
       _client = null;
+      _isConnectingToMaster = false;
+      _connectingMasterIp = null;
+      _connectedMasterIp = null;
       autoModeTimer?.cancel();
       autoModeTimer = null;
       _masterDiscovery?.stopListening();

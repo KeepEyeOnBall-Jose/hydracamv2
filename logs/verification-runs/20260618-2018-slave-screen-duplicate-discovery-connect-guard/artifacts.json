@@ -1,0 +1,96 @@
+{
+  "acceptanceChecks": [
+    "Duplicate master-discovery callbacks create only one slave client connection",
+    "Existing forced preferred-master and auto-promotion behavior remains covered",
+    "Focused slave screen test, analyzer, full Flutter suite, and diff hygiene pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "--plain-name",
+        "duplicate discovery callbacks create one slave client"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:42:15.183570+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "--plain-name",
+        "duplicate discovery callbacks create one slave client"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:43:31.069735+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_screen_fast_connect_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:43:42.877856+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:43:50.031138+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:44:00.697086+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:44:26.013986+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:44:46.408961+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-screen-duplicate-discovery-connect-guard",
+    "source": "docs/control/backlog-import.md#preserve-session-state-across-master-reconnect",
+    "title": "Ignore duplicate slave discovery connect callbacks"
+  },
+  "notes": [
+    "SlaveScreen now ignores duplicate connection attempts to the same in-flight or already connected master IP. Red/green duplicate-discovery widget test, full slave-screen fast-connect file, analyzer, full Flutter suite, and diff hygiene passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

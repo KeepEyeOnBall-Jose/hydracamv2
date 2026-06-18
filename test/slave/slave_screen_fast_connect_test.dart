@@ -74,8 +74,10 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
 }
 
 class FakeMasterDiscovery extends MasterDiscovery {
-  FakeMasterDiscovery() : super(onMasterDiscovered: (_) {});
+  FakeMasterDiscovery([this.onDiscovered])
+      : super(onMasterDiscovered: onDiscovered ?? (_) {});
 
+  final void Function(String masterIp)? onDiscovered;
   var startCalls = 0;
   var stopCalls = 0;
 
@@ -87,6 +89,10 @@ class FakeMasterDiscovery extends MasterDiscovery {
   @override
   Future<void> stopListening() async {
     stopCalls += 1;
+  }
+
+  void discover(String masterIp) {
+    onDiscovered?.call(masterIp);
   }
 }
 
@@ -444,6 +450,61 @@ void main() {
     await tester.pump(const Duration(seconds: 3));
 
     expect(find.text("Identifying this slave"), findsNothing);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("duplicate discovery callbacks create one slave client",
+      (tester) async {
+    late FakeMasterDiscovery discovery;
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          connectivityChanges: const Stream<List<ConnectivityResult>>.empty(),
+          masterDiscoveryFactory: (onMasterDiscovered) {
+            discovery = FakeMasterDiscovery(onMasterDiscovered);
+            return discovery;
+          },
+          networkReadinessLoader: () async => const NetworkReadinessResult(
+            canUseLocalControl: true,
+            blockingReason: NetworkReadinessBlockingReason.none,
+            message: "network ready",
+            snapshot: NetworkSnapshot(
+              isWifiActive: true,
+              ipAddress: "192.168.178.72",
+              subnetMask: "255.255.255.0",
+              source: "test",
+            ),
+          ),
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    discovery.discover("192.168.178.153");
+    discovery.discover("192.168.178.153");
+    await tester.pump();
+
+    expect(clients, hasLength(1));
+    expect(clients.single.serverAddress, "ws://192.168.178.153:4040/ws");
+    expect(clients.single.connected, isTrue);
 
     await tester.pumpWidget(const SizedBox.shrink());
     for (final client in clients) {

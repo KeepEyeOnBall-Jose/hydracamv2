@@ -245,6 +245,14 @@ Default issue schema:
   longer receives forced-recording-stop callbacks after screen disposal. Keep
   this issue open for real master/slave reconnect reproduction, master-loss
   recording policy, and cross-device metadata comparison.
+- 2026-06-18 duplicate discovery connect guard note:
+  `logs/verification-runs/20260618-2018-slave-screen-duplicate-discovery-connect-guard/`
+  adds red/green widget coverage for duplicate master-discovery callbacks.
+  `SlaveScreen` now ignores repeated connection attempts to the same in-flight
+  or already connected master IP instead of creating and disconnecting multiple
+  slave clients. Keep this issue open for real master/slave reconnect
+  reproduction, master-loss recording policy, and cross-device metadata
+  comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing
