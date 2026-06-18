@@ -127,6 +127,25 @@ class HydraCamApiService {
 
   static const String _legacyUploadSuccessBody = "Media uploaded successfully.";
   static const int _uploadFailureResponseBodyLogLimit = 300;
+  static const Set<String> _photoIsoBaseMediaBrands = {
+    "heic",
+    "heix",
+    "hevc",
+    "hevx",
+    "mif1",
+    "msf1",
+  };
+  static const Set<String> _videoIsoBaseMediaBrands = {
+    "3gp4",
+    "avc1",
+    "isom",
+    "iso2",
+    "M4A ",
+    "M4V ",
+    "mp41",
+    "mp42",
+    "qt  ",
+  };
 
   // Base URL for the API
   final String _baseUrl = "https://hydracam.azurewebsites.net/api";
@@ -618,11 +637,11 @@ class HydraCamApiService {
   bool _hasPhotoMediaSignature(List<int> header) {
     return _hasJpegSignature(header) ||
         _hasPngSignature(header) ||
-        _hasIsoBaseMediaSignature(header);
+        _hasIsoBaseMediaSignature(header, _photoIsoBaseMediaBrands);
   }
 
   bool _hasVideoMediaSignature(List<int> header) {
-    return _hasIsoBaseMediaSignature(header);
+    return _hasIsoBaseMediaSignature(header, _videoIsoBaseMediaBrands);
   }
 
   bool _hasJpegSignature(List<int> header) {
@@ -642,12 +661,20 @@ class HydraCamApiService {
     return true;
   }
 
-  bool _hasIsoBaseMediaSignature(List<int> header) {
-    return header.length >= 8 &&
-        header[4] == 0x66 &&
-        header[5] == 0x74 &&
-        header[6] == 0x79 &&
-        header[7] == 0x70;
+  bool _hasIsoBaseMediaSignature(
+    List<int> header,
+    Set<String> supportedMajorBrands,
+  ) {
+    if (header.length < 12 ||
+        header[4] != 0x66 ||
+        header[5] != 0x74 ||
+        header[6] != 0x79 ||
+        header[7] != 0x70) {
+      return false;
+    }
+
+    final majorBrand = String.fromCharCodes(header.sublist(8, 12));
+    return supportedMajorBrands.contains(majorBrand);
   }
 
   bool _uploadResponseReportsFailure(String responseBody) {

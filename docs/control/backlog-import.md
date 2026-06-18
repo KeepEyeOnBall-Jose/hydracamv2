@@ -1421,6 +1421,16 @@ bodies instead of logging them as successful uploads. Keep broader contract
 coverage open for live backend response-shape confirmation and any
 camera-plugin format added later.
 
+2026-06-18 T-016 ISO brand signature note:
+`logs/verification-runs/20260618-1516-upload-iso-brand-signature-guard/`
+tightens ISO BMFF media validation so an `ftyp` marker is not enough to pass
+local upload guards. Video uploads now require an accepted video major brand,
+photo uploads require an accepted HEIC/HEIF-style major brand, forged
+`ftypbad!` media is rejected before token lookup/HTTP send, and HEIC photo
+coverage proves iOS-style photo uploads still pass. Keep broader contract
+coverage open for live backend response-shape confirmation and any
+camera-plugin format added later.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

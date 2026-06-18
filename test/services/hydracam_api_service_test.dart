@@ -24,6 +24,20 @@ const List<int> _validMp4Bytes = [
   0x34,
   0x32,
 ];
+const List<int> _validHeicBytes = [
+  0x00,
+  0x00,
+  0x00,
+  0x10,
+  0x66,
+  0x74,
+  0x79,
+  0x70,
+  0x68,
+  0x65,
+  0x69,
+  0x63,
+];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -506,6 +520,88 @@ void main() {
     expect(
       LogService.instance.logs.map((entry) => entry["message"]),
       contains("Upload file is not valid video media: ${corruptVideo.path}"),
+    );
+  });
+
+  test("uploadMedia rejects unsupported ISO media signatures before HTTP send",
+      () async {
+    var requestCount = 0;
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requestCount += 1;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    final forgedIsoVideo = File("${tempDir.path}/forged-iso-video.mp4")
+      ..writeAsBytesSync([
+        0x00,
+        0x00,
+        0x00,
+        0x10,
+        0x66,
+        0x74,
+        0x79,
+        0x70,
+        0x62,
+        0x61,
+        0x64,
+        0x21,
+      ]);
+
+    final result = await HydraCamApiService().uploadMedia(
+      "session-guid",
+      forgedIsoVideo,
+      false,
+      "slave-device",
+      DateTime.utc(2026, 6, 18, 18),
+      DateTime.utc(2026, 6, 18, 18, 0, 1),
+      null,
+    );
+
+    expect(result, isFalse);
+    expect(requestCount, 0);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Upload file is not valid video media: ${forgedIsoVideo.path}"),
+    );
+  });
+
+  test("uploadMedia accepts supported HEIC photo signatures", () async {
+    var requestCount = 0;
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requestCount += 1;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    final heicPhoto = File("${tempDir.path}/photo.heic")
+      ..writeAsBytesSync(_validHeicBytes);
+
+    final result = await HydraCamApiService().uploadMedia(
+      "session-guid",
+      heicPhoto,
+      true,
+      "slave-device",
+      DateTime.utc(2026, 6, 18, 18, 5),
+      DateTime.utc(2026, 6, 18, 18, 5, 1),
+      null,
+    );
+
+    expect(result, isTrue);
+    expect(requestCount, 1);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Media uploaded successfully"),
     );
   });
 
