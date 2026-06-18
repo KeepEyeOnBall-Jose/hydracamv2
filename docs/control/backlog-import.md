@@ -686,6 +686,13 @@ Default issue schema:
   falling back to BSSID/gateway readiness, and `MasterServer` sends
   `networkMismatch` for that registration path. Keep this issue open for
   real-device network smoke evidence and multi-group network UX.
+- 2026-06-18 blank stored-device-ID regeneration note:
+  `logs/verification-runs/20260618-1909-blank-stored-device-id-regeneration/`
+  adds red/green coverage for corrupted local preferences that contain a blank
+  or whitespace-only `device_id`. `DeviceIdService` now treats that value as
+  missing, generates and persists a new UUID, and still preserves existing
+  nonblank device IDs. Keep this issue open for real-device network smoke
+  evidence and multi-group network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 

@@ -13,8 +13,8 @@ class DeviceIdService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? deviceId = prefs.getString(_deviceIdKey);
 
-    // If the device ID doesn't exist, generate a new one and save it.
-    if (deviceId == null) {
+    // If the device ID doesn't exist or is unusable, generate and save a new one.
+    if (deviceId == null || deviceId.trim().isEmpty) {
       deviceId = const Uuid().v4(); // Generate a new unique ID (UUID v4).
       await prefs.setString(_deviceIdKey, deviceId);
       LogService.instance.registerLog("Generated new Device ID: $deviceId");

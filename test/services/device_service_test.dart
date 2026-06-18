@@ -18,6 +18,31 @@ void main() {
   });
 
   group("DeviceIdService", () {
+    test("regenerates blank stored device IDs", () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{
+        "device_id": "   ",
+      });
+
+      final deviceId = await DeviceIdService.getOrCreateDeviceId();
+      final prefs = await SharedPreferences.getInstance();
+
+      expect(deviceId.trim(), isNotEmpty);
+      expect(deviceId, isNot("   "));
+      expect(prefs.getString("device_id"), deviceId);
+    });
+
+    test("preserves existing nonblank device IDs", () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{
+        "device_id": "existing-device-id",
+      });
+
+      final deviceId = await DeviceIdService.getOrCreateDeviceId();
+      final prefs = await SharedPreferences.getInstance();
+
+      expect(deviceId, "existing-device-id");
+      expect(prefs.getString("device_id"), "existing-device-id");
+    });
+
     test("reports native macOS device info instead of unsupported platform",
         () async {
       if (!Platform.isMacOS) {
