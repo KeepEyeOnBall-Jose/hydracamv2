@@ -55,16 +55,33 @@ spreadsheet sprint rows.
 
 - `status-and-roadmap.md`: current mobile status, release blockers, roadmap, and
   future product ideas separated from active mobile work.
+- `baseline-functionality-and-support.md`: basic support contract for baseline
+  functionality, supported hardware, emulator/simulator scope, and minimum
+  gates before making support claims.
 - `requirements.md`: FR/NFR inventory preserving source IDs, dependencies,
   completion state, and mobile/backend scope.
 - `backlog-import.md`: Linear-ready issue candidates with source rows, labels,
   priority, and acceptance checks.
 - `architecture-and-testing.md`: attended/unattended architecture notes,
   Auth0 components, diagrams source, and test matrix.
+- `hydracam-visual-makeover-plan.md`: squash design-system alignment plan for
+  making the mobile app visually homogeneous with media-timeline.
+- `user-flow-tracker.md`: derived user-flow map tying product journeys to
+  current evidence packs, validation gates, and open proof gaps.
+- `user-flow-fsm-diagrams.md`: Mermaid FSM diagrams for HydraCam app journeys
+  and the related MoBo service/media-timeline lifecycle states.
 - `evidence-first-loop.md`: recurring advancement loop and required evidence
   pack contract for hardware/emulator-backed verification.
+- `regular-evaluation-plan.md`: recurring app-change evaluation gates and quick
+  lanes for static checks, emulator/simulator UI, hardware capture, multi-device
+  role switching, and release readiness.
+- `local-ide-emulator-deploy-playbook.md`: local IDE setup and manual steps for
+  VS Code, Android Studio, Xcode, emulator runs, device runs, and release/deploy
+  lanes.
 - `wireless-device-debugging.md`: Android ADB-over-WiFi and iPhone
   Xcode/CoreDevice setup for cable-free real-device debugging.
+- `fleet-operations-plan.md`: lab-managed always-on Android fleet plan,
+  heartbeat contract, remote-operations boundaries, and S10e soak harness.
 - `macos-dev-host.md`: one-command deployment and validation for a new Mac
   development host over SSH/Tailscale.
 - `win11-dev-host.md`: current Win11 host identity, installed toolchains,
@@ -76,6 +93,9 @@ spreadsheet sprint rows.
 - `store-privacy-and-metadata.md`: store privacy/data-safety, support URL,
   review-note, and beta-readiness checklist for App Store Connect and Google
   Play.
+- `android-auth-sign-in-decision.md`: Android human-login decision record for
+  keeping Auth0 Universal Login in the current release lane and deferring native
+  Credential Manager until backend/Auth0 account linking is specified.
 - `../../scripts/check_store_readiness.sh`: local/upload preflight for store
   IDs, permission metadata, launch assets, artifact presence, and submission
   credentials/URLs.
@@ -86,6 +106,9 @@ spreadsheet sprint rows.
 - `hydracam-mobo-media-timeline-merge-plan.md`: cross-repo convergence plan for
   the HydraCam mobile app, MoBo HydraCam webservice, and media-timeline event
   and media backend.
+- `cross-project-api-data-map.md`: Mermaid diagrams for current and target API
+  calls, endpoint families, storage ownership, and cutover boundaries across
+  HydraCam mobile, MoBo, and media-timeline.
 - `../superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`: executable
   Win11 C: cleanup and dev-environment moveout plan backed by SSH disk
   inventory.

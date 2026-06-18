@@ -202,7 +202,7 @@ stateDiagram-v2
     FollowerRecording --> MasterMissingRecording: master heartbeat/socket lost
 
     MasterMissingIdle --> Discovering: restart discovery immediately
-    MasterMissingSession --> RejoinOrRecover: preserve local session and media
+    MasterMissingSession --> RejoinOrRecover: preserve active session and media
     MasterMissingRecording --> OrphanedRecordingPolicy: keep saving locally; apply configured stop/rejoin policy
 
     RejoinOrRecover --> FollowerSessionActive: same session master rejoined
@@ -233,7 +233,7 @@ Required contract decisions before implementation:
   recording policy.
 - Split-brain handling: if two masters are seen, phones need a deterministic
   rule for which authority wins and how the losing master steps down without
-  losing local session/media.
+  losing active session/media.
 - Observability: UI and automation should expose the relationship state, not
   just "connected clients" and free-form status text.
 
