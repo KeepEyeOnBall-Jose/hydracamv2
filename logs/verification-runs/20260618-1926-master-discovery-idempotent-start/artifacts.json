@@ -1,0 +1,87 @@
+{
+  "acceptanceChecks": [
+    "Calling MasterDiscovery.startListening twice while active does not restart the socket",
+    "Stopping discovery resets listener state so it can start again",
+    "Focused discovery tests, analyzer, full Flutter suite, and diff hygiene pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/master_discovery_test.dart",
+        "--plain-name",
+        "startListening is idempotent while discovery socket is active"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:26:48.637476+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/master_discovery_test.dart",
+        "--plain-name",
+        "startListening is idempotent while discovery socket is active"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:27:18.423999+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/master_discovery_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:27:33.586364+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:27:47.720718+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:27:57.481715+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:28:23.035138+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-discovery-idempotent-start",
+    "source": "docs/control/backlog-import.md#network-device-identity",
+    "title": "Stabilize slave master-discovery listener lifecycle"
+  },
+  "notes": [
+    "MasterDiscovery startListening is now idempotent while the UDP listener is active and stopListening resets state for later starts. Red/green focused discovery tests, analyzer, full Flutter suite, and diff hygiene passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

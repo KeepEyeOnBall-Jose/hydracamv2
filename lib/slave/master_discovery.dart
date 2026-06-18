@@ -15,17 +15,16 @@ class MasterDiscovery {
   /// Starts listening for the master broadcast message.
   Future<void> startListening() async {
     if (_isListening) {
-      // Already listening
+      LogService.instance.registerLog("MasterDiscovery is already listening.");
       return;
     }
-
-    _isListening = true;
 
     // Close any existing socket before creating a new one
     await stopListening();
 
     _socket =
         await RawDatagramSocket.bind(InternetAddress.anyIPv4, broadcastPort);
+    _isListening = true;
     LogService.instance.registerLog(
         "Listening for master broadcast on port $broadcastPort...");
 

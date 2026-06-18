@@ -702,6 +702,14 @@ Default issue schema:
   missing, generates and persists a new UUID, and still preserves existing
   nonblank device IDs. Keep this issue open for real-device network smoke
   evidence and multi-group network UX.
+- 2026-06-18 master-discovery idempotent-start note:
+  `logs/verification-runs/20260618-1926-master-discovery-idempotent-start/`
+  fixes `MasterDiscovery.startListening()` so the active-listener flag remains
+  true after the UDP socket binds. Repeated start requests now log
+  `MasterDiscovery is already listening.` instead of tearing down and rebinding
+  the listener, while `stopListening()` still resets the state for a later
+  start. Keep this issue open for real-device network smoke evidence and
+  multi-group network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 
