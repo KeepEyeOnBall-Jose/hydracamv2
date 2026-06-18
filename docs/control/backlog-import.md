@@ -1150,6 +1150,16 @@ Default issue schema:
   behavior, or master/slave capture flow as part of this item. Do not add
   unsourced stock imagery or one-off decorative backgrounds.
 
+2026-06-18 court dropdown search robustness note:
+`logs/verification-runs/20260618-1709-court-dropdown-search-selected-value/`
+adds focused widget coverage for the existing court selection dropdown when an
+operator selects a court and then searches for a different court. The dropdown
+now keeps its visible value null when the selected court is filtered out,
+preserves the prior selected-court title, and avoids emitting callbacks with an
+empty court GUID. This is robustness cleanup for the current text-only selector;
+the photo-backed venue selection feature remains planned only until its source
+and asset standards are decided.
+
 ## Open Bug/Improvement Rows From `FALLOS Y MEJORAS`
 
 These are de-duplicated open rows from the Spanish and English tabs. Create

@@ -1,0 +1,110 @@
+{
+  "acceptanceChecks": [
+    "Filtering courts after selecting one does not leave DropdownButton with a value missing from its items",
+    "Court selection callback is not called with an empty GUID when filtered selection is unavailable"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:09:39.051795+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:09:39.186347+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/court_selection_widget_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:10:11.856480+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/court_selection_widget_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:11:02.241451+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:11:35.195191+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:11:44.754518+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:11:51.335840+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:12:00.724245+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:12:25.195723+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "court-dropdown-search-selected-value",
+    "source": "docs/control/backlog-import.md#15-add-consistent-club-and-court-photos-to-venue-selection",
+    "title": "Keep court dropdown valid when search filters selected court"
+  },
+  "notes": [
+    "Court dropdown search no longer leaves a filtered-out selected court as the active DropdownButton value."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -26,15 +26,21 @@ class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
         .toList();
   }
 
+  String? _guidForCourtName(String courtName) {
+    for (final court in getFilteredCourts()) {
+      if (court["name"] == courtName) {
+        final guid = court["guid"];
+        return guid?.isNotEmpty == true ? guid : null;
+      }
+    }
+    return null;
+  }
+
   void _selectCourt(String? courtName) {
+    final courtGuid = courtName != null ? _guidForCourtName(courtName) : null;
     setState(() {
-      selectedCourtName = courtName;
-      selectedCourtGuid = courtName != null
-          ? getFilteredCourts().firstWhere(
-              (court) => court["name"] == courtName,
-              orElse: () => {"guid": ""},
-            )["guid"]
-          : null;
+      selectedCourtName = courtGuid != null ? courtName : null;
+      selectedCourtGuid = courtGuid;
     });
 
     if (selectedCourtName != null && selectedCourtGuid != null) {
@@ -44,6 +50,13 @@ class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredCourts = getFilteredCourts();
+    final visibleSelectedCourtName = filteredCourts.any(
+      (court) => court["name"] == selectedCourtName,
+    )
+        ? selectedCourtName
+        : null;
+
     return ExpansionTile(
       title: Text(
         selectedCourtName != null
@@ -87,9 +100,9 @@ class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
                   ),
                   DropdownButton<String>(
                     hint: const Text("Select a Court"),
-                    value: selectedCourtName,
+                    value: visibleSelectedCourtName,
                     isExpanded: true,
-                    items: getFilteredCourts().map((court) {
+                    items: filteredCourts.map((court) {
                       return DropdownMenuItem<String>(
                         value: court["name"],
                         child: Text(court["name"]!),
