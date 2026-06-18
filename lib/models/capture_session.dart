@@ -47,7 +47,7 @@ class CaptureSession {
   /// Prefer the backend/API GUID for cross-device references, falling back to
   /// the legacy session ID for older local metadata.
   String get preferredIdentifier {
-    final guid = sessionGuid;
+    final guid = sessionGuid?.trim();
     if (guid != null && guid.isNotEmpty) {
       return guid;
     }

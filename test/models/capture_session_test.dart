@@ -20,4 +20,14 @@ void main() {
 
     expect(session.preferredIdentifier, "legacy-session-id");
   });
+
+  test("preferred identifier falls back to session id for blank guid", () {
+    final session = CaptureSession(
+      sessionId: "legacy-session-id",
+      sessionGuid: "  ",
+      startTime: DateTime.utc(2026, 6, 18),
+    );
+
+    expect(session.preferredIdentifier, "legacy-session-id");
+  });
 }

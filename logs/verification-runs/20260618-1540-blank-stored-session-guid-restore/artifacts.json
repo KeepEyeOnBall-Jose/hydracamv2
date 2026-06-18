@@ -1,0 +1,140 @@
+{
+  "acceptanceChecks": [
+    "Stored metadata with a blank sessionGuid restores through the storage identifier when the storage identifier is a service GUID",
+    "Preferred session identifiers trim GUIDs and fall back to legacy IDs for blank GUID values"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:40:27.535597+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "test/models/capture_session_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:40:27.776437+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/models/capture_session_test.dart",
+        "--plain-name",
+        "preferred identifier falls back to session id for blank guid"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T13:41:03.028090+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "--plain-name",
+        "restoreSessionFromMetadata repairs blank stored session guid"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T13:41:11.630957+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/models/capture_session_test.dart",
+        "--plain-name",
+        "preferred identifier falls back to session id for blank guid"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:42:08.464392+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "--plain-name",
+        "restoreSessionFromMetadata repairs blank stored session guid"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:42:17.593253+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/session_manager_test.dart",
+        "test/models/capture_session_test.dart",
+        "test/screens/previous_sessions_screen_test.dart",
+        "test/screens/session_details_screen_test.dart",
+        "test/services/gallery_session_candidate_source_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:42:27.095682+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub",
+        "lib/services/session_manager.dart",
+        "lib/models/capture_session.dart",
+        "test/services/session_manager_test.dart",
+        "test/models/capture_session_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:42:39.604510+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:42:45.754951+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T13:42:56.968537+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "blank-stored-session-guid-restore",
+    "source": "docs/control/backlog-import.md#historical-javi-immediate-backlog-row-35",
+    "title": "Repair blank stored session GUID restore"
+  },
+  "notes": [
+    "Red tests reproduced whitespace GUID preferredIdentifier and restoreSessionFromMetadata rejection.",
+    "Blank stored sessionGuid metadata is repaired from the storage identifier before restore.",
+    "Focused tests, full analyzer, and full Flutter tests passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

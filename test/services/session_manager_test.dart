@@ -525,6 +525,53 @@ void main() {
             isTrue);
         expect(uploaderService.queueLength, 0);
       });
+
+      test("restoreSessionFromMetadata repairs blank stored session guid",
+          () async {
+        final restoredPhotoPath = createTempMediaFile("blank_guid_photo.jpg");
+        final sessionDirectory = Directory(
+            "${testPathProvider.documentsDir.path}/session_backend-restore-guid");
+        sessionDirectory.createSync(recursive: true);
+        final metadataFile = File("${sessionDirectory.path}/metadata.json");
+        await metadataFile.writeAsString(
+          jsonEncode({
+            "sessionId": "legacy-blank-guid-id",
+            "sessionGuid": "  ",
+            "startTime": DateTime.utc(2026, 6, 18, 15).toIso8601String(),
+            "endTime": null,
+            "deviceType": "Slave",
+            "photos": [
+              {
+                "photoPath": restoredPhotoPath,
+                "slaveDeviceId": "blank-guid-photo-device",
+                "captureDate":
+                    DateTime.utc(2026, 6, 18, 15, 1).toIso8601String(),
+                "receivedDate":
+                    DateTime.utc(2026, 6, 18, 15, 2).toIso8601String(),
+                "isUploaded": false,
+                "fileSizeInBytes": 5,
+              },
+            ],
+            "videos": [],
+          }),
+        );
+
+        final restored = await sessionManager.restoreSessionFromMetadata(
+          "backend-restore-guid",
+          deviceType: "Master",
+        );
+
+        expect(restored.sessionGuid, "backend-restore-guid");
+        expect(restored.preferredIdentifier, "backend-restore-guid");
+        expect(sessionManager.sessionGuid, "backend-restore-guid");
+        expect(
+            sessionManager.currentSession?.sessionId, "legacy-blank-guid-id");
+        expect(uploaderService.queueLength, 1);
+
+        final repairedMetadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(repairedMetadata["sessionGuid"], "backend-restore-guid");
+      });
     });
 
     group("Media management", () {

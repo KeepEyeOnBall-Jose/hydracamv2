@@ -263,13 +263,13 @@ class SessionManager extends ChangeNotifier {
         return null;
       }
 
-      final metadata = jsonDecode(await metadataFile.readAsString());
+      final metadata = _asMap(jsonDecode(await metadataFile.readAsString()));
       final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-      final restoredSessionGuid =
-          (metadata["sessionGuid"] ?? sessionGuid).toString();
+      final restoredSessionGuid = await _normalizedStoredSessionGuid(
+          metadataFile, metadata, sessionGuid);
       final session = CaptureSession(
         sessionId: metadata["sessionId"],
-        sessionGuid: restoredSessionGuid, // Correct if null
+        sessionGuid: restoredSessionGuid,
         startTime: DateTime.parse(metadata["startTime"]),
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
@@ -283,14 +283,6 @@ class SessionManager extends ChangeNotifier {
         debugSession: metadata["debugSession"] == true,
         serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
       );
-
-      // Correct sessionguid if null
-      if (session.sessionGuid == null) {
-        session.sessionGuid = sessionGuid;
-        await saveSessionMetadata(); // Save updated metadata
-        LogService.instance.registerLog(
-            "Session GUID was null. Corrected to $sessionGuid and saved.");
-      }
 
       LogService.instance
           .registerLog("Session metadata loaded for session $sessionGuid");
@@ -313,11 +305,13 @@ class SessionManager extends ChangeNotifier {
         return null;
       }
 
-      final metadata = jsonDecode(await metadataFile.readAsString());
+      final metadata = _asMap(jsonDecode(await metadataFile.readAsString()));
       final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+      final restoredSessionGuid = await _normalizedStoredSessionGuid(
+          metadataFile, metadata, sessionGuid);
       final session = CaptureSession(
         sessionId: metadata["sessionId"],
-        sessionGuid: metadata["sessionGuid"] ?? sessionGuid,
+        sessionGuid: restoredSessionGuid,
         startTime: DateTime.parse(metadata["startTime"]),
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
@@ -352,7 +346,10 @@ class SessionManager extends ChangeNotifier {
           "Failed to load session metadata for session: $sessionIdentifier");
     }
 
-    final restoredSessionGuid = loadedSession.sessionGuid ?? sessionIdentifier;
+    final restoredSessionGuid =
+        loadedSession.sessionGuid?.trim().isNotEmpty == true
+            ? loadedSession.sessionGuid!.trim()
+            : sessionIdentifier;
     if (!isServiceSessionGuid(restoredSessionGuid)) {
       throw StateError(
           "Stored media $restoredSessionGuid is not attached to a service session and cannot be restored for upload.");
@@ -705,6 +702,28 @@ class SessionManager extends ChangeNotifier {
       );
     }
     return normalizedSessionGuid;
+  }
+
+  Future<String> _normalizedStoredSessionGuid(
+    File metadataFile,
+    Map<String, dynamic> metadata,
+    String storageIdentifier,
+  ) async {
+    final fallbackGuid = storageIdentifier.trim();
+    final rawSessionGuid = metadata["sessionGuid"]?.toString();
+    final normalizedSessionGuid = rawSessionGuid?.trim();
+    final repairedSessionGuid = normalizedSessionGuid?.isNotEmpty == true
+        ? normalizedSessionGuid!
+        : fallbackGuid;
+
+    if (rawSessionGuid != repairedSessionGuid) {
+      metadata["sessionGuid"] = repairedSessionGuid;
+      await metadataFile.writeAsString(jsonEncode(metadata));
+      LogService.instance.registerLog(
+          "Stored session GUID repaired to $repairedSessionGuid for $storageIdentifier.");
+    }
+
+    return repairedSessionGuid;
   }
 
   Map<String, dynamic> _asMap(Object? value) {
