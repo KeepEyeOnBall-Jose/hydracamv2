@@ -2427,6 +2427,64 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
 
         self.assertEqual(commands, [])
 
+    def test_prepare_android_target_reports_install_timeout(self) -> None:
+        module = load_module()
+        target = matrix_target(module, "android-a", "android")
+        calls: list[tuple[list[str], dict]] = []
+
+        def fake_run_command(command, **kwargs):
+            calls.append((list(command), dict(kwargs)))
+            if "install" in command:
+                raise subprocess.TimeoutExpired(command, kwargs.get("timeout"))
+
+        module.run_command = fake_run_command
+        module.bridge_supports_runtime_role_switch = lambda _target: False
+
+        with self.assertRaisesRegex(
+            module.MatrixRunError,
+            "Timed out installing Android APK on android-a",
+        ):
+            module.prepare_android_target(
+                target,
+                Path("/tmp/app.apk"),
+                skip_install=False,
+                reuse_running_bridge=False,
+            )
+
+        self.assertEqual(
+            calls[0][1]["timeout"],
+            module.ANDROID_ADB_INSTALL_TIMEOUT_SECONDS,
+        )
+
+    def test_prepare_android_target_reports_forward_timeout(self) -> None:
+        module = load_module()
+        target = matrix_target(module, "android-a", "android")
+        calls: list[tuple[list[str], dict]] = []
+
+        def fake_run_command(command, **kwargs):
+            calls.append((list(command), dict(kwargs)))
+            if "forward" in command:
+                raise subprocess.TimeoutExpired(command, kwargs.get("timeout"))
+
+        module.run_command = fake_run_command
+        module.bridge_supports_runtime_role_switch = lambda _target: False
+
+        with self.assertRaisesRegex(
+            module.MatrixRunError,
+            "Timed out forwarding Android automation port for android-a",
+        ):
+            module.prepare_android_target(
+                target,
+                Path("/tmp/app.apk"),
+                skip_install=True,
+                reuse_running_bridge=False,
+            )
+
+        self.assertEqual(
+            calls[0][1]["timeout"],
+            module.ANDROID_ADB_FORWARD_TIMEOUT_SECONDS,
+        )
+
     def test_prepare_android_target_continues_when_permission_grant_times_out(
         self,
     ) -> None:

@@ -68,6 +68,14 @@ diagnostic probe,
 also passed but took `22.344s` because slave registration lag rose sharply when
 clients raced the promoted master's WebSocket server startup.
 
+Role-switch runner setup hardening:
+`logs/verification-runs/20260618-1846-android-adb-setup-timeouts/` adds focused
+regression coverage for Android `prepare_android_target()`: `adb install` is
+bounded at 120 seconds, `adb forward` is bounded by the 8 second setup budget,
+and either timeout now raises `MatrixRunError` with the target device id instead
+of leaving the matrix waiting indefinitely. This is script-level proof only;
+rerun the live hardware matrix before using it as fresh device evidence.
+
 ## Latest One-by-One Device Rerun
 
 Evidence root: `logs/verification-runs/20260607-all-devices-one-by-one-rerun/`.

@@ -79,6 +79,8 @@ DEFAULT_IOS_BRIDGE_SCAN_CONNECT_TIMEOUT_SECONDS = 0.5
 DEFAULT_IOS_BRIDGE_SCAN_HEALTH_TIMEOUT_SECONDS = 0.8
 DEFAULT_IOS_BRIDGE_SCAN_WORKERS = 128
 ANDROID_ADB_SETUP_TIMEOUT_SECONDS = 8.0
+ANDROID_ADB_INSTALL_TIMEOUT_SECONDS = 120.0
+ANDROID_ADB_FORWARD_TIMEOUT_SECONDS = ANDROID_ADB_SETUP_TIMEOUT_SECONDS
 ANDROID_ADB_LAUNCH_TIMEOUT_SECONDS = 15.0
 RUNTIME_ROLE_SWITCH_ACK_MODE = "accepted"
 IOS_BUNDLE_ID = "com.keepeyeonball"
@@ -1441,19 +1443,40 @@ def prepare_android_target(
     reuse_running_bridge: bool = False,
 ) -> None:
     if not skip_install:
-        run_command(["adb", "-s", target.device_id, "install", "-r", str(apk)])
+        try:
+            run_command(
+                ["adb", "-s", target.device_id, "install", "-r", str(apk)],
+                timeout=ANDROID_ADB_INSTALL_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as error:
+            raise MatrixRunError(
+                (
+                    "Timed out installing Android APK on "
+                    f"{target.device_id} after "
+                    f"{ANDROID_ADB_INSTALL_TIMEOUT_SECONDS:.0f}s"
+                )
+            ) from error
     if reuse_running_bridge and bridge_supports_runtime_role_switch(target):
         return
-    run_command(
-        [
-            "adb",
-            "-s",
-            target.device_id,
-            "forward",
-            f"tcp:{target.bridge_port}",
-            f"tcp:{REMOTE_AUTOMATION_PORT}",
-        ]
-    )
+    try:
+        run_command(
+            [
+                "adb",
+                "-s",
+                target.device_id,
+                "forward",
+                f"tcp:{target.bridge_port}",
+                f"tcp:{REMOTE_AUTOMATION_PORT}",
+            ],
+            timeout=ANDROID_ADB_FORWARD_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise MatrixRunError(
+            (
+                "Timed out forwarding Android automation port for "
+                f"{target.device_id} after {ANDROID_ADB_FORWARD_TIMEOUT_SECONDS:.0f}s"
+            )
+        ) from error
     if reuse_running_bridge and bridge_supports_runtime_role_switch(target):
         return
     for permission in android_permissions_for_target(target):
