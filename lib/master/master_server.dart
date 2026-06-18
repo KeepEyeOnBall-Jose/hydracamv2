@@ -633,6 +633,12 @@ class MasterServer {
     required String messageType,
     required String deviceId,
   }) async {
+    if (_hasInboundMediaSessionMismatch(deviceId)) {
+      LogService.instance.registerLog(
+          "Ignored $messageType from slave $deviceId due to session mismatch.");
+      return;
+    }
+
     final Uint8List binaryData =
         Uint8List.fromList(List<int>.from(decodedData["data"]));
     final String filePath =
@@ -680,6 +686,14 @@ class MasterServer {
     onMediaReceived?.call(receivedVideo);
     LogService.instance.registerLog(
         "Video from slave device ($deviceId) received and stored at: $filePath");
+  }
+
+  bool _hasInboundMediaSessionMismatch(String deviceId) {
+    final info = _clientInfo[deviceId];
+    final sessionStatus = info?.sessionStatus(
+      masterSessionGuid: SessionManager.instance.sessionGuid,
+    );
+    return sessionStatus == "different";
   }
 
   Future<void> _handleHeartbeatMessage(

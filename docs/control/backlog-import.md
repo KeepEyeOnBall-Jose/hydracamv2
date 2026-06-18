@@ -295,6 +295,14 @@ Default issue schema:
   device without first sending capture/upload commands into the wrong session.
   Keep this issue open for real master/slave reconnect reproduction and
   cross-device metadata comparison.
+- 2026-06-18 inbound stale-session media guard note:
+  `logs/verification-runs/20260618-1723-inbound-stale-session-media-guard/`
+  adds regression coverage for delayed inbound slave media after a slave has
+  reported a different active session GUID. The master now rejects that
+  stale-session photo/video payload before writing received media into the
+  current master session; unreported legacy media remains accepted. Keep this
+  issue open for real master/slave reconnect reproduction and cross-device
+  metadata comparison.
 
 ### 3. Prevent stale uploads from crossing sessions
 

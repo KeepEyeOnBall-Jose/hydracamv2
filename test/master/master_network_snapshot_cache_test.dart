@@ -460,6 +460,69 @@ void main() {
     }
   });
 
+  test("incoming photo media from stale slave session is ignored", () async {
+    final galleryCalls = <SessionMediaType>[];
+    final storageRoot =
+        Directory.systemTemp.createTempSync("master_stale_media");
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+      sessionMediaStorage: SessionMediaStorage(
+        documentsDirectoryProvider: () async => storageRoot,
+        galleryMediaPersistor: (filePath, mediaType) async {
+          galleryCalls.add(mediaType);
+        },
+        now: () => DateTime.fromMillisecondsSinceEpoch(1770000000789),
+      ),
+    );
+    SessionManager.instance.startSession(
+      "current-master-session",
+      "current-master-id",
+      deviceType: "Master",
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "stale-slave",
+      socket: MockWebSocket(),
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "old-slave-session",
+    );
+
+    try {
+      await server.handleIncomingMessageForTest(
+        jsonEncode({
+          "type": "photo",
+          "deviceId": "stale-slave",
+          "data": [0xFF, 0xD8, 0xFF],
+          "captureDate": DateTime.utc(2026, 6, 18, 17, 25).toIso8601String(),
+        }),
+        socket: MockWebSocket(),
+      );
+
+      final photos =
+          SessionManager.instance.currentSession?.capturedPhotos ?? [];
+      expect(photos, isEmpty);
+      expect(galleryCalls, isEmpty);
+      expect(
+        Directory("${storageRoot.path}/session_current-master-session")
+            .existsSync(),
+        isFalse,
+      );
+    } finally {
+      storageRoot.deleteSync(recursive: true);
+    }
+  });
+
   test("stale socket close does not remove current client registration",
       () async {
     final server = MasterServer(
