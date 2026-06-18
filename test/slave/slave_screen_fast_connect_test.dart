@@ -7,11 +7,15 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
+import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/network_info_service.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/storage_service.dart";
+import "package:hydracam/slave/master_discovery.dart";
 import "package:hydracam/slave/slave_client.dart";
 import "package:hydracam/slave/slave_screen.dart";
+// ignore: depend_on_referenced_packages
+import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 class FakeSlaveConnectionClient implements SlaveConnectionClient {
@@ -69,8 +73,31 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
   }
 }
 
+class FakeMasterDiscovery extends MasterDiscovery {
+  FakeMasterDiscovery() : super(onMasterDiscovered: (_) {});
+
+  var startCalls = 0;
+  var stopCalls = 0;
+
+  @override
+  Future<void> startListening() async {
+    startCalls += 1;
+  }
+
+  @override
+  Future<void> stopListening() async {
+    stopCalls += 1;
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  final pathProvider = _SlaveScreenPathProvider();
+
+  setUpAll(() {
+    PathProviderPlatform.instance = pathProvider;
+  });
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({
@@ -95,6 +122,10 @@ void main() {
 
   tearDown(() {
     debugDefaultTargetPlatformOverride = null;
+  });
+
+  tearDownAll(() {
+    pathProvider.dispose();
   });
 
   testWidgets(
@@ -419,4 +450,115 @@ void main() {
       await client.dispose();
     }
   });
+
+  testWidgets(
+      "auto-mode slave with active session does not promote on discovery timeout",
+      (tester) async {
+    final discovery = FakeMasterDiscovery();
+    SessionManager.instance.startSession(
+      "active-slave-session",
+      "active-slave-session-id",
+      deviceType: "Slave",
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: true,
+          connectivityChanges: const Stream<List<ConnectivityResult>>.empty(),
+          masterDiscoveryFactory: (_) => discovery,
+          networkReadinessLoader: () async => const NetworkReadinessResult(
+            canUseLocalControl: true,
+            blockingReason: NetworkReadinessBlockingReason.none,
+            message: "network ready",
+            snapshot: NetworkSnapshot(
+              isWifiActive: true,
+              ipAddress: "192.168.178.70",
+              subnetMask: "255.255.255.0",
+              source: "test",
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pump();
+
+    expect(discovery.startCalls, 1);
+    expect(find.byType(SlaveScreen), findsOneWidget);
+    expect(find.textContaining("No active session"), findsNothing);
+    expect(
+      find.textContaining("Master unavailable; preserving active session"),
+      findsOneWidget,
+    );
+    expect(SessionManager.instance.sessionGuid, "active-slave-session");
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    if (SessionManager.instance.isSessionActive) {
+      await tester.runAsync(SessionManager.instance.endSession);
+    }
+  });
+
+  testWidgets("auto-mode slave without active session still promotes",
+      (tester) async {
+    final discovery = FakeMasterDiscovery();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: true,
+          connectivityChanges: const Stream<List<ConnectivityResult>>.empty(),
+          masterDiscoveryFactory: (_) => discovery,
+          networkReadinessLoader: () async => const NetworkReadinessResult(
+            canUseLocalControl: true,
+            blockingReason: NetworkReadinessBlockingReason.none,
+            message: "network ready",
+            snapshot: NetworkSnapshot(
+              isWifiActive: true,
+              ipAddress: "192.168.178.71",
+              subnetMask: "255.255.255.0",
+              source: "test",
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pump();
+
+    expect(discovery.startCalls, 1);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("No master found, switching to Master mode."),
+    );
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Cleaned up Slave mode."),
+    );
+
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+}
+
+class _SlaveScreenPathProvider extends PathProviderPlatform {
+  Directory? _documentsDir;
+
+  Directory get documentsDir {
+    _documentsDir ??= Directory.systemTemp.createTempSync("slave_screen_docs");
+    return _documentsDir!;
+  }
+
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return documentsDir.path;
+  }
+
+  void dispose() {
+    if (_documentsDir != null && _documentsDir!.existsSync()) {
+      _documentsDir!.deleteSync(recursive: true);
+    }
+    _documentsDir = null;
+  }
 }

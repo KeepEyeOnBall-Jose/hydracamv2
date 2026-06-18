@@ -229,6 +229,15 @@ Default issue schema:
   reporting a different session. Focused master/slave socket coverage, analyzer,
   and the full Flutter test suite passed. Keep this issue open for real
   master/slave reconnect reproduction and cross-device metadata comparison.
+- 2026-06-18 active-slave auto-promotion guard note:
+  `logs/verification-runs/20260618-1913-active-slave-auto-promotion-guard/`
+  blocks auto-mode slave promotion while a nonblank active slave session is
+  present, surfacing `Master unavailable; preserving active session ...`
+  instead of letting a master-loss timeout create a split-brain candidate.
+  Focused widget coverage also proves idle auto-mode startup can still promote
+  when no session is active. Keep this issue open for real master/slave
+  reconnect reproduction, master-loss recording policy, and cross-device
+  metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing

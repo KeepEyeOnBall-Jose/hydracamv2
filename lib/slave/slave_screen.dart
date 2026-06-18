@@ -39,6 +39,10 @@ typedef SlaveConnectionClientFactory = SlaveConnectionClient Function(
   VoidCallback? onRecordingStopped,
 });
 
+typedef MasterDiscoveryFactory = MasterDiscovery Function(
+  void Function(String masterIp) onMasterDiscovered,
+);
+
 class SlaveScreen extends StatefulWidget {
   // Mode that controls if we entered here manually or on app init.
   // If is auto mode, after some time without finding master will move automatically to master screen
@@ -47,6 +51,7 @@ class SlaveScreen extends StatefulWidget {
   final bool forceSlaveMode;
   final NetworkReadinessLoader? networkReadinessLoader;
   final SlaveConnectionClientFactory? slaveClientFactory;
+  final MasterDiscoveryFactory? masterDiscoveryFactory;
   final Stream<List<ConnectivityResult>>? connectivityChanges;
 
   const SlaveScreen({
@@ -56,6 +61,7 @@ class SlaveScreen extends StatefulWidget {
     this.forceSlaveMode = false,
     @visibleForTesting this.networkReadinessLoader,
     @visibleForTesting this.slaveClientFactory,
+    @visibleForTesting this.masterDiscoveryFactory,
     @visibleForTesting this.connectivityChanges,
   }); // Default is manual mode
 
@@ -104,7 +110,13 @@ class SlaveScreenState extends State<SlaveScreen> {
     super.initState();
 
     // Master discovery and other initializations
-    _masterDiscovery = MasterDiscovery(onMasterDiscovered: _connectToMaster);
+    final masterDiscoveryFactory = widget.masterDiscoveryFactory ??
+        (onMasterDiscovered) => MasterDiscovery(
+              onMasterDiscovered: onMasterDiscovered,
+            );
+    _masterDiscovery = masterDiscoveryFactory(
+      (masterIp) => unawaited(_connectToMaster(masterIp)),
+    );
 
     final connectivityChanges = widget.connectivityChanges;
     if (connectivityChanges != null ||
@@ -250,6 +262,22 @@ class SlaveScreenState extends State<SlaveScreen> {
         !widget.forceSlaveMode &&
         widget.preferredMasterIp == null;
     if (!shouldAutoPromote || autoModeTimer != null) {
+      return;
+    }
+
+    final activeSessionGuid = SessionManager.instance.sessionGuid?.trim();
+    if (SessionManager.instance.isSessionActive &&
+        activeSessionGuid != null &&
+        activeSessionGuid.isNotEmpty) {
+      if (mounted && !_isConnected) {
+        setState(() {
+          statusMessage =
+              "Master unavailable; preserving active session $activeSessionGuid.";
+        });
+      }
+      LogService.instance.registerLog(
+        "Auto-promotion blocked while slave session $activeSessionGuid is active.",
+      );
       return;
     }
 
