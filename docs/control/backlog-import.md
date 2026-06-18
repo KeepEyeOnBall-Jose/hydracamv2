@@ -1528,6 +1528,16 @@ successful bodies while still decoding JSON objects for callers that need
 fields. Keep broader contract coverage open for live backend response-shape
 confirmation and any endpoint-specific failure object handling added later.
 
+2026-06-18 T-016 shared POST failure-body note:
+`logs/verification-runs/20260618-1640-api-post-json-failure-response/` extends
+the shared POST helper so HTTP 200 JSON objects that explicitly report failure
+through `success` aliases, non-empty `error` fields, or failed `status` values
+return no response to callers. Focused coverage now proves `endSession()` and
+`deleteDebugSession()` reject backend failure objects while the prior empty and
+plaintext HTTP 200 compatibility path remains accepted. Keep broader contract
+coverage open for live backend response-shape confirmation and any
+endpoint-specific failure object handling added later.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

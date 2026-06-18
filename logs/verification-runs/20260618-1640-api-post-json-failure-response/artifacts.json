@@ -1,0 +1,102 @@
+{
+  "acceptanceChecks": [
+    "Shared POST API calls reject HTTP 200 JSON bodies that explicitly report failure",
+    "Empty and plaintext HTTP 200 POST success bodies remain accepted"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:40:32.462454+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:40:32.554793+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T14:40:53.976120+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:41:25.082526+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart",
+        "test/services/debug_session_cleanup_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:41:49.850789+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:41:52.557672+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:41:59.263096+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:43:37.739707+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "api-post-json-failure-response",
+    "source": "docs/control/backlog-import.md#T-016-photo-video-upload-api-test-with-invalid-files",
+    "title": "Reject JSON failure bodies from shared API POST helper"
+  },
+  "notes": [
+    "Shared POST helper rejects explicit HTTP 200 JSON failure bodies while preserving empty/plaintext success compatibility."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

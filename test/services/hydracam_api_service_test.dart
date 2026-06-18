@@ -932,6 +932,28 @@ void main() {
     );
   });
 
+  test("endSession rejects JSON failure POST responses", () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response(
+          '{"success":false,"message":"Already closed"}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().endSession("session-guid");
+
+    expect(result, isFalse);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        "POST sessions/end?sessionGuid=session-guid reported failure: "
+        '{"success":false,"message":"Already closed"}',
+      ),
+    );
+  });
+
   test("deleteDebugSession sends service cleanup identifiers", () async {
     Uri? requestedUri;
     HydraCamApiService.configureHttpClient(
@@ -971,6 +993,27 @@ void main() {
     expect(
       LogService.instance.logs.map((entry) => entry["message"]),
       contains("Debug session deleted from service: debug-session-guid"),
+    );
+  });
+
+  test("deleteDebugSession rejects JSON error POST responses", () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response('{"error":"Debug session not found"}', 200);
+      }),
+    );
+
+    final result = await HydraCamApiService().deleteDebugSession(
+      sessionGuid: "debug-session-guid",
+    );
+
+    expect(result, isFalse);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        "POST sessions/debug/delete?sessionGuid=debug-session-guid "
+        'reported failure: {"error":"Debug session not found"}',
+      ),
     );
   });
 
