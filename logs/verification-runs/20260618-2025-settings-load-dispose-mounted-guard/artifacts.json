@@ -1,0 +1,90 @@
+{
+  "acceptanceChecks": [
+    "Settings screen must not update state after it is disposed while async preference and locale loading is still pending."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/capture_settings_screen_test.dart",
+        "--name",
+        "settings screen ignores load completion after dispose"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:26:05.186328+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/capture_settings_screen_test.dart",
+        "--name",
+        "settings screen ignores load completion after dispose"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:26:29.847397+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/screens/settings_screen.dart",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:26:38.761981+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/capture_settings_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:26:42.375519+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:26:53.121140+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:27:09.268604+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:28:00.564118+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "settings-load-dispose-mounted-guard",
+    "source": "docs/control/backlog-import.md",
+    "title": "Auto-record mode settings lifecycle"
+  },
+  "notes": [
+    "Red/green widget regression proves SettingsScreen ignores delayed async load completion after disposal instead of calling setState on a defunct State."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

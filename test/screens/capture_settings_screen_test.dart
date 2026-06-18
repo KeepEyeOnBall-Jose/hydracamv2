@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/l10n/app_localizations.dart";
@@ -98,4 +100,46 @@ void main() {
         "pl");
     expect(localeService.localeOverrideCode, "pl");
   });
+
+  testWidgets("settings screen ignores load completion after dispose",
+      (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final localeService = _BlockingLocaleService();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: SettingsScreen(localeService: localeService),
+      ),
+    );
+    await localeService.started;
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    localeService.completeLoad();
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+  });
+}
+
+class _BlockingLocaleService extends AppLocaleService {
+  final _started = Completer<void>();
+  final _loadCompleter = Completer<void>();
+
+  Future<void> get started => _started.future;
+
+  @override
+  Future<void> load() async {
+    if (!_started.isCompleted) {
+      _started.complete();
+    }
+    await _loadCompleter.future;
+  }
+
+  void completeLoad() {
+    if (!_loadCompleter.isCompleted) {
+      _loadCompleter.complete();
+    }
+  }
 }

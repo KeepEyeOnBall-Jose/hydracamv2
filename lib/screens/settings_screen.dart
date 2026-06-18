@@ -63,6 +63,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     final flashForVideoAnnounce =
         await SettingsService.getFlashForVideoAnnounce();
     await _localeService.load();
+    if (!mounted) return;
     final localeCode = _localeService.localeOverrideCode ?? _systemLocaleCode;
 
     setState(() {
