@@ -407,6 +407,29 @@ class NetworkInfoService {
       return ConnectedDeviceNetworkStatus.unknown;
     }
 
+    final masterSubnet = masterSnapshot.effectiveSubnetSignature;
+    final deviceSubnet = deviceSnapshot.effectiveSubnetSignature;
+    if (masterSubnet != null && deviceSubnet != null) {
+      if (masterSubnet != deviceSubnet) {
+        return ConnectedDeviceNetworkStatus.wrongNetwork;
+      }
+    }
+
+    final remoteIp = _normalizeBlank(socketRemoteIp);
+    if (remoteIp != null && masterSubnet != null) {
+      if (!_isIpInSubnetSignature(remoteIp, masterSubnet)) {
+        return ConnectedDeviceNetworkStatus.wrongNetwork;
+      }
+    }
+
+    if (masterSubnet != null && deviceSubnet != null) {
+      return ConnectedDeviceNetworkStatus.ready;
+    }
+
+    if (remoteIp != null && masterSubnet != null) {
+      return ConnectedDeviceNetworkStatus.ready;
+    }
+
     final masterBssid = _normalizeBlank(masterSnapshot.bssid)?.toLowerCase();
     final deviceBssid = _normalizeBlank(deviceSnapshot.bssid)?.toLowerCase();
     if (masterBssid != null &&
@@ -421,21 +444,6 @@ class NetworkInfoService {
         deviceGateway != null &&
         masterGateway == deviceGateway) {
       return ConnectedDeviceNetworkStatus.ready;
-    }
-
-    final masterSubnet = masterSnapshot.effectiveSubnetSignature;
-    final deviceSubnet = deviceSnapshot.effectiveSubnetSignature;
-    if (masterSubnet != null && deviceSubnet != null) {
-      return masterSubnet == deviceSubnet
-          ? ConnectedDeviceNetworkStatus.ready
-          : ConnectedDeviceNetworkStatus.wrongNetwork;
-    }
-
-    final remoteIp = _normalizeBlank(socketRemoteIp);
-    if (remoteIp != null && masterSubnet != null) {
-      return _isIpInSubnetSignature(remoteIp, masterSubnet)
-          ? ConnectedDeviceNetworkStatus.ready
-          : ConnectedDeviceNetworkStatus.wrongNetwork;
     }
 
     return ConnectedDeviceNetworkStatus.unknown;

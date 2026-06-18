@@ -122,6 +122,34 @@ void main() {
       expect(status, ConnectedDeviceNetworkStatus.wrongNetwork);
     });
 
+    test("stale matching BSSID and gateway do not override subnet conflict",
+        () {
+      const master = NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.159",
+        bssid: "2c:91:ab:8b:a3:07",
+        gatewayIp: "192.168.178.1",
+        subnetMask: "255.255.255.0",
+        source: "master-test",
+      );
+      const slave = NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "10.10.0.20",
+        bssid: "2c:91:ab:8b:a3:07",
+        gatewayIp: "192.168.178.1",
+        subnetMask: "255.255.255.0",
+        source: "stale-slave-test",
+      );
+
+      final status = NetworkInfoService.compareDeviceNetwork(
+        masterSnapshot: master,
+        deviceSnapshot: slave,
+        socketRemoteIp: "10.10.0.20",
+      );
+
+      expect(status, ConnectedDeviceNetworkStatus.wrongNetwork);
+    });
+
     test("existing clients without network payload remain unknown", () {
       const master = NetworkSnapshot(
         isWifiActive: true,

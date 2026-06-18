@@ -591,6 +591,14 @@ Default issue schema:
   `battery:unavailable` and `storage:unavailable`, while absent values still use
   the existing `battery:unknown` and `storage:unknown` warnings. Keep this issue
   open for real-device network smoke evidence and multi-group network UX.
+- 2026-06-18 network conflict precedence note:
+  `logs/verification-runs/20260618-1704-network-compare-conflicting-subnet-evidence/`
+  adds red/green coverage for stale slave network payloads whose BSSID/gateway
+  still match the master but whose subnet/socket IP evidence conflicts.
+  `NetworkInfoService.compareDeviceNetwork()` now reports `wrongNetwork` before
+  falling back to BSSID/gateway readiness, and `MasterServer` sends
+  `networkMismatch` for that registration path. Keep this issue open for
+  real-device network smoke evidence and multi-group network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 

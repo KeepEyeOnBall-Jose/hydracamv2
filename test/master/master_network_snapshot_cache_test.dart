@@ -172,6 +172,47 @@ void main() {
     );
   });
 
+  test("master server warns slave when stale Wi-Fi identity conflicts with IP",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          bssid: "2c:91:ab:8b:a3:07",
+          gatewayIp: "192.168.178.1",
+          subnetMask: "255.255.255.0",
+          source: "master-test",
+        ),
+      ),
+    );
+    final socket = MockWebSocket();
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "wrong-network-slave",
+      socket: socket,
+      remoteIp: "10.10.0.20",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "10.10.0.20",
+        bssid: "2c:91:ab:8b:a3:07",
+        gatewayIp: "192.168.178.1",
+        subnetMask: "255.255.255.0",
+        source: "stale-slave-test",
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    final clients = server.getConnectedDeviceInfos();
+    expect(clients.single.networkStatus,
+        ConnectedDeviceNetworkStatus.wrongNetwork);
+    final sentMessage =
+        verify(() => socket.add(captureAny())).captured.single as String;
+    final payload = jsonDecode(sentMessage) as Map<String, dynamic>;
+    expect(payload["command"], "networkMismatch");
+  });
+
   test("master server preserves optional camera setup status", () async {
     final server = MasterServer(
       MockCameraService(),

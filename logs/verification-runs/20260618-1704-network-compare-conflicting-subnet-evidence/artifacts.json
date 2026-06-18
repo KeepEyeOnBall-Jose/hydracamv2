@@ -1,0 +1,116 @@
+{
+  "acceptanceChecks": [
+    "Network comparison reports wrongNetwork when subnet or socket evidence conflicts even if stale BSSID/gateway matches",
+    "Existing ready and unknown network comparison cases remain compatible"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:04:33.478412+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/network_readiness_service_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:04:33.573667+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/network_readiness_service_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:05:28.197966+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/network_readiness_service_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:06:07.542264+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/network_readiness_service_test.dart",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/master/connected_client_automation_payload_test.dart",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:06:28.698776+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:06:32.866489+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:06:39.154936+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:06:49.945354+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:07:13.941573+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "network-compare-conflicting-subnet-evidence",
+    "source": "docs/control/backlog-import.md#6-make-network-device-identity-visible",
+    "title": "Prioritize conflicting subnet evidence in network comparison"
+  },
+  "notes": [
+    "Network comparison now prioritizes conflicting subnet/socket evidence over stale matching BSSID or gateway values."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
