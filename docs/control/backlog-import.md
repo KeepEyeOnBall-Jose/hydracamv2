@@ -477,6 +477,13 @@ Default issue schema:
   no-interruption assertions. This is test-harness cleanup only; keep this
   issue open for real-device or emulator recording proof from platform
   battery/storage events.
+- 2026-06-18 critical-storage callback log test cleanup note:
+  `logs/verification-runs/20260618-1554-storage-critical-callback-log-test-cleanup/`
+  strengthens the storage critical-callback failure test by draining the guarded
+  callback and asserting the `LogService` diagnostic, matching the intended
+  non-escaping failure contract. This is test-harness cleanup only; keep this
+  issue open for real-device or emulator recording proof from platform
+  battery/storage events.
 
 ### 6. Make network/device identity visible
 

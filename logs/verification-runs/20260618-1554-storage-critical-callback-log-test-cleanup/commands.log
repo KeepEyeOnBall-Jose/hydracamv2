@@ -1,0 +1,115 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1554-storage-critical-callback-log-test-cleanup/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ flutter test --no-pub test/services/storage_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart
+00:00 +0: StorageService Recording block logic recording is not blocked when storage is available
+00:00 +1: StorageService Recording block logic recording is blocked when storage is critically low
+00:00 +2: StorageService Threshold configuration exposes low storage threshold
+00:00 +3: StorageService Threshold configuration exposes critical storage threshold
+00:00 +4: StorageService anchors blocks recording and triggers callback when storage is critical
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 15:54:41.608690, function: null, file: null}
+Log registered: {message: Critical storage: triggering recording stop at 0.39 GB., timestamp: 2026-06-18 15:54:41.610339, function: null, file: null}
+00:00 +5: StorageService anchors clears recording block after recovering above critical threshold
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 15:54:41.637776, function: null, file: null}
+Log registered: {message: Critical storage: triggering recording stop at 0.39 GB., timestamp: 2026-06-18 15:54:41.637909, function: null, file: null}
+00:00 +6: StorageService anchors critical callback failures do not escape storage handling
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 15:54:41.647497, function: null, file: null}
+Log registered: {message: Critical storage: triggering recording stop at 0.39 GB., timestamp: 2026-06-18 15:54:41.647730, function: null, file: null}
+Log registered: {message: StorageService: critical storage callback failed: Bad state: forced stop failed
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart:156:11)
+#1      StorageService._runCriticalStorageCallback (package:hydracam/services/storage_service.dart:95:39)
+#2      StorageService._handleStorageLevel (package:hydracam/services/storage_service.dart:79:19)
+#3      StorageService.simulateStorageLevel (package:hydracam/services/storage_service.dart:153:5)
+#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart:166:30)
+#5      _ReturnsNormally.typedMatches (package:matcher/src/core_matchers.dart:156:22)
+#6      FeatureMatcher.matches (package:matcher/src/feature_matcher.dart:16:42)
+#7      _expect (package:matcher/src/expect/expect.dart:176:30)
+#8      expect (package:matcher/src/expect/expect.dart:65:3)
+#9      expect (package:flutter_test/src/widget_tester.dart:473:18)
+#10     main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart:165:7)
+<asynchronous suspension>
+#11     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#12     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#13     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-18 15:54:41.647993, function: null, file: null}
+00:00 +7: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/storage_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart
+00:00 +0: StorageService Recording block logic recording is not blocked when storage is available
+00:00 +1: StorageService Recording block logic recording is blocked when storage is critically low
+00:00 +2: StorageService Threshold configuration exposes low storage threshold
+00:00 +3: StorageService Threshold configuration exposes critical storage threshold
+00:00 +4: StorageService anchors blocks recording and triggers callback when storage is critical
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 15:55:01.982685, function: null, file: null}
+Log registered: {message: Critical storage: triggering recording stop at 0.39 GB., timestamp: 2026-06-18 15:55:01.984744, function: null, file: null}
+00:00 +5: StorageService anchors clears recording block after recovering above critical threshold
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 15:55:02.045987, function: null, file: null}
+Log registered: {message: Critical storage: triggering recording stop at 0.39 GB., timestamp: 2026-06-18 15:55:02.046221, function: null, file: null}
+00:00 +6: StorageService anchors critical callback failures do not escape storage handling
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-18 15:55:02.065291, function: null, file: null}
+Log registered: {message: Critical storage: triggering recording stop at 0.39 GB., timestamp: 2026-06-18 15:55:02.065612, function: null, file: null}
+Log registered: {message: StorageService: critical storage callback failed: Bad state: forced stop failed
+#0      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart:156:11)
+#1      StorageService._runCriticalStorageCallback (package:hydracam/services/storage_service.dart:95:39)
+#2      StorageService._handleStorageLevel (package:hydracam/services/storage_service.dart:79:19)
+#3      StorageService.simulateStorageLevel (package:hydracam/services/storage_service.dart:153:5)
+#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart:166:30)
+#5      _ReturnsNormally.typedMatches (package:matcher/src/core_matchers.dart:156:22)
+#6      FeatureMatcher.matches (package:matcher/src/feature_matcher.dart:16:42)
+#7      _expect (package:matcher/src/expect/expect.dart:176:30)
+#8      expect (package:matcher/src/expect/expect.dart:65:3)
+#9      expect (package:flutter_test/src/widget_tester.dart:473:18)
+#10     main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/services/storage_service_test.dart:165:7)
+<asynchronous suspension>
+#11     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#12     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#13     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-18 15:55:02.065872, function: null, file: null}
+00:00 +7: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 5.4s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

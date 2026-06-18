@@ -166,7 +166,18 @@ void main() {
         () => storageService.simulateStorageLevel(400),
         returnsNormally,
       );
+      await tester.pump();
+
       expect(storageService.isRecordingBlocked, true);
+      expect(
+        LogService.instance.logs.any((entry) {
+          final message = entry["message"].toString();
+          return message.contains(
+                  "StorageService: critical storage callback failed") &&
+              message.contains("forced stop failed");
+        }),
+        isTrue,
+      );
     });
   });
 }
