@@ -1557,6 +1557,15 @@ values under one helper while preserving each caller's existing malformed-body
 compatibility contract. Focused API tests, analyzer, `git diff --check`, and
 the full Flutter test suite passed.
 
+2026-06-18 T-016 create-session failure-body note:
+`logs/verification-runs/20260618-1653-create-session-json-failure-response/`
+adds red/green coverage for `createSession()` responses that return HTTP 200
+with an explicit failure object and backend-looking GUID fields. Session
+creation now rejects the same `success` aliases, non-empty `error` fields, and
+failed status values used by upload/shared POST response handling before
+building a `HydraCamBackendSession`. Keep broader contract coverage open for
+live backend response-shape confirmation and endpoint-specific failure handling.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

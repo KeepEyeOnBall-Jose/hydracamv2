@@ -383,6 +383,53 @@ void main() {
     expect(requestBody, containsPair("SessionId", "friendly-session"));
   });
 
+  test("createSession rejects JSON failure response with backend guid",
+      () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response(
+          '{"success":false,"message":"Court unavailable","guid":"backend-guid"}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().createSession(
+      "friendly-session",
+    );
+
+    expect(result, isNull);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        'Failed to create session: backend response reported failure - {"success":false,"message":"Court unavailable","guid":"backend-guid"}',
+      ),
+    );
+  });
+
+  test("createSession rejects JSON error response with backend guid", () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response(
+          '{"error":"Duplicate session","guid":"backend-guid"}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().createSession(
+      "friendly-session",
+    );
+
+    expect(result, isNull);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        'Failed to create session: backend response reported failure - {"error":"Duplicate session","guid":"backend-guid"}',
+      ),
+    );
+  });
+
   test("warmUpBackend sends an authenticated lightweight startup request",
       () async {
     Uri? requestedUri;

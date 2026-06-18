@@ -443,8 +443,15 @@ class HydraCamApiService {
               "Failed to create session: unexpected response $responseData");
           return null;
         }
+        final responseMap =
+            responseData.map((key, value) => MapEntry(key.toString(), value));
+        if (_responseMapReportsFailure(responseMap)) {
+          LogService.instance.registerLog(
+              "Failed to create session: backend response reported failure - ${_uploadFailureResponseBodySnippet(response.body)}");
+          return null;
+        }
         final backendSession = HydraCamBackendSession.fromCreateResponse(
-          responseData.map((key, value) => MapEntry(key.toString(), value)),
+          responseMap,
           requestedSessionId: sessionId,
         );
         LogService.instance
