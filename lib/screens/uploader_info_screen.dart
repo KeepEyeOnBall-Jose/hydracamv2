@@ -61,6 +61,13 @@ class _UploaderInfoScreenState extends State<UploaderInfoScreen> {
     return "${minutes}m ${seconds}s";
   }
 
+  String _formatEstimatedRemaining(Duration duration, dynamic currentUpload) {
+    if (currentUpload != null && duration == Duration.zero) {
+      return "calculating";
+    }
+    return _formatDuration(duration);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<CapturedPhoto> photos =
@@ -113,7 +120,7 @@ class _UploaderInfoScreenState extends State<UploaderInfoScreen> {
                             style: const TextStyle(fontSize: 16),
                           ),
                           Text(
-                            "Estimated remaining: ${_formatDuration(estimatedTime)}",
+                            "Estimated remaining: ${_formatEstimatedRemaining(estimatedTime, currentUpload)}",
                             style: const TextStyle(fontSize: 16),
                           ),
                           ElevatedButton.icon(

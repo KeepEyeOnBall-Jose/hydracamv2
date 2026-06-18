@@ -424,6 +424,12 @@ Default issue schema:
   pending queue depth and the current upload filename in the summary area,
   alongside uploaded photo/video counts and estimated remaining time. Keep
   production closure gated on a real-device plus live-backend upload smoke run.
+- 2026-06-18 uploader active-ETA label note:
+  `logs/verification-runs/20260618-1728-uploader-active-upload-zero-eta-label/`
+  adds focused `UploaderInfoScreen` coverage so an active current upload with
+  no queue-level ETA displays `Estimated remaining: calculating` instead of a
+  misleading `0s`, while idle/no-upload state still displays `0s`. Keep
+  production closure gated on a real-device plus live-backend upload smoke run.
 - 2026-06-17 uploader-screen start action note:
   focused `UploaderInfoScreen` coverage now proves the uploader status surface
   can start all pending uploads directly, awaits the manual upload drain, and

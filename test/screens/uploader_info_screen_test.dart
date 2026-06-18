@@ -173,6 +173,53 @@ void main() {
     expect(find.text("Current upload: current-upload.mp4"), findsOneWidget);
   });
 
+  testWidgets("summary avoids zero ETA while current upload is active",
+      (tester) async {
+    SessionManager.instance.startSession(
+      "uploader-info-active-eta-guid",
+      "uploader-info-active-eta",
+      deviceType: "Master",
+    );
+
+    final currentFile = File("${tempDir.path}/current-upload.mp4")
+      ..writeAsBytesSync([1, 2, 3, 4]);
+    final currentVideo = CapturedVideo(
+      videoPath: currentFile.path,
+      slaveDeviceId: "summary-current-device",
+      startRecordingDate: DateTime(2026, 6, 18, 17, 28),
+      endRecordingDate: DateTime(2026, 6, 18, 17, 28, 4),
+      receivedDate: DateTime(2026, 6, 18, 17, 28, 5),
+    );
+
+    SessionManager.instance.currentSession?.addVideo(currentVideo);
+    UploaderService().currentlyUploadingNotifier.value = currentVideo;
+    UploaderService().estimatedTimeNotifier.value = Duration.zero;
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: UploaderInfoScreen(),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text("Queue: 0 pending"), findsOneWidget);
+    expect(find.text("Current upload: current-upload.mp4"), findsOneWidget);
+    expect(find.text("Estimated remaining: 0s"), findsNothing);
+    expect(find.text("Estimated remaining: calculating"), findsOneWidget);
+  });
+
+  testWidgets("summary shows zero ETA when idle", (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: UploaderInfoScreen(),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text("Current upload: none"), findsOneWidget);
+    expect(find.text("Estimated remaining: 0s"), findsOneWidget);
+  });
+
   testWidgets("start uploads action drains the pending queue", (tester) async {
     M2MAuthService.overrideTokenForTests("test-token");
     PackageInfo.setMockInitialValues(
