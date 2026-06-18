@@ -58,9 +58,10 @@ class UserService {
         _email = loginEmail;
         LogService.instance.registerLog("Fetching GUID for email: $loginEmail");
         final fetchedGuid = await _getUserGuidByEmail(loginEmail);
+        final normalizedGuid = _normalizeGuid(fetchedGuid);
 
-        if (fetchedGuid != null) {
-          _guid = fetchedGuid;
+        if (normalizedGuid != null) {
+          _guid = normalizedGuid;
           _isLoggedIn = true;
           LogService.instance
               .registerLog("User logged in successfully. GUID: $_guid");
@@ -99,14 +100,15 @@ class UserService {
       LogService.instance
           .registerLog("Fetching restored GUID for email: $restoredEmail");
       final fetchedGuid = await _getUserGuidByEmail(restoredEmail);
-      if (fetchedGuid == null) {
+      final normalizedGuid = _normalizeGuid(fetchedGuid);
+      if (normalizedGuid == null) {
         _clearUserState();
         LogService.instance
             .registerLog("Failed to fetch restored GUID for $restoredEmail");
         return false;
       }
 
-      _guid = fetchedGuid;
+      _guid = normalizedGuid;
       _isLoggedIn = true;
       LogService.instance.registerLog("User session restored. GUID: $_guid");
       return true;
@@ -154,5 +156,13 @@ class UserService {
     _email = null;
     _guid = null;
     _profilePicture = null;
+  }
+
+  String? _normalizeGuid(String? guid) {
+    final normalized = guid?.trim();
+    if (normalized == null || normalized.isEmpty) {
+      return null;
+    }
+    return normalized;
   }
 }

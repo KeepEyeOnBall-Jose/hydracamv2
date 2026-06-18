@@ -96,6 +96,43 @@ void main() {
     expect(service.guid, isNull);
   });
 
+  test("UserService login rejects blank backend GUID", () async {
+    final service = UserService.forTesting(
+      authService: _FakeAuthService(
+        restoreResult: false,
+        loginEmail: "user@example.com",
+        loginProfilePicture: "https://example.com/user.png",
+      ),
+      getUserGuidByEmail: (_) async => "   ",
+    );
+
+    await service.login();
+
+    expect(service.isLoggedIn, isFalse);
+    expect(service.email, isNull);
+    expect(service.profilePicture, isNull);
+    expect(service.guid, isNull);
+  });
+
+  test("UserService restore rejects blank backend GUID", () async {
+    final service = UserService.forTesting(
+      authService: _FakeAuthService(
+        restoreResult: true,
+        restoredEmail: "restored@example.com",
+        restoredProfilePicture: "https://example.com/restored.png",
+      ),
+      getUserGuidByEmail: (_) async => "   ",
+    );
+
+    final restored = await service.restoreStoredSession();
+
+    expect(restored, isFalse);
+    expect(service.isLoggedIn, isFalse);
+    expect(service.email, isNull);
+    expect(service.profilePicture, isNull);
+    expect(service.guid, isNull);
+  });
+
   test("UserService login clears stale GUID when switched account is unmapped",
       () async {
     final authService = _FakeAuthService(

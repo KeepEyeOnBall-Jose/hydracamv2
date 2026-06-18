@@ -1109,6 +1109,13 @@ Default issue schema:
   null, and does not clear the secure credential store. Keep this issue open
   for Android plus iOS mobile smoke evidence, Android process-death validation,
   and account-switch validation.
+- 2026-06-18 blank backend GUID guard note:
+  `logs/verification-runs/20260618-1834-user-service-reject-blank-guid/` proves
+  `UserService.login()` and `restoreStoredSession()` reject whitespace-only
+  HydraCam backend GUID lookup results, clearing in-memory email, profile
+  picture, GUID, and login state instead of marking a false logged-in user. Keep
+  this issue open for Android plus iOS mobile smoke evidence, Android
+  process-death validation, and account-switch validation.
 
 ### 12. Decide and implement Android-native account-picker sign-in
 
