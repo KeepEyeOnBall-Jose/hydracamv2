@@ -1,0 +1,63 @@
+{
+  "acceptanceChecks": [
+    "Unit tests prove route-interface parsing, hex/dotted netmask subnet parsing, literal subnet preservation, and the preflight CLI documents --expected-subnet auto with --expected-host."
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/test_android_wifi_preflight.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:38:47.545273+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_wifi_preflight.py",
+        "--help"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:38:51.997639+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "scripts/android_wifi_preflight.py",
+        "scripts/test_android_wifi_preflight.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:38:57.411305+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "No Android device preflight was run; this pack validates parser/CLI behavior only."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local tooling test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "android-wifi-preflight-auto-subnet",
+    "source": "AGENTS.md#validation-policy",
+    "title": "Infer Android Wi-Fi preflight subnet from host route"
+  },
+  "notes": [
+    "Unit tests, CLI help, and py_compile passed. No attached Android hardware preflight was run in this static tooling slice."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

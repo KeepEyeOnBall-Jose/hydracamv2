@@ -138,6 +138,64 @@ def extract_wlan0_ip(route_output: str) -> str | None:
     return None
 
 
+def parse_route_interface(route_output: str) -> str | None:
+    for line in route_output.splitlines():
+        match = re.match(r"\s*interface:\s*(\S+)\s*$", line)
+        if match:
+            return match.group(1)
+    return None
+
+
+def parse_ifconfig_ipv4_network(
+    ifconfig_output: str,
+) -> ipaddress.IPv4Network | None:
+    for line in ifconfig_output.splitlines():
+        match = re.search(
+            r"\binet\s+([0-9]+(?:\.[0-9]+){3})\s+netmask\s+(\S+)",
+            line,
+        )
+        if not match:
+            continue
+        address = match.group(1)
+        if address.startswith("127."):
+            continue
+        netmask = match.group(2)
+        if netmask.startswith("0x"):
+            netmask = str(ipaddress.IPv4Address(int(netmask, 16)))
+        return ipaddress.ip_network(f"{address}/{netmask}", strict=False)
+    return None
+
+
+def infer_expected_subnet_from_host(
+    expected_host: str,
+    timeout: int,
+) -> ipaddress.IPv4Network:
+    route = run_command(
+        ["route", "-n", "get", expected_host],
+        timeout=timeout,
+        check=True,
+    )
+    interface = parse_route_interface(route.combined_output)
+    if not interface:
+        raise RuntimeError(f"Could not resolve route interface for {expected_host}")
+
+    ifconfig = run_command(["ifconfig", interface], timeout=timeout, check=True)
+    network = parse_ifconfig_ipv4_network(ifconfig.stdout)
+    if not network:
+        raise RuntimeError(f"Could not resolve IPv4 subnet for interface {interface}")
+    return network
+
+
+def resolve_expected_subnet(
+    expected_subnet: str,
+    expected_host: str,
+    timeout: int,
+) -> ipaddress.IPv4Network:
+    if expected_subnet.lower() != "auto":
+        return ipaddress.ip_network(expected_subnet, strict=False)
+    return infer_expected_subnet_from_host(expected_host, timeout)
+
+
 def inspect_device(
     adb: str,
     device: AndroidDevice,
@@ -300,8 +358,19 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "--expected-subnet",
-        required=True,
-        help="Expected HydraCam LAN subnet, for example 192.168.178.0/24.",
+        default=os.environ.get("HYDRACAM_EXPECTED_SUBNET", "auto"),
+        help=(
+            "Expected HydraCam LAN subnet, for example 192.168.178.0/24. "
+            "Use auto to infer it from the Mac route to --expected-host."
+        ),
+    )
+    parser.add_argument(
+        "--expected-host",
+        default=os.environ.get("HYDRACAM_EXPECTED_HOST", "1.1.1.1"),
+        help=(
+            "Host used when --expected-subnet=auto. Use a known device bridge "
+            "IP, such as a reachable iPhone automation host, when available."
+        ),
     )
     parser.add_argument(
         "--device",
@@ -331,7 +400,15 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
 
 def main(argv: Sequence[str]) -> int:
     args = parse_args(argv)
-    expected_subnet = ipaddress.ip_network(args.expected_subnet, strict=False)
+    try:
+        expected_subnet = resolve_expected_subnet(
+            args.expected_subnet,
+            args.expected_host,
+            args.timeout,
+        )
+    except (RuntimeError, ValueError) as exc:
+        raise SystemExit(f"Could not resolve expected subnet: {exc}") from exc
+
     adb = os.path.expanduser(args.adb)
     if not os.path.exists(adb):
         raise SystemExit(f"adb not found at {adb}")
@@ -340,7 +417,10 @@ def main(argv: Sequence[str]) -> int:
     if not devices:
         raise SystemExit("No Android devices are attached or authorized.")
 
-    print(f"Expected subnet: {expected_subnet}")
+    if args.expected_subnet.lower() == "auto":
+        print(f"Expected subnet: {expected_subnet} (inferred from {args.expected_host})")
+    else:
+        print(f"Expected subnet: {expected_subnet}")
     password: str | None = None
     final_states: list[DeviceNetworkState] = []
 

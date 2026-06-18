@@ -1,0 +1,49 @@
+# HydraCam evidence run command log
+
+$ python3 scripts/test_android_wifi_preflight.py
+
+[stderr]
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+[exit-code] 0
+
+$ python3 scripts/android_wifi_preflight.py --help
+usage: android_wifi_preflight.py [-h] [--adb ADB] [--ssid SSID]
+                                 [--security {open,owe,wpa2,wpa3}]
+                                 [--expected-subnet EXPECTED_SUBNET]
+                                 [--expected-host EXPECTED_HOST]
+                                 [--device DEVICE] [--check-only]
+                                 [--wait-seconds WAIT_SECONDS]
+                                 [--timeout TIMEOUT]
+
+Verify and optionally provision Android Wi-Fi for HydraCam.
+
+options:
+  -h, --help            show this help message and exit
+  --adb ADB             Path to adb. Defaults to Android SDK platform-tools.
+  --ssid SSID           Target SSID. May also be set with HYDRACAM_WIFI_SSID.
+  --security {open,owe,wpa2,wpa3}
+                        Target network security type for Android cmd wifi.
+  --expected-subnet EXPECTED_SUBNET
+                        Expected HydraCam LAN subnet, for example
+                        192.168.178.0/24. Use auto to infer it from the Mac
+                        route to --expected-host.
+  --expected-host EXPECTED_HOST
+                        Host used when --expected-subnet=auto. Use a known
+                        device bridge IP, such as a reachable iPhone
+                        automation host, when available.
+  --device DEVICE       ADB serial to include. Repeat to select multiple
+                        devices.
+  --check-only          Inspect devices without attempting to connect or
+                        opening settings.
+  --wait-seconds WAIT_SECONDS
+                        Seconds to wait for a provisioned device to receive a
+                        wlan0 route.
+  --timeout TIMEOUT     Per-adb-command timeout in seconds.
+[exit-code] 0
+
+$ python3 -m py_compile scripts/android_wifi_preflight.py scripts/test_android_wifi_preflight.py
+[exit-code] 0
