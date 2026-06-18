@@ -162,6 +162,8 @@ class UploaderService {
     _uploadQueue.remove(pendingItem);
     _markUploadBlocked(pendingItem, _cancelledUploadMessage);
     await _persistUploadStateNow();
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    SessionManager.instance.notifyListeners();
     estimatedTimeNotifier.value = estimateTotalTimeRemaining();
     LogService.instance.registerLog("Cancelled pending upload: $mediaPath");
     return true;
@@ -196,9 +198,9 @@ class UploaderService {
     estimatedTimeNotifier.value = estimateTotalTimeRemaining();
     currentUpload.isUploaded = false;
     currentUpload.uploadFailureReason = _cancelledUploadMessage;
-    if (wasUploading) {
-      await _persistUploadStateNow();
-    }
+    await _persistUploadStateNow();
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    SessionManager.instance.notifyListeners();
 
     LogService.instance
         .registerLog("Cancelled active upload: ${currentUpload.mediaPath}");

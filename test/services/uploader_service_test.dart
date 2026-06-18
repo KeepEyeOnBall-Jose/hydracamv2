@@ -380,6 +380,40 @@ void main() {
     expect(failureReason, "Upload cancelled.");
   });
 
+  test("cancelQueuedMedia notifies session listeners", () async {
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "queued-cancel-notify-guid",
+        sessionId: "queued-cancel-notify-session",
+      ),
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/queued-cancel-notify.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "queued-cancel-notify-device",
+      captureDate: DateTime(2026, 6, 18, 19, 5),
+      receivedDate: DateTime(2026, 6, 18, 19, 5, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+
+    var notificationCount = 0;
+    void listener() {
+      notificationCount += 1;
+    }
+
+    SessionManager.instance.addListener(listener);
+    try {
+      expect(await uploaderService.cancelQueuedMedia(photo), isTrue);
+    } finally {
+      SessionManager.instance.removeListener(listener);
+    }
+
+    expect(notificationCount, greaterThanOrEqualTo(1));
+  });
+
   test("addMediaToQueue persists cleared failure reason when retrying",
       () async {
     SessionManager.instance.startCreatedSession(
@@ -705,6 +739,66 @@ void main() {
       sessionGuid: "active-cancel-metadata-guid",
     );
     expect(failureReason, "Upload cancelled.");
+
+    releaseUpload.complete();
+    await requestFinished.future.timeout(const Duration(seconds: 1));
+    await uploadFuture;
+  });
+
+  test("cancelCurrentUpload notifies session listeners", () async {
+    final releaseUpload = Completer<void>();
+    final requestStarted = Completer<void>();
+    final requestFinished = Completer<void>();
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        if (!requestStarted.isCompleted) {
+          requestStarted.complete();
+        }
+        await releaseUpload.future;
+        await bodyStream.drain<void>();
+        if (!requestFinished.isCompleted) {
+          requestFinished.complete();
+        }
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    SessionManager.instance.startCreatedSession(
+      const HydraCamBackendSession(
+        guid: "active-cancel-notify-guid",
+        sessionId: "active-cancel-notify-session",
+      ),
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/active-cancel-notify.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "active-cancel-notify-device",
+      captureDate: DateTime(2026, 6, 18, 19, 6),
+      receivedDate: DateTime(2026, 6, 18, 19, 6, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    final uploadFuture = uploaderService.startUploadingManually();
+    await requestStarted.future.timeout(const Duration(seconds: 1));
+
+    var notificationCount = 0;
+    void listener() {
+      notificationCount += 1;
+    }
+
+    SessionManager.instance.addListener(listener);
+    try {
+      expect(await uploaderService.cancelCurrentUpload(), isTrue);
+    } finally {
+      SessionManager.instance.removeListener(listener);
+    }
+
+    expect(notificationCount, greaterThanOrEqualTo(1));
 
     releaseUpload.complete();
     await requestFinished.future.timeout(const Duration(seconds: 1));

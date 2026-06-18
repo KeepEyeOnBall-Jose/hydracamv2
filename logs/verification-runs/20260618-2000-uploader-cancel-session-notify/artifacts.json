@@ -1,0 +1,71 @@
+{
+  "acceptanceChecks": [
+    "Queued upload cancellation notifies SessionManager listeners after marking media cancelled."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/uploader_service_test.dart",
+        "--name",
+        "notifies session listeners"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:00:40.579806+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/uploader_service_test.dart",
+        "--name",
+        "notifies session listeners"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:01:14.713952+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/uploader_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:01:27.073452+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:01:29.883291+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:01:43.465039+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "uploader-cancel-session-notify",
+    "source": "docs/control/backlog-import.md#upload-cancellation-and-retry",
+    "title": "Uploader cancellation session notification"
+  },
+  "notes": [
+    "Red-to-green regression covered queued and active upload cancellation session notifications. Full uploader service suite, flutter analyze, and full flutter test passed. Hardware smoke skipped because this is a Tier D service/UI-notification regression and no mobile devices are attached/responsive."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
