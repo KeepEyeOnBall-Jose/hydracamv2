@@ -1538,6 +1538,14 @@ plaintext HTTP 200 compatibility path remains accepted. Keep broader contract
 coverage open for live backend response-shape confirmation and any
 endpoint-specific failure object handling added later.
 
+2026-06-18 T-016 response-failure helper refactor note:
+`logs/verification-runs/20260618-1645-api-response-failure-helper-refactor/`
+centralizes backend response-object failure detection for upload and shared
+POST paths, keeping success aliases, non-empty error fields, and failed status
+values under one helper while preserving each caller's existing malformed-body
+compatibility contract. Focused API tests, analyzer, `git diff --check`, and
+the full Flutter test suite passed.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

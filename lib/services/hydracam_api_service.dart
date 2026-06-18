@@ -268,7 +268,7 @@ class HydraCamApiService {
       if (decoded is Map) {
         final decodedMap =
             decoded.map((key, value) => MapEntry(key.toString(), value));
-        if (_postResponseReportsFailure(decodedMap)) {
+        if (_responseMapReportsFailure(decodedMap)) {
           LogService.instance.registerLog(
               "POST $endpoint reported failure: ${_uploadFailureResponseBodySnippet(responseBody)}");
           return null;
@@ -284,25 +284,6 @@ class HydraCamApiService {
           "POST $endpoint returned non-JSON success body: ${_uploadFailureResponseBodySnippet(responseBody)}");
       return <String, dynamic>{};
     }
-  }
-
-  bool _postResponseReportsFailure(Map<String, dynamic> decoded) {
-    final successValue =
-        decoded["success"] ?? decoded["succeeded"] ?? decoded["isSuccess"];
-    final parsedSuccessValue = _parseUploadSuccessValue(successValue);
-    if (parsedSuccessValue != null) {
-      return !parsedSuccessValue;
-    }
-
-    final errorValue = decoded["error"] ?? decoded["errors"];
-    if (_hasMeaningfulErrorValue(errorValue)) {
-      return true;
-    }
-
-    final statusValue = decoded["status"]?.toString().toLowerCase();
-    return statusValue == "failed" ||
-        statusValue == "failure" ||
-        statusValue == "error";
   }
 
   /// Fetch courts, optionally filtered by Sports Center GUID
@@ -778,22 +759,9 @@ class HydraCamApiService {
         return true;
       }
 
-      final successValue =
-          decoded["success"] ?? decoded["succeeded"] ?? decoded["isSuccess"];
-      final parsedSuccessValue = _parseUploadSuccessValue(successValue);
-      if (parsedSuccessValue != null) {
-        return !parsedSuccessValue;
-      }
-
-      final errorValue = decoded["error"] ?? decoded["errors"];
-      if (_hasMeaningfulErrorValue(errorValue)) {
-        return true;
-      }
-
-      final statusValue = decoded["status"]?.toString().toLowerCase();
-      return statusValue == "failed" ||
-          statusValue == "failure" ||
-          statusValue == "error";
+      final decodedMap =
+          decoded.map((key, value) => MapEntry(key.toString(), value));
+      return _responseMapReportsFailure(decodedMap);
     } catch (e) {
       LogService.instance
           .registerLog("Malformed upload response body: $trimmedBody ($e)");
@@ -801,7 +769,26 @@ class HydraCamApiService {
     }
   }
 
-  bool? _parseUploadSuccessValue(Object? value) {
+  bool _responseMapReportsFailure(Map<String, dynamic> decoded) {
+    final successValue =
+        decoded["success"] ?? decoded["succeeded"] ?? decoded["isSuccess"];
+    final parsedSuccessValue = _parseResponseSuccessValue(successValue);
+    if (parsedSuccessValue != null) {
+      return !parsedSuccessValue;
+    }
+
+    final errorValue = decoded["error"] ?? decoded["errors"];
+    if (_hasMeaningfulErrorValue(errorValue)) {
+      return true;
+    }
+
+    final statusValue = decoded["status"]?.toString().toLowerCase();
+    return statusValue == "failed" ||
+        statusValue == "failure" ||
+        statusValue == "error";
+  }
+
+  bool? _parseResponseSuccessValue(Object? value) {
     if (value is bool) {
       return value;
     }

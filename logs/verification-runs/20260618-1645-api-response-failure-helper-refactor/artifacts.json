@@ -1,0 +1,99 @@
+{
+  "acceptanceChecks": [
+    "Upload and shared POST response failure contracts continue to pass",
+    "Failure response map parsing is centralized for success aliases, error fields, and failed status values"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:45:53.744215+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:45:53.882968+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:46:27.593244+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:46:30.327777+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:46:37.564301+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:46:49.681775+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:47:44.021611+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T14:47:44.119201+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "api-response-failure-helper-refactor",
+    "source": "docs/control/backlog-import.md#T-016-photo-video-upload-api-test-with-invalid-files",
+    "title": "Refactor shared API response failure detection"
+  },
+  "notes": [
+    "Shared API response failure-map detection refactored without changing upload or POST response contracts."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
