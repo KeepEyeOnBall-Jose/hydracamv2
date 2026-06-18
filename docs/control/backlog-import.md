@@ -1529,6 +1529,15 @@ and the full Flutter test suite passed. Keep row 35 open for real old-media
 attachment smoke evidence and any remaining controller/view GUID audit not
 covered by local widget/model tests.
 
+2026-06-18 row 35 previous-session upload restore note:
+`logs/verification-runs/20260618-1932-previous-session-upload-storage-identifier/`
+routes both load-only and upload-confirm restore actions through a shared
+`SessionDetailsScreen` restore identifier, preferring the original storage
+directory key while keeping the restored backend `sessionGuid` as the active
+upload identity. Focused session-details/session-manager coverage passed. Keep
+row 35 open for real old-media attachment smoke evidence and any remaining
+controller/view GUID audit not covered by local widget/model tests.
+
 2026-06-08 row 111 note:
 `logs/verification-runs/20260608-1901-upload-app-version-metadata/` adds
 `appVersion` and `appBuildNumber` multipart fields to media uploads and proves

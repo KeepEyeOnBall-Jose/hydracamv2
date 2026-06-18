@@ -21,6 +21,10 @@ class SessionDetailsScreen extends StatelessWidget {
     this.storageIdentifier,
   });
 
+  @visibleForTesting
+  String get restoreSessionIdentifier =>
+      storageIdentifier ?? session.preferredIdentifier;
+
   @override
   Widget build(BuildContext context) {
     final photos = session.capturedPhotos;
@@ -148,7 +152,7 @@ class SessionDetailsScreen extends StatelessWidget {
   Future<void> _loadSessionWithoutUploading(BuildContext context) async {
     try {
       await SessionManager.instance.restoreSessionFromMetadata(
-        storageIdentifier ?? session.preferredIdentifier,
+        restoreSessionIdentifier,
         deviceType: "Master",
       );
 
@@ -300,7 +304,7 @@ class SessionDetailsScreen extends StatelessWidget {
   Future<void> _loadSessionAndUploadMedia(BuildContext context) async {
     try {
       await SessionManager.instance.restoreSessionFromMetadata(
-        session.preferredIdentifier,
+        restoreSessionIdentifier,
         deviceType: "Master",
       );
 

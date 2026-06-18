@@ -209,6 +209,20 @@ void main() {
     expect(find.textContaining("Failed to load session:"), findsNothing);
   });
 
+  test("restore identifier prefers storage key for upload and load actions",
+      () {
+    final screen = SessionDetailsScreen(
+      storageIdentifier: "directory-reference-guid",
+      session: CaptureSession(
+        sessionId: "legacy-session-id",
+        sessionGuid: "backend-session-guid",
+        startTime: DateTime.utc(2026, 6, 18, 19, 32),
+      ),
+    );
+
+    expect(screen.restoreSessionIdentifier, "directory-reference-guid");
+  });
+
   testWidgets("upload confirm action reports missing restored metadata",
       (tester) async {
     final videoFile = File("${testPathProvider.documentsDir.path}/upload.mp4")
