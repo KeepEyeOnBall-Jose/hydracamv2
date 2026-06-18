@@ -49,13 +49,15 @@ void main() {
     });
 
     group("Force stop recording", () {
-      test("forceStopRecordingDueToStorage API exists", () {
-        // Verify the API exists and can be called
-        // Full behavior testing requires camera controller mocking
-        expect(
-          () => cameraService.forceStopRecordingDueToStorage(),
-          returnsNormally,
+      test("forceStopRecordingDueToStorage is a no-op when idle", () async {
+        await expectLater(
+          cameraService.forceStopRecordingDueToStorage(),
+          completes,
         );
+
+        expect(cameraService.isRecording, isFalse);
+        expect(cameraService.recordingInterrupted.value, isFalse);
+        verifyNever(() => mockStorageService.showNotification(any()));
       });
     });
   });

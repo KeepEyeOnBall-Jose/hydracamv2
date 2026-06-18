@@ -470,6 +470,13 @@ Default issue schema:
   battery/storage/alert warning snackbars with the shared HydraCam warning and
   danger surfaces. Keep this issue open for real-device or emulator recording
   proof from platform battery/storage events.
+- 2026-06-18 forced-stop async test cleanup note:
+  `logs/verification-runs/20260618-1551-camera-force-stop-async-test-cleanup/`
+  replaces the old synchronous `returnsNormally` smoke for idle storage
+  forced-stop with awaited `completes` coverage and explicit no-notification /
+  no-interruption assertions. This is test-harness cleanup only; keep this
+  issue open for real-device or emulator recording proof from platform
+  battery/storage events.
 
 ### 6. Make network/device identity visible
 
