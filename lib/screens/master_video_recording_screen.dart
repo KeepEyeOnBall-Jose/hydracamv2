@@ -27,6 +27,8 @@ class MasterVideoRecordingScreen extends StatefulWidget {
 class MasterVideoRecordingScreenState
     extends State<MasterVideoRecordingScreen> {
   bool _isStopping = false; // State variable to avoid button spam
+  late final VoidCallback _recordingInterruptedListener =
+      _handleRecordingInterrupted;
 
   Future<void> _handleStopRecording() async {
     if (_isStopping) return; // Prevent multiple presses
@@ -105,16 +107,33 @@ class MasterVideoRecordingScreenState
     super.initState();
 
     // Listen to interruption from CameraService
-    widget.cameraService.recordingInterrupted.addListener(() {
-      if (widget.cameraService.recordingInterrupted.value) {
-        Navigator.of(context).pop();
-      }
-    });
+    widget.cameraService.recordingInterrupted
+        .addListener(_recordingInterruptedListener);
+  }
+
+  @override
+  void didUpdateWidget(covariant MasterVideoRecordingScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.cameraService == widget.cameraService) {
+      return;
+    }
+    oldWidget.cameraService.recordingInterrupted
+        .removeListener(_recordingInterruptedListener);
+    widget.cameraService.recordingInterrupted
+        .addListener(_recordingInterruptedListener);
+  }
+
+  void _handleRecordingInterrupted() {
+    if (!mounted || !widget.cameraService.recordingInterrupted.value) {
+      return;
+    }
+    Navigator.of(context).pop();
   }
 
   @override
   void dispose() {
-    widget.cameraService.recordingInterrupted.removeListener(() {});
+    widget.cameraService.recordingInterrupted
+        .removeListener(_recordingInterruptedListener);
     super.dispose();
   }
 

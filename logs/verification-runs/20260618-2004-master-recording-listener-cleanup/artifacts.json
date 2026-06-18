@@ -1,0 +1,71 @@
+{
+  "acceptanceChecks": [
+    "Master recording preview removes its recording interruption listener when disposed."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart",
+        "--name",
+        "recording interruption listener is removed on dispose"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:04:28.438426+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart",
+        "--name",
+        "recording interruption listener is removed on dispose"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:04:49.584685+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:05:05.608464+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:05:08.928280+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:05:19.541367+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-recording-listener-cleanup",
+    "source": "docs/control/backlog-import.md#recording-and-session-cleanup",
+    "title": "Master recording interruption listener cleanup"
+  },
+  "notes": [
+    "Red-to-green widget regression covered disposed master recording interruption listener cleanup. Focused screen suite, flutter analyze, and full flutter test passed. Hardware smoke skipped because no mobile devices are attached/responsive."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -50,6 +50,43 @@ void main() {
     recordingInterrupted.dispose();
   });
 
+  testWidgets("recording interruption listener is removed on dispose",
+      (WidgetTester tester) async {
+    final cameraService = MockCameraService();
+    final recordingInterrupted = ValueNotifier<bool>(false);
+
+    when(() => cameraService.recordingInterrupted)
+        .thenReturn(recordingInterrupted);
+    when(() => cameraService.isRecording).thenReturn(false);
+    when(() => cameraService.controller).thenReturn(null);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: _PreviewHost(
+          cameraService: cameraService,
+          onStopRecording: () async {
+            throw StateError("stop recording should not be called");
+          },
+        ),
+      ),
+    );
+
+    await tester.tap(find.text("Open preview"));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip("Exit recording preview"));
+    await tester.pumpAndSettle();
+
+    recordingInterrupted.value = true;
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(MasterVideoRecordingScreen), findsNothing);
+    expect(find.text("Open preview"), findsOneWidget);
+
+    recordingInterrupted.dispose();
+  });
+
   testWidgets("stop recording button returns captured video",
       (WidgetTester tester) async {
     SettingsService.overrideTimerDuration(0);
