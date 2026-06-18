@@ -65,6 +65,16 @@ work only where the gate maps to a concrete mobile task.
 | 17 | NFR-015 | Usability | Cross-browser compatibility | Medium | external-backend | Web-owned unless Flutter web support is active. |
 | 18 | NFR-016 | Usability | Localization to English, Spanish, and German | Low | mobile | Track as a future localization task if product needs it. |
 
+### NFR Evidence Notes
+
+- 2026-06-18 NFR-010 logging trace retry note:
+  `logs/verification-runs/20260618-1330-log-service-trace-retry/` proves
+  `LogService` no longer permanently disables trace persistence after a
+  transient documents-directory/path failure, waits for queued trace writes
+  before reading persisted lines, and suppresses repeated debug noise while
+  retrying later log writes. Focused `LogService` coverage, full
+  `flutter test --no-pub`, and `flutter analyze --no-pub` passed.
+
 ## Completed Functional Requirements
 
 The sheet marked 39 functional requirements complete. Treat those rows as

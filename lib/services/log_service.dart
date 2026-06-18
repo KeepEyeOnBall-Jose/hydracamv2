@@ -13,8 +13,9 @@ class LogService {
   final List<Map<String, dynamic>> _logs = [];
   Future<File?>? _traceFileFuture;
   Future<void> _persistedWriteQueue = Future<void>.value();
-  bool _tracePersistenceDisabled = false;
   String? _traceFilePath;
+  int _traceGeneration = 0;
+  String? _lastTraceDebugMessage;
 
   LogService._internal();
 
@@ -68,9 +69,13 @@ class LogService {
   /// Clears all logs.
   void clearLogs() {
     _logs.clear();
+    _traceGeneration++;
+    _traceFileFuture = null;
+    _traceFilePath = null;
   }
 
   Future<List<String>> readPersistedLogLines({int limit = 500}) async {
+    await _persistedWriteQueue;
     final traceFile = await _getTraceFile();
     if (traceFile == null || !await traceFile.exists()) {
       return [];
@@ -84,15 +89,27 @@ class LogService {
   }
 
   void _persistLogEntry(Map<String, dynamic> logEntry) {
-    _persistedWriteQueue =
-        _persistedWriteQueue.then((_) => _writePersistedLogEntry(logEntry));
+    final generation = _traceGeneration;
+    _persistedWriteQueue = _persistedWriteQueue.then(
+      (_) => _writePersistedLogEntry(logEntry, generation),
+    );
     unawaited(_persistedWriteQueue);
   }
 
-  Future<void> _writePersistedLogEntry(Map<String, dynamic> logEntry) async {
+  Future<void> _writePersistedLogEntry(
+    Map<String, dynamic> logEntry,
+    int generation,
+  ) async {
+    if (generation != _traceGeneration) {
+      return;
+    }
+
     try {
       final traceFile = await _getTraceFile();
       if (traceFile == null) {
+        return;
+      }
+      if (generation != _traceGeneration) {
         return;
       }
 
@@ -109,18 +126,15 @@ class LogService {
         mode: FileMode.append,
         flush: true,
       );
+      _lastTraceDebugMessage = null;
     } catch (error) {
-      _tracePersistenceDisabled = true;
-      if (kDebugMode) {
-        debugPrint("Trace persistence disabled: $error");
-      }
+      _traceFileFuture = null;
+      _traceFilePath = null;
+      _debugPrintTraceIssue("Trace persistence retry scheduled", error);
     }
   }
 
   Future<File?> _getTraceFile() {
-    if (_tracePersistenceDisabled) {
-      return Future<File?>.value(null);
-    }
     return _traceFileFuture ??= _createTraceFile();
   }
 
@@ -136,13 +150,27 @@ class LogService {
       final traceFile =
           File("${logDirectory.path}/hydracam-trace-$traceStartedAt.ndjson");
       _traceFilePath = traceFile.path;
+      _lastTraceDebugMessage = null;
       return traceFile;
     } catch (error) {
-      _tracePersistenceDisabled = true;
-      if (kDebugMode) {
-        debugPrint("Trace file unavailable: $error");
-      }
+      _traceFileFuture = null;
+      _traceFilePath = null;
+      _debugPrintTraceIssue("Trace file unavailable", error);
       return null;
     }
+  }
+
+  void _debugPrintTraceIssue(String label, Object error) {
+    if (!kDebugMode) {
+      return;
+    }
+
+    final message = "$label: $error";
+    if (_lastTraceDebugMessage == message) {
+      return;
+    }
+
+    _lastTraceDebugMessage = message;
+    debugPrint(message);
   }
 }

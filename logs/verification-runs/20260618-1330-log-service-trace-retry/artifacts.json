@@ -1,0 +1,63 @@
+{
+  "acceptanceChecks": [
+    "Focused and full Flutter test coverage proves LogService retries persisted trace creation after transient path failures, suppresses repeated debug noise, and analyzer passes."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/log_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:30:16.102644+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:30:21.886174+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:30:34.416922+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "Shared-service Tier D proof; flutter devices inventory was interrupted after hanging beyond the requested timeout."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "log-service-trace-retry",
+    "source": "docs/control/requirements.md#nfr-010-logging-and-monitoring",
+    "title": "Recover LogService trace persistence after transient path failures"
+  },
+  "notes": [
+    "Focused LogService test, analyzer, and full Flutter test suite passed. Device inventory was started but interrupted after hanging beyond the requested timeout; this run is local/static proof only."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
