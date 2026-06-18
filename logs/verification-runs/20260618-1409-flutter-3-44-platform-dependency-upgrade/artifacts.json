@@ -1,0 +1,143 @@
+{
+  "acceptanceChecks": [
+    "Flutter dependencies resolve under Flutter 3.44.1",
+    "Analyzer and full Flutter tests pass",
+    "Android release app bundle builds with upgraded AGP and dependencies",
+    "iOS and macOS platform builds either pass or document concrete blockers",
+    "Store readiness preflight no longer fails the Android URL-launcher pin after AGP upgrade"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "pub",
+        "get"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:10:02.687983+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:10:09.427991+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:10:19.321981+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "config",
+        "--jdk-dir",
+        "/Library/Java/JavaVirtualMachines/temurin-26.jdk/Contents/Home"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:19:16.606648+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-26.jdk/Contents/Home",
+        "android/gradlew",
+        "-p",
+        "android",
+        "bundleRelease"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T12:22:10.973793+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+        "android/gradlew",
+        "-p",
+        "android",
+        "bundleRelease"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:22:41.199826+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--release",
+        "--no-codesign"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:26:53.036202+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "macos"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T12:27:51.229729+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "HYDRACAM_PRIVACY_POLICY_URL=https://store-site-ten.vercel.app/privacy.html",
+        "HYDRACAM_SUPPORT_URL=https://store-site-ten.vercel.app/support.html",
+        "HYDRACAM_ACCOUNT_DELETION_URL=https://store-site-ten.vercel.app/account-deletion.html",
+        "bash",
+        "scripts/check_store_readiness.sh",
+        "local"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T12:28:27.623653+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "android/app/build.gradle",
+        "android/gradle/wrapper/gradle-wrapper.properties",
+        "android/settings.gradle",
+        "ios/Podfile.lock",
+        "ios/Runner.xcodeproj/project.pbxproj",
+        "linux/flutter/generated_plugins.cmake",
+        "windows/flutter/generated_plugins.cmake",
+        "pubspec.yaml",
+        "pubspec.lock",
+        "scripts/check_store_readiness.sh",
+        "logs/verification-runs/20260618-1409-flutter-3-44-platform-dependency-upgrade"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T12:28:58.977393+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "flutter-3-44-platform-dependency-upgrade",
+    "source": "docs/control/status-and-roadmap.md",
+    "title": "Flutter 3.44 platform dependency upgrade"
+  },
+  "notes": [
+    "Android release bundle and iOS no-codesign build passed under upgraded Flutter dependencies. macOS dirty SPM/CocoaPods migration failed and is excluded."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

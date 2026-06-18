@@ -14,6 +14,7 @@ STORE_METADATA_FORMAT="HydraCamStoreArtifactMetadataV1"
 EXPECTED_ANDROID_MIN_SDK="${EXPECTED_ANDROID_MIN_SDK:-24}"
 EXPECTED_ANDROID_MIN_TARGET_SDK="${EXPECTED_ANDROID_MIN_TARGET_SDK:-35}"
 EXPECTED_ANDROID_MIN_COMPILE_SDK="${EXPECTED_ANDROID_MIN_COMPILE_SDK:-35}"
+MIN_URL_LAUNCHER_UNPIN_AGP_VERSION="${MIN_URL_LAUNCHER_UNPIN_AGP_VERSION:-8.9.1}"
 EXPECTED_ANDROID_UPLOAD_CERT_SHA256="${EXPECTED_ANDROID_UPLOAD_CERT_SHA256:-51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3}"
 EXPECTED_URL_LAUNCHER_ANDROID_VERSION="${EXPECTED_URL_LAUNCHER_ANDROID_VERSION:-6.3.23}"
 
@@ -26,6 +27,7 @@ IOS_FASTLANE_FASTFILE="$ROOT_DIR/ios/fastlane/Fastfile"
 IOS_FASTLANE_README="$ROOT_DIR/ios/fastlane/README.md"
 ANDROID_MANIFEST="$ROOT_DIR/android/app/src/main/AndroidManifest.xml"
 ANDROID_BUILD_GRADLE="$ROOT_DIR/android/app/build.gradle"
+ANDROID_SETTINGS_GRADLE="$ROOT_DIR/android/settings.gradle"
 ANDROID_KEY_PROPERTIES="$ROOT_DIR/android/key.properties"
 ANDROID_UPLOAD_CERT="$ROOT_DIR/android/amaia23-hydracam-upload-certificate-20260609.pem"
 ANDROID_FASTLANE_APPFILE="$ROOT_DIR/android/fastlane/Appfile"
@@ -183,6 +185,24 @@ gradle_int_value() {
       }
     }
   ' "$path"
+}
+
+android_gradle_plugin_version() {
+  if [[ ! -f "$ANDROID_SETTINGS_GRADLE" ]]; then
+    return 1
+  fi
+  sed -nE 's/.*id "com\.android\.application" version "([^"]+)".*/\1/p' \
+    "$ANDROID_SETTINGS_GRADLE" | head -n 1
+}
+
+version_at_least() {
+  local current="$1"
+  local minimum="$2"
+  local first second
+
+  first="$(printf '%s\n%s\n' "$minimum" "$current" | sort -V | head -n 1)"
+  second="$(printf '%s\n%s\n' "$minimum" "$current" | sort -V | tail -n 1)"
+  [[ "$first" == "$minimum" && "$second" == "$current" ]]
 }
 
 is_public_https_url() {
@@ -776,8 +796,15 @@ if [[ -f "$PUBSPEC" ]]; then
     "pubspec description is release-appropriate"
   require_text "$PUBSPEC" "url_launcher:" \
     "pubspec includes url_launcher for account deletion URL handoff"
-  require_line "$PUBSPEC" "  url_launcher_android: ${EXPECTED_URL_LAUNCHER_ANDROID_VERSION}" \
-    "pubspec pins url_launcher_android ${EXPECTED_URL_LAUNCHER_ANDROID_VERSION} for the current Android toolchain"
+  agp_version="$(android_gradle_plugin_version || true)"
+  if [[ -n "$agp_version" ]] &&
+    version_at_least "$agp_version" "$MIN_URL_LAUNCHER_UNPIN_AGP_VERSION"; then
+    require_text "$PUBSPEC" "url_launcher_android:" \
+      "pubspec declares url_launcher_android for Android Gradle Plugin ${agp_version}"
+  else
+    require_line "$PUBSPEC" "  url_launcher_android: ${EXPECTED_URL_LAUNCHER_ANDROID_VERSION}" \
+      "pubspec pins url_launcher_android ${EXPECTED_URL_LAUNCHER_ANDROID_VERSION} for the current Android toolchain"
+  fi
 fi
 
 if [[ -f "$LOGIN_SCREEN" ]]; then

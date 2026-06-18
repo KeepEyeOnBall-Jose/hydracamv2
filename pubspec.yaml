@@ -38,12 +38,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   web_socket_channel: ^3.0.3
-  camera: ^0.11.4
+  camera: ^0.12.0+1
   permission_handler: ^12.0.1
   path_provider: ^2.1.1
   video_player: ^2.7.2
   http: ^1.0.0
-  device_info_plus: ^12.2.0
+  device_info_plus: ^13.1.0
   shared_preferences: ^2.2.2
   uuid: ^4.1.0
   provider: ^6.1.2
@@ -53,11 +53,11 @@ dependencies:
   #flutter_webrtc: ^0.9.34
   photo_manager: ^3.6.3
   intl: ^0.20.2
-  flutter_appauth: ^11.0.0
+  flutter_appauth: ^12.0.1
   connectivity_plus: ^7.0.0
-  network_info_plus: ^7.0.0
+  network_info_plus: ^8.1.0
   flutter_launcher_icons: ^0.14.4
-  package_info_plus: ^8.3.1
+  package_info_plus: ^10.1.0
   # battery_info: ^1.1.1  # Removed - incompatible with current Android Gradle plugin
   context_holder: ^0.0.5
   disk_space_plus: ^0.2.4
@@ -66,10 +66,9 @@ dependencies:
   sensors_plus: ^7.0.0
   flutter_secure_storage: ^10.3.1
   url_launcher: ^6.3.2
-  # url_launcher_android 6.3.29+ pulls AndroidX Core 1.17/Browser 1.9, which
-  # requires AGP 8.9.1+. Keep the Android implementation pinned until the
-  # release branch takes the Android toolchain upgrade.
-  url_launcher_android: 6.3.23
+  # url_launcher_android 6.3.29+ pulls AndroidX Core 1.17/Browser 1.9, so keep
+  # this unpinned only while the Android toolchain remains on AGP 8.9.1+.
+  url_launcher_android: ^6.3.32
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +83,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
