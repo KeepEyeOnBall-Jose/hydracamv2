@@ -200,6 +200,13 @@ Default issue schema:
   socket regression keeps the active slave session and upload queue intact.
   Keep this issue open for real master/slave reconnect reproduction and
   cross-device metadata comparison.
+- 2026-06-18 malformed-master-reported-session-guid note:
+  `logs/verification-runs/20260618-1808-master-malformed-reported-session-guid/`
+  hardens master-side connected-client updates so malformed non-string slave
+  `sessionGuid` reports clear stale session/media diagnostics instead of
+  aborting heartbeat processing and leaving an old reported session attached.
+  Keep this issue open for real master/slave reconnect reproduction and
+  cross-device metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing

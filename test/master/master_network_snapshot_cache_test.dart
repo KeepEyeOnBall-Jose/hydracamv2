@@ -408,6 +408,60 @@ void main() {
     expect(client["sessionMedia"], isNull);
   });
 
+  test("incoming heartbeat clears malformed slave session diagnostics",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "heartbeat",
+        "deviceId": "slave-a",
+        "sessionGuid": "slave-session-guid",
+        "sessionMedia": {
+          "photoCount": 1,
+          "videoCount": 1,
+          "pendingUploadCount": 1,
+          "uploadedCount": 1,
+        },
+      }),
+      socket: MockWebSocket(),
+      remoteIp: "192.168.178.62",
+    );
+
+    await server.handleIncomingMessageForTest(
+      jsonEncode({
+        "type": "heartbeat",
+        "deviceId": "slave-a",
+        "sessionGuid": ["not-a-guid"],
+        "sessionMedia": {
+          "photoCount": 9,
+          "videoCount": 9,
+          "pendingUploadCount": 9,
+          "uploadedCount": 9,
+        },
+      }),
+      socket: MockWebSocket(),
+      remoteIp: "192.168.178.62",
+    );
+
+    final payload =
+        buildConnectedClientAutomationPayload(server.getConnectedDeviceInfos());
+    final client =
+        (payload["connectedClients"] as List).single as Map<String, dynamic>;
+
+    expect(client["reportedSessionGuid"], isNull);
+    expect(client["sessionMedia"], isNull);
+  });
+
   test("incoming photo media is saved through session media storage", () async {
     final galleryCalls = <SessionMediaType>[];
     final storageRoot =

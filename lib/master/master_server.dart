@@ -368,6 +368,14 @@ String? _stringValue(Object? value) {
   return normalized;
 }
 
+String? _reportedSessionGuidValue(Object? value) {
+  if (value is! String) {
+    return null;
+  }
+  final normalized = value.trim();
+  return normalized.isEmpty ? null : normalized;
+}
+
 class MasterNetworkSnapshotCache {
   MasterNetworkSnapshotCache({
     required this.loadSnapshot,
@@ -616,7 +624,8 @@ class MasterServer {
       networkSnapshot: NetworkSnapshot.tryFromJson(decodedData["network"]),
       setupStatus:
           ConnectedDeviceSetupStatus.tryFromJson(decodedData["setupStatus"]),
-      reportedSessionGuid: decodedData["sessionGuid"] as String?,
+      reportedSessionGuid:
+          _reportedSessionGuidValue(decodedData["sessionGuid"]),
       appVersion: _stringValue(decodedData["appVersion"]),
       appBuildNumber: _stringValue(decodedData["appBuildNumber"]),
       hardwareLabel: _stringValue(decodedData["hardware"]),
@@ -714,7 +723,8 @@ class MasterServer {
       networkSnapshot: NetworkSnapshot.tryFromJson(decodedData["network"]),
       setupStatus:
           ConnectedDeviceSetupStatus.tryFromJson(decodedData["setupStatus"]),
-      reportedSessionGuid: decodedData["sessionGuid"] as String?,
+      reportedSessionGuid:
+          _reportedSessionGuidValue(decodedData["sessionGuid"]),
       appVersion: _stringValue(decodedData["appVersion"]),
       appBuildNumber: _stringValue(decodedData["appBuildNumber"]),
       hardwareLabel: _stringValue(decodedData["hardware"]),
@@ -740,7 +750,8 @@ class MasterServer {
       networkSnapshot: NetworkSnapshot.tryFromJson(decodedData["network"]),
       setupStatus:
           ConnectedDeviceSetupStatus.tryFromJson(decodedData["setupStatus"]),
-      reportedSessionGuid: decodedData["sessionGuid"] as String?,
+      reportedSessionGuid:
+          _reportedSessionGuidValue(decodedData["sessionGuid"]),
       appVersion: _stringValue(decodedData["appVersion"]),
       appBuildNumber: _stringValue(decodedData["appBuildNumber"]),
       hardwareLabel: _stringValue(decodedData["hardware"]),
