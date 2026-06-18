@@ -3,6 +3,7 @@ import "package:camera/camera.dart";
 import "package:connectivity_plus/connectivity_plus.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "../app_theme.dart";
 import "../screens/camera_setup_preview_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../screens/uploader_info_screen.dart";
@@ -23,6 +24,7 @@ import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
 import "../widgets/camera_preview_widget.dart";
 import "../widgets/hydra_cam_app_bar.dart";
+import "../widgets/hydracam_surface.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
 import "../master/master_screen.dart";
@@ -552,39 +554,32 @@ class SlaveScreenState extends State<SlaveScreen> {
     return ValueListenableBuilder<TimeSyncResult?>(
       valueListenable: TimeSyncService.instance.latest,
       builder: (context, result, child) {
-        const Map<TimeSyncConfidence, Color> colors = {
-          TimeSyncConfidence.green: Colors.green,
-          TimeSyncConfidence.yellow: Colors.amber,
-          TimeSyncConfidence.red: Colors.red,
-        };
-        final Color color;
+        final HydraCamStatusTone tone;
+        final IconData icon;
         final String label;
         if (result == null) {
-          color = Colors.grey;
+          tone = HydraCamStatusTone.neutral;
+          icon = Icons.sync_outlined;
           label = "Clock sync: calibrating…";
         } else {
-          color = colors[result.confidence] ?? Colors.grey;
+          tone = switch (result.confidence) {
+            TimeSyncConfidence.green => HydraCamStatusTone.active,
+            TimeSyncConfidence.yellow => HydraCamStatusTone.warning,
+            TimeSyncConfidence.red => HydraCamStatusTone.danger,
+          };
+          icon = switch (result.confidence) {
+            TimeSyncConfidence.green => Icons.sync_outlined,
+            TimeSyncConfidence.yellow => Icons.sync_problem_outlined,
+            TimeSyncConfidence.red => Icons.sync_disabled_outlined,
+          };
           label = "Clock sync: ±${result.uncertainty.inMilliseconds} ms · "
               "RTT ${result.minRoundTrip.inMilliseconds} ms · "
               "${result.sampleCount} samples";
         }
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-            ),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                label,
-                style: const TextStyle(fontSize: 12),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
+        return HydraCamStatusChip(
+          status: tone,
+          icon: icon,
+          label: label,
         );
       },
     );
@@ -665,9 +660,10 @@ class SlaveScreenState extends State<SlaveScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Recording...",
-              style: TextStyle(color: Colors.red, fontSize: 24),
+            const HydraCamStatusChip(
+              status: HydraCamStatusTone.recording,
+              icon: Icons.fiber_manual_record,
+              label: "Recording...",
             ),
             const SizedBox(height: 12),
             Tooltip(
@@ -676,6 +672,7 @@ class SlaveScreenState extends State<SlaveScreen> {
                 key: const ValueKey("slaveStopRecordingButton"),
                 icon: const Icon(Icons.stop_circle_outlined),
                 label: Text(_isStoppingRecording ? "Stopping..." : "Stop"),
+                style: AppTheme.dangerButtonStyle(),
                 onPressed: _isStoppingRecording ? null : _stopRecordingSafely,
               ),
             ),
@@ -690,13 +687,13 @@ class SlaveScreenState extends State<SlaveScreen> {
       child: IgnorePointer(
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.amberAccent, width: 10),
-            color: Colors.white.withValues(alpha: 0.24),
+            border: Border.all(color: AppTheme.accent, width: 10),
+            color: AppTheme.previewOverlay,
           ),
           child: const Center(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: AppTheme.appChrome,
                 borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
               child: Padding(
@@ -704,7 +701,7 @@ class SlaveScreenState extends State<SlaveScreen> {
                 child: Text(
                   "Identifying this slave",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppTheme.inverseText,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
@@ -744,16 +741,36 @@ class SlaveScreenState extends State<SlaveScreen> {
     // Controls and camera preview widget
     final Widget controlsAndPreview = Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SessionInfoWidget(
-            sessionDisplay:
-                SessionManager.instance.sessionGuid ?? "No active session",
+        HydraCamSurface(
+          tone: HydraCamSurfaceTone.muted,
+          margin: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SessionInfoWidget(
+                sessionDisplay:
+                    SessionManager.instance.sessionGuid ?? "No active session",
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  HydraCamStatusChip(
+                    status: _isConnected
+                        ? HydraCamStatusTone.active
+                        : HydraCamStatusTone.neutral,
+                    icon: _isConnected
+                        ? Icons.link_outlined
+                        : Icons.link_off_outlined,
+                    label: _isConnected ? "Master connected" : "Searching",
+                  ),
+                  _buildSyncStatusChip(),
+                ],
+              ),
+            ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: _buildSyncStatusChip(),
         ),
         AddGalleryMediaButton(enabled: !isRecording),
         const SizedBox(height: 10),
@@ -807,11 +824,14 @@ class SlaveScreenState extends State<SlaveScreen> {
                     _resetDimTimer(),
                   ), // Wake up the screen
                   child: Container(
-                    color: Colors.black,
+                    color: AppTheme.cameraCanvas,
                     child: const Center(
                       child: Text(
                         "Screen Off - Tap to wake",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                          color: AppTheme.inverseText,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -863,11 +883,14 @@ class SlaveScreenState extends State<SlaveScreen> {
                   _resetDimTimer(),
                 ), // Wake up the screen
                 child: Container(
-                  color: Colors.black,
+                  color: AppTheme.cameraCanvas,
                   child: const Center(
                     child: Text(
                       "Screen Off - Tap to wake",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                        color: AppTheme.inverseText,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

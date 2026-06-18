@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "../app_theme.dart";
 import "../services/alert_utils.dart";
+import "hydracam_surface.dart";
 
 /// A reusable widget for settings options with an optional info icon.
 class SettingsOption extends StatelessWidget {
@@ -17,10 +18,10 @@ class SettingsOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10.0,
-      ), // Space between options
+    return HydraCamSurface(
+      tone: HydraCamSurfaceTone.muted,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final label = _SettingsOptionLabel(

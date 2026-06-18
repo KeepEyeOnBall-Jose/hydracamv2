@@ -59,7 +59,8 @@ class FakeSessionManager extends Fake implements SessionManager {
     String guid,
     String? id, {
     required String deviceType,
-    bool backendCreated = true,
+    bool debugSession = false,
+    int? serviceNumericId,
   }) {
     _sessionGuid = guid;
     _isSessionActive = true;

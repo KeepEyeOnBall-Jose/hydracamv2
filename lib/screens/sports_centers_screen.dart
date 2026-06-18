@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "../widgets/hydracam_surface.dart";
 import "../services/hydracam_api_service.dart";
 import "courts_screen.dart";
 
@@ -21,15 +22,23 @@ class SportsCentersScreen extends StatelessWidget {
           }
 
           final sportsCenters = snapshot.data!;
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.all(12),
             itemCount: sportsCenters.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final sportsCenter = sportsCenters[index];
-              return Card(
+              return HydraCamSurface(
+                padding: EdgeInsets.zero,
                 child: ListTile(
-                  title: Text(sportsCenter["name"]),
+                  leading: const Icon(Icons.location_city_outlined),
+                  title: Text(sportsCenter["name"]?.toString() ?? "Unnamed"),
                   subtitle: Text(sportsCenter["city"] ?? "Unknown location"),
-                  trailing: Text("Courts: ${sportsCenter['numberOfCourts']}"),
+                  trailing: HydraCamBadge(
+                    icon: Icons.sports_tennis_outlined,
+                    label: "Courts: ${sportsCenter['numberOfCourts']}",
+                    tone: HydraCamStatusTone.neutral,
+                  ),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(

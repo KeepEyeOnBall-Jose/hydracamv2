@@ -5,6 +5,7 @@ import "../models/camera_capture_settings.dart";
 import "../services/app_locale_service.dart";
 import "../services/camera_service_singleton.dart";
 import "../services/settings_service.dart";
+import "../widgets/hydracam_surface.dart";
 import "../widgets/settings_option.dart"; // Import the widget
 
 class SettingsScreen extends StatefulWidget {
@@ -201,9 +202,14 @@ class SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              l10n.settingsPreferencesHeading,
-              style: AppTheme.headline1.copyWith(fontSize: 24),
+            HydraCamToolbar(
+              children: [
+                const Icon(Icons.tune_outlined, color: AppTheme.accent),
+                Text(
+                  l10n.settingsPreferencesHeading,
+                  style: AppTheme.headline1.copyWith(fontSize: 24),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             SettingsOption(
@@ -229,9 +235,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                 inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
-            Text(
-              l10n.settingsCaptureHeading,
-              style: AppTheme.headline1.copyWith(fontSize: 20),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 8),
+              child: HydraCamBadge(
+                label: l10n.settingsCaptureHeading,
+                icon: Icons.videocam_outlined,
+                tone: HydraCamStatusTone.active,
+              ),
             ),
             SettingsOption(
               title: l10n.settingsCameraLensTitle,

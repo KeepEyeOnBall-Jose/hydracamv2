@@ -8,6 +8,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
 import "package:hydracam/services/network_info_service.dart";
+import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/storage_service.dart";
 import "package:hydracam/slave/slave_client.dart";
 import "package:hydracam/slave/slave_screen.dart";
@@ -50,6 +51,7 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
   @override
   void connect() {
     connected = true;
+    connectionController.add(true);
   }
 
   @override
@@ -70,10 +72,13 @@ class FakeSlaveConnectionClient implements SlaveConnectionClient {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() {
+  setUp(() async {
     SharedPreferences.setMockInitialValues({
       "screenAutoOff": false,
     });
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
     if (!CameraServiceSingleton.isInitialized) {
       final storageService = StorageService(
         messengerState: null,
@@ -137,6 +142,11 @@ void main() {
     expect(clients, hasLength(1));
     expect(clients.single.serverAddress, "ws://192.168.178.153:4040/ws");
     expect(clients.single.connected, isTrue);
+    expect(find.textContaining("No active session"), findsOneWidget);
+    expect(find.text("Master connected"), findsOneWidget);
+    expect(find.byIcon(Icons.link_outlined), findsOneWidget);
+    expect(find.textContaining("Clock sync: calibrating"), findsOneWidget);
+    expect(find.text("No media available"), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
     for (final client in clients) {
@@ -299,13 +309,15 @@ void main() {
     await tester.pump();
 
     expect(find.text("Recording..."), findsOneWidget);
+    expect(find.byIcon(Icons.fiber_manual_record), findsOneWidget);
     expect(find.byTooltip("Stop recording safely"), findsOneWidget);
 
     await tester.tap(find.byTooltip("Stop recording safely"));
     await tester.pump();
 
     expect(clients.single.stopRecordingCalls, 1);
-    expect(find.text("Recording stopped."), findsOneWidget);
+    expect(find.text("Prepare Camera"), findsOneWidget);
+    expect(find.text("Recording..."), findsNothing);
 
     await tester.pumpWidget(const SizedBox.shrink());
     for (final client in clients) {
@@ -352,6 +364,7 @@ void main() {
     await tester.pump(const Duration(seconds: 11));
 
     expect(find.text("Screen Off - Tap to wake"), findsOneWidget);
+    expect(find.byIcon(Icons.fiber_manual_record), findsOneWidget);
 
     await tester.tap(find.text("Screen Off - Tap to wake"));
     await tester.pump();
@@ -395,7 +408,7 @@ void main() {
     await tester.pump();
 
     expect(find.text("Identifying this slave"), findsOneWidget);
-    expect(find.text("Identify acknowledged to master."), findsOneWidget);
+    expect(find.text("Prepare Camera"), findsOneWidget);
 
     await tester.pump(const Duration(seconds: 3));
 

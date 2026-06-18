@@ -80,6 +80,10 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
         final canShowActions = appBarWidth == null || appBarWidth >= 320;
 
         return AppBar(
+          backgroundColor: AppTheme.appChrome,
+          foregroundColor: AppTheme.inverseText,
+          iconTheme: const IconThemeData(color: AppTheme.accent),
+          actionsIconTheme: const IconThemeData(color: AppTheme.accent),
           title: Text(
             title,
             maxLines: 1,
@@ -147,7 +151,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                         const Icon(Icons.info_outline,
                             color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellDeviceInfo),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellDeviceInfo,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -157,7 +166,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                       children: [
                         const Icon(Icons.settings, color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellSettings),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellSettings,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -168,7 +182,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                         const Icon(Icons.camera_alt,
                             color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellCameraSelection),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellCameraSelection,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -179,7 +198,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                         const Icon(Icons.location_on,
                             color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellLocationInfo),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellLocationInfo,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -189,7 +213,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                       children: [
                         const Icon(Icons.list_alt, color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellLogs),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellLogs,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -200,7 +229,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                         const Icon(Icons.cloud_upload,
                             color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellUploaderInfo),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellUploaderInfo,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -211,7 +245,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                         const Icon(Icons.perm_device_info,
                             color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellAppVersion),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellAppVersion,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -223,9 +262,14 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                             UserService().isLoggedIn
                                 ? Icons.account_circle
                                 : Icons.login,
-                            color: Colors.blue),
+                            color: AppTheme.accentColor),
                         const SizedBox(width: 8),
-                        Text(l10n.appShellLogin),
+                        Expanded(
+                          child: Text(
+                            l10n.appShellLogin,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),

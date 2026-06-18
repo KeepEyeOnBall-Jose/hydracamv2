@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:package_info_plus/package_info_plus.dart";
+import "../app_theme.dart";
 import "../services/device_service.dart";
 import "../services/log_service.dart";
 import "../services/network_info_service.dart";
@@ -94,7 +95,7 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
   Widget _buildInfoText(
     String text, {
     int maxLines = 2,
-    Color color = Colors.grey,
+    Color color = AppTheme.textSecondary,
     FontWeight? fontWeight,
     double fontSize = 14,
   }) {
@@ -147,7 +148,7 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
               return _buildInfoText(
                 "Error fetching network info",
                 maxLines: 1,
-                color: Colors.red,
+                color: AppTheme.danger,
               );
             } else {
               final data = snapshot.data!;

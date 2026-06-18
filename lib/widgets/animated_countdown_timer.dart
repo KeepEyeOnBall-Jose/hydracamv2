@@ -100,7 +100,7 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
               value: progress,
               strokeWidth: 8,
               color: AppTheme.primaryColor,
-              backgroundColor: Colors.grey.shade200,
+              backgroundColor: AppTheme.surfaceAlt,
             ),
           ),
 
@@ -122,7 +122,7 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
                           const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: AppTheme.textPrimary,
                             decoration: TextDecoration.none, // Remove underline
                           ))
                       : (widget.finalMessageStyle ??

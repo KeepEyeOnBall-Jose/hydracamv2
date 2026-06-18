@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 
+import "../app_theme.dart";
 import "../models/capture_context_metadata.dart";
 import "../services/camera_service.dart";
 import "../services/camera_service_singleton.dart";
@@ -11,6 +12,7 @@ import "../services/log_service.dart";
 import "../services/settings_service.dart";
 import "../widgets/camera_level_overlay.dart";
 import "../widgets/camera_preview_widget.dart";
+import "../widgets/hydracam_surface.dart";
 
 class CameraSetupPreviewScreen extends StatefulWidget {
   const CameraSetupPreviewScreen({
@@ -130,6 +132,7 @@ class CameraSetupPreviewPanel extends StatefulWidget {
     super.key,
     this.title = "Prepare Camera",
     this.preview,
+    this.onOpenNormalApp,
     this.initialReading,
     this.initialPerspective,
     this.levelService,
@@ -137,6 +140,7 @@ class CameraSetupPreviewPanel extends StatefulWidget {
 
   final String title;
   final Widget? preview;
+  final VoidCallback? onOpenNormalApp;
   final DeviceLevelReading? initialReading;
   final CameraPerspectiveMetadata? initialPerspective;
   final DeviceLevelService? levelService;
@@ -150,9 +154,11 @@ class CameraSetupStandaloneScreen extends StatefulWidget {
   const CameraSetupStandaloneScreen({
     super.key,
     this.title = "Prepare Camera",
+    this.onOpenNormalApp,
   });
 
   final String title;
+  final VoidCallback? onOpenNormalApp;
 
   @override
   State<CameraSetupStandaloneScreen> createState() =>
@@ -228,6 +234,7 @@ class _CameraSetupStandaloneScreenState
       body: CameraSetupPreviewPanel(
         title: "Placement preview",
         preview: _previewWidget(),
+        onOpenNormalApp: widget.onOpenNormalApp,
       ),
     );
   }
@@ -316,6 +323,7 @@ class _CameraSetupPreviewPanelState extends State<CameraSetupPreviewPanel> {
       reading: _reading,
       perspective: _perspective,
       onPerspectiveChanged: _setPerspective,
+      onOpenNormalApp: widget.onOpenNormalApp,
     );
   }
 }
@@ -328,6 +336,7 @@ class CameraSetupPreviewContent extends StatelessWidget {
     required this.onPerspectiveChanged,
     this.preview,
     this.onStartRecording,
+    this.onOpenNormalApp,
     this.title,
   });
 
@@ -338,82 +347,156 @@ class CameraSetupPreviewContent extends StatelessWidget {
   final Future<void> Function(CameraPerspectiveMetadata perspective)
       onPerspectiveChanged;
   final VoidCallback? onStartRecording;
+  final VoidCallback? onOpenNormalApp;
 
   @override
   Widget build(BuildContext context) {
     final previewWidget =
         preview ?? _CameraPreviewPlaceholder(reading: reading);
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (title != null) ...[
-              Text(
-                title!,
-                style: Theme.of(context).textTheme.titleLarge,
+
+    Widget buildPreviewFrame() {
+      return HydraCamSurface(
+        tone: HydraCamSurfaceTone.dark,
+        padding: EdgeInsets.zero,
+        child: ClipRRect(
+          borderRadius: AppTheme.smallRadius,
+          child: CameraLevelOverlay(
+            reading: reading,
+            child: ColoredBox(
+              color: AppTheme.cameraCanvas,
+              child: Center(child: previewWidget),
+            ),
+          ),
+        ),
+      );
+    }
+
+    List<Widget> buildHeader() {
+      return [
+        if (title != null) ...[
+          Text(
+            title!,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 12),
+        ],
+      ];
+    }
+
+    List<Widget> buildControls() {
+      return [
+        const SizedBox(height: 16),
+        HydraCamSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              HydraCamStatusChip(
+                status: reading.sensorAvailable
+                    ? HydraCamStatusTone.active
+                    : HydraCamStatusTone.warning,
+                icon: reading.sensorAvailable
+                    ? Icons.videocam_outlined
+                    : Icons.sensors_off,
+                label: reading.sensorAvailable
+                    ? "Camera ready"
+                    : "Camera sensor unavailable",
               ),
-              const SizedBox(height: 12),
-            ],
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: CameraLevelOverlay(
-                  reading: reading,
-                  child: ColoredBox(
-                    color: Colors.black,
-                    child: Center(child: previewWidget),
+              const SizedBox(height: 16),
+              const Text(
+                "Camera perspective",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                key: ValueKey(perspective.cameraPerspectiveId),
+                initialValue: perspective.cameraPerspectiveId,
+                isExpanded: true,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
                   ),
                 ),
+                items: CameraPerspectiveMetadata.canonicalPerspectives
+                    .map(
+                      (option) => DropdownMenuItem<String>(
+                        value: option.cameraPerspectiveId,
+                        child: Text(
+                          option.cameraPerspectiveLabel,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (id) {
+                  if (id == null) {
+                    return;
+                  }
+                  unawaited(
+                    onPerspectiveChanged(CameraPerspectiveMetadata.fromId(id)),
+                  );
+                },
               ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Camera perspective",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              key: ValueKey(perspective.cameraPerspectiveId),
-              initialValue: perspective.cameraPerspectiveId,
-              isExpanded: true,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
+              if (onStartRecording != null) ...[
+                const SizedBox(height: 16),
+                HydraCamButton(
+                  icon: Icons.fiber_manual_record,
+                  label: "Start Recording",
+                  onPressed: onStartRecording,
+                ),
+              ],
+              if (onOpenNormalApp != null) ...[
+                const SizedBox(height: 12),
+                HydraCamButton(
+                  icon: Icons.home_outlined,
+                  label: "Open HydraCam",
+                  onPressed: onOpenNormalApp,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ];
+    }
+
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isShort = constraints.maxHeight < 520;
+          if (isShort) {
+            final previewHeight =
+                (constraints.maxHeight * 0.42).clamp(140.0, 240.0).toDouble();
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ...buildHeader(),
+                    SizedBox(
+                      height: previewHeight,
+                      child: buildPreviewFrame(),
+                    ),
+                    ...buildControls(),
+                  ],
                 ),
               ),
-              items: CameraPerspectiveMetadata.canonicalPerspectives
-                  .map(
-                    (option) => DropdownMenuItem<String>(
-                      value: option.cameraPerspectiveId,
-                      child: Text(
-                        option.cameraPerspectiveLabel,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (id) {
-                if (id == null) {
-                  return;
-                }
-                unawaited(
-                  onPerspectiveChanged(CameraPerspectiveMetadata.fromId(id)),
-                );
-              },
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ...buildHeader(),
+                Expanded(child: buildPreviewFrame()),
+                ...buildControls(),
+              ],
             ),
-            if (onStartRecording != null) ...[
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: onStartRecording,
-                child: const Text("Start Recording"),
-              ),
-            ],
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -427,7 +510,7 @@ class _CameraPreviewPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icon = reading.sensorAvailable ? Icons.videocam : Icons.sensors_off;
-    return Icon(icon, size: 56, color: Colors.white70);
+    return Icon(icon, size: 56, color: AppTheme.inverseTextMuted);
   }
 }
 
@@ -441,7 +524,7 @@ class _CameraPreviewStatus extends StatelessWidget {
     return Icon(
       hasError ? Icons.videocam_off : Icons.videocam,
       size: 56,
-      color: Colors.white70,
+      color: AppTheme.inverseTextMuted,
     );
   }
 }

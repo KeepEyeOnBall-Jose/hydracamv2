@@ -53,7 +53,10 @@ void main() {
 
     await tester.pump();
 
-    expect(find.text("Candidate: guid-court-1"), findsOneWidget);
+    expect(
+      find.text("Candidate: guid-court-1 - 4 min after session"),
+      findsOneWidget,
+    );
     expect(find.text("Candidate: court-1"), findsNothing);
     expect(find.text("Candidate: outside-session"), findsNothing);
   });
@@ -82,6 +85,9 @@ void main() {
 
     await tester.pump();
 
-    expect(find.text("Candidate: legacy-session-id"), findsOneWidget);
+    expect(
+      find.text("Candidate: legacy-session-id - 4 min after session"),
+      findsOneWidget,
+    );
   });
 }

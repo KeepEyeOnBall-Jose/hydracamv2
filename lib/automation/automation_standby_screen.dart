@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 
+import "../app_theme.dart";
 import "../widgets/hydra_cam_app_bar.dart";
+import "../widgets/hydracam_surface.dart";
 
 class AutomationStandbyScreen extends StatelessWidget {
   const AutomationStandbyScreen({
@@ -19,42 +21,70 @@ class AutomationStandbyScreen extends StatelessWidget {
         title: "HydraCam",
         onBack: onOpenNormalApp ?? () {},
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 420),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.pause_circle_outline,
-                  color: theme.colorScheme.primary,
-                  size: 72,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "Automation standby",
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Waiting for role assignment",
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyLarge,
-                ),
-                if (onOpenNormalApp != null) ...[
-                  const SizedBox(height: 28),
-                  ElevatedButton.icon(
-                    onPressed: onOpenNormalApp,
-                    icon: const Icon(Icons.play_arrow),
-                    label: const Text("Open HydraCam"),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isShort = constraints.maxHeight < 360;
+            final padding = isShort ? 16.0 : 24.0;
+            final iconSize = isShort ? 56.0 : 72.0;
+
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: Padding(
+                      padding: EdgeInsets.all(padding),
+                      child: HydraCamSurface(
+                        tone: HydraCamSurfaceTone.dark,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.pause_circle_outline,
+                              color: AppTheme.accent,
+                              size: iconSize,
+                            ),
+                            SizedBox(height: isShort ? 12 : 20),
+                            Text(
+                              "Automation standby",
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                color: AppTheme.inverseText,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              "Waiting for role assignment",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppTheme.inverseTextMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const HydraCamStatusChip(
+                              status: HydraCamStatusTone.active,
+                              icon: Icons.settings_ethernet,
+                              label: "Bridge ready",
+                            ),
+                            if (onOpenNormalApp != null) ...[
+                              SizedBox(height: isShort ? 20 : 28),
+                              HydraCamButton(
+                                icon: Icons.play_arrow,
+                                label: "Open HydraCam",
+                                onPressed: onOpenNormalApp,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ],
-              ],
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

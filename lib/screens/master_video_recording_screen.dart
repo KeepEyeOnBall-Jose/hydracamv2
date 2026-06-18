@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
+import "../app_theme.dart";
 import "../models/captured_video.dart";
 import "../services/camera_service.dart";
 import "../services/log_service.dart";
@@ -129,7 +130,7 @@ class MasterVideoRecordingScreenState
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppTheme.cameraCanvas,
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {}, // Absorb taps
@@ -147,7 +148,7 @@ class MasterVideoRecordingScreenState
                 child: IconButton(
                   tooltip: "Exit recording preview",
                   onPressed: _isStopping ? null : _handleExitPreview,
-                  icon: const Icon(Icons.close, color: Colors.white),
+                  icon: const Icon(Icons.close, color: AppTheme.inverseText),
                 ),
               ),
               // Stop Recording button
@@ -163,7 +164,8 @@ class MasterVideoRecordingScreenState
                               _handleStopRecording(),
                             ), // Disable if stopping
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppTheme.danger,
+                      foregroundColor: AppTheme.inverseText,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 12),
                       textStyle: const TextStyle(fontSize: 18),
@@ -176,7 +178,7 @@ class MasterVideoRecordingScreenState
               if (_isStopping)
                 Positioned.fill(
                   child: Container(
-                    color: Colors.black
+                    color: AppTheme.appChrome
                         .withValues(alpha: 0.5), // Semi-transparent overlay
                     child: const Center(
                       child: Column(
@@ -186,7 +188,7 @@ class MasterVideoRecordingScreenState
                           SizedBox(height: 16),
                           Text(
                             "Processing video, please wait...",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppTheme.inverseText),
                           ),
                         ],
                       ),

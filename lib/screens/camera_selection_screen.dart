@@ -7,6 +7,7 @@ library;
 
 import "package:camera/camera.dart";
 import "package:flutter/material.dart";
+import "../app_theme.dart";
 import "../models/camera_capture_settings.dart";
 import "../services/camera_hardware_metadata_service.dart";
 import "../services/camera_service_singleton.dart";
@@ -281,7 +282,10 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
                   "${metadata == null ? "" : " • $metadata"}",
                 ),
                 trailing: isSelected
-                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    ? const Icon(
+                        Icons.check_circle,
+                        color: AppTheme.accent,
+                      )
                     : null,
                 // Tap => select camera
                 onTap: _isLoading ? null : () => _onCameraSelected(index),
@@ -295,7 +299,7 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
         // 2) A semi-transparent loading overlay if _isLoading
         if (_isLoading)
           Container(
-            color: Colors.black26,
+            color: AppTheme.appChrome.withValues(alpha: 0.26),
             child: const Center(child: CircularProgressIndicator()),
           ),
       ],

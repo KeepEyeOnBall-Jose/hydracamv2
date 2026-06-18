@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:photo_manager/photo_manager.dart";
+import "../app_theme.dart";
 import "../models/capture_session.dart";
 import "../services/gallery_session_matcher.dart";
 
@@ -35,7 +36,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
             },
             child: const Text(
               "Done",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: AppTheme.accent),
             ),
           ),
         ],
@@ -47,7 +48,9 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
         itemBuilder: (context, index) {
           final AssetEntity asset = widget.mediaList[index];
           final GallerySessionCandidate? candidate = _bestCandidateFor(asset);
-          final String? candidateLabel = candidate?.session.preferredIdentifier;
+          final String? candidateLabel = candidate != null
+              ? _candidateLabelFor(asset: asset, candidate: candidate)
+              : null;
 
           return GestureDetector(
             onTap: () {
@@ -70,9 +73,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
                       return snapshot.data!;
                     }
 
-                    return Container(
-                      color: Colors.grey[300],
-                    );
+                    return Container(color: AppTheme.border);
                   },
                 ),
                 if (candidate != null)
@@ -85,13 +86,13 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
                         horizontal: 6,
                         vertical: 4,
                       ),
-                      color: Colors.black54,
+                      color: AppTheme.appChrome.withValues(alpha: 0.72),
                       child: Text(
                         "Candidate: $candidateLabel",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.inverseText,
                           fontSize: 11,
                         ),
                       ),
@@ -103,7 +104,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
                     right: 0,
                     child: Icon(
                       Icons.check_circle,
-                      color: Colors.green,
+                      color: AppTheme.accent,
                     ),
                   ),
               ],
@@ -131,6 +132,50 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
     return candidates.first;
   }
 
+  String _candidateLabelFor({
+    required AssetEntity asset,
+    required GallerySessionCandidate candidate,
+  }) {
+    return "${candidate.session.preferredIdentifier} - "
+        "${_candidateTimingText(asset: asset, candidate: candidate)}";
+  }
+
+  String _candidateTimingText({
+    required AssetEntity asset,
+    required GallerySessionCandidate candidate,
+  }) {
+    final videoStart = asset.createDateTime;
+    final videoEnd = videoStart.add(asset.videoDuration);
+    final sessionStart = candidate.session.startTime;
+    final sessionEnd = candidate.session.endTime ?? sessionStart;
+
+    if (!videoEnd.isBefore(sessionStart) && !videoStart.isAfter(sessionEnd)) {
+      return "during session";
+    }
+
+    final gapText = _formatCandidateGap(candidate.timeGap);
+    if (videoEnd.isBefore(sessionStart)) {
+      return "$gapText before session";
+    }
+    return "$gapText after session";
+  }
+
+  String _formatCandidateGap(Duration gap) {
+    if (gap.inMinutes < 1) {
+      return "<1 min";
+    }
+
+    final hours = gap.inHours;
+    final minutes = gap.inMinutes.remainder(Duration.minutesPerHour);
+    if (hours > 0 && minutes > 0) {
+      return "$hours hr $minutes min";
+    }
+    if (hours > 0) {
+      return "$hours hr";
+    }
+    return "${gap.inMinutes} min";
+  }
+
   Future<Widget> _buildThumbnail(AssetEntity asset) async {
     final thumbnailData =
         await asset.thumbnailDataWithSize(const ThumbnailSize(200, 200));
@@ -142,7 +187,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
         height: double.infinity,
       );
     } else {
-      return Container(color: Colors.grey);
+      return Container(color: AppTheme.textTertiary);
     }
   }
 }

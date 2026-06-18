@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/app_theme.dart";
 import "package:hydracam/models/sync_metadata.dart";
 import "package:hydracam/services/time_sync_service.dart";
+import "package:hydracam/widgets/hydracam_surface.dart";
 
 /// Widget coverage for the slave screen's clock-sync status chip.
 ///
@@ -48,11 +50,8 @@ void main() {
     expect(chipText, contains("RTT 24 ms"));
     expect(chipText, contains("8 samples"));
 
-    // The confidence dot reflects the green tier.
-    final dot = tester.widget<Container>(find.byType(Container));
-    final decoration = dot.decoration as BoxDecoration;
-    expect(decoration.color, Colors.green);
-    expect(decoration.shape, BoxShape.circle);
+    final chip = tester.widget<Chip>(find.byType(Chip));
+    expect(chip.backgroundColor, AppTheme.accent);
   });
 }
 
@@ -67,40 +66,32 @@ class _SyncChipHarness extends StatelessWidget {
         body: ValueListenableBuilder<TimeSyncResult?>(
           valueListenable: TimeSyncService.instance.latest,
           builder: (context, result, child) {
-            const Map<TimeSyncConfidence, Color> colors = {
-              TimeSyncConfidence.green: Colors.green,
-              TimeSyncConfidence.yellow: Colors.amber,
-              TimeSyncConfidence.red: Colors.red,
-            };
-            final Color color;
+            final HydraCamStatusTone tone;
+            final IconData icon;
             final String label;
             if (result == null) {
-              color = Colors.grey;
+              tone = HydraCamStatusTone.neutral;
+              icon = Icons.sync_outlined;
               label = "Clock sync: calibrating…";
             } else {
-              color = colors[result.confidence] ?? Colors.grey;
+              tone = switch (result.confidence) {
+                TimeSyncConfidence.green => HydraCamStatusTone.active,
+                TimeSyncConfidence.yellow => HydraCamStatusTone.warning,
+                TimeSyncConfidence.red => HydraCamStatusTone.danger,
+              };
+              icon = switch (result.confidence) {
+                TimeSyncConfidence.green => Icons.sync_outlined,
+                TimeSyncConfidence.yellow => Icons.sync_problem_outlined,
+                TimeSyncConfidence.red => Icons.sync_disabled_outlined,
+              };
               label = "Clock sync: ±${result.uncertainty.inMilliseconds} ms · "
                   "RTT ${result.minRoundTrip.inMilliseconds} ms · "
                   "${result.sampleCount} samples";
             }
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration:
-                      BoxDecoration(color: color, shape: BoxShape.circle),
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    label,
-                    style: const TextStyle(fontSize: 12),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
+            return HydraCamStatusChip(
+              status: tone,
+              icon: icon,
+              label: label,
             );
           },
         ),

@@ -1,0 +1,82 @@
+{
+  "acceptanceChecks": [
+    "Focused UI/theme tests prove role selection, setup, standby, app chrome, slave sync/recording status, navigation lists, uploader controls, theme tokens, and direct-color guard; analyzer and full Flutter tests pass."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/theme/hydracam_theme_test.dart",
+        "test/theme/no_ad_hoc_color_test.dart",
+        "test/widgets/hydra_cam_app_bar_test.dart",
+        "test/widgets/camera_setup_preview_screen_test.dart",
+        "test/automation/automation_standby_screen_test.dart",
+        "test/screens/role_selection_screen_test.dart",
+        "test/screens/navigation_list_screens_test.dart",
+        "test/screens/media_selection_screen_test.dart",
+        "test/screens/uploader_info_screen_test.dart",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "test/slave/slave_screen_sync_chip_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:46:33.527454+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:46:43.642351+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:46:53.903401+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:47:16.827365+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "ADB inventory was recorded; no Android hardware UI smoke was run in this Tier D visual validation."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local Flutter test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "hydracam-visual-system-core-surfaces",
+    "source": "docs/control/hydracam-visual-makeover-plan.md",
+    "title": "Apply HydraCam squash visual system to core app surfaces"
+  },
+  "notes": [
+    "Focused visual/theme tests, analyzer, full Flutter tests, and adb inventory passed. No Android hardware UI smoke was run because ADB did not expose attached devices."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
