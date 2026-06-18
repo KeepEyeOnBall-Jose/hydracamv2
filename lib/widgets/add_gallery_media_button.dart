@@ -3,9 +3,8 @@ import "dart:io";
 import "package:flutter/material.dart";
 import "package:photo_manager/photo_manager.dart";
 import "../app_theme.dart";
-import "../models/captured_photo.dart";
-import "../models/captured_video.dart";
 import "../services/device_service.dart";
+import "../services/gallery_session_attachment_service.dart";
 import "../services/gallery_session_candidate_source.dart";
 import "../services/session_manager.dart";
 import "../services/log_service.dart";
@@ -15,8 +14,13 @@ import "../screens/media_selection_screen.dart";
 /// A button widget that allows adding media from the gallery to the current session.
 class AddGalleryMediaButton extends StatefulWidget {
   final bool enabled; // New parameter to control enable/disable state
+  final GallerySessionAttachmentService galleryAttachmentService;
 
-  const AddGalleryMediaButton({super.key, this.enabled = true});
+  const AddGalleryMediaButton({
+    super.key,
+    this.enabled = true,
+    this.galleryAttachmentService = const GallerySessionAttachmentService(),
+  });
 
   @override
   AddGalleryMediaButtonState createState() => AddGalleryMediaButtonState();
@@ -164,7 +168,19 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
       return;
     }
 
-    final List<AssetEntity> media = await _fetchMedia(filters);
+    final List<AssetEntity> media;
+    try {
+      media = await _fetchMedia(filters);
+    } catch (error) {
+      LogService.instance.registerLog(
+        "Failed to load gallery media for import: $error",
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Could not load gallery media")),
+      );
+      return;
+    }
 
     if (media.isEmpty) {
       if (!mounted) return;
@@ -200,38 +216,91 @@ class AddGalleryMediaButtonState extends State<AddGalleryMediaButton> {
 
   Future<void> _addMediaToSession(List<AssetEntity> selectedMedia) async {
     final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+    var importedMediaCount = 0;
+    var skippedMediaCount = 0;
 
     for (var asset in selectedMedia) {
+      LogService.instance.registerLog(
+        "Importing selected gallery asset into active session: ${asset.id}",
+      );
       final File? file = await asset.file;
-      if (file == null) continue;
-
-      if (asset.type == AssetType.image) {
-        final CapturedPhoto photo = CapturedPhoto(
-          photoPath: file.path,
-          captureDate: asset.createDateTime,
-          receivedDate: DateTime.now(),
-          slaveDeviceId: deviceId,
+      if (file == null) {
+        LogService.instance.registerLog(
+          "Skipping gallery asset with no available local file: ${asset.id}",
         );
-        await SessionManager.instance.addPhoto(photo);
-      } else if (asset.type == AssetType.video) {
-        final CapturedVideo video = CapturedVideo(
-          videoPath: file.path,
-          startRecordingDate: asset.createDateTime,
-          endRecordingDate: asset.createDateTime.add(asset.videoDuration),
-          receivedDate: DateTime.now(),
-          slaveDeviceId: deviceId,
+        skippedMediaCount += 1;
+        continue;
+      }
+      LogService.instance.registerLog(
+        "Resolved gallery asset file for import: ${file.path}",
+      );
+      final sessionGuid = SessionManager.instance.sessionGuid;
+      if (sessionGuid == null || sessionGuid.isEmpty) {
+        LogService.instance.registerLog(
+          "Skipping gallery asset because no active session GUID is available: "
+          "${asset.id}",
         );
-        await SessionManager.instance.addVideo(video);
+        skippedMediaCount += 1;
+        continue;
+      }
+      final photosBefore =
+          SessionManager.instance.currentSession?.capturedPhotos.length ?? 0;
+      final videosBefore =
+          SessionManager.instance.currentSession?.capturedVideos.length ?? 0;
+      try {
+        await widget.galleryAttachmentService.attachImportedMedia(
+          sourceFile: file,
+          sessionGuid: sessionGuid,
+          assetId: asset.id,
+          assetType: asset.type,
+          createDateTime: asset.createDateTime,
+          videoDuration: asset.videoDuration,
+          deviceId: deviceId,
+        );
+      } catch (error) {
+        LogService.instance.registerLog(
+          "Failed to import selected gallery asset ${asset.id}: $error",
+        );
+        skippedMediaCount += 1;
+        continue;
+      }
+      final photosAfter =
+          SessionManager.instance.currentSession?.capturedPhotos.length ?? 0;
+      final videosAfter =
+          SessionManager.instance.currentSession?.capturedVideos.length ?? 0;
+      if (photosAfter > photosBefore || videosAfter > videosBefore) {
+        importedMediaCount += 1;
+      } else {
+        skippedMediaCount += 1;
       }
     }
 
-    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-    SessionManager.instance.notifyListeners();
+    if (importedMediaCount > 0) {
+      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+      SessionManager.instance.notifyListeners();
+    } else {
+      LogService.instance.registerLog(
+        "No selected gallery media was imported into the active session.",
+      );
+    }
 
     if (!mounted) return;
 
+    final String message;
+    if (importedMediaCount == 0) {
+      message = "No gallery media was added";
+    } else if (skippedMediaCount == 0) {
+      message = "Media added to session";
+    } else {
+      final importedText = importedMediaCount == 1
+          ? "1 gallery media item"
+          : "$importedMediaCount gallery media items";
+      final skippedText =
+          skippedMediaCount == 1 ? "1 skipped" : "$skippedMediaCount skipped";
+      message = "$importedText added, $skippedText";
+    }
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Media added to session")),
+      SnackBar(content: Text(message)),
     );
   }
 

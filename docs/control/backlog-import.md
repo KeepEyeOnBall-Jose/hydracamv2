@@ -738,6 +738,16 @@ Default issue schema:
   reported as `Could not load gallery media` without navigating to selection or
   touching session media. Keep this issue open for real gallery attachment smoke
   evidence.
+- 2026-06-18 gallery import durability note:
+  `logs/verification-runs/20260618-1325-gallery-session-import-durability/`
+  reruns the focused gallery attachment service/widget tests plus analyzer and
+  proves permission/save stalls time out, gallery assets are copied to
+  session-owned files before registration, duplicates are idempotent, missing
+  assets are skipped without session mutation, provider query failures surface
+  as user-visible errors, and per-asset import failures do not abort later
+  selected media. Keep this issue open for real gallery attachment smoke
+  evidence; Flutter wireless discovery could not reach the iPad/iPhone during
+  this Tier D run.
 
 ### 10. Add user/player assignment to sessions
 

@@ -1,0 +1,87 @@
+{
+  "acceptanceChecks": [
+    "Focused service/widget coverage proves gallery provider failures, unavailable assets, per-asset attachment failure, copied session-owned media, duplicate guards, and bounded gallery save/permission stalls."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_persistence_service_test.dart",
+        "test/services/gallery_session_attachment_service_test.dart",
+        "test/widgets/add_gallery_media_button_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:26:02.679335+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:26:13.362996+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:26:39.357139+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/gallery_persistence_service_test.dart",
+        "test/services/gallery_session_attachment_service_test.dart",
+        "test/widgets/add_gallery_media_button_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:28:01.486686+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:28:11.763329+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "Flutter also saw Chrome; wireless iPad/iPhone browsing failed during this Tier D run."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "gallery-session-import-durability",
+    "source": "docs/control/backlog-import.md#9-improve-old-media-gallery-session-attachment",
+    "title": "Harden gallery media import into active sessions"
+  },
+  "notes": [
+    "Focused gallery/session import service and widget tests plus analyzer passed. Mobile gallery smoke was not run; Flutter reported wireless iPad/iPhone LAN browsing unavailable during device inventory."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
