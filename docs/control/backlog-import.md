@@ -1686,6 +1686,14 @@ now fail before a false uploadable session can be created. Keep broader
 contract coverage open for live backend response-shape confirmation and
 endpoint-specific failure handling.
 
+2026-06-18 T-016 invalid upload session GUID note:
+`logs/verification-runs/20260618-1924-reject-invalid-upload-session-guids/`
+adds red/green coverage for `uploadMedia()` calls with blank or sentinel
+session GUIDs. Uploads now reject those identifiers before file/header/token or
+HTTP send work, while existing valid service-session upload coverage remains
+green. Keep broader contract coverage open for live backend response-shape
+confirmation and endpoint-specific failure handling.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

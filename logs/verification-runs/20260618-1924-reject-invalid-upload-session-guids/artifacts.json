@@ -1,0 +1,83 @@
+{
+  "acceptanceChecks": [
+    "uploadMedia rejects blank session GUIDs before HTTP send",
+    "uploadMedia rejects sentinel session GUIDs before HTTP send",
+    "uploadMedia still accepts valid service session GUIDs"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:20:45.872047+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:21:20.807451+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/hydracam_api_service_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:21:50.565089+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:22:07.693589+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:22:18.178625+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:22:41.211906+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "reject-invalid-upload-session-guids",
+    "source": "docs/control/backlog-import.md#t-016-photo-video-upload-api-test-with-invalid-files",
+    "title": "Reject invalid upload session GUIDs"
+  },
+  "notes": [
+    "Invalid upload session GUIDs are rejected before HTTP send."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

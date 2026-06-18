@@ -510,6 +510,75 @@ void main() {
     );
   });
 
+  test("uploadMedia rejects blank session GUID before HTTP send", () async {
+    var requestSent = false;
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requestSent = true;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    final mediaFile = File("${tempDir.path}/blank-session-photo.jpg")
+      ..writeAsBytesSync(_validJpegBytes);
+
+    final result = await HydraCamApiService().uploadMedia(
+      "   ",
+      mediaFile,
+      true,
+      "slave-device",
+      DateTime.utc(2026, 6, 18, 19, 24),
+      DateTime.utc(2026, 6, 18, 19, 24, 1),
+      null,
+    );
+
+    expect(result, isFalse);
+    expect(requestSent, isFalse);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Upload session GUID is invalid: <blank>"),
+    );
+  });
+
+  test("uploadMedia rejects sentinel session GUID before HTTP send", () async {
+    var requestSent = false;
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requestSent = true;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    final mediaFile = File("${tempDir.path}/sentinel-session-video.mp4")
+      ..writeAsBytesSync(_validMp4Bytes);
+
+    final result = await HydraCamApiService().uploadMedia(
+      " null ",
+      mediaFile,
+      false,
+      "slave-device",
+      DateTime.utc(2026, 6, 18, 19, 25),
+      DateTime.utc(2026, 6, 18, 19, 25, 1),
+      null,
+      recordingEndDate: DateTime.utc(2026, 6, 18, 19, 25, 5),
+    );
+
+    expect(result, isFalse);
+    expect(requestSent, isFalse);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Upload session GUID is invalid: null"),
+    );
+  });
+
   test("uploadMedia rejects missing files before HTTP send", () async {
     var requestSent = false;
     HydraCamApiService.configureHttpClient(

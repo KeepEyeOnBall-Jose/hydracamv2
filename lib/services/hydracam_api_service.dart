@@ -555,6 +555,17 @@ class HydraCamApiService {
     Function(String)? onFailureReason,
   }) async {
     try {
+      final normalizedSessionGuid = _normalizedUploadSessionGuid(sessionGuid);
+      if (normalizedSessionGuid == null) {
+        final failureReason =
+            "Upload session GUID is invalid: ${_invalidSessionGuidLabel(sessionGuid)}";
+        return _failUpload(
+          failureReason,
+          onFailureReason: onFailureReason,
+          mediaFailureReason: "Upload failed: $failureReason",
+        );
+      }
+
       if (!file.existsSync()) {
         return _failUpload(
           "Upload file does not exist: ${file.path}",
@@ -609,7 +620,7 @@ class HydraCamApiService {
         hydracamApiEndpoint(
           HydraCamUploadMediaContract.endpoint,
           queryParameters: {
-            HydraCamUploadMediaContract.querySessionGuid: sessionGuid,
+            HydraCamUploadMediaContract.querySessionGuid: normalizedSessionGuid,
             HydraCamUploadMediaContract.queryIsPhoto: isPhoto.toString(),
           },
         ),
@@ -689,6 +700,23 @@ class HydraCamApiService {
         mediaFailureReason: "Upload failed: $e",
       );
     }
+  }
+
+  String? _normalizedUploadSessionGuid(String sessionGuid) {
+    final normalizedSessionGuid = sessionGuid.trim();
+    final lowerSessionGuid = normalizedSessionGuid.toLowerCase();
+    if (normalizedSessionGuid.isEmpty ||
+        lowerSessionGuid.startsWith("local-") ||
+        lowerSessionGuid == "null" ||
+        lowerSessionGuid == "undefined") {
+      return null;
+    }
+    return normalizedSessionGuid;
+  }
+
+  String _invalidSessionGuidLabel(String sessionGuid) {
+    final normalizedSessionGuid = sessionGuid.trim();
+    return normalizedSessionGuid.isEmpty ? "<blank>" : normalizedSessionGuid;
   }
 
   bool _failUpload(
