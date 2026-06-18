@@ -1,0 +1,183 @@
+{
+  "acceptanceChecks": [
+    "Stale connected slaves receive sessionStarted for a new master session",
+    "Capture commands remain blocked for slaves reporting a different session",
+    "Focused master/slave socket regressions pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "session start broadcast reaches slaves with a different session"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:41:12.790004+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "session start broadcast reaches slaves with a different session"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:41:58.245898+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:42:08.465969+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:42:15.142817+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:42:27.084204+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:42:50.658476+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:43:09.374479+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "lifecycle broadcasts skip slaves on the wrong network"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:46:21.801401+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "--plain-name",
+        "ending master session broadcasts the ended session guid"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:46:28.470303+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:46:34.716861+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "startUploadingAll command starts pending upload queue"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:46:53.690339+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/master/master_network_snapshot_cache_test.dart",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:47:12.700869+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:47:21.628136+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:47:33.904029+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:47:57.482192+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "lifecycle-broadcast-bypasses-session-gate",
+    "source": "docs/control/backlog-import.md#row-22-preserve-session-state-across-master-reconnect",
+    "title": "Split session lifecycle broadcasts from capture command gating"
+  },
+  "notes": [
+    "Lifecycle broadcasts now bypass stale-session mismatch checks while preserving network eligibility; capture commands remain session-gated. Red/green named regression, focused master/slave socket tests, analyzer, full Flutter tests, and diff hygiene passed.",
+    "Reviewer-requested coverage added for wrong-network lifecycle skips and stale-session sessionEnded broadcasts; focused pair passed on rerun after a transient existing slave WebSocket failure. Analyzer, full Flutter tests, and diff hygiene passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1113,7 +1113,10 @@ class MasterServer {
       "command": "sessionStarted",
       "sessionGuid": sessionGuid,
     });
-    sendCommandToAll(sessionStartedCommand);
+    _sendLifecycleCommandToAll(
+      sessionStartedCommand,
+      commandLabel: "sessionStarted",
+    );
   }
 
   /// Sends a command to all connected slave devices.
@@ -1140,7 +1143,10 @@ class MasterServer {
         if (endedSessionGuid != null && endedSessionGuid.isNotEmpty)
           "sessionGuid": endedSessionGuid,
       });
-      sendCommandToAll(sessionEndedCommand);
+      _sendLifecycleCommandToAll(
+        sessionEndedCommand,
+        commandLabel: "sessionEnded",
+      );
     } else {
       LogService.instance.registerLog("No active session to end.");
     }
@@ -1332,6 +1338,25 @@ class MasterServer {
       sentCount += 1;
     }
     return sentCount;
+  }
+
+  void _sendLifecycleCommandToAll(
+    String message, {
+    required String commandLabel,
+  }) {
+    var sentCount = 0;
+    for (var entry in _clients.entries) {
+      if (!_isNetworkEligible(entry.key)) {
+        LogService.instance.registerLog(
+            "Lifecycle command '$commandLabel' skipped for slave ${entry.key} due to network mismatch.");
+        continue;
+      }
+
+      entry.value.add(message);
+      sentCount += 1;
+    }
+    LogService.instance.registerLog(
+        "Lifecycle command '$commandLabel' sent to $sentCount network-eligible connected slave(s).");
   }
 
   bool _isCommandEligible(String deviceId) {

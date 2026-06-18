@@ -220,6 +220,15 @@ Default issue schema:
   metadata-written, sidecar-written, or queued for upload when there is no
   active nonblank session GUID. Keep this issue open for real master/slave
   reconnect reproduction and cross-device metadata comparison.
+- 2026-06-18 lifecycle-broadcast session-gate split note:
+  `logs/verification-runs/20260618-1840-lifecycle-broadcast-bypasses-session-gate/`
+  splits master lifecycle broadcasts from capture-command session gating:
+  `sessionStarted` / `sessionEnded` now bypass stale-session mismatch checks so
+  connected slaves can receive the event that repairs their local session, while
+  capture and scheduled capture commands remain blocked for slaves still
+  reporting a different session. Focused master/slave socket coverage, analyzer,
+  and the full Flutter test suite passed. Keep this issue open for real
+  master/slave reconnect reproduction and cross-device metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing

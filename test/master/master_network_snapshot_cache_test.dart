@@ -1144,6 +1144,121 @@ void main() {
     verifyNever(() => staleSessionSocket.add(any()));
   });
 
+  test("session start broadcast reaches slaves with a different session",
+      () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          source: "master-test",
+        ),
+      ),
+    );
+    final matchingSocket = MockWebSocket();
+    final staleSessionSocket = MockWebSocket();
+    const newSessionGuid = "new-master-session-guid";
+    final sessionStartedCommand = jsonEncode({
+      "command": "sessionStarted",
+      "sessionGuid": newSessionGuid,
+    });
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "matching-slave",
+      socket: matchingSocket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: newSessionGuid,
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "stale-session-slave",
+      socket: staleSessionSocket,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "old-session-guid",
+    );
+
+    server.startNewSession(newSessionGuid);
+    server.sendCommand("takePhoto");
+
+    verify(() => matchingSocket.add(sessionStartedCommand)).called(1);
+    verify(() => staleSessionSocket.add(sessionStartedCommand)).called(1);
+    verify(() => matchingSocket.add("takePhoto")).called(1);
+    verifyNever(() => staleSessionSocket.add("takePhoto"));
+  });
+
+  test("lifecycle broadcasts skip slaves on the wrong network", () async {
+    final server = MasterServer(
+      MockCameraService(),
+      masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
+        loadSnapshot: () async => const NetworkSnapshot(
+          isWifiActive: true,
+          ipAddress: "192.168.178.153",
+          bssid: "2c:91:ab:8b:a3:07",
+          gatewayIp: "192.168.178.1",
+          subnetMask: "255.255.255.0",
+          source: "master-test",
+        ),
+      ),
+    );
+    final matchingSocket = MockWebSocket();
+    final wrongNetworkSocket = MockWebSocket();
+    const sessionGuid = "network-gated-session-guid";
+    final sessionStartedCommand = jsonEncode({
+      "command": "sessionStarted",
+      "sessionGuid": sessionGuid,
+    });
+    final sessionEndedCommand = jsonEncode({
+      "command": "sessionEnded",
+      "sessionGuid": sessionGuid,
+    });
+
+    await server.registerOrUpdateClientForTest(
+      deviceId: "matching-slave",
+      socket: matchingSocket,
+      remoteIp: "192.168.178.62",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.62",
+        bssid: "2c:91:ab:8b:a3:07",
+        gatewayIp: "192.168.178.1",
+        subnetMask: "255.255.255.0",
+        source: "slave-test",
+      ),
+    );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "wrong-network-slave",
+      socket: wrongNetworkSocket,
+      remoteIp: "10.10.0.20",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "10.10.0.20",
+        bssid: "2c:91:ab:8b:a3:07",
+        gatewayIp: "192.168.178.1",
+        subnetMask: "255.255.255.0",
+        source: "stale-slave-test",
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+    clearInteractions(wrongNetworkSocket);
+
+    server.startNewSession(sessionGuid);
+    await server.endCurrentSession();
+
+    verify(() => matchingSocket.add(sessionStartedCommand)).called(1);
+    verify(() => matchingSocket.add(sessionEndedCommand)).called(1);
+    verifyNever(() => wrongNetworkSocket.add(any()));
+  });
+
   test("master sends identify command and records ack diagnostics", () async {
     final server = MasterServer(
       MockCameraService(),
@@ -1283,7 +1398,8 @@ void main() {
         ),
       ),
     );
-    final socket = MockWebSocket();
+    final matchingSocket = MockWebSocket();
+    final staleSessionSocket = MockWebSocket();
     SessionManager.instance.startSession(
       "master-session-guid",
       "master-session-id",
@@ -1292,7 +1408,7 @@ void main() {
 
     await server.registerOrUpdateClientForTest(
       deviceId: "matching-slave",
-      socket: socket,
+      socket: matchingSocket,
       remoteIp: "192.168.178.62",
       networkSnapshot: const NetworkSnapshot(
         isWifiActive: true,
@@ -1301,16 +1417,32 @@ void main() {
       ),
       reportedSessionGuid: "master-session-guid",
     );
+    await server.registerOrUpdateClientForTest(
+      deviceId: "stale-session-slave",
+      socket: staleSessionSocket,
+      remoteIp: "192.168.178.63",
+      networkSnapshot: const NetworkSnapshot(
+        isWifiActive: true,
+        ipAddress: "192.168.178.63",
+        source: "slave-test",
+      ),
+      reportedSessionGuid: "old-session-guid",
+    );
 
     await server.endCurrentSession();
 
-    final sentMessage =
-        verify(() => socket.add(captureAny())).captured.single as String;
-    final payload = jsonDecode(sentMessage) as Map<String, dynamic>;
-    expect(payload, {
+    final expectedPayload = {
       "command": "sessionEnded",
       "sessionGuid": "master-session-guid",
-    });
+    };
+    final matchingMessage = verify(() => matchingSocket.add(captureAny()))
+        .captured
+        .single as String;
+    final staleSessionMessage =
+        verify(() => staleSessionSocket.add(captureAny())).captured.single
+            as String;
+    expect(jsonDecode(matchingMessage), expectedPayload);
+    expect(jsonDecode(staleSessionMessage), expectedPayload);
     expect(SessionManager.instance.isSessionActive, isFalse);
   });
 
