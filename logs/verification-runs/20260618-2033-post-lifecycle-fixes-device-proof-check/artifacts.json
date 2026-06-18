@@ -1,0 +1,93 @@
+{
+  "acceptanceChecks": [
+    "Inventory connected hardware and prove whether current UI lifecycle fixes can be smoke-tested on responsive device automation bridges."
+  ],
+  "commands": [
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:33:45.709380+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:33:49.387748+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:34:33.273883+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "20",
+        "--required-command",
+        "capture_screenshot",
+        "--all"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:34:37.799354+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "90",
+        "--run-dir",
+        "logs/verification-runs/20260618-2033-post-lifecycle-fixes-device-proof-check/device-logs/ipad-ios-launch-bridge-check",
+        "--lens",
+        "autoBack",
+        "--profile",
+        "standard1080p30"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:35:35.255994+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "device-logs/ipad-ios-launch-bridge-check/flutter-run.log"
+  ],
+  "item": {
+    "slug": "post-lifecycle-fixes-device-proof-check",
+    "source": "docs/control/regular-evaluation-plan.md",
+    "title": "Post-iteration hardware UI proof"
+  },
+  "notes": [
+    "Device-facing UI proof blocked: adb saw no Android devices, CoreDevice marks the iPhone unavailable, Flutter sees only a wireless iPad, no screenshot-capable automation bridge was discovered on 192.168.178.0/24, and a bounded iPad launch attempt did not progress past Flutter launching before bridge discovery timed out."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
