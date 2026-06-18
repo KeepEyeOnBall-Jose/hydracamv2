@@ -1,0 +1,54 @@
+{
+  "acceptanceChecks": [
+    "Python tests prove Android permission-grant and force-stop timeouts do not hang the runner, launch timeouts surface as MatrixRunError, and the runner still compiles."
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/test_run_rotating_master_slave_matrix.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:41:10.000640+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "scripts/test_run_rotating_master_slave_matrix.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T11:41:15.406807+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS host",
+      "notes": [
+        "No Android hardware matrix was run; this pack validates timeout handling in runner unit tests."
+      ],
+      "os": "macOS 26.4.1",
+      "role": "local tooling test host"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "rotating-matrix-adb-timeout-guards",
+    "source": "AGENTS.md#multi-device-synchronization-evidence",
+    "title": "Bound Android ADB setup and launch calls in rotating matrix"
+  },
+  "notes": [
+    "Rotating matrix Python tests and py_compile passed. No Android hardware matrix was run in this static tooling slice."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

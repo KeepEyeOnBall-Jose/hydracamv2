@@ -78,6 +78,8 @@ DEFAULT_SESSION_POLL_INTERVAL_SECONDS = 0.5
 DEFAULT_IOS_BRIDGE_SCAN_CONNECT_TIMEOUT_SECONDS = 0.5
 DEFAULT_IOS_BRIDGE_SCAN_HEALTH_TIMEOUT_SECONDS = 0.8
 DEFAULT_IOS_BRIDGE_SCAN_WORKERS = 128
+ANDROID_ADB_SETUP_TIMEOUT_SECONDS = 8.0
+ANDROID_ADB_LAUNCH_TIMEOUT_SECONDS = 15.0
 RUNTIME_ROLE_SWITCH_ACK_MODE = "accepted"
 IOS_BUNDLE_ID = "com.keepeyeonball"
 IOS_PROFILE_APP = REPO_ROOT / "build" / "ios" / "iphoneos" / "Runner.app"
@@ -1455,18 +1457,44 @@ def prepare_android_target(
     if reuse_running_bridge and bridge_supports_runtime_role_switch(target):
         return
     for permission in android_permissions_for_target(target):
-        run_command(
-            ["adb", "-s", target.device_id, "shell", "pm", "grant", PACKAGE_NAME, permission],
-            check=False,
-        )
+        try:
+            run_command(
+                [
+                    "adb",
+                    "-s",
+                    target.device_id,
+                    "shell",
+                    "pm",
+                    "grant",
+                    PACKAGE_NAME,
+                    permission,
+                ],
+                check=False,
+                timeout=ANDROID_ADB_SETUP_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired:
+            print(
+                (
+                    "warning: timed out granting "
+                    f"{permission} on {target.device_id}; continuing"
+                ),
+                flush=True,
+            )
 
 
 def stop_android_target(target: MatrixTarget) -> None:
     if target.platform == "android":
-        run_command(
-            ["adb", "-s", target.device_id, "shell", "am", "force-stop", PACKAGE_NAME],
-            check=False,
-        )
+        try:
+            run_command(
+                ["adb", "-s", target.device_id, "shell", "am", "force-stop", PACKAGE_NAME],
+                check=False,
+                timeout=ANDROID_ADB_SETUP_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired:
+            print(
+                f"warning: timed out force-stopping {PACKAGE_NAME} on {target.device_id}; continuing",
+                flush=True,
+            )
 
 
 def launch_android_target(
@@ -1476,7 +1504,18 @@ def launch_android_target(
     master_ip: str | None,
 ) -> None:
     stop_android_target(target)
-    run_command(build_android_start_command(target, role=role, master_ip=master_ip))
+    try:
+        run_command(
+            build_android_start_command(target, role=role, master_ip=master_ip),
+            timeout=ANDROID_ADB_LAUNCH_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise MatrixRunError(
+            (
+                "Timed out launching Android target "
+                f"{target.device_id} after {ANDROID_ADB_LAUNCH_TIMEOUT_SECONDS:.0f}s"
+            )
+        ) from error
 
 
 def launch_flutter_target(

@@ -2427,6 +2427,70 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
 
         self.assertEqual(commands, [])
 
+    def test_prepare_android_target_continues_when_permission_grant_times_out(
+        self,
+    ) -> None:
+        module = load_module()
+        target = matrix_target(module, "android-a", "android")
+        calls: list[tuple[list[str], dict]] = []
+
+        def fake_run_command(command, **kwargs):
+            calls.append((list(command), dict(kwargs)))
+            if "pm" in command and "grant" in command:
+                raise subprocess.TimeoutExpired(command, kwargs.get("timeout"))
+
+        module.run_command = fake_run_command
+        module.bridge_supports_runtime_role_switch = lambda _target: False
+        module.android_permissions_for_target = lambda _target: [
+            "android.permission.CAMERA"
+        ]
+
+        module.prepare_android_target(
+            target,
+            Path("/tmp/app.apk"),
+            skip_install=True,
+            reuse_running_bridge=False,
+        )
+
+        permission_call = calls[-1]
+        self.assertIn("grant", permission_call[0])
+        self.assertEqual(
+            permission_call[1]["timeout"],
+            module.ANDROID_ADB_SETUP_TIMEOUT_SECONDS,
+        )
+
+    def test_stop_android_target_continues_when_force_stop_times_out(self) -> None:
+        module = load_module()
+        target = matrix_target(module, "android-a", "android")
+
+        def fake_run_command(command, **kwargs):
+            raise subprocess.TimeoutExpired(command, kwargs.get("timeout"))
+
+        module.run_command = fake_run_command
+
+        module.stop_android_target(target)
+
+    def test_launch_android_target_reports_launch_timeout(self) -> None:
+        module = load_module()
+        target = matrix_target(module, "android-a", "android")
+        module.stop_android_target = lambda _target: None
+        module.build_android_start_command = lambda _target, *, role, master_ip: [
+            "adb",
+            "shell",
+            "am",
+            "start",
+        ]
+
+        def fake_run_command(command, **kwargs):
+            raise subprocess.TimeoutExpired(command, kwargs.get("timeout"))
+
+        module.run_command = fake_run_command
+
+        with self.assertRaises(module.MatrixRunError) as context:
+            module.launch_android_target(target, role="master", master_ip=None)
+
+        self.assertIn("Timed out launching Android target", str(context.exception))
+
     def test_parse_android_wifi_ip_prefers_wlan0_address(self) -> None:
         module = load_module()
 
