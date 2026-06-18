@@ -1,0 +1,393 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1605-gallery-attachment-session-guid-guard/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ flutter test --no-pub test/services/gallery_session_attachment_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart
+00:00 +0: copyImportedMedia writes gallery files inside the session directory
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testfrChSy/camera roll/photo one.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testfrChSy/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:05:51.826837, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testfrChSy/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:05:51.830837, function: null, file: null}
+00:00 +1: copyImportedMedia does not overwrite an existing session copy
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testmxaOMG/camera roll/idempotent.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testmxaOMG/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:05:51.841427, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testmxaOMG/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:05:51.841965, function: null, file: null}
+Log registered: {message: Reusing existing gallery media session copy: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testmxaOMG/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:05:51.842429, function: null, file: null}
+00:00 +2: attachImportedMedia copies and registers gallery photos
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:05:51.847403, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:05:51.847853, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-guid on device type: Master, timestamp: 2026-06-18 16:05:51.848176, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/camera roll/photo two.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:05:51.849455, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:05:51.850133, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:05:51.850696, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:05:51.852359, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:05:51.853337, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:05:51.853470, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:05:51.854454, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testLyz8d0/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:05:51.857179, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:05:51.857303, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:05:51.857378, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:05:51.857444, function: null, file: null}
+00:00 +3: attachImportedMedia does not duplicate the same gallery photo
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:05:51.859661, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:05:51.859768, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-gallery-guid on device type: Master, timestamp: 2026-06-18 16:05:51.859835, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/camera roll/duplicate.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:05:51.860509, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:05:51.861025, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:05:51.861142, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:05:51.861815, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:05:51.861940, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:05:51.862010, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:05:51.862142, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:05:51.862470, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testJDhTse/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:05:51.863791, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:05:51.863930, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:05:51.864033, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:05:51.864183, function: null, file: null}
+00:00 +4: duplicate gallery attachment does not overwrite the session copy
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:05:51.866223, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:05:51.866357, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-copy-guid on device type: Master, timestamp: 2026-06-18 16:05:51.866428, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/camera roll/overwrite.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:05:51.867272, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:05:51.867826, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:05:51.867941, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:05:51.868589, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:05:51.868692, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:05:51.868754, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:05:51.868893, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:05:51.869338, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testGN0Xd1/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:05:51.870309, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:05:51.870409, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:05:51.870474, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:05:51.870527, function: null, file: null}
+00:00 +5: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/gallery_session_attachment_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart
+00:00 +0: copyImportedMedia writes gallery files inside the session directory
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testVEfDES/camera roll/photo one.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testVEfDES/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:06:38.808154, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testVEfDES/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:06:38.812325, function: null, file: null}
+00:00 +1: copyImportedMedia does not overwrite an existing session copy
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testv86RPR/camera roll/idempotent.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testv86RPR/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:06:38.823907, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testv86RPR/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:06:38.824629, function: null, file: null}
+Log registered: {message: Reusing existing gallery media session copy: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testv86RPR/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:06:38.825317, function: null, file: null}
+00:00 +2: attachImportedMedia copies and registers gallery photos
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.830821, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.831322, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-guid on device type: Master, timestamp: 2026-06-18 16:06:38.831602, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/camera roll/photo two.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:06:38.832865, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:06:38.833499, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:06:38.834128, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:06:38.836065, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:06:38.837334, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:06:38.837462, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:06:38.838526, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testF5rmrU/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:06:38.841396, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.841508, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.841604, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:06:38.841662, function: null, file: null}
+00:00 +3: attachImportedMedia rejects stale session guid before copying
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.843863, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.843938, function: null, file: null}
+Log registered: {message: Session started with GUID: active-gallery-guid on device type: Master, timestamp: 2026-06-18 16:06:38.844004, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/camera roll/stale.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/session_stale-gallery-guid/gallery_stale_photo_stale.jpg, timestamp: 2026-06-18 16:06:38.844723, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/session_stale-gallery-guid/gallery_stale_photo_stale.jpg, timestamp: 2026-06-18 16:06:38.845262, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/session_stale-gallery-guid/gallery_stale_photo_stale.jpg, timestamp: 2026-06-18 16:06:38.845395, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/session_active-gallery-guid/metadata.json, timestamp: 2026-06-18 16:06:38.846075, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:06:38.846180, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/session_stale-gallery-guid/gallery_stale_photo_stale.jpg, timestamp: 2026-06-18 16:06:38.846251, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:06:38.846385, function: null, file: null}
+00:00 +3 -1: attachImportedMedia rejects stale session guid before copying [E]
+  Expected: empty
+    Actual: [Instance of 'CapturedPhoto']
+
+  package:matcher                                                   expect
+  package:flutter_test/src/widget_tester.dart 473:18                expect
+  test/services/gallery_session_attachment_service_test.dart 161:5  main.<fn>
+
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testUWVHER/session_active-gallery-guid/metadata.json, timestamp: 2026-06-18 16:06:38.861940, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.862056, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.862123, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:06:38.862178, function: null, file: null}
+00:00 +3 -1: attachImportedMedia does not duplicate the same gallery photo
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.865901, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.865972, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-gallery-guid on device type: Master, timestamp: 2026-06-18 16:06:38.866047, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/camera roll/duplicate.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:06:38.866629, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:06:38.867143, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:06:38.867251, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:06:38.867858, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:06:38.867948, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:06:38.868019, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:06:38.868147, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:06:38.868434, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRHfLfu/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:06:38.869646, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.869718, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.869786, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:06:38.869833, function: null, file: null}
+00:00 +4 -1: duplicate gallery attachment does not overwrite the session copy
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.871620, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.871690, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-copy-guid on device type: Master, timestamp: 2026-06-18 16:06:38.871743, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/camera roll/overwrite.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:06:38.872301, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:06:38.872799, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:06:38.872887, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:06:38.873524, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:06:38.873613, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:06:38.873898, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:06:38.874064, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:06:38.874572, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testqLFHEi/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:06:38.875453, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:06:38.875526, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:06:38.875578, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:06:38.875628, function: null, file: null}
+00:00 +5 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: attachImportedMedia rejects stale session guid before copying
+[exit-code] 1
+
+$ flutter test --no-pub test/services/gallery_session_attachment_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart
+00:00 +0: copyImportedMedia writes gallery files inside the session directory
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testOqJc2r/camera roll/photo one.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testOqJc2r/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:07:41.114843, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testOqJc2r/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:07:41.117156, function: null, file: null}
+00:00 +1: copyImportedMedia does not overwrite an existing session copy
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test032VZ8/camera roll/idempotent.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test032VZ8/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:07:41.125775, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test032VZ8/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:07:41.126355, function: null, file: null}
+Log registered: {message: Reusing existing gallery media session copy: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test032VZ8/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:07:41.126850, function: null, file: null}
+00:00 +2: attachImportedMedia copies and registers gallery photos
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.131106, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.131447, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-guid on device type: Master, timestamp: 2026-06-18 16:07:41.131661, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/camera roll/photo two.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:41.132887, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:41.133366, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:41.133907, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:41.135268, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:07:41.136080, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:41.136209, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:07:41.137061, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testQIWBiT/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:41.139559, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.139703, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.139776, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:41.139835, function: null, file: null}
+00:00 +3: attachImportedMedia rejects stale session guid before copying
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.141877, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.141945, function: null, file: null}
+Log registered: {message: Session started with GUID: active-gallery-guid on device type: Master, timestamp: 2026-06-18 16:07:41.142018, function: null, file: null}
+Log registered: {message: Skipping gallery attachment for inactive session GUID: stale-gallery-guid (active: active-gallery-guid), timestamp: 2026-06-18 16:07:41.142099, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testcRilIR/session_active-gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:41.143061, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.143160, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.143218, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:41.143275, function: null, file: null}
+00:00 +4: attachImportedMedia does not duplicate the same gallery photo
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.144927, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.145002, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-gallery-guid on device type: Master, timestamp: 2026-06-18 16:07:41.145074, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/camera roll/duplicate.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:41.145742, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:41.146235, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:41.146326, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:41.146949, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:07:41.147050, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:41.147112, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:07:41.147255, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:41.147561, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test5XDqxZ/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:41.148818, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.148918, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.148986, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:41.149043, function: null, file: null}
+00:00 +5: duplicate gallery attachment does not overwrite the session copy
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.150705, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.150770, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-copy-guid on device type: Master, timestamp: 2026-06-18 16:07:41.150840, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/camera roll/overwrite.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:41.151407, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:41.151870, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:41.151954, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:07:41.152588, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:07:41.152669, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:41.152726, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:07:41.152840, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:41.153220, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_test93DxrE/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:07:41.153973, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:41.154042, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:41.154101, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:41.154148, function: null, file: null}
+00:00 +6: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/gallery_session_attachment_service_test.dart test/widgets/add_gallery_media_button_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: copyImportedMedia writes gallery files inside the session directory
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testMmwZWz/camera roll/photo one.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testMmwZWz/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:07:48.509299, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testMmwZWz/session_session-guid/gallery_asset_id_one_photo one.jpg, timestamp: 2026-06-18 16:07:48.512170, function: null, file: null}
+00:00 +1: /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: copyImportedMedia does not overwrite an existing session copy
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRUT93E/camera roll/idempotent.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRUT93E/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:07:48.524365, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRUT93E/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:07:48.524989, function: null, file: null}
+Log registered: {message: Reusing existing gallery media session copy: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testRUT93E/session_copy-idempotent-guid/gallery_copy_idempotent_idempotent.jpg, timestamp: 2026-06-18 16:07:48.525526, function: null, file: null}
+00:00 +2: /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: attachImportedMedia copies and registers gallery photos
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.530769, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.531229, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-guid on device type: Master, timestamp: 2026-06-18 16:07:48.531562, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/camera roll/photo two.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:48.533021, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:48.533612, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:48.534204, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:48.535676, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:07:48.536506, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/session_gallery-guid/gallery_gallery_photo_two_photo two.jpg, timestamp: 2026-06-18 16:07:48.536619, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:07:48.537642, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjL65nA/session_gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:48.540611, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.540756, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.540839, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:48.540897, function: null, file: null}
+00:00 +3: /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: attachImportedMedia rejects stale session guid before copying
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.543143, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.543236, function: null, file: null}
+Log registered: {message: Session started with GUID: active-gallery-guid on device type: Master, timestamp: 2026-06-18 16:07:48.543298, function: null, file: null}
+Log registered: {message: Skipping gallery attachment for inactive session GUID: stale-gallery-guid (active: active-gallery-guid), timestamp: 2026-06-18 16:07:48.543378, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testjCO9Iq/session_active-gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:48.544223, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.544305, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.544362, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:48.544411, function: null, file: null}
+00:00 +4: /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: attachImportedMedia does not duplicate the same gallery photo
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.546249, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.546365, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-gallery-guid on device type: Master, timestamp: 2026-06-18 16:07:48.546521, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/camera roll/duplicate.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:48.547358, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:48.547979, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:48.548130, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:48.548848, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:07:48.548963, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:48.549089, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:07:48.549310, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/gallery_duplicate_photo_duplicate.jpg, timestamp: 2026-06-18 16:07:48.549660, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testowXdaV/session_duplicate-gallery-guid/metadata.json, timestamp: 2026-06-18 16:07:48.551133, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.551242, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.551311, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:48.551364, function: null, file: null}
+00:00 +5: /Users/jose/src/work/hydracamv2/test/services/gallery_session_attachment_service_test.dart: duplicate gallery attachment does not overwrite the session copy
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.553385, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.553512, function: null, file: null}
+Log registered: {message: Session started with GUID: duplicate-copy-guid on device type: Master, timestamp: 2026-06-18 16:07:48.553579, function: null, file: null}
+Log registered: {message: Copying gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/camera roll/overwrite.jpg -> /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:48.554405, function: null, file: null}
+Log registered: {message: Copied gallery media into session: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:48.554950, function: null, file: null}
+Log registered: {message: Adding photo to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:48.555051, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:07:48.555691, function: null, file: null}
+Log registered: {message: [UploaderService] No uploaded media with valid durations. Returning zero duration., timestamp: 2026-06-18 16:07:48.555804, function: null, file: null}
+Log registered: {message: Media added to upload queue: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:48.555864, function: null, file: null}
+Log registered: {message: Auto-upload is disabled. Media added to queue but not uploaded., timestamp: 2026-06-18 16:07:48.556047, function: null, file: null}
+Log registered: {message: Skipping duplicate gallery photo attachment: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/gallery_duplicate_copy_overwrite.jpg, timestamp: 2026-06-18 16:07:48.556660, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/gallery_session_attachment_service_testIZF8g9/session_duplicate-copy-guid/metadata.json, timestamp: 2026-06-18 16:07:48.557719, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:48.557822, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:48.557881, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:48.557932, function: null, file: null}
+00:00 +6: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: (setUpAll)
+00:00 +6: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: button label fits narrow desktop panes
+00:00 +7: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: active session button opens media filter dialog
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:49.246699, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:49.248459, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-button-guid on device type: Master, timestamp: 2026-06-18 16:07:49.248694, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docs0pnOHJ/session_gallery-button-guid/metadata.json, timestamp: 2026-06-18 16:07:49.432730, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:49.432966, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:49.433035, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:49.433105, function: null, file: null}
+00:00 +8: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: gallery load errors are reported without crashing
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:49.436618, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:49.436730, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-load-error-guid on device type: Master, timestamp: 2026-06-18 16:07:49.436789, function: null, file: null}
+Log registered: {message: Failed to load gallery media for import: PlatformException(gallery_unavailable, Gallery provider unavailable, null, null), timestamp: 2026-06-18 16:07:49.487979, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsNNUJ5L/session_gallery-load-error-guid/metadata.json, timestamp: 2026-06-18 16:07:49.528204, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:49.528376, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:49.528439, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:49.528496, function: null, file: null}
+00:01 +9: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: selected gallery media is copied into the active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:49.531813, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:49.531914, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-copy-guid on device type: Master, timestamp: 2026-06-18 16:07:49.531972, function: null, file: null}
+Log registered: {message: Album: Gallery, Assets Processed: 1, timestamp: 2026-06-18 16:07:49.568787, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: gallery-import-device, timestamp: 2026-06-18 16:07:50.695562, function: null, file: null}
+Log registered: {message: Importing selected gallery asset into active session: gallery-photo-1, timestamp: 2026-06-18 16:07:50.695824, function: null, file: null}
+Log registered: {message: Resolved gallery asset file for import: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsmv75Hd/source.jpg, timestamp: 2026-06-18 16:07:50.696327, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsmv75Hd/session_gallery-copy-guid/metadata.json, timestamp: 2026-06-18 16:07:50.750197, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:50.750386, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:50.750449, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:50.750498, function: null, file: null}
+00:02 +10: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: unavailable selected gallery media reports no import
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:50.754028, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:50.754174, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-missing-file-guid on device type: Master, timestamp: 2026-06-18 16:07:50.754226, function: null, file: null}
+Log registered: {message: Album: Gallery, Assets Processed: 1, timestamp: 2026-06-18 16:07:50.785082, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: gallery-import-device, timestamp: 2026-06-18 16:07:50.866307, function: null, file: null}
+Log registered: {message: Importing selected gallery asset into active session: missing-gallery-photo, timestamp: 2026-06-18 16:07:50.866477, function: null, file: null}
+Log registered: {message: Skipping gallery asset with no available local file: missing-gallery-photo, timestamp: 2026-06-18 16:07:50.866658, function: null, file: null}
+Log registered: {message: No selected gallery media was imported into the active session., timestamp: 2026-06-18 16:07:50.866715, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsUZPprZ/session_gallery-missing-file-guid/metadata.json, timestamp: 2026-06-18 16:07:50.896789, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:50.896969, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:50.897029, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:50.897078, function: null, file: null}
+00:02 +11: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: partially unavailable selected gallery media reports skipped
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:50.900438, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:50.900531, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-partial-guid on device type: Master, timestamp: 2026-06-18 16:07:50.900588, function: null, file: null}
+Log registered: {message: Album: Gallery, Assets Processed: 2, timestamp: 2026-06-18 16:07:50.927863, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: gallery-import-device, timestamp: 2026-06-18 16:07:52.006498, function: null, file: null}
+Log registered: {message: Importing selected gallery asset into active session: partial-gallery-photo, timestamp: 2026-06-18 16:07:52.007100, function: null, file: null}
+Log registered: {message: Resolved gallery asset file for import: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsZ0Clsk/partial-source.jpg, timestamp: 2026-06-18 16:07:52.007637, function: null, file: null}
+Log registered: {message: Importing selected gallery asset into active session: missing-gallery-photo, timestamp: 2026-06-18 16:07:52.008902, function: null, file: null}
+Log registered: {message: Skipping gallery asset with no available local file: missing-gallery-photo, timestamp: 2026-06-18 16:07:52.009142, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsZ0Clsk/session_gallery-partial-guid/metadata.json, timestamp: 2026-06-18 16:07:52.057030, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:52.057370, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:52.057472, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:52.057559, function: null, file: null}
+00:03 +12: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: gallery import continues after one selected asset fails
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:52.063918, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:52.064057, function: null, file: null}
+Log registered: {message: Session started with GUID: gallery-failure-guid on device type: Master, timestamp: 2026-06-18 16:07:52.064116, function: null, file: null}
+Log registered: {message: Album: Gallery, Assets Processed: 2, timestamp: 2026-06-18 16:07:52.095256, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: gallery-import-device, timestamp: 2026-06-18 16:07:53.180842, function: null, file: null}
+Log registered: {message: Importing selected gallery asset into active session: failed-gallery-photo, timestamp: 2026-06-18 16:07:53.181357, function: null, file: null}
+Log registered: {message: Resolved gallery asset file for import: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsR6J1gh/failed-source.jpg, timestamp: 2026-06-18 16:07:53.181866, function: null, file: null}
+Log registered: {message: Failed to import selected gallery asset failed-gallery-photo: Bad state: Failed to attach failed-gallery-photo, timestamp: 2026-06-18 16:07:53.182601, function: null, file: null}
+Log registered: {message: Importing selected gallery asset into active session: imported-gallery-photo, timestamp: 2026-06-18 16:07:53.182862, function: null, file: null}
+Log registered: {message: Resolved gallery asset file for import: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsR6J1gh/imported-source.jpg, timestamp: 2026-06-18 16:07:53.183219, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/add_gallery_button_docsR6J1gh/session_gallery-failure-guid/metadata.json, timestamp: 2026-06-18 16:07:53.234218, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-18 16:07:53.234419, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-18 16:07:53.234481, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-18 16:07:53.234529, function: null, file: null}
+00:04 +13: /Users/jose/src/work/hydracamv2/test/widgets/add_gallery_media_button_test.dart: (tearDownAll)
+00:04 +13: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 5.8s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0

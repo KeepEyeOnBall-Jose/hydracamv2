@@ -806,6 +806,13 @@ Default issue schema:
   selected media. Keep this issue open for real gallery attachment smoke
   evidence; Flutter wireless discovery could not reach the iPad/iPhone during
   this Tier D run.
+- 2026-06-18 stale gallery session guard note:
+  `logs/verification-runs/20260618-1605-gallery-attachment-session-guid-guard/`
+  adds a red/green regression for stale gallery imports: when the attachment
+  service is called with a GUID that differs from the active session, it now
+  returns before creating a session directory, copying media, or mutating active
+  session metadata. Keep this issue open for real gallery attachment smoke
+  evidence.
 
 ### 10. Add user/player assignment to sessions
 

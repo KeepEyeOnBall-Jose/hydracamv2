@@ -133,6 +133,44 @@ void main() {
     expect(await metadataFile.readAsString(), contains(importedPhotoPath));
   });
 
+  test("attachImportedMedia rejects stale session guid before copying",
+      () async {
+    final sourceFile = File("${tempDir.path}/camera roll/stale.jpg")
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(<int>[0xff, 0xd8, 0x07, 0xff, 0xd9]);
+    final service = GallerySessionAttachmentService(
+      documentsDirectoryProvider: () async => tempDir,
+    );
+
+    SessionManager.instance.startSession(
+      "active-gallery-guid",
+      "active-gallery-id",
+      deviceType: "Master",
+    );
+
+    await service.attachImportedMedia(
+      sourceFile: sourceFile,
+      sessionGuid: "stale-gallery-guid",
+      assetId: "stale/photo",
+      assetType: AssetType.image,
+      createDateTime: DateTime.utc(2026, 6, 18, 16, 5),
+      videoDuration: Duration.zero,
+      deviceId: "device-1",
+    );
+
+    expect(SessionManager.instance.currentSession?.capturedPhotos, isEmpty);
+    expect(
+      Directory("${tempDir.path}/session_stale-gallery-guid").existsSync(),
+      isFalse,
+    );
+    expect(
+      File("${tempDir.path}/session_active-gallery-guid/metadata.json")
+          .existsSync(),
+      isFalse,
+    );
+    expect(sourceFile.existsSync(), isTrue);
+  });
+
   test("attachImportedMedia does not duplicate the same gallery photo",
       () async {
     final sourceFile = File("${tempDir.path}/camera roll/duplicate.jpg")

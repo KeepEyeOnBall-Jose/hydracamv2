@@ -26,6 +26,14 @@ class GallerySessionAttachmentService {
     required Duration videoDuration,
     required String deviceId,
   }) async {
+    if (!_isCurrentSession(sessionGuid)) {
+      LogService.instance.registerLog(
+        "Skipping gallery attachment for inactive session GUID: "
+        "$sessionGuid (active: ${SessionManager.instance.sessionGuid ?? 'none'})",
+      );
+      return;
+    }
+
     final sessionFile = await _sessionFileFor(
       sourceFile: sourceFile,
       sessionGuid: sessionGuid,
@@ -78,6 +86,13 @@ class GallerySessionAttachmentService {
       );
       await SessionManager.instance.addVideo(video);
     }
+  }
+
+  bool _isCurrentSession(String sessionGuid) {
+    final activeGuid = SessionManager.instance.sessionGuid?.trim();
+    return activeGuid != null &&
+        activeGuid.isNotEmpty &&
+        activeGuid == sessionGuid.trim();
   }
 
   Future<File> copyImportedMedia({
