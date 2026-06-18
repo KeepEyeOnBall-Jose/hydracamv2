@@ -36,6 +36,8 @@ class MasterVideoRecordingScreenState
     // Get possible timer
     final timerDuration = await SettingsService.getTimerDuration();
 
+    if (!mounted) return;
+
     if (timerDuration > 0) {
       // Get scheduled time
       final DateTime scheduledTime =

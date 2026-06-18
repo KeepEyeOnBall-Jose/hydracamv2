@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 
 import "package:flutter/material.dart";
@@ -142,6 +143,50 @@ void main() {
     expect(find.byType(MasterVideoRecordingScreen), findsNothing);
     expect(stopCallCount, 1);
     expect(returnedVideo, same(capturedVideo));
+
+    recordingInterrupted.dispose();
+  });
+
+  testWidgets("stop recording ignores settings completion after dispose",
+      (WidgetTester tester) async {
+    final timerDuration = Completer<int>();
+    SettingsService.overrideTimerDurationFutureForTests(
+      () => timerDuration.future,
+    );
+    addTearDown(SettingsService.clearTestOverrides);
+
+    final cameraService = MockCameraService();
+    final recordingInterrupted = ValueNotifier<bool>(false);
+    var stopRecordingCalled = false;
+
+    when(() => cameraService.recordingInterrupted)
+        .thenReturn(recordingInterrupted);
+    when(() => cameraService.isRecording).thenReturn(true);
+    when(() => cameraService.controller).thenReturn(null);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: _PreviewHost(
+          cameraService: cameraService,
+          onStopRecording: () async {
+            stopRecordingCalled = true;
+            throw StateError("disposed preview should not stop recording");
+          },
+        ),
+      ),
+    );
+
+    await tester.tap(find.text("Open preview"));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text("Stop Recording"));
+    await tester.pump();
+    await tester.pumpWidget(const SizedBox.shrink());
+    timerDuration.complete(0);
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(stopRecordingCalled, isFalse);
 
     recordingInterrupted.dispose();
   });

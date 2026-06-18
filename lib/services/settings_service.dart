@@ -9,6 +9,7 @@ import "log_service.dart";
 class SettingsService {
   static bool? _masterShouldRecordOverride;
   static int? _timerDurationOverride;
+  static Future<int> Function()? _timerDurationFutureOverride;
 
   static const String _masterShouldRecordKey =
       "masterShouldRecord"; // Whether or not master should also take pics/videos
@@ -235,6 +236,10 @@ class SettingsService {
 
   /// Retrieve the current value for "timerDuration"
   static Future<int> getTimerDuration() async {
+    final timerDurationFutureOverride = _timerDurationFutureOverride;
+    if (timerDurationFutureOverride != null) {
+      return timerDurationFutureOverride();
+    }
     if (_timerDurationOverride != null) {
       return _timerDurationOverride!;
     }
@@ -277,9 +282,16 @@ class SettingsService {
   }
 
   @visibleForTesting
+  static void overrideTimerDurationFutureForTests(
+      Future<int> Function() value) {
+    _timerDurationFutureOverride = value;
+  }
+
+  @visibleForTesting
   static void clearTestOverrides() {
     _masterShouldRecordOverride = null;
     _timerDurationOverride = null;
+    _timerDurationFutureOverride = null;
   }
 
   /// Retrieve the current value for "screenAutoOff"

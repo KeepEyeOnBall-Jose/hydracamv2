@@ -1,0 +1,102 @@
+{
+  "acceptanceChecks": [
+    "Master recording preview stop flow must not update disposed state after the async timer-duration lookup completes."
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart",
+        "--name",
+        "stop recording ignores settings completion after dispose"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:21:24.432006+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart",
+        "--name",
+        "stop recording ignores settings completion after dispose"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:22:01.059102+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart",
+        "--name",
+        "stop recording ignores settings completion after dispose"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:22:18.469746+00:00"
+    },
+    {
+      "command": [
+        "dart",
+        "format",
+        "lib/services/settings_service.dart",
+        "lib/screens/master_video_recording_screen.dart",
+        "test/screens/master_video_recording_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:22:30.340959+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/screens/master_video_recording_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:22:33.579052+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:22:41.747948+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:22:54.847529+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:23:32.478262+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "master-video-stop-dispose-mounted-guard",
+    "source": "docs/control/backlog-import.md",
+    "title": "Auto-record mode safe stop controls"
+  },
+  "notes": [
+    "Red/green widget regression proves MasterVideoRecordingScreen no longer calls setState or stopRecording after the stop flow resumes from a disposed async timer-duration lookup."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}
