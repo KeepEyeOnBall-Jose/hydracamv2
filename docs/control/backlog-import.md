@@ -1308,6 +1308,17 @@ boundary logs already-uploaded media as a no-op instead of duplicating upload
 work. Keep row 35 open for real old-media attachment smoke evidence and any
 remaining controller/view GUID audit not covered by local widget/model tests.
 
+2026-06-18 row 35 stored-media GUID-primary note:
+`logs/verification-runs/20260618-1508-stored-media-guid-primary-display/`
+changes `PreviousSessionsScreen` stored-media rows to load metadata snapshots,
+display `CaptureSession.preferredIdentifier` as `Session: <guid>`, label a
+distinct legacy ID separately, and pass the original storage directory
+identifier into `SessionDetailsScreen` so restore still works when metadata GUID
+differs from the folder key. Focused widget coverage proves GUID-primary display
+and storage-key restore, and the full Flutter analyzer/test suite passed. Keep
+row 35 open for real old-media attachment smoke evidence and any remaining
+controller/view GUID audit not covered by local widget/model tests.
+
 2026-06-08 row 111 note:
 `logs/verification-runs/20260608-1901-upload-app-version-metadata/` adds
 `appVersion` and `appBuildNumber` multipart fields to media uploads and proves

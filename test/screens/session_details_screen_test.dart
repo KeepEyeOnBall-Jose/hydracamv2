@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:convert";
 import "dart:io";
 
 import "package:flutter/material.dart";
@@ -8,9 +9,12 @@ import "package:hydracam/models/captured_photo.dart";
 import "package:hydracam/models/captured_video.dart";
 import "package:hydracam/master/master_screen.dart";
 import "package:hydracam/screens/session_details_screen.dart";
+import "package:hydracam/services/camera_service_singleton.dart";
 import "package:hydracam/services/session_manager.dart";
+import "package:hydracam/services/storage_service.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
+import "package:shared_preferences/shared_preferences.dart";
 // ignore: depend_on_referenced_packages
 import "package:video_player_platform_interface/video_player_platform_interface.dart";
 
@@ -22,6 +26,19 @@ void main() {
 
   setUpAll(() {
     PathProviderPlatform.instance = testPathProvider;
+    SharedPreferences.setMockInitialValues({});
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
     originalVideoPlayerPlatform = VideoPlayerPlatform.instance;
   });
 
@@ -161,6 +178,37 @@ void main() {
     );
   });
 
+  testWidgets("load session action can restore through storage identifier",
+      (tester) async {
+    testPathProvider.writeSessionMetadata(
+      storageIdentifier: "directory-reference-guid",
+      sessionGuid: "backend-session-guid",
+      sessionId: "legacy-session-id",
+    );
+    final session = CaptureSession(
+      sessionId: "legacy-session-id",
+      sessionGuid: "backend-session-guid",
+      startTime: DateTime.utc(2026, 6, 18, 16),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SessionDetailsScreen(
+          session: session,
+          storageIdentifier: "directory-reference-guid",
+        ),
+      ),
+    );
+
+    await tester.tap(find.byTooltip("Load Session"));
+    await _pumpUntilSessionGuid(tester, "backend-session-guid");
+
+    expect(SessionManager.instance.sessionGuid, "backend-session-guid");
+    expect(
+        SessionManager.instance.currentSession?.sessionId, "legacy-session-id");
+    expect(find.textContaining("Failed to load session:"), findsNothing);
+  });
+
   testWidgets("upload confirm action reports missing restored metadata",
       (tester) async {
     final videoFile = File("${testPathProvider.documentsDir.path}/upload.mp4")
@@ -281,6 +329,22 @@ void main() {
   });
 }
 
+Future<void> _pumpUntilSessionGuid(
+  WidgetTester tester,
+  String sessionGuid, {
+  int maxPumps = 10,
+}) async {
+  for (var pumpCount = 0; pumpCount < maxPumps; pumpCount += 1) {
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    });
+    if (SessionManager.instance.sessionGuid == sessionGuid) {
+      return;
+    }
+    await tester.pump();
+  }
+}
+
 class _TestPathProviderPlatform extends PathProviderPlatform {
   Directory? _documentsDir;
 
@@ -294,6 +358,27 @@ class _TestPathProviderPlatform extends PathProviderPlatform {
   @override
   Future<String?> getApplicationDocumentsPath() async {
     return documentsDir.path;
+  }
+
+  void writeSessionMetadata({
+    required String storageIdentifier,
+    required String sessionGuid,
+    required String sessionId,
+  }) {
+    final sessionDir =
+        Directory("${documentsDir.path}/session_$storageIdentifier");
+    sessionDir.createSync(recursive: true);
+    File("${sessionDir.path}/metadata.json").writeAsStringSync(
+      jsonEncode({
+        "sessionId": sessionId,
+        "sessionGuid": sessionGuid,
+        "startTime": DateTime.utc(2026, 6, 18, 16).toIso8601String(),
+        "endTime": DateTime.utc(2026, 6, 18, 17).toIso8601String(),
+        "deviceType": "Master",
+        "photos": [],
+        "videos": [],
+      }),
+    );
   }
 
   void resetDocumentsDir() {

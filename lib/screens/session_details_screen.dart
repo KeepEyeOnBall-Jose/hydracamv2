@@ -13,8 +13,13 @@ import "../master/master_screen.dart";
 
 class SessionDetailsScreen extends StatelessWidget {
   final CaptureSession session;
+  final String? storageIdentifier;
 
-  const SessionDetailsScreen({super.key, required this.session});
+  const SessionDetailsScreen({
+    super.key,
+    required this.session,
+    this.storageIdentifier,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +148,7 @@ class SessionDetailsScreen extends StatelessWidget {
   Future<void> _loadSessionWithoutUploading(BuildContext context) async {
     try {
       await SessionManager.instance.restoreSessionFromMetadata(
-        session.preferredIdentifier,
+        storageIdentifier ?? session.preferredIdentifier,
         deviceType: "Master",
       );
 

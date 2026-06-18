@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
+import "../models/capture_session.dart";
 import "session_details_screen.dart";
 import "../services/session_manager.dart";
 import "../widgets/hydracam_surface.dart";
@@ -13,7 +14,8 @@ class PreviousSessionsScreen extends StatefulWidget {
 }
 
 class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
-  Future<List<String>> _availableSessions = Future<List<String>>.value([]);
+  Future<List<_StoredSessionListItem>> _availableSessions =
+      Future<List<_StoredSessionListItem>>.value([]);
 
   Future<void> _handleSessionTap(BuildContext context, String sessionId) async {
     // Store a reference to the current context
@@ -29,7 +31,10 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
         Navigator.push(
           currentContext,
           MaterialPageRoute(
-            builder: (context) => SessionDetailsScreen(session: session),
+            builder: (context) => SessionDetailsScreen(
+              session: session,
+              storageIdentifier: sessionId,
+            ),
           ),
         );
       } else {
@@ -58,8 +63,24 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
 
     // Get available sessions after scan
     setState(() {
-      _availableSessions = SessionManager.instance.getAvailableSessions();
+      _availableSessions = _loadStoredSessions();
     });
+  }
+
+  Future<List<_StoredSessionListItem>> _loadStoredSessions() async {
+    final sessionIds = await SessionManager.instance.getAvailableSessions();
+    final storedSessions = <_StoredSessionListItem>[];
+    for (final sessionId in sessionIds) {
+      final session =
+          await SessionManager.instance.loadSessionMetadataSnapshot(sessionId);
+      storedSessions.add(
+        _StoredSessionListItem(
+          storageIdentifier: sessionId,
+          session: session,
+        ),
+      );
+    }
+    return storedSessions;
   }
 
   @override
@@ -86,7 +107,7 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<String>>(
+      body: FutureBuilder<List<_StoredSessionListItem>>(
         future: _availableSessions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -105,15 +126,20 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
             itemCount: sessions.length,
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
-              final sessionId = sessions[index];
+              final session = sessions[index];
+              final legacySessionId = session.legacySessionId;
               return HydraCamSurface(
                 padding: EdgeInsets.zero,
                 child: ListTile(
                   leading: const Icon(Icons.history_outlined),
-                  title: Text("Service session: $sessionId"),
+                  title: Text("Session: ${session.primaryIdentifier}"),
+                  subtitle: legacySessionId == null
+                      ? null
+                      : Text("Legacy Session ID: $legacySessionId"),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
-                    unawaited(_handleSessionTap(context, sessionId));
+                    unawaited(
+                        _handleSessionTap(context, session.storageIdentifier));
                   },
                 ),
               );
@@ -122,5 +148,29 @@ class PreviousSessionsScreenState extends State<PreviousSessionsScreen> {
         },
       ),
     );
+  }
+}
+
+class _StoredSessionListItem {
+  const _StoredSessionListItem({
+    required this.storageIdentifier,
+    required this.session,
+  });
+
+  final String storageIdentifier;
+  final CaptureSession? session;
+
+  String get primaryIdentifier {
+    return session?.preferredIdentifier ?? storageIdentifier;
+  }
+
+  String? get legacySessionId {
+    final sessionId = session?.sessionId.trim();
+    if (sessionId == null ||
+        sessionId.isEmpty ||
+        sessionId == primaryIdentifier) {
+      return null;
+    }
+    return sessionId;
   }
 }
