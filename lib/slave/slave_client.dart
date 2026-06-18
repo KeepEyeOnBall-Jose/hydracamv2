@@ -51,8 +51,17 @@ class SlaveClient implements SlaveConnectionClient {
   /// WebSocket channel for communication with the master.
   IOWebSocketChannel? _channel;
 
+  /// Optional camera service override for tests.
+  final CameraService? _cameraServiceOverride;
+  final Function(String)? _onPhotoTaken;
+  bool _recordingInterruptListenerRegistered = false;
+
   /// CameraService instance for handling camera operations.
-  final CameraService _cameraService;
+  CameraService get _cameraService {
+    final service = _cameraServiceOverride ?? CameraServiceSingleton.instance;
+    _registerRecordingInterruptListener(service);
+    return service;
+  }
 
   /// Flag to indicate whether the client is currently connected.
   bool _isConnected = false;
@@ -157,18 +166,29 @@ class SlaveClient implements SlaveConnectionClient {
     @visibleForTesting
     Future<Map<String, dynamic>> Function()? identityPayloadLoader,
     @visibleForTesting ScheduledTaskService? scheduledTaskService,
+    @visibleForTesting CameraService? cameraService,
     @visibleForTesting DateTime Function()? now,
   })  : _networkPayloadLoader = networkPayloadLoader,
         _identityPayloadLoader = identityPayloadLoader,
+        _cameraServiceOverride = cameraService,
+        _onPhotoTaken = onPhotoTaken,
         _scheduledTaskService =
             scheduledTaskService ?? ScheduledTaskService.instance,
-        _now = now ?? DateTime.now,
-        _cameraService = CameraServiceSingleton.instance {
-    // Reassign callback after the colon:
-    _cameraService.onPhotoTaken = onPhotoTaken;
-    // Listener for forced stop:
-    CameraServiceSingleton.instance.recordingInterrupted
-        .addListener(_handleRecordingInterrupted);
+        _now = now ?? DateTime.now {
+    if (cameraService != null || CameraServiceSingleton.isInitialized) {
+      _registerRecordingInterruptListener(
+        cameraService ?? CameraServiceSingleton.instance,
+      );
+    }
+  }
+
+  void _registerRecordingInterruptListener(CameraService service) {
+    if (_recordingInterruptListenerRegistered) {
+      return;
+    }
+    service.onPhotoTaken = _onPhotoTaken;
+    service.recordingInterrupted.addListener(_handleRecordingInterrupted);
+    _recordingInterruptListenerRegistered = true;
   }
 
   /// Connects the client to the WebSocket server and initializes communication.
@@ -726,8 +746,7 @@ class SlaveClient implements SlaveConnectionClient {
 
   /// A private method to handle forced-stop events from the camera service.
   void _handleRecordingInterrupted() {
-    final interrupted =
-        CameraServiceSingleton.instance.recordingInterrupted.value;
+    final interrupted = _cameraService.recordingInterrupted.value;
     if (interrupted) {
       // 1) Update local flag
       isRecordingVideo = false;

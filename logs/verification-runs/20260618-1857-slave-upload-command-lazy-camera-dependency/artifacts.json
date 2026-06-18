@@ -1,0 +1,105 @@
+{
+  "acceptanceChecks": [
+    "startUploadingAll slave command test passes when run in isolation",
+    "SlaveClient construction no longer requires CameraServiceSingleton for non-camera commands",
+    "Focused slave client tests and analyzer pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "startUploadingAll command starts pending upload queue"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:57:30.566045+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "test/slave/slave_client_time_sync_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T16:57:40.598179+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:58:08.259897+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_time_sync_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:58:15.757222+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:58:25.552852+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:58:35.391945+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:59:00.701043+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T16:59:25.552862+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-upload-command-lazy-camera-dependency",
+    "source": "logs/verification-runs/20260618-1851-store-readiness-mode-scope/commands.log#startUploadingAll-isolated-failure",
+    "title": "Remove hidden camera singleton dependency from upload-only slave command"
+  },
+  "notes": [
+    "SlaveClient now resolves CameraService lazily so upload-only commands can run without pre-initializing CameraServiceSingleton. Isolated startUploadingAll test, focused slave tests, analyzer, full Flutter tests, and diff hygiene passed; combined slave registration/time-sync run exposed an existing controller-close race, but both files pass independently and the full suite passes."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

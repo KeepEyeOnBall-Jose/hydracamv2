@@ -439,6 +439,14 @@ Default issue schema:
   the slave WebSocket `startUploadingAll` command to the existing manual
   uploader path and proves queued media is consumed by the command handler.
   Keep this issue open for in-flight network cancellation and slave upload info.
+- 2026-06-18 lazy-camera upload-command cleanup note:
+  `logs/verification-runs/20260618-1857-slave-upload-command-lazy-camera-dependency/`
+  removes the hidden `CameraServiceSingleton` construction dependency from
+  upload-only slave command handling. `SlaveClient` now resolves and registers
+  the camera service lazily, so the isolated `startUploadingAll` slave command
+  test passes without pre-initializing camera state; camera commands still
+  resolve the singleton when they execute. Keep this issue open for slave upload
+  info and any remaining live upload-command device proof.
 - 2026-06-08 slave-upload-info note:
   `logs/verification-runs/20260608-1922-slave-upload-info-action/` adds a
   direct `Uploader Info` action to `SlaveScreen` in portrait and landscape
