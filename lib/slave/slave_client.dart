@@ -730,6 +730,12 @@ class SlaveClient implements SlaveConnectionClient {
     final networkPayload = await _currentNetworkPayload();
     final identityPayload = await _currentIdentityPayload();
     final sessionMediaPayload = _sessionMediaPayload();
+    final channel = _channel;
+    if (channel == null || !_isConnected) {
+      LogService.instance.registerLog(
+          "Skipping identifyAck because slave disconnected before payload was ready.");
+      return;
+    }
     final payload = {
       "type": "identifyAck",
       "deviceId": _deviceId,
@@ -742,7 +748,7 @@ class SlaveClient implements SlaveConnectionClient {
       ...identityPayload,
       if (networkPayload != null) "network": networkPayload,
     };
-    _channel!.sink.add(jsonEncode(payload));
+    channel.sink.add(jsonEncode(payload));
     LogService.instance.registerLog("Sent identifyAck notification to master");
     _statusStreamController.add("Identify acknowledged to master.");
   }

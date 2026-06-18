@@ -1,0 +1,108 @@
+{
+  "acceptanceChecks": [
+    "Disconnecting during identifyAck payload collection prevents stale identifyAck emission",
+    "The disconnect race does not log a JSON command processing error",
+    "Focused slave client test, analyzer, full Flutter suite, and diff hygiene pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "identifyAck is suppressed when disconnected during payload load"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:46:51.906688+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "identifyAck is suppressed when disconnected during payload load"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:47:16.279165+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "identifyAck is suppressed when disconnected during payload load"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:47:44.613053+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:47:54.701579+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:48:01.984129+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:48:15.042850+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:48:39.636964+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:48:52.240703+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-identify-ack-disconnect-race",
+    "source": "docs/control/backlog-import.md#network-device-identity",
+    "title": "Suppress stale identify acknowledgements after slave disconnect"
+  },
+  "notes": [
+    "SlaveClient identifyAck now rechecks connection state after async payload collection, suppressing stale ACKs and avoiding command-processing errors if the slave disconnects mid-request. Red/green focused race test, full slave registration file, analyzer, full Flutter suite, and diff hygiene passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

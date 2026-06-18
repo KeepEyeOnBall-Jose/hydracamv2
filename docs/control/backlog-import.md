@@ -725,6 +725,13 @@ Default issue schema:
   the listener, while `stopListening()` still resets the state for a later
   start. Keep this issue open for real-device network smoke evidence and
   multi-group network UX.
+- 2026-06-18 identifyAck disconnect-race note:
+  `logs/verification-runs/20260618-2030-slave-identify-ack-disconnect-race/`
+  adds red/green loopback coverage for an `identifySlave` request whose async
+  network payload read completes after the slave disconnects. The slave now
+  rechecks connection state before sending `identifyAck`, so stale ACKs are
+  suppressed without logging command-processing errors. Keep this issue open
+  for real-device network smoke evidence and multi-group network UX.
 
 ### 7. Support synchronized time accurately enough for capture
 

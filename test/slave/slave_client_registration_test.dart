@@ -1041,6 +1041,102 @@ void main() {
     }
   });
 
+  test("identifyAck is suppressed when disconnected during payload load",
+      () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+      "autoUploadMaterials": false,
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+
+    LogService.instance.clearLogs();
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final messages = _JsonMessageCollector();
+    final networkPayload = Completer<Map<String, dynamic>?>();
+    final networkPayloadStarted = Completer<void>();
+    var networkPayloadLoadCount = 0;
+    final sockets = <WebSocket>[];
+    var identifySent = false;
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = messages.addJsonMessage(data as String);
+        if (decoded != null && decoded["type"] == "deviceId" && !identifySent) {
+          identifySent = true;
+          socket.add(jsonEncode({
+            "command": "identifySlave",
+            "requestId": "disconnect-race",
+          }));
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () {
+        networkPayloadLoadCount += 1;
+        if (networkPayloadLoadCount == 1) {
+          return Future<Map<String, dynamic>?>.value(null);
+        }
+        if (!networkPayloadStarted.isCompleted) {
+          networkPayloadStarted.complete();
+        }
+        return networkPayload.future;
+      },
+    );
+
+    try {
+      await client.connect();
+      await networkPayloadStarted.future.timeout(const Duration(seconds: 1));
+
+      client.disconnect();
+      networkPayload.complete({
+        "isWifiActive": true,
+        "ipAddress": "192.168.178.62",
+        "source": "disconnect-race",
+      });
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(
+        messages.messages.where((message) => message["type"] == "identifyAck"),
+        isEmpty,
+      );
+      expect(
+        _logContains("Error decoding or processing message in processcommand"),
+        isFalse,
+      );
+    } finally {
+      client.disconnect();
+      if (!networkPayload.isCompleted) {
+        networkPayload.complete(null);
+      }
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await messages.close();
+      await server.close(force: true);
+    }
+  });
+
   test("scheduled command applies master clock offset before countdown",
       () async {
     SharedPreferences.setMockInitialValues({
@@ -1209,6 +1305,7 @@ void main() {
 class _JsonMessageCollector {
   final StreamController<Map<String, dynamic>> _controller =
       StreamController<Map<String, dynamic>>.broadcast();
+  final List<Map<String, dynamic>> messages = <Map<String, dynamic>>[];
   var _isClosed = false;
 
   Stream<Map<String, dynamic>> get stream => _controller.stream;
@@ -1219,6 +1316,7 @@ class _JsonMessageCollector {
     }
     final decoded = jsonDecode(data);
     if (decoded is Map<String, dynamic> && !_isClosed) {
+      messages.add(decoded);
       _controller.add(decoded);
       return decoded;
     }
