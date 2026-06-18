@@ -55,6 +55,7 @@ class SlaveClient implements SlaveConnectionClient {
   final CameraService? _cameraServiceOverride;
   final Function(String)? _onPhotoTaken;
   bool _recordingInterruptListenerRegistered = false;
+  CameraService? _recordingInterruptService;
 
   /// CameraService instance for handling camera operations.
   CameraService get _cameraService {
@@ -183,12 +184,25 @@ class SlaveClient implements SlaveConnectionClient {
   }
 
   void _registerRecordingInterruptListener(CameraService service) {
-    if (_recordingInterruptListenerRegistered) {
+    if (_recordingInterruptListenerRegistered &&
+        identical(_recordingInterruptService, service)) {
       return;
     }
+    _unregisterRecordingInterruptListener();
     service.onPhotoTaken = _onPhotoTaken;
     service.recordingInterrupted.addListener(_handleRecordingInterrupted);
+    _recordingInterruptService = service;
     _recordingInterruptListenerRegistered = true;
+  }
+
+  void _unregisterRecordingInterruptListener() {
+    final service = _recordingInterruptService;
+    if (service == null || !_recordingInterruptListenerRegistered) {
+      return;
+    }
+    service.recordingInterrupted.removeListener(_handleRecordingInterrupted);
+    _recordingInterruptService = null;
+    _recordingInterruptListenerRegistered = false;
   }
 
   /// Connects the client to the WebSocket server and initializes communication.
@@ -920,6 +934,7 @@ class SlaveClient implements SlaveConnectionClient {
     _reconnectTimer?.cancel();
     _stopHeartbeat();
     _stopTimeSync();
+    _unregisterRecordingInterruptListener();
   }
 
   Future<Map<String, dynamic>?> _currentNetworkPayload() async {

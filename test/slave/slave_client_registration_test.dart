@@ -5,6 +5,7 @@ import "dart:io";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/capture_context_metadata.dart";
 import "package:hydracam/models/captured_photo.dart";
+import "package:hydracam/services/camera_service.dart";
 import "package:hydracam/services/camera_setup_service.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
 import "package:hydracam/services/log_service.dart";
@@ -173,6 +174,31 @@ void main() {
       await messages.close();
       await server.close(force: true);
     }
+  });
+
+  test("disconnect removes recording interruption listener", () {
+    final storageService = StorageService(
+      messengerState: null,
+      lowStorageThreshold: 1.5,
+      criticalStorageThreshold: 0.5,
+      onCriticalStorageCallback: () async {},
+    );
+    final cameraService = CameraService(
+      storageService: storageService,
+      useMockCamera: true,
+    );
+    var stoppedCallbackCount = 0;
+    final client = SlaveClient(
+      "ws://127.0.0.1:1/ws",
+      cameraService: cameraService,
+      networkPayloadLoader: () async => null,
+      onRecordingStopped: () => stoppedCallbackCount++,
+    );
+
+    client.disconnect();
+    cameraService.recordingInterrupted.value = true;
+
+    expect(stoppedCallbackCount, 0);
   });
 
   test("slave heartbeat includes camera setup status when available", () async {

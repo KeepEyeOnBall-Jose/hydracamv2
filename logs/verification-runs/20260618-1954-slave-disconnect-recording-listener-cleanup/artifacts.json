@@ -1,0 +1,117 @@
+{
+  "acceptanceChecks": [
+    "SlaveClient.disconnect removes its CameraService recordingInterrupted listener",
+    "Focused slave client lifecycle test, analyzer, full Flutter suite, and diff hygiene pass"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "disconnect removes recording interruption listener"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:34:26.887412+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "disconnect removes recording interruption listener"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:34:50.019975+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:35:01.520477+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T17:35:08.452934+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:35:38.534091+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart",
+        "--plain-name",
+        "disconnect removes recording interruption listener"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:35:44.066610+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:36:03.485669+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:36:08.998052+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T17:36:34.609335+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-disconnect-recording-listener-cleanup",
+    "source": "docs/control/backlog-import.md#preserve-session-state-across-master-reconnect",
+    "title": "Unregister slave recording-interrupt listeners on disconnect"
+  },
+  "notes": [
+    "SlaveClient.disconnect now unregisters the CameraService recordingInterrupted listener so disposed slave clients no longer receive forced-stop callbacks. Red/green focused lifecycle test, full slave registration file, analyzer, full Flutter suite, and diff hygiene passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

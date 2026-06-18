@@ -238,6 +238,13 @@ Default issue schema:
   when no session is active. Keep this issue open for real master/slave
   reconnect reproduction, master-loss recording policy, and cross-device
   metadata comparison.
+- 2026-06-18 slave disconnect listener cleanup note:
+  `logs/verification-runs/20260618-1954-slave-disconnect-recording-listener-cleanup/`
+  adds red/green coverage for `SlaveClient.disconnect()` removing its
+  `CameraService.recordingInterrupted` listener. A disconnected slave client no
+  longer receives forced-recording-stop callbacks after screen disposal. Keep
+  this issue open for real master/slave reconnect reproduction, master-loss
+  recording policy, and cross-device metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing
