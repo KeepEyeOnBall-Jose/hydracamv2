@@ -1,0 +1,116 @@
+{
+  "acceptanceChecks": [
+    "Inventory connected devices and record whether same-turn hardware proof is available after local UI/service fixes."
+  ],
+  "commands": [
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:12:38.490028+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:12:38.505024+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T18:12:38.556657+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "20",
+        "--required-command",
+        "capture_screenshot",
+        "--target-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--all"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:13:10.443200+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--timeout",
+        "90",
+        "--run-dir",
+        "logs/verification-runs/20260618-2012-post-iteration-device-proof-check/device-logs/ipad-ios-capture-repro",
+        "--lens",
+        "autoBack",
+        "--profile",
+        "standard1080p30"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T18:13:51.804967+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS hardware wireless",
+      "name": "iPad (5)",
+      "notes": [
+        "Flutter and devicectl reported the iPad available/paired, but no identity-matched automation bridge appeared on 192.168.178.0/24:4762 after a bounded launch attempt."
+      ],
+      "os": "iOS 17.7.11 21H461",
+      "role": "candidate hardware proof target"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS hardware wireless",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "devicectl reported unavailable and Flutter LAN browsing failed with code -27; unlock/attach/same-LAN/developer-mode action required before proof."
+      ],
+      "os": "iOS unknown",
+      "role": "unavailable iOS target"
+    }
+  ],
+  "evidenceFiles": [
+    "device-logs/ipad-ios-capture-repro/flutter-run.log"
+  ],
+  "item": {
+    "slug": "post-iteration-device-proof-check",
+    "source": "docs/control/regular-evaluation-plan.md#start-every-run",
+    "title": "Post-iteration connected-device proof check"
+  },
+  "notes": [
+    "Device inventory succeeded. No Android devices attached. iPad was visible via Flutter/devicectl, but no identity-matched automation bridge exposing capture_screenshot appeared on 192.168.178.0/24:4762 after a bounded launch attempt; ios_capture_repro could not proceed. iPhone remained unavailable with Flutter code -27. Same-turn hardware proof remains blocked on a warm/launchable iOS bridge or attached Android hardware."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}
