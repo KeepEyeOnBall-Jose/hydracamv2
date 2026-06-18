@@ -916,6 +916,22 @@ void main() {
     );
   });
 
+  test("endSession accepts empty successful POST responses", () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response("", 200);
+      }),
+    );
+
+    final result = await HydraCamApiService().endSession("session-guid");
+
+    expect(result, isTrue);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Session ended successfully"),
+    );
+  });
+
   test("deleteDebugSession sends service cleanup identifiers", () async {
     Uri? requestedUri;
     HydraCamApiService.configureHttpClient(
@@ -937,6 +953,25 @@ void main() {
       containsPair("sessionGuid", "debug guid/one+two"),
     );
     expect(requestedUri?.queryParameters, containsPair("id", "456"));
+  });
+
+  test("deleteDebugSession accepts plaintext successful POST responses",
+      () async {
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        return http.Response("OK", 200);
+      }),
+    );
+
+    final result = await HydraCamApiService().deleteDebugSession(
+      sessionGuid: "debug-session-guid",
+    );
+
+    expect(result, isTrue);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains("Debug session deleted from service: debug-session-guid"),
+    );
   });
 
   test("user lookups use centralized user contract endpoints", () async {

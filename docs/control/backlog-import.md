@@ -1498,6 +1498,15 @@ coverage proves iOS-style photo uploads still pass. Keep broader contract
 coverage open for live backend response-shape confirmation and any
 camera-plugin format added later.
 
+2026-06-18 T-016 shared POST success-body note:
+`logs/verification-runs/20260618-1616-api-post-empty-success-response/` adds
+red/green coverage for non-upload POST commands whose backend returns HTTP 200
+with an empty or plaintext success body. The shared `HydraCamApiService._post()`
+helper now returns an empty response map for empty, non-JSON, or non-object
+successful bodies while still decoding JSON objects for callers that need
+fields. Keep broader contract coverage open for live backend response-shape
+confirmation and any endpoint-specific failure object handling added later.
+
 2026-06-08 T-017 note:
 `logs/verification-runs/20260608-2140-storage-critical-block-recovery/` fixes
 `StorageService` so recording remains blocked only while available storage is

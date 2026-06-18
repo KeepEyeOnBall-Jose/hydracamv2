@@ -242,7 +242,7 @@ class HydraCamApiService {
           await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        return _decodeSuccessfulPostResponse(endpoint, response.body);
       } else {
         LogService.instance
             .registerLog("POST $endpoint failed: ${response.body}");
@@ -251,6 +251,31 @@ class HydraCamApiService {
     } catch (e) {
       LogService.instance.registerLog("Error on POST $endpoint: $e");
       return null;
+    }
+  }
+
+  Map<String, dynamic> _decodeSuccessfulPostResponse(
+    String endpoint,
+    String responseBody,
+  ) {
+    final trimmedBody = responseBody.trim();
+    if (trimmedBody.isEmpty) {
+      return <String, dynamic>{};
+    }
+
+    try {
+      final decoded = jsonDecode(trimmedBody);
+      if (decoded is Map) {
+        return decoded.map((key, value) => MapEntry(key.toString(), value));
+      }
+
+      LogService.instance.registerLog(
+          "POST $endpoint returned unexpected JSON success body: $decoded");
+      return <String, dynamic>{};
+    } on FormatException {
+      LogService.instance.registerLog(
+          "POST $endpoint returned non-JSON success body: ${_uploadFailureResponseBodySnippet(responseBody)}");
+      return <String, dynamic>{};
     }
   }
 

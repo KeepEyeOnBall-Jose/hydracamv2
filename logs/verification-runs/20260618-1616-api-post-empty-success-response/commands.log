@@ -1,0 +1,447 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-1616-api-post-empty-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+[exit-code] 0
+
+$ flutter test --no-pub test/services/hydracam_api_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart
+00:00 +0: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:18.948628, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:18.969067, function: null, file: null}
+00:00 +1: uploadMedia includes video recording end and duration metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:18.974246, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:18.976149, function: null, file: null}
+00:00 +2: uploadMedia derives duration from recording timestamps when mismatched
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:18.978872, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:18.980695, function: null, file: null}
+00:00 +3: uploadMedia rejects inverted video recording timestamps
+Log registered: {message: Upload video duration is invalid: recordingEndDate is before captureDate for /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testBuKmAA/video-inverted-duration.mp4, timestamp: 2026-06-18 16:16:18.983547, function: null, file: null}
+00:00 +4: uploadMedia uses centralized upload-media contract fields
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:18.989369, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:18.991942, function: null, file: null}
+00:00 +5: uploadMedia omits video duration metadata for photo uploads
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:18.995725, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:18.997650, function: null, file: null}
+00:00 +6: createSession returns typed backend session from API response
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:18.999845, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: backend-guid, sessionId: friendly-session, numericId: 42), timestamp: 2026-06-18 16:16:19.004651, function: null, file: null}
+00:00 +7: warmUpBackend sends an authenticated lightweight startup request
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.008603, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-18 16:16:19.009907, function: null, file: null}
+00:00 +8: uploadMedia rejects missing files before HTTP send
+Log registered: {message: Upload file does not exist: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testyAINr6/missing-video.mp4, timestamp: 2026-06-18 16:16:19.012379, function: null, file: null}
+00:00 +9: uploadMedia rejects empty files before HTTP send
+Log registered: {message: Upload file is empty: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testIYpnfM/empty-video.mp4, timestamp: 2026-06-18 16:16:19.014941, function: null, file: null}
+00:00 +10: uploadMedia rejects corrupt local photo and video before HTTP send
+Log registered: {message: Upload file is not valid photo media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testNA76Ba/corrupt-photo.jpg, timestamp: 2026-06-18 16:16:19.018348, function: null, file: null}
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testNA76Ba/corrupt-video.mp4, timestamp: 2026-06-18 16:16:19.019212, function: null, file: null}
+00:00 +11: uploadMedia rejects unsupported ISO media signatures before HTTP send
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testA1RaZx/forged-iso-video.mp4, timestamp: 2026-06-18 16:16:19.022503, function: null, file: null}
+00:00 +12: uploadMedia accepts supported HEIC photo signatures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.025325, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:19.027392, function: null, file: null}
+00:00 +13: uploadMedia rejects backend failure bodies with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.030478, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":false,"message":"Rejected corrupt media"}, timestamp: 2026-06-18 16:16:19.032806, function: null, file: null}
+00:00 +14: uploadMedia accepts deployed legacy plaintext success body
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.036059, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:19.037532, function: null, file: null}
+00:00 +15: uploadMedia accepts JSON success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.040453, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:19.041938, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.042735, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:19.043999, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.044663, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:19.046894, function: null, file: null}
+00:00 +16: uploadMedia rejects textual false success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.050191, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":"false"}, timestamp: 2026-06-18 16:16:19.051490, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.052167, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"succeeded":"0"}, timestamp: 2026-06-18 16:16:19.053356, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.053979, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"isSuccess":"no"}, timestamp: 2026-06-18 16:16:19.055235, function: null, file: null}
+00:00 +17: uploadMedia rejects malformed backend success bodies
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.057745, function: null, file: null}
+Log registered: {message: Malformed upload response body: not-json (FormatException: Unexpected character (at character 1)
+not-json
+^
+), timestamp: 2026-06-18 16:16:19.059574, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - not-json, timestamp: 2026-06-18 16:16:19.059719, function: null, file: null}
+00:00 +18: uploadMedia bounds logged response bodies for failures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.062381, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 500 - backend failure xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..., timestamp: 2026-06-18 16:16:19.064318, function: null, file: null}
+00:00 +19: uploadMedia rejects backend error objects with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.069155, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"error":"Unsupported media codec"}, timestamp: 2026-06-18 16:16:19.071481, function: null, file: null}
+00:00 +20: fetchCourts preserves encoded sports center query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.074304, function: null, file: null}
+Log registered: {message: Parsed list (courts): [], timestamp: 2026-06-18 16:16:19.075689, function: null, file: null}
+00:00 +21: endSession preserves encoded session guid query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.077475, function: null, file: null}
+Log registered: {message: Session ended successfully, timestamp: 2026-06-18 16:16:19.078141, function: null, file: null}
+00:00 +22: deleteDebugSession sends service cleanup identifiers
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.079541, function: null, file: null}
+Log registered: {message: Debug session deleted from service: debug guid/one+two, timestamp: 2026-06-18 16:16:19.079970, function: null, file: null}
+00:00 +23: user lookups use centralized user contract endpoints
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.081023, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:19.081545, function: null, file: null}
+00:00 +24: All tests passed!
+[exit-code] 0
+
+$ flutter test --no-pub test/services/hydracam_api_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart
+00:00 +0: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.767429, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.791380, function: null, file: null}
+00:00 +1: uploadMedia includes video recording end and duration metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.800320, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.802553, function: null, file: null}
+00:00 +2: uploadMedia derives duration from recording timestamps when mismatched
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.808279, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.811087, function: null, file: null}
+00:00 +3: uploadMedia rejects inverted video recording timestamps
+Log registered: {message: Upload video duration is invalid: recordingEndDate is before captureDate for /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_test6WAgLd/video-inverted-duration.mp4, timestamp: 2026-06-18 16:16:40.816556, function: null, file: null}
+00:00 +4: uploadMedia uses centralized upload-media contract fields
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.824977, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.830040, function: null, file: null}
+00:00 +5: uploadMedia omits video duration metadata for photo uploads
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.836541, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.838120, function: null, file: null}
+00:00 +6: createSession returns typed backend session from API response
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.845786, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: backend-guid, sessionId: friendly-session, numericId: 42), timestamp: 2026-06-18 16:16:40.850178, function: null, file: null}
+00:00 +7: warmUpBackend sends an authenticated lightweight startup request
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.855236, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-18 16:16:40.856292, function: null, file: null}
+00:00 +8: uploadMedia rejects missing files before HTTP send
+Log registered: {message: Upload file does not exist: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testxwCJnw/missing-video.mp4, timestamp: 2026-06-18 16:16:40.859801, function: null, file: null}
+00:00 +9: uploadMedia rejects empty files before HTTP send
+Log registered: {message: Upload file is empty: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testtr7vqv/empty-video.mp4, timestamp: 2026-06-18 16:16:40.863683, function: null, file: null}
+00:00 +10: uploadMedia rejects corrupt local photo and video before HTTP send
+Log registered: {message: Upload file is not valid photo media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testa74bRR/corrupt-photo.jpg, timestamp: 2026-06-18 16:16:40.869747, function: null, file: null}
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testa74bRR/corrupt-video.mp4, timestamp: 2026-06-18 16:16:40.870267, function: null, file: null}
+00:00 +11: uploadMedia rejects unsupported ISO media signatures before HTTP send
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testm9ZpcQ/forged-iso-video.mp4, timestamp: 2026-06-18 16:16:40.874206, function: null, file: null}
+00:00 +12: uploadMedia accepts supported HEIC photo signatures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.878447, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.879755, function: null, file: null}
+00:00 +13: uploadMedia rejects backend failure bodies with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.888853, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":false,"message":"Rejected corrupt media"}, timestamp: 2026-06-18 16:16:40.890868, function: null, file: null}
+00:00 +14: uploadMedia accepts deployed legacy plaintext success body
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.894845, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.896684, function: null, file: null}
+00:00 +15: uploadMedia accepts JSON success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.900487, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.901674, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.904663, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.907920, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.908662, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:16:40.910338, function: null, file: null}
+00:00 +16: uploadMedia rejects textual false success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.912794, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":"false"}, timestamp: 2026-06-18 16:16:40.913852, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.914422, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"succeeded":"0"}, timestamp: 2026-06-18 16:16:40.916901, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.917454, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"isSuccess":"no"}, timestamp: 2026-06-18 16:16:40.919516, function: null, file: null}
+00:00 +17: uploadMedia rejects malformed backend success bodies
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.924338, function: null, file: null}
+Log registered: {message: Malformed upload response body: not-json (FormatException: Unexpected character (at character 1)
+not-json
+^
+), timestamp: 2026-06-18 16:16:40.926481, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - not-json, timestamp: 2026-06-18 16:16:40.926758, function: null, file: null}
+00:00 +18: uploadMedia bounds logged response bodies for failures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.932896, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 500 - backend failure xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..., timestamp: 2026-06-18 16:16:40.935573, function: null, file: null}
+00:00 +19: uploadMedia rejects backend error objects with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.938664, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"error":"Unsupported media codec"}, timestamp: 2026-06-18 16:16:40.939872, function: null, file: null}
+00:00 +20: fetchCourts preserves encoded sports center query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.945601, function: null, file: null}
+Log registered: {message: Parsed list (courts): [], timestamp: 2026-06-18 16:16:40.947068, function: null, file: null}
+00:00 +21: endSession preserves encoded session guid query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.949806, function: null, file: null}
+Log registered: {message: Session ended successfully, timestamp: 2026-06-18 16:16:40.950436, function: null, file: null}
+00:00 +22: endSession accepts empty successful POST responses
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.959360, function: null, file: null}
+Log registered: {message: Error on POST sessions/end?sessionGuid=session-guid: FormatException: Unexpected end of input (at character 1)
+
+^
+, timestamp: 2026-06-18 16:16:40.960006, function: null, file: null}
+Log registered: {message: Failed to end session: No response, timestamp: 2026-06-18 16:16:40.960100, function: null, file: null}
+00:00 +22 -1: endSession accepts empty successful POST responses [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/hydracam_api_service_test.dart 928:5  main.<fn>
+
+00:00 +22 -1: deleteDebugSession sends service cleanup identifiers
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.980491, function: null, file: null}
+Log registered: {message: Debug session deleted from service: debug guid/one+two, timestamp: 2026-06-18 16:16:40.982389, function: null, file: null}
+00:00 +23 -1: user lookups use centralized user contract endpoints
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.992423, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:16:40.993404, function: null, file: null}
+00:00 +24 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart: endSession accepts empty successful POST responses
+[exit-code] 1
+
+$ flutter test --no-pub test/services/hydracam_api_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart
+00:00 +0: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.543887, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.559928, function: null, file: null}
+00:00 +1: uploadMedia includes video recording end and duration metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.564215, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.566111, function: null, file: null}
+00:00 +2: uploadMedia derives duration from recording timestamps when mismatched
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.568366, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.569673, function: null, file: null}
+00:00 +3: uploadMedia rejects inverted video recording timestamps
+Log registered: {message: Upload video duration is invalid: recordingEndDate is before captureDate for /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testXTCnMj/video-inverted-duration.mp4, timestamp: 2026-06-18 16:17:24.571603, function: null, file: null}
+00:00 +4: uploadMedia uses centralized upload-media contract fields
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.573919, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.575037, function: null, file: null}
+00:00 +5: uploadMedia omits video duration metadata for photo uploads
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.576736, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.577688, function: null, file: null}
+00:00 +6: createSession returns typed backend session from API response
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.579304, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: backend-guid, sessionId: friendly-session, numericId: 42), timestamp: 2026-06-18 16:17:24.582766, function: null, file: null}
+00:00 +7: warmUpBackend sends an authenticated lightweight startup request
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.585783, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-18 16:17:24.586860, function: null, file: null}
+00:00 +8: uploadMedia rejects missing files before HTTP send
+Log registered: {message: Upload file does not exist: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_test4V8hrQ/missing-video.mp4, timestamp: 2026-06-18 16:17:24.588256, function: null, file: null}
+00:00 +9: uploadMedia rejects empty files before HTTP send
+Log registered: {message: Upload file is empty: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testArMg66/empty-video.mp4, timestamp: 2026-06-18 16:17:24.589781, function: null, file: null}
+00:00 +10: uploadMedia rejects corrupt local photo and video before HTTP send
+Log registered: {message: Upload file is not valid photo media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testdUeKnL/corrupt-photo.jpg, timestamp: 2026-06-18 16:17:24.591723, function: null, file: null}
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testdUeKnL/corrupt-video.mp4, timestamp: 2026-06-18 16:17:24.592114, function: null, file: null}
+00:00 +11: uploadMedia rejects unsupported ISO media signatures before HTTP send
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testZcIzfH/forged-iso-video.mp4, timestamp: 2026-06-18 16:17:24.593889, function: null, file: null}
+00:00 +12: uploadMedia accepts supported HEIC photo signatures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.595546, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.596665, function: null, file: null}
+00:00 +13: uploadMedia rejects backend failure bodies with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.599890, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":false,"message":"Rejected corrupt media"}, timestamp: 2026-06-18 16:17:24.601653, function: null, file: null}
+00:00 +14: uploadMedia accepts deployed legacy plaintext success body
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.603899, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.605382, function: null, file: null}
+00:00 +15: uploadMedia accepts JSON success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.607395, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.608515, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.609003, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.609912, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.610361, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:17:24.611348, function: null, file: null}
+00:00 +16: uploadMedia rejects textual false success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.613671, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":"false"}, timestamp: 2026-06-18 16:17:24.614892, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.615431, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"succeeded":"0"}, timestamp: 2026-06-18 16:17:24.616319, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.616730, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"isSuccess":"no"}, timestamp: 2026-06-18 16:17:24.617761, function: null, file: null}
+00:00 +17: uploadMedia rejects malformed backend success bodies
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.619512, function: null, file: null}
+Log registered: {message: Malformed upload response body: not-json (FormatException: Unexpected character (at character 1)
+not-json
+^
+), timestamp: 2026-06-18 16:17:24.620834, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - not-json, timestamp: 2026-06-18 16:17:24.620946, function: null, file: null}
+00:00 +18: uploadMedia bounds logged response bodies for failures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.623129, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 500 - backend failure xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..., timestamp: 2026-06-18 16:17:24.624382, function: null, file: null}
+00:00 +19: uploadMedia rejects backend error objects with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.626314, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"error":"Unsupported media codec"}, timestamp: 2026-06-18 16:17:24.627367, function: null, file: null}
+00:00 +20: fetchCourts preserves encoded sports center query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.628739, function: null, file: null}
+Log registered: {message: Parsed list (courts): [], timestamp: 2026-06-18 16:17:24.629609, function: null, file: null}
+00:00 +21: endSession preserves encoded session guid query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.630882, function: null, file: null}
+Log registered: {message: Session ended successfully, timestamp: 2026-06-18 16:17:24.631396, function: null, file: null}
+00:00 +22: endSession accepts empty successful POST responses
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.632364, function: null, file: null}
+Log registered: {message: Error on POST sessions/end?sessionGuid=session-guid: FormatException: Unexpected end of input (at character 1)
+
+^
+, timestamp: 2026-06-18 16:17:24.632744, function: null, file: null}
+Log registered: {message: Failed to end session: No response, timestamp: 2026-06-18 16:17:24.632817, function: null, file: null}
+00:00 +22 -1: endSession accepts empty successful POST responses [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/hydracam_api_service_test.dart 928:5  main.<fn>
+
+00:00 +22 -1: deleteDebugSession sends service cleanup identifiers
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.648432, function: null, file: null}
+Log registered: {message: Debug session deleted from service: debug guid/one+two, timestamp: 2026-06-18 16:17:24.648910, function: null, file: null}
+00:00 +23 -1: deleteDebugSession accepts plaintext successful POST responses
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.650396, function: null, file: null}
+Log registered: {message: Error on POST sessions/debug/delete?sessionGuid=debug-session-guid: FormatException: Unexpected character (at character 1)
+OK
+^
+, timestamp: 2026-06-18 16:17:24.650886, function: null, file: null}
+Log registered: {message: Failed to delete debug session from service: debug-session-guid, timestamp: 2026-06-18 16:17:24.650968, function: null, file: null}
+00:00 +23 -2: deleteDebugSession accepts plaintext successful POST responses [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/hydracam_api_service_test.dart 970:5  main.<fn>
+
+00:00 +23 -2: user lookups use centralized user contract endpoints
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.656848, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:17:24.657374, function: null, file: null}
+00:00 +24 -2: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart: deleteDebugSession accepts plaintext successful POST responses
+  /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart: endSession accepts empty successful POST responses
+[exit-code] 1
+
+$ flutter test --no-pub test/services/hydracam_api_service_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/services/hydracam_api_service_test.dart
+00:00 +0: uploadMedia includes app version fields in multipart metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.429688, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.448112, function: null, file: null}
+00:00 +1: uploadMedia includes video recording end and duration metadata
+00:00 +1: uploadMedia includes app version fields in multipart metadata
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+00:00 +1: uploadMedia includes video recording end and duration metadata
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.452212, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.453781, function: null, file: null}
+00:00 +2: uploadMedia derives duration from recording timestamps when mismatched
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.456181, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.458051, function: null, file: null}
+00:00 +3: uploadMedia rejects inverted video recording timestamps
+Log registered: {message: Upload video duration is invalid: recordingEndDate is before captureDate for /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_test8FiFXH/video-inverted-duration.mp4, timestamp: 2026-06-18 16:18:05.460864, function: null, file: null}
+00:00 +4: uploadMedia uses centralized upload-media contract fields
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.463929, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.465551, function: null, file: null}
+00:00 +5: uploadMedia omits video duration metadata for photo uploads
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.467932, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.469255, function: null, file: null}
+00:00 +6: createSession returns typed backend session from API response
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.471101, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: backend-guid, sessionId: friendly-session, numericId: 42), timestamp: 2026-06-18 16:18:05.474322, function: null, file: null}
+00:00 +7: warmUpBackend sends an authenticated lightweight startup request
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.476260, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-18 16:18:05.477407, function: null, file: null}
+00:00 +8: uploadMedia rejects missing files before HTTP send
+Log registered: {message: Upload file does not exist: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testrYGYbv/missing-video.mp4, timestamp: 2026-06-18 16:18:05.479010, function: null, file: null}
+00:00 +9: uploadMedia rejects empty files before HTTP send
+Log registered: {message: Upload file is empty: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testoRwMST/empty-video.mp4, timestamp: 2026-06-18 16:18:05.481271, function: null, file: null}
+00:00 +10: uploadMedia rejects corrupt local photo and video before HTTP send
+Log registered: {message: Upload file is not valid photo media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testi1ZoSp/corrupt-photo.jpg, timestamp: 2026-06-18 16:18:05.483870, function: null, file: null}
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testi1ZoSp/corrupt-video.mp4, timestamp: 2026-06-18 16:18:05.484371, function: null, file: null}
+00:00 +11: uploadMedia rejects unsupported ISO media signatures before HTTP send
+Log registered: {message: Upload file is not valid video media: /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam_api_testT6qZwy/forged-iso-video.mp4, timestamp: 2026-06-18 16:18:05.486621, function: null, file: null}
+00:00 +12: uploadMedia accepts supported HEIC photo signatures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.488660, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.490122, function: null, file: null}
+00:00 +13: uploadMedia rejects backend failure bodies with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.492135, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":false,"message":"Rejected corrupt media"}, timestamp: 2026-06-18 16:18:05.493918, function: null, file: null}
+00:00 +14: uploadMedia accepts deployed legacy plaintext success body
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.496007, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.497029, function: null, file: null}
+00:00 +15: uploadMedia accepts JSON success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.498823, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.499927, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.500480, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.501472, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.501893, function: null, file: null}
+Log registered: {message: Media uploaded successfully, timestamp: 2026-06-18 16:18:05.502927, function: null, file: null}
+00:00 +16: uploadMedia rejects textual false success aliases
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.505224, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"success":"false"}, timestamp: 2026-06-18 16:18:05.506300, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.506806, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"succeeded":"0"}, timestamp: 2026-06-18 16:18:05.507669, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.508081, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"isSuccess":"no"}, timestamp: 2026-06-18 16:18:05.509086, function: null, file: null}
+00:00 +17: uploadMedia rejects malformed backend success bodies
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.510973, function: null, file: null}
+Log registered: {message: Malformed upload response body: not-json (FormatException: Unexpected character (at character 1)
+not-json
+^
+), timestamp: 2026-06-18 16:18:05.512225, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - not-json, timestamp: 2026-06-18 16:18:05.512319, function: null, file: null}
+00:00 +18: uploadMedia bounds logged response bodies for failures
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.514191, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 500 - backend failure xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..., timestamp: 2026-06-18 16:18:05.515260, function: null, file: null}
+00:00 +19: uploadMedia rejects backend error objects with HTTP 200
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.517011, function: null, file: null}
+Log registered: {message: Failed to upload media: HTTP 200 backend response reported failure - {"error":"Unsupported media codec"}, timestamp: 2026-06-18 16:18:05.517959, function: null, file: null}
+00:00 +20: fetchCourts preserves encoded sports center query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.519238, function: null, file: null}
+Log registered: {message: Parsed list (courts): [], timestamp: 2026-06-18 16:18:05.520068, function: null, file: null}
+00:00 +21: endSession preserves encoded session guid query values
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.521495, function: null, file: null}
+Log registered: {message: Session ended successfully, timestamp: 2026-06-18 16:18:05.522091, function: null, file: null}
+00:00 +22: endSession accepts empty successful POST responses
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.523065, function: null, file: null}
+Log registered: {message: Session ended successfully, timestamp: 2026-06-18 16:18:05.523447, function: null, file: null}
+00:00 +23: deleteDebugSession sends service cleanup identifiers
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.524797, function: null, file: null}
+Log registered: {message: Debug session deleted from service: debug guid/one+two, timestamp: 2026-06-18 16:18:05.525249, function: null, file: null}
+00:00 +24: deleteDebugSession accepts plaintext successful POST responses
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.526381, function: null, file: null}
+Log registered: {message: POST sessions/debug/delete?sessionGuid=debug-session-guid returned non-JSON success body: OK, timestamp: 2026-06-18 16:18:05.526773, function: null, file: null}
+Log registered: {message: Debug session deleted from service: debug-session-guid, timestamp: 2026-06-18 16:18:05.526840, function: null, file: null}
+00:00 +25: user lookups use centralized user contract endpoints
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.527891, function: null, file: null}
+Log registered: {message: Get token, timestamp: 2026-06-18 16:18:05.528436, function: null, file: null}
+00:00 +26: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...
+No issues found! (ran in 5.9s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
