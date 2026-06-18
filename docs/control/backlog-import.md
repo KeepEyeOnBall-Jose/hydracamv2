@@ -192,6 +192,14 @@ Default issue schema:
   state as live. The master known-device modal uses the same shared label. Keep
   this issue open for real master/slave reconnect reproduction and cross-device
   metadata comparison.
+- 2026-06-18 malformed-slave-session-guid note:
+  `logs/verification-runs/20260618-1758-slave-malformed-session-guid/` hardens
+  slave WebSocket handling so `sessionStatus` / `sessionStarted` messages with
+  non-string or blank `sessionGuid` values are ignored with an explicit log
+  instead of flowing through JSON decode/processing cast errors. The focused
+  socket regression keeps the active slave session and upload queue intact.
+  Keep this issue open for real master/slave reconnect reproduction and
+  cross-device metadata comparison.
 - 2026-06-09 metadata-write-serialization note:
   `logs/verification-runs/20260609-0155-session-metadata-write-serialization-cleanup/`
   removes the `SessionManager.updateMetadata()` concurrency TODO by capturing

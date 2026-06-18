@@ -1,0 +1,130 @@
+{
+  "acceptanceChecks": [
+    "Slave ignores sessionStatus/sessionStarted messages with non-string sessionGuid",
+    "Malformed session identifiers do not replace the active slave session or upload queue"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:44:46.990109+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:44:47.086057+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:45:32.160856+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-18T15:45:58.494799+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:46:15.976473+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave/slave_client_registration_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:46:28.107351+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/slave"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:46:46.451516+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:46:54.876357+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:47:04.783797+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:47:09.055268+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-18T15:47:30.970340+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "slave-malformed-session-guid",
+    "source": "docs/control/backlog-import.md#2-preserve-session-state-across-master-reconnect",
+    "title": "Ignore malformed slave session identifiers"
+  },
+  "notes": [
+    "Slave sessionStatus/sessionStarted messages with malformed sessionGuid values are now ignored explicitly without replacing the active slave session or upload queue. Focused slave registration test, slave directory tests, analyzer, diff check, and full flutter test passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

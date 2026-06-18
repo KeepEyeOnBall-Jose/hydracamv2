@@ -265,11 +265,10 @@ class SlaveClient implements SlaveConnectionClient {
 
                 if (command == "sessionStarted" || command == "sessionStatus") {
                   LogService.instance.registerLog("Command: $message");
-                  final String sessionGuid = decodedMessage["sessionGuid"];
-                  LogService.instance.registerLog("Session guid: $sessionGuid");
-                  if (sessionGuid.isNotEmpty) {
-                    _handleSessionAvailable(sessionGuid);
-                  }
+                  _handleSessionAvailableFromMaster(
+                    command!,
+                    decodedMessage["sessionGuid"],
+                  );
                 } else if (command == "networkMismatch") {
                   final message = decodedMessage["message"] ??
                       "This device is not on the same network as the master.";
@@ -357,8 +356,10 @@ class SlaveClient implements SlaveConnectionClient {
             await _scheduleExecution(command, scheduledTime);
           } else if (type == "sessionStarted" || type == "sessionStatus") {
             // Handle session start/status
-            final String sessionGuid = decodedMessage["sessionGuid"];
-            _handleSessionAvailable(sessionGuid);
+            _handleSessionAvailableFromMaster(
+              type!,
+              decodedMessage["sessionGuid"],
+            );
           } else if (type == "sessionEnded") {
             // Handle session end
             await _handleSessionEndedFromMaster(
@@ -392,6 +393,21 @@ class SlaveClient implements SlaveConnectionClient {
   String? _stringValue(Map<String, dynamic> payload, String key) {
     final value = payload[key];
     return value is String ? value : null;
+  }
+
+  void _handleSessionAvailableFromMaster(
+    String messageType,
+    Object? sessionGuidValue,
+  ) {
+    final sessionGuid =
+        sessionGuidValue is String ? sessionGuidValue.trim() : null;
+    if (sessionGuid == null || sessionGuid.isEmpty) {
+      LogService.instance
+          .registerLog("Ignoring $messageType without valid sessionGuid.");
+      return;
+    }
+    LogService.instance.registerLog("Session guid: $sessionGuid");
+    _handleSessionAvailable(sessionGuid);
   }
 
   void _handleSessionAvailable(String sessionGuid) {

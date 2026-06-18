@@ -533,6 +533,113 @@ void main() {
     }
   });
 
+  test("malformed sessionStatus preserves active slave session and queue",
+      () async {
+    SharedPreferences.setMockInitialValues({
+      "device_id": "test-device",
+      "autoUploadMaterials": false,
+    });
+    if (!CameraServiceSingleton.isInitialized) {
+      final storageService = StorageService(
+        messengerState: null,
+        lowStorageThreshold: 1.5,
+        criticalStorageThreshold: 0.5,
+        onCriticalStorageCallback: () async {},
+      );
+      CameraServiceSingleton.initialize(
+        storageService,
+        useMockCamera: true,
+      );
+    }
+
+    LogService.instance.clearLogs();
+    final pathProvider = _TestPathProviderPlatform();
+    PathProviderPlatform.instance = pathProvider;
+    final uploaderService = UploaderService();
+    uploaderService.reset();
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.joinSession(
+      "slave-active-session",
+      "slave-active-session-id",
+      deviceType: "Slave",
+    );
+
+    final tempDir = Directory.systemTemp.createTempSync("slave_bad_session");
+    final photoFile = File("${tempDir.path}/queued-photo.jpg")
+      ..writeAsBytesSync([1, 2, 3, 4]);
+    final capturedPhoto = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "queued-slave",
+      captureDate: DateTime(2026, 6, 18, 17, 55),
+      receivedDate: DateTime(2026, 6, 18, 17, 55, 1),
+    );
+    await uploaderService.addMediaToQueue(capturedPhoto);
+    expect(SessionManager.instance.sessionGuid, "slave-active-session");
+    expect(uploaderService.queueLength, 1);
+
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final sockets = <WebSocket>[];
+
+    server.listen((request) async {
+      if (request.uri.path != "/ws") {
+        request.response
+          ..statusCode = HttpStatus.notFound
+          ..close();
+        return;
+      }
+      final socket = await WebSocketTransformer.upgrade(request);
+      sockets.add(socket);
+      socket.listen((data) {
+        final decoded = jsonDecode(data as String);
+        if (decoded is Map<String, dynamic> && decoded["type"] == "deviceId") {
+          socket.add(jsonEncode({
+            "command": "sessionStatus",
+            "sessionGuid": 42,
+          }));
+          socket.add(jsonEncode({
+            "type": "sessionStarted",
+            "sessionGuid": ["not-a-guid"],
+          }));
+        }
+      });
+    });
+
+    final client = SlaveClient(
+      "ws://127.0.0.1:${server.port}/ws",
+      networkPayloadLoader: () async => null,
+    );
+
+    try {
+      await client.connect();
+      await _waitFor(
+        () =>
+            _logContains("Ignoring sessionStatus without valid sessionGuid") &&
+            _logContains("Ignoring sessionStarted without valid sessionGuid"),
+        timeout: const Duration(seconds: 1),
+      );
+
+      expect(SessionManager.instance.sessionGuid, "slave-active-session");
+      expect(SessionManager.instance.isSessionActive, isTrue);
+      expect(uploaderService.queueLength, 1);
+    } finally {
+      client.disconnect();
+      uploaderService.reset();
+      if (SessionManager.instance.isSessionActive) {
+        await SessionManager.instance.endSession();
+      }
+      for (final socket in sockets) {
+        await socket.close();
+      }
+      await server.close(force: true);
+      if (tempDir.existsSync()) {
+        tempDir.deleteSync(recursive: true);
+      }
+      pathProvider.dispose();
+    }
+  });
+
   test("conflicting sessionEnded preserves active slave session and queue",
       () async {
     SharedPreferences.setMockInitialValues({
