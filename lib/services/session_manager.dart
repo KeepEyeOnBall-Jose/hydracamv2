@@ -416,14 +416,7 @@ class SessionManager extends ChangeNotifier {
         // Skip if metadata already exists
         if (metadataFile.existsSync()) {
           final metadata = jsonDecode(await metadataFile.readAsString());
-
-          // Correct sessionGuid if null
-          if (metadata["sessionGuid"] == null) {
-            metadata["sessionGuid"] = sessionGuid;
-            await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
-            LogService.instance.registerLog(
-                "Session GUID in metadata was null. Corrected to $sessionGuid and saved.");
-          }
+          await _normalizedStoredSessionGuid(metadataFile, metadata, sessionGuid);
           await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
 
           reconstructedSessions.add(sessionGuid);
@@ -718,7 +711,7 @@ class SessionManager extends ChangeNotifier {
 
     if (rawSessionGuid != repairedSessionGuid) {
       metadata["sessionGuid"] = repairedSessionGuid;
-      await metadataFile.writeAsString(jsonEncode(metadata));
+      await metadataFile.writeAsString(jsonEncode(metadata), flush: true);
       LogService.instance.registerLog(
           "Stored session GUID repaired to $repairedSessionGuid for $storageIdentifier.");
     }

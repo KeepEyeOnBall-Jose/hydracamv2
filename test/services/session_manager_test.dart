@@ -196,6 +196,38 @@ void main() {
         expect(metadata["sessionGuid"], sessionIdentifier);
       });
 
+      test("scanAndReconstructSessions repairs blank stored session guid",
+          () async {
+        const sessionIdentifier = "scan-repair-blank-guid";
+        final sessionDir = Directory(
+          "${testPathProvider.documentsDir.path}/session_$sessionIdentifier",
+        );
+        if (sessionDir.existsSync()) {
+          sessionDir.deleteSync(recursive: true);
+        }
+        sessionDir.createSync(recursive: true);
+        final metadataFile = File("${sessionDir.path}/metadata.json");
+        await metadataFile.writeAsString(
+          jsonEncode({
+            "sessionId": "legacy-scan-id",
+            "sessionGuid": "  ",
+            "startTime": DateTime.utc(2026, 6, 18, 16, 10).toIso8601String(),
+            "endTime": null,
+            "deviceType": "Master",
+            "photos": [],
+            "videos": [],
+          }),
+        );
+
+        final reconstructed = await sessionManager.scanAndReconstructSessions();
+
+        expect(reconstructed, contains(sessionIdentifier));
+        final metadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(metadata["sessionId"], "legacy-scan-id");
+        expect(metadata["sessionGuid"], sessionIdentifier);
+      });
+
       test("loadSessionMetadataSnapshot preserves active session identity",
           () async {
         sessionManager.startSession("active-guid", "active-id",

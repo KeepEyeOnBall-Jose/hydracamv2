@@ -1376,6 +1376,16 @@ analyzer, and full Flutter tests passed. Keep row 35 open for real old-media
 attachment smoke evidence and any remaining controller/view GUID audit not
 covered by local widget/model tests.
 
+2026-06-18 row 35 blank stored-GUID scan note:
+`logs/verification-runs/20260618-1610-session-scan-blank-guid-repair/` adds a
+red/green regression for historical metadata whose stored `sessionGuid` is blank
+during directory scanning. `scanAndReconstructSessions()` now uses the same
+stored-GUID normalization as explicit restore, repairing the stored GUID to the
+directory storage identifier while preserving a distinct legacy `sessionId`.
+Focused session-manager and gallery candidate tests plus analyzer passed. Keep
+row 35 open for real old-media attachment smoke evidence and any remaining
+controller/view GUID audit not covered by local widget/model tests.
+
 2026-06-08 row 111 note:
 `logs/verification-runs/20260608-1901-upload-app-version-metadata/` adds
 `appVersion` and `appBuildNumber` multipart fields to media uploads and proves
