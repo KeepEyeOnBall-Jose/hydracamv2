@@ -95,6 +95,10 @@ flutter {
     source = "../.."
 }
 
+dependencies {
+    testImplementation "junit:junit:4.13.2"
+}
+
 tasks.withType(JavaCompile).configureEach { task ->
     if (task.name == "compileReleaseJavaWithJavac") {
         task.doFirst {
