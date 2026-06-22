@@ -46,6 +46,22 @@ class StoreReadinessModeScopeTest(unittest.TestCase):
             self.assertNotIn("iOS IPA", result.output)
             self.assertNotIn("App Store Connect", result.output)
 
+    def test_google_play_track_aliases_are_android_scoped(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = self._create_fixture(Path(temp_dir))
+
+            for mode in ("play-internal", "play-closed", "play-production"):
+                with self.subTest(mode=mode):
+                    result = self._run_readiness(root, mode)
+
+                    self.assertNotIn("iOS Info.plist", result.output)
+                    self.assertNotIn("iOS privacy manifest", result.output)
+                    self.assertNotIn("iOS Xcode project", result.output)
+                    self.assertNotIn("iOS fastlane", result.output)
+                    self.assertNotIn("iOS app icon", result.output)
+                    self.assertNotIn("iOS IPA", result.output)
+                    self.assertNotIn("App Store Connect", result.output)
+
     def _create_fixture(self, root: Path) -> Path:
         scripts_dir = root / "scripts"
         scripts_dir.mkdir(parents=True)

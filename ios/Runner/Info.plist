@@ -35,15 +35,34 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.keepeyeonball</string>
+				<string>com.keepeyeonball.mwdat</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fb-viewapp</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>MWDAT</key>
+	<dict>
+		<key>Analytics</key>
+		<dict>
+			<key>OptOut</key>
+			<true/>
+		</dict>
+		<key>AppLinkURLScheme</key>
+		<string>com.keepeyeonball.mwdat://</string>
+		<key>MetaAppID</key>
+		<string>0</string>
+	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is used to connect HydraCam to paired Meta wearable devices during capture sessions.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is required to capture videos and photos during matches.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -87,6 +106,15 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-peripheral</string>
+		<string>external-accessory</string>
+	</array>
+	<key>UISupportedExternalAccessoryProtocols</key>
+	<array>
+		<string>com.meta.ar.wearable</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -13,10 +13,11 @@ Latest static/build evidence:
 - iOS bundle ID: `com.keepeyeonball`
 - Android package name: `com.amaia23.hydracam`
 - Display name: `HydraCam`
-- Current Flutter version: `1.4.0+16`
+- Current Flutter version: `1.4.0+18`
 - Android target SDK: `35`
-- Last verified default Android AAB SHA-256 (`1.4.0+16`):
-  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`
+- Latest verified Android AAB SHA-256 (`1.4.0+18`, built 2026-06-21 with
+  current public store URLs):
+  `d570e6ebe507ad2a6f2de5c499cf5bd2cd2f162932bde63e47a728b51c75c8d9`
 - Historical default iOS IPA SHA-256 (`1.4.0+16`, prior to bundled
   court-fallback and launcher-icon cleanup):
   `385e08c05b7213b0b5c199a4621198b0d2b0f356034c69f5fa89ebe85ab0dc08`
@@ -178,8 +179,8 @@ Current recovery evidence from 2026-06-09:
   when registering the package or requesting an upload-key reset.
 - `flutter build appbundle --release` now builds the signed AAB at
   `build/app/outputs/bundle/release/app-release.aab`; latest verified artifact
-  SHA-256 for the default `1.4.0+16` build:
-  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`.
+  SHA-256 for the current `1.4.0+18` build:
+  `d570e6ebe507ad2a6f2de5c499cf5bd2cd2f162932bde63e47a728b51c75c8d9`.
 - The release Gradle config no longer falls back to debug signing. The store
   readiness preflight verifies `android/key.properties`, the referenced upload
   keystore, app IDs, Android SDK floor, Android target/compile SDK policy, and
@@ -466,12 +467,13 @@ scripts/ios_fastlane.sh ios beta
 Use Google Play Internal testing first. It is fast, private, and does not require
 friends to install APKs manually.
 
-Current 2026-06-09 state:
+Current 2026-06-21 state:
 
 - Local Android App Bundle export works for `com.amaia23.hydracam`; the latest
-  default `1.4.0+16` run produced Android AAB SHA-256
-  `39475a054693bdca4b55bbe85a67d9eb5b1c00cc73af9a8ee9e284ae69455dbc`.
-  Later override builds overwrite
+  default `1.4.0+18` run produced Android AAB SHA-256
+  `d570e6ebe507ad2a6f2de5c499cf5bd2cd2f162932bde63e47a728b51c75c8d9`
+  with matching store metadata sidecar values for the current public privacy,
+  support, and account-deletion URLs. Later override builds overwrite
   `build/app/outputs/bundle/release/app-release.aab`, so hash the artifact
   immediately before uploading.
 - `GOOGLE_PLAY_JSON_KEY` is not set locally, so fastlane upload cannot run yet.
@@ -486,10 +488,31 @@ Current 2026-06-09 state:
    HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
    HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
    HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
-     scripts/android_fastlane.sh android internal
+     bash scripts/google_play_release.sh internal
    ```
 
-3. Share the internal test opt-in link from Play Console.
+3. For a wider closed test after internal smoke, upload to the configured
+   closed testing track:
+
+   ```bash
+   GOOGLE_PLAY_JSON_KEY=/absolute/path/to/google-play-service-account.json \
+   HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+   HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+   HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+     bash scripts/google_play_release.sh closed_beta beta
+   ```
+
+4. For production review, upload a draft first:
+
+   ```bash
+   GOOGLE_PLAY_JSON_KEY=/absolute/path/to/google-play-service-account.json \
+   HYDRACAM_PRIVACY_POLICY_URL="$PUBLISHED_HYDRACAM_PRIVACY_POLICY_URL" \
+   HYDRACAM_SUPPORT_URL="$PUBLISHED_HYDRACAM_SUPPORT_URL" \
+   HYDRACAM_ACCOUNT_DELETION_URL="$PUBLISHED_HYDRACAM_ACCOUNT_DELETION_URL" \
+     bash scripts/google_play_release.sh production_draft
+   ```
+
+5. Share the internal or closed-test opt-in link from Play Console.
 
 Google Play internal testing is intended for up to 100 trusted testers and can
 make builds available quickly. For a wider pre-release group, use a closed test.
@@ -505,7 +528,8 @@ production access can be requested. Plan this calendar time before launch.
 3. Run release gates.
 4. Build artifacts.
 5. Upload iOS to App Store Connect/TestFlight.
-6. Upload Android AAB to Play Console internal or production draft.
+6. Upload Android AAB to Play Console internal, closed testing, or production
+   draft with `scripts/google_play_release.sh`.
 7. Run store pre-launch checks and review warnings.
 8. Complete privacy, data safety, content rating, and review notes.
 9. Submit App Store version for review.

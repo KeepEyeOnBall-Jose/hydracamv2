@@ -138,6 +138,8 @@ Use Terminal > Run Task for common commands:
 - `release: Build Android Store AAB`
 - `release: Build iOS Store IPA`
 - `deploy: Android Google Play Internal`
+- `deploy: Android Google Play Closed Beta`
+- `deploy: Android Google Play Production Draft`
 - `deploy: iOS TestFlight Beta`
 
 ## Run Emulators Manually
@@ -221,21 +223,21 @@ logs before treating it as an app bug.
 First run the local store-readiness preflight:
 
 ```bash
-scripts/check_store_readiness.sh local
+bash scripts/check_store_readiness.sh local
 ```
 
 Build store artifacts without uploading:
 
 ```bash
-scripts/build_store_artifacts.sh android
-scripts/build_store_artifacts.sh ios
+bash scripts/build_store_artifacts.sh android
+bash scripts/build_store_artifacts.sh ios
 ```
 
 Fastlane wrappers use the repo-pinned Bundler environment:
 
 ```bash
-scripts/android_fastlane.sh build_store
-scripts/ios_fastlane.sh build_store
+bash scripts/android_fastlane.sh build_store
+bash scripts/ios_fastlane.sh build_store
 ```
 
 Upload lanes require credentials and should only be run when the account state
@@ -243,11 +245,17 @@ is intentional:
 
 ```bash
 GOOGLE_PLAY_JSON_KEY=/path/to/play-service-account.json \
-  scripts/android_fastlane.sh internal
+  bash scripts/google_play_release.sh internal
+
+GOOGLE_PLAY_JSON_KEY=/path/to/play-service-account.json \
+  bash scripts/google_play_release.sh closed_beta beta
+
+GOOGLE_PLAY_JSON_KEY=/path/to/play-service-account.json \
+  bash scripts/google_play_release.sh production_draft
 
 APP_STORE_CONNECT_API_KEY_PATH=/path/to/app-store-connect-key.json \
   TESTFLIGHT_CHANGELOG="<short changelog>" \
-  scripts/ios_fastlane.sh beta
+  bash scripts/ios_fastlane.sh beta
 ```
 
 Current release blockers should be treated as real blockers, not app passes:

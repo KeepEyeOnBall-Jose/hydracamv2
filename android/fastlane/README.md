@@ -13,9 +13,20 @@ bundle install
 
 ## Repo wrapper
 
-From the repository root, prefer `scripts/android_fastlane.sh android <lane>`
-instead of running `bundle exec fastlane` directly. The wrapper selects the
-Homebrew Ruby/Bundler path used by `android/Gemfile.lock`.
+From the repository root, prefer `scripts/android_fastlane.sh <lane>` instead of
+running `bundle exec fastlane` directly. The wrapper selects the Homebrew
+Ruby/Bundler path used by `android/Gemfile.lock`.
+
+For real Google Play uploads, prefer the track-aware release helper:
+
+```sh
+GOOGLE_PLAY_JSON_KEY=/path/to/play-service-account.json \
+  bash scripts/google_play_release.sh internal
+GOOGLE_PLAY_JSON_KEY=/path/to/play-service-account.json \
+  bash scripts/google_play_release.sh closed_beta beta
+GOOGLE_PLAY_JSON_KEY=/path/to/play-service-account.json \
+  bash scripts/google_play_release.sh production_draft
+```
 
 ## Android
 

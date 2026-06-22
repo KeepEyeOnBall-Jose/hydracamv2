@@ -2,6 +2,7 @@
 set -euo pipefail
 
 IOS_XCODE_DESTINATION_ID="${IOS_XCODE_DESTINATION_ID:-00008101-000A68811E43001E}"
+IOS_XCODE_DESTINATION="${IOS_XCODE_DESTINATION:-platform=iOS,arch=arm64,id=$IOS_XCODE_DESTINATION_ID}"
 IOS_DEVICE="${IOS_DEVICE:-AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A}"
 IOS_DEVELOPMENT_TEAM="${IOS_DEVELOPMENT_TEAM:-4RRY2QT7H8}"
 IOS_BUNDLE_ID="${IOS_BUNDLE_ID:-com.keepeyeonball}"
@@ -16,7 +17,7 @@ xcodebuild \
   -workspace ios/Runner.xcworkspace \
   -scheme Runner \
   -configuration Profile \
-  -destination "id=$IOS_XCODE_DESTINATION_ID" \
+  -destination "$IOS_XCODE_DESTINATION" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   -allowProvisioningUpdates \
   -allowProvisioningDeviceRegistration \

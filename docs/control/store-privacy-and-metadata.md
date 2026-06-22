@@ -129,9 +129,12 @@ a permanent keepeyeonball-owned domain replaces them.
   Distribution identity is installed, `scripts/build_store_artifacts.sh ios`
   can pass the same API key to `xcodebuild -allowProvisioningUpdates` for
   automatic signing/provisioning.
-- `scripts/google_play_internal_release.sh`: after `GOOGLE_PLAY_JSON_KEY` is
-  available, verifies the Android upload gate and uploads the current release to
-  the Google Play internal testing track.
+- `scripts/google_play_release.sh`: after `GOOGLE_PLAY_JSON_KEY` is available,
+  verifies the Android upload gate and uploads the current release to the
+  requested Google Play lane: `internal`, `closed_beta`, or `production_draft`.
+  Pass a second argument, for example `beta`, to select the closed testing
+  track used by the `closed_beta` lane. `scripts/google_play_internal_release.sh`
+  remains a compatibility wrapper for the internal testing lane.
 
 Use explicit `bash scripts/...` invocations for the release helpers on this Mac;
 that also matches the helper-to-helper calls inside the scripts.

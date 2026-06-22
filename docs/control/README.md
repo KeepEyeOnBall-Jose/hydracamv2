@@ -109,6 +109,9 @@ spreadsheet sprint rows.
 - `cross-project-api-data-map.md`: Mermaid diagrams for current and target API
   calls, endpoint families, storage ownership, and cutover boundaries across
   HydraCam mobile, MoBo, and media-timeline.
+- `wearable-replay-integration-plan.md`: player-worn Ray-Ban Meta and Galaxy
+  Watch4 replay lane, local wearable sidecars, sync proof, feedback boundaries,
+  and media-timeline replay targets.
 - `../superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`: executable
   Win11 C: cleanup and dev-environment moveout plan backed by SSH disk
   inventory.

@@ -317,6 +317,56 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets("active session command panel fits compact orientations",
+      (tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    final masterServer = MockMasterServer();
+    final announcer = MockMasterAnnouncer();
+    when(() => masterServer.cameraService)
+        .thenReturn(CameraServiceSingleton.instance);
+    when(() => masterServer.getConnectedDeviceInfos()).thenReturn([]);
+    when(() => masterServer.getConnectedDeviceIds()).thenReturn([]);
+    when(() => masterServer.startServer()).thenAnswer((_) async {});
+    when(() => masterServer.stopServer()).thenReturn(null);
+    when(() => announcer.startBroadcasting()).thenReturn(null);
+    when(() => announcer.stopBroadcasting()).thenReturn(null);
+    SessionManager.instance.joinSession(
+      "compact-layout-session-guid",
+      "compact-layout-session-id",
+      deviceType: "Master",
+    );
+
+    for (final size in const [
+      Size(360, 640),
+      Size(640, 360),
+    ]) {
+      await tester.binding.setSurfaceSize(size);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MasterScreen(
+            masterServer: masterServer,
+            announcer: announcer,
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.textContaining("Session Active:"), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, "Take Photo"), findsOneWidget);
+      expect(
+        find.widgetWithText(ElevatedButton, "Start Recording"),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    }
+
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets("recording start path opens master video preview",
       (tester) async {
     addTearDown(() async {

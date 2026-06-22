@@ -10,11 +10,13 @@ typedef NetworkInfoLoader = Future<Map<String, String?>> Function();
 class SessionInfoWidget extends StatefulWidget {
   final String sessionDisplay;
   final NetworkInfoLoader? networkInfoLoader;
+  final bool compact;
 
   const SessionInfoWidget({
     super.key,
     required this.sessionDisplay,
     this.networkInfoLoader,
+    this.compact = false,
   });
 
   @override
@@ -127,6 +129,84 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.compact) {
+      return _buildStackedDiagnostics();
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final rawMaxWidth =
+            constraints.maxWidth.isFinite ? constraints.maxWidth : 360.0;
+        final maxWidth = rawMaxWidth <= 0 ? 180.0 : rawMaxWidth;
+        final detailWidth = maxWidth >= 520 ? (maxWidth - 12) / 2 : maxWidth;
+
+        Widget compactLine(
+          String text, {
+          double? width,
+          Color color = AppTheme.textSecondary,
+          FontWeight? fontWeight,
+        }) {
+          return SizedBox(
+            width: width ?? detailWidth,
+            child: _buildInfoText(
+              text,
+              maxLines: 1,
+              color: color,
+              fontSize: 13,
+              fontWeight: fontWeight,
+            ),
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            compactLine(
+              "Session: ${widget.sessionDisplay}",
+              width: maxWidth,
+              color: AppTheme.textPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 4),
+            FutureBuilder<Map<String, String?>>(
+              future: _networkInfoFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return compactLine("Loading network info...");
+                } else if (snapshot.hasError) {
+                  return compactLine(
+                    "Error fetching network info",
+                    color: AppTheme.danger,
+                  );
+                }
+
+                final data = snapshot.data!;
+                final networkType = data["networkType"] ?? "Unknown Network";
+                final ip = data["ip"] ?? "Unknown IP";
+                final shortDeviceId = _shortDeviceId(data["deviceId"]);
+                final appVersion =
+                    data["appVersion"] ?? "App version unavailable";
+                final hardware = data["hardware"] ?? "Hardware unavailable";
+
+                return Wrap(
+                  spacing: 12,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    compactLine("Network: $networkType | IP: $ip"),
+                    compactLine("Device: $shortDeviceId | App: $appVersion"),
+                    compactLine("Hardware: $hardware"),
+                  ],
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildStackedDiagnostics() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

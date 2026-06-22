@@ -13,12 +13,16 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class MainActivity: FlutterActivity() {
 	private val launchConfigChannelName = "hydracamv2/launch_config"
 	private val cameraMetadataChannelName = "hydracamv2/camera_metadata"
 	private val videoMetadataChannelName = "hydracamv2/video_metadata"
 	private val fixedCameraHlsChannelName = "hydracamv2/fixed_camera_hls"
+	private val wearableReplayChannelName = "hydracamv2/wearable_replay"
 	private val fixedCameraLocalHlsRecorder: FixedCameraLocalHlsRecorder by lazy {
 		FixedCameraLocalHlsRecorder(getFixedCameraHlsOutputDirectory())
 	}
@@ -26,6 +30,7 @@ class MainActivity: FlutterActivity() {
 		FixedCameraCamera2HlsRecorder(this, getFixedCameraHlsOutputDirectory())
 	}
 	private val fixedCameraRecordingModes = mutableMapOf<String, String>()
+	private val wearablePovCaptures = mutableMapOf<String, Map<String, Any?>>()
 
 	override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
 		super.configureFlutterEngine(flutterEngine)
@@ -69,6 +74,17 @@ class MainActivity: FlutterActivity() {
 					"getCapabilities" -> result.success(buildFixedCameraHlsCapabilities())
 					"startRecording" -> startFixedCameraHlsRecording(call, result)
 					"stopRecording" -> stopFixedCameraHlsRecording(call, result)
+					else -> result.notImplemented()
+				}
+			}
+		MethodChannel(flutterEngine.dartExecutor.binaryMessenger, wearableReplayChannelName)
+			.setMethodCallHandler { call, result ->
+				when (call.method) {
+					"getCapabilities" -> result.success(buildWearableReplayCapabilities())
+					"pollWatchTelemetry" -> result.success(buildMockWatchTelemetry(call))
+					"startMetaPovCapture" -> startMockMetaPovCapture(call, result)
+					"stopMetaPovCapture" -> stopMockMetaPovCapture(call, result)
+					"sendFeedback" -> result.success(true)
 					else -> result.notImplemented()
 				}
 			}
@@ -185,6 +201,92 @@ class MainActivity: FlutterActivity() {
 		)
 	}
 
+	private fun buildWearableReplayCapabilities(): Map<String, Any?> {
+		return mapOf(
+			"platform" to "android",
+			"channelAvailable" to true,
+			"metaDatAvailable" to false,
+			"metaMockAvailable" to true,
+			"watchCompanionAvailable" to false,
+			"watchMockAvailable" to true,
+			"supportsWatchHaptics" to true,
+			"supportsGlassesAudio" to true,
+			"supportsRollingPovFallback" to true,
+			"requiresPhysicalMetaHardware" to true,
+			"requiresPhysicalWatchHardware" to true,
+			"reason" to "Mock Meta DAT and Galaxy Watch telemetry are available for emulator proof; physical Ray-Ban Meta and Galaxy Watch4 remain hardware gates."
+		)
+	}
+
+	private fun buildMockWatchTelemetry(call: MethodCall): Map<String, Any?> {
+		val sourceDeviceId = call.argument<String>("sourceDeviceId")
+			?.takeIf { it.isNotBlank() }
+			?: "galaxy-watch4-sim"
+		val nowMs = System.currentTimeMillis()
+		val heartRate = 145 + ((nowMs / 1000) % 8).toInt()
+		return mapOf(
+			"sourceDeviceId" to sourceDeviceId,
+			"localTimestamp" to isoTimestamp(nowMs),
+			"heartRateBpm" to heartRate,
+			"interBeatIntervalMs" to 60000 / heartRate,
+			"accelerometerX" to 0.31,
+			"accelerometerY" to 0.42,
+			"accelerometerZ" to 9.62,
+			"gyroscopeX" to 0.11,
+			"gyroscopeY" to 0.07,
+			"gyroscopeZ" to 0.13,
+			"motionIntensity" to 0.76,
+			"mockReading" to true
+		)
+	}
+
+	private fun startMockMetaPovCapture(
+		call: MethodCall,
+		result: MethodChannel.Result
+	) {
+		try {
+			val recordingId = requiredString(call, "recordingId")
+			val nowMs = System.currentTimeMillis()
+			val mediaFile = File(getWearableReplayOutputDirectory(), "$recordingId-mock-pov.mp4")
+			mediaFile.parentFile?.mkdirs()
+			mediaFile.writeText("mock Ray-Ban Meta POV capture for $recordingId\n")
+			val payload = mapOf(
+				"recordingId" to recordingId,
+				"mediaPath" to mediaFile.absolutePath,
+				"startedAt" to isoTimestamp(nowMs),
+				"endedAt" to isoTimestamp(nowMs),
+				"captureMode" to (call.argument<String>("captureMode") ?: "continuous"),
+				"hasAudio" to (call.argument<Boolean>("includeAudio") ?: true),
+				"mockCapture" to true
+			)
+			wearablePovCaptures[recordingId] = payload
+			result.success(payload)
+		} catch (error: IllegalArgumentException) {
+			result.error("invalid_meta_pov_request", error.message, null)
+		} catch (error: Exception) {
+			result.error("meta_pov_mock_error", error.message, null)
+		}
+	}
+
+	private fun stopMockMetaPovCapture(
+		call: MethodCall,
+		result: MethodChannel.Result
+	) {
+		try {
+			val recordingId = requiredString(call, "recordingId")
+			val started = wearablePovCaptures[recordingId]
+				?: throw IllegalArgumentException("Unknown recordingId: $recordingId")
+			val payload = started.toMutableMap()
+			payload["endedAt"] = isoTimestamp(System.currentTimeMillis())
+			wearablePovCaptures.remove(recordingId)
+			result.success(payload)
+		} catch (error: IllegalArgumentException) {
+			result.error("invalid_meta_pov_request", error.message, null)
+		} catch (error: Exception) {
+			result.error("meta_pov_mock_error", error.message, null)
+		}
+	}
+
 	private fun startFixedCameraHlsRecording(
 		call: MethodCall,
 		result: MethodChannel.Result
@@ -271,5 +373,20 @@ class MainActivity: FlutterActivity() {
 			directory.mkdirs()
 		}
 		return directory
+	}
+
+	private fun getWearableReplayOutputDirectory(): File {
+		val directory = getExternalFilesDir("wearable_replay")
+			?: File(filesDir, "wearable_replay")
+		if (!directory.exists()) {
+			directory.mkdirs()
+		}
+		return directory
+	}
+
+	private fun isoTimestamp(epochMillis: Long): String {
+		val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+		format.timeZone = TimeZone.getTimeZone("UTC")
+		return format.format(java.util.Date(epochMillis))
 	}
 }

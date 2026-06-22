@@ -178,8 +178,22 @@
     {
       "label": "deploy: Android Google Play Internal",
       "type": "shell",
-      "command": "scripts/android_fastlane.sh",
-      "args": ["internal"],
+      "command": "bash",
+      "args": ["scripts/google_play_release.sh", "internal"],
+      "problemMatcher": []
+    },
+    {
+      "label": "deploy: Android Google Play Closed Beta",
+      "type": "shell",
+      "command": "bash",
+      "args": ["scripts/google_play_release.sh", "closed_beta"],
+      "problemMatcher": []
+    },
+    {
+      "label": "deploy: Android Google Play Production Draft",
+      "type": "shell",
+      "command": "bash",
+      "args": ["scripts/google_play_release.sh", "production_draft"],
       "problemMatcher": []
     },
     {

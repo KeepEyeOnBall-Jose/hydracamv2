@@ -109,7 +109,11 @@ requires_ios_upload() {
 
 requires_android_upload() {
   case "$MODE" in
-    upload | upload-android | android-upload | play-upload)
+    upload | \
+      upload-android | android-upload | play-upload | \
+      play-internal | upload-android-internal | android-internal-upload | \
+      play-closed | upload-android-closed | android-closed-upload | \
+      play-production | upload-android-production | android-production-upload)
       return 0
       ;;
     *)
@@ -1113,13 +1117,16 @@ case "$MODE" in
       fail "$MODE mode requires an App Store Connect API key"
     require_public_store_urls
     ;;
-  upload-android | android-upload | play-upload)
+  upload-android | android-upload | play-upload | \
+    play-internal | upload-android-internal | android-internal-upload | \
+    play-closed | upload-android-closed | android-closed-upload | \
+    play-production | upload-android-production | android-production-upload)
     [[ -n "${GOOGLE_PLAY_JSON_KEY:-}" && -f "${GOOGLE_PLAY_JSON_KEY:-}" ]] || \
       fail "$MODE mode requires GOOGLE_PLAY_JSON_KEY"
     require_public_store_urls
     ;;
   *)
-    fail "unknown mode '$MODE'; use 'local', 'upload', 'upload-ios', or 'upload-android'"
+    fail "unknown mode '$MODE'; use 'local', 'upload', 'upload-ios', 'upload-android', 'play-internal', 'play-closed', or 'play-production'"
     ;;
 esac
 

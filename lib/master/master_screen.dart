@@ -961,6 +961,44 @@ class MasterScreenState extends State<MasterScreen> {
     return "$count $singular${count == 1 ? "" : "s"}";
   }
 
+  String _sessionDisplay(String? sessionGuid) {
+    return sessionActive ? "Session Active: $sessionGuid" : "No active session";
+  }
+
+  double _actionButtonWidth(double maxWidth) {
+    final availableWidth =
+        !maxWidth.isFinite || maxWidth <= 0 ? 180.0 : maxWidth;
+    if (availableWidth < 360) {
+      return availableWidth;
+    }
+    if (availableWidth < 560) {
+      return (availableWidth - 8) / 2;
+    }
+    return 168;
+  }
+
+  Widget _actionButton({
+    required double width,
+    required Widget icon,
+    required String label,
+    required VoidCallback? onPressed,
+    ButtonStyle? style,
+  }) {
+    return SizedBox(
+      width: width,
+      child: ElevatedButton.icon(
+        icon: icon,
+        label: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onPressed: onPressed,
+        style: style,
+      ),
+    );
+  }
+
   // Build the initial UI when no session is active
   Widget _buildInitialUI() {
     // Order courts and centers for widget
@@ -972,12 +1010,6 @@ class MasterScreenState extends State<MasterScreen> {
           ..sort((a, b) => a["name"]!.compareTo(b["name"]!)) // Order courts
     };
 
-    // Compute button width based on orientation
-    final buttonWidth = MediaQuery.of(context).orientation ==
-            Orientation.portrait
-        ? MediaQuery.of(context).size.width * 0.8 // 80% width when vertical
-        : MediaQuery.of(context).size.width * 0.4; // 40% width when horizontal
-
     return SingleChildScrollView(
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -988,85 +1020,105 @@ class MasterScreenState extends State<MasterScreen> {
           padding: const EdgeInsets.all(16),
           child: Align(
             alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: buttonWidth),
-              child: HydraCamSurface(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.center,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final panelWidth =
+                    constraints.maxWidth < 560 ? constraints.maxWidth : 520.0;
+                final buttonWidth = _actionButtonWidth(panelWidth - 32);
+
+                return ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: panelWidth),
+                  child: HydraCamSurface(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _connectedDevicesWidget(),
-                        const HydraCamStatusChip(
-                          status: HydraCamStatusTone.neutral,
-                          icon: Icons.event_busy_outlined,
-                          label: "No active session",
+                        SessionInfoWidget(
+                          sessionDisplay: _sessionDisplay(null),
+                          compact: true,
+                        ),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _connectedDevicesWidget(),
+                            const HydraCamStatusChip(
+                              status: HydraCamStatusTone.neutral,
+                              icon: Icons.event_busy_outlined,
+                              label: "No active session",
+                            ),
+                          ],
+                        ),
+                        const Divider(height: 20),
+                        CourtSelectionWidget(
+                          groupedCourts: sortedGroupedCourts,
+                          onCourtSelected: (selectedName, selectedGuid) {
+                            setState(() {
+                              selectedCourtName = selectedName;
+                              selectedCourtGuid = selectedGuid;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _actionButton(
+                              width: buttonWidth,
+                              icon: isProcessingStartSession
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: AppTheme.inverseText,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Icon(Icons.play_arrow_outlined),
+                              label: isProcessingStartSession
+                                  ? "Starting session"
+                                  : "Start Session",
+                              onPressed: isProcessingStartSession
+                                  ? null
+                                  : () => unawaited(_startOrEndSession()),
+                            ),
+                            _actionButton(
+                              width: buttonWidth,
+                              icon: const Icon(Icons.folder_open_outlined),
+                              label: "Join Existing Session",
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SportsCentersScreen(),
+                                ),
+                              ),
+                            ),
+                            _actionButton(
+                              width: buttonWidth,
+                              icon: const Icon(Icons.history_outlined),
+                              label: "Review Stored Media",
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PreviousSessionsScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    CourtSelectionWidget(
-                      groupedCourts: sortedGroupedCourts,
-                      onCourtSelected: (selectedName, selectedGuid) {
-                        setState(() {
-                          selectedCourtName = selectedName;
-                          selectedCourtGuid = selectedGuid;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      icon: isProcessingStartSession
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: AppTheme.inverseText,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Icon(Icons.play_arrow_outlined),
-                      label: Text(
-                        isProcessingStartSession
-                            ? "Starting session"
-                            : "Start Session",
-                      ),
-                      onPressed: isProcessingStartSession
-                          ? null
-                          : () => unawaited(_startOrEndSession()),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.folder_open_outlined),
-                      label: const Text("Join Existing Session"),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SportsCentersScreen(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.history_outlined),
-                      label: const Text("Review Stored Media"),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const PreviousSessionsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -1078,119 +1130,123 @@ class MasterScreenState extends State<MasterScreen> {
   Widget _buildSessionUI() {
     final String? sessionGuid = SessionManager.instance.sessionGuid;
 
-    // Compute button width for vertical layout
-    final buttonWidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.width * 0.8 // 80% width in portrait
-            : MediaQuery.of(context).size.width * 0.4; // 40% width in landscape
-
-    final double buttonDistance =
-        MediaQuery.of(context).orientation == Orientation.portrait ? 10 : 5;
-
     // Buttons and connected devices widget
-    final Widget controls = HydraCamSurface(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
+    final Widget controls = LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth =
+            constraints.maxWidth.isFinite ? constraints.maxWidth : 360.0;
+        final buttonWidth = _actionButtonWidth(maxWidth - 24);
+
+        return HydraCamSurface(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _connectedDevicesWidget(),
-              HydraCamStatusChip(
-                status: _recordingActive
-                    ? HydraCamStatusTone.recording
-                    : HydraCamStatusTone.active,
-                icon: _recordingActive
-                    ? Icons.fiber_manual_record
-                    : Icons.event_available_outlined,
-                label: _recordingActive ? "Recording" : "Session active",
+              SessionInfoWidget(
+                sessionDisplay: _sessionDisplay(sessionGuid),
+                compact: true,
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.center,
+                children: [
+                  _connectedDevicesWidget(),
+                  HydraCamStatusChip(
+                    status: _recordingActive
+                        ? HydraCamStatusTone.recording
+                        : HydraCamStatusTone.active,
+                    icon: _recordingActive
+                        ? Icons.fiber_manual_record
+                        : Icons.event_available_outlined,
+                    label: _recordingActive ? "Recording" : "Session active",
+                  ),
+                ],
+              ),
+              const Divider(height: 20),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.center,
+                children: [
+                  _actionButton(
+                    width: buttonWidth,
+                    icon: isProcessingTakePhoto
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: AppTheme.inverseText,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Icon(Icons.camera_alt_outlined),
+                    label:
+                        isProcessingTakePhoto ? "Taking photo" : "Take Photo",
+                    onPressed: sessionGuid != null && !isProcessingTakePhoto
+                        ? _handleTakePhotoButton
+                        : null,
+                  ),
+                  _actionButton(
+                    width: buttonWidth,
+                    icon: Icon(
+                      _recordingActive
+                          ? Icons.stop_circle_outlined
+                          : Icons.videocam_outlined,
+                    ),
+                    label:
+                        _recordingActive ? "Stop Recording" : "Start Recording",
+                    onPressed: sessionGuid != null
+                        ? _handleToggleRecordingButton
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          _recordingActive ? AppTheme.danger : AppTheme.accent,
+                      foregroundColor: _recordingActive
+                          ? AppTheme.inverseText
+                          : AppTheme.textOnAccent,
+                    ),
+                  ),
+                  _actionButton(
+                    width: buttonWidth,
+                    icon: isProcessingEndSession
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: AppTheme.inverseText,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Icon(Icons.stop_outlined),
+                    label: isProcessingEndSession
+                        ? "Ending session"
+                        : "End Session",
+                    onPressed: isProcessingEndSession || sessionGuid == null
+                        ? null
+                        : () => unawaited(_endCurrentSession()),
+                    style: AppTheme.dangerButtonStyle(),
+                  ),
+                  _actionButton(
+                    width: buttonWidth,
+                    icon: const Icon(Icons.cloud_upload_outlined),
+                    label: "Start Uploads",
+                    onPressed: sessionGuid != null
+                        ? () => unawaited(_startAllUploads())
+                        : null,
+                  ),
+                  SizedBox(
+                    width: buttonWidth,
+                    child: AddGalleryMediaButton(enabled: !_recordingActive),
+                  ),
+                ],
               ),
             ],
           ),
-          SizedBox(height: buttonDistance * 2),
-          // Buttons
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton.icon(
-              icon: isProcessingTakePhoto
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                          color: AppTheme.inverseText, strokeWidth: 2),
-                    )
-                  : const Icon(Icons.camera_alt_outlined),
-              label:
-                  Text(isProcessingTakePhoto ? "Taking photo" : "Take Photo"),
-              onPressed: sessionGuid != null && !isProcessingTakePhoto
-                  ? _handleTakePhotoButton
-                  : null,
-            ),
-          ),
-          SizedBox(height: buttonDistance),
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton.icon(
-              icon: Icon(
-                _recordingActive
-                    ? Icons.stop_circle_outlined
-                    : Icons.videocam_outlined,
-              ),
-              label:
-                  Text(_recordingActive ? "Stop Recording" : "Start Recording"),
-              onPressed:
-                  sessionGuid != null ? _handleToggleRecordingButton : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    _recordingActive ? AppTheme.danger : AppTheme.accent,
-                foregroundColor: _recordingActive
-                    ? AppTheme.inverseText
-                    : AppTheme.textOnAccent,
-              ),
-            ),
-          ),
-          SizedBox(height: buttonDistance),
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton.icon(
-              icon: isProcessingEndSession
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                          color: AppTheme.inverseText, strokeWidth: 2),
-                    )
-                  : const Icon(Icons.stop_outlined),
-              label: Text(
-                isProcessingEndSession ? "Ending session" : "End Session",
-              ),
-              onPressed: isProcessingEndSession || sessionGuid == null
-                  ? null
-                  : () => unawaited(_endCurrentSession()),
-              style: AppTheme.dangerButtonStyle(),
-            ),
-          ),
-          SizedBox(height: buttonDistance),
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.cloud_upload_outlined),
-              label: const Text("Start Uploads"),
-              onPressed: sessionGuid != null
-                  ? () => unawaited(_startAllUploads())
-                  : null,
-            ),
-          ),
-          SizedBox(height: buttonDistance),
-          SizedBox(
-            width: buttonWidth,
-            child: AddGalleryMediaButton(enabled: !_recordingActive),
-          ),
-        ],
-      ),
+        );
+      },
     );
 
     // Media list widget
@@ -1252,8 +1308,6 @@ class MasterScreenState extends State<MasterScreen> {
   // Build the final widget for the whole screen
   @override
   Widget build(BuildContext context) {
-    final String? sessionGuid = SessionManager.instance.sessionGuid;
-
     return PopScope(
       canPop: false, // We handle back navigation ourselves
       onPopInvokedWithResult: (didPop, result) {
@@ -1280,25 +1334,8 @@ class MasterScreenState extends State<MasterScreen> {
             );
           },
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Display session active status at the top
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SessionInfoWidget(
-                sessionDisplay: sessionActive
-                    ? "Session Active: $sessionGuid"
-                    : "No active session",
-              ),
-            ),
-            // Expanded widget to allow content to scroll if necessary
-            Expanded(
-              child: Center(
-                child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
-              ),
-            ),
-          ],
+        body: Center(
+          child: sessionActive ? _buildSessionUI() : _buildInitialUI(),
         ),
       ),
     );
