@@ -5,6 +5,11 @@
 
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <!-- Wear OS 5+/API 35+ Health Services MeasureClient requires the health
+         heart-rate permission in addition to legacy BODY_SENSORS. The device
+         reports "Missing permissions: [android.permission.health.READ_HEART_RATE]"
+         at MeasureClient registration without it. -->
+    <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application

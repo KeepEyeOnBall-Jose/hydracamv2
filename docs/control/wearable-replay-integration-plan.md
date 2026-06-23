@@ -369,6 +369,24 @@ wearable replay is still partial because no Wear OS ADB target is visible for
 installing/granting `BODY_SENSORS`, and the phone app still exposes the
 mock/fallback Ray-Ban bridge rather than a real DAT SDK capture stream.
 
+The 2026-06-23 follow-up
+`logs/verification-runs/20260623-1538-watch4-wearos-adb-hr-stream/` clears the
+Galaxy Watch4 ADB gate on physical hardware. The Watch4 `SM-R875F`
+(Wear OS API `36`) was paired and connected over wireless ADB at
+`192.168.178.117:41145`, the `:wearable` module was installed on the watch, and
+`WearMainActivity` ran on-device. The first launch surfaced a real bug: Health
+Services `MeasureClient` registration failed with
+`Missing permissions: [android.permission.health.READ_HEART_RATE]` because the
+module declared only legacy `BODY_SENSORS`. On Wear OS 5+/API 35+ the
+heart-rate stream additionally requires `android.permission.health.READ_HEART_RATE`.
+After declaring/requesting that permission and re-granting, the status changed
+to `Health Services HeartRate availability: ACQUIRING` with live motion samples
+and no registration failure. `HR 0 bpm` is expected off-body; Health Services
+reports `ACQUIRING` and withholds BPM until skin contact. The only remaining
+Watch4 step is a wrist-worn capture for a non-zero heart-rate sample; ADB
+install, permission grant, Health Services registration, and the motion stream
+are now proven on hardware.
+
 ## External Dependencies
 
 - Meta Wearables Device Access Toolkit is developer preview. Start each

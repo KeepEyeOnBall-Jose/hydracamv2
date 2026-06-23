@@ -227,9 +227,14 @@ class WearMainActivity : Activity() {
         const val SAMPLE_INTERVAL_MS = 1_000L
         const val MAX_VISIBLE_SAMPLES = 12
         const val SENSOR_PERMISSION_REQUEST_CODE = 4040
+        // No android.Manifest constant exists for the health permission, so it
+        // is referenced by its framework string. Health Services MeasureClient
+        // on Wear OS 5+/API 35+ requires it to register a heart-rate stream.
+        const val READ_HEART_RATE_PERMISSION = "android.permission.health.READ_HEART_RATE"
         val REQUIRED_SENSOR_PERMISSIONS = arrayOf(
             Manifest.permission.BODY_SENSORS,
             Manifest.permission.ACTIVITY_RECOGNITION,
+            READ_HEART_RATE_PERMISSION,
         )
     }
 }
