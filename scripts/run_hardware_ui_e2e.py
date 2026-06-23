@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import re
 import subprocess
 import sys
@@ -109,6 +110,39 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
 
+def env_value(name: str) -> str:
+    return os.environ.get(name, "").strip()
+
+
+def dev_auto_login_config(args: argparse.Namespace) -> dict[str, Any]:
+    email = (
+        args.dev_auto_login_email or env_value("HYDRACAM_DEV_AUTO_LOGIN_EMAIL")
+    ).strip()
+    guid = (
+        args.dev_auto_login_guid or env_value("HYDRACAM_DEV_AUTO_LOGIN_GUID")
+    ).strip()
+    profile_picture = (
+        args.dev_auto_login_profile_picture
+        or env_value("HYDRACAM_DEV_AUTO_LOGIN_PROFILE_PICTURE")
+    ).strip()
+    enabled = (
+        args.dev_auto_login
+        or env_value("HYDRACAM_DEV_AUTO_LOGIN").lower() == "true"
+        or bool(email)
+    )
+    if enabled and not email:
+        raise HardwareUiE2EError(
+            "Development auto-login requires --dev-auto-login-email or "
+            "HYDRACAM_DEV_AUTO_LOGIN_EMAIL"
+        )
+    return {
+        "enabled": enabled,
+        "email": email,
+        "guid": guid,
+        "profilePicture": profile_picture,
+    }
+
+
 def discover_adb_devices(*, include_emulators: bool) -> list[dict[str, str]]:
     result = run_command(
         ["adb", "devices", "-l"],
@@ -149,14 +183,32 @@ def build_apk(args: argparse.Namespace) -> Path:
         if not apk.exists():
             raise HardwareUiE2EError(f"APK does not exist: {apk}")
         return apk
+    dev_login = dev_auto_login_config(args)
+    command = [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+    ]
+    if dev_login["enabled"]:
+        command.extend(
+            [
+                "--dart-define=HYDRACAM_DEV_AUTO_LOGIN=true",
+                f"--dart-define=HYDRACAM_DEV_AUTO_LOGIN_EMAIL={dev_login['email']}",
+            ]
+        )
+        if dev_login["guid"]:
+            command.append(
+                f"--dart-define=HYDRACAM_DEV_AUTO_LOGIN_GUID={dev_login['guid']}"
+            )
+        if dev_login["profilePicture"]:
+            command.append(
+                "--dart-define=HYDRACAM_DEV_AUTO_LOGIN_PROFILE_PICTURE="
+                f"{dev_login['profilePicture']}"
+            )
     run_command(
-        [
-            "flutter",
-            "build",
-            "apk",
-            "--debug",
-            "--dart-define=HYDRACAM_AUTOMATION=true",
-        ],
+        command,
         timeout=args.build_timeout,
     )
     if not apk.exists():
@@ -502,6 +554,7 @@ def write_summary(run_dir: Path, summary: dict[str, Any]) -> None:
         f"- Started at: `{summary['startedAt']}`",
         f"- Finished at: `{summary['finishedAt']}`",
         f"- APK: `{summary['apk']}`",
+        f"- Development auto-login: `{summary['devAutoLogin']['enabled']}`",
         "",
         "## Devices",
         "",
@@ -536,6 +589,7 @@ def run_hardware_ui_e2e(args: argparse.Namespace) -> int:
     if not devices:
         raise HardwareUiE2EError("No connected Android hardware devices selected")
 
+    dev_login = dev_auto_login_config(args)
     apk = build_apk(args)
     started_at = dt.datetime.now().isoformat()
     route_results: list[dict[str, Any]] = []
@@ -583,6 +637,12 @@ def run_hardware_ui_e2e(args: argparse.Namespace) -> int:
         "startedAt": started_at,
         "finishedAt": dt.datetime.now().isoformat(),
         "apk": str(apk),
+        "devAutoLogin": {
+            "enabled": dev_login["enabled"],
+            "email": dev_login["email"] if dev_login["enabled"] else "",
+            "hasGuid": bool(dev_login["guid"]),
+            "hasProfilePicture": bool(dev_login["profilePicture"]),
+        },
         "devices": devices,
         "routes": list(args.route),
         "scrollCheckRoutes": list(args.scroll_check_route),
@@ -636,6 +696,26 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--skip-install", action="store_true")
     parser.add_argument("--include-emulators", action="store_true")
+    parser.add_argument(
+        "--dev-auto-login",
+        action="store_true",
+        help=(
+            "Build with development auto-login enabled. Also enabled when "
+            "--dev-auto-login-email or HYDRACAM_DEV_AUTO_LOGIN_EMAIL is set."
+        ),
+    )
+    parser.add_argument(
+        "--dev-auto-login-email",
+        help="Development account email for automatic login.",
+    )
+    parser.add_argument(
+        "--dev-auto-login-guid",
+        help="Optional HydraCam GUID for automatic login.",
+    )
+    parser.add_argument(
+        "--dev-auto-login-profile-picture",
+        help="Optional profile picture URL for automatic login.",
+    )
     parser.add_argument("--port-base", type=int, default=6700)
     parser.add_argument("--timeout", type=float, default=45)
     parser.add_argument("--build-timeout", type=float, default=300)

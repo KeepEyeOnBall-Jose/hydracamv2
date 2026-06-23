@@ -49,6 +49,32 @@ void main() {
     expect(service.guid, isNull);
   });
 
+  test("UserService restore uses development auto-login before Auth0 restore",
+      () async {
+    String? requestedEmail;
+    final authService = _FakeAuthService(restoreResult: false);
+    final service = UserService.forTesting(
+      authService: authService,
+      developmentAutoLogin: const DevelopmentAutoLoginConfig(
+        enabled: true,
+        email: "jose@keepeyeonball.com",
+      ),
+      getUserGuidByEmail: (email) async {
+        requestedEmail = email;
+        return "dev-user-guid";
+      },
+    );
+
+    final restored = await service.restoreStoredSession();
+
+    expect(restored, isTrue);
+    expect(authService.restoreCalls, 0);
+    expect(requestedEmail, "jose@keepeyeonball.com");
+    expect(service.isLoggedIn, isTrue);
+    expect(service.email, "jose@keepeyeonball.com");
+    expect(service.guid, "dev-user-guid");
+  });
+
   test("UserService restore rejects blank restored email", () async {
     var lookupCalls = 0;
     final service = UserService.forTesting(
@@ -208,6 +234,7 @@ class _FakeAuthService extends AuthService {
   String? loginEmail;
   String? loginProfilePicture;
   Object? loginError;
+  int restoreCalls = 0;
 
   _FakeAuthService({
     required this.restoreResult,
@@ -226,7 +253,10 @@ class _FakeAuthService extends AuthService {
   }
 
   @override
-  Future<bool> restoreStoredSession() async => restoreResult;
+  Future<bool> restoreStoredSession() async {
+    restoreCalls += 1;
+    return restoreResult;
+  }
 
   @override
   String? get email => loginEmail ?? restoredEmail;

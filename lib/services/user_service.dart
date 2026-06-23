@@ -7,6 +7,43 @@ import "log_service.dart";
 typedef UserGuidLookup = Future<String?> Function(String email);
 typedef UserDetailsLookup = Future<Map?> Function(String guid);
 
+@immutable
+class DevelopmentAutoLoginConfig {
+  const DevelopmentAutoLoginConfig({
+    required this.enabled,
+    required this.email,
+    this.guid,
+    this.profilePicture,
+  });
+
+  const DevelopmentAutoLoginConfig.disabled()
+      : enabled = false,
+        email = "",
+        guid = null,
+        profilePicture = null;
+
+  factory DevelopmentAutoLoginConfig.fromEnvironment() {
+    return const DevelopmentAutoLoginConfig(
+      enabled:
+          bool.fromEnvironment("HYDRACAM_DEV_AUTO_LOGIN", defaultValue: false),
+      email: String.fromEnvironment("HYDRACAM_DEV_AUTO_LOGIN_EMAIL"),
+      guid: String.fromEnvironment("HYDRACAM_DEV_AUTO_LOGIN_GUID"),
+      profilePicture:
+          String.fromEnvironment("HYDRACAM_DEV_AUTO_LOGIN_PROFILE_PICTURE"),
+    );
+  }
+
+  final bool enabled;
+  final String email;
+  final String? guid;
+  final String? profilePicture;
+
+  String? get normalizedEmail {
+    final normalized = email.trim();
+    return normalized.isEmpty ? null : normalized;
+  }
+}
+
 /// Singleton service to manage the current user's state and data.
 class UserService {
   // Singleton instance
@@ -15,20 +52,25 @@ class UserService {
   UserService._internal()
       : _authService = AuthService(),
         _getUserGuidByEmail = HydraCamApiService().getUserGuidByEmail,
-        _fetchUserDetailsByGuid = HydraCamApiService().fetchUserDetails;
+        _fetchUserDetailsByGuid = HydraCamApiService().fetchUserDetails,
+        _developmentAutoLogin = DevelopmentAutoLoginConfig.fromEnvironment();
 
   @visibleForTesting
   UserService.forTesting({
     required AuthService authService,
     required UserGuidLookup getUserGuidByEmail,
     UserDetailsLookup? fetchUserDetailsByGuid,
+    DevelopmentAutoLoginConfig developmentAutoLogin =
+        const DevelopmentAutoLoginConfig.disabled(),
   })  : _authService = authService,
         _getUserGuidByEmail = getUserGuidByEmail,
-        _fetchUserDetailsByGuid = fetchUserDetailsByGuid ?? ((_) async => null);
+        _fetchUserDetailsByGuid = fetchUserDetailsByGuid ?? ((_) async => null),
+        _developmentAutoLogin = developmentAutoLogin;
 
   final AuthService _authService;
   final UserGuidLookup _getUserGuidByEmail;
   final UserDetailsLookup _fetchUserDetailsByGuid;
+  final DevelopmentAutoLoginConfig _developmentAutoLogin;
 
   bool _isLoggedIn = false;
   String? _email;
@@ -82,6 +124,10 @@ class UserService {
 
   Future<bool> restoreStoredSession() async {
     try {
+      if (await _restoreDevelopmentAutoLogin()) {
+        return true;
+      }
+
       final restored = await _authService.restoreStoredSession();
       if (!restored) {
         _clearUserState();
@@ -127,6 +173,43 @@ class UserService {
       _clearUserState();
       LogService.instance.registerLog("User logged out.");
     }
+  }
+
+  Future<bool> _restoreDevelopmentAutoLogin() async {
+    if (!_developmentAutoLogin.enabled) {
+      return false;
+    }
+
+    final email = _developmentAutoLogin.normalizedEmail;
+    if (email == null) {
+      _clearUserState();
+      LogService.instance.registerLog(
+          "Development auto-login skipped because no email was configured.");
+      return false;
+    }
+
+    final configuredGuid = _normalizeGuid(_developmentAutoLogin.guid);
+    final fetchedGuid = configuredGuid ?? await _getUserGuidByEmail(email);
+    final normalizedGuid = _normalizeGuid(fetchedGuid);
+    if (normalizedGuid == null) {
+      _clearUserState();
+      LogService.instance.registerLog(
+          "Development auto-login failed: User not found for $email");
+      return false;
+    }
+
+    _email = email;
+    _guid = normalizedGuid;
+    final normalizedProfilePicture =
+        _developmentAutoLogin.profilePicture?.trim();
+    _profilePicture =
+        normalizedProfilePicture == null || normalizedProfilePicture.isEmpty
+            ? null
+            : normalizedProfilePicture;
+    _isLoggedIn = true;
+    LogService.instance
+        .registerLog("Development auto-login restored user $email.");
+    return true;
   }
 
   Future<Map<String, dynamic>?> fetchUserDetails(String guid) async {

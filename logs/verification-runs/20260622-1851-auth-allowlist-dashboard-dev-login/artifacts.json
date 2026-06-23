@@ -1,0 +1,108 @@
+{
+  "acceptanceChecks": [
+    "Connected device inventory is captured before seeding dashboard data",
+    "Allowed upload users include vectorblanco@gmail.com, jose@keepeyeonball.com, and pkosiak@gmail.com",
+    "Development devices can use a bounded automatic login path without production credentials"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:52:00.705725+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:52:12.344162+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:52:12.359993+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "emulator-5554",
+      "kind": "Android emulator",
+      "name": "sdk gphone64 arm64",
+      "notes": [],
+      "os": "Android 14 API 34",
+      "role": "connected development auto-login/upload target"
+    },
+    {
+      "identifier": "6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3",
+      "kind": "iOS simulator",
+      "name": "iPhone 16 Pro",
+      "notes": [],
+      "os": "iOS 18.4 simulator",
+      "role": "connected development auto-login/upload target"
+    },
+    {
+      "identifier": "macos",
+      "kind": "macOS",
+      "name": "macOS",
+      "notes": [],
+      "os": "macOS 26.4.1",
+      "role": "connected controller/mock-camera development target"
+    },
+    {
+      "identifier": "chrome",
+      "kind": "web",
+      "name": "Chrome",
+      "notes": [],
+      "os": "Chrome 149",
+      "role": "connected dashboard validation target"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS physical",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "Paired in CoreDevice but unavailable in the 2026-06-22 inventory."
+      ],
+      "os": "iPhone 12 Pro / CoreDevice unavailable",
+      "role": "paired unavailable physical upload target"
+    },
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS physical",
+      "name": "iPad (5)",
+      "notes": [
+        "Paired in CoreDevice but unavailable in the 2026-06-22 inventory."
+      ],
+      "os": "iPad 6th generation / CoreDevice unavailable",
+      "role": "paired unavailable physical upload target"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "auth-allowlist-dashboard-dev-login",
+    "source": "user-request: connected devices and allowed upload users",
+    "title": "Auth allowlist dashboard and development-device login"
+  },
+  "notes": [
+    "Dashboard/API and auth-focused unit validation passed; same-turn device auto-login launch proof remains blocked by unrelated HydraCam court-selection analyzer/full-suite drift and unavailable physical iOS devices."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}
