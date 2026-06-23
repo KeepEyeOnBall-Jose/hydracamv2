@@ -102,9 +102,11 @@ artifacts to normal builds:
   setup guide.
 
 Do not add `mwdat-core` / `mwdat-camera` / `mwdat-mockdevice` or the iOS
-`MWDATCore` / `MWDATCamera` / `MWDATMockDevice` packages until the developer
-account/package credentials are available in the local environment; keep default
-HydraCam builds green on the mock/fallback lane.
+`MWDATCore` / `MWDATCamera` / `MWDATMockDevice` packages to default builds.
+The local GitHub token now has Android DAT package access, but the SDK artifacts
+should stay gated behind the physical DAT lane until a reachable paired phone
+and Ray-Ban Meta device can prove the stream path without regressing the
+mock/fallback lane.
 
 Use the wearable readiness checker to keep that boundary explicit:
 
@@ -329,13 +331,20 @@ rendered `POV replay`, `Ray-Ban Meta`, `Rolling Highlight`, `Sync green`, `HR`,
 browser warning/error console messages after label-store was started on
 `3004`.
 
-The external DAT package-access probe still fails with the current GitHub
-token:
+The external DAT package-access probe now passes with the current GitHub token:
 
 ```bash
 GH_TOKEN="$(gh auth token)" python3 scripts/check_wearable_replay_readiness.py dat --check-network
-# FAIL: Android DAT GitHub Package access - HTTP 401
+# PASS: Android DAT GitHub Package access - HTTP 200
 ```
+
+Physical hardware proof attempt
+`logs/verification-runs/20260622-1915-wearable-replay-real-device-clap-flash/`
+advanced the lane by confirming that DAT entitlement and `:wearable:assembleDebug`
+both pass, then blocked truthfully on device availability: `adb devices -l` and
+ADB mDNS showed no Android/Wear OS target, Bluetooth inventory showed no
+connected Ray-Ban Meta or Galaxy Watch4, and CoreDevice listed the physical
+iPhone/iPad as unavailable while Flutter reported code `-27`.
 
 ## External Dependencies
 

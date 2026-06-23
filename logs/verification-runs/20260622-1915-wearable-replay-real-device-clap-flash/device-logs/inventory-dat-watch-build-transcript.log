@@ -1,0 +1,334 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+ M docs/control/status-and-roadmap.md
+ M lib/constants.dart
+ M lib/master/master_screen.dart
+ M lib/services/time_sync_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/court_selection_widget.dart
+ M test/master/master_screen_test.dart
+ M test/services/time_sync_service_test.dart
+ M test/services/user_service_test.dart
+ M test/slave/slave_client_time_sync_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/slave/slave_screen_sync_chip_test.dart
+ M test/widgets/court_selection_widget_test.dart
+?? docs/superpowers/plans/2026-06-22-hydracam-ui-flow-layout-sync.md
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+?? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+?? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+?? logs/verification-runs/20260619-live-hls-idempotency-proof/
+?? logs/verification-runs/20260619-live-hls-playback-proof/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+?? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+?? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+?? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+?? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+?? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1843-mba13-rf8m21-and-ipad-continuation/
+?? logs/verification-runs/20260622-1851-auth-allowlist-dashboard-dev-login/
+?? logs/verification-runs/20260622-1855-ui-flow-layout-sync-drift/
+?? logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy/
+?? logs/verification-runs/20260622-1915-wearable-replay-real-device-clap-flash/
+?? logs/verification-runs/browser-proof-smoke-2/
+?? logs/verification-runs/browser-proof-smoke/
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State         Model                                        
+-------------------   -----------------------------------   ------------------------------------   -----------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   unavailable   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   unavailable   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ timeout 45 flutter devices --device-timeout 10
+Found 3 connected devices:
+  iPhone 16 Pro (mobile) • 6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3 • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)        • macos                                • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)           • chrome                               • web-javascript • unknown
+
+Error: Browsing on the local area network for iPad (5). Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 124
+
+$ timeout 20 adb devices -l
+List of devices attached
+
+[exit-code] 0
+
+$ timeout 20 xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State         Model                                        
+-------------------   -----------------------------------   ------------------------------------   -----------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   unavailable   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   unavailable   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ zsh -lc GH_TOKEN="$(gh auth token)" python3 scripts/check_wearable_replay_readiness.py dat --check-network --timeout-seconds 15
+PASS: lib/models/wearable_replay.dart exists
+PASS: lib/services/wearable_replay_bridge_service.dart exists
+PASS: lib/services/wearable_replay_service.dart exists
+PASS: lib/services/wearable_replay_simulation_service.dart exists
+PASS: lib/services/wearable_replay_upload_service.dart exists
+PASS: integration_test/wearable_replay_channel_test.dart exists
+PASS: test/models/wearable_replay_test.dart exists
+PASS: test/services/wearable_replay_bridge_service_test.dart exists
+PASS: test/services/wearable_replay_service_test.dart exists
+PASS: test/services/wearable_replay_simulation_service_test.dart exists
+PASS: test/services/wearable_replay_upload_service_test.dart exists
+PASS: test/services/wearable_replay_live_upload_test.dart exists
+PASS: docs/control/wearable-replay-integration-plan.md exists
+PASS: Android declares BLUETOOTH_CONNECT for DAT
+PASS: Android declares DAT application id metadata
+PASS: Android declares DAT analytics opt-out metadata
+PASS: Android declares DAT callback scheme intent filter
+PASS: Android Gradle defines DAT redirect scheme placeholder
+PASS: Android Gradle defaults DAT application id to developer mode
+PASS: iOS declares DAT callback scheme
+PASS: iOS MWDAT developer MetaAppID is configured
+PASS: iOS MWDAT callback URL is configured
+PASS: iOS MWDAT analytics opt-out is configured
+PASS: iOS allows Meta AI callback query scheme
+PASS: iOS declares Meta wearable external accessory protocol
+PASS: iOS declares Bluetooth/external accessory background modes
+PASS: iOS declares Bluetooth usage description
+PASS: Wear module depends on Wear OS Health Services
+PASS: Wear module declares BODY_SENSORS
+PASS: Wear telemetry registers MeasureClient heart-rate callback
+PASS: Wear telemetry merges Android motion sensors
+PASS: Dart bridge exposes rolling POV fallback capability
+PASS: Simulation falls back to rollingHighlight when DAT is unavailable
+PASS: Simulation records fallback reason
+PASS: Android native bridge advertises rolling fallback
+PASS: iOS native bridge advertises rolling fallback
+PASS: Native integration test asserts rollingHighlight
+PASS: Upload service depends on http_parser for multipart MIME types
+PASS: Upload service imports MediaType
+PASS: Upload service parses POV media count
+PASS: Upload service attaches multipart content types
+PASS: Upload service includes calibration sidecars
+PASS: Upload service maps JSONL sidecars to NDJSON MIME
+PASS: Upload service maps MP4 POV media to video/mp4
+PASS: Upload unit test asserts POV media MIME
+PASS: Live upload proof is gated by HYDRACAM_WEARABLE_LIVE_UPLOAD
+PASS: Live upload proof writes a generated wearable manifest
+PASS: Live upload proof records clap-flash calibration sidecar
+PASS: Live upload proof verifies <=50 ms calibration target
+PASS: Live upload proof posts generated manifest to media-timeline
+PASS: Live upload proof verifies media-timeline POV media count
+PASS: Live upload proof verifies rolling-highlight replay metadata
+PASS: Simulation proof sends watch haptic feedback
+PASS: Simulation proof sends glasses audio feedback
+PASS: Live upload proof persists both feedback channels
+PASS: Control doc records live upload proof command
+PASS: Default Android build keeps private Meta DAT SDK artifacts gated
+PASS: Default iOS build keeps private Meta DAT SDK artifacts gated
+PASS: Control doc records DAT dependencies as hardware-lane gated
+PASS: Android DAT GitHub Package access - HTTP 200
+wearable replay readiness passed: 60 check(s)
+[exit-code] 0
+
+$ timeout 20 adb mdns services
+List of discovered mdns services
+
+[exit-code] 0
+
+$ timeout 20 system_profiler SPUSBDataType
+[exit-code] 0
+
+$ timeout 25 system_profiler SPBluetoothDataType
+Bluetooth:
+
+      Bluetooth Controller:
+          Address: 60:3E:5F:3E:4A:F1
+          State: On
+          Chipset: BCM_4388
+          Discoverable: Off
+          Firmware Version: 23.5.574.4424
+          Product ID: 0x4A2F
+          Supported services: 0x392039 < HFP AVRCP A2DP HID Braille LEA AACP GATT SerialPort >
+          Transport: PCIe
+          Vendor ID: 0x004C (Apple)
+      Not Connected:
+          AirPods Pro de Jose:
+              Address: 14:87:6A:60:6E:50
+              Vendor ID: 0x004C
+              Product ID: 0x200E
+              Case Version: 1.9.9
+              Firmware Version: 6F21
+              Minor Type: Headphones
+              Serial Number: H79DVD3ULKKT
+              Serial Number (Left): GX1ZHXD1JQH4
+              Serial Number (Right): GX9ZHEZCJQH3
+          Galaxy S10e:
+              Address: CC:21:19:ED:94:82
+              Vendor ID: 0x0075
+              Product ID: 0x0100
+              Firmware Version: 2.0.1
+              Minor Type: Mobile Phone
+          iPad (5):
+              Address: B0:CA:68:C6:ED:DB
+          José Ramón’s AirPods Pro:
+              Address: D0:DA:D7:0A:49:43
+              Vendor ID: 0x004C
+              Product ID: 0x200E
+              Case Version: 1.9.9
+              Firmware Version: 6F21
+              Minor Type: Headphones
+              Serial Number: H79DVD3ULKKT
+              Serial Number (Left): H19JFUFN0C6K
+              Serial Number (Right): H19JFQYN0C6J
+          José Ramón’s AirPods Pro #2:
+              Address: E8:85:4B:AB:E5:D3
+              Vendor ID: 0x004C
+              Product ID: 0x200E
+              Case Version: 1.9.9
+              Firmware Version: 6F21
+              Minor Type: Headphones
+              Serial Number: GXCZJAJFLKKT
+              Serial Number (Left): GN2D9CLEJQH4
+              Serial Number (Right): GX9D9X7LJQH3
+          José Ramón’s iPhone:
+              Address: 94:5C:9A:E6:1B:09
+          José’s MacBook Air:
+              Address: DD:0C:DF:48:19:80
+          MacBook Air de Maria:
+              Address: 48:D7:05:CE:57:48
+          MAJOR V:
+              Address: 00:25:D1:42:72:57
+              Vendor ID: 0x0094
+              Product ID: 0x0004
+              Firmware Version: 1.0.0
+              Minor Type: Headset
+
+[exit-code] 0
+
+$ timeout 180 zsh -lc cd android && JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home ./gradlew :wearable:assembleDebug
+
+> Configure project :gradle
+WARNING: Unsupported Kotlin plugin version.
+The `embedded-kotlin` and `kotlin-dsl` plugins rely on features of Kotlin `2.0.21` that might work differently than in the requested version `2.2.20`.
+
+> Task :gradle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle:compileKotlin UP-TO-DATE
+> Task :gradle:compileJava NO-SOURCE
+> Task :gradle:compileGroovy NO-SOURCE
+> Task :gradle:pluginDescriptors UP-TO-DATE
+> Task :gradle:processResources UP-TO-DATE
+> Task :gradle:classes UP-TO-DATE
+> Task :gradle:jar UP-TO-DATE
+> Task :wearable:preBuild UP-TO-DATE
+> Task :wearable:preDebugBuild UP-TO-DATE
+> Task :wearable:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :wearable:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :wearable:checkDebugAarMetadata UP-TO-DATE
+> Task :wearable:generateDebugResValues UP-TO-DATE
+> Task :wearable:mapDebugSourceSetPaths UP-TO-DATE
+> Task :wearable:generateDebugResources UP-TO-DATE
+> Task :wearable:mergeDebugResources UP-TO-DATE
+> Task :wearable:packageDebugResources UP-TO-DATE
+> Task :wearable:parseDebugLocalResources UP-TO-DATE
+> Task :wearable:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :wearable:extractDeepLinksDebug UP-TO-DATE
+> Task :wearable:processDebugMainManifest UP-TO-DATE
+> Task :wearable:processDebugManifest UP-TO-DATE
+> Task :wearable:processDebugManifestForPackage UP-TO-DATE
+> Task :wearable:processDebugResources UP-TO-DATE
+> Task :wearable:compileDebugKotlin UP-TO-DATE
+> Task :wearable:javaPreCompileDebug UP-TO-DATE
+> Task :wearable:compileDebugJavaWithJavac NO-SOURCE
+> Task :wearable:mergeDebugShaders UP-TO-DATE
+> Task :wearable:compileDebugShaders NO-SOURCE
+> Task :wearable:generateDebugAssets UP-TO-DATE
+> Task :wearable:mergeDebugAssets UP-TO-DATE
+> Task :wearable:compressDebugAssets UP-TO-DATE
+> Task :wearable:desugarDebugFileDependencies UP-TO-DATE
+> Task :wearable:dexBuilderDebug UP-TO-DATE
+> Task :wearable:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :wearable:processDebugJavaRes UP-TO-DATE
+> Task :wearable:mergeDebugJavaResource UP-TO-DATE
+> Task :wearable:checkDebugDuplicateClasses UP-TO-DATE
+> Task :wearable:mergeExtDexDebug UP-TO-DATE
+> Task :wearable:mergeLibDexDebug UP-TO-DATE
+> Task :wearable:mergeProjectDexDebug UP-TO-DATE
+> Task :wearable:mergeDebugJniLibFolders UP-TO-DATE
+> Task :wearable:mergeDebugNativeLibs NO-SOURCE
+> Task :wearable:stripDebugDebugSymbols NO-SOURCE
+> Task :wearable:validateSigningDebug UP-TO-DATE
+> Task :wearable:writeDebugAppMetadata UP-TO-DATE
+> Task :wearable:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :wearable:packageDebug UP-TO-DATE
+> Task :wearable:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :wearable:assembleDebug UP-TO-DATE
+
+[Incubating] Problems report is available at: file:///Users/jose/src/work/hydracamv2/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.5/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1s
+37 actionable tasks: 37 up-to-date
+
+[stderr]
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0

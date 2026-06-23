@@ -1,0 +1,180 @@
+{
+  "acceptanceChecks": [
+    "Meta DAT GitHub Packages entitlement passes with GH_TOKEN from gh auth token",
+    "Ray-Ban Meta is physically paired and a DAT POV/audio stream or rolling-buffer fallback is captured",
+    "Galaxy Watch4 is paired, BODY_SENSORS is permitted, and Health Services HR plus motion samples are captured",
+    "HydraCam session contains clap/flash calibration evidence with measured alignment <= 50 ms",
+    "media-timeline replay renders POV angle, audio-on state, HR/motion overlays, markers, feedback cues, and pre-publish review state"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:15:34.959596+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:17:17.241994+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "45",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 124,
+      "startedAt": "2026-06-22T17:17:31.503540+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:18:22.021564+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:18:25.719153+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "GH_TOKEN=\"$(gh auth token)\" python3 scripts/check_wearable_replay_readiness.py dat --check-network --timeout-seconds 15"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:18:29.960518+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "adb",
+        "mdns",
+        "services"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:20:14.608067+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "system_profiler",
+        "SPUSBDataType"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:20:17.574194+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "25",
+        "system_profiler",
+        "SPBluetoothDataType"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:20:21.641577+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "180",
+        "zsh",
+        "-lc",
+        "cd android && JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home ./gradlew :wearable:assembleDebug"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:20:35.166427+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "not-visible-host-side",
+      "kind": "wearable",
+      "name": "Ray-Ban Meta glasses",
+      "notes": [
+        "Expected physical DAT source, but no paired reachable phone/device was available to expose a DAT session."
+      ],
+      "os": "Meta wearable firmware unknown",
+      "role": "POV/audio source"
+    },
+    {
+      "identifier": "no-adb-wearos-target",
+      "kind": "wearable",
+      "name": "Galaxy Watch4",
+      "notes": [
+        "No Wear OS ADB target was visible, so BODY_SENSORS could not be requested or verified."
+      ],
+      "os": "Wear OS unknown",
+      "role": "HR/motion/marker telemetry source"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS physical",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "CoreDevice listed the phone but state was unavailable; Flutter reported code -27."
+      ],
+      "os": "iOS unavailable via CoreDevice",
+      "role": "candidate paired phone / HydraCam control device"
+    },
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS physical",
+      "name": "iPad (5)",
+      "notes": [
+        "CoreDevice listed the iPad but state was unavailable; Flutter reported code -27."
+      ],
+      "os": "iOS unavailable via CoreDevice",
+      "role": "candidate HydraCam camera device"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/BLOCKED-no-physical-wearable-ui.txt",
+    "video/BLOCKED-no-physical-wearable-video.txt",
+    "device-logs/inventory-dat-watch-build-transcript.log"
+  ],
+  "item": {
+    "slug": "wearable-replay-real-device-clap-flash",
+    "source": "docs/control/wearable-replay-integration-plan.md#full-hardware-evidence",
+    "title": "Run full physical wearable replay proof with Ray-Ban Meta, Galaxy Watch4, and clap/flash sync"
+  },
+  "notes": [
+    "DAT entitlement passed with GH_TOKEN from gh auth token (HTTP 200).",
+    "Wear OS companion APK build passed.",
+    "Physical proof blocked because no Android/Wear OS target was visible, Bluetooth inventory showed no connected Ray-Ban Meta or Galaxy Watch4, and physical iPhone/iPad were unavailable to Flutter/CoreDevice."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}
