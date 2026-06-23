@@ -31,6 +31,12 @@ class MainActivity: FlutterActivity() {
 	}
 	private val fixedCameraRecordingModes = mutableMapOf<String, String>()
 	private val wearablePovCaptures = mutableMapOf<String, Map<String, Any?>>()
+	// Null on default builds (stub factory) -> mock POV path. Non-null only on
+	// gated `-PwithMetaDat=true` builds, and even then drives capture only when
+	// isAvailable() reports a live Meta DAT stream.
+	private val realPovBridge: WearablePovBridge? by lazy {
+		RealMetaPovBridgeFactory.createOrNull(this)
+	}
 
 	override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
 		super.configureFlutterEngine(flutterEngine)
@@ -202,10 +208,12 @@ class MainActivity: FlutterActivity() {
 	}
 
 	private fun buildWearableReplayCapabilities(): Map<String, Any?> {
+		val realStreamAvailable = realPovBridge?.isAvailable() == true
 		return mapOf(
 			"platform" to "android",
 			"channelAvailable" to true,
-			"metaDatAvailable" to false,
+			"metaDatAvailable" to realStreamAvailable,
+			"metaDatBridgeCompiled" to BuildConfig.META_DAT_BRIDGE,
 			"metaMockAvailable" to true,
 			"watchCompanionAvailable" to false,
 			"watchMockAvailable" to true,
@@ -246,6 +254,19 @@ class MainActivity: FlutterActivity() {
 	) {
 		try {
 			val recordingId = requiredString(call, "recordingId")
+			val bridge = realPovBridge
+			if (bridge != null && bridge.isAvailable()) {
+				val payload = bridge.startCapture(
+					mapOf(
+						"recordingId" to recordingId,
+						"captureMode" to call.argument<String>("captureMode"),
+						"includeAudio" to call.argument<Boolean>("includeAudio"),
+					)
+				)
+				wearablePovCaptures[recordingId] = payload
+				result.success(payload)
+				return
+			}
 			val nowMs = System.currentTimeMillis()
 			val mediaFile = File(getWearableReplayOutputDirectory(), "$recordingId-mock-pov.mp4")
 			mediaFile.parentFile?.mkdirs()
@@ -274,6 +295,13 @@ class MainActivity: FlutterActivity() {
 	) {
 		try {
 			val recordingId = requiredString(call, "recordingId")
+			val bridge = realPovBridge
+			if (bridge != null && bridge.isAvailable()) {
+				val payload = bridge.stopCapture(recordingId)
+				wearablePovCaptures.remove(recordingId)
+				result.success(payload)
+				return
+			}
 			val started = wearablePovCaptures[recordingId]
 				?: throw IllegalArgumentException("Unknown recordingId: $recordingId")
 			val payload = started.toMutableMap()

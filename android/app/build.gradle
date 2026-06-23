@@ -26,6 +26,14 @@ def hasReleaseKeystore =
     releaseStoreFile?.exists()
 def hydracamNdkVersion =
     (project.findProperty("hydracamNdkVersion") ?: "28.2.13676358").toString()
+// Gated Meta DAT wearable-bridge seam. Default (flavorless) builds compile the
+// stub source set so the mock/fallback Ray-Ban POV path is unchanged and the
+// wearable-replay dependency-boundary check stays green. Pass
+// `-PwithMetaDat=true` to compile the real bridge source set instead; the
+// developer-preview Meta DAT SDK is intentionally NOT added as a dependency
+// here yet — that lands in the dedicated physical DAT integration step.
+def withMetaDat =
+    (project.findProperty("withMetaDat") ?: "false").toString().toBoolean()
 def generatedPluginRegistrantFile = file(
     "src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java"
 )
@@ -44,8 +52,19 @@ android {
         jvmTarget = '17'
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        // Exactly one of these source sets is compiled. Both define
+        // RealMetaPovBridgeFactory so src/main can reference it unconditionally.
+        if (withMetaDat) {
+            main.java.srcDirs += 'src/metaDatReal/kotlin'
+        } else {
+            main.java.srcDirs += 'src/metaDatStub/kotlin'
+        }
     }
 
     defaultConfig {
@@ -57,6 +76,7 @@ android {
         manifestPlaceholders["appAuthRedirectScheme"] = "com.amaia23.hydracam"
         manifestPlaceholders["mwdatRedirectScheme"] = "com.amaia23.hydracam.mwdat"
         manifestPlaceholders["mwdatApplicationId"] = "0"
+        buildConfigField "boolean", "META_DAT_BRIDGE", "${withMetaDat}"
     }
 
     signingConfigs {

@@ -108,6 +108,26 @@ should stay gated behind the physical DAT lane until a reachable paired phone
 and Ray-Ban Meta device can prove the stream path without regressing the
 mock/fallback lane.
 
+The Android app now has a gated bridge seam so the real DAT integration has a
+home without touching the default lane. `MainActivity` resolves a
+`WearablePovBridge` through `RealMetaPovBridgeFactory.createOrNull(this)` and
+falls back to the mock/rolling-highlight POV path whenever the factory returns
+null or the bridge reports `isAvailable() == false`:
+
+- `lib`-side contract is unchanged; the channel still answers
+  `metaDatAvailable: false` on default builds and adds `metaDatBridgeCompiled`.
+- Default (flavorless) builds compile `src/metaDatStub/` whose factory returns
+  null — Flutter's `flutter build apk --debug` lane is unaffected (no product
+  flavor is introduced, so no `--flavor` is required).
+- The gated `./gradlew :app:assembleDebug -PwithMetaDat=true` build compiles
+  `src/metaDatReal/` (`RealMetaPovBridge`), which currently reports
+  `isAvailable() == false` so even the gated build never claims continuous DAT
+  capture until the SDK and physical stream path are wired.
+- No `mwdat` SDK coordinate is added to `android/app/build.gradle`, so the
+  wearable-replay dependency-boundary check stays green (mock 56, offline dat
+  59). The SDK dependency belongs only in the gated build during the dedicated
+  physical DAT integration step.
+
 Use the wearable readiness checker to keep that boundary explicit:
 
 ```bash
