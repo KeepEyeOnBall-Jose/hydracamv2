@@ -1313,6 +1313,53 @@ empty court GUID. This is robustness cleanup for the current text-only selector;
 the photo-backed venue selection feature remains planned only until its source
 and asset standards are decided.
 
+### 16. Add human-readable session names and default naming presets
+
+- Source: user request, 2026-06-22.
+- Labels: `hydracam`, `mobile`, `ux`, `session`, `metadata`, `players`,
+  `venues`.
+- Priority: Medium.
+- Disposition: Planned only; do not implement until this item is selected for
+  a focused session UX pass.
+- Implementation plan:
+  `docs/superpowers/plans/2026-06-22-human-readable-session-names.md`.
+- Body: Replace primary operator-facing session labels that show backend GUIDs
+  or other long technical identifiers with readable session names. The app
+  should auto-generate sensible defaults from activity preset, venue/court,
+  local date/time, and player names when a player source is available. Operators
+  should be able to use preset activity names, edit the generated name before
+  session creation, and reset it back to the generated value. GUIDs must remain
+  the internal identifiers for API calls, uploads, local storage, sync sidecars,
+  master/slave transport, automation, logs, and diagnostics.
+- Planned approach:
+  1. Add a pure `SessionNamingService` that creates compact defaults such as
+     `Squash match - Sportwerk Court 2 - Ana vs Luis - 2026-06-22 19:30` and
+     sanitizes custom operator names.
+  2. Add optional `displayName` metadata to `CaptureSession` and
+     `SessionManager` persistence while preserving `preferredIdentifier` for
+     GUID-backed logic.
+  3. Add activity preset and session-name controls to the master setup flow,
+     with auto-regeneration from selected sports center/court and local time
+     until the operator manually edits the name.
+  4. Update active-session, stored-session, fetched-session,
+     media-selection, and session-detail surfaces so the readable name is the
+     primary label and GUIDs move to technical metadata or diagnostics.
+  5. Keep the current backend create-session body unchanged until the service
+     explicitly accepts a session display-name field; read backend-provided
+     name fields if they are already returned.
+- Acceptance checks: creating a session without manual edits shows a readable
+  generated title instead of `Session Active: <guid>`; manual edits persist in
+  `metadata.json`; old sessions without `displayName` still load; previous
+  sessions, session details, fetched backend sessions, and gallery candidates
+  use the display title as the primary row/title text; GUIDs are still used for
+  joins/restores/uploads and remain available in diagnostics; focused widget and
+  service tests plus `flutter analyze` pass; real-device UI smoke evidence
+  proves the setup and active-session surfaces do not overflow.
+- Non-goals: do not remove GUID fields, rename storage directories, change
+  upload/session API identifiers, or block this feature on the unfinished
+  session-player backend. Player names should be included automatically only
+  when a reliable player source is available.
+
 ## Open Bug/Improvement Rows From `FALLOS Y MEJORAS`
 
 These are de-duplicated open rows from the Spanish and English tabs. Create
