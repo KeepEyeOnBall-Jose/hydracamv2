@@ -407,6 +407,29 @@ Watch4 step is a wrist-worn capture for a non-zero heart-rate sample; ADB
 install, permission grant, Health Services registration, and the motion stream
 are now proven on hardware.
 
+## Remote Device Access
+
+Hardware proofs can run from either Mac without moving devices. Tailscale links
+the Macs, not the watch, and Wear OS wireless-debugging pairing uses mDNS that
+only works on the watch's own LAN, so the `adb` server that owns the devices
+must run on the Mac physically on that LAN. `scripts/adb_remote_bridge.sh`
+opens an SSH-over-Tailscale tunnel to that Mac's adb server and points the
+local `adb` client at it, so builds stay on the dev Mac while installs and
+screencaps flow to the remote devices:
+
+```bash
+scripts/adb_remote_bridge.sh up            # tunnel + verify (defaults to MBA13 M1)
+eval "$(scripts/adb_remote_bridge.sh env)" # export ADB_SERVER_SOCKET in this shell
+scripts/adb_remote_bridge.sh pair HOST:PORT CODE  # pair the watch ON the remote LAN
+scripts/adb_remote_bridge.sh connect HOST:PORT
+scripts/adb_remote_bridge.sh down          # tear down
+```
+
+It requires macOS Remote Login or Tailscale SSH on the remote Mac. Override the
+target with `ADB_BRIDGE_HOST` (MagicDNS name or Tailscale IP). When both Macs
+and the devices share one LAN, no bridge is needed — use the local adb host
+directly.
+
 ## External Dependencies
 
 - Meta Wearables Device Access Toolkit is developer preview. Start each
