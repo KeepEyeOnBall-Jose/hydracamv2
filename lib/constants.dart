@@ -93,5 +93,9 @@ const int timeSyncYellowUncertaintyMs =
     100; // <= this uncertainty classifies as yellow confidence
 const int timeSyncFreshSeconds =
     60; // Calibration older than this can no longer be green
+const int timeSyncStaleSeconds =
+    120; // Calibration older than this is too stale for scheduled commands
+const int timeSyncStatusRefreshSeconds =
+    5; // How often the UI refreshes age-based clock-sync status
 const double timeSyncOutlierFactor =
     1.5; // Samples with round-trip above median * factor are discarded

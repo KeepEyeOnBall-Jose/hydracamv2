@@ -90,7 +90,7 @@ void main() {
     expect(
         find.widgetWithText(ElevatedButton, "Start Session"), findsOneWidget);
     expect(
-      find.widgetWithText(ElevatedButton, "Join Existing Session"),
+      find.widgetWithText(ElevatedButton, "Load Existing Session"),
       findsOneWidget,
     );
     expect(
@@ -131,6 +131,8 @@ void main() {
       findsOneWidget,
     );
 
+    await _selectAirportCourt1(tester);
+
     await tester.tap(find.widgetWithText(ElevatedButton, "Start Session"));
     await tester.pumpAndSettle();
 
@@ -159,6 +161,8 @@ void main() {
       "master-session-id",
     );
     expect(requestedUri?.path, "/api/sessions/create");
+    expect(requestedUri?.queryParameters["courtGuid"],
+        "16de47b8-535a-4950-b275-b8b6982c7b8d");
     expect(requestBody?["SessionId"], startsWith("debug-"));
     expect(
       await DebugSessionRegistry().list(),
@@ -169,6 +173,41 @@ void main() {
         ),
       ],
     );
+
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets("starting without a court requires explicit confirmation",
+      (tester) async {
+    var createSessionCalls = 0;
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        createSessionCalls += 1;
+        return http.Response(
+          '{"guid":"no-court-guid","sessionId":"no-court-id"}',
+          200,
+        );
+      }),
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: MasterScreen(),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.widgetWithText(ElevatedButton, "Start Session"));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Start without court?"), findsOneWidget);
+    expect(createSessionCalls, 0);
+
+    await tester.tap(find.widgetWithText(FilledButton, "Start Without Court"));
+    await tester.pumpAndSettle();
+
+    expect(createSessionCalls, 1);
+    expect(SessionManager.instance.sessionGuid, "no-court-guid");
 
     await tester.pumpWidget(const SizedBox.shrink());
   });
@@ -361,6 +400,13 @@ void main() {
         find.widgetWithText(ElevatedButton, "Start Recording"),
         findsOneWidget,
       );
+      _expectEqualButtonGeometry(tester, const [
+        "Take Photo",
+        "Start Recording",
+        "End Session",
+        "Start Uploads",
+        "Add Media from Gallery",
+      ]);
       expect(tester.takeException(), isNull);
     }
 
@@ -391,6 +437,8 @@ void main() {
 
     await tester.tap(find.widgetWithText(ElevatedButton, "Start Session"));
     await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, "Start Without Court"));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.widgetWithText(ElevatedButton, "Start Recording"));
     await tester.pumpAndSettle();
@@ -419,6 +467,33 @@ Future<void> _disposeMasterScreenSession() async {
   if (SessionManager.instance.isSessionActive) {
     await SessionManager.instance.endSession();
   }
+}
+
+Future<void> _selectAirportCourt1(WidgetTester tester) async {
+  await tester.tap(find.byKey(const ValueKey("sportsCenterDropdown")));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text("Airport Squash & Fitness Berlin").last);
+  await tester.pumpAndSettle();
+
+  final court = find.byKey(
+    const ValueKey("court-16de47b8-535a-4950-b275-b8b6982c7b8d"),
+  );
+  await tester.ensureVisible(court);
+  await tester.tap(court);
+  await tester.pumpAndSettle();
+}
+
+void _expectEqualButtonGeometry(WidgetTester tester, List<String> labels) {
+  final sizes = labels
+      .map(
+          (label) => tester.getSize(find.widgetWithText(ElevatedButton, label)))
+      .toList();
+  final first = sizes.first;
+  for (final size in sizes.skip(1)) {
+    expect(size.width, closeTo(first.width, 0.1));
+    expect(size.height, closeTo(first.height, 0.1));
+  }
+  expect(first.height, closeTo(48, 0.1));
 }
 
 class _MasterScreenPathProvider extends PathProviderPlatform {

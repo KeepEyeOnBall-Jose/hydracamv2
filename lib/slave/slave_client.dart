@@ -224,6 +224,7 @@ class SlaveClient implements SlaveConnectionClient {
         .add("Attempting to connect to master at $serverAddress...");
     LogService.instance.registerLog(
         "Attempting to connect to master WebSocket at $serverAddress with Device ID: $_deviceId");
+    _resetClockSyncState();
 
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse(serverAddress));
@@ -257,9 +258,6 @@ class SlaveClient implements SlaveConnectionClient {
 
       // Start sending heartbeat messages
       _startHeartbeat();
-
-      // Begin NTP-style clock calibration against the master.
-      _startTimeSync();
 
       _channel?.stream.listen(
         (message) async {
@@ -341,6 +339,7 @@ class SlaveClient implements SlaveConnectionClient {
               .add(false); // Notify UI of connection status
           _stopHeartbeat();
           _stopTimeSync();
+          _resetClockSyncState();
           _attemptReconnect();
         },
         onDone: () {
@@ -352,9 +351,14 @@ class SlaveClient implements SlaveConnectionClient {
               .add(false); // Notify UI of connection status
           _stopHeartbeat();
           _stopTimeSync();
+          _resetClockSyncState();
           _attemptReconnect();
         },
       );
+
+      // Begin NTP-style clock calibration against the master after the stream
+      // listener is attached so fast local replies cannot be missed.
+      _startTimeSync();
     } catch (e) {
       _statusStreamController.add("Failed to connect: $e");
       LogService.instance
@@ -580,7 +584,8 @@ class SlaveClient implements SlaveConnectionClient {
     // calibration. The single-sample master timestamp is only a coarse
     // fallback for the very first scheduled command before the first burst
     // completes, so it must not overwrite a measured offset.
-    if (TimeSyncService.instance.latest.value != null) {
+    final latest = TimeSyncService.instance.latest.value;
+    if (latest != null && !latest.isStaleAt(_now().toUtc())) {
       return;
     }
     if (masterTimeValue is! String || masterTimeValue.isEmpty) {
@@ -954,8 +959,14 @@ class SlaveClient implements SlaveConnectionClient {
     _reconnectTimer?.cancel();
     _stopHeartbeat();
     _stopTimeSync();
+    _resetClockSyncState();
     _cancelScheduledCommands();
     _unregisterRecordingInterruptListener();
+  }
+
+  void _resetClockSyncState() {
+    TimeSyncService.instance.reset();
+    _scheduledTaskService.updateClockOffset(Duration.zero);
   }
 
   Future<Map<String, dynamic>?> _currentNetworkPayload() async {

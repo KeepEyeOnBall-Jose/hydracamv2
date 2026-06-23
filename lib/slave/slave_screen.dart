@@ -4,6 +4,7 @@ import "package:connectivity_plus/connectivity_plus.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "../app_theme.dart";
+import "../constants.dart" as constants;
 import "../screens/camera_setup_preview_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../screens/uploader_info_screen.dart";
@@ -53,6 +54,7 @@ class SlaveScreen extends StatefulWidget {
   final SlaveConnectionClientFactory? slaveClientFactory;
   final MasterDiscoveryFactory? masterDiscoveryFactory;
   final Stream<List<ConnectivityResult>>? connectivityChanges;
+  final DateTime Function()? syncStatusNow;
 
   const SlaveScreen({
     super.key,
@@ -63,6 +65,7 @@ class SlaveScreen extends StatefulWidget {
     @visibleForTesting this.slaveClientFactory,
     @visibleForTesting this.masterDiscoveryFactory,
     @visibleForTesting this.connectivityChanges,
+    @visibleForTesting this.syncStatusNow,
   }); // Default is manual mode
 
   @override
@@ -88,6 +91,7 @@ class SlaveScreenState extends State<SlaveScreen> {
 
   Timer? dimTimer; // Timer for screen dimming
   Timer? _identifyFrameTimer;
+  Timer? _syncStatusRefreshTimer;
   int dimTime = 10; // Number of seconds before turning screen black
   bool isScreenDimmed = false; // To control the dimmed screen state
   bool _isIdentifyFrameVisible = false;
@@ -148,6 +152,14 @@ class SlaveScreenState extends State<SlaveScreen> {
 
     // Add listener
     SessionManager.instance.addListener(_onSessionChanged);
+    _syncStatusRefreshTimer = Timer.periodic(
+      const Duration(seconds: constants.timeSyncStatusRefreshSeconds),
+      (_) {
+        if (mounted && TimeSyncService.instance.latest.value != null) {
+          setState(() {});
+        }
+      },
+    );
   }
 
   void _onSessionChanged() {
@@ -612,6 +624,7 @@ class SlaveScreenState extends State<SlaveScreen> {
     try {
       dimTimer?.cancel();
       _identifyFrameTimer?.cancel();
+      _syncStatusRefreshTimer?.cancel();
       _statusSubscription
           ?.cancel(); // Cancel the subscription to avoid memory leaks
       _connectionStatusSubscription?.cancel();
@@ -636,7 +649,7 @@ class SlaveScreenState extends State<SlaveScreen> {
   }
 
   /// Compact clock-sync status indicator driven by the latest calibration.
-  Widget _buildSyncStatusChip() {
+  Widget _buildSyncStatusChip({bool compact = false}) {
     return ValueListenableBuilder<TimeSyncResult?>(
       valueListenable: TimeSyncService.instance.latest,
       builder: (context, result, child) {
@@ -646,21 +659,27 @@ class SlaveScreenState extends State<SlaveScreen> {
         if (result == null) {
           tone = HydraCamStatusTone.neutral;
           icon = Icons.sync_outlined;
-          label = "Clock sync: calibrating…";
+          label = compact ? "Clock: syncing" : "Clock sync: calibrating…";
         } else {
-          tone = switch (result.confidence) {
+          final now = (widget.syncStatusNow ?? DateTime.now)().toUtc();
+          final confidence = result.confidenceAt(now);
+          final ageSeconds = result.ageAt(now).inSeconds;
+          tone = switch (confidence) {
             TimeSyncConfidence.green => HydraCamStatusTone.active,
             TimeSyncConfidence.yellow => HydraCamStatusTone.warning,
             TimeSyncConfidence.red => HydraCamStatusTone.danger,
           };
-          icon = switch (result.confidence) {
+          icon = switch (confidence) {
             TimeSyncConfidence.green => Icons.sync_outlined,
             TimeSyncConfidence.yellow => Icons.sync_problem_outlined,
             TimeSyncConfidence.red => Icons.sync_disabled_outlined,
           };
-          label = "Clock sync: ±${result.uncertainty.inMilliseconds} ms · "
-              "RTT ${result.minRoundTrip.inMilliseconds} ms · "
-              "${result.sampleCount} samples";
+          label = compact
+              ? "Clock: ±${result.uncertainty.inMilliseconds} ms · "
+                  "${ageSeconds}s"
+              : "Clock sync: ±${result.uncertainty.inMilliseconds} ms · "
+                  "RTT ${result.minRoundTrip.inMilliseconds} ms · "
+                  "${result.sampleCount} samples · age ${ageSeconds}s";
         }
         return HydraCamStatusChip(
           status: tone,
@@ -815,6 +834,20 @@ class SlaveScreenState extends State<SlaveScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isPortrait = mediaQuery.orientation == Orientation.portrait;
+    final shortestSide = mediaQuery.size.shortestSide;
+    final longestSide = mediaQuery.size.longestSide;
+    final isCompactLandscapePhone =
+        !isPortrait && shortestSide <= 620 && longestSide <= 900;
+    final statusPanelMargin = isCompactLandscapePhone
+        ? const EdgeInsets.fromLTRB(4, 4, 4, 6)
+        : const EdgeInsets.all(8);
+    final statusPanelPadding = isCompactLandscapePhone
+        ? const EdgeInsets.all(8)
+        : const EdgeInsets.all(12);
+    final previewGap = isCompactLandscapePhone ? 6.0 : 10.0;
+
     // Media list widget with placeholder enabled
     final Widget mediaList = MediaListWidget(
       photos: photos,
@@ -829,19 +862,21 @@ class SlaveScreenState extends State<SlaveScreen> {
       children: [
         HydraCamSurface(
           tone: HydraCamSurfaceTone.muted,
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(12),
+          margin: statusPanelMargin,
+          padding: statusPanelPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SessionInfoWidget(
                 sessionDisplay:
                     SessionManager.instance.sessionGuid ?? "No active session",
+                compact: isCompactLandscapePhone,
+                showDiagnostics: !isCompactLandscapePhone,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: isCompactLandscapePhone ? 6 : 8),
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: isCompactLandscapePhone ? 6 : 8,
+                runSpacing: isCompactLandscapePhone ? 6 : 8,
                 children: [
                   HydraCamStatusChip(
                     status: _isConnected
@@ -852,14 +887,16 @@ class SlaveScreenState extends State<SlaveScreen> {
                         : Icons.link_off_outlined,
                     label: _isConnected ? "Master connected" : "Searching",
                   ),
-                  _buildSyncStatusChip(),
+                  _buildSyncStatusChip(compact: isCompactLandscapePhone),
                 ],
               ),
             ],
           ),
         ),
-        AddGalleryMediaButton(enabled: !isRecording),
-        const SizedBox(height: 10),
+        if (!isCompactLandscapePhone) ...[
+          AddGalleryMediaButton(enabled: !isRecording),
+          SizedBox(height: previewGap),
+        ],
         Expanded(
           child: _buildCameraPreviewArea(),
         ),
@@ -867,7 +904,7 @@ class SlaveScreenState extends State<SlaveScreen> {
     );
 
     // Adjust layout based on orientation
-    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+    if (isPortrait) {
       // Vertical layout: controls and media list stacked
       return GestureDetector(
           onTap: () => unawaited(
@@ -947,17 +984,29 @@ class SlaveScreenState extends State<SlaveScreen> {
               body: Row(
                 children: [
                   Expanded(
-                    flex: 1,
+                    flex: isCompactLandscapePhone ? 3 : 1,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(
+                        isCompactLandscapePhone ? 4.0 : 8.0,
+                      ),
                       child: controlsAndPreview,
                     ),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: isCompactLandscapePhone ? 2 : 1,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: mediaList,
+                      padding: EdgeInsets.all(
+                        isCompactLandscapePhone ? 4.0 : 8.0,
+                      ),
+                      child: isCompactLandscapePhone
+                          ? Column(
+                              children: [
+                                AddGalleryMediaButton(enabled: !isRecording),
+                                SizedBox(height: previewGap),
+                                Expanded(child: mediaList),
+                              ],
+                            )
+                          : mediaList,
                     ),
                   ),
                 ],

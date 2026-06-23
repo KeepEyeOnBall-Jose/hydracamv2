@@ -49,9 +49,32 @@ void main() {
     expect(chipText, contains("±12 ms"));
     expect(chipText, contains("RTT 24 ms"));
     expect(chipText, contains("8 samples"));
+    expect(chipText, contains("age"));
 
     final chip = tester.widget<Chip>(find.byType(Chip));
     expect(chip.backgroundColor, AppTheme.accent);
+  });
+
+  testWidgets("shows stale calibrations as danger", (tester) async {
+    TimeSyncService.instance.reset();
+
+    await tester.pumpWidget(const _SyncChipHarness());
+
+    TimeSyncService.instance.record(TimeSyncResult(
+      offset: const Duration(milliseconds: 4),
+      uncertainty: const Duration(milliseconds: 12),
+      minRoundTrip: const Duration(milliseconds: 24),
+      sampleCount: 8,
+      confidence: TimeSyncConfidence.green,
+      calibratedAt: DateTime.now().toUtc().subtract(
+            const Duration(seconds: 121),
+          ),
+    ));
+    await tester.pump();
+
+    final chip = tester.widget<Chip>(find.byType(Chip));
+    expect(chip.backgroundColor, AppTheme.dangerSurface);
+    expect(find.byIcon(Icons.sync_disabled_outlined), findsOneWidget);
   });
 }
 
@@ -74,19 +97,22 @@ class _SyncChipHarness extends StatelessWidget {
               icon = Icons.sync_outlined;
               label = "Clock sync: calibrating…";
             } else {
-              tone = switch (result.confidence) {
+              final now = DateTime.now().toUtc();
+              final confidence = result.confidenceAt(now);
+              final ageSeconds = result.ageAt(now).inSeconds;
+              tone = switch (confidence) {
                 TimeSyncConfidence.green => HydraCamStatusTone.active,
                 TimeSyncConfidence.yellow => HydraCamStatusTone.warning,
                 TimeSyncConfidence.red => HydraCamStatusTone.danger,
               };
-              icon = switch (result.confidence) {
+              icon = switch (confidence) {
                 TimeSyncConfidence.green => Icons.sync_outlined,
                 TimeSyncConfidence.yellow => Icons.sync_problem_outlined,
                 TimeSyncConfidence.red => Icons.sync_disabled_outlined,
               };
               label = "Clock sync: ±${result.uncertainty.inMilliseconds} ms · "
                   "RTT ${result.minRoundTrip.inMilliseconds} ms · "
-                  "${result.sampleCount} samples";
+                  "${result.sampleCount} samples · age ${ageSeconds}s";
             }
             return HydraCamStatusChip(
               status: tone,

@@ -86,6 +86,41 @@ void main() {
     expect(find.text("Hardware: Hardware unavailable"), findsOneWidget);
   });
 
+  testWidgets("compact mode can hide diagnostics for tight panes",
+      (WidgetTester tester) async {
+    var loadCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SessionInfoWidget(
+            sessionDisplay: "No active session",
+            compact: true,
+            showDiagnostics: false,
+            networkInfoLoader: () async {
+              loadCount += 1;
+              return {
+                "networkType": "Wi-Fi",
+                "ip": "192.168.178.20",
+                "deviceId": "abcdef12-3456-7890",
+                "appVersion": "1.2.3+45",
+                "hardware": "Samsung Galaxy S10e",
+              };
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.text("Session: No active session"), findsOneWidget);
+    expect(find.textContaining("Network:"), findsNothing);
+    expect(find.textContaining("Device:"), findsNothing);
+    expect(find.textContaining("Hardware:"), findsNothing);
+    expect(loadCount, 0);
+  });
+
   testWidgets("long session and network labels fit narrow desktop panes",
       (WidgetTester tester) async {
     addTearDown(() async {

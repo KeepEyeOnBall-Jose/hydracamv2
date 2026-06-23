@@ -1,0 +1,125 @@
+{
+  "acceptanceChecks": [
+    "Main/master screen uses consistent compact action sizing without overflow on common phone layouts",
+    "Court selection supports a clearer center-first and court-first flow with search that preserves selection",
+    "Slave screen fits a Samsung S10e-sized landscape viewport without Flutter overflow",
+    "Slave clock sync refreshes often enough to avoid stale/desynced status between master time-sync messages"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:55:36.598217+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:55:48.327667+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:55:48.429557+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/court_selection_widget_test.dart",
+        "test/master/master_screen_test.dart",
+        "test/slave/slave_screen_fast_connect_test.dart",
+        "test/services/time_sync_service_test.dart",
+        "test/slave/slave_client_time_sync_test.dart",
+        "test/slave/slave_screen_sync_chip_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:12:10.442115+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:12:25.428617+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:12:32.110581+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:12:41.199581+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:13:28.134157+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "emulator-5554",
+      "kind": "Android emulator",
+      "name": "Android emulator sdk_gphone64_arm64",
+      "notes": [
+        "S10e hardware not visible through adb at baseline; emulator plus widget landscape tests used for this turn."
+      ],
+      "os": "Android 14 API 34",
+      "role": "UI validation target"
+    },
+    {
+      "identifier": "6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3",
+      "kind": "iOS simulator",
+      "name": "iPhone 16 Pro simulator",
+      "notes": [],
+      "os": "iOS 18.4 simulator",
+      "role": "UI validation target"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "ui-flow-layout-sync-drift",
+    "source": "docs/control/status-and-roadmap.md#default-priority-queue",
+    "title": "Tighten existing UI flow and layout drift"
+  },
+  "notes": [
+    "Focused Flutter tests, analyzer, and diff check passed; physical S10e and final ADB artifact capture were unavailable because no Android target was visible at final inventory."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

@@ -1,0 +1,452 @@
+# HydraCam evidence run command log
+
+$ flutter devices --device-timeout 10
+Found 4 connected devices:
+  sdk gphone64 arm64 (mobile) • emulator-5554                        • android-arm64  • Android 14 (API 34) (emulator)
+  iPhone 16 Pro (mobile)      • 6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3 • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)             • macos                                • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                • chrome                               • web-javascript • Google Chrome 149.0.7827.115
+
+Error: Browsing on the local area network for iPad (5). Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+ M .vscode/tasks.json
+ M DISTRIBUTION_RUNBOOK.md
+ M android/app/build.gradle
+ M android/app/src/main/AndroidManifest.xml
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M android/fastlane/README.md
+ M android/settings.gradle
+ M docs/control/README.md
+ M docs/control/local-ide-emulator-deploy-playbook.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/Runner/AppDelegate.swift
+ M ios/Runner/Info.plist
+ M lib/master/master_screen.dart
+ M lib/widgets/session_info_widget.dart
+ M pubspec.lock
+ M pubspec.yaml
+ M scripts/check_store_readiness.sh
+ M scripts/google_play_internal_release.sh
+ M scripts/ios_icon_launch_dev.sh
+ M scripts/test_store_readiness_mode_scope.py
+ M test/master/master_screen_test.dart
+ M test/services/user_service_test.dart
+?? android/wearable/
+?? docs/control/wearable-replay-integration-plan.md
+?? integration_test/wearable_replay_channel_test.dart
+?? lib/models/wearable_replay.dart
+?? lib/services/wearable_replay_bridge_service.dart
+?? lib/services/wearable_replay_service.dart
+?? lib/services/wearable_replay_simulation_service.dart
+?? lib/services/wearable_replay_upload_service.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+?? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+?? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+?? logs/verification-runs/20260619-live-hls-idempotency-proof/
+?? logs/verification-runs/20260619-live-hls-playback-proof/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+?? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+?? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+?? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+?? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+?? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1843-mba13-rf8m21-and-ipad-continuation/
+?? logs/verification-runs/20260622-1851-auth-allowlist-dashboard-dev-login/
+?? logs/verification-runs/20260622-1855-ui-flow-layout-sync-drift/
+?? logs/verification-runs/browser-proof-smoke-2/
+?? logs/verification-runs/browser-proof-smoke/
+?? scripts/check_wearable_replay_readiness.py
+?? scripts/google_play_release.sh
+?? scripts/run_wearable_replay_non_hardware_proof.py
+?? scripts/test_wearable_replay_non_hardware_proof.py
+?? scripts/test_wearable_replay_readiness.py
+?? test/models/wearable_replay_test.dart
+?? test/services/wearable_replay_bridge_service_test.dart
+?? test/services/wearable_replay_live_upload_test.dart
+?? test/services/wearable_replay_service_test.dart
+?? test/services/wearable_replay_simulation_service_test.dart
+?? test/services/wearable_replay_upload_service_test.dart
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:2
+
+[exit-code] 0
+
+$ flutter test --no-pub test/widgets/court_selection_widget_test.dart test/master/master_screen_test.dart test/slave/slave_screen_fast_connect_test.dart test/services/time_sync_service_test.dart test/slave/slave_client_time_sync_test.dart test/slave/slave_screen_sync_chip_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart
+00:00 +0: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +0: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: (setUpAll)
+Log registered: {message: StorageService monitoring disabled - timer not started., timestamp: 2026-06-22 19:12:13.000469, function: null, file: null}
+00:00 +0: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +1: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +2: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +3: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +4: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +5: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +6: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +7: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +8: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +9: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +10: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +11: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +12: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +13: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +14: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +15: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +16: /Users/jose/src/work/hydracamv2/test/widgets/court_selection_widget_test.dart: uses a visible center-first court selection flow
+00:00 +17: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start area uses service-session language
+00:00 +17: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: slave calibrates its clock from the master's timeSyncResponse replies
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-22 19:12:13.290838, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:54100/ws with Device ID: test-device, timestamp: 2026-06-22 19:12:13.293477, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-22 19:12:13.309902, function: null, file: null}
+Trace file unavailable: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-22 19:12:13.311599, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:54100/ws, timestamp: 2026-06-22 19:12:13.313681, function: null, file: null}
+Log registered: {message: Clock synced to master: offset 0 ms, uncertainty 3 ms, RTT 6 ms, 8 samples, green., timestamp: 2026-06-22 19:12:13.323998, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-22 19:12:13.327115, function: null, file: null}
+00:00 +18: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start area uses service-session language
+00:00 +18: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+Log registered: {message: Retrieved existing Device ID: test-device, timestamp: 2026-06-22 19:12:13.335398, function: null, file: null}
+Log registered: {message: Attempting to connect to master WebSocket at ws://127.0.0.1:54102/ws with Device ID: test-device, timestamp: 2026-06-22 19:12:13.335574, function: null, file: null}
+Log registered: {message: Could not read slave app version diagnostics: MissingPluginException(No implementation found for method getAll on channel dev.fluttercommunity.plus/package_info), timestamp: 2026-06-22 19:12:13.337374, function: null, file: null}
+Log registered: {message: Could not read slave hardware diagnostics: MissingPluginException(No implementation found for method getDeviceInfo on channel dev.fluttercommunity.plus/device_info), timestamp: 2026-06-22 19:12:13.339479, function: null, file: null}
+Log registered: {message: Connected to WebSocket at ws://127.0.0.1:54102/ws, timestamp: 2026-06-22 19:12:13.340264, function: null, file: null}
+00:00 +18: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:13.357186, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:13.359326, function: null, file: null}
+00:00 +19: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start area uses service-session language
+00:01 +20: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start area uses service-session language
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-22 19:12:13.562560, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-22 19:12:13.562957, function: null, file: null}
+00:01 +21: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:01 +22: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:01 +23: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:01 +24: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: forced preferred master connects without network readiness probe
+00:01 +25: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +26: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +26: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: slave app bar opens uploader info directly
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:13.744037, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:13.744269, function: null, file: null}
+00:01 +27: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +28: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +28: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: connectivity stream errors are logged without uncaught exception
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:13.919356, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:13.919605, function: null, file: null}
+Log registered: {message: Connectivity change listener failed: SocketException: dbus unavailable
+#0      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:268:18)
+<asynchronous suspension>
+#1      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#2      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#3      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-22 19:12:13.940532, function: null, file: null}
+00:01 +29: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +29: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start session button creates backend session
+Log registered: {message: Get token, timestamp: 2026-06-22 19:12:13.972141, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: master-screen-guid, sessionId: master-session-id, numericId: null), timestamp: 2026-06-22 19:12:13.980517, function: null, file: null}
+Log registered: {message: Response to create session: HydraCamBackendSession(guid: master-screen-guid, sessionId: master-session-id, numericId: null), timestamp: 2026-06-22 19:12:13.980743, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:13.981296, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:13.981548, function: null, file: null}
+Log registered: {message: Session started with GUID: master-screen-guid on device type: Master, timestamp: 2026-06-22 19:12:13.981746, function: null, file: null}
+Log registered: {message: Session already active with GUID: master-screen-guid. Preserving existing media on rejoin as Master., timestamp: 2026-06-22 19:12:13.983235, function: null, file: null}
+Log registered: {message: New capture session started with GUID: master-screen-guid, timestamp: 2026-06-22 19:12:13.983368, function: null, file: null}
+Log registered: {message: Lifecycle command 'sessionStarted' sent to 0 network-eligible connected slave(s)., timestamp: 2026-06-22 19:12:13.983539, function: null, file: null}
+Log registered: {message: Session created with GUID: master-screen-guid, timestamp: 2026-06-22 19:12:13.983635, function: null, file: null}
+00:01 +29: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: linux skips default connectivity stream subscription
+Log registered: {message: Skipping connectivity change listener on linux; network readiness will be checked on demand., timestamp: 2026-06-22 19:12:13.983628, function: null, file: null}
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:13.983843, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:13.983941, function: null, file: null}
+00:01 +29: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start session button creates backend session
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-22 19:12:14.044983, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-22 19:12:14.045191, function: null, file: null}
+00:01 +30: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +30: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: recording slave surface exposes safe stop control
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:14.053607, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.053796, function: null, file: null}
+00:01 +30: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start session button creates backend session
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/master_screen_docsqsql4d/session_master-screen-guid/metadata.json, timestamp: 2026-06-22 19:12:14.054966, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.055408, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.055524, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.055587, function: null, file: null}
+00:01 +31: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +31: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: starting without a court requires explicit confirmation
+Log registered: {message: Get token, timestamp: 2026-06-22 19:12:14.133379, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: no-court-guid, sessionId: no-court-id, numericId: null), timestamp: 2026-06-22 19:12:14.134305, function: null, file: null}
+Log registered: {message: Response to create session: HydraCamBackendSession(guid: no-court-guid, sessionId: no-court-id, numericId: null), timestamp: 2026-06-22 19:12:14.134473, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.134594, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.134701, function: null, file: null}
+Log registered: {message: Session started with GUID: no-court-guid on device type: Master, timestamp: 2026-06-22 19:12:14.134761, function: null, file: null}
+Log registered: {message: Session already active with GUID: no-court-guid. Preserving existing media on rejoin as Master., timestamp: 2026-06-22 19:12:14.134913, function: null, file: null}
+Log registered: {message: New capture session started with GUID: no-court-guid, timestamp: 2026-06-22 19:12:14.135009, function: null, file: null}
+Log registered: {message: Lifecycle command 'sessionStarted' sent to 0 network-eligible connected slave(s)., timestamp: 2026-06-22 19:12:14.135096, function: null, file: null}
+Log registered: {message: Session created with GUID: no-court-guid, timestamp: 2026-06-22 19:12:14.135143, function: null, file: null}
+00:01 +32: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +32: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: S10e landscape slave layout keeps core controls visible
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:14.150466, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.150640, function: null, file: null}
+00:01 +32: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: starting without a court requires explicit confirmation
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-22 19:12:14.173475, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-22 19:12:14.173734, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/master_screen_docslWc7ur/session_no-court-guid/metadata.json, timestamp: 2026-06-22 19:12:14.179897, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.180148, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.180224, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.180277, function: null, file: null}
+00:01 +33: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +34: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +34: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: S10e landscape recording controls do not overflow
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:14.218722, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.219205, function: null, file: null}
+00:01 +34: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: disposing master screen does not end active session
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.232610, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.232805, function: null, file: null}
+Log registered: {message: Session started with GUID: dispose-contract-guid on device type: Master, timestamp: 2026-06-22 19:12:14.232871, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/master_screen_docs2Xi3bo/session_dispose-contract-guid/metadata.json, timestamp: 2026-06-22 19:12:14.241269, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.241479, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.241545, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.241591, function: null, file: null}
+Log registered: {message: Error checking connectivity: MissingPluginException(No implementation found for method check on channel dev.fluttercommunity.plus/connectivity), timestamp: 2026-06-22 19:12:14.243783, function: null, file: null}
+00:01 +35: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +36: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +36: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: S10e landscape uses compact long clock-sync label
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:14.287366, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.287550, function: null, file: null}
+00:01 +37: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +38: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +38: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start uploads control tells slaves to upload queued media
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.335210, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.335352, function: null, file: null}
+Log registered: {message: Session started with GUID: master-upload-control-guid on device type: Master, timestamp: 2026-06-22 19:12:14.335507, function: null, file: null}
+00:01 +38: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: recording slave screen auto-off dims and tap wakes
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:14.335781, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.336006, function: null, file: null}
+00:01 +38: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: start uploads control tells slaves to upload queued media
+Log registered: {message: No items in queue to upload., timestamp: 2026-06-22 19:12:14.371712, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/master_screen_docsbanqGf/session_master-upload-control-guid/metadata.json, timestamp: 2026-06-22 19:12:14.380450, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.380823, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.380907, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.380963, function: null, file: null}
+00:01 +39: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +39: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: active session command panel fits compact orientations
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.386053, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.386218, function: null, file: null}
+Log registered: {message: Session started with GUID: compact-layout-session-guid on device type: Master, timestamp: 2026-06-22 19:12:14.386296, function: null, file: null}
+00:01 +40: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:01 +40: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: identify command acknowledgement shows visible slave frame
+Log registered: {message: Skipping slave network readiness for forced preferred master 192.168.178.153., timestamp: 2026-06-22 19:12:14.424646, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.424814, function: null, file: null}
+00:01 +40: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: active session command panel fits compact orientations
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/master_screen_docsGRqy0r/session_compact-layout-session-guid/metadata.json, timestamp: 2026-06-22 19:12:14.452525, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.452721, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.452785, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.452832, function: null, file: null}
+00:01 +41: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:02 +42: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:02 +42: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: duplicate discovery callbacks create one slave client
+Log registered: {message: Ignoring duplicate connection attempt to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.518404, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.518711, function: null, file: null}
+00:02 +42: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: recording start path opens master video preview
+Log registered: {message: Get token, timestamp: 2026-06-22 19:12:14.520911, function: null, file: null}
+Log registered: {message: Session created successfully: HydraCamBackendSession(guid: recording-preview-guid, sessionId: recording-preview-id, numericId: null), timestamp: 2026-06-22 19:12:14.521497, function: null, file: null}
+Log registered: {message: Response to create session: HydraCamBackendSession(guid: recording-preview-guid, sessionId: recording-preview-id, numericId: null), timestamp: 2026-06-22 19:12:14.521561, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.521608, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.521657, function: null, file: null}
+Log registered: {message: Session started with GUID: recording-preview-guid on device type: Master, timestamp: 2026-06-22 19:12:14.521697, function: null, file: null}
+Log registered: {message: Session already active with GUID: recording-preview-guid. Preserving existing media on rejoin as Master., timestamp: 2026-06-22 19:12:14.521819, function: null, file: null}
+Log registered: {message: New capture session started with GUID: recording-preview-guid, timestamp: 2026-06-22 19:12:14.521861, function: null, file: null}
+Log registered: {message: Lifecycle command 'sessionStarted' sent to 0 network-eligible connected slave(s)., timestamp: 2026-06-22 19:12:14.521902, function: null, file: null}
+Log registered: {message: Session created with GUID: recording-preview-guid, timestamp: 2026-06-22 19:12:14.521934, function: null, file: null}
+00:02 +43: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:02 +43: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: discovery retries after transient readiness failure
+Log registered: {message: Connection to master at IP 192.168.178.153 failed during network readiness: SocketException: transient route lookup failure
+#0      main.<anonymous closure>.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:676:15)
+#1      SlaveScreenState._loadNetworkReadiness (package:hydracam/slave/slave_screen.dart:249:20)
+#2      SlaveScreenState._connectToMaster (package:hydracam/slave/slave_screen.dart:331:27)
+#3      SlaveScreenState.initState.<anonymous closure> (package:hydracam/slave/slave_screen.dart:123:31)
+#4      FakeMasterDiscovery.discover (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:97:19)
+#5      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart:707:15)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+#8      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+, timestamp: 2026-06-22 19:12:14.558636, function: null, file: null}
+Log registered: {message: Connecting to master at IP: 192.168.178.153, timestamp: 2026-06-22 19:12:14.559320, function: null, file: null}
+00:02 +43: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: recording start path opens master video preview
+Log registered: {message: PRESSED TOGGLE RECORDING. IS RECORDING = false, timestamp: 2026-06-22 19:12:14.565197, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-22 19:12:14.566223, function: null, file: null}
+00:02 +44: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:02 +44: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: auto-mode slave with active session does not promote on discovery timeout
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.583084, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.583376, function: null, file: null}
+Log registered: {message: Session started with GUID: active-slave-session on device type: Slave, timestamp: 2026-06-22 19:12:14.583647, function: null, file: null}
+Log registered: {message: Auto-promotion blocked while slave session active-slave-session is active., timestamp: 2026-06-22 19:12:14.604894, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/slave_screen_docsIMfF35/session_active-slave-session/metadata.json, timestamp: 2026-06-22 19:12:14.622148, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.622443, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.622536, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.622593, function: null, file: null}
+Log registered: {message: Error checking connectivity: MissingPluginException(No implementation found for method check on channel dev.fluttercommunity.plus/connectivity), timestamp: 2026-06-22 19:12:14.623007, function: null, file: null}
+00:02 +45: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:02 +45: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: recording start path opens master video preview
+Log registered: {message: Scheduling command 'startRecordingVideo' for 2026-06-22T19:12:14.634, timestamp: 2026-06-22 19:12:14.634705, function: null, file: null}
+Log registered: {message: No slave devices connected. Scheduled command 'startRecordingVideo' not sent., timestamp: 2026-06-22 19:12:14.634890, function: null, file: null}
+Log registered: {message: Will record from master and show preview, timestamp: 2026-06-22 19:12:14.635428, function: null, file: null}
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-22 19:12:14.635674, function: null, file: null}
+Log registered: {message: Generated new Device ID: 522741b2-c64c-491c-9889-45d3f5bf2f4b, timestamp: 2026-06-22 19:12:14.637230, function: null, file: null}
+Log registered: {message: Mock video recording started for native controller mode., timestamp: 2026-06-22 19:12:14.637704, function: null, file: null}
+Log registered: {message: Command 'startRecordingVideo' finished executing by master at 2026-06-22 19:12:14.638152, timestamp: 2026-06-22 19:12:14.638159, function: null, file: null}
+00:02 +45: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: auto-mode slave without active session still promotes
+Log registered: {message: No master found, switching to Master mode., timestamp: 2026-06-22 19:12:14.654137, function: null, file: null}
+Log registered: {message: Cleaned up Slave mode., timestamp: 2026-06-22 19:12:14.654565, function: null, file: null}
+00:02 +45: /Users/jose/src/work/hydracamv2/test/master/master_screen_test.dart: recording start path opens master video preview
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-22 19:12:14.676065, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-22 19:12:14.676298, function: null, file: null}
+Log registered: {message: Session metadata saved to /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/master_screen_docsebEMU6/session_recording-preview-guid/metadata.json, timestamp: 2026-06-22 19:12:14.682206, function: null, file: null}
+Log registered: {message: UploaderService: Resetting upload queue and state., timestamp: 2026-06-22 19:12:14.682340, function: null, file: null}
+Log registered: {message: UploaderService: Reset completed., timestamp: 2026-06-22 19:12:14.682395, function: null, file: null}
+Log registered: {message: Session ended and uploader reset., timestamp: 2026-06-22 19:12:14.682445, function: null, file: null}
+00:02 +46: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+00:02 +46: /Users/jose/src/work/hydracamv2/test/slave/slave_screen_fast_connect_test.dart: auto-mode slave without active session still promotes
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-22 19:12:14.696292, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-22 19:12:14.696693, function: null, file: null}
+00:02 +47: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: malformed timeSyncResponse does not consume a pending sample
+Log registered: {message: Clock synced to master: offset 11 ms, uncertainty 12 ms, RTT 24 ms, 1 samples, green., timestamp: 2026-06-22 19:12:16.343549, function: null, file: null}
+Log registered: {message: Connection closed, timestamp: 2026-06-22 19:12:16.344019, function: null, file: null}
+00:03 +48: /Users/jose/src/work/hydracamv2/test/slave/slave_client_time_sync_test.dart: disconnect clears calibration and scheduled clock offset
+00:03 +49: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...                                         
+No issues found! (ran in 5.7s)
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+ M docs/control/status-and-roadmap.md
+ M lib/constants.dart
+ M lib/master/master_screen.dart
+ M lib/services/time_sync_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/court_selection_widget.dart
+ M test/master/master_screen_test.dart
+ M test/services/time_sync_service_test.dart
+ M test/services/user_service_test.dart
+ M test/slave/slave_client_time_sync_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/slave/slave_screen_sync_chip_test.dart
+ M test/widgets/court_selection_widget_test.dart
+?? docs/superpowers/plans/2026-06-22-hydracam-ui-flow-layout-sync.md
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+?? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+?? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+?? logs/verification-runs/20260619-live-hls-idempotency-proof/
+?? logs/verification-runs/20260619-live-hls-playback-proof/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+?? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+?? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+?? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+?? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+?? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1843-mba13-rf8m21-and-ipad-continuation/
+?? logs/verification-runs/20260622-1851-auth-allowlist-dashboard-dev-login/
+?? logs/verification-runs/20260622-1855-ui-flow-layout-sync-drift/
+?? logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy/
+?? logs/verification-runs/browser-proof-smoke-2/
+?? logs/verification-runs/browser-proof-smoke/
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+
+[exit-code] 0

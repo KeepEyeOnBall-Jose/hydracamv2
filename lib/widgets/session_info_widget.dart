@@ -11,12 +11,14 @@ class SessionInfoWidget extends StatefulWidget {
   final String sessionDisplay;
   final NetworkInfoLoader? networkInfoLoader;
   final bool compact;
+  final bool showDiagnostics;
 
   const SessionInfoWidget({
     super.key,
     required this.sessionDisplay,
     this.networkInfoLoader,
     this.compact = false,
+    this.showDiagnostics = true,
   });
 
   @override
@@ -29,14 +31,17 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
   @override
   void initState() {
     super.initState();
-    _networkInfoFuture = _loadNetworkInfo();
+    _networkInfoFuture =
+        widget.showDiagnostics ? _loadNetworkInfo() : Future.value(const {});
   }
 
   @override
   void didUpdateWidget(SessionInfoWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.networkInfoLoader != oldWidget.networkInfoLoader) {
-      _networkInfoFuture = _loadNetworkInfo();
+    if (widget.networkInfoLoader != oldWidget.networkInfoLoader ||
+        widget.showDiagnostics != oldWidget.showDiagnostics) {
+      _networkInfoFuture =
+          widget.showDiagnostics ? _loadNetworkInfo() : Future.value(const {});
     }
   }
 
@@ -167,39 +172,41 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
               color: AppTheme.textPrimary,
               fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 4),
-            FutureBuilder<Map<String, String?>>(
-              future: _networkInfoFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return compactLine("Loading network info...");
-                } else if (snapshot.hasError) {
-                  return compactLine(
-                    "Error fetching network info",
-                    color: AppTheme.danger,
+            if (widget.showDiagnostics) ...[
+              const SizedBox(height: 4),
+              FutureBuilder<Map<String, String?>>(
+                future: _networkInfoFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return compactLine("Loading network info...");
+                  } else if (snapshot.hasError) {
+                    return compactLine(
+                      "Error fetching network info",
+                      color: AppTheme.danger,
+                    );
+                  }
+
+                  final data = snapshot.data!;
+                  final networkType = data["networkType"] ?? "Unknown Network";
+                  final ip = data["ip"] ?? "Unknown IP";
+                  final shortDeviceId = _shortDeviceId(data["deviceId"]);
+                  final appVersion =
+                      data["appVersion"] ?? "App version unavailable";
+                  final hardware = data["hardware"] ?? "Hardware unavailable";
+
+                  return Wrap(
+                    spacing: 12,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      compactLine("Network: $networkType | IP: $ip"),
+                      compactLine("Device: $shortDeviceId | App: $appVersion"),
+                      compactLine("Hardware: $hardware"),
+                    ],
                   );
-                }
-
-                final data = snapshot.data!;
-                final networkType = data["networkType"] ?? "Unknown Network";
-                final ip = data["ip"] ?? "Unknown IP";
-                final shortDeviceId = _shortDeviceId(data["deviceId"]);
-                final appVersion =
-                    data["appVersion"] ?? "App version unavailable";
-                final hardware = data["hardware"] ?? "Hardware unavailable";
-
-                return Wrap(
-                  spacing: 12,
-                  runSpacing: 4,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    compactLine("Network: $networkType | IP: $ip"),
-                    compactLine("Device: $shortDeviceId | App: $appVersion"),
-                    compactLine("Hardware: $hardware"),
-                  ],
-                );
-              },
-            ),
+                },
+              ),
+            ],
           ],
         );
       },

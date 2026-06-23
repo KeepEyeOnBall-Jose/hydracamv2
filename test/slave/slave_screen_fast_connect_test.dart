@@ -6,11 +6,13 @@ import "package:connectivity_plus/connectivity_plus.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/models/sync_metadata.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
 import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/network_info_service.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/storage_service.dart";
+import "package:hydracam/services/time_sync_service.dart";
 import "package:hydracam/slave/master_discovery.dart";
 import "package:hydracam/slave/slave_client.dart";
 import "package:hydracam/slave/slave_screen.dart";
@@ -128,6 +130,7 @@ void main() {
 
   tearDown(() {
     debugDefaultTargetPlatformOverride = null;
+    TimeSyncService.instance.reset();
   });
 
   tearDownAll(() {
@@ -182,7 +185,7 @@ void main() {
     expect(find.textContaining("No active session"), findsOneWidget);
     expect(find.text("Master connected"), findsOneWidget);
     expect(find.byIcon(Icons.link_outlined), findsOneWidget);
-    expect(find.textContaining("Clock sync: calibrating"), findsOneWidget);
+    expect(find.textContaining("Clock"), findsOneWidget);
     expect(find.text("No media available"), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
@@ -360,6 +363,209 @@ void main() {
     for (final client in clients) {
       await client.dispose();
     }
+  });
+
+  testWidgets("S10e landscape slave layout keeps core controls visible",
+      (tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+    await tester.binding.setSurfaceSize(const Size(760, 360));
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text("Master connected"), findsOneWidget);
+    expect(find.textContaining("Clock:"), findsOneWidget);
+    expect(find.textContaining("Network:"), findsNothing);
+    expect(find.textContaining("Hardware:"), findsNothing);
+    expect(find.widgetWithText(ElevatedButton, "Add Media from Gallery"),
+        findsOneWidget);
+    expect(find.text("Prepare Camera"), findsOneWidget);
+    expect(find.text("No media available"), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("S10e landscape recording controls do not overflow",
+      (tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+    await tester.binding.setSurfaceSize(const Size(760, 360));
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(
+              serverAddress,
+              onRecordingStarted: onRecordingStarted,
+              onRecordingStopped: onRecordingStopped,
+            );
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    clients.single.emitRecordingStarted();
+    await tester.pump();
+
+    expect(find.text("Recording..."), findsOneWidget);
+    expect(find.byTooltip("Stop recording safely"), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+  });
+
+  testWidgets("S10e landscape uses compact long clock-sync label",
+      (tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+    await tester.binding.setSurfaceSize(const Size(760, 360));
+    TimeSyncService.instance.record(TimeSyncResult(
+      offset: const Duration(milliseconds: 42),
+      uncertainty: const Duration(milliseconds: 88),
+      minRoundTrip: const Duration(milliseconds: 176),
+      sampleCount: 8,
+      confidence: TimeSyncConfidence.yellow,
+      calibratedAt: DateTime.now().toUtc(),
+    ));
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.textContaining("Clock: ±88 ms"), findsOneWidget);
+    expect(find.textContaining("samples"), findsNothing);
+    expect(find.textContaining("Network:"), findsNothing);
+    expect(find.textContaining("Hardware:"), findsNothing);
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+    TimeSyncService.instance.reset();
+  });
+
+  testWidgets("real slave clock chip degrades after the refresh timer",
+      (tester) async {
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+    await tester.binding.setSurfaceSize(const Size(760, 360));
+    final calibratedAt = DateTime.utc(2026, 1, 1, 12, 0, 0);
+    var syncStatusNow = calibratedAt;
+    TimeSyncService.instance.record(TimeSyncResult(
+      offset: const Duration(milliseconds: 42),
+      uncertainty: const Duration(milliseconds: 20),
+      minRoundTrip: const Duration(milliseconds: 40),
+      sampleCount: 8,
+      confidence: TimeSyncConfidence.green,
+      calibratedAt: calibratedAt,
+    ));
+    final clients = <FakeSlaveConnectionClient>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SlaveScreen(
+          isAutoMode: false,
+          preferredMasterIp: "192.168.178.153",
+          forceSlaveMode: true,
+          syncStatusNow: () => syncStatusNow,
+          slaveClientFactory: (
+            serverAddress, {
+            onScheduledCommand,
+            onPhotoTaken,
+            onRecordingStarted,
+            onRecordingStopped,
+          }) {
+            final client = FakeSlaveConnectionClient(serverAddress);
+            clients.add(client);
+            return client;
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.textContaining("Clock: ±20 ms"), findsOneWidget);
+    expect(find.byIcon(Icons.sync_disabled_outlined), findsNothing);
+
+    syncStatusNow = calibratedAt.add(const Duration(seconds: 121));
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pump();
+
+    expect(find.textContaining("Clock: ±20 ms"), findsOneWidget);
+    expect(find.byIcon(Icons.sync_disabled_outlined), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    for (final client in clients) {
+      await client.dispose();
+    }
+    TimeSyncService.instance.reset();
   });
 
   testWidgets("recording slave screen auto-off dims and tap wakes",

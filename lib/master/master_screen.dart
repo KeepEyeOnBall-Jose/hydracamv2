@@ -164,7 +164,12 @@ class MasterScreenState extends State<MasterScreen> {
     if (sessionActive) {
       await _endCurrentSession();
     } else {
-      await _createSession();
+      final shouldStart =
+          selectedCourtGuid != null || await _confirmStartWithoutCourt();
+      if (!shouldStart) {
+        return;
+      }
+      await _createSession(skipCourtSelectionWarning: true);
     }
   }
 
@@ -977,6 +982,8 @@ class MasterScreenState extends State<MasterScreen> {
     return 168;
   }
 
+  static const double _masterActionButtonHeight = 48;
+
   Widget _actionButton({
     required double width,
     required Widget icon,
@@ -986,6 +993,7 @@ class MasterScreenState extends State<MasterScreen> {
   }) {
     return SizedBox(
       width: width,
+      height: _masterActionButtonHeight,
       child: ElevatedButton.icon(
         icon: icon,
         label: Text(
@@ -999,6 +1007,30 @@ class MasterScreenState extends State<MasterScreen> {
     );
   }
 
+  Future<bool> _confirmStartWithoutCourt() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Start without court?"),
+        content: const Text(
+          "This session will not be attached to a court. Choose a court first "
+          "unless this is a quick test.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("Choose Court"),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text("Start Without Court"),
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   // Build the initial UI when no session is active
   Widget _buildInitialUI() {
     // Order courts and centers for widget
@@ -1006,7 +1038,7 @@ class MasterScreenState extends State<MasterScreen> {
       for (var entry in (constants.groupedCourts.entries.toList()
             ..sort((a, b) => a.key.compareTo(b.key))) // Order centers
           )
-        entry.key: entry.value
+        entry.key: [...entry.value]
           ..sort((a, b) => a["name"]!.compareTo(b["name"]!)) // Order courts
     };
 
@@ -1055,10 +1087,10 @@ class MasterScreenState extends State<MasterScreen> {
                         const Divider(height: 20),
                         CourtSelectionWidget(
                           groupedCourts: sortedGroupedCourts,
-                          onCourtSelected: (selectedName, selectedGuid) {
+                          onCourtSelected: (selection) {
                             setState(() {
-                              selectedCourtName = selectedName;
-                              selectedCourtGuid = selectedGuid;
+                              selectedCourtName = selection?.courtName;
+                              selectedCourtGuid = selection?.courtGuid;
                             });
                           },
                         ),
@@ -1090,7 +1122,7 @@ class MasterScreenState extends State<MasterScreen> {
                             _actionButton(
                               width: buttonWidth,
                               icon: const Icon(Icons.folder_open_outlined),
-                              label: "Join Existing Session",
+                              label: "Load Existing Session",
                               onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -1239,6 +1271,7 @@ class MasterScreenState extends State<MasterScreen> {
                   ),
                   SizedBox(
                     width: buttonWidth,
+                    height: _masterActionButtonHeight,
                     child: AddGalleryMediaButton(enabled: !_recordingActive),
                   ),
                 ],

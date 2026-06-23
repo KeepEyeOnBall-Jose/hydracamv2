@@ -101,6 +101,14 @@ void main() {
       );
     });
 
+    test("a too-stale calibration degrades to red", () {
+      expect(
+        TimeSyncService.confidenceFor(
+            const Duration(milliseconds: 20), const Duration(seconds: 121)),
+        TimeSyncConfidence.red,
+      );
+    });
+
     test("moderate uncertainty is yellow", () {
       expect(
         TimeSyncService.confidenceFor(
@@ -152,6 +160,39 @@ void main() {
       expect(meta.minRoundTripMs, 30);
       expect(meta.uncertaintyMs, 20);
       expect(meta.sampleCount, 4);
+    });
+
+    test("reports age-aware freshness and usability", () {
+      final calibratedAt = DateTime.utc(2026, 1, 1, 12, 0, 0);
+      final result = TimeSyncResult(
+        offset: const Duration(milliseconds: 12),
+        uncertainty: const Duration(milliseconds: 20),
+        minRoundTrip: const Duration(milliseconds: 30),
+        sampleCount: 4,
+        confidence: TimeSyncConfidence.green,
+        calibratedAt: calibratedAt,
+      );
+
+      expect(result.isFreshAt(calibratedAt.add(const Duration(seconds: 10))),
+          isTrue);
+      expect(result.isStaleAt(calibratedAt.add(const Duration(seconds: 10))),
+          isFalse);
+      expect(
+        result.confidenceAt(calibratedAt.add(const Duration(seconds: 90))),
+        TimeSyncConfidence.yellow,
+      );
+      expect(result.isUsableAt(calibratedAt.add(const Duration(seconds: 90))),
+          isTrue);
+      expect(result.isStaleAt(calibratedAt.add(const Duration(seconds: 90))),
+          isFalse);
+      expect(
+        result.confidenceAt(calibratedAt.add(const Duration(seconds: 121))),
+        TimeSyncConfidence.red,
+      );
+      expect(result.isStaleAt(calibratedAt.add(const Duration(seconds: 121))),
+          isTrue);
+      expect(result.isUsableAt(calibratedAt.add(const Duration(seconds: 121))),
+          isFalse);
     });
   });
 

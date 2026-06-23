@@ -64,6 +64,22 @@ class TimeSyncResult {
     );
   }
 
+  TimeSyncConfidence confidenceAt(DateTime now) {
+    return TimeSyncService.confidenceFor(uncertainty, ageAt(now));
+  }
+
+  bool isFreshAt(DateTime now) {
+    return confidenceAt(now) == TimeSyncConfidence.green;
+  }
+
+  bool isStaleAt(DateTime now) {
+    return ageAt(now).inSeconds > timeSyncStaleSeconds;
+  }
+
+  bool isUsableAt(DateTime now) {
+    return confidenceAt(now) != TimeSyncConfidence.red;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "offsetMs": offset.inMilliseconds,
@@ -183,6 +199,9 @@ class TimeSyncService {
   /// and [age].
   static TimeSyncConfidence confidenceFor(Duration uncertainty, Duration age) {
     final uncertaintyMs = uncertainty.inMilliseconds;
+    if (age.inSeconds > timeSyncStaleSeconds) {
+      return TimeSyncConfidence.red;
+    }
     if (uncertaintyMs <= timeSyncGreenUncertaintyMs &&
         age.inSeconds <= timeSyncFreshSeconds) {
       return TimeSyncConfidence.green;
