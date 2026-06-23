@@ -83,4 +83,8 @@
 - [x] Code and focused tests cover the master screen, court selection, S10e-class widget layout, and clock-sync fallback/refresh behavior.
 - [x] Android emulator proof captured the actual slave screen in landscape at `866 x 388` with no Flutter overflow markers:
   `logs/verification-runs/20260622-1934-ui-flow-layout-sync-emulator-slave-screen-landscape-after-trim/`.
-- [ ] Physical S10e proof remains outstanding because no ADB-visible S10e was connected during the continuation audit.
+- [x] Physical S10e proof passed on `RF8M21J8XRT` at `674 x 360` in
+  `logs/verification-runs/20260623-0333-s10e-physical-slave-landscape/`; the
+  companion S10e `RF8M90QE7LX` remained blocked by automation screenshot
+  timeouts recorded in
+  `logs/verification-runs/20260623-0330-s10e-physical-standby-proof/`.

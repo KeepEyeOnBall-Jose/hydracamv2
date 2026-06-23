@@ -1,0 +1,220 @@
+{
+  "acceptanceChecks": [
+    "Ray-Ban Meta pairing/DAT stream; Galaxy Watch4 ADB or Bluetooth visibility with BODY_SENSORS/Health Services stream; physical clap/flash calibration; media-timeline replay proof"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:35:43.761745+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:35:49.923087+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:36:06.757776+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "mdns",
+        "services"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:36:12.449535+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:36:16.635382+00:00"
+    },
+    {
+      "command": [
+        "system_profiler",
+        "SPBluetoothDataType"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:36:21.165993+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_wearable_replay_readiness.py",
+        "mock"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:36:26.977869+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_wearable_replay_readiness.py",
+        "dat"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:37:04.903654+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "GH_TOKEN=\"$(gh auth token)\" python3 scripts/check_wearable_replay_readiness.py dat --check-network --timeout-seconds 15"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:37:11.690959+00:00"
+    },
+    {
+      "command": [
+        "./android/gradlew",
+        "-p",
+        "android",
+        ":wearable:assembleDebug"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-23T01:37:25.395965+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home ./android/gradlew -p android :wearable:assembleDebug"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:38:07.795282+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s RF8M21J8XRT shell dumpsys bluetooth_manager | rg -i \"watch|ray|meta|wear|galaxy|connected|bond\" || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:38:25.647408+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s RF8M90QE7LX shell dumpsys bluetooth_manager | rg -i \"watch|ray|meta|wear|galaxy|connected|bond\" || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:38:31.972988+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s RF8M21J8XRT shell pm list packages | rg -i \"meta|facebook|galaxy|wear|watch|health|samsung\" || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T01:38:49.244132+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "rayban-meta-expected",
+      "kind": "wearable",
+      "name": "Ray-Ban Meta",
+      "notes": [
+        "Expected physical device; must be paired through a reachable phone before DAT stream proof can run."
+      ],
+      "os": "Meta DAT",
+      "role": "POV/audio source"
+    },
+    {
+      "identifier": "galaxy-watch4-expected",
+      "kind": "wearable",
+      "name": "Galaxy Watch4",
+      "notes": [
+        "Expected physical device; must appear as Wear OS ADB target or reachable paired watch before Health Services proof can run."
+      ],
+      "os": "Wear OS",
+      "role": "heart-rate/motion/marker source"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "ios",
+      "name": "Jose Ramon iPhone 12 Pro",
+      "notes": [
+        "Flutter-visible wireless iPhone; CoreDevice identifier AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A."
+      ],
+      "os": "iOS 26.5",
+      "role": "candidate paired phone"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "ios",
+      "name": "iPad 5",
+      "notes": [
+        "Flutter-visible wireless iPad; CoreDevice identifier 0A947DBD-A462-5BAA-AB84-17F143D41619."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "candidate HydraCam camera device"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "android",
+      "name": "S10e RF8M21J8XRT",
+      "notes": [
+        "ADB-visible SM-G970F."
+      ],
+      "os": "Android 12",
+      "role": "candidate Android paired phone"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "android",
+      "name": "S10e RF8M90QE7LX",
+      "notes": [
+        "ADB-visible SM-G970F; automation screenshot currently times out."
+      ],
+      "os": "Android 12",
+      "role": "candidate Android paired phone"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/no-physical-wearable-screenshot.txt",
+    "video/no-physical-wearable-video.txt",
+    "device-logs/RF8M21J8XRT/bluetooth-manager-filtered.txt",
+    "device-logs/RF8M90QE7LX/bluetooth-manager-filtered.txt",
+    "device-logs/host/adb-devices.txt",
+    "device-logs/host/adb-mdns-services.txt"
+  ],
+  "item": {
+    "slug": "wearable-replay-real-device-rerun",
+    "source": "docs/control/wearable-replay-integration-plan.md#full-hardware-evidence",
+    "title": "Physical Ray-Ban Meta and Galaxy Watch4 wearable replay proof"
+  },
+  "notes": [
+    "RF8M21J8XRT showed bonded Watch4 and RB Meta entries but Bluetooth state was disconnected; no Wear OS ADB target was visible; DAT readiness and Wear APK build gates passed, so full physical replay remains blocked on active wearable stream reachability."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

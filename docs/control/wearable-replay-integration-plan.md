@@ -346,6 +346,17 @@ ADB mDNS showed no Android/Wear OS target, Bluetooth inventory showed no
 connected Ray-Ban Meta or Galaxy Watch4, and CoreDevice listed the physical
 iPhone/iPad as unavailable while Flutter reported code `-27`.
 
+The 2026-06-23 physical rerun
+`logs/verification-runs/20260623-0335-wearable-replay-real-device-rerun/`
+narrows the blocker. Attached Android phones, the wireless iPhone, and the
+wireless iPad were visible; DAT readiness passed in mock, offline DAT, and
+network package-access modes; and the Wear OS module built successfully when run
+with the Flutter-configured JDK 17. `RF8M21J8XRT` showed bonded Watch4 and
+RB Meta entries, but Bluetooth state was disconnected, no Wear OS ADB target was
+visible, and no physical DAT or Health Services stream could be captured. The
+remaining gate is active wearable connection/stream reachability, not repo
+readiness.
+
 ## External Dependencies
 
 - Meta Wearables Device Access Toolkit is developer preview. Start each
