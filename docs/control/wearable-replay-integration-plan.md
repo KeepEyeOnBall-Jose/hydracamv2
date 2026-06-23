@@ -357,6 +357,18 @@ visible, and no physical DAT or Health Services stream could be captured. The
 remaining gate is active wearable connection/stream reachability, not repo
 readiness.
 
+The follow-up same-day evidence pack
+`logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/`
+proves the active paired phone state. Flutter saw three physical Android phones,
+the iPhone, the iPad, emulator, simulator, macOS, and Chrome. `RF8M21J8XRT`
+reported connected Bluetooth devices `Watch4 von Jose Ramon` and `RB Meta 00D5`,
+installed `com.facebook.stella`, Samsung Watch Manager, Samsung Health Monitor,
+and HydraCam `com.amaia23.hydracam` version `1.4.0`/`versionCode=19`. The pack
+includes a real screenshot and short screen recording from that phone. Full
+wearable replay is still partial because no Wear OS ADB target is visible for
+installing/granting `BODY_SENSORS`, and the phone app still exposes the
+mock/fallback Ray-Ban bridge rather than a real DAT SDK capture stream.
+
 ## External Dependencies
 
 - Meta Wearables Device Access Toolkit is developer preview. Start each
