@@ -10,6 +10,9 @@ class CaptureSession {
   /// A guid returned by API.
   String? sessionGuid;
 
+  /// Human-readable operator-facing name. This is not an API identifier.
+  String? displayName;
+
   /// The date and time when the capture session started.
   final DateTime startTime;
 
@@ -35,6 +38,7 @@ class CaptureSession {
   CaptureSession({
     required this.sessionId,
     this.sessionGuid,
+    this.displayName,
     required this.startTime,
     this.endTime,
     List<CapturedPhoto>? capturedPhotos,
@@ -52,6 +56,16 @@ class CaptureSession {
       return guid;
     }
     return sessionId;
+  }
+
+  /// Prefer the operator-facing display name for UI, falling back to the stable
+  /// identifier used by storage and backend calls.
+  String get displayTitle {
+    final name = displayName?.trim();
+    if (name != null && name.isNotEmpty) {
+      return name;
+    }
+    return preferredIdentifier;
   }
 
   /// Adds a captured photo to the session.

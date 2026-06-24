@@ -41,7 +41,7 @@ void main() {
     pathProvider.dispose();
   });
 
-  testWidgets("backend sessions list uses guid as primary session reference",
+  testWidgets("backend sessions list uses readable title as primary label",
       (tester) async {
     HydraCamApiService.configureHttpClient(
       MockClient((request) async {
@@ -53,6 +53,7 @@ void main() {
             {
               "guid": "backend-session-guid",
               "sessionId": "legacy-session-id",
+              "displayName": "Squash match - Sportwerk Court 2",
               "startTime": "2026-06-09T01:00:00Z",
               "endTime": "2026-06-09T02:00:00Z",
             },
@@ -69,8 +70,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text("Session: backend-session-guid"), findsOneWidget);
+    expect(
+        find.text("Session: Squash match - Sportwerk Court 2"), findsOneWidget);
+    expect(find.text("Service GUID: backend-session-guid"), findsOneWidget);
     expect(find.text("Legacy Session ID: legacy-session-id"), findsOneWidget);
+    expect(find.text("Session: backend-session-guid"), findsNothing);
     expect(find.text("legacy-session-id"), findsNothing);
   });
 
@@ -104,7 +108,12 @@ void main() {
       SessionManager.instance.currentSession?.sessionId,
       "legacy-session-id",
     );
-    expect(find.text("Session loaded: backend-session-guid"), findsOneWidget);
+    expect(
+      SessionManager.instance.currentSession?.displayName,
+      "Squash match - Sportwerk Court 2",
+    );
+    expect(find.text("Session loaded: Squash match - Sportwerk Court 2"),
+        findsOneWidget);
     expect(find.text("Master Screen"), findsOneWidget);
   });
 }
@@ -146,6 +155,7 @@ MockClient _backendSessionListClient() {
         {
           "guid": "backend-session-guid",
           "sessionId": "legacy-session-id",
+          "displayName": "Squash match - Sportwerk Court 2",
           "startTime": "2026-06-09T01:00:00Z",
           "endTime": "2026-06-09T02:00:00Z",
         },

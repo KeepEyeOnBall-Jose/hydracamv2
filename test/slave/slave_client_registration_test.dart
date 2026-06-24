@@ -816,6 +816,7 @@ void main() {
           socket.add(jsonEncode({
             "command": "sessionStarted",
             "sessionGuid": "auto-record-session",
+            "displayName": "Squash match - Slave Court",
           }));
         }
       });
@@ -836,6 +837,10 @@ void main() {
       await recordingStarted.future.timeout(const Duration(seconds: 2));
 
       expect(SessionManager.instance.sessionGuid, "auto-record-session");
+      expect(
+        SessionManager.instance.currentSession?.displayTitle,
+        "Squash match - Slave Court",
+      );
       expect(cameraService.isRecording, isTrue);
     } finally {
       client.disconnect();

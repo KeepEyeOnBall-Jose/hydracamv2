@@ -116,6 +116,8 @@ class AutomationBridge {
     final session = SessionManager.instance.currentSession;
     return {
       "sessionGuid": SessionManager.instance.sessionGuid,
+      "displayName": session?.displayName,
+      "displayTitle": session?.displayTitle,
       "deviceType": SessionManager.instance.deviceType,
       "isActive": SessionManager.instance.isSessionActive,
       "photoCount": session?.capturedPhotos.length ?? 0,

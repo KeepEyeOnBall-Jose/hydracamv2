@@ -69,12 +69,13 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets("stored media list prefers metadata GUID over storage key",
+  testWidgets("stored media list uses display name before technical IDs",
       (tester) async {
     pathProvider.writeSessionMetadata(
       storageIdentifier: "directory-reference-guid",
       sessionGuid: "backend-session-guid",
       sessionId: "legacy-session-id",
+      displayName: "Squash match - Sportwerk Court 2",
     );
 
     await tester.pumpWidget(
@@ -84,10 +85,12 @@ void main() {
     );
     await _pumpUntilText(
       tester,
-      "Session: backend-session-guid",
+      "Session: Squash match - Sportwerk Court 2",
     );
 
-    expect(find.text("Session: backend-session-guid"), findsOneWidget);
+    expect(
+        find.text("Session: Squash match - Sportwerk Court 2"), findsOneWidget);
+    expect(find.text("Session: backend-session-guid"), findsNothing);
     expect(find.text("Legacy Session ID: legacy-session-id"), findsOneWidget);
     expect(find.textContaining("directory-reference-guid"), findsNothing);
     expect(find.textContaining("Service session:"), findsNothing);
@@ -140,6 +143,7 @@ class _PreviousSessionsPathProvider extends PathProviderPlatform {
     required String storageIdentifier,
     required String sessionGuid,
     required String sessionId,
+    String? displayName,
   }) {
     final sessionDir =
         Directory("${documentsDir.path}/session_$storageIdentifier");
@@ -148,6 +152,7 @@ class _PreviousSessionsPathProvider extends PathProviderPlatform {
       jsonEncode({
         "sessionId": sessionId,
         "sessionGuid": sessionGuid,
+        "displayName": displayName,
         "startTime": DateTime.utc(2026, 6, 18, 16).toIso8601String(),
         "endTime": DateTime.utc(2026, 6, 18, 17).toIso8601String(),
         "deviceType": "Master",

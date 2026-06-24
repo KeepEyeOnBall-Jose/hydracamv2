@@ -136,7 +136,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
     required AssetEntity asset,
     required GallerySessionCandidate candidate,
   }) {
-    return "${candidate.session.preferredIdentifier} - "
+    return "${candidate.session.displayTitle} - "
         "${_candidateTimingText(asset: asset, candidate: candidate)}";
   }
 

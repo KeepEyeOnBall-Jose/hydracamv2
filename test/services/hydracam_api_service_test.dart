@@ -383,6 +383,31 @@ void main() {
     expect(requestBody, containsPair("SessionId", "friendly-session"));
   });
 
+  test("createSession keeps current backend request body contract", () async {
+    Map<String, dynamic>? requestBody;
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        requestBody = jsonDecode(request.body) as Map<String, dynamic>;
+        return http.Response(
+          '{"guid":"backend-guid","sessionId":"legacy-id"}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().createSession(
+      "legacy-id",
+      courtGuid: "court-guid",
+      userGuid: "user-guid",
+    );
+
+    expect(result?.guid, "backend-guid");
+    expect(requestBody, containsPair("SessionId", "legacy-id"));
+    expect(requestBody, contains("StartTime"));
+    expect(requestBody?.containsKey("DisplayName"), isFalse);
+    expect(requestBody?.containsKey("displayName"), isFalse);
+  });
+
   test("createSession rejects non-string backend GUID values", () async {
     HydraCamApiService.configureHttpClient(
       MockClient((request) async {

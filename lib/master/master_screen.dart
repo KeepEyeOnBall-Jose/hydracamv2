@@ -24,6 +24,7 @@ import "../services/device_service.dart";
 import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
 import "../services/network_info_service.dart";
+import "../services/session_naming_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
 import "../services/storage_service.dart";
@@ -73,8 +74,12 @@ class MasterScreenState extends State<MasterScreen> {
   bool _isRecordingTransitioning =
       false; // Track if recording state is changing
   bool get sessionActive => SessionManager.instance.isSessionActive;
+  String selectedActivityPreset = sessionNamingService.defaultActivityPreset;
+  String? selectedSportsCenterName; // Name of the selected sports center
   String? selectedCourtName; // Name of the selected Court
   String? selectedCourtGuid; // GUID of the selected Court
+  final TextEditingController sessionNameController = TextEditingController();
+  bool sessionNameEditedManually = false;
 
   // Getters for SessionManager photos and videos
   List<CapturedPhoto> get photos =>
@@ -101,6 +106,7 @@ class MasterScreenState extends State<MasterScreen> {
     _announcer = widget._announcer ?? MasterAnnouncer();
     _server =
         widget._masterServer ?? MasterServer(CameraServiceSingleton.instance);
+    _refreshGeneratedSessionName(force: true);
 
     _announcer.startBroadcasting();
     // Use singletons directly instead of Provider
@@ -156,6 +162,7 @@ class MasterScreenState extends State<MasterScreen> {
     } catch (e) {
       LogService.instance.registerLog("Error during dispose: $e");
     }
+    sessionNameController.dispose();
     super.dispose();
   }
 
@@ -336,6 +343,7 @@ class MasterScreenState extends State<MasterScreen> {
           skipCourtSelectionWarning: true,
           overrideCourtGuid: payload["courtGuid"] as String?,
           overrideSessionId: payload["sessionId"] as String?,
+          overrideDisplayName: payload["displayName"] as String?,
         );
         return AutomationBridge.instance.buildSessionSnapshot();
       },
@@ -666,6 +674,7 @@ class MasterScreenState extends State<MasterScreen> {
     bool skipCourtSelectionWarning = false,
     String? overrideCourtGuid,
     String? overrideSessionId,
+    String? overrideDisplayName,
   }) async {
     if (isProcessingStartSession) return;
 
@@ -678,6 +687,9 @@ class MasterScreenState extends State<MasterScreen> {
           overrideSessionId ?? _debugSessionPolicy.defaultSessionId();
       final debugSession =
           overrideSessionId == null && _debugSessionPolicy.debugBuild;
+      final displayName = _sessionDisplayNameForCreation(
+        overrideDisplayName: overrideDisplayName,
+      );
 
       if (!skipCourtSelectionWarning && selectedCourtGuid == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -706,6 +718,7 @@ class MasterScreenState extends State<MasterScreen> {
           backendSession,
           deviceType: "Master",
           debugSession: debugSession,
+          displayName: displayName,
         );
         if (debugSession) {
           await DebugSessionRegistry().record(
@@ -717,7 +730,7 @@ class MasterScreenState extends State<MasterScreen> {
           );
           if (!mounted) return;
         }
-        _server.startNewSession(sessionGuid);
+        _server.startNewSession(sessionGuid, displayName: displayName);
 
         LogService.instance
             .registerLog("Session created with GUID: $sessionGuid");
@@ -725,8 +738,7 @@ class MasterScreenState extends State<MasterScreen> {
         setState(() {});
         if (!suppressSnackbars && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text("Session created successfully: $sessionGuid")),
+            SnackBar(content: Text("Session created: $displayName")),
           );
         }
       } else {
@@ -966,8 +978,48 @@ class MasterScreenState extends State<MasterScreen> {
     return "$count $singular${count == 1 ? "" : "s"}";
   }
 
-  String _sessionDisplay(String? sessionGuid) {
-    return sessionActive ? "Session Active: $sessionGuid" : "No active session";
+  String _sessionDisplay() {
+    if (!sessionActive) {
+      return "No active session";
+    }
+    return SessionManager.instance.currentSession?.displayTitle ??
+        "Active session";
+  }
+
+  String _sessionDisplayNameForCreation({String? overrideDisplayName}) {
+    final override =
+        sessionNamingService.sanitizeCustomName(overrideDisplayName ?? "");
+    if (override.isNotEmpty) {
+      return override;
+    }
+
+    final custom =
+        sessionNamingService.sanitizeCustomName(sessionNameController.text);
+    if (custom.isNotEmpty) {
+      return custom;
+    }
+
+    return _generatedSessionName();
+  }
+
+  String _generatedSessionName() {
+    return sessionNamingService.defaultName(
+      SessionNamingContext(
+        activityPreset: selectedActivityPreset,
+        sportsCenterName: selectedSportsCenterName,
+        courtName: selectedCourtName,
+        players: const [],
+        startTime: DateTime.now(),
+      ),
+    );
+  }
+
+  void _refreshGeneratedSessionName({bool force = false}) {
+    if (sessionNameEditedManually && !force) {
+      return;
+    }
+    sessionNameController.text = _generatedSessionName();
+    sessionNameEditedManually = false;
   }
 
   double _actionButtonWidth(double maxWidth) {
@@ -1067,7 +1119,7 @@ class MasterScreenState extends State<MasterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SessionInfoWidget(
-                          sessionDisplay: _sessionDisplay(null),
+                          sessionDisplay: _sessionDisplay(),
                           compact: true,
                         ),
                         const SizedBox(height: 10),
@@ -1089,9 +1141,64 @@ class MasterScreenState extends State<MasterScreen> {
                           groupedCourts: sortedGroupedCourts,
                           onCourtSelected: (selection) {
                             setState(() {
+                              selectedSportsCenterName =
+                                  selection?.sportsCenterName;
                               selectedCourtName = selection?.courtName;
                               selectedCourtGuid = selection?.courtGuid;
+                              _refreshGeneratedSessionName();
                             });
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        DropdownButtonFormField<String>(
+                          key: const ValueKey("activityPresetDropdown"),
+                          initialValue: selectedActivityPreset,
+                          isExpanded: true,
+                          decoration: const InputDecoration(
+                            labelText: "Activity",
+                            prefixIcon: Icon(Icons.sports_tennis_outlined),
+                          ),
+                          items: sessionNamingService.activityPresets
+                              .map(
+                                (preset) => DropdownMenuItem<String>(
+                                  value: preset,
+                                  child: Text(
+                                    preset,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (preset) {
+                            if (preset == null) {
+                              return;
+                            }
+                            setState(() {
+                              selectedActivityPreset = preset;
+                              _refreshGeneratedSessionName();
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          key: const ValueKey("sessionNameField"),
+                          controller: sessionNameController,
+                          decoration: InputDecoration(
+                            labelText: "Session name",
+                            prefixIcon:
+                                const Icon(Icons.edit_calendar_outlined),
+                            suffixIcon: IconButton(
+                              key: const ValueKey(
+                                  "resetGeneratedSessionNameButton"),
+                              icon: const Icon(Icons.auto_fix_high_outlined),
+                              tooltip: "Reset generated session name",
+                              onPressed: () => setState(() {
+                                _refreshGeneratedSessionName(force: true);
+                              }),
+                            ),
+                          ),
+                          onChanged: (_) {
+                            sessionNameEditedManually = true;
                           },
                         ),
                         const SizedBox(height: 12),
@@ -1176,7 +1283,7 @@ class MasterScreenState extends State<MasterScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SessionInfoWidget(
-                sessionDisplay: _sessionDisplay(sessionGuid),
+                sessionDisplay: _sessionDisplay(),
                 compact: true,
               ),
               const SizedBox(height: 10),

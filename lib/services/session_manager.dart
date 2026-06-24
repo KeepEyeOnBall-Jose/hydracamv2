@@ -65,6 +65,7 @@ class SessionManager extends ChangeNotifier {
     api.HydraCamBackendSession session, {
     required String deviceType,
     bool debugSession = false,
+    String? displayName,
   }) {
     startSession(
       session.guid,
@@ -72,6 +73,7 @@ class SessionManager extends ChangeNotifier {
       deviceType: deviceType,
       debugSession: debugSession,
       serviceNumericId: session.numericId,
+      displayName: displayName,
     );
   }
 
@@ -81,6 +83,7 @@ class SessionManager extends ChangeNotifier {
     required String deviceType,
     bool debugSession = false,
     int? serviceNumericId,
+    String? displayName,
   }) {
     startSession(
       sessionGuid,
@@ -88,6 +91,7 @@ class SessionManager extends ChangeNotifier {
       deviceType: deviceType,
       debugSession: debugSession,
       serviceNumericId: serviceNumericId,
+      displayName: displayName,
     );
   }
 
@@ -99,6 +103,7 @@ class SessionManager extends ChangeNotifier {
     required String deviceType,
     bool debugSession = false,
     int? serviceNumericId,
+    String? displayName,
   }) {
     final normalizedSessionGuid = _validateServiceSessionGuid(sessionGuid);
     if (_currentSession != null && _sessionGuid == normalizedSessionGuid) {
@@ -118,6 +123,7 @@ class SessionManager extends ChangeNotifier {
     _currentSession = CaptureSession(
       sessionId: sessionId ?? normalizedSessionGuid,
       sessionGuid: normalizedSessionGuid,
+      displayName: _optionalTrimmedString(displayName),
       startTime: DateTime.now(),
       debugSession: debugSession,
       serviceNumericId: serviceNumericId,
@@ -288,6 +294,7 @@ class SessionManager extends ChangeNotifier {
       final session = CaptureSession(
         sessionId: metadata["sessionId"],
         sessionGuid: restoredSessionGuid,
+        displayName: _optionalTrimmedString(metadata["displayName"]),
         startTime: DateTime.parse(metadata["startTime"]),
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
@@ -328,6 +335,7 @@ class SessionManager extends ChangeNotifier {
       final session = CaptureSession(
         sessionId: metadata["sessionId"],
         sessionGuid: restoredSessionGuid,
+        displayName: _optionalTrimmedString(metadata["displayName"]),
         startTime: DateTime.parse(metadata["startTime"]),
         endTime: metadata["endTime"] != null
             ? DateTime.parse(metadata["endTime"])
@@ -374,6 +382,7 @@ class SessionManager extends ChangeNotifier {
       deviceType: deviceType,
       debugSession: loadedSession.debugSession,
       serviceNumericId: loadedSession.serviceNumericId,
+      displayName: loadedSession.displayName,
     );
 
     for (final photo in loadedSession.capturedPhotos) {
@@ -608,6 +617,7 @@ class SessionManager extends ChangeNotifier {
     return {
       "sessionId": _currentSession!.sessionId,
       "sessionGuid": _sessionGuid,
+      "displayName": _currentSession!.displayName,
       "debugSession": _currentSession!.debugSession,
       "serviceNumericId": _currentSession!.serviceNumericId,
       "startTime": _currentSession!.startTime.toIso8601String(),
@@ -810,6 +820,14 @@ class SessionManager extends ChangeNotifier {
       return int.tryParse(value);
     }
     return null;
+  }
+
+  String? _optionalTrimmedString(Object? value) {
+    final text = value?.toString().trim();
+    if (text == null || text.isEmpty) {
+      return null;
+    }
+    return text;
   }
 }
 

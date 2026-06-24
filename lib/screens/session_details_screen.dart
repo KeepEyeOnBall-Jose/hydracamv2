@@ -32,7 +32,7 @@ class SessionDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Session: ${session.preferredIdentifier}"),
+        title: Text("Session: ${session.displayTitle}"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,7 +77,9 @@ class SessionDetailsScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Text("Session: ${session.preferredIdentifier}"),
+                Text("Session: ${session.displayTitle}"),
+                if (hasBackendGuid)
+                  Text("Service GUID: ${session.sessionGuid}"),
                 if (hasDistinctLegacySessionId)
                   Text("Legacy Session ID: ${session.sessionId}"),
                 Text("Start Time: ${session.startTime}"),

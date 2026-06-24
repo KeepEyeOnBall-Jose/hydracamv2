@@ -262,18 +262,29 @@ List<ConnectedDeviceInfo> sortConnectedDeviceInfos(
     });
 }
 
-Map<String, dynamic> masterSessionStatusResponsePayload(String? sessionGuid) {
+Map<String, dynamic> masterSessionStatusResponsePayload(
+  String? sessionGuid, {
+  String? displayName,
+}) {
   if (sessionGuid == null || sessionGuid.isEmpty) {
     return {"command": "noSession"};
   }
   return {
     "command": "sessionStatus",
     "sessionGuid": sessionGuid,
+    if (displayName?.trim().isNotEmpty == true)
+      "displayName": displayName!.trim(),
   };
 }
 
-String encodeMasterSessionStatusResponse(String? sessionGuid) {
-  return jsonEncode(masterSessionStatusResponsePayload(sessionGuid));
+String encodeMasterSessionStatusResponse(
+  String? sessionGuid, {
+  String? displayName,
+}) {
+  return jsonEncode(masterSessionStatusResponsePayload(
+    sessionGuid,
+    displayName: displayName,
+  ));
 }
 
 class ConnectedDeviceSetupStatus {
@@ -779,7 +790,10 @@ class MasterServer {
     final sessionGuid = SessionManager.instance.isSessionActive
         ? SessionManager.instance.sessionGuid
         : null;
-    final message = encodeMasterSessionStatusResponse(sessionGuid);
+    final message = encodeMasterSessionStatusResponse(
+      sessionGuid,
+      displayName: SessionManager.instance.currentSession?.displayName,
+    );
     socket.add(message);
 
     if (sessionGuid == null || sessionGuid.isEmpty) {
@@ -1099,10 +1113,14 @@ class MasterServer {
     );
   }
 
-  void startNewSession(String sessionGuid) {
+  void startNewSession(String sessionGuid, {String? displayName}) {
     // Init new session through SessionManager
-    SessionManager.instance
-        .joinSession(sessionGuid, null, deviceType: "Master");
+    SessionManager.instance.joinSession(
+      sessionGuid,
+      null,
+      deviceType: "Master",
+      displayName: displayName,
+    );
 
     // Register logs
     LogService.instance
@@ -1112,6 +1130,8 @@ class MasterServer {
     final sessionStartedCommand = jsonEncode({
       "command": "sessionStarted",
       "sessionGuid": sessionGuid,
+      if (displayName?.trim().isNotEmpty == true)
+        "displayName": displayName!.trim(),
     });
     _sendLifecycleCommandToAll(
       sessionStartedCommand,

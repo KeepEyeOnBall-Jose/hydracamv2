@@ -81,10 +81,11 @@ void main() {
     expect(find.text("Player assignment unavailable"), findsOneWidget);
   });
 
-  testWidgets("session details title prefers the session guid", (tester) async {
+  testWidgets("session details title prefers the display name", (tester) async {
     final session = CaptureSession(
       sessionId: "legacy-session-id",
       sessionGuid: "backend-session-guid",
+      displayName: "Squash match - Sportwerk Court 2",
       startTime: DateTime.utc(2026, 6, 9),
     );
 
@@ -94,15 +95,19 @@ void main() {
       ),
     );
 
-    expect(find.text("Session: backend-session-guid"), findsWidgets);
+    expect(
+        find.text("Session: Squash match - Sportwerk Court 2"), findsWidgets);
+    expect(find.text("Service GUID: backend-session-guid"), findsOneWidget);
+    expect(find.text("Session: backend-session-guid"), findsNothing);
     expect(find.text("Session: legacy-session-id"), findsNothing);
   });
 
-  testWidgets("session details metadata uses guid as primary session reference",
+  testWidgets("session details metadata keeps guid as technical reference",
       (tester) async {
     final session = CaptureSession(
       sessionId: "legacy-session-id",
       sessionGuid: "backend-session-guid",
+      displayName: "Squash match - Sportwerk Court 2",
       startTime: DateTime.utc(2026, 6, 9),
     );
 
@@ -112,7 +117,9 @@ void main() {
       ),
     );
 
-    expect(find.text("Session: backend-session-guid"), findsNWidgets(2));
+    expect(find.text("Session: Squash match - Sportwerk Court 2"),
+        findsNWidgets(2));
+    expect(find.text("Service GUID: backend-session-guid"), findsOneWidget);
     expect(find.text("Session ID: legacy-session-id"), findsNothing);
     expect(find.text("Legacy Session ID: legacy-session-id"), findsOneWidget);
   });
@@ -249,6 +256,11 @@ void main() {
     );
 
     final uploadAction = find.byIcon(Icons.cloud_upload_outlined);
+    await tester.scrollUntilVisible(
+      uploadAction,
+      120,
+      scrollable: find.byType(Scrollable).last,
+    );
     await tester.ensureVisible(uploadAction);
     await tester.pumpAndSettle();
     await tester.tap(uploadAction);
@@ -331,6 +343,11 @@ void main() {
     );
 
     final videoTitle = find.text("Video from court-camera");
+    await tester.scrollUntilVisible(
+      videoTitle,
+      120,
+      scrollable: find.byType(Scrollable).last,
+    );
     await tester.ensureVisible(videoTitle);
     await tester.pumpAndSettle();
     await tester.tap(videoTitle);

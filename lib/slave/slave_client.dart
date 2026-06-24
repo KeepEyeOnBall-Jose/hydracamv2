@@ -302,6 +302,7 @@ class SlaveClient implements SlaveConnectionClient {
                   _handleSessionAvailableFromMaster(
                     command!,
                     decodedMessage["sessionGuid"],
+                    displayName: _stringValue(decodedMessage, "displayName"),
                   );
                 } else if (command == "networkMismatch") {
                   final message = decodedMessage["message"] ??
@@ -399,6 +400,7 @@ class SlaveClient implements SlaveConnectionClient {
             _handleSessionAvailableFromMaster(
               type!,
               decodedMessage["sessionGuid"],
+              displayName: _stringValue(decodedMessage, "displayName"),
             );
           } else if (type == "sessionEnded") {
             // Handle session end
@@ -437,8 +439,9 @@ class SlaveClient implements SlaveConnectionClient {
 
   void _handleSessionAvailableFromMaster(
     String messageType,
-    Object? sessionGuidValue,
-  ) {
+    Object? sessionGuidValue, {
+    String? displayName,
+  }) {
     final sessionGuid =
         sessionGuidValue is String ? sessionGuidValue.trim() : null;
     if (sessionGuid == null || sessionGuid.isEmpty) {
@@ -447,10 +450,10 @@ class SlaveClient implements SlaveConnectionClient {
       return;
     }
     LogService.instance.registerLog("Session guid: $sessionGuid");
-    _handleSessionAvailable(sessionGuid);
+    _handleSessionAvailable(sessionGuid, displayName: displayName);
   }
 
-  void _handleSessionAvailable(String sessionGuid) {
+  void _handleSessionAvailable(String sessionGuid, {String? displayName}) {
     final activeSessionGuid = SessionManager.instance.sessionGuid;
     if (SessionManager.instance.isSessionActive &&
         activeSessionGuid != null &&
@@ -465,8 +468,12 @@ class SlaveClient implements SlaveConnectionClient {
     }
 
     try {
-      SessionManager.instance
-          .joinSession(sessionGuid, null, deviceType: "Slave");
+      SessionManager.instance.joinSession(
+        sessionGuid,
+        null,
+        deviceType: "Slave",
+        displayName: displayName,
+      );
     } catch (error) {
       LogService.instance.registerLog(
           "Rejected non-backend session from master: $sessionGuid, error: $error");

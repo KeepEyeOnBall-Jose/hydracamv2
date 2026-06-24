@@ -19,6 +19,20 @@ class SessionsScreen extends StatelessWidget {
     return session["sessionId"]?.toString() ?? "Unknown session";
   }
 
+  String _sessionDisplayTitle(Map<String, dynamic> session) {
+    for (final key in ["displayName", "name", "sessionName"]) {
+      final value = session[key]?.toString().trim();
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    }
+    final startTime = session["startTime"]?.toString().trim();
+    if (startTime != null && startTime.isNotEmpty) {
+      return "Session - $startTime";
+    }
+    return "Session";
+  }
+
   String? _legacySessionId(Map<String, dynamic> session) {
     final sessionId = session["sessionId"]?.toString();
     final primaryReference = _primarySessionReference(session);
@@ -35,13 +49,14 @@ class SessionsScreen extends StatelessWidget {
         function: "_loadSession", file: "sessions_screen.dart");
 
     final sessionReference = _primarySessionReference(session);
+    final displayTitle = _sessionDisplayTitle(session);
 
     // Join an existing service session with SessionManager
     SessionManager.instance.joinSession(
         sessionReference, session["sessionId"]?.toString(),
-        deviceType: "Master");
+        deviceType: "Master", displayName: displayTitle);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Session loaded: $sessionReference")),
+      SnackBar(content: Text("Session loaded: $displayTitle")),
     );
   }
 
@@ -66,14 +81,17 @@ class SessionsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final session = sessions[index];
               final legacySessionId = _legacySessionId(session);
+              final displayTitle = _sessionDisplayTitle(session);
               return HydraCamSurface(
                 padding: EdgeInsets.zero,
                 child: ListTile(
                   leading: const Icon(Icons.event_available_outlined),
-                  title: Text("Session: ${_primarySessionReference(session)}"),
+                  title: Text("Session: $displayTitle"),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                          "Service GUID: ${_primarySessionReference(session)}"),
                       if (legacySessionId != null)
                         Text("Legacy Session ID: $legacySessionId"),
                       Text("Start: ${session['startTime']}"),

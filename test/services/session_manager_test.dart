@@ -90,11 +90,50 @@ void main() {
             sessionId: "backend-session",
           ),
           deviceType: "Master",
+          displayName: "Squash match - Sportwerk Court 2",
         );
 
         expect(sessionManager.isSessionActive, true);
         expect(sessionManager.sessionGuid, "backend-guid");
+        expect(
+          sessionManager.currentSession?.displayTitle,
+          "Squash match - Sportwerk Court 2",
+        );
         expect(sessionManager.canUploadCurrentSession, isTrue);
+      });
+
+      test("persists and restores a human-readable display name", () async {
+        sessionManager.startSession(
+          "backend-guid",
+          "legacy-session-id",
+          deviceType: "Master",
+          displayName: "Squash match - Sportwerk Court 2 - 2026-06-22 19:30",
+        );
+
+        await sessionManager.updateMetadata();
+
+        final restored =
+            await sessionManager.loadSessionMetadataSnapshot("backend-guid");
+
+        expect(
+          restored?.displayName,
+          "Squash match - Sportwerk Court 2 - 2026-06-22 19:30",
+        );
+        expect(
+          restored?.displayTitle,
+          "Squash match - Sportwerk Court 2 - 2026-06-22 19:30",
+        );
+        expect(restored?.preferredIdentifier, "backend-guid");
+
+        final metadataFile = File(
+          "${testPathProvider.documentsDir.path}/session_backend-guid/metadata.json",
+        );
+        final metadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(
+          metadata["displayName"],
+          "Squash match - Sportwerk Court 2 - 2026-06-22 19:30",
+        );
       });
 
       test("startCreatedSession rejects non-service GUIDs", () {

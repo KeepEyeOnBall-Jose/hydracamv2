@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 import "dart:ui" as ui;
 
@@ -8,6 +9,10 @@ import "package:path_provider/path_provider.dart";
 
 class AutomationScreenshotService {
   AutomationScreenshotService._();
+
+  static const Duration _frameWaitTimeout = Duration(seconds: 5);
+  static const Duration _imageCaptureTimeout = Duration(seconds: 10);
+  static const Duration _pngEncodingTimeout = Duration(seconds: 10);
 
   static final GlobalKey repaintBoundaryKey =
       GlobalKey(debugLabel: "hydracamAutomationScreenshotBoundary");
@@ -22,16 +27,35 @@ class AutomationScreenshotService {
     final renderObject = context.findRenderObject();
     final pixelRatio = _pixelRatio(payload, View.of(context).devicePixelRatio);
 
-    await SchedulerBinding.instance.endOfFrame;
+    await SchedulerBinding.instance.endOfFrame.timeout(
+      _frameWaitTimeout,
+      onTimeout: () => throw TimeoutException(
+        "Automation screenshot frame wait timed out.",
+        _frameWaitTimeout,
+      ),
+    );
 
     if (renderObject is! RenderRepaintBoundary) {
       throw StateError("Automation screenshot boundary is not renderable.");
     }
 
-    final image = await renderObject.toImage(pixelRatio: pixelRatio);
+    final image = await renderObject.toImage(pixelRatio: pixelRatio).timeout(
+          _imageCaptureTimeout,
+          onTimeout: () => throw TimeoutException(
+            "Automation screenshot image capture timed out.",
+            _imageCaptureTimeout,
+          ),
+        );
 
     try {
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      final byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png).timeout(
+                _pngEncodingTimeout,
+                onTimeout: () => throw TimeoutException(
+                  "Automation screenshot PNG encoding timed out.",
+                  _pngEncodingTimeout,
+                ),
+              );
       if (byteData == null) {
         throw StateError("Automation screenshot PNG encoding failed.");
       }

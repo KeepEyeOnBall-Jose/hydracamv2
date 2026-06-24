@@ -165,7 +165,7 @@ class _StoredSessionListItem {
   final CaptureSession? session;
 
   String get primaryIdentifier {
-    return session?.preferredIdentifier ?? storageIdentifier;
+    return session?.displayTitle ?? storageIdentifier;
   }
 
   String? get legacySessionId {

@@ -101,6 +101,23 @@ void main() {
     expect(find.textContaining("Local Sessions"), findsNothing);
   });
 
+  testWidgets("setup shows generated session naming controls", (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: MasterScreen(),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text("Session name"), findsOneWidget);
+    expect(find.text("Squash match"), findsOneWidget);
+    expect(find.byKey(const ValueKey("sessionNameField")), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey("resetGeneratedSessionNameButton")),
+      findsOneWidget,
+    );
+  });
+
   testWidgets("start session button creates backend session", (tester) async {
     Uri? requestedUri;
     Map<String, dynamic>? requestBody;
@@ -136,10 +153,8 @@ void main() {
     await tester.tap(find.widgetWithText(ElevatedButton, "Start Session"));
     await tester.pumpAndSettle();
 
-    expect(
-      find.textContaining("Session Active: master-screen-guid"),
-      findsOneWidget,
-    );
+    expect(find.textContaining("Squash match - Airport Squash"), findsWidgets);
+    expect(find.textContaining("Session Active:"), findsNothing);
     expect(find.text("Session active"), findsOneWidget);
     expect(find.byIcon(Icons.event_available_outlined), findsOneWidget);
     expect(find.text("Connected clients: 0"), findsOneWidget);
@@ -159,6 +174,10 @@ void main() {
     expect(
       SessionManager.instance.currentSession?.sessionId,
       "master-session-id",
+    );
+    expect(
+      SessionManager.instance.currentSession?.displayName,
+      startsWith("Squash match - Airport Squash"),
     );
     expect(requestedUri?.path, "/api/sessions/create");
     expect(requestedUri?.queryParameters["courtGuid"],
@@ -208,6 +227,10 @@ void main() {
 
     expect(createSessionCalls, 1);
     expect(SessionManager.instance.sessionGuid, "no-court-guid");
+    expect(
+      SessionManager.instance.currentSession?.displayName,
+      startsWith("Squash match - "),
+    );
 
     await tester.pumpWidget(const SizedBox.shrink());
   });
@@ -394,7 +417,8 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.textContaining("Session Active:"), findsOneWidget);
+      expect(find.text("Session: compact-layout-session-guid"), findsOneWidget);
+      expect(find.textContaining("Session Active:"), findsNothing);
       expect(find.widgetWithText(ElevatedButton, "Take Photo"), findsOneWidget);
       expect(
         find.widgetWithText(ElevatedButton, "Start Recording"),

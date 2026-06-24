@@ -24,11 +24,12 @@ void main() {
     );
   }
 
-  testWidgets("video tiles show nearest candidate session guid",
+  testWidgets("video tiles show nearest candidate session display title",
       (tester) async {
     final candidateSession = CaptureSession(
       sessionId: "court-1",
       sessionGuid: "guid-court-1",
+      displayName: "Squash match - Court 1",
       startTime: DateTime.utc(2026, 6, 8, 10),
       endTime: DateTime.utc(2026, 6, 8, 10, 30),
     );
@@ -54,9 +55,11 @@ void main() {
     await tester.pump();
 
     expect(
-      find.text("Candidate: guid-court-1 - 4 min after session"),
+      find.text("Candidate: Squash match - Court 1 - 4 min after session"),
       findsOneWidget,
     );
+    expect(find.text("Candidate: guid-court-1 - 4 min after session"),
+        findsNothing);
     expect(find.text("Candidate: court-1"), findsNothing);
     expect(find.text("Candidate: outside-session"), findsNothing);
   });

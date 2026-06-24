@@ -869,7 +869,8 @@ class SlaveScreenState extends State<SlaveScreen> {
             children: [
               SessionInfoWidget(
                 sessionDisplay:
-                    SessionManager.instance.sessionGuid ?? "No active session",
+                    SessionManager.instance.currentSession?.displayTitle ??
+                        "No active session",
                 compact: isCompactLandscapePhone,
                 showDiagnostics: !isCompactLandscapePhone,
               ),
