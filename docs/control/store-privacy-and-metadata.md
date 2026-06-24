@@ -92,7 +92,9 @@ Do not mark beta submission ready until:
   Apple's `.p8` triplet:
   `APP_STORE_CONNECT_API_KEY_P8_PATH`,
   `APP_STORE_CONNECT_API_KEY_ID`, and
-  `APP_STORE_CONNECT_API_ISSUER_ID`.
+  `APP_STORE_CONNECT_API_ISSUER_ID`. For unattended local uploads, put the
+  exports in `~/.hydracam/secrets/app-store-connect.env`; the iOS readiness and
+  TestFlight wrapper scripts auto-source that file when present.
 - `GOOGLE_PLAY_JSON_KEY` is configured outside the repo or a manual upload
   owner is assigned.
 - `HYDRACAM_ACCOUNT_DELETION_URL` points to a public deletion-request page, and

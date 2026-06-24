@@ -8,6 +8,20 @@ HOMEBREW_RUBY_GEMS_BIN="${HOMEBREW_RUBY_GEMS_BIN:-/opt/homebrew/lib/ruby/gems/3.
 
 export PATH="$HOMEBREW_RUBY_BIN:$HOMEBREW_RUBY_GEMS_BIN:$PATH"
 
+load_local_app_store_connect_env() {
+  local env_file
+
+  env_file="${HYDRACAM_ASC_ENV_FILE:-$HOME/.hydracam/secrets/app-store-connect.env}"
+  if [[ -f "$env_file" ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    source "$env_file"
+    set +a
+  fi
+}
+
+load_local_app_store_connect_env
+
 export HYDRACAM_PRIVACY_POLICY_URL="${HYDRACAM_PRIVACY_POLICY_URL:-https://store-site-ten.vercel.app/privacy.html}"
 export HYDRACAM_SUPPORT_URL="${HYDRACAM_SUPPORT_URL:-https://store-site-ten.vercel.app/support.html}"
 export HYDRACAM_ACCOUNT_DELETION_URL="${HYDRACAM_ACCOUNT_DELETION_URL:-https://store-site-ten.vercel.app/account-deletion.html}"
@@ -110,6 +124,9 @@ or Apple's .p8 triplet:
   APP_STORE_CONNECT_API_KEY_ID=XXXXXXXXXX \
   APP_STORE_CONNECT_API_ISSUER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx \
   bash scripts/testflight_release_and_invite.sh
+
+For unattended local uploads, put those exports in:
+  ~/.hydracam/secrets/app-store-connect.env
 EOF
   exit 64
 fi

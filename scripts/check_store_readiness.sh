@@ -4,12 +4,26 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MODE="${1:-local}"
 
+load_local_app_store_connect_env() {
+  local env_file
+
+  env_file="${HYDRACAM_ASC_ENV_FILE:-$HOME/.hydracam/secrets/app-store-connect.env}"
+  if [[ -f "$env_file" ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    source "$env_file"
+    set +a
+  fi
+}
+
+load_local_app_store_connect_env
+
 EXPECTED_IOS_BUNDLE_ID="${EXPECTED_IOS_BUNDLE_ID:-com.keepeyeonball}"
 EXPECTED_ANDROID_PACKAGE="${EXPECTED_ANDROID_PACKAGE:-com.amaia23.hydracam}"
 EXPECTED_DISPLAY_NAME="${EXPECTED_DISPLAY_NAME:-HydraCam}"
 EXPECTED_IOS_AUTH_REDIRECT_SCHEME="${EXPECTED_IOS_AUTH_REDIRECT_SCHEME:-com.keepeyeonball}"
 EXPECTED_ANDROID_AUTH_REDIRECT_SCHEME="${EXPECTED_ANDROID_AUTH_REDIRECT_SCHEME:-com.amaia23.hydracam}"
-EXPECTED_VERSION="${EXPECTED_VERSION:-1.4.0+18}"
+EXPECTED_VERSION="${EXPECTED_VERSION:-1.4.0+19}"
 STORE_METADATA_FORMAT="HydraCamStoreArtifactMetadataV1"
 EXPECTED_ANDROID_MIN_SDK="${EXPECTED_ANDROID_MIN_SDK:-24}"
 EXPECTED_ANDROID_MIN_TARGET_SDK="${EXPECTED_ANDROID_MIN_TARGET_SDK:-35}"
