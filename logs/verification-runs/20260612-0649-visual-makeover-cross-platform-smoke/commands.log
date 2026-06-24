@@ -1,0 +1,384 @@
+# HydraCam evidence run command log
+
+$ adb devices -l
+List of devices attached
+575ecf2cbd24           device usb:2-1.1 product:veux_p_eea model:2201116PG device:veux transport_id:5
+
+[exit-code] 0
+
+$ xcrun simctl list devices available
+== Devices ==
+-- iOS 18.4 --
+    iPhone 16 Pro (6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3) (Shutdown) 
+    iPhone 16 Pro Max (CB509746-6183-4AEC-9FA5-725378C563BF) (Shutdown) 
+    iPhone 16e (E6EC1822-E63D-4034-A308-8B918FE35465) (Shutdown) 
+    iPhone 16 (8803DD22-4646-4C0C-95BD-249D898CF513) (Shutdown) 
+    iPhone 16 Plus (5CF4A12E-A8B5-4285-AE86-407B9067CB5F) (Booted) 
+    iPad Pro 11-inch (M4) (D1B0CC6E-6F4C-4948-A9C3-073E5932CF45) (Shutdown) 
+    iPad Pro 13-inch (M4) (BF1EC7ED-01F1-437A-9CD5-6647DFEC2C8E) (Shutdown) 
+    iPad mini (A17 Pro) (57AF3A1E-667B-4C93-93F4-273BF71F610D) (Shutdown) 
+    iPad (A16) (65B81095-034E-43BD-B725-25D20F633515) (Shutdown) 
+    iPad Air 13-inch (M3) (F1653079-F410-49D2-A063-1AF6509CA7DF) (Shutdown) 
+    iPad Air 11-inch (M3) (3138C415-02AD-4FBE-8325-337E0B1D85A4) (Shutdown) 
+-- iOS 26.5 --
+    iPhone 17 Pro (45768BC9-71B5-4BBA-9372-EAD4A0234650) (Shutdown) 
+    iPhone 17 Pro Max (D8D3076F-9A3B-431E-9040-444592B8714D) (Shutdown) 
+    iPhone 17e (E9295FDD-2A32-40D9-81CC-DEA8042F3F78) (Shutdown) 
+    iPhone Air (AD4C96F1-9085-4422-993A-1CA9C8458240) (Shutdown) 
+    iPhone 17 (74BEC426-E51A-460B-8AA3-E8E615CF7444) (Shutdown) 
+    iPad Pro 13-inch (M5) (1620C6D6-0BFB-4857-B75D-ECE4BA0B1190) (Shutdown) 
+    iPad Pro 11-inch (M5) (F1AD956F-F029-4ED1-8153-C4D325402AF5) (Shutdown) 
+    iPad mini (A17 Pro) (2105C891-0F6B-4A05-B471-3F589F3319C1) (Shutdown) 
+    iPad Air 13-inch (M4) (57C9ED10-064A-4596-92B8-94A582FBDE79) (Shutdown) 
+    iPad Air 11-inch (M4) (CDDCC03E-021A-4F65-96A0-F2659D1D77AD) (Shutdown) 
+    iPad (A16) (87CD6158-316A-47D7-8CF7-771A8784C5FB) (Shutdown) 
+-- tvOS 18.4 --
+    Apple TV 4K (3rd generation) (0B98182D-7F16-4881-9075-15CB539C6916) (Shutdown) 
+    Apple TV 4K (3rd generation) (at 1080p) (7865E8CA-E4B9-4710-9ACD-3D6808A7AC05) (Shutdown) 
+    Apple TV (D43C6B59-90A5-45B2-B036-E82888CD3396) (Shutdown) 
+-- watchOS 11.4 --
+    Apple Watch Series 10 (46mm) (BB392236-84F5-4DFE-8C31-E8258FDF8B39) (Shutdown) 
+    Apple Watch Series 10 (42mm) (834DA641-E4E1-4017-920C-F24C6190B6BB) (Shutdown) 
+    Apple Watch Ultra 2 (49mm) (37E68BED-6456-4102-85BF-BA64F7F4F936) (Shutdown) 
+    Apple Watch SE (44mm) (2nd generation) (5C3B67F3-AAC3-4DAE-981E-4C56151CB758) (Shutdown) 
+    Apple Watch SE (40mm) (2nd generation) (46A5F0BA-FDC2-4580-9666-32460B4668B4) (Shutdown) 
+-- visionOS 2.4 --
+    Apple Vision Pro (CAE1E201-EE58-4BAF-86A6-ADD79EAE7D6E) (Shutdown) 
+[exit-code] 0
+
+$ flutter devices --device-timeout 10
+Found 5 connected devices:
+  2201116PG (mobile)      • 575ecf2cbd24                             • android-arm64  • Android 13 (API 33)
+  iPad (5) (mobile)       • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  iPhone 16 Plus (mobile) • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)         • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)            • chrome                                   • web-javascript • Google Chrome 149.0.7827.114
+
+Error: Browsing on the local area network for José Ramón’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ flutter emulators
+8 available emulators:
+
+Id                  • Name                • Manufacturer • Platform
+
+apple_ios_simulator • iOS Simulator       • Apple        • ios
+Hydra_Master_API34  • Hydra Master API34  • Google       • android
+Hydra_SlaveA_API34  • Hydra SlaveA API34  • Google       • android
+Hydra_SlaveB_API34  • Hydra SlaveB API34  • Google       • android
+Hydra_SlaveC_API34  • Hydra SlaveC API34  • Google       • android
+Medium_Phone_API_36 • Medium Phone API 36 • Generic      • android
+Pixel_7             • Pixel 7             • Google       • android
+SaberWatch4         • SaberWatch4         • Google       • android
+
+To run an emulator, run 'flutter emulators --launch <emulator id>'.
+To create a new emulator, run 'flutter emulators --create [--name xyz]'.
+
+You can find more information on managing emulators at the links below:
+  https://developer.android.com/studio/run/managing-avds
+  https://developer.android.com/studio/command-line/avdmanager
+[exit-code] 0
+
+$ emulator -list-avds
+Hydra_Master_API34
+Hydra_SlaveA_API34
+Hydra_SlaveB_API34
+Hydra_SlaveC_API34
+Medium_Phone_API_36
+Pixel_7
+SaberWatch4
+[exit-code] 0
+
+$ flutter emulators --launch Medium_Phone_API_36
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+575ecf2cbd24           device usb:2-1.1 product:veux_p_eea model:2201116PG device:veux transport_id:5
+
+[exit-code] 0
+
+$ python3 scripts/run_hardware_ui_e2e.py --device 575ecf2cbd24 --route setup --route standby --run-dir logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-hardware-ui
++ adb devices -l
++ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+Running Gradle task 'assembleDebug'...                          
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 658, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 651, in main
+    return run_hardware_ui_e2e(args)
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 539, in run_hardware_ui_e2e
+    apk = build_apk(args)
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 152, in build_apk
+    run_command(
+    ~~~~~~~~~~~^
+        [
+        ^
+    ...<6 lines>...
+        timeout=args.build_timeout,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 65, in run_command
+    return subprocess.run(
+           ~~~~~~~~~~~~~~^
+        list(command),
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        text=text,
+        ^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1219, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2148, in _communicate
+    self.wait(timeout=self._remaining_time(endtime))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1274, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2052, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['flutter', 'build', 'apk', '--debug', '--dart-define=HYDRACAM_AUTOMATION=true']' timed out after 299.9999717499886 seconds
+[exit-code] 1
+
+$ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                            227.0s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ python3 scripts/run_hardware_ui_e2e.py --skip-build --device 575ecf2cbd24 --route setup --route standby --run-dir logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-hardware-ui
++ adb devices -l
++ adb -s 575ecf2cbd24 forward --remove-all
++ adb -s 575ecf2cbd24 install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-hardware-ui
+
+[stderr]
+adb: failed to install /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk: Failure [INSTALL_FAILED_USER_RESTRICTED: Install canceled by user]
+
+[exit-code] 1
+
+$ python3 scripts/run_hardware_ui_e2e.py --skip-build --include-emulators --device emulator-5554 --route setup --route standby --run-dir logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-emulator-ui
++ adb devices -l
++ adb -s emulator-5554 forward --remove-all
++ adb -s emulator-5554 install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
++ adb -s emulator-5554 forward tcp:6700 tcp:4762
+6700
++ adb -s emulator-5554 logcat -c
++ adb -s emulator-5554 shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am start -n com.amaia23.hydracam/.MainActivity --es role setup --es automationTargetId emulator-5554
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s emulator-5554 logcat -c
+logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-emulator-ui
+[exit-code] 1
+
+$ flutter build ios --simulator --debug --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=ios-simulator-iphone16plus
+Building com.keepeyeonball for simulator (ios)...
+Running Xcode build...                                          
+Xcode build done.                                           38.1s
+✓ Built build/ios/iphonesimulator/Runner.app
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun simctl install 5CF4A12E-A8B5-4285-AE86-407B9067CB5F build/ios/iphonesimulator/Runner.app
+[exit-code] 0
+
+$ xcrun simctl launch --terminate-running-process --env HYDRACAM_AUTOMATION_ROLE setup --env HYDRACAM_AUTOMATION_TARGET_ID ios-simulator-iphone16plus 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.keepeyeonball
+
+[stderr]
+Invalid device: --env
+[exit-code] 148
+
+$ xcrun simctl launch --terminate-running-process 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.keepeyeonball
+com.keepeyeonball: 60546
+[exit-code] 0
+
+$ xcrun simctl privacy 5CF4A12E-A8B5-4285-AE86-407B9067CB5F grant microphone com.keepeyeonball
+[exit-code] 0
+
+$ xcrun simctl privacy 5CF4A12E-A8B5-4285-AE86-407B9067CB5F grant camera com.keepeyeonball
+[exit-code] 0
+
+$ xcrun simctl launch --terminate-running-process 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.keepeyeonball
+com.keepeyeonball: 68457
+[exit-code] 0
+
+$ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+Building com.keepeyeonball for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 4RRY2QT7H8
+Running Xcode build...                                          
+Xcode build done.                                           46.5s
+✓ Built build/ios/iphoneos/Runner.app (31.2MB)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 build/ios/iphoneos/Runner.app --json-output logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/device-logs/ipad-devicectl-install.json
+07:44:33  Acquired tunnel connection to device.
+07:44:33  Enabling developer disk image services.
+07:44:33  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/E3C5526F-7144-4B4E-8859-8C3EA514A675/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1544
+• options: 
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"setup","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
+07:45:27  Acquired tunnel connection to device.
+07:45:27  Enabling developer disk image services.
+07:45:27  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ python3 scripts/ios_capture_repro.py --host auto --scan-subnet 192.168.178.0/24 --device-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --timeout 45 --run-dir logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/ipad-bridge-scan
+
+[stderr]
+ios_capture_repro failed: Automation bridge was not discovered on 192.168.178.0/24 port 4762
+[exit-code] 1
+
+$ flutter build macos --debug --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_ROLE=setup --dart-define=HYDRACAM_AUTOMATION_TARGET_ID=macos-local
+Running pod install...                                             601ms
+Building macOS application...                                   
+✓ Built build/macos/Build/Products/Debug/HydraCam.app
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun simctl terminate 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.keepeyeonball
+[exit-code] 0
+
+$ pkill -x HydraCam
+[exit-code] 1
+
+$ open -n build/macos/Build/Products/Debug/HydraCam.app
+[exit-code] 0

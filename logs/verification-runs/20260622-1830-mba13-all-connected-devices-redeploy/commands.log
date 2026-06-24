@@ -1,0 +1,847 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+ M .vscode/tasks.json
+ M DISTRIBUTION_RUNBOOK.md
+ M android/app/build.gradle
+ M android/app/src/main/AndroidManifest.xml
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M android/fastlane/README.md
+ M android/settings.gradle
+ M docs/control/README.md
+ M docs/control/local-ide-emulator-deploy-playbook.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/Runner/AppDelegate.swift
+ M ios/Runner/Info.plist
+ M lib/master/master_screen.dart
+ M lib/widgets/session_info_widget.dart
+ M pubspec.lock
+ M pubspec.yaml
+ M scripts/check_store_readiness.sh
+ M scripts/google_play_internal_release.sh
+ M scripts/ios_icon_launch_dev.sh
+ M scripts/test_store_readiness_mode_scope.py
+ M test/master/master_screen_test.dart
+?? android/wearable/
+?? docs/control/wearable-replay-integration-plan.md
+?? integration_test/wearable_replay_channel_test.dart
+?? lib/models/wearable_replay.dart
+?? lib/services/wearable_replay_bridge_service.dart
+?? lib/services/wearable_replay_service.dart
+?? lib/services/wearable_replay_simulation_service.dart
+?? lib/services/wearable_replay_upload_service.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+?? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+?? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+?? logs/verification-runs/20260619-live-hls-idempotency-proof/
+?? logs/verification-runs/20260619-live-hls-playback-proof/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+?? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+?? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+?? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+?? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+?? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/browser-proof-smoke-2/
+?? logs/verification-runs/browser-proof-smoke/
+?? scripts/check_wearable_replay_readiness.py
+?? scripts/google_play_release.sh
+?? scripts/run_wearable_replay_non_hardware_proof.py
+?? scripts/test_wearable_replay_non_hardware_proof.py
+?? scripts/test_wearable_replay_readiness.py
+?? test/models/wearable_replay_test.dart
+?? test/services/wearable_replay_bridge_service_test.dart
+?? test/services/wearable_replay_live_upload_test.dart
+?? test/services/wearable_replay_service_test.dart
+?? test/services/wearable_replay_simulation_service_test.dart
+?? test/services/wearable_replay_upload_service_test.dart
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net hostname; whoami; sw_vers; uname -m; echo PATH=$PATH; command -v brew || true; command -v git || true; command -v ruby || true; command -v pod || true; command -v xcodebuild || true; xcode-select -p 2>/dev/null || true; security find-identity -p codesigning -v || true; /Users/jose/development/flutter/bin/flutter --version || flutter --version || true; /Users/jose/Library/Android/sdk/platform-tools/adb version || adb version || true; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l || true; xcrun devicectl list devices || true
+Joses-MacBook-Air.fritz.box
+jose
+ProductName:		macOS
+ProductVersion:		26.4.1
+BuildVersion:		25E253
+arm64
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+/usr/bin/git
+/usr/bin/ruby
+/usr/bin/xcodebuild
+/Applications/Xcode.app/Contents/Developer
+     0 valid identities found
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+│ To update to the latest version, run "flutter upgrade". │
+└─────────────────────────────────────────────────────────┘
+Flutter 3.44.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 924134a44c (3 weeks ago) • 2026-05-29 12:13:22 -0400
+Engine • hash 39b1f7043775b9578bbb26a1676e79c4e31c8b5e (revision c416acfeb8) (25 days ago) • 2026-05-27 20:19:31.000Z
+Tools • Dart 3.12.1 • DevTools 2.57.0
+Android Debug Bridge version 1.0.41
+Version 37.0.0-14910828
+Installed as /Users/jose/Library/Android/sdk/platform-tools/adb
+Running on Darwin 25.4.0 (arm64)
+List of devices attached
+9885e6503930304946     device usb:0-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M21J8XRT            unauthorized usb:0-1.3.1 transport_id:12
+RF8M90QE7LX            device usb:0-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:13
+
+Name                  Hostname                              Identifier                             State                Model                     
+-------------------   -----------------------------------   ------------------------------------   ------------------   --------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   available            iPad7,5                   
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && grep -qxF "$(cat ~/.ssh/jose_mba13_ed25519.pub)" ~/.ssh/authorized_keys || printf "%s\n" "$(cat ~/.ssh/jose_mba13_ed25519.pub)" >> ~/.ssh/authorized_keys && grep -F "jose-mbp-to-joss-macbook-air-20260621" ~/.ssh/authorized_keys >/dev/null && echo KEY_AUTHORIZED
+
+[stderr]
+cat: /Users/jose/.ssh/jose_mba13_ed25519.pub: No such file or directory
+cat: /Users/jose/.ssh/jose_mba13_ed25519.pub: No such file or directory
+[exit-code] 1
+
+$ git ls-remote --heads github codex/hydracam-visual-makeover master-jose-2025
+8a9743c2c936be20d6d25dda7ed4d7040551a0d3	refs/heads/codex/hydracam-visual-makeover
+636343feaa95e2ffbce4c83e15b9f033080d346b	refs/heads/master-jose-2025
+[exit-code] 0
+
+$ git status --branch --porcelain=v2
+# branch.oid 8a9743c2c936be20d6d25dda7ed4d7040551a0d3
+# branch.head codex/hydracam-visual-makeover
+# branch.upstream github/codex/hydracam-visual-makeover
+# branch.ab +0 -0
+1 .M N... 100644 100644 100644 b6608bedbe042a0c2d8e25f7c0b6988c76ebf416 b6608bedbe042a0c2d8e25f7c0b6988c76ebf416 .vscode/tasks.json
+1 .M N... 100644 100644 100644 0c2241d7ceddd4628322a2948253f760085c6767 0c2241d7ceddd4628322a2948253f760085c6767 DISTRIBUTION_RUNBOOK.md
+1 .M N... 100755 100755 100755 d9b8dbb92302e1965a524a3643602f9182b424c8 d9b8dbb92302e1965a524a3643602f9182b424c8 android/app/build.gradle
+1 .M N... 100755 100755 100755 02a0d228c6ada2e2b6c1b93f28244fe5ce53503d 02a0d228c6ada2e2b6c1b93f28244fe5ce53503d android/app/src/main/AndroidManifest.xml
+1 .M N... 100755 100755 100755 b66a4891a21a41315e03ba52129e09c08c81b1f6 b66a4891a21a41315e03ba52129e09c08c81b1f6 android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+1 .M N... 100644 100644 100644 a3f7edfae34c98840ca2ef705a511fa2a4fcdb2c a3f7edfae34c98840ca2ef705a511fa2a4fcdb2c android/fastlane/README.md
+1 .M N... 100755 100755 100755 ff03f22be32b5f5c18ada13d1c620475071e80c9 ff03f22be32b5f5c18ada13d1c620475071e80c9 android/settings.gradle
+1 .M N... 100644 100644 100644 354f7c5d6ec093882033f430872fa9fb9f816629 354f7c5d6ec093882033f430872fa9fb9f816629 docs/control/README.md
+1 .M N... 100644 100644 100644 c4eea31a6df49cc0d1583e3c3bd5dd20edc68024 c4eea31a6df49cc0d1583e3c3bd5dd20edc68024 docs/control/local-ide-emulator-deploy-playbook.md
+1 .M N... 100644 100644 100644 889e91ee4702d98bdc4c11b2d7b016ad91c6fd6b 889e91ee4702d98bdc4c11b2d7b016ad91c6fd6b docs/control/status-and-roadmap.md
+1 .M N... 100644 100644 100644 629408df374b79f44b07464944ff83764b612c78 629408df374b79f44b07464944ff83764b612c78 docs/control/store-privacy-and-metadata.md
+1 .M N... 100755 100755 100755 1e20069dd87dffc90dd1280e92ebbb93db536828 1e20069dd87dffc90dd1280e92ebbb93db536828 ios/Runner/AppDelegate.swift
+1 .M N... 100755 100755 100755 549b5043dced80c74193dcf08f747dfca06f2c55 549b5043dced80c74193dcf08f747dfca06f2c55 ios/Runner/Info.plist
+1 .M N... 100755 100755 100755 2404caf9d9f49ffcdcb88ef89fa0245dbbacaab7 2404caf9d9f49ffcdcb88ef89fa0245dbbacaab7 lib/master/master_screen.dart
+1 .M N... 100755 100755 100755 8e8de9a73407114d2e1ef2cd6b4eb5726c6be7f8 8e8de9a73407114d2e1ef2cd6b4eb5726c6be7f8 lib/widgets/session_info_widget.dart
+1 .M N... 100755 100755 100755 462339e55d04e3bbe40f1b1da3a3eda85535ad04 462339e55d04e3bbe40f1b1da3a3eda85535ad04 pubspec.lock
+1 .M N... 100755 100755 100755 8a47a7a50eb7c893f8c67c2444dd19c68aa5c223 8a47a7a50eb7c893f8c67c2444dd19c68aa5c223 pubspec.yaml
+1 .M N... 100755 100755 100755 886d8dea1a660126b9da1fec08724c384fab81dd 886d8dea1a660126b9da1fec08724c384fab81dd scripts/check_store_readiness.sh
+1 .M N... 100755 100755 100755 2025c00c89a8c44c204c1b39c5986aaaec63bcc9 2025c00c89a8c44c204c1b39c5986aaaec63bcc9 scripts/google_play_internal_release.sh
+1 .M N... 100755 100755 100755 ecba18b830d758e8fd85ce03c51c19e6d69d58d2 ecba18b830d758e8fd85ce03c51c19e6d69d58d2 scripts/ios_icon_launch_dev.sh
+1 .M N... 100644 100644 100644 28096bf3d7758715f94b5b1e56c621d654c1899a 28096bf3d7758715f94b5b1e56c621d654c1899a scripts/test_store_readiness_mode_scope.py
+1 .M N... 100644 100644 100644 cc9158783ba8b50ad5abced2e80eb2bbfb1ba68e cc9158783ba8b50ad5abced2e80eb2bbfb1ba68e test/master/master_screen_test.dart
+? android/wearable/
+? docs/control/wearable-replay-integration-plan.md
+? integration_test/wearable_replay_channel_test.dart
+? lib/models/wearable_replay.dart
+? lib/services/wearable_replay_bridge_service.dart
+? lib/services/wearable_replay_service.dart
+? lib/services/wearable_replay_simulation_service.dart
+? lib/services/wearable_replay_upload_service.dart
+? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+? logs/verification-runs/20260615-1935-store-distribution-readiness/
+? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+? logs/verification-runs/20260618-all-connected-redeploy/
+? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+? logs/verification-runs/20260619-live-hls-idempotency-proof/
+? logs/verification-runs/20260619-live-hls-playback-proof/
+? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+? logs/verification-runs/browser-proof-smoke-2/
+? logs/verification-runs/browser-proof-smoke/
+? scripts/check_wearable_replay_readiness.py
+? scripts/google_play_release.sh
+? scripts/run_wearable_replay_non_hardware_proof.py
+? scripts/test_wearable_replay_non_hardware_proof.py
+? scripts/test_wearable_replay_readiness.py
+? test/models/wearable_replay_test.dart
+? test/services/wearable_replay_bridge_service_test.dart
+? test/services/wearable_replay_live_upload_test.dart
+? test/services/wearable_replay_service_test.dart
+? test/services/wearable_replay_simulation_service_test.dart
+? test/services/wearable_replay_upload_service_test.dart
+[exit-code] 0
+
+$ git diff --stat
+ .vscode/tasks.json                                 |  18 +-
+ DISTRIBUTION_RUNBOOK.md                            |  48 ++-
+ android/app/build.gradle                           |   2 +
+ android/app/src/main/AndroidManifest.xml           |  13 +
+ .../kotlin/com/amaia23/hydracam/MainActivity.kt    | 117 ++++++
+ android/fastlane/README.md                         |  17 +-
+ android/settings.gradle                            |   1 +
+ docs/control/README.md                             |   3 +
+ docs/control/local-ide-emulator-deploy-playbook.md |  22 +-
+ docs/control/status-and-roadmap.md                 |  24 +-
+ docs/control/store-privacy-and-metadata.md         |   9 +-
+ ios/Runner/AppDelegate.swift                       | 146 +++++++
+ ios/Runner/Info.plist                              |  28 ++
+ lib/master/master_screen.dart                      | 453 +++++++++++----------
+ lib/widgets/session_info_widget.dart               |  80 ++++
+ pubspec.lock                                       |   2 +-
+ pubspec.yaml                                       |   1 +
+ scripts/check_store_readiness.sh                   |  13 +-
+ scripts/google_play_internal_release.sh            |  21 +-
+ scripts/ios_icon_launch_dev.sh                     |   3 +-
+ scripts/test_store_readiness_mode_scope.py         |  16 +
+ test/master/master_screen_test.dart                |  50 +++
+ 22 files changed, 819 insertions(+), 268 deletions(-)
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && grep -qxF 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAT4mKd0aDETEaVe3oVwRRP4rBlY2qnGuUa9vxfmeIcC jose-mbp-to-joss-macbook-air-20260621' ~/.ssh/authorized_keys || printf '%s\n' 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAT4mKd0aDETEaVe3oVwRRP4rBlY2qnGuUa9vxfmeIcC jose-mbp-to-joss-macbook-air-20260621' >> ~/.ssh/authorized_keys; grep -F 'jose-mbp-to-joss-macbook-air-20260621' ~/.ssh/authorized_keys >/dev/null && echo KEY_AUTHORIZED
+
+[stderr]
+Permission denied, please try again.
+Permission denied, please try again.
+jose@joss-macbook-air.tail6ce139.ts.net: Permission denied (publickey,password,keyboard-interactive).
+[exit-code] 255
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net zsh -lc "echo LOGIN_PATH=\$PATH; command -v brew || true; command -v pod || true; command -v flutter || true; /opt/homebrew/bin/brew --version 2>/dev/null | head -5 || true; /opt/homebrew/bin/pod --version 2>/dev/null || true; flutter doctor -v || /Users/jose/development/flutter/bin/flutter doctor -v"
+LOGIN_PATH=/Users/jose/development/flutter/bin:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/opt/openjdk@17/bin:/Users/jose/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+/opt/homebrew/bin/brew
+/opt/homebrew/bin/pod
+/Users/jose/development/flutter/bin/flutter
+Homebrew 5.1.15
+1.16.2
+[✓] Flutter (Channel stable, 3.44.1, on macOS 26.4.1 25E253 darwin-arm64, locale en-ES) [928ms]
+    • Flutter version 3.44.1 on channel stable at /Users/jose/development/flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 924134a44c (3 weeks ago), 2026-05-29 12:13:22 -0400
+    • Engine revision c416acfeb8
+    • Dart version 3.12.1
+    • DevTools version 2.57.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 35.0.0) [8.7s]
+    • Android SDK at /Users/jose/Library/Android/sdk
+    • Emulator version 36.6.11.0 (build_id 15507667) (CL:N/A)
+    • Platform android-36, build-tools 35.0.0
+    • ANDROID_HOME = /Users/jose/Library/Android/sdk
+    • ANDROID_SDK_ROOT = /Users/jose/Library/Android/sdk
+    • Java binary at: /Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/java
+      This is the JDK bundled with the latest Android Studio installation on this machine.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-17.0.6b829.9-10027231)
+    • All Android licenses accepted.
+
+[✓] Xcode - develop for iOS and macOS (Xcode 26.5) [3.5s]
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 17F42
+    • CocoaPods version 1.16.2
+
+[✓] Chrome - develop for the web [5ms]
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Connected device (5 available) [7.3s]
+    • SM G935F (mobile)            • 9885e6503930304946        • android-arm64  • Android 8.0.0 (API 26)
+    • SM G970F (mobile)            • RF8M90QE7LX               • android-arm64  • Android 12 (API 31)
+    • José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E • ios            • iOS 26.5 23F77
+    • macOS (desktop)              • macos                     • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+    • Chrome (web)                 • chrome                    • web-javascript • Google Chrome 149.0.7827.116
+    ! Device RF8M21J8XRT is not authorized.
+      You might need to check your device for an authorization dialog.
+    ! Error: iPad (5) is not available because it is unpaired. Pair with the device in the Xcode Devices Window, and respond to any pairing prompts on the device. (code -29)
+
+[✓] Network resources [1,261ms]
+    • All expected network resources are available.
+
+• No issues found!
+[exit-code] 0
+
+$ bash -lc if [[ -d build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app ]]; then echo LOCAL_TRANSFER_APP_EXISTS; /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/Info.plist; codesign -dv --verbose=4 build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app 2>&1 | sed -n "1,80p"; security cms -D -i build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/embedded.mobileprovision > /tmp/hydracam-embedded-profile.plist; /usr/libexec/PlistBuddy -c "Print :ProvisionedDevices" /tmp/hydracam-embedded-profile.plist 2>/dev/null || true; else echo LOCAL_TRANSFER_APP_MISSING; fi
+LOCAL_TRANSFER_APP_EXISTS
+com.keepeyeonball
+Executable=/Users/jose/src/work/hydracamv2/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/Runner
+Identifier=com.keepeyeonball
+Format=app bundle with Mach-O thin (arm64)
+CodeDirectory v=20400 size=4917 flags=0x0(none) hashes=143+7 location=embedded
+VersionPlatform=2
+VersionMin=851968
+VersionSDK=1705216
+Hash type=sha256 size=32
+CandidateCDHash sha256=e30e15505df045f3e8bf7193feb37026d2cc8ee6
+CandidateCDHashFull sha256=e30e15505df045f3e8bf7193feb37026d2cc8ee6aa7adae7442d7b87ab93ae3f
+Hash choices=sha256
+CMSDigest=e30e15505df045f3e8bf7193feb37026d2cc8ee6aa7adae7442d7b87ab93ae3f
+CMSDigestType=2
+Executable Segment base=0
+Executable Segment limit=819200
+Executable Segment flags=0x11
+Page size=16384
+CDHash=e30e15505df045f3e8bf7193feb37026d2cc8ee6
+Signature size=4802
+Authority=Apple Development: Jose Ramon Torregrosa Duran (4K56D5L8D9)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+Signed Time=22 Jun 2026 at 14:00:06
+Info.plist entries=46
+TeamIdentifier=4RRY2QT7H8
+Sealed Resources version=2 rules=10 files=91
+Internal requirements count=1 size=196
+Array {
+    8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+    00008101-000A68811E43001E
+    da6ccac259b28ff204a9d2ef5fd971390895a59d
+    6a7bce048d1c9439334677e3fc178b578edb1433
+    2857dde857bb9f31f0f2762e42f4eb6bee8643c2
+    3cf0b445a303832e1db3bf0bc564c59175920c1e
+    dd135f8737301251b093927907ca4b4c243e0ead
+    00006031-000C318021A2001C
+}
+[exit-code] 0
+
+$ ssh -o BatchMode=yes -o ConnectTimeout=8 mba13 echo KEY_SSH_OK; hostname; whoami
+
+[stderr]
+jose@joss-macbook-air.tail6ce139.ts.net: Permission denied (publickey,password,keyboard-interactive).
+[exit-code] 255
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net set -e; echo DEPLOY_DIR; ls -ld /Users/jose/src/work/hydracamv2-mba13-deploy; echo GIT; git -C /Users/jose/src/work/hydracamv2-mba13-deploy status -sb 2>&1 || true; echo FLUTTER_DEVICES; zsh -lc "flutter devices --device-timeout 10"; echo ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo IOS; xcrun devicectl list devices
+DEPLOY_DIR
+drwxr-xr-x  81 jose  staff  2592 Jun 22 14:43 /Users/jose/src/work/hydracamv2-mba13-deploy
+GIT
+fatal: not a git repository (or any of the parent directories): .git
+FLUTTER_DEVICES
+Found 5 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946        • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M90QE7LX               • android-arm64  • Android 12 (API 31)
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E • ios            • iOS 26.5 23F77
+  macOS (desktop)              • macos                     • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                    • web-javascript • Google Chrome 149.0.7827.116
+
+Device RF8M21J8XRT is not authorized.
+You might need to check your device for an authorization dialog.
+
+Error: iPad (5) is not available because it is unpaired. Pair with the device in the Xcode Devices Window, and respond to any pairing prompts on the device. (code -29)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+ADB
+List of devices attached
+9885e6503930304946     device usb:0-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M21J8XRT            unauthorized usb:0-1.3.1 transport_id:12
+RF8M90QE7LX            device usb:0-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:13
+
+IOS
+Name                  Hostname                              Identifier                             State                Model                     
+-------------------   -----------------------------------   ------------------------------------   ------------------   --------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   available            iPad7,5                   
+[exit-code] 0
+
+$ git diff --check
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net git ls-remote https://github.com/KeepEyeOnBall-Jose/hydracamv2.git refs/heads/codex/hydracam-visual-makeover refs/heads/master-jose-2025
+8a9743c2c936be20d6d25dda7ed4d7040551a0d3	refs/heads/codex/hydracam-visual-makeover
+636343feaa95e2ffbce4c83e15b9f033080d346b	refs/heads/master-jose-2025
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net xcrun devicectl help device manage 2>&1 || true; xcrun devicectl help device 2>&1 | sed -n "1,180p"
+OVERVIEW: Commands to interact with devices.
+
+Allows users to interact with devices that CoreDevice is aware of.
+
+USAGE: devicectl device [--verbose] [--quiet] [--timeout <seconds>] [--json-output <path>] [--log-output <path>] <subcommand>
+
+OUTPUT OPTIONS:
+  -v, --verbose           If given, provide more logging output than normal.
+  -q, --quiet             If given, output will include only errors.
+  -t, --timeout <seconds> The overall command timeout in seconds. If this limit
+                          is exceeded the command is abandoned as a failure.
+  -j, --json-output <path>
+                          An optional path to write a JSON file with command
+                          results.
+        Note: JSON output to a user-provided file on disk is the ONLY supported
+        interface for scripts/programs to consume command output.
+  -l, --log-output <path> An optional path to write all logging otherwise
+                          passed to stdout/stderr.
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  copy                    Copy files.
+  info                    Commands that provide information about a specific
+                          device
+  install                 Install content onto a device.
+  notification            Post and observe Darwin notifications on a device.
+  orientation             Control device orientation.
+  process                 Interact with processes on devices.
+  reboot                  Reboot a device.
+  sysdiagnose             Gather a sysdiagnose for a device.
+  uninstall               Uninstall content from a device.
+
+  See 'devicectl help device <subcommand>' for detailed help.
+OVERVIEW: Commands to interact with devices.
+
+Allows users to interact with devices that CoreDevice is aware of.
+
+USAGE: devicectl device [--verbose] [--quiet] [--timeout <seconds>] [--json-output <path>] [--log-output <path>] <subcommand>
+
+OUTPUT OPTIONS:
+  -v, --verbose           If given, provide more logging output than normal.
+  -q, --quiet             If given, output will include only errors.
+  -t, --timeout <seconds> The overall command timeout in seconds. If this limit
+                          is exceeded the command is abandoned as a failure.
+  -j, --json-output <path>
+                          An optional path to write a JSON file with command
+                          results.
+        Note: JSON output to a user-provided file on disk is the ONLY supported
+        interface for scripts/programs to consume command output.
+  -l, --log-output <path> An optional path to write all logging otherwise
+                          passed to stdout/stderr.
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  copy                    Copy files.
+  info                    Commands that provide information about a specific
+                          device
+  install                 Install content onto a device.
+  notification            Post and observe Darwin notifications on a device.
+  orientation             Control device orientation.
+  process                 Interact with processes on devices.
+  reboot                  Reboot a device.
+  sysdiagnose             Gather a sysdiagnose for a device.
+  uninstall               Uninstall content from a device.
+
+  See 'devicectl help device <subcommand>' for detailed help.
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net /Users/jose/Library/Android/sdk/platform-tools/adb reconnect; sleep 5; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l
+more than one device/emulator
+List of devices attached
+9885e6503930304946     device usb:0-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M21J8XRT            unauthorized usb:0-1.3.1 transport_id:12
+RF8M90QE7LX            device usb:0-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:13
+
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net set -e; PUB="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAT4mKd0aDETEaVe3oVwRRP4rBlY2qnGuUa9vxfmeIcC jose-mbp-to-joss-macbook-air-20260621"; mkdir -p "$HOME/.ssh"; chmod 700 "$HOME/.ssh"; touch "$HOME/.ssh/authorized_keys"; chmod 600 "$HOME/.ssh/authorized_keys"; grep -qxF "$PUB" "$HOME/.ssh/authorized_keys" || printf "%s\n" "$PUB" >> "$HOME/.ssh/authorized_keys"; grep -F "jose-mbp-to-joss-macbook-air-20260621" "$HOME/.ssh/authorized_keys" >/dev/null && echo KEY_AUTHORIZED
+KEY_AUTHORIZED
+[exit-code] 0
+
+$ sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=12 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net set -e; P=/Users/jose/src/work/hydracamv2-published; if [[ ! -d "$P/.git" ]]; then rm -rf "$P"; git clone --branch codex/hydracam-visual-makeover https://github.com/KeepEyeOnBall-Jose/hydracamv2.git "$P"; fi; git -C "$P" fetch origin codex/hydracam-visual-makeover; git -C "$P" checkout codex/hydracam-visual-makeover; git -C "$P" reset --hard origin/codex/hydracam-visual-makeover; git -C "$P" status -sb; git -C "$P" rev-parse HEAD
+Your branch is up to date with 'origin/codex/hydracam-visual-makeover'.
+HEAD is now at 8a9743c feat: add fixed camera HLS recording
+## codex/hydracam-visual-makeover...origin/codex/hydracam-visual-makeover
+8a9743c2c936be20d6d25dda7ed4d7040551a0d3
+
+[stderr]
+Cloning into '/Users/jose/src/work/hydracamv2-published'...
+From https://github.com/KeepEyeOnBall-Jose/hydracamv2
+ * branch            codex/hydracam-visual-makeover -> FETCH_HEAD
+Already on 'codex/hydracam-visual-makeover'
+[exit-code] 0
+
+$ ssh -o BatchMode=yes -o ConnectTimeout=8 mba13 echo KEY_SSH_OK; hostname; whoami
+KEY_SSH_OK
+Joses-MacBook-Air.fritz.box
+jose
+[exit-code] 0
+
+$ ssh mba13 set -e; mkdir -p "$HOME/.android"; if [[ -f "$HOME/.android/debug.keystore" ]]; then mkdir -p "$HOME/.android/debug-keystore-backups"; cp "$HOME/.android/debug.keystore" "$HOME/.android/debug-keystore-backups/debug.keystore.$(date +%Y%m%d-%H%M%S)"; fi; echo REMOTE_DEBUG_KEY_READY_DIR="$HOME/.android"
+REMOTE_DEBUG_KEY_READY_DIR=/Users/jose/.android
+[exit-code] 0
+
+$ rsync -az --delete --exclude=.git/ --exclude=tempass.txt --exclude=.dart_tool/ --exclude=build/ --exclude=android/.gradle/ --exclude=android/app/build/ --exclude=ios/Pods/ --exclude=macos/Pods/ --exclude=.worktrees/ --exclude=worktrees/ --exclude=logs/verification-runs/ --exclude=.DS_Store ./ mba13:/Users/jose/src/work/hydracamv2-mba13-deploy/
+[exit-code] 0
+
+$ rsync -az /Users/jose/.android/debug.keystore mba13:/Users/jose/.android/debug.keystore
+[exit-code] 0
+
+$ ssh mba13 cd /Users/jose/src/work/hydracamv2-mba13-deploy && zsh -lc "flutter pub get && flutter build apk --debug"
+Resolving dependencies...
+Downloading packages...
+  cli_util 0.4.2 (0.5.1 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  image 4.8.0 (4.9.1 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  test_api 0.7.11 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  cli_util 0.4.2 (0.5.1 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  image 4.8.0 (4.9.1 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  test_api 0.7.11 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             70.8s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for ios:
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2-mba13-deploy/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ ssh mba13 cd /Users/jose/src/work/hydracamv2-mba13-deploy && ls -lh build/app/outputs/flutter-apk/app-debug.apk && shasum -a 256 build/app/outputs/flutter-apk/app-debug.apk && unzip -t build/app/outputs/flutter-apk/app-debug.apk >/tmp/hydracam-apk-unzip.txt && tail -5 /tmp/hydracam-apk-unzip.txt
+-rw-r--r--@ 1 jose  staff   162M Jun 22 18:36 build/app/outputs/flutter-apk/app-debug.apk
+33d019a86384dc4ce1dcb47dc391eb4eb2984392dffd54ed3f3e03cdaa43631e  build/app/outputs/flutter-apk/app-debug.apk
+    testing: play-services-base.properties   OK
+    testing: play-services-basement.properties   OK
+    testing: play-services-location.properties   OK
+    testing: play-services-tasks.properties   OK
+No errors detected in compressed data of build/app/outputs/flutter-apk/app-debug.apk.
+[exit-code] 0
+
+$ ssh mba13 set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIALS="9885e6503930304946 RF8M90QE7LX"; rm -f /tmp/hydracam-android-deploy-*.log; pids=""; for serial in $SERIALS; do ( set -e; echo START_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r "$APK" || $ADB -s $serial install --no-streaming -r "$APK"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf "PID="; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d "\r"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep "Package \[com.amaia23.hydracam\]|versionName|versionCode|firstInstallTime|lastUpdateTime"; echo END_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > /tmp/hydracam-android-deploy-$serial.log 2>&1 & pids="$pids $!"; done; status=0; for pid in $pids; do wait $pid || status=1; done; for serial in $SERIALS; do echo ==== $serial ====; cat /tmp/hydracam-android-deploy-$serial.log; done; exit $status
+
+[stderr]
+zsh:1: no matches found: /tmp/hydracam-android-deploy-*.log
+[exit-code] 1
+
+$ ssh mba13 set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIALS="9885e6503930304946 RF8M90QE7LX"; find /tmp -maxdepth 1 -name "hydracam-android-deploy-*.log" -delete; pids=""; for serial in $SERIALS; do ( set -e; echo START_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r "$APK" || $ADB -s $serial install --no-streaming -r "$APK"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf "PID="; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d "\r"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep "Package \[com.amaia23.hydracam\]|versionName|versionCode|firstInstallTime|lastUpdateTime"; echo END_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > /tmp/hydracam-android-deploy-$serial.log 2>&1 & pids="$pids $!"; done; status=0; for pid in $pids; do wait $pid || status=1; done; for serial in $SERIALS; do echo ==== $serial ====; cat /tmp/hydracam-android-deploy-$serial.log; done; exit $status
+
+[stderr]
+zsh:1: read-only variable: status
+[exit-code] 1
+
+$ ssh mba13 bash -lc 'set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIALS="9885e6503930304946 RF8M90QE7LX"; find /tmp -maxdepth 1 -name "hydracam-android-deploy-*.log" -delete; pids=""; for serial in $SERIALS; do ( set -e; echo START_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r "$APK" || $ADB -s $serial install --no-streaming -r "$APK"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf "PID="; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d "\r"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep "Package \[com.amaia23.hydracam\]|versionName|versionCode|firstInstallTime|lastUpdateTime"; echo END_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > /tmp/hydracam-android-deploy-$serial.log 2>&1 & pids="$pids $!"; done; deploy_status=0; for pid in $pids; do wait $pid || deploy_status=1; done; for serial in $SERIALS; do echo ==== $serial ====; cat /tmp/hydracam-android-deploy-$serial.log; done; exit $deploy_status'
+==== 9885e6503930304946 ====
+START_ANDROID_DEPLOY 9885e6503930304946 2026-06-22T16:38:11Z
+Performing Streamed Install
+Success
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+PID=25331
+  Package [com.amaia23.hydracam] (9b12a0a):
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    firstInstallTime=2026-06-07 02:45:12
+    lastUpdateTime=2026-06-22 18:38:36
+END_ANDROID_DEPLOY 9885e6503930304946 2026-06-22T16:38:42Z
+==== RF8M90QE7LX ====
+START_ANDROID_DEPLOY RF8M90QE7LX 2026-06-22T16:38:11Z
+Performing Streamed Install
+Success
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+PID=22201
+  Package [com.amaia23.hydracam] (37ffded):
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    firstInstallTime=2026-06-07 00:07:29
+    lastUpdateTime=2026-06-22 18:38:22
+END_ANDROID_DEPLOY RF8M90QE7LX 2026-06-22T16:38:24Z
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State         Model                                        
+-------------------   -----------------------------------   ------------------------------------   -----------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   unavailable   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   unavailable   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ ssh mba13 APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; if [[ -d "$APP" ]]; then echo REMOTE_IOS_APP_EXISTS; /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Info.plist"; codesign -dv --verbose=4 "$APP" 2>&1 | sed -n "1,70p"; else echo REMOTE_IOS_APP_MISSING; fi
+REMOTE_IOS_APP_EXISTS
+com.keepeyeonball
+Executable=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/Runner
+Identifier=com.keepeyeonball
+Format=app bundle with Mach-O thin (arm64)
+CodeDirectory v=20400 size=4917 flags=0x0(none) hashes=143+7 location=embedded
+VersionPlatform=2
+VersionMin=851968
+VersionSDK=1705216
+Hash type=sha256 size=32
+CandidateCDHash sha256=e30e15505df045f3e8bf7193feb37026d2cc8ee6
+CandidateCDHashFull sha256=e30e15505df045f3e8bf7193feb37026d2cc8ee6aa7adae7442d7b87ab93ae3f
+Hash choices=sha256
+CMSDigest=e30e15505df045f3e8bf7193feb37026d2cc8ee6aa7adae7442d7b87ab93ae3f
+CMSDigestType=2
+Executable Segment base=0
+Executable Segment limit=819200
+Executable Segment flags=0x11
+Page size=16384
+CDHash=e30e15505df045f3e8bf7193feb37026d2cc8ee6
+Signature size=4802
+Authority=Apple Development: Jose Ramon Torregrosa Duran (4K56D5L8D9)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+Signed Time=22 Jun 2026 at 14:00:06
+Info.plist entries=46
+TeamIdentifier=4RRY2QT7H8
+Sealed Resources version=2 rules=10 files=91
+Internal requirements count=1 size=196
+[exit-code] 0
+
+$ ssh mba13 xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app
+
+[stderr]
+ERROR: The device must be paired before it can be connected. (com.apple.dt.CoreDeviceError error 2 (0x02))
+       ----------------------------------------
+           The device must be paired before it can be connected. (com.apple.dt.RemotePairingError error 2 (0x02))
+[exit-code] 1
+
+$ ssh mba13 APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A; BUNDLE=com.keepeyeonball; xcrun devicectl device install app --device "$DEVICE" "$APP"; xcrun devicectl device process launch --device "$DEVICE" --terminate-existing "$BUNDLE"; sleep 3; xcrun devicectl device info apps --device "$DEVICE" | grep -A14 -B2 "$BUNDLE"; xcrun devicectl device info processes --device "$DEVICE" | grep -i "keepeyeonball\|Runner\|HydraCam"; xcrun devicectl device info lockState --device "$DEVICE"
+18:39:27  Acquired tunnel connection to device.
+18:39:27  Enabling developer disk image services.
+18:39:27  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/1F9FFF65-2F02-4D75-A5E2-D7DE8B78CDB2/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9AE68C29-BCF0-468A-80A2-5D38F03AFCDD
+• databaseSequenceNumber: 2096
+• options: 
+18:39:29  Acquired tunnel connection to device.
+18:39:29  Enabling developer disk image services.
+18:39:29  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+Name       Bundle Identifier   Version   Bundle Version
+--------   -----------------   -------   --------------
+HydraCam   com.keepeyeonball   1.4.0     18            
+4193   /private/var/containers/Bundle/Application/1F9FFF65-2F02-4D75-A5E2-D7DE8B78CDB2/Runner.app/Runner                                                                                                 
+18:39:32  Acquired tunnel connection to device.
+18:39:32  Acquired usage assertion.
+Current device lock state:
+• deviceIdentifier: AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A
+• passcodeRequired: false
+• unlockedSinceBoot: true
+[exit-code] 0
+
+$ ssh mba13 echo FINAL_FLUTTER_DEVICES; zsh -lc "flutter devices --device-timeout 10"; echo FINAL_ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo FINAL_IOS; xcrun devicectl list devices; echo FINAL_PROCESSES_ANDROID; /Users/jose/Library/Android/sdk/platform-tools/adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M90QE7LX shell pidof com.amaia23.hydracam; echo FINAL_IPHONE_PROCESS; xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i "keepeyeonball\|Runner\|HydraCam"
+FINAL_FLUTTER_DEVICES
+Found 5 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946        • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M90QE7LX               • android-arm64  • Android 12 (API 31)
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E • ios            • iOS 26.5 23F77
+  macOS (desktop)              • macos                     • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                    • web-javascript • Google Chrome 149.0.7827.116
+
+Device RF8M21J8XRT is not authorized.
+You might need to check your device for an authorization dialog.
+
+Error: iPad (5) is not available because it is unpaired. Pair with the device in the Xcode Devices Window, and respond to any pairing prompts on the device. (code -29)
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+FINAL_ADB
+List of devices attached
+9885e6503930304946     device usb:0-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M21J8XRT            unauthorized usb:0-1.3.1 transport_id:12
+RF8M90QE7LX            device usb:0-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:13
+
+FINAL_IOS
+Name                  Hostname                              Identifier                             State                Model                     
+-------------------   -----------------------------------   ------------------------------------   ------------------   --------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   available            iPad7,5                   
+FINAL_PROCESSES_ANDROID
+25331
+22201
+FINAL_IPHONE_PROCESS
+4193   /private/var/containers/Bundle/Application/1F9FFF65-2F02-4D75-A5E2-D7DE8B78CDB2/Runner.app/Runner                                                                                                 
+[exit-code] 0
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+ M .vscode/tasks.json
+ M DISTRIBUTION_RUNBOOK.md
+ M android/app/build.gradle
+ M android/app/src/main/AndroidManifest.xml
+ M android/app/src/main/kotlin/com/amaia23/hydracam/MainActivity.kt
+ M android/fastlane/README.md
+ M android/settings.gradle
+ M docs/control/README.md
+ M docs/control/local-ide-emulator-deploy-playbook.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/Runner/AppDelegate.swift
+ M ios/Runner/Info.plist
+ M lib/master/master_screen.dart
+ M lib/widgets/session_info_widget.dart
+ M pubspec.lock
+ M pubspec.yaml
+ M scripts/check_store_readiness.sh
+ M scripts/google_play_internal_release.sh
+ M scripts/ios_icon_launch_dev.sh
+ M scripts/test_store_readiness_mode_scope.py
+ M test/master/master_screen_test.dart
+?? android/wearable/
+?? docs/control/wearable-replay-integration-plan.md
+?? integration_test/wearable_replay_channel_test.dart
+?? lib/models/wearable_replay.dart
+?? lib/services/wearable_replay_bridge_service.dart
+?? lib/services/wearable_replay_service.dart
+?? lib/services/wearable_replay_simulation_service.dart
+?? lib/services/wearable_replay_upload_service.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+?? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+?? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+?? logs/verification-runs/20260619-live-hls-idempotency-proof/
+?? logs/verification-runs/20260619-live-hls-playback-proof/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+?? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+?? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+?? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+?? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+?? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/browser-proof-smoke-2/
+?? logs/verification-runs/browser-proof-smoke/
+?? scripts/check_wearable_replay_readiness.py
+?? scripts/google_play_release.sh
+?? scripts/run_wearable_replay_non_hardware_proof.py
+?? scripts/test_wearable_replay_non_hardware_proof.py
+?? scripts/test_wearable_replay_readiness.py
+?? test/models/wearable_replay_test.dart
+?? test/services/wearable_replay_bridge_service_test.dart
+?? test/services/wearable_replay_live_upload_test.dart
+?? test/services/wearable_replay_service_test.dart
+?? test/services/wearable_replay_simulation_service_test.dart
+?? test/services/wearable_replay_upload_service_test.dart
+[exit-code] 0
+
+$ ls -lh logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/video logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/screenshots
+logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/screenshots:
+total 696
+-rw-r--r--@ 1 jose  staff   141K Jun 22 18:40 9885e6503930304946-foreground.png
+-rw-r--r--@ 1 jose  staff   202K Jun 22 18:40 RF8M90QE7LX-foreground.png
+
+logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/video:
+total 5824
+-rw-r--r--@ 1 jose  staff    96K Jun 22 18:41 9885e6503930304946-foreground.mp4
+-rw-r--r--@ 1 jose  staff   2.1M Jun 22 18:41 RF8M90QE7LX-foreground.mp4
+[exit-code] 0

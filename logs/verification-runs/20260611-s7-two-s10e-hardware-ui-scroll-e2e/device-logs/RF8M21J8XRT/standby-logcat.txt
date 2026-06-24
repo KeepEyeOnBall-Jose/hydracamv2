@@ -1,0 +1,866 @@
+--------- beginning of main
+06-11 10:56:13.822   739 14736 I CameraLatencyHistogram:      99.27   0.00   0.73   0.00   0.00   0.00   0.00   0.00   0.00   0.00 (%)
+06-11 10:56:13.822   739 14736 D Camera3-OutputStream: disconnectLocked: disconnecting stream 1 from native window
+06-11 10:56:13.822   739 14736 W Camera3-OutputStream: disconnectLocked: While disconnecting stream 1 from native window, the native window died from under us
+06-11 10:56:13.822   739 14736 D Camera3-OutputStream: disconnectLocked: disconnecting stream 2 from native window
+06-11 10:56:13.822   739 14736 W Camera3-OutputStream: disconnectLocked: While disconnecting stream 2 from native window, the native window died from under us
+06-11 10:56:13.822   739 14736 I Camera3-Device: disconnectImpl: X
+06-11 10:56:13.822   739 14736 I CameraServiceProxyWrapper: updateProxyDeviceState: notifyCameraState for Camera ID 0, newState 3, facing 0, clientName com.amaia23.hydracam, apiLevel 2
+06-11 10:56:13.822   739 14736 D CameraService: BasicClient::disconnect E
+--------- beginning of system
+06-11 10:56:13.822   976  3810 I CameraService_proxy: Notify nfc service : camera open was(false) -> now(true) = polling(true)
+06-11 10:56:13.823   739 14736 I CameraService: finishCameraOps: Finish camera ops, package name = com.amaia23.hydracam, client UID = 10367
+06-11 10:56:13.823   739 14736 I CameraService: decreaseCamConnRef: ref=-1
+06-11 10:56:13.823   739 14736 W CameraService: decreaseCamConnRef: ref(-1) is abnormal. so, set to 0.
+06-11 10:56:13.823   739 14736 I CameraService: onTorchStatusChangedLocked: Torch status changed for cameraId=0, newStatus=1
+06-11 10:56:13.823   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.823  1353  3215 I CameraManagerGlobal: postSingleTorchUpdate device: camera id 0 status 1
+06-11 10:56:13.823  1739  3064 D NfcService: call the applyRouting
+06-11 10:56:13.823  1353  3215 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:13.824  3763 26970 I CameraManagerGlobal: postSingleUpdate device: camera id 20 status STATUS_PRESENT
+06-11 10:56:13.824 29554 31785 I CameraManagerGlobal: postSingleUpdate device: camera id 0 status STATUS_PRESENT
+06-11 10:56:13.824  1739  3064 I NfcService: Screen State: ON_UNLOCKED
+06-11 10:56:13.824 29554 31785 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:13.824  1353  1980 I CameraManagerGlobal: onTorchModeChanged
+06-11 10:56:13.824   976  1376 I DexController: getTaskHasActivityIsWaitingToRun: r=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887}, app=ProcessRecord{683a172 3397:com.amaia23.hydracam/u0a367}
+06-11 10:56:13.824   976  1376 D ActivityManager: attachApplicationLocked() app=ProcessRecord{683a172 3397:com.amaia23.hydracam/u0a367} app.isolatedEntryPoint=null instr2=null
+06-11 10:56:13.824  3763 26970 I CameraManagerGlobal: postSingleUpdate device: camera id 20 status STATUS_PRESENT
+06-11 10:56:13.824   976  3766 D SettingsProvider: isChangeAllowed() : name = flashlight_available
+06-11 10:56:13.824   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.824   976  3766 D SettingsProvider: edmUri: content://com.sec.knox.provider/RestrictionPolicy3
+06-11 10:56:13.824   976  3766 D SettingsProvider: projectionArgs: isSettingsChangesAllowed
+06-11 10:56:13.824   976  3766 D SettingsProvider: selectionArgs: false
+06-11 10:56:13.824   976  3766 D SettingsProvider: selectionArgs: 10036
+06-11 10:56:13.824   976  3766 D SecContentProvider: query(), uri = 17 selection = isSettingsChangesAllowed
+06-11 10:56:13.824   976  3766 D SecContentProvider: called from android.uid.systemui:10036
+06-11 10:56:13.824   976  1963 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:13.824  3763 26970 I CameraManagerGlobal: postSingleUpdate device: camera id 23 status STATUS_PRESENT
+06-11 10:56:13.825   976  3766 D RestrictionPolicy: isSettingsChangesAllowedAsUser, userId 0 : true
+06-11 10:56:13.825   976  3766 D SettingsProvider: ret = 1
+06-11 10:56:13.825   739 14736 I CameraFlashlight: deviceClosed: device 0 is closed
+06-11 10:56:13.825   739 14736 I CameraService: disconnect: Disconnected client for camera 0 for PID 0
+06-11 10:56:13.825   739 14736 D CameraService: BasicClient::disconnect X
+06-11 10:56:13.825   739 14736 I CameraService: onUidStateChanged: uid=10178, procState is changed. (15 -> 2)
+06-11 10:56:13.825  3763 26970 I CameraManagerGlobal: postSingleUpdate device: camera id 23 status STATUS_PRESENT
+06-11 10:56:13.825   976  3766 I GenerationRegistry: mBackingStore.isClosed() : false
+06-11 10:56:13.825   739 15085 E Camera2-FrameProcessorBase: removeListener: 
+06-11 10:56:13.825   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.825   739 15085 D Camera3-Device: flush: mInterfaceLock.lock()
+06-11 10:56:13.825   739 15085 D Camera3-Device: waitUntilDrained: mInterfaceLock.unlock()
+06-11 10:56:13.825   739 15085 I Camera3-Device: disconnectImpl: E
+06-11 10:56:13.825   739 15085 D Camera3-Device: disconnectImpl: mInterfaceLock.unlock()
+06-11 10:56:13.825   739 15085 E CameraServiceProxyWrapper: logClose: SessionStatsMap should contain camera 0 before it's closed
+06-11 10:56:13.825   739 15085 D CameraService: BasicClient::disconnect E
+06-11 10:56:13.825   739 15085 D CameraService: BasicClient::disconnect X - already disconnected
+06-11 10:56:13.825  3763 26970 I CameraManagerGlobal: postSingleUpdate device: camera id 0 status STATUS_PRESENT
+06-11 10:56:13.825 31880 31912 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:13.825   739 15085 I Camera3-Device: disconnectImpl: E
+06-11 10:56:13.825   739 15085 D Camera3-Device: disconnectImpl: mInterfaceLock.unlock()
+06-11 10:56:13.825   739 15085 D CameraService: BasicClient::disconnect E
+06-11 10:56:13.825   739 15085 D CameraService: BasicClient::disconnect X - already disconnected
+06-11 10:56:13.825   739 15085 I Camera2ClientBase: Closed Camera 0. Client was: com.amaia23.hydracam (PID 3139, UID 10367)
+06-11 10:56:13.825   739 15085 I Camera3-Device: disconnectImpl: E
+06-11 10:56:13.825   739 15085 D Camera3-Device: disconnectImpl: mInterfaceLock.unlock()
+06-11 10:56:13.825   739 15085 D Camera3-RequestInjector: RequestInjector[0] Mapper destroyed
+06-11 10:56:13.825   739 15085 I Camera3DeviceInjectionMethods: injectionDisconnectImpl: Injection camera disconnect
+06-11 10:56:13.825   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  1878  1878 I SecHAL  : nfc_hal_write: enter;
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  1878  1878 E SecHAL  : nfc_hal_write: [Cmd]Send EVT data_sending_flag = true, return size=4!!
+06-11 10:56:13.826  1878  1878 I SecHAL  : nfc_hal_write: exit;
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   739 15085 E CameraService: binderDied: Java client's binder died, removing it from the list of active clients
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  1878  2798 D SecHAL  : nfc_hal_task: Got a event: HAL_EVT_WRITE(3)
+06-11 10:56:13.826  1878  2798 D SecHAL  : nfc_hal_task: current state: SERVICE
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  1878  2798 I SecHAL  : device_wakeup: Wakeup! in 20 ms
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  3763 26970 I CameraManagerGlobal: postSingleUpdate device: camera id 0 status STATUS_PRESENT
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  1093  1218 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:13.826   976  1376 V WindowManager: rotationForOrientation(orient=SCREEN_ORIENTATION_UNSPECIFIED (-1), last=ROTATION_0 (0)); user=ROTATION_0 (0) 
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826  3763  3763 I SemDvfsHyPerManager: acquire hyper - BaseTABoost/3763@20, type = 1090523139
+06-11 10:56:13.826   976  1376 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887}
+06-11 10:56:13.826  3763  3763 I SemDvfsHyPerManager: acquire hyper - BaseTAToouchBoost/3763@22, type = 1090523139
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.826   976  1376 V WindowManager: rotationForOrientation(orient=SCREEN_ORIENTATION_UNSPECIFIED (-1), last=ROTATION_0 (0)); user=ROTATION_0 (0) 
+06-11 10:56:13.826   976  1376 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887}
+06-11 10:56:13.826   976  1819 D SettingsProvider: isChangeAllowed() : name = flashlight_enabled
+06-11 10:56:13.826   976  1819 D SettingsProvider: edmUri: content://com.sec.knox.provider/RestrictionPolicy3
+06-11 10:56:13.826   976  1819 D SettingsProvider: projectionArgs: isSettingsChangesAllowed
+06-11 10:56:13.826   976  1819 D SettingsProvider: selectionArgs: false
+06-11 10:56:13.826   976  1819 D SettingsProvider: selectionArgs: 10036
+06-11 10:56:13.826   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.827   976  1819 D SecContentProvider: query(), uri = 17 selection = isSettingsChangesAllowed
+06-11 10:56:13.827   976  1819 D SecContentProvider: called from android.uid.systemui:10036
+06-11 10:56:13.827   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.827   976  1819 D RestrictionPolicy: isSettingsChangesAllowedAsUser, userId 0 : true
+06-11 10:56:13.827   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.827   976  1819 D SettingsProvider: ret = 1
+06-11 10:56:13.827   976  2481 W NetlinkSocket: maximum read
+06-11 10:56:13.827  3763 26970 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:13.827  3763 26970 I CameraManagerGlobal: onCameraDeviceStateChangedLocked: post device state update
+06-11 10:56:13.827  3763 26970 I CameraManagerGlobal: onCameraDeviceStateChangedLocked: post device state update
+06-11 10:56:13.827   976  1376 V WindowManager: Computed rotation=ROTATION_0 (0) for display id=0 based on lastOrientation=SCREEN_ORIENTATION_UNSPECIFIED (-1) and oldRotation=ROTATION_0 (0), caller=com.android.server.wm.DisplayRotation.updateOrientation:407 com.android.server.wm.DisplayContent.updateOrientation:1939 com.android.server.wm.DisplayContent.updateOrientation:1877 com.android.server.wm.RootWindowContainer.ensureVisibilityAndConfig:2207 com.android.server.wm.ActivityTaskSupervisor.realStartActivityLocked:939 com.android.server.wm.RootWindowContainer.startActivityForAttachedApplicationIfNeeded:2361 
+06-11 10:56:13.827   976  1376 D TspStateManager: updateCustomValue customSetting=
+06-11 10:56:13.827 31880 32128 I [SC][CloudServiceTypeRepositoryImpl]: getCloudServiceTypeInfo. result=CloudServiceTypeInfo(serviceType=Unknown, sequenceNumber=0)
+06-11 10:56:13.828   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 7157456  [3763 / 20]    HINT :      list : [TABoost / 5] 
+06-11 10:56:13.828   976  1376 V WindowManager: rotationForOrientation(orient=SCREEN_ORIENTATION_UNSPECIFIED (-1), last=ROTATION_0 (0)); user=ROTATION_0 (0) 
+06-11 10:56:13.828   976  1376 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887}
+06-11 10:56:13.828   976  1376 D TspStateManager: updateCustomValue customSetting=
+06-11 10:56:13.828   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 7165027  [3763 / 22]    HINT :      list : [TABoost / 20] [TIMEOUT / 1500] 
+06-11 10:56:13.828   976  1376 D SGM:PkgDataHelper: notifyAppCreate(), pkgName: com.amaia23.hydracam, userId: 0, sendRet: true
+06-11 10:56:13.829   976  1187 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_CREATE, pkgName: com.amaia23.hydracam, userId: 0
+06-11 10:56:13.829   976  1376 D MARsPolicyManager: onPackageResumedFG pkgName = com.amaia23.hydracam, userId = 0
+06-11 10:56:13.830   976  1376 D InputDispatcher: Focused application set to (0): fe6fc4b
+06-11 10:56:13.830   976  1376 D SGM:GameManager: TaskStackListener.onTaskFocusChanged(), taskId=1862, focused=false
+06-11 10:56:13.830   976  1376 D SGM:GameManager: TaskStackListener.onTaskFocusChanged(), taskId=1887, focused=true
+06-11 10:56:13.830   976  1376 D SGM:GameManager:   sendRunningComponentFocus(), pkgName: com.amaia23.hydracam, userId: 0
+06-11 10:56:13.830   976  1187 D SGM:GameManager: onLooperPrepared(), msg: MSG_TASK_FOCUSED, pkgName: com.amaia23.hydracam, userId: 0
+06-11 10:56:13.830   976  1187 D SGM:GameManager: handleTaskFocused().
+06-11 10:56:13.830   976  1187 D SGM:GameManager:   handleTaskFocused(), pkgName: com.amaia23.hydracam, userID:0
+06-11 10:56:13.830   976  1187 D SGM:GameManager: handleResume().
+06-11 10:56:13.830   976  1187 D SGM:GameManager: sendFocusOutConditionally() - mPrevNotiPkg: (unknown), userId: 0
+06-11 10:56:13.830   976  1187 D SGM:GameManager:   handleResume(). pkgName: com.amaia23.hydracam, userId: 0, isTunableApp: null
+06-11 10:56:13.830   976  1187 D SGM:GameManager: notifyFocusInOut(). of pkg: com.amaia23.hydracam, type: 4, isMinimized: false, isTunableApp: false, userId: 0
+06-11 10:56:13.830   976  1187 D SGM:GameManager:   notifyFocusInOut(). unexpected mPrevNotiType: -1
+06-11 10:56:13.830   976  1187 D SGM:NetworkLimit: callRelease
+06-11 10:56:13.830   976  1187 D SGM:SystemHelper: callReleaseBlock needReleaseBlock:false
+06-11 10:56:13.831   976  1376 W WindowManager: Execute app transition: mNextAppTransitionRequests=[TRANSIT_OPEN, TRANSIT_OPEN], mNextAppTransitionFlags=, displayId: 0 Callers=com.android.server.wm.RootWindowContainer.executeAppTransitionForAllDisplay:2706 com.android.server.wm.ActivityTaskSupervisor.reportResumedActivityLocked:2255 com.android.server.wm.ActivityRecord.completeResumeLocked:6361 com.android.server.wm.Task.minimalResumeActivityLocked:7470 com.android.server.wm.ActivityTaskSupervisor.realStartActivityLocked:1162 
+06-11 10:56:13.831   976  1027 V ActivityManager: Changed top to ProcessRecord{683a172 3397:com.amaia23.hydracam/u0a367}
+06-11 10:56:13.831   976  1027 I ActivityManager: Changes in 10367 19 to 2, 0 to 15
+06-11 10:56:13.831   976  1027 I AppOps  : updateUidProcState uid: 10367 procState: 2 capability:15
+06-11 10:56:13.831   976  1028 D WindowManager: performShow logReadyForDisplay  mToken.waitingToShow:true isTransitionSet:true
+06-11 10:56:13.832 19560 19560 D HidDeviceService: handleMessage(): msg.what=8
+06-11 10:56:13.832   976  1025 D NetworkPolicy: onUidStateChanged() uid: 10367, isForeground(true, 2)
+06-11 10:56:13.833   976  1028 D WindowManager: Loading animation for app transition. transit=TRANSIT_OLD_TASK_OPEN enter=false frame=Rect(0, 0 - 1080, 2020) insets=Rect(0, 0 - 0, 0) surfaceInsets=Rect(0, 0 - 0, 0)
+06-11 10:56:13.833   976  1025 D SSRM:LoadDetectMonitor: PID = 3397, UID = 10367
+06-11 10:56:13.834   976  1028 D WindowManager: prepareDimAnimOnAnimating owner = Task{e01fe53 #1862 type=standard A=10178:com.google.android.gm U=0 visible=false mode=fullscreen translucent=true sz=1}
+06-11 10:56:13.834   976  1028 I WindowManager: Reparenting to leash, surface=Surface(name=Task=1862)/@0xf2c7ea1, leashParent=Surface(name=DefaultTaskDisplayArea)/@0x3ac759c
+06-11 10:56:13.835   629   809 I SurfaceFlinger: id=13168 createSurf (0x0),-1 flag=24000, Surface(name=Task=1862)/@0xf2c7ea1 - animation-leash of app_transition#0
+06-11 10:56:13.835   976  1028 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=Task=1862)/@0xf2c7ea1 - animation-leash of app_transition)/@0x10f982a
+06-11 10:56:13.835   976  1028 D WindowManager: startDimAnimation owner = Task{e01fe53 #1862 type=standard A=10178:com.google.android.gm U=0 visible=false mode=fullscreen translucent=true sz=1}
+06-11 10:56:13.836   629   809 I SurfaceFlinger: id=13169 createSurf (0x0),-1 flag=20004, Dim Layer for - Task=1862 - animating-dim#0
+06-11 10:56:13.837   976  1028 I WindowManager: Reparenting to leash, surface=Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b, leashParent=Surface(name=Task=1862)/@0xf2c7ea1
+06-11 10:56:13.837   629   809 I SurfaceFlinger: id=13170 createSurf (0x0),-1 flag=24000, Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b - animation-leash of dimmer#0
+06-11 10:56:13.840  3397  3397 D ActivityThread: handleBindApplication()++ app=com.amaia23.hydracam
+06-11 10:56:13.841  3397  3397 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10367; state: ENABLED
+06-11 10:56:13.841   976  1028 D WindowManager: makeSurface duration=5 leash=Surface(name=Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b - animation-leash of dimmer)/@0x35ec3b8
+06-11 10:56:13.841   976  1028 D WindowManager: Loading animation for app transition. transit=TRANSIT_OLD_TASK_OPEN enter=true frame=Rect(0, 0 - 1080, 2280) insets=Rect(0, 117 - 0, 144) surfaceInsets=Rect(0, 0 - 0, 0)
+06-11 10:56:13.842   976  1028 I WindowManager: Reparenting to leash, surface=Surface(name=Task=1887)/@0x6aa51d0, leashParent=Surface(name=DefaultTaskDisplayArea)/@0x3ac759c
+06-11 10:56:13.842   629   809 I SurfaceFlinger: id=13171 createSurf (0x0),-1 flag=24004, Surface(name=Task=1887)/@0x6aa51d0 - animation-leash of app_transition#0
+06-11 10:56:13.843   976  1028 D WindowManager: makeSurface duration=0 leash=Surface(name=Surface(name=Task=1887)/@0x6aa51d0 - animation-leash of app_transition)/@0x25265c9
+06-11 10:56:13.843   976  1028 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-11 10:56:13.847  1878  2798 I SecHAL  : device_wakeup: exit
+06-11 10:56:13.847  1878  2798 I SecHAL  : OSI_timer_start: enter,osi_lock
+06-11 10:56:13.847  1878  2798 I SecHAL  : OSI_timer_start: before pthread_create for timer thread
+06-11 10:56:13.847  1878  2798 I SecHAL  : OSI_timer_start: after pthread_create for timer thread
+06-11 10:56:13.847  1878  2798 I SecHAL  : OSI_timer_start: before osi_unlock
+06-11 10:56:13.847  1878  2798 I SecHAL  : OSI_timer_start: exit
+06-11 10:56:13.847  1878  2798 I SecHAL  : device_write: enter
+06-11 10:56:13.847  1878  2798 I SecHAL  : device_write: before system call
+06-11 10:56:13.847  1878  2798 I SecHAL  : device_write: after system call
+06-11 10:56:13.848  1878  2798 I SecHAL  : device_write: exit
+06-11 10:56:13.849   629   629 I Layer   : id=13172 Destroyed Screenshot Parent
+06-11 10:56:13.851  1878  2797 I SecHAL  : subft_sent_msg_to_Hal_task: subft_sent_msg_to_Hal_task enter
+06-11 10:56:13.851  1878  2797 D SecHAL  : subft_sent_msg_to_Hal_task: Sent message to HAL message task, remind que: 2
+06-11 10:56:13.851  1878  2798 D SecHAL  : nfc_hal_task: Got a event: HAL_EVT_READ(4)
+06-11 10:56:13.851  1878  2798 D SecHAL  : nfc_hal_task: current state: SERVICE
+06-11 10:56:13.852  1878  2798 I SecHAL  : OSI_timer_start: enter,osi_lock
+06-11 10:56:13.852  1878  2798 I SecHAL  : OSI_timer_start: before osi_unlock
+06-11 10:56:13.852  1878  2798 I SecHAL  : OSI_timer_start: exit
+06-11 10:56:13.852  1878  2798 I SecHAL  : nfc_data_callback: !
+06-11 10:56:13.852  1878  2798 E SecHAL  : nfc_data_callback: [Cmd]Received a response packet : data_sending_flag = false!!
+06-11 10:56:13.852   976  1028 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x671153f
+06-11 10:56:13.852   976  1028 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1, destroy=false, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8
+06-11 10:56:13.852   976  1028 I WindowManager: Reparenting to leash, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8, leashParent=Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1
+06-11 10:56:13.852  1739  2793 E libnfc_nci: [ERROR:nfc_ncif.cc(1457)] nfc_ncif_proc_deactivate - evt_data.deactivate.reason 0, nfc_cb.deact_reason = 2
+06-11 10:56:13.852  1878  1878 I SecHAL  : nfc_hal_pre_discover: enter;
+06-11 10:56:13.852  1878  1878 I SecHAL  : nfc_hal_pre_discover: exit;
+06-11 10:56:13.853   629   809 I SurfaceFlinger: id=13173 createSurf (0x0),-1 flag=24000, Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0
+06-11 10:56:13.853  1878  1878 I SecHAL  : nfc_hal_write: enter;
+06-11 10:56:13.853   976  1028 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x414bfef
+06-11 10:56:13.853  1878  1878 E SecHAL  : nfc_hal_write: [Cmd]Send EVT data_sending_flag = true, return size=18!!
+06-11 10:56:13.853  1878  1878 I SecHAL  : nfc_hal_write: exit;
+06-11 10:56:13.853   976  1028 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation)/@0xee3b355
+06-11 10:56:13.853   976  1028 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{3605819 android.os.BinderProxy@2aed363})/@0xd1e8e54, destroy=false, surface=Surface(name=73350de NavigationBar0)/@0x8e0e9a7
+06-11 10:56:13.853   976  1028 I WindowManager: Reparenting to leash, surface=Surface(name=73350de NavigationBar0)/@0x8e0e9a7, leashParent=Surface(name=WindowToken{3605819 android.os.BinderProxy@2aed363})/@0xd1e8e54
+06-11 10:56:13.853   629   809 I SurfaceFlinger: id=13174 createSurf (0x0),-1 flag=24000, Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#0
+06-11 10:56:13.854  1878  2798 D SecHAL  : nfc_hal_task: Got a event: HAL_EVT_WRITE(3)
+06-11 10:56:13.854   976  1028 D WindowManager: makeSurface duration=0 leash=Surface(name=Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation)/@0xf129585
+06-11 10:56:13.854  1878  2798 D SecHAL  : nfc_hal_task: current state: SERVICE
+06-11 10:56:13.854  1878  2798 I SecHAL  : OSI_timer_start: enter,osi_lock
+06-11 10:56:13.854  1878  2798 I SecHAL  : OSI_timer_start: before osi_unlock
+06-11 10:56:13.854  1878  2798 I SecHAL  : OSI_timer_start: exit
+06-11 10:56:13.854  1878  2798 I SecHAL  : device_write: enter
+06-11 10:56:13.854  1878  2798 I SecHAL  : device_write: before system call
+06-11 10:56:13.855  1878  2798 I SecHAL  : device_write: after system call
+06-11 10:56:13.855  1878  2798 I SecHAL  : device_write: exit
+06-11 10:56:13.856  1353  1582 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_NAVIGATION_BAR on Splash Screen com.amaia23.hydracam
+06-11 10:56:13.856  1353  1582 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_STATUS_BAR on Splash Screen com.amaia23.hydracam
+06-11 10:56:13.860  1093  1093 I VSET/ObserveCameraStateService: onStartCommand : unihal 2.03
+06-11 10:56:13.860  1093  1093 I VSET/ObserveCameraStateService: initAppRepository is created already
+06-11 10:56:13.861  1353  1353 D PrivacyDotViewController: scheduleUpdate: 
+06-11 10:56:13.862  1353  2450 D PrivacyDotViewController: processNextViewState: 
+06-11 10:56:13.862  1093  1093 I VSET/ObserveCameraStateService: onStartCommand: true
+06-11 10:56:13.862  1353  2450 D PrivacyDotViewController: resolveState ViewState(viewInitialized=true, havingInset=false, isEdgeActive=false, dotTopMargin=80, systemPrivacyEventIsActive=false, shadeExpanded=false, qsExpanded=false, portraitRect=Rect(0, 0 - 931, 117), landscapeRect=Rect(116, 0 - 2268, 72), upsideDownRect=Rect(0, 0 - 1068, 117), seascapeRect=Rect(0, 0 - 2164, 72), layoutRtl=false, rotation=0, height=117, cornerIndex=1, designatedCorner=android.widget.FrameLayout{d0b4a16 V.E...... ........ 913,80-1062,197 #7f0b067a app:id/privacy_dot_right_container})
+06-11 10:56:13.862  1093  1093 I VSET/SettingsActivity: ActivateSettingActivityForSupportedCases: country true
+06-11 10:56:13.862  1878  2797 I SecHAL  : subft_sent_msg_to_Hal_task: subft_sent_msg_to_Hal_task enter
+06-11 10:56:13.863  1353  1614 D OpenGLRenderer: setSurface called with nullptr
+06-11 10:56:13.863  1353  1614 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-11 10:56:13.863  1353  1614 D OpenGLRenderer: destroyEglSurface
+06-11 10:56:13.863  1878  2797 D SecHAL  : subft_sent_msg_to_Hal_task: Sent message to HAL message task, remind que: 2
+06-11 10:56:13.863  1878  2798 D SecHAL  : nfc_hal_task: Got a event: HAL_EVT_READ(4)
+06-11 10:56:13.863  1878  2798 D SecHAL  : nfc_hal_task: current state: SERVICE
+06-11 10:56:13.863  1878  2798 I SecHAL  : OSI_timer_start: enter,osi_lock
+06-11 10:56:13.863  1878  2798 I SecHAL  : OSI_timer_start: before osi_unlock
+06-11 10:56:13.863  1878  2798 I SecHAL  : OSI_timer_start: exit
+06-11 10:56:13.863  1878  2798 I SecHAL  : nfc_data_callback: !
+06-11 10:56:13.863  1878  2798 E SecHAL  : nfc_data_callback: [Cmd]Received a response packet : data_sending_flag = false!!
+06-11 10:56:13.863  3669  3669 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.startService:1886 android.content.ContextWrapper.startService:793 android.content.ContextWrapper.startService:793 com.sec.android.diagmonagent.sa.receiver.CFLogReceiver.a:4 com.sec.android.diagmonagent.sa.receiver.CFLogReceiver.onReceive:4 
+06-11 10:56:13.864  1353  2450 I ViewRootImpl@d4e0efd[ScreenDecorOverlay]: dispatchDetachedFromWindow
+06-11 10:56:13.865   976  1027 I GameSDK@LifeCycle: noteResumeComponent(): package name  : com.amaia23.hydracam
+06-11 10:56:13.865   976  1027 D SGM:GameManager: noteResumeComponent(), received pkgName: com.amaia23.hydracam, userId: 0
+06-11 10:56:13.865   976   976 I CocktailBarManagerServiceContainer: handleMessage: entry what = 5
+06-11 10:56:13.865   976  1026 D SettingsProvider: isChangeAllowed() : name = enabled_notification_listeners
+06-11 10:56:13.865   976  3810 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.vtcamerasettings cmp = com.samsung.android.vtcamerasettings.settings.SettingsActivity newState = 1 callingPackage = 1000/com.samsung.android.vtcamerasettings
+06-11 10:56:13.866   976  1187 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_RESUME, pkgName: com.amaia23.hydracam, userid: 0
+06-11 10:56:13.866   976  1187 D SGM:GameManager: handleResume().
+06-11 10:56:13.866   976  1187 D SGM:GameManager: sendFocusOutConditionally() - mPrevNotiPkg: (unknown), userId: 0
+06-11 10:56:13.866   976  1187 D SGM:GameManager:   handleResume(). pkgName: com.amaia23.hydracam, userId: 0, isTunableApp: null
+06-11 10:56:13.866   976  1187 D SGM:GameManager: notifyFocusInOut(). of pkg: com.amaia23.hydracam, type: 4, isMinimized: false, isTunableApp: false, userId: 0
+06-11 10:56:13.866   976  1187 D SGM:GameManager:   notifyFocusInOut(). unexpected mPrevNotiType: -1
+06-11 10:56:13.866   976  1187 D SGM:NetworkLimit: callRelease
+06-11 10:56:13.866   976  1187 D SGM:SystemHelper: callReleaseBlock needReleaseBlock:false
+06-11 10:56:13.866   976  3810 D InputTransport: Input channel destroyed: 'f17337f', fd=1003
+06-11 10:56:13.866   976  2503 I MediaSessionMonitor: Media session stopped : controllerList empty
+06-11 10:56:13.866  1093  1093 I VSET/ObserveCameraStateService: onStartCommand: update SALogging status
+06-11 10:56:13.866   976  3810 W InputManager-JNI: Input channel object 'f17337f ScreenDecorOverlay (client)' was disposed without first being removed with the input manager!
+06-11 10:56:13.866   976  3810 D InputTransport: Input channel destroyed: 'f17337f', fd=1004
+06-11 10:56:13.866  1093  1093 I VSET/VSETFeature: isDefaultOffCounty: DE
+06-11 10:56:13.866  1093  1093 I VSET/VSETPreference: getVSETEnabled: update first lunch time false
+06-11 10:56:13.867   976  3810 I WindowManager: Destroying surface Surface(name=ScreenDecorOverlay$_1353)/@0xeca9fa6 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.removeImmediately:2960 com.android.server.wm.WindowState.removeIfPossible:3151 com.android.server.wm.WindowState.removeIfPossible:2984 com.android.server.wm.WindowManagerService.removeWindow:2266 com.android.server.wm.Session.remove:225 android.view.IWindowSession$Stub.onTransact:746 
+06-11 10:56:13.867  1093  1093 I VSET/AppInfoRepository: isSupportedP: ---, false
+06-11 10:56:13.867  1093  1093 I VSET/ObserveCameraStateService: updateAppInfoRepository: E 
+06-11 10:56:13.867  1093  1093 I VSET/ObserveCameraStateService: initAppRepository is created already
+06-11 10:56:13.868  8288  8288 I Utils   : HomePackage : com.sec.android.app.launcher, resumePackageName : com.amaia23.hydracam
+06-11 10:56:13.869  1353  2450 D InputTransport: Input channel destroyed: 'f17337f', fd=185
+06-11 10:56:13.869   629   629 I Layer   : id=13161 removeFromCurrentState Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#1 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=68 removeFromCurrentState 73350de NavigationBar0#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=78 removeFromCurrentState NavigationBar0$_1353#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=68 addToCurrentState 73350de NavigationBar0#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=78 addToCurrentState NavigationBar0$_1353#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=13160 removeFromCurrentState Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=75 removeFromCurrentState 6c2cdc StatusBar#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=83 removeFromCurrentState StatusBar$_1353#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=75 addToCurrentState 6c2cdc StatusBar#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=83 addToCurrentState StatusBar$_1353#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=13153 removeFromCurrentState ScreenDecorOverlay$_1353#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=13150 removeFromCurrentState f17337f ScreenDecorOverlay#0 (130)
+06-11 10:56:13.869   629   629 I Layer   : id=13149 removeFromCurrentState WindowToken{5ab8c9e android.os.BinderProxy@5692ad9}#0 (130)
+06-11 10:56:13.869  1093  1093 I VSET/VisionServerHelper: isNeedUpdated: last app : 250013000, installed app : 250013000
+06-11 10:56:13.869   629   629 I SurfaceFlinger: id=13150 Removed f17337f ScreenDecorOverlay#0 (130)
+06-11 10:56:13.869   629   629 I SurfaceFlinger: id=13149 Removed WindowToken{5ab8c9e android.os.BinderProxy@5692ad9}#0 (130)
+06-11 10:56:13.869  1093  1093 I VSET/VisionServerHelper: isNeedUpdated: fast request
+06-11 10:56:13.869   629   629 I SurfaceFlinger: id=13153 Removed ScreenDecorOverlay$_1353#0 (130)
+06-11 10:56:13.870   629   629 I SurfaceFlinger: id=13161 Removed Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#1 (130)
+06-11 10:56:13.870   629   629 I SurfaceFlinger: id=13160 Removed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1 (130)
+06-11 10:56:13.870   976  1027 D SGM:GameManager: identifyGamePackage. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.fgapps.GameAppUtils.isGame(GameAppUtils.java:84)
+06-11 10:56:13.870   976  1027 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-11 10:56:13.870  1353  1614 D OpenGLRenderer: setSurface called with nullptr
+06-11 10:56:13.870  1353  1614 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-11 10:56:13.870  1353  1614 D OpenGLRenderer: destroyEglSurface
+06-11 10:56:13.870   629   629 I Layer   : id=13160 Destroyed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1
+06-11 10:56:13.870   629   629 I Layer   : id=13161 Destroyed Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#1
+06-11 10:56:13.870   629   629 I Layer   : id=13149 Destroyed WindowToken{5ab8c9e android.os.BinderProxy@5692ad9}#0
+06-11 10:56:13.870   629   629 I Layer   : id=13150 Destroyed f17337f ScreenDecorOverlay#0
+06-11 10:56:13.870   976  1027 D SGM:GameManager: identifyGamePackage. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.SortingMachine.isGame(SortingMachine.java:162)
+06-11 10:56:13.871   976  1027 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-11 10:56:13.871  1353  2450 I ViewRootImpl@28fab9f[ScreenDecorOverlayBottom]: dispatchDetachedFromWindow
+06-11 10:56:13.871   976  1819 W InputDispatcher: f17337f ScreenDecorOverlay has FLAG_SLIPPERY. Please report this in b/157929241
+06-11 10:56:13.872   629   629 I Layer   : id=13153 Destroyed ScreenDecorOverlay$_1353#0
+06-11 10:56:13.872   976  3810 D InputTransport: Input channel destroyed: '75889b ', fd=1005
+06-11 10:56:13.873   976  3810 W InputManager-JNI: Input channel object '75889b ScreenDecorOverlayBottom (client)' was disposed without first being removed with the input manager!
+06-11 10:56:13.873   976  3810 D InputTransport: Input channel destroyed: '75889b ', fd=1006
+06-11 10:56:13.874   629   629 D SurfaceFlinger: Display 0 HWC layers:
+06-11 10:56:13.874   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c44770 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2255.0 |    0   25 1080 2280 | com.google.android.gm/com.google.and[...]nversationListActivityGmail$_29554#0
+06-11 10:56:13.874   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c560b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0    0 1080  117 | StatusBar$_1353#0
+06-11 10:56:13.874   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c52870 | 0100 | RGBA_8888    |    0.0    0.0   67.0  320.0 | 1013  357 1080  677 | com.samsung.android.app.cocktailbars[...]arservice.CocktailBarService$_8288#0
+06-11 10:56:13.874   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4d0b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1353#0
+06-11 10:56:13.874   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c476b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0 2163 1080 2280 | ScreenDecorOverlayBottom$_1353#0
+06-11 10:56:13.874   629   629 D SurfaceFlinger: 
+06-11 10:56:13.874   976  3810 I WindowManager: Destroying surface Surface(name=ScreenDecorOverlayBottom$_1353)/@0x29bfd7e called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.removeImmediately:2960 com.android.server.wm.WindowState.removeIfPossible:3151 com.android.server.wm.WindowState.removeIfPossible:2984 com.android.server.wm.WindowManagerService.removeWindow:2266 com.android.server.wm.Session.remove:225 android.view.IWindowSession$Stub.onTransact:746 
+06-11 10:56:13.876  1353  2450 D InputTransport: Input channel destroyed: '75889b ', fd=211
+06-11 10:56:13.876   976  1053 D PowerManagerService: UserActivityStateListenerState: 0
+06-11 10:56:13.876  1884  1915 I RecentModel: onTaskStackChangedBackground
+06-11 10:56:13.877  3763 26970 E TaskStackListenerAbstract: onTaskSnapshotChanged called by Binder.getCallingPid() 0 android.app.ITaskStackListener$Stub.onTransact:585 android.os.Binder.execTransactInternal:1220 android.os.Binder.execTransact:1179 <bottom of call stack> 
+06-11 10:56:13.878  4224  4276 E TaskStackListenerAbstract: onTaskSnapshotChanged called by Binder.getCallingPid() 0 android.app.ITaskStackListener$Stub.onTransact:585 android.os.Binder.execTransactInternal:1220 android.os.Binder.execTransact:1179 <bottom of call stack> 
+06-11 10:56:13.878  1353  3215 E TaskStackListenerAbstract: onTaskSnapshotChanged called by Binder.getCallingPid() 0 android.app.ITaskStackListener$Stub.onTransact:585 android.os.Binder.execTransactInternal:1220 android.os.Binder.execTransact:1179 <bottom of call stack> 
+06-11 10:56:13.879  1353  3240 E TaskStackListenerAbstract: onTaskSnapshotChanged called by Binder.getCallingPid() 0 android.app.ITaskStackListener$Stub.onTransact:585 android.os.Binder.execTransactInternal:1220 android.os.Binder.execTransact:1179 <bottom of call stack> 
+06-11 10:56:13.885   629   629 I Layer   : id=13154 removeFromCurrentState ScreenDecorOverlayBottom$_1353#0 (125)
+06-11 10:56:13.885   629   629 I Layer   : id=13152 removeFromCurrentState 75889b ScreenDecorOverlayBottom#0 (125)
+06-11 10:56:13.886   629   629 I Layer   : id=13151 removeFromCurrentState WindowToken{13fd4aa android.os.BinderProxy@db89b95}#0 (125)
+06-11 10:56:13.886   629   629 I SurfaceFlinger: id=13152 Removed 75889b ScreenDecorOverlayBottom#0 (125)
+06-11 10:56:13.886   629   629 I SurfaceFlinger: id=13151 Removed WindowToken{13fd4aa android.os.BinderProxy@db89b95}#0 (125)
+06-11 10:56:13.886   629   629 I SurfaceFlinger: id=13154 Removed ScreenDecorOverlayBottom$_1353#0 (125)
+06-11 10:56:13.886   629   629 I Layer   : id=13151 Destroyed WindowToken{13fd4aa android.os.BinderProxy@db89b95}#0
+06-11 10:56:13.886   629   629 I Layer   : id=13152 Destroyed 75889b ScreenDecorOverlayBottom#0
+06-11 10:56:13.887   976  3766 W InputDispatcher: 75889b ScreenDecorOverlayBottom has FLAG_SLIPPERY. Please report this in b/157929241
+06-11 10:56:13.888   629   629 I Layer   : id=13154 Destroyed ScreenDecorOverlayBottom$_1353#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger: Display 0 HWC layers:
+06-11 10:56:13.891   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c44770 | 0100 | RGBA_8888    |    0.0   16.0 1080.0 2276.0 |    0   20 1080 2280 | com.google.android.gm/com.google.and[...]nversationListActivityGmail$_29554#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger:  SOLID_COLOR |              | 0000 |  Unknown  |    0.0    0.0    0.0    0.0 |    0   20 1080 2280 | Dim Layer for - Task=1862 - animating-dim#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c58ed0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 1943.0 |    0  337 1080 2280 | Splash Screen com.amaia23.hydracam$_1353#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c560b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0    0 1080  117 | StatusBar$_1353#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c52870 | 0100 | RGBA_8888    |    0.0    0.0   67.0  320.0 | 1013  357 1080  677 | com.samsung.android.app.cocktailbars[...]arservice.CocktailBarService$_8288#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4b370 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1353#0
+06-11 10:56:13.891   629   629 D SurfaceFlinger: 
+06-11 10:56:13.982   976  1278 W SemWifiTransportLayerUtils: getApplicationCategory - IOException com.amaia23.hydracam
+06-11 10:56:13.982   976  1278 W System.err: java.io.FileNotFoundException: https://play.google.com/store/apps/details?id=com.amaia23.hydracam&hl=en
+06-11 10:56:13.982   976  1278 W System.err: 	at com.android.okhttp.internal.huc.HttpURLConnectionImpl.getInputStream(HttpURLConnectionImpl.java:255)
+06-11 10:56:13.982   976  1278 W System.err: 	at com.android.okhttp.internal.huc.DelegatingHttpsURLConnection.getInputStream(DelegatingHttpsURLConnection.java:211)
+06-11 10:56:13.982   976  1278 W System.err: 	at com.android.okhttp.internal.huc.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:30)
+06-11 10:56:13.982   976  1278 W System.err: 	at com.samsung.android.server.wifi.tcp.SemWifiTransportLayerUtils.getApplicationCategory(SemWifiTransportLayerUtils.java:104)
+06-11 10:56:13.982   976  1278 W System.err: 	at com.samsung.android.server.wifi.tcp.SemWifiTransportLayerMonitor$TcpMonitorHandler.handleMessage(SemWifiTransportLayerMonitor.java:244)
+06-11 10:56:13.982   976  1278 W System.err: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+06-11 10:56:13.982   976  1278 W System.err: 	at android.os.Looper.loopOnce(Looper.java:226)
+06-11 10:56:13.982   976  1278 W System.err: 	at android.os.Looper.loop(Looper.java:313)
+06-11 10:56:13.982   976  1278 W System.err: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+06-11 10:56:13.983   976  1278 D SemWifiTransportLayerMonitor.TcpMonitorHandler: MSG_SAVE_PACKAGE_INFO
+06-11 10:56:13.983   976  1278 D SemWifiTransportLayerFileManager: saveWifiPackageInfoToFile
+06-11 10:56:13.983   976  1278 D SemWifiTransportLayerFileManager: writeWifiPackageInfoList
+06-11 10:56:13.990   976  1412 D MdnieScenarioControlService:  packageName : com.amaia23.hydracam    className : com.amaia23.hydracam.MainActivity
+06-11 10:56:13.990   976  1412 V MdnieScenarioControlService: setUIMode from UI function(3)
+06-11 10:56:14.020 29554 29554 W bfda    : Already started: bfda@aeaa0f5
+06-11 10:56:14.036   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:14.053   976  1028 I WindowManager: Reparenting to original parent: Surface(name=FullscreenMagnification:2:14)/@0xeebcba5, destroy=true, surface=Surface(name=DefaultTaskDisplayArea)/@0x3ac759c
+06-11 10:56:14.054   976  1028 V WindowManager: Setting visibility of Window{db9937 u0 com.google.android.gm/com.google.android.gm.ConversationListActivityGmail}: false, caller=com.android.server.wm.WindowContainer.sendAppVisibilityToClients:1110 com.android.server.wm.WindowToken.setClientVisible:448 com.android.server.wm.ActivityRecord.setClientVisible:7034 com.android.server.wm.ActivityRecord.onAnimationFinished:7921 com.android.server.wm.WindowContainer.doAnimationFinished:3107 
+06-11 10:56:14.056 29554 29554 I ViewRootImpl@67c1c94[ConversationListActivityGmail]: handleAppVisibility mAppVisible=true visible=false
+06-11 10:56:14.070   629   629 I Layer   : id=13162 removeFromCurrentState Surface(name=DefaultTaskDisplayArea)/@0x3ac759c - animation-leash of app_transition#0 (122)
+06-11 10:56:14.070   629   629 I SurfaceFlinger: id=13162 Removed Surface(name=DefaultTaskDisplayArea)/@0x3ac759c - animation-leash of app_transition#0 (122)
+06-11 10:56:14.070   629   629 I Layer   : id=13162 Destroyed Surface(name=DefaultTaskDisplayArea)/@0x3ac759c - animation-leash of app_transition#0
+06-11 10:56:14.077 29554   967 D OpenGLRenderer: setSurface called with nullptr
+06-11 10:56:14.077 29554   967 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-11 10:56:14.077 29554   967 D OpenGLRenderer: destroyEglSurface
+06-11 10:56:14.079   976  3810 V WindowManager: Relayout Window{db9937 u0 com.google.android.gm/com.google.android.gm.ConversationListActivityGmail}: viewVisibility=8 req=1080x2280 d0
+06-11 10:56:14.079   976  3810 V WindowManager: tryStartExitingAnimation 2, Window{db9937 u0 com.google.android.gm/com.google.android.gm.ConversationListActivityGmail}
+06-11 10:56:14.080   976  3810 V WindowManager: Relayout hash=db9937, pid=29554: mAttrs={(0,0)(fillxfill) sim={state=always_visible adjust=resize forwardNavigation} layoutInDisplayCutoutMode=always ty=BASE_APPLICATION wanim=0x1030303
+06-11 10:56:14.080   976  3810 V WindowManager:   fl=81810100
+06-11 10:56:14.080   976  3810 V WindowManager:   pfl=12020040
+06-11 10:56:14.080   976  3810 V WindowManager:   vsysui=2110
+06-11 10:56:14.080   976  3810 V WindowManager:   apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+06-11 10:56:14.080   976  3810 V WindowManager:   bhv=DEFAULT
+06-11 10:56:14.080   976  3810 V WindowManager:   fitSides= naviIconColor=0}
+06-11 10:56:14.081 29554 29554 I ViewRootImpl@67c1c94[ConversationListActivityGmail]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)8 dur=2 res=0x5 s={false 0} ch=true fn=6
+06-11 10:56:14.091   976  1412 V MdnieScenarioControlService: mAclOffEnabled : false mAclPreviewState : false mAclCompensationState : false
+06-11 10:56:14.104   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0114744585]
+06-11 10:56:14.104   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.46536356]
+06-11 10:56:14.104   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.03540091]
+06-11 10:56:14.104   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.355346 msecs
+06-11 10:56:14.105   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.64323 msecs
+06-11 10:56:14.106   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.515077 msecs
+06-11 10:56:14.109  3397  3397 V GraphicsEnvironment: ANGLE Developer option for 'com.amaia23.hydracam' set to: 'default'
+06-11 10:56:14.109  3397  3397 V GraphicsEnvironment: App is not on the allowlist for updatable production driver.
+06-11 10:56:14.112  3397  3397 D LoadedApk: LoadedApk::makeApplication() appContext.mOpPackageName=com.amaia23.hydracam appContext.mBasePackageName=com.amaia23.hydracam
+06-11 10:56:14.112  3397  3397 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+06-11 10:56:14.126  3397  3397 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+06-11 10:56:14.140  3397  3397 D ActivityThread: handleBindApplication() --
+06-11 10:56:14.145  3397  3428 D OpenGLRenderer: RenderThread::requireGlContext()
+06-11 10:56:14.154   976  1028 I WindowManager: Reparenting to original parent: Surface(name=Task=1862)/@0xf2c7ea1, destroy=true, surface=Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b
+06-11 10:56:14.154  3397  3428 D OpenGLRenderer: RenderThread::setGrContext()
+06-11 10:56:14.163   976  3810 I GenerationRegistry: mBackingStore.isClosed() : false
+06-11 10:56:14.169  8288  8288 I Utils   : isCurrentUser current = 0, ownerId = 0
+06-11 10:56:14.169  8288  8288 I TrayVisibilityController: getComputedTrayVisible : keyguardState = 1
+06-11 10:56:14.169  8288  8288 I TrayVisibilityController: updateTrayVisible: State=1 visible=1 mCurrentVisible=1 specificMode=0
+06-11 10:56:14.169  8288  8288 I TrayStateController: onNotifyUpdateTray: state=0
+06-11 10:56:14.180  3397  3439 I ResourceExtractor: Found extracted resources res_timestamp-16-1781168161646
+06-11 10:56:14.180  3397  3438 D FlutterJNI: Beginning load of flutter...
+06-11 10:56:14.187   629   629 I Layer   : id=13170 removeFromCurrentState Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b - animation-leash of dimmer#0 (121)
+06-11 10:56:14.187   629   629 I SurfaceFlinger: id=13170 Removed Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b - animation-leash of dimmer#0 (121)
+06-11 10:56:14.187   629   629 I Layer   : id=13170 Destroyed Surface(name=Dim Layer for - Task=1862 - animating-dim)/@0xe7cc61b - animation-leash of dimmer#0
+06-11 10:56:14.188  3397  3438 D FlutterJNI: flutter (null) was loaded normally!
+06-11 10:56:14.191  3397  3441 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+06-11 10:56:14.209  3397  3397 W maia23.hydraca: Accessing hidden method Landroid/view/SurfaceControl$Builder;->setHidden(Z)Landroid/view/SurfaceControl$Builder; (blocked, linking, denied)
+06-11 10:56:14.212   515   515 E audit   : type=1400 audit(1781168174.205:44604): avc:  denied  { read } for  pid=3397 comm="maia23.hydracam" name="max_map_count" dev="proc" ino=4230775 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-11 10:56:14.212   515   515 E audit   : type=1300 audit(1781168174.205:44604): arch=c00000b7 syscall=56 success=no exit=-13 a0=ffffff9c a1=721756507f a2=0 a3=0 items=0 ppid=535 pid=3397 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="maia23.hydracam" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-11 10:56:14.212   515   515 E audit   : type=1327 audit(1781168174.205:44604): proctitle="com.amaia23.hydracam"
+06-11 10:56:14.224  3397  3442 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+06-11 10:56:14.237   976  1028 I WindowManager: Reparenting to original parent: Surface(name=DefaultTaskDisplayArea)/@0x3ac759c, destroy=true, surface=Surface(name=Task=1862)/@0xf2c7ea1
+06-11 10:56:14.238   976  1028 D WindowManager: clearDimAnimation owner = Task{e01fe53 #1862 type=standard A=10178:com.google.android.gm U=0 visible=false mode=fullscreen translucent=true sz=1}, caller=com.android.server.wm.WindowContainer.onAnimationLeashLost:3129 com.android.server.wm.Task.onAnimationLeashLost:10173 com.android.server.wm.SurfaceAnimator.removeLeash:426 
+06-11 10:56:14.238   976  1028 I WindowManager: Reparenting to original parent: Surface(name=DefaultTaskDisplayArea)/@0x3ac759c, destroy=true, surface=Surface(name=Task=1887)/@0x6aa51d0
+06-11 10:56:14.244   976  3449 D TspStateManager: update cmd=set_grip_data,1,45,7,24,684
+06-11 10:56:14.270   629   629 I Layer   : id=13168 removeFromCurrentState Surface(name=Task=1862)/@0xf2c7ea1 - animation-leash of app_transition#0 (120)
+06-11 10:56:14.270   629   629 I Layer   : id=13171 removeFromCurrentState Surface(name=Task=1887)/@0x6aa51d0 - animation-leash of app_transition#0 (120)
+06-11 10:56:14.270   629   629 I Layer   : id=13164 removeFromCurrentState Task=1887#0 (120)
+06-11 10:56:14.270   629   629 I Layer   : id=13165 removeFromCurrentState ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887}#0 (120)
+06-11 10:56:14.270   629   629 I Layer   : id=13166 removeFromCurrentState fa71227 Splash Screen com.amaia23.hydracam#0 (120)
+06-11 10:56:14.270   629   629 I Layer   : id=13167 removeFromCurrentState Splash Screen com.amaia23.hydracam$_1353#0 (120)
+06-11 10:56:14.271   629   629 I Layer   : id=13169 removeFromCurrentState Dim Layer for - Task=1862 - animating-dim#0 (120)
+06-11 10:56:14.271   629   629 I Layer   : id=13164 addToCurrentState Task=1887#0 (120)
+06-11 10:56:14.271   629   629 I Layer   : id=13165 addToCurrentState ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887}#0 (120)
+06-11 10:56:14.271   629   629 I Layer   : id=13166 addToCurrentState fa71227 Splash Screen com.amaia23.hydracam#0 (120)
+06-11 10:56:14.271   629   629 I Layer   : id=13167 addToCurrentState Splash Screen com.amaia23.hydracam$_1353#0 (120)
+06-11 10:56:14.271   629   629 I SurfaceFlinger: id=13168 Removed Surface(name=Task=1862)/@0xf2c7ea1 - animation-leash of app_transition#0 (120)
+06-11 10:56:14.271   629   629 I SurfaceFlinger: id=13171 Removed Surface(name=Task=1887)/@0x6aa51d0 - animation-leash of app_transition#0 (120)
+06-11 10:56:14.271   629   629 I SurfaceFlinger: id=13169 Removed Dim Layer for - Task=1862 - animating-dim#0 (120)
+06-11 10:56:14.271   629   629 I Layer   : id=13168 Destroyed Surface(name=Task=1862)/@0xf2c7ea1 - animation-leash of app_transition#0
+06-11 10:56:14.271   629   629 I Layer   : id=13171 Destroyed Surface(name=Task=1887)/@0x6aa51d0 - animation-leash of app_transition#0
+06-11 10:56:14.273   629   629 I Layer   : id=13169 Destroyed Dim Layer for - Task=1862 - animating-dim#0
+06-11 10:56:14.274   629   629 D SurfaceFlinger: Display 0 HWC layers:
+06-11 10:56:14.274   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c58ed0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | Splash Screen com.amaia23.hydracam$_1353#0
+06-11 10:56:14.274   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c560b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0    0 1080  117 | StatusBar$_1353#0
+06-11 10:56:14.274   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c52870 | 0100 | RGBA_8888    |    0.0    0.0   67.0  320.0 | 1013  357 1080  677 | com.samsung.android.app.cocktailbars[...]arservice.CocktailBarService$_8288#0
+06-11 10:56:14.274   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4a290 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1353#0
+06-11 10:56:14.274   629   629 D SurfaceFlinger: 
+06-11 10:56:14.275 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 14- eventType=0x1a, addressType=1, address=48B617_2, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-69, periodicAdvInt=0x0
+06-11 10:56:14.304 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-80, periodicAdvInt=0x0
+06-11 10:56:14.307 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:14.339  3397  3450 I flutter : The Dart VM service is listening on http://127.0.0.1:42121/N30JhAKH3dg=/
+06-11 10:56:14.356 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-78, periodicAdvInt=0x0
+06-11 10:56:14.358 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:14.413   565  3381 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 603473
+06-11 10:56:14.560   976  1996 D ActivityManagerPerformance: AMP_release() ACT_RESUME
+06-11 10:56:14.560   565   599 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 510589
+06-11 10:56:14.606   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.025397554]
+06-11 10:56:14.606   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.5266903]
+06-11 10:56:14.606   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.04032748]
+06-11 10:56:14.606   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.182885 msecs
+06-11 10:56:14.606   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.3225 msecs
+06-11 10:56:14.607   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.291346 msecs
+06-11 10:56:14.629   976  3810 D BaseRestrictionMgr: Package: com.android.chrome, userid: 0, hostingType: bindService is allowed by freecess, caller is: com.amaia23.hydracam
+06-11 10:56:14.629 32315 19074 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_IDLE for client com.amaia23.hydracam API Level 2
+06-11 10:56:14.634 32315 19074 I CameraManagerGlobal: postSingleUpdate device: camera id 0 status STATUS_PRESENT
+06-11 10:56:14.634 32315 19074 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:14.640  3397  3397 D FlutterGeolocator: Attaching Geolocator to activity
+06-11 10:56:14.656   976  3810 W ServiceManager: Permission failure: android.permission.HIGH_SAMPLING_RATE_SENSORS from uid=10367 pid=3397
+06-11 10:56:14.700  3397  3397 W maia23.hydraca: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+06-11 10:56:14.700  3397  3397 W maia23.hydraca: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+06-11 10:56:14.700  3397  3397 W maia23.hydraca: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+06-11 10:56:14.700  3397  3397 W maia23.hydraca: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+06-11 10:56:14.713  3397  3397 D FlutterRenderer: Width is zero. 0,0
+06-11 10:56:14.718  3397  3397 I DecorView: [INFO] isPopOver=false, config=true
+06-11 10:56:14.718  3397  3397 I DecorView: updateCaptionType >> DecorView@2705036[], isFloating=false, isApplication=true, hasWindowControllerCallback=true, hasWindowDecorCaption=false
+06-11 10:56:14.718  3397  3397 D DecorView: setCaptionType = 0, this = DecorView@2705036[]
+06-11 10:56:14.720  3397  3397 I DecorView: getCurrentDensityDpi: from real metrics. densityDpi=480 msg=resources_loaded
+06-11 10:56:14.728   565  3389 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 494533
+06-11 10:56:14.734  3397  3397 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=false
+06-11 10:56:14.735   976  3810 D InputTransport: Input channel constructed: 'b121424', fd=773
+06-11 10:56:14.735   976  3810 D InputTransport: Input channel constructed: 'b121424', fd=788
+06-11 10:56:14.735   976  3810 D InputTransport: Input channel constructed: 'b121424', fd=795
+06-11 10:56:14.736   629  1960 I SurfaceFlinger: id=13175 createSurf (0x0),-1 flag=80004, b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0
+06-11 10:56:14.736   976  3810 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-11 10:56:14.736   976  3810 D InputTransport: Input channel destroyed: 'b121424', fd=795
+06-11 10:56:14.738  3397  3397 I ViewRootImpl@25978a4[MainActivity]: setView = com.android.internal.policy.DecorView@2705036 TM=true
+06-11 10:56:14.785  5310  5310 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-11 10:56:14.894  3397  3397 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+06-11 10:56:14.940  3397  3397 I SurfaceView@7ebb33f: onWindowVisibilityChanged(0) true io.flutter.embedding.android.FlutterSurfaceView{7ebb33f V.E...... ......I. 0,0-0,0} of ViewRootImpl@25978a4[MainActivity]
+06-11 10:56:14.941  3397  3397 D FlutterRenderer: Width is zero. 0,0
+06-11 10:56:14.943   976  3810 V WindowManager: Relayout Window{b121424 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=0 req=1080x2280 d0
+06-11 10:56:14.943   976  3810 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-11 10:56:14.944   629  1960 I SurfaceFlinger: id=13176 createSurf (1x1),-3 flag=40004, com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_3397#0
+06-11 10:56:14.944   976  3810 D WindowManager: makeSurface duration=1 name=com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_3397
+06-11 10:56:14.946   976  3810 V WindowManager: Changing focus from null to Window{b121424 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:583 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6497 com.android.server.wm.WindowManagerService.relayoutWindow:2770 com.android.server.wm.Session.relayout:242 
+06-11 10:56:14.946   976  3810 D MARsPolicyManager: onPackageResumedFG pkgName = com.amaia23.hydracam, userId = 0
+06-11 10:56:14.946   976  3810 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x414bfef
+06-11 10:56:14.946   976  3810 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1, destroy=false, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8
+06-11 10:56:14.946   976  3810 I WindowManager: Reparenting to leash, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8, leashParent=Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1
+06-11 10:56:14.947   629  1960 I SurfaceFlinger: id=13177 createSurf (0x0),-1 flag=24000, Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1
+06-11 10:56:14.947   976  3810 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x67cef8e
+06-11 10:56:14.947   976  3810 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation)/@0xf129585
+06-11 10:56:14.947   976  3810 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{3605819 android.os.BinderProxy@2aed363})/@0xd1e8e54, destroy=false, surface=Surface(name=73350de NavigationBar0)/@0x8e0e9a7
+06-11 10:56:14.947   976  3810 I WindowManager: Reparenting to leash, surface=Surface(name=73350de NavigationBar0)/@0x8e0e9a7, leashParent=Surface(name=WindowToken{3605819 android.os.BinderProxy@2aed363})/@0xd1e8e54
+06-11 10:56:14.947   629  1960 I SurfaceFlinger: id=13178 createSurf (0x0),-1 flag=24000, Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#1
+06-11 10:56:14.948   976  3810 D WindowManager: makeSurface duration=0 leash=Surface(name=Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation)/@0x911c3bc
+06-11 10:56:14.948   976  3810 D StatusBarManagerService: notifyRequestedSystemKey recent=false home=false
+06-11 10:56:14.949   976  3810 V WindowManager: Relayout hash=b121424, pid=3397: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-11 10:56:14.949   976  3810 V WindowManager:   fl=81810100
+06-11 10:56:14.949   976  3810 V WindowManager:   pfl=12020040
+06-11 10:56:14.949   976  3810 V WindowManager:   vsysui=500
+06-11 10:56:14.949   976  3810 V WindowManager:   apr=LIGHT_NAVIGATION_BARS
+06-11 10:56:14.949   976  3810 V WindowManager:   bhv=DEFAULT
+06-11 10:56:14.949   976  3810 V WindowManager:   fitSides= naviIconColor=0
+06-11 10:56:14.949   976  3810 V WindowManager:   sfl=100000}
+06-11 10:56:14.948  1353  1353 D NavigationBar: onSystemBarAttributesChanged() -  displayId:0, appearance:16 (APPEARANCE_LIGHT_NAVIGATION_BARS ), navbarColorManagedByIme:false
+06-11 10:56:14.949   976  1028 D CompatibilityChangeReporter: Compat change id reported: 158002302; UID 10367; state: ENABLED
+06-11 10:56:14.952  3397  3397 I ViewRootImpl@25978a4[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)0 dur=7 res=0x7 s={true 498725033248} ch=true fn=-1
+06-11 10:56:14.953  3397  3397 D FlutterJNI: Sending viewport metrics to the engine.
+06-11 10:56:14.954   552   622 I display : getColorModes:: Supported color modes (3)
+06-11 10:56:14.954   552   622 I display : 	[0] mode 0
+06-11 10:56:14.954   552   622 I display : 	[1] mode 7
+06-11 10:56:14.954   552   622 I display : 	[2] mode 9
+06-11 10:56:14.954   629   661 E HWComposer: getSupportedContentTypes: getSupportedContentTypes failed for display 0: Unsupported (8)
+06-11 10:56:14.954  3397  3428 D hw-ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+06-11 10:56:14.956  3397  3428 D OpenGLRenderer: eglCreateWindowSurface
+06-11 10:56:14.959  3397  3397 I SurfaceView@7ebb33f: windowStopped(false) true io.flutter.embedding.android.FlutterSurfaceView{7ebb33f V.E...... ......ID 0,0-1080,2136} of ViewRootImpl@25978a4[MainActivity]
+06-11 10:56:14.959  3397  3397 I ViewRootImpl@25978a4[MainActivity]: [DP] dp(1) 1 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.performTraversals:4198 android.view.ViewRootImpl.doTraversal:2924 
+06-11 10:56:14.959   629  1960 I SurfaceFlinger: id=13179 createSurf (0x0),-1 flag=20004, Bounds for - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@0#0
+06-11 10:56:14.961   629  1960 I SurfaceFlinger: id=13180 createSurf (0x0),-1 flag=80004, SurfaceView - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@7ebb33f@0#0
+06-11 10:56:14.961   629  1960 I SurfaceFlinger: id=13181 createSurf (0x0),-1 flag=40400, SurfaceView - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@7ebb33f@0(BLAST)#0
+06-11 10:56:14.962   629  1960 I SurfaceFlinger: id=13182 createSurf (0x0),-1 flag=20404, Background for SurfaceView - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@7ebb33f@0#0
+06-11 10:56:14.963  3397  3397 I SurfaceView@7ebb33f: pST: sr = Rect(0, 0 - 1080, 2136) sw = 1080 sh = 2136
+06-11 10:56:14.963  3397  3397 I SurfaceView@7ebb33f: onSSPAndSRT: pl = 0 pt = 0 sx = 1.0 sy = 1.0
+06-11 10:56:14.963  3397  3397 I SurfaceView@7ebb33f: pST: mTmpTransaction.apply, mTmpTransaction = android.view.SurfaceControl$Transaction@e7e5f58
+06-11 10:56:14.964  3397  3397 I SurfaceView@7ebb33f: updateSurface: mVisible = true mSurface.isValid() = true
+06-11 10:56:14.964  3397  3397 I SurfaceView@7ebb33f: updateSurface: mSurfaceCreated = false surfaceChanged = true visibleChanged = true
+06-11 10:56:14.964  3397  3397 I SurfaceView@7ebb33f: surfaceCreated 1 #8 io.flutter.embedding.android.FlutterSurfaceView{7ebb33f V.E...... ......ID 0,0-1080,2136}
+06-11 10:56:14.973   629   629 I Layer   : id=13173 removeFromCurrentState Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0 (125)
+06-11 10:56:14.973   629   629 I Layer   : id=13174 removeFromCurrentState Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#0 (125)
+06-11 10:56:14.974   629   629 I SurfaceFlinger: id=13173 Removed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0 (125)
+06-11 10:56:14.974   629   629 I SurfaceFlinger: id=13174 Removed Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#0 (125)
+06-11 10:56:14.974   629   629 I Layer   : id=13173 Destroyed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0
+06-11 10:56:14.974   629   629 I Layer   : id=13174 Destroyed Surface(name=73350de NavigationBar0)/@0x8e0e9a7 - animation-leash of insets_animation#0
+06-11 10:56:14.974  1878  3422 I SecHAL  : device_sleep: NFC can be going to sleep
+06-11 10:56:14.975   976  3810 D InputDispatcher: Focus request (0): b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity but waiting because NOT_VISIBLE
+06-11 10:56:14.985  3397  3397 I SurfaceView@7ebb33f: surfaceChanged (1080,2136) 1 #8 io.flutter.embedding.android.FlutterSurfaceView{7ebb33f V.E...... ......ID 0,0-1080,2136}
+06-11 10:56:14.986  3397  3397 I ViewRootImpl@25978a4[MainActivity]: [DP] dp(2) 1 android.view.SurfaceView.updateSurface:1375 android.view.SurfaceView.lambda$new$1$SurfaceView:254 android.view.SurfaceView$$ExternalSyntheticLambda2.onPreDraw:2 
+06-11 10:56:14.990  3397  3397 D FlutterGeolocator: Creating service.
+06-11 10:56:14.990  3397  3397 D FlutterGeolocator: Binding to location service.
+06-11 10:56:15.021  3397  3397 I flutter : Log registered: {message: Launch config from intent: role=standby, preferredMasterIp=null, targetId=RF8M21J8XRT, forceSlaveMode=null, manualLaunch=null, timestamp: 2026-06-11 10:56:15.007477, function: null, file: null}
+06-11 10:56:15.063  3397  3397 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_NAVIGATION_BAR on com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+06-11 10:56:15.064  3397  3397 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_STATUS_BAR on com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+06-11 10:56:15.070  3397  3397 D FlutterGeolocator: Geolocator foreground service connected
+06-11 10:56:15.070  3397  3397 D FlutterGeolocator: Initializing Geolocator services
+06-11 10:56:15.070  3397  3397 D FlutterGeolocator: Flutter engine connected. Connected engine count 1
+06-11 10:56:15.078  3397  3397 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-11 10:56:15.080  3397  3397 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-11 10:56:15.079515, function: null, file: null}
+06-11 10:56:15.107   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.021470182]
+06-11 10:56:15.107   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.69115335]
+06-11 10:56:15.107   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.03955374]
+06-11 10:56:15.107   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.18073 msecs
+06-11 10:56:15.108   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.333115 msecs
+06-11 10:56:15.108   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.290193 msecs
+06-11 10:56:15.112  3397  3397 I flutter : Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-06-11 10:56:15.111544, function: null, file: null}
+06-11 10:56:15.120  3397  3397 D FlutterJNI: Sending viewport metrics to the engine.
+06-11 10:56:15.123   976  3766 V WindowManager: Relayout Window{b121424 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=0 req=1080x2280 d0
+06-11 10:56:15.125   976  3766 V WindowManager: Relayout hash=b121424, pid=3397: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-11 10:56:15.125   976  3766 V WindowManager:   fl=81810180
+06-11 10:56:15.125   976  3766 V WindowManager:   pfl=12020040
+06-11 10:56:15.125   976  3766 V WindowManager:   vsysui=500
+06-11 10:56:15.125   976  3766 V WindowManager:   apr=LIGHT_NAVIGATION_BARS
+06-11 10:56:15.125   976  3766 V WindowManager:   bhv=DEFAULT
+06-11 10:56:15.125   976  3766 V WindowManager:   fitSides= naviIconColor=0
+06-11 10:56:15.125   976  3766 V WindowManager:   sfl=100000}
+06-11 10:56:15.126  3397  3397 I ViewRootImpl@25978a4[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)0 dur=4 res=0x3 s={true 498725033248} ch=false fn=1
+06-11 10:56:15.127  3397  3397 I ViewRootImpl@25978a4[MainActivity]: updateBoundsLayer: t = android.view.SurfaceControl$Transaction@bc2196 sc = Surface(name=Bounds for - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@0)/@0x25a3117 frame = 1
+06-11 10:56:15.127  3397  3397 I ViewRootImpl@25978a4[MainActivity]: mWNT: t = android.view.SurfaceControl$Transaction@bc2196 fN = 1 android.view.ViewRootImpl.prepareSurfaces:2783 android.view.ViewRootImpl.performTraversals:4029 android.view.ViewRootImpl.doTraversal:2924 
+06-11 10:56:15.127  3397  3397 I ViewRootImpl@25978a4[MainActivity]: mWNT: merge t to BBQ
+06-11 10:56:15.135 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 14- eventType=0x1a, addressType=1, address=48B617_2, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-68, periodicAdvInt=0x0
+06-11 10:56:15.142  3397  3397 I flutter : Log registered: {message: Permission request completed.
+06-11 10:56:15.142  3397  3397 I flutter : Granted: [Permission.camera, Permission.locationWhenInUse, Permission.microphone]
+06-11 10:56:15.142  3397  3397 I flutter : Denied: [], timestamp: 2026-06-11 10:56:15.141671, function: requestAllPermissions, file: PermissionService}
+06-11 10:56:15.144  3397  3397 I flutter : Log registered: {message: Retrieved existing Device ID: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-11 10:56:15.143382, function: null, file: null}
+06-11 10:56:15.144  3397  3397 I flutter : Log registered: {message: Device ID: c92dc796-b612-4ff4-95ee-81715b124560, timestamp: 2026-06-11 10:56:15.144305, function: null, file: null}
+06-11 10:56:15.144  3397  3397 I flutter : Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-11 10:56:15.144471, function: null, file: null}
+06-11 10:56:15.170   976  3766 D DARUtil : Device owner status not updated yet...
+06-11 10:56:15.170   976  3766 D DARUtil : Not an enterprise user : 0
+06-11 10:56:15.170   976  3766 D DARUtil : Device owner status not updated yet...
+06-11 10:56:15.170   976  3766 D DARUtil : Not an enterprise user : 0
+06-11 10:56:15.177 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-85, periodicAdvInt=0x0
+06-11 10:56:15.179 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:15.183   474   474 W keymaster_tee: [WRN]begin req PARAMS: A1 P2 D4 
+06-11 10:56:15.187   473 16812 I keystore2: keystore2::security_level: In create_operation. Success to create IKeystoreOperation. 10367, None
+06-11 10:56:15.221   565  3384 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 7130989
+06-11 10:56:15.263  3397  3397 I flutter : Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-11 10:56:15.263050, function: null, file: null}
+06-11 10:56:15.286 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-85, periodicAdvInt=0x0
+06-11 10:56:15.288 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:15.329   565  3421 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 7165027
+06-11 10:56:15.430  3397  3397 I flutter : Log registered: {message: Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-11 10:56:15.430285, function: null, file: null}
+06-11 10:56:15.430  3397  3397 I flutter : Log registered: {message: Navigating to AutomationStandbyScreen, timestamp: 2026-06-11 10:56:15.430543, function: null, file: null}
+06-11 10:56:15.450   976  1027 D SGM:GameManager: identifyForegroundApp. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0
+06-11 10:56:15.450   976  1027 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-11 10:56:15.450   976  1027 D SGM:SemGameManager: isForegroundGame(), ret=false
+06-11 10:56:15.451   976  3462 D TspStateManager: update cmd=set_grip_data,1,45,7,15,684
+06-11 10:56:15.610   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.049191147]
+06-11 10:56:15.610   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.3238563]
+06-11 10:56:15.610   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.027799895]
+06-11 10:56:15.610   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.187346 msecs
+06-11 10:56:15.610   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.351192 msecs
+06-11 10:56:15.610   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.304193 msecs
+06-11 10:56:15.705 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 14- eventType=0x1a, addressType=1, address=48B617_2, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-74, periodicAdvInt=0x0
+06-11 10:56:15.795   458   458 D io_stats: !@   8,0 r 9027513 325087708 w 3098270 135088812 d 0 0 f 0 0 iot 3016116 0 th 0 0 0 pt 0 inp 0 0 202145.933
+06-11 10:56:16.080  1632 14213 D IpClient/wlan0: addressUpdated: 2a02:8109:9c8d:df00:90bc:e2ff:fea2:5bf3/64 on ifindex 17 flags 0x00000100 scope 0
+06-11 10:56:16.081  1632 14213 D IpClient/wlan0: addressUpdated: 2a02:8109:9c8d:df00:d4a7:fc69:196c:26c0/64 on ifindex 17 flags 0x00000001 scope 0
+06-11 10:56:16.081  1632 14213 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@815fe4
+06-11 10:56:16.081  1632 14213 D ApfFilter: (wlan0): Ignoring RA RA fe80::e7f:b2ff:fe78:c2e2 -> ff02::1 1800s 2a02:8109:9c8d:df00::/64 86400s/86400s DNS 300s 2a02:8109:9c8d:df00:e7f:b2ff:fe78:c2e2 RIO 86400s 2a02:8109:9c8d:df00::/62 RIO 1800s ::/0  which matches RA fe80::e7f:b2ff:fe78:c2e2 -> ff02::1 1800s 2a02:8109:9c8d:df00::/64 86400s/86400s DNS 300s 2a02:8109:9c8d:df00:e7f:b2ff:fe78:c2e2 RIO 86400s 2a02:8109:9c8d:df00::/62 RIO 1800s ::/0 
+06-11 10:56:16.112   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.027865496]
+06-11 10:56:16.112   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.31920034]
+06-11 10:56:16.112   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.041884504]
+06-11 10:56:16.112   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.469884 msecs
+06-11 10:56:16.113   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.651539 msecs
+06-11 10:56:16.114   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.506077 msecs
+06-11 10:56:16.566   515   515 E audit   : type=1400 audit(1781168176.561:44605): avc:  denied  { write } for  pid=25125 comm="ThreadPoolForeg" name="traced_producer" dev="tmpfs" ino=9748 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock_file permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-11 10:56:16.566   515   515 E audit   : type=1300 audit(1781168176.561:44605): arch=c00000b7 syscall=203 success=no exit=-13 a0=128 a1=72be607110 a2=1e a3=ffffffff95d89d72 items=0 ppid=535 pid=25125 auid=4294967295 uid=10075 gid=10075 euid=10075 suid=10075 fsuid=10075 egid=10075 sgid=10075 fsgid=10075 tty=(none) ses=4294967295 comm="ThreadPoolForeg" exe="/system/bin/app_process64" subj=u:r:gmscore_app:s0:c512,c768 key=(null)
+06-11 10:56:16.566   515   515 E audit   : type=1327 audit(1781168176.561:44605): proctitle="com.google.android.gms.persistent"
+06-11 10:56:16.614   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.011677387]
+06-11 10:56:16.614   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.6742821]
+06-11 10:56:16.614   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.021953773]
+06-11 10:56:16.614   976  1274 D SemNscXgbMsL1: 1 sample inference time: 0.376885 msecs
+06-11 10:56:16.615   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.726231 msecs
+06-11 10:56:16.616   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.536307 msecs
+06-11 10:56:16.617   417   417 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+06-11 10:56:16.617  3397  3442 I Gralloc4: mapper 4.x is not supported
+06-11 10:56:16.617   417   417 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device VINTF manifest.
+06-11 10:56:16.617  3397  3442 W Gralloc3: mapper 3.x is not supported
+06-11 10:56:16.618  3397  3442 I gralloc : Arm Module v1.0
+06-11 10:56:16.619   417   417 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.allocator@4.0::IAllocator/default in either framework or device VINTF manifest.
+06-11 10:56:16.619  3397  3442 W Gralloc4: allocator 4.x is not supported
+06-11 10:56:16.619   417   417 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.allocator@3.0::IAllocator/default in either framework or device VINTF manifest.
+06-11 10:56:16.619  3397  3442 W Gralloc3: allocator 3.x is not supported
+06-11 10:56:16.629   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:16.648  8987  8987 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.safetynet.service.START pkg=com.google.android.gms }
+06-11 10:56:16.715   976  1996 I SemDvfsHyPerManager: acquire hyper - AMS_RESUME_TAIL/976@19, type = -999
+06-11 10:56:16.715   976  1996 I SemDvfsHyPerManager: acquire hyper - AMS_ACT_LAZY/976@20, type = -999
+06-11 10:56:16.715   976  1996 D ActivityManagerPerformance: AMP_acquire() TAIL
+06-11 10:56:16.715   976  1996 D ActivityManagerPerformance: AMP_release() APP_SWITCH
+06-11 10:56:16.715   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 495529  [976 / 19]    HINT : AMS_RESUME_TAIL    list : 
+06-11 10:56:16.716  3397  3397 I ViewRootImpl@25978a4[MainActivity]: [DP] pdf(1) 1 android.view.SurfaceView.notifyDrawFinished:599 android.view.SurfaceView.performDrawFinished:586 android.view.SurfaceView.$r8$lambda$st27mCkd9jfJkTrN_P3qIGKX6NY:0 
+06-11 10:56:16.716  3397  3397 D ViewRootImpl@25978a4[MainActivity]: pendingDrawFinished. Waiting on draw reported mDrawsNeededToReport=1
+06-11 10:56:16.717   565   599 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 497524
+06-11 10:56:16.720  1055  2651 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_IDLE for client com.amaia23.hydracam API Level 2
+06-11 10:56:16.721  1055  2651 I CameraManagerGlobal: postSingleUpdate device: camera id 0 status STATUS_PRESENT
+06-11 10:56:16.721  1055  2651 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:16.722  1055  1097 I IC_Service[1.2.90]: onCameraAvailable(0)
+06-11 10:56:16.722  1479  1577 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_IDLE for client com.amaia23.hydracam API Level 2
+06-11 10:56:16.723  3397  3397 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-11 10:56:16.722905, function: null, file: null}
+06-11 10:56:16.723  1479  1577 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:16.723  3397  3397 I Choreographer: Skipped 86 frames!  The application may be doing too much work on its main thread.
+06-11 10:56:16.724  3397  3397 D ViewRootImpl@25978a4[MainActivity]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-11 10:56:16.724  3397  3397 D ViewRootImpl@25978a4[MainActivity]: Creating frameCompleteCallback
+06-11 10:56:16.730 18878 18965 I CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED for client com.amaia23.hydracam API Level 2
+06-11 10:56:16.730  3397  3468 I SurfaceView@7ebb33f: uSP: rtp = Rect(0, 0 - 1080, 2136) rtsw = 1080 rtsh = 2136
+06-11 10:56:16.730  3397  3468 I SurfaceView@7ebb33f: onSSPAndSRT: pl = 0 pt = 0 sx = 1.0 sy = 1.0
+06-11 10:56:16.730  3397  3467 D ViewRootImpl@25978a4[MainActivity]: Received frameDrawingCallback frameNum=1. Creating transactionCompleteCallback=false
+06-11 10:56:16.730  3397  3468 I SurfaceView@7ebb33f: aOrMT: uB = true t = android.view.SurfaceControl$Transaction@c3e1d45 fN = 1 android.view.SurfaceView.access$500:124 android.view.SurfaceView$SurfaceViewPositionUpdateListener.positionChanged:1728 android.graphics.RenderNode$CompositePositionUpdateListener.positionChanged:319 
+06-11 10:56:16.730  3397  3468 I SurfaceView@7ebb33f: aOrMT: vR.mWNT, vR = ViewRootImpl@25978a4[MainActivity]
+06-11 10:56:16.731  3397  3468 I ViewRootImpl@25978a4[MainActivity]: mWNT: t = android.view.SurfaceControl$Transaction@c3e1d45 fN = 1 android.view.SurfaceView.applyOrMergeTransaction:1628 android.view.SurfaceView.access$500:124 android.view.SurfaceView$SurfaceViewPositionUpdateListener.positionChanged:1728 
+06-11 10:56:16.731  3397  3468 I ViewRootImpl@25978a4[MainActivity]: mWNT: merge t to BBQ
+06-11 10:56:16.741  3397  3428 D ViewRootImpl@25978a4[MainActivity]: Received frameCompleteCallback  lastAcquiredFrameNum=1 lastAttemptedDrawFrameNum=1
+06-11 10:56:16.741   976  2482 D FreecessController: com.sec.android.app.camera(state: Initial -> Freezeable, Reason: uidIdle)
+06-11 10:56:16.741   976  2482 D FreecessController: com.google.android.youtube(state: Initial -> Freezeable, Reason: uidIdle)
+06-11 10:56:16.741   976  2482 D FreecessController: com.google.android.apps.photos(state: Initial -> Freezeable, Reason: uidIdle)
+06-11 10:56:16.741   976  2482 D FreecessController: com.whatsapp(state: Initial -> Freezeable, Reason: uidIdle)
+06-11 10:56:16.741   976  2482 D FreecessController: de.number26.android(state: Initial -> Freezeable, Reason: uidIdle)
+06-11 10:56:16.746  3397  3397 I ViewRootImpl@25978a4[MainActivity]: [DP] pdf(0) 1 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-11 10:56:16.746  3397  3397 I ViewRootImpl@25978a4[MainActivity]: [DP] rdf()
+06-11 10:56:16.746  3397  3397 D ViewRootImpl@25978a4[MainActivity]: reportDrawFinished (fn: 1) 
+06-11 10:56:16.747   976  3766 D WindowManager: finishDrawingWindow: Window{b121424 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} mDrawState=DRAW_PENDING
+06-11 10:56:16.750   976  1024 D [secipm]: mSecIpmManager report to nap
+06-11 10:56:16.750   976  1024 I PkgPredictorService-SecIpmManagerServiceImpl: reportToNAP uid:10367 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity thisTime:3037
+06-11 10:56:16.751   976  1028 D PowerManagerService: [api] acquire WakeLock SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=976 ws=WorkSource{10367} displayId=-1)
+06-11 10:56:16.751   976  1024 I ActivityTaskManager: Displayed com.amaia23.hydracam/.MainActivity: +3s37ms
+06-11 10:56:16.751   976  1024 I Pageboost: Launch time gathered : pid 3397 com.amaia23.hydracam 3037
+06-11 10:56:16.751   976  1024 I ActivityTaskManager: Fully drawn com.amaia23.hydracam/.MainActivity: +3s37ms
+06-11 10:56:16.752  2609  2609 E pageboostd: Received HALT command code 2
+06-11 10:56:16.752   976  1028 I WindowManager: Reparenting to leash, surface=Surface(name=b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x6ad0da1, leashParent=Surface(name=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887})/@0xd5c0bc6
+06-11 10:56:16.752   629   661 I SurfaceFlinger: id=13183 createSurf (0x0),-1 flag=24000, Surface(name=b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x6ad0da1 - animation-leash of starting_reveal#0
+06-11 10:56:16.753   976  1028 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x6ad0da1 - animation-leash of starting_reveal)/@0xceb8787
+06-11 10:56:16.757   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:16.757   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:16.759   976  3766 D InputDispatcher: Focus entered window (0): b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+06-11 10:56:16.760 29554 29689 D ConnectivityManager: StackLog: [android.net.ConnectivityManager.unregisterNetworkCallback(ConnectivityManager.java:4598)] [apso.invokeSuspend(PG:10)] [apso.invoke(PG:13)] [ckcg.I(PG:14)] [ckqo.j(PG:11)] [bwrr.invokeSuspend(PG:139)] [ckiv.resumeWith(PG:11)] [ckqz.run(PG:112)] [ankh.run(PG:7)] [bzgr.run(PG:44)] [kgh.run(PG:443)] [java.lang.Thread.run(Thread.java:920)] [anky.run(PG:61)]
+06-11 10:56:16.761   976  1215 D ConnectivityService:  Removing from current network [151 WIFI], leaving 139 requests.
+06-11 10:56:16.761 29554 29554 I ViewRootImpl@67c1c94[ConversationListActivityGmail]: stopped(true) old=false
+06-11 10:56:16.762  3397  3397 D PhoneWindow: forceLight changed to false [com.amaia23.hydracam/com.amaia23.hydracam.MainActivity] from com.android.internal.policy.PhoneWindow.updateForceLightNavigationBar:4319 com.android.internal.policy.PhoneWindow.setNavigationBarColor:4011 io.flutter.plugin.platform.PlatformPlugin.setSystemChromeSystemUIOverlayStyle:574 io.flutter.plugin.platform.PlatformPlugin.access$700:37 io.flutter.plugin.platform.PlatformPlugin$1.setSystemUiOverlayStyle:125 
+06-11 10:56:16.762  3397  3397 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-11 10:56:16.764  1353  2158 I ViewRootImpl@61870ab[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@222cfdd fN = 2 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-11 10:56:16.764  1353  2158 I ViewRootImpl@61870ab[hydracam]: mWNT: merge t to BBQ
+06-11 10:56:16.764  1353  2158 I ViewRootImpl@61870ab[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@6160752 fN = 2 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-11 10:56:16.764  1353  2158 I ViewRootImpl@61870ab[hydracam]: mWNT: merge t to BBQ
+06-11 10:56:16.765   976  1819 D SyncManager: userId - 0 auto - true
+06-11 10:56:16.767   629   629 D SurfaceFlinger: Display 0 HWC layers:
+06-11 10:56:16.767   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c44f50 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2136.0 |    0    0 1080 2136 | SurfaceView - com.amaia23.hydracam/c[...]acam.MainActivity@7ebb33f@0(BLAST)#0
+06-11 10:56:16.767   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c3cf10 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_3397#0
+06-11 10:56:16.767   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c58ed0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | Splash Screen com.amaia23.hydracam$_1353#0
+06-11 10:56:16.767   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c560b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0    0 1080  117 | StatusBar$_1353#0
+06-11 10:56:16.767   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c52870 | 0100 | RGBA_8888    |    0.0    0.0   67.0  320.0 | 1013  357 1080  677 | com.samsung.android.app.cocktailbars[...]arservice.CocktailBarService$_8288#0
+06-11 10:56:16.767   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4a290 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1353#0
+06-11 10:56:16.767   629   629 D SurfaceFlinger: 
+06-11 10:56:16.768  3397  3418 I OpenGLRenderer: Davey! duration=1466ms; Flags=1, FrameTimelineVsyncId=7785453, IntendedVsync=202145412855800, Vsync=202146846189076, InputEventId=0, HandleInputStart=202146862350681, AnimationStart=202146862353220, PerformTraversalsStart=202146862355220, DrawStart=202146863699027, FrameDeadline=202145429522466, FrameInterval=202146862292951, FrameStartTime=16666666, SyncQueued=202146864838220, SyncStart=202146864918489, IssueDrawCommandsStart=202146869079451, SwapBuffers=202146877323527, FrameCompleted=202146879636027, DequeueBufferDuration=2362807, QueueBufferDuration=915077, GpuCompleted=202146879436720, SwapBuffersCompleted=202146879636027, DisplayPresentTime=0, 
+06-11 10:56:16.773   976  3810 E WindowManager: win=Window{db9937 u0 com.google.android.gm/com.google.android.gm.ConversationListActivityGmail} destroySurfaces: appStopped=true win.mWindowRemovalAllowed=false win.mRemoveOnExit=false win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.notifyAppStopped:5912 com.android.server.wm.ActivityRecord.activityStopped:6554 com.android.server.wm.ActivityClientController.activityStopped:254 android.app.IActivityClientController$Stub.onTransact:596 com.android.server.wm.ActivityClientController.onTransact:130 
+06-11 10:56:16.773   976  3810 I WindowManager: Destroying surface Surface(name=com.google.android.gm/com.google.android.gm.ConversationListActivityGmail$_29554)/@0xdfd1e52 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4246 com.android.server.wm.WindowState.destroySurface:4220 com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.notifyAppStopped:5912 com.android.server.wm.ActivityRecord.activityStopped:6554 
+06-11 10:56:16.777   976  3810 I ActivityManager: Changes in 99054 3 to 15, 8 to 0
+06-11 10:56:16.777   976  3810 I ActivityManager: Changes in 10178 2 to 15, 15 to 0
+06-11 10:56:16.777   976  3810 I AppOps  : updateUidProcState uid: 10075 procState: 5 capability:15
+06-11 10:56:16.777   976  1025 D NetworkPolicy: onUidStateChanged() uid: 99054, isForeground(false, 15)
+06-11 10:56:16.777   739  1123 I CameraService: onUidStateChanged: uid=10178, procState is changed. (2 -> 15)
+06-11 10:56:16.777   976  1025 D NetworkPolicy: onUidStateChanged() uid: 10178, isForeground(false, 15)
+06-11 10:56:16.778 19560 19560 D HidDeviceService: handleMessage(): msg.what=8
+06-11 10:56:16.778 19560 19560 D HidDeviceService: handleMessage(): msg.what=8
+06-11 10:56:16.778   976  1036 W BroadcastQueue: Permission Denial: broadcasting Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) } from null (pid=-1, uid=-1) requires com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION due to registered receiver BroadcastFilter{b48cfd9 10367/u0 ReceiverList{8ceda20 3397 com.amaia23.hydracam/10367/u0 remote:96f1523}}
+06-11 10:56:16.780   629   629 I Layer   : id=13159 removeFromCurrentState com.google.android.gm/com.google.android.gm.ConversationListActivityGmail$_29554#0 (124)
+06-11 10:56:16.780   629   629 I SurfaceFlinger: id=13159 Removed com.google.android.gm/com.google.android.gm.ConversationListActivityGmail$_29554#0 (124)
+06-11 10:56:16.780   629   629 I Layer   : id=13159 Destroyed com.google.android.gm/com.google.android.gm.ConversationListActivityGmail$_29554#0
+06-11 10:56:16.782  1353  2159 I ViewRootImpl@61870ab[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@9084a23 fN = 3 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-11 10:56:16.782  1353  2159 I ViewRootImpl@61870ab[hydracam]: mWNT: merge t to BBQ
+06-11 10:56:16.798  1353  2158 I ViewRootImpl@61870ab[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@9306b20 fN = 4 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-11 10:56:16.798  1353  2158 I ViewRootImpl@61870ab[hydracam]: mWNT: merge t to BBQ
+06-11 10:56:16.798  3397  3397 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-11 10:56:16.800   976  3810 V WindowManager: Relayout Window{b121424 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=0 req=1080x2280 d0
+06-11 10:56:16.802  1353  1353 D NavigationBar: onSystemBarAttributesChanged() -  displayId:0, appearance:24 (APPEARANCE_LIGHT_STATUS_BARS APPEARANCE_LIGHT_NAVIGATION_BARS ), navbarColorManagedByIme:false
+06-11 10:56:16.803   976  3810 V WindowManager: Relayout hash=b121424, pid=3397: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-11 10:56:16.803   976  3810 V WindowManager:   fl=81810180
+06-11 10:56:16.803   976  3810 V WindowManager:   pfl=16020040
+06-11 10:56:16.803   976  3810 V WindowManager:   vsysui=2500
+06-11 10:56:16.803   976  3810 V WindowManager:   apr=LIGHT_STATUS_BARS
+06-11 10:56:16.803   976  3810 V WindowManager:   bhv=DEFAULT
+06-11 10:56:16.803   976  3810 V WindowManager:   fitSides= naviIconColor=0}
+06-11 10:56:16.806  3397  3397 I ViewRootImpl@25978a4[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)0 dur=5 res=0x1 s={true 498725033248} ch=false fn=2
+06-11 10:56:16.807  3397  3397 D FlutterJNI: Sending viewport metrics to the engine.
+06-11 10:56:16.811  3397  3397 I ViewRootImpl@25978a4[MainActivity]: updateBoundsLayer: t = android.view.SurfaceControl$Transaction@bc2196 sc = Surface(name=Bounds for - com.amaia23.hydracam/com.amaia23.hydracam.MainActivity@0)/@0x25a3117 frame = 2
+06-11 10:56:16.811  3397  3397 I ViewRootImpl@25978a4[MainActivity]: mWNT: t = android.view.SurfaceControl$Transaction@bc2196 fN = 2 android.view.ViewRootImpl.prepareSurfaces:2783 android.view.ViewRootImpl.performTraversals:4029 android.view.ViewRootImpl.doTraversal:2924 
+06-11 10:56:16.811  3397  3397 I ViewRootImpl@25978a4[MainActivity]: mWNT: merge t to BBQ
+06-11 10:56:16.813  3397  3397 I ViewRootImpl@25978a4[MainActivity]: MSG_WINDOW_FOCUS_CHANGED 1 1
+06-11 10:56:16.814  3397  3397 D InputMethodManager: startInputInner - Id : 0
+06-11 10:56:16.814  3397  3397 I InputMethodManager: startInputInner - mService.startInputOrWindowGainedFocus
+06-11 10:56:16.815   976  1376 D InputMethodManagerService: mSecureKeypadEnabled = false
+06-11 10:56:16.815   976  1376 V InputMethodManagerService: Unspecified window will hide input
+06-11 10:56:16.815   976  1376 V InputMethodManagerService: hideCurrentInputLocked : shouldHideSoftInput is false
+06-11 10:56:16.815   976  1376 D InputMethodManagerService: DESKTOP MODE! : 2
+06-11 10:56:16.815   976  1376 D InputMethodManagerService: NOT IN KNOX DESKTOP MODE!
+06-11 10:56:16.815   976  1376 V InputMethodManagerService: getDisplayIdOfInputMethodWindowToBeAdded : 0
+06-11 10:56:16.815   976  1376 V InputMethodManagerService: Creating new session for client ClientState{b13e07f uid=10367 pid=3397 displayId=0}
+06-11 10:56:16.815  1353  1614 D OpenGLRenderer: setSurface called with nullptr
+06-11 10:56:16.815  1353  1614 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-11 10:56:16.815   976  1376 D InputTransport: Input channel constructed: 'ClientS', fd=795
+06-11 10:56:16.815   976  1376 D InputTransport: Input channel constructed: 'ClientS', fd=808
+06-11 10:56:16.815  1353  1614 D OpenGLRenderer: destroyEglSurface
+06-11 10:56:16.816   976  1376 D InputTransport: Input channel destroyed: 'ClientS', fd=808
+06-11 10:56:16.817 29554 29554 D InputTransport: Input channel destroyed: 'ClientS', fd=208
+06-11 10:56:16.818   976  1376 W InputMethodManagerService: onSessionCreated
+06-11 10:56:16.818   976  1376 D InputMethodManagerService: checkDisplayOfStartInputAndUpdateKeyboard display Id 0last 0
+06-11 10:56:16.818   976  1376 D InputTransport: Input channel constructed: 'ClientS', fd=808
+06-11 10:56:16.818   976  1376 D InputTransport: Input channel destroyed: 'ClientS', fd=808
+06-11 10:56:16.819   976  3810 V WindowManager: Relayout Window{fa71227 u0 Splash Screen com.amaia23.hydracam}: viewVisibility=8 req=1080x2280 d0
+06-11 10:56:16.819 29775 29775 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259 
+06-11 10:56:16.819   976  3810 I WindowManager: Reparenting to leash, surface=Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b, leashParent=Surface(name=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887})/@0xd5c0bc6
+06-11 10:56:16.820   629   660 I SurfaceFlinger: id=13184 createSurf (0x0),-1 flag=24000, Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b - animation-leash of window_animation#0
+06-11 10:56:16.820 29775 29775 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():127 repeatCheckTimes = 0, locked = false
+06-11 10:56:16.821   976  3810 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b - animation-leash of window_animation)/@0xd69cd38
+06-11 10:56:16.821 29775 29775 D InputMethodService: checkDisplayOfStartInputAndUpdateKeyboard display Id 0last 0
+06-11 10:56:16.821 29775 29775 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.amaia23.hydracam, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{displayId=0}], hintText=null, hintLocales=[]}}, false)
+06-11 10:56:16.822  3397  3397 D InputMethodManager: startInputInner - Id : 0
+06-11 10:56:16.822   976  1376 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-11 10:56:16.822   976  1376 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=3c60107 InputMethod)/@0x8897d2a - animation-leash of insets_animation)/@0x6d10809
+06-11 10:56:16.822   976  1376 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{7267c07 android.os.Binder@8f4ce21})/@0xf29471b, destroy=false, surface=Surface(name=3c60107 InputMethod)/@0x8897d2a
+06-11 10:56:16.822   976  1376 I WindowManager: Reparenting to leash, surface=Surface(name=3c60107 InputMethod)/@0x8897d2a, leashParent=Surface(name=WindowToken{7267c07 android.os.Binder@8f4ce21})/@0xf29471b
+06-11 10:56:16.823   976  3810 V WindowManager: Relayout hash=fa71227, pid=1353: mAttrs={(0,0)(fillxfill) sim={adjust=pan} ty=APPLICATION_STARTING fmt=TRANSLUCENT wanim=0x1030001
+06-11 10:56:16.823   976  3810 V WindowManager:   fl=81030118
+06-11 10:56:16.823   976  3810 V WindowManager:   pfl=36000010
+06-11 10:56:16.823   976  3810 V WindowManager:   apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+06-11 10:56:16.823   976  3810 V WindowManager:   bhv=DEFAULT
+06-11 10:56:16.823   976  3810 V WindowManager:   fitSides= naviIconColor=0}
+06-11 10:56:16.823   629   660 I SurfaceFlinger: id=13185 createSurf (0x0),-1 flag=24004, Surface(name=3c60107 InputMethod)/@0x8897d2a - animation-leash of insets_animation#1
+06-11 10:56:16.823   976  1376 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=3c60107 InputMethod)/@0x8897d2a - animation-leash of insets_animation)/@0x724f276
+06-11 10:56:16.823  1353  1582 I ViewRootImpl@61870ab[hydracam]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)8 dur=5 res=0x5 s={false 0} ch=true fn=5
+06-11 10:56:16.823  1353  1582 I ViewRootImpl@61870ab[hydracam]: dispatchDetachedFromWindow
+06-11 10:56:16.824   976  1376 I WindowManager: Cancelling animation restarting=false, leash=Surface(name=Surface(name=b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x6ad0da1 - animation-leash of starting_reveal)/@0xceb8787
+06-11 10:56:16.825   976  1376 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887})/@0xd5c0bc6, destroy=false, surface=Surface(name=b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x6ad0da1
+06-11 10:56:16.825   976  1376 D InputTransport: Input channel destroyed: 'fa71227', fd=718
+06-11 10:56:16.825   976  1376 W InputManager-JNI: Input channel object 'fa71227 Splash Screen com.amaia23.hydracam (client)' was disposed without first being removed with the input manager!
+06-11 10:56:16.825   976  1376 D InputTransport: Input channel destroyed: 'fa71227', fd=734
+06-11 10:56:16.826   533   540 E statsd  : Predicate -7037417284711607308 dropping data for dimension key (10)0x2010101->10367[I] (10)0x30000->*launch*[S] 
+06-11 10:56:16.826 29775 29775 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():326 Null input view, cannot update padding!
+06-11 10:56:16.826   533   540 E statsd  : Predicate 5980654721335871649 dropping data for dimension key (10)0x2010101->10367[I] (10)0x30000->*launch*[S] 
+06-11 10:56:16.827  1353  1582 D InputTransport: Input channel destroyed: 'fa71227', fd=264
+06-11 10:56:16.828 29775 29775 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():127 repeatCheckTimes = 1, locked = false
+06-11 10:56:16.828   976  1376 D InputMethodManagerServicePhysicalKey: isConnectedDexOnPC false
+06-11 10:56:16.828   976  1376 D InputMethodManagerService: isImeSwitcherDisabledPackage : false
+06-11 10:56:16.830   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:16.830   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:16.830   629   629 I Layer   : id=13163 removeFromCurrentState Surface(name=3c60107 InputMethod)/@0x8897d2a - animation-leash of insets_animation#0 (125)
+06-11 10:56:16.830   629   629 I Layer   : id=13183 removeFromCurrentState Surface(name=b121424 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x6ad0da1 - animation-leash of starting_reveal#0 (125)
+06-11 10:56:16.831   629   629 I SurfaceFlinger: id=13163 Removed Surface(name=3c60107 InputMethod)/@0x8897d2a - animation-leash of insets_animation#0 (125)
+06-11 10:56:16.832   629   629 I Layer   : id=13163 Destroyed Surface(name=3c60107 InputMethod)/@0x8897d2a - animation-leash of insets_animation#0
+06-11 10:56:16.847   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:16.858 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 14- eventType=0x1a, addressType=1, address=48B617_2, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-68, periodicAdvInt=0x0
+06-11 10:56:16.881   976  1028 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{fe6fc4b u0 com.amaia23.hydracam/.MainActivity t1887})/@0xd5c0bc6, destroy=true, surface=Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b
+06-11 10:56:16.882   976  1028 E WindowManager: win=Window{fa71227 u0 Splash Screen com.amaia23.hydracam EXITING} destroySurfaces: appStopped=false win.mWindowRemovalAllowed=true win.mRemoveOnExit=true win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.WindowState.onExitAnimationDone:5992 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 com.android.server.wm.WindowState.onAnimationFinished:6245 com.android.server.wm.WindowContainer$$ExternalSyntheticLambda0.onAnimationFinished:2 com.android.server.wm.SurfaceAnimator.lambda$getFinishedCallback$0$SurfaceAnimator:113 
+06-11 10:56:16.882   976  1028 I WindowManager: Destroying surface Surface(name=Splash Screen com.amaia23.hydracam$_1353)/@0x6e5c002 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4246 com.android.server.wm.WindowState.destroySurface:4220 com.android.server.wm.ActivityRecord.destroySurfaces:5867 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.WindowState.onExitAnimationDone:5992 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 
+06-11 10:56:16.885  1353  1353 D NavigationBar: onSystemBarAttributesChanged() -  displayId:0, appearance:8 (APPEARANCE_LIGHT_STATUS_BARS ), navbarColorManagedByIme:false
+06-11 10:56:16.885  1353  1353 V Navbar.Store: handleEvent [EventType] GET_BOOL_REGION_SAMPLING_ENABLED [Module] LightBarController  KEYS_DEFAULT=false
+06-11 10:56:16.885  1353  1353 V Navbar.Store: --[Band]COLOR_PACK_GET_REGION_SAMPLING_ENABLED
+06-11 10:56:16.885  1353  1353 V Navbar.Store: ----getValue(BOOL_REGION_SAMPLING_ENABLED)=false
+06-11 10:56:16.898   629   629 I Layer   : id=13167 removeFromCurrentState Splash Screen com.amaia23.hydracam$_1353#0 (124)
+06-11 10:56:16.898   629   629 I Layer   : id=13166 removeFromCurrentState fa71227 Splash Screen com.amaia23.hydracam#0 (124)
+06-11 10:56:16.898   629   629 I Layer   : id=13184 removeFromCurrentState Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b - animation-leash of window_animation#0 (124)
+06-11 10:56:16.898   629   629 I SurfaceFlinger: id=13166 Removed fa71227 Splash Screen com.amaia23.hydracam#0 (124)
+06-11 10:56:16.898   629   629 I SurfaceFlinger: id=13167 Removed Splash Screen com.amaia23.hydracam$_1353#0 (124)
+06-11 10:56:16.898   629   629 I SurfaceFlinger: id=13184 Removed Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b - animation-leash of window_animation#0 (124)
+06-11 10:56:16.898   629   629 I Layer   : id=13184 Destroyed Surface(name=fa71227 Splash Screen com.amaia23.hydracam)/@0x410059b - animation-leash of window_animation#0
+06-11 10:56:16.898   629   629 I Layer   : id=13166 Destroyed fa71227 Splash Screen com.amaia23.hydracam#0
+06-11 10:56:16.900   629   629 I Layer   : id=13167 Destroyed Splash Screen com.amaia23.hydracam$_1353#0
+06-11 10:56:16.903   629   629 D SurfaceFlinger: Display 0 HWC layers:
+06-11 10:56:16.903   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c55e70 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2136.0 |    0    0 1080 2136 | SurfaceView - com.amaia23.hydracam/c[...]acam.MainActivity@7ebb33f@0(BLAST)#0
+06-11 10:56:16.903   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4d530 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_3397#0
+06-11 10:56:16.903   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c560b0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0    0 1080  117 | StatusBar$_1353#0
+06-11 10:56:16.903   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c52870 | 0100 | RGBA_8888    |    0.0    0.0   67.0  320.0 | 1013  357 1080  677 | com.samsung.android.app.cocktailbars[...]arservice.CocktailBarService$_8288#0
+06-11 10:56:16.903   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4a290 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1353#0
+06-11 10:56:16.903   629   629 D SurfaceFlinger: 
+06-11 10:56:16.907   976  1412 D MdnieScenarioControlService:  packageName : com.amaia23.hydracam    className : com.amaia23.hydracam.MainActivity
+06-11 10:56:16.907   976  1412 V MdnieScenarioControlService: setUIMode from UI function(3)
+06-11 10:56:17.008   976  1412 V MdnieScenarioControlService: mAclOffEnabled : false mAclPreviewState : false mAclCompensationState : false
+06-11 10:56:17.019   565  3466 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 495529
+06-11 10:56:17.118   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.005860564]
+06-11 10:56:17.119   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.7604516]
+06-11 10:56:17.119   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.019492628]
+06-11 10:56:17.119   976  1274 D SemNscXgbMsL1: 1 sample inference time: 1.229038 msecs
+06-11 10:56:17.121   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.238769 msecs
+06-11 10:56:17.123   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.806885 msecs
+06-11 10:56:17.324   976  1027 D SGM:GameManager: identifyForegroundApp. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0
+06-11 10:56:17.325   976  1027 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-11 10:56:17.325   976  1027 D SGM:SemGameManager: isForegroundGame(), ret=false
+06-11 10:56:17.627   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.017202359]
+06-11 10:56:17.628   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.5635618]
+06-11 10:56:17.628   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.022977617]
+06-11 10:56:17.628   976  1274 D SemNscXgbMsL1: 1 sample inference time: 1.298538 msecs
+06-11 10:56:17.631   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.508692 msecs
+06-11 10:56:17.633   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.023115 msecs
+06-11 10:56:17.722 25125  2954 I NearbyMediums: Found Fast Ble Advertisements :
+06-11 10:56:17.722 25125  2954 I NearbyMediums: BleAdvertisement { version=2, socketVersion=2, isFast=true, serviceIdHash=null, data=[ 0x23 0x36 0x50 0x47 0x42 0x11 0x32 0x03 0x8e 0xe3 0x53 0xc9 0x1c 0x73 0x89 0xf6 0x72 0x1a 0xaa 0x3f 0x2b 0xd0 0xc1 ], deviceToken=[ 0x3e 0x81 ], rxAdvertisement=[ 0xa0 0x17 0x84 0xf8 0x43 0x77 0x4b 0xeb 0x0b 0xfb 0x52 0x9b 0x97 0x35 0x75 0x3d 0x95 0xd3 0x13 0xc0 0xab 0xb1 0x22 0x2a 0x5b 0xeb 0x65 0x22 0x41 0xc4 0x85 0x67 0x41 0x61 0x84 0x15 0x05 0x7f 0x00 0x00 0x84 0x15 0x06 0x61 0x00 0x00 0x84 0x15 0x04 0x7f 0x00 0x00 0x83 0x15 0x01 0x09 0x85 ] } : 10 times.
+06-11 10:56:17.722 25125  2954 I NearbyMediums: Total 10 fast advertisements from 1 unique advertisers.
+06-11 10:56:17.722 25125  2954 I NearbyMediums: Current Tracked Scanning Clients are : {NearbyConnections.EnvironmentMonitor, NearbySharing, NearbyConnections.TxAdvertisement}
+06-11 10:56:17.729   565  3390 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 7134767
+06-11 10:56:17.742 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 14- eventType=0x1a, addressType=1, address=48B617_2, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-74, periodicAdvInt=0x0
+06-11 10:56:17.798   458   458 D io_stats: !@   8,0 r 9027523 325087860 w 3098290 135089340 d 0 0 f 0 0 iot 3016132 0 th 0 0 0 pt 0 inp 0 0 202147.935
+06-11 10:56:18.051  8987  8987 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-11 10:56:18.137   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.007096311]
+06-11 10:56:18.138   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.79329157]
+06-11 10:56:18.138   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.026808832]
+06-11 10:56:18.138   976  1274 D SemNscXgbMsL1: 1 sample inference time: 1.677423 msecs
+06-11 10:56:18.141   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.2585 msecs
+06-11 10:56:18.143   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.872576 msecs
+06-11 10:56:18.159 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-78, periodicAdvInt=0x0
+06-11 10:56:18.166 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:18.216 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-79, periodicAdvInt=0x0
+06-11 10:56:18.222 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:18.465   617   796 I EDEN    : [Exynos][EDEN][v1.6.22][SERVICE] processAliveMointorMain:253: Try to check pid=(1479)...
+06-11 10:56:18.540   976  1036 I AppOps  : commitUidPendingStateLocked() :: UID - 10367, 200 > 200, 15 > 15
+06-11 10:56:18.634   976  1284 D WifiConnectivityMonitor.NetworkStatsAnalyzer: Backhaul result - RSSI:-48, CE:5, PE:5, TI:15, PTI:15, TW:9, PTW:4, Tx:593, Rx:618, TxS:589, RxS:590, RESULT:true, IC:0, ICT:5, WC:0, WCT:5, R:517, RC:0, IE:0, EC:0
+06-11 10:56:18.644   976  1274 D SemNscXgbMsL1: Probability - Cloud gaming: [0.005265026]
+06-11 10:56:18.645   976  1274 D SemNscXgbMsL1: Probability - Real time: [0.65001714]
+06-11 10:56:18.645   976  1274 D SemNscXgbMsL1: Probability - Non real time: [0.019492628]
+06-11 10:56:18.645   976  1274 D SemNscXgbMsL1: 1 sample inference time: 1.143769 msecs
+06-11 10:56:18.647   976  1274 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.773769 msecs
+06-11 10:56:18.649   976  1274 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.413577 msecs
+06-11 10:56:18.814   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-11 10:56:18.997 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-84, periodicAdvInt=0x0
+06-11 10:56:19.003 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:19.086 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 14- eventType=0x10, addressType=1, address=4F6394_E, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-79, periodicAdvInt=0x0
+06-11 10:56:19.090 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7BC000_5, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-84, periodicAdvInt=0x0
+06-11 10:56:19.096 25125  2954 I NearbyMediums: Triggered instant on lost for service id : NearbySharing with hash [ 0x1e 0x39 0x6c 0xa7 ]
+06-11 10:56:19.097 25125 25528 I NearbyDiscovery: (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+06-11 10:56:19.097 25125  2917 I NearbyConnections: Processing instant lost on BlePeripheral BlePeripheral{advertisement=BleAdvertisement { version=2, socketVersion=2, isFast=true, serviceIdHash=null, data=[ 0x23 0x36 0x50 0x47 0x42 0x11 0x32 0x03 0x8e 0xe3 0x53 0xc9 0x1c 0x73 0x89 0xf6 0x72 0x1a 0xaa 0x3f 0x2b 0xd0 0xc1 ], deviceToken=[ 0x3e 0x81 ], rxAdvertisement=[ 0xa0 0x17 0x84 0xf8 0x43 0x77 0x4b 0xeb 0x0b 0xfb 0x52 0x9b 0x97 0x35 0x75 0x3d 0x95 0xd3 0x13 0xc0 0xab 0xb1 0x22 0x2a 0x5b 0xeb 0x65 0x22 0x41 0xc4 0x85 0x67 0x41 0x61 0x84 0x15 0x05 0x7f 0x00 0x00 0x84 0x15 0x06 0x61 0x00 0x00 0x84 0x15 0x04 0x7f 0x00 0x00 0x83 0x15 0x01 0x09 0x85 ] }, dctAdvertisement=null, address=null, psm=0, deviceToken=<ByteString@10362d0 size=2 contents=">\201">, isSecondProfile=false, rxInstantConnectionAdv=[-96, 23, -124, -8, 67, 119, 75, -21, 11, -5, 82, -101, -105, 53, 117, 61, -107, -45, 19, -64, -85, -79, 34, 42, 91, -21, 101, 34, 65, -60, -123, 103, 65, 97, -124, 21, 5, 127, 0, 0, -124, 21, 6, 97, 0, 0, -124, 21, 4, 127, 0, 0, -125, 21, 1, 9, -123]}.
+06-11 10:56:19.097 25125  2917 I NearbyConnections: Remove entry from BleAdvertisementProcessor bleEndpoints.
+06-11 10:56:19.099 25125  2917 I NearbyConnections: Unable to record lost endpoint due to null currentDiscoveryPhase
+06-11 10:56:19.099 25125  2917 I NearbyConnections: ClientProxy(174910412) reporting onEndpointLost(6PGB)
+06-11 10:56:19.107 25125  3478 I NearbySharing: NearbySharing Internal event EndpointLost(endpointId=6PGB)

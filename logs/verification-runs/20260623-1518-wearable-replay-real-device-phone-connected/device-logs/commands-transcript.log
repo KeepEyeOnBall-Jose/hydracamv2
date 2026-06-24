@@ -1,0 +1,778 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover...github/codex/hydracam-visual-makeover
+ M docs/control/backlog-import.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/fastlane/README.md
+ M lib/automation/automation_bridge.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/models/capture_session.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/previous_sessions_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/services/session_manager.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M pubspec.yaml
+ M scripts/boot_and_verify_emulators.py
+ M scripts/check_store_readiness.sh
+ M scripts/emulator_manager.py
+ M scripts/testflight_release_and_invite.sh
+ M test/master/master_screen_test.dart
+ M test/models/capture_session_test.dart
+ M test/screens/media_selection_screen_test.dart
+ M test/screens/previous_sessions_screen_test.dart
+ M test/screens/session_details_screen_test.dart
+ M test/screens/sessions_screen_test.dart
+ M test/services/hydracam_api_service_test.dart
+ M test/services/session_manager_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/test_utils/mock_services.dart
+?? lib/services/session_naming_service.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? logs/verification-runs/20260617-1949-auth0-blank-stored-token-guards/
+?? logs/verification-runs/20260617-2019-ipad-legacy-upload-success-response/
+?? logs/verification-runs/20260618-all-connected-redeploy/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls-fixed/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/camera2-hls/
+?? logs/verification-runs/20260619-camera2-hls-emulator-smoke/synthetic-local/
+?? logs/verification-runs/20260619-fixed-camera-local-hls-channel-emulator-smoke/
+?? logs/verification-runs/20260619-hls-native-result-queue-raw-metadata-upload/
+?? logs/verification-runs/20260619-live-hls-idempotency-proof/
+?? logs/verification-runs/20260619-live-hls-playback-proof/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-timing-metadata/
+?? logs/verification-runs/20260619-local-fixed-camera-hls-upload/
+?? logs/verification-runs/20260619-native-hls-playlist-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-fragment-writer-emulator-smoke/
+?? logs/verification-runs/20260619-native-mp4-init-writer-emulator-smoke/
+?? logs/verification-runs/20260621-1553-mba13-tailscale-phone-updates/
+?? logs/verification-runs/20260622-1426-master-session-controls-compact-layout/
+?? logs/verification-runs/20260622-1813-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1818-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1820-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1825-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/
+?? logs/verification-runs/20260622-1831-wearable-replay-non-hardware-proof/
+?? logs/verification-runs/20260622-1843-mba13-rf8m21-and-ipad-continuation/
+?? logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy/
+?? logs/verification-runs/20260622-1923-ui-flow-layout-sync-emulator-standby-landscape/
+?? logs/verification-runs/20260622-1926-ui-flow-layout-sync-emulator-standby-landscape-rerun/
+?? logs/verification-runs/20260622-1928-ui-flow-layout-sync-emulator-slave-screen-landscape/
+?? logs/verification-runs/20260622-1932-ui-flow-layout-sync-emulator-standby-landscape-after-trim/
+?? logs/verification-runs/20260622-1942-mba13-remote-device-dashboard-inventory/
+?? logs/verification-runs/20260623-0318-s10e-physical-ui-proof/
+?? logs/verification-runs/20260623-0335-wearable-replay-real-device-rerun/.evidence-pack.lock
+?? logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/
+?? logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/
+?? logs/verification-runs/browser-proof-smoke-2/
+?? logs/verification-runs/browser-proof-smoke/
+?? test/services/session_naming_service_test.dart
+[exit-code] 0
+
+$ timeout 45 flutter devices --device-timeout 10
+Found 9 connected devices:
+  SM G960F (mobile)            • 29d816ac550b7ece                         • android-arm64  • Android 10 (API 29)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  sdk gphone64 arm64 (mobile)  • emulator-5572                            • android-arm64  • Android 16 (API 36) (emulator)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Pro (mobile)       • 6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.156
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ timeout 20 adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:0-1.2 product:starltexx model:SM_G960F device:starlte transport_id:8
+RF8M21J8XRT            device usb:0-1.4.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:9
+RF8M90QE7LX            device usb:0-1.4.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1
+emulator-5572          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:21
+
+[exit-code] 0
+
+$ timeout 20 xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State       Model                                        
+-------------------   -----------------------------------   ------------------------------------   ---------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   connected   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   connected   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ zsh -lc GH_TOKEN="$(gh auth token)" python3 scripts/check_wearable_replay_readiness.py dat --check-network --timeout-seconds 15
+PASS: lib/models/wearable_replay.dart exists
+PASS: lib/services/wearable_replay_bridge_service.dart exists
+PASS: lib/services/wearable_replay_service.dart exists
+PASS: lib/services/wearable_replay_simulation_service.dart exists
+PASS: lib/services/wearable_replay_upload_service.dart exists
+PASS: integration_test/wearable_replay_channel_test.dart exists
+PASS: test/models/wearable_replay_test.dart exists
+PASS: test/services/wearable_replay_bridge_service_test.dart exists
+PASS: test/services/wearable_replay_service_test.dart exists
+PASS: test/services/wearable_replay_simulation_service_test.dart exists
+PASS: test/services/wearable_replay_upload_service_test.dart exists
+PASS: test/services/wearable_replay_live_upload_test.dart exists
+PASS: docs/control/wearable-replay-integration-plan.md exists
+PASS: Android declares BLUETOOTH_CONNECT for DAT
+PASS: Android declares DAT application id metadata
+PASS: Android declares DAT analytics opt-out metadata
+PASS: Android declares DAT callback scheme intent filter
+PASS: Android Gradle defines DAT redirect scheme placeholder
+PASS: Android Gradle defaults DAT application id to developer mode
+PASS: iOS declares DAT callback scheme
+PASS: iOS MWDAT developer MetaAppID is configured
+PASS: iOS MWDAT callback URL is configured
+PASS: iOS MWDAT analytics opt-out is configured
+PASS: iOS allows Meta AI callback query scheme
+PASS: iOS declares Meta wearable external accessory protocol
+PASS: iOS declares Bluetooth/external accessory background modes
+PASS: iOS declares Bluetooth usage description
+PASS: Wear module depends on Wear OS Health Services
+PASS: Wear module declares BODY_SENSORS
+PASS: Wear telemetry registers MeasureClient heart-rate callback
+PASS: Wear telemetry merges Android motion sensors
+PASS: Dart bridge exposes rolling POV fallback capability
+PASS: Simulation falls back to rollingHighlight when DAT is unavailable
+PASS: Simulation records fallback reason
+PASS: Android native bridge advertises rolling fallback
+PASS: iOS native bridge advertises rolling fallback
+PASS: Native integration test asserts rollingHighlight
+PASS: Upload service depends on http_parser for multipart MIME types
+PASS: Upload service imports MediaType
+PASS: Upload service parses POV media count
+PASS: Upload service attaches multipart content types
+PASS: Upload service includes calibration sidecars
+PASS: Upload service maps JSONL sidecars to NDJSON MIME
+PASS: Upload service maps MP4 POV media to video/mp4
+PASS: Upload unit test asserts POV media MIME
+PASS: Live upload proof is gated by HYDRACAM_WEARABLE_LIVE_UPLOAD
+PASS: Live upload proof writes a generated wearable manifest
+PASS: Live upload proof records clap-flash calibration sidecar
+PASS: Live upload proof verifies <=50 ms calibration target
+PASS: Live upload proof posts generated manifest to media-timeline
+PASS: Live upload proof verifies media-timeline POV media count
+PASS: Live upload proof verifies rolling-highlight replay metadata
+PASS: Simulation proof sends watch haptic feedback
+PASS: Simulation proof sends glasses audio feedback
+PASS: Live upload proof persists both feedback channels
+PASS: Control doc records live upload proof command
+PASS: Default Android build keeps private Meta DAT SDK artifacts gated
+PASS: Default iOS build keeps private Meta DAT SDK artifacts gated
+PASS: Control doc records DAT dependencies as hardware-lane gated
+PASS: Android DAT GitHub Package access - HTTP 200
+wearable replay readiness passed: 60 check(s)
+[exit-code] 0
+
+$ timeout 25 adb mdns services
+List of discovered mdns services
+
+[exit-code] 0
+
+$ zsh -lc for s in 29d816ac550b7ece RF8M21J8XRT RF8M90QE7LX; do echo "===== $s props ====="; timeout 10 adb -s "$s" shell getprop ro.product.model; timeout 10 adb -s "$s" shell getprop ro.build.version.release; echo "===== $s wearable/meta packages ====="; timeout 15 adb -s "$s" shell pm list packages | grep -Ei "facebook|meta|oculus|stella|samsung.android.app.watch|wear|galaxy|health" || true; echo "===== $s bluetooth pairing hints ====="; timeout 20 adb -s "$s" shell dumpsys bluetooth_manager | grep -Ei "ray|ban|meta|galaxy|watch|wear|buds|rb|name|bond|connected" | head -200 || true; done
+===== 29d816ac550b7ece props =====
+SM-G960F
+10
+===== 29d816ac550b7ece wearable/meta packages =====
+package:com.samsung.android.app.galaxyfinder
+package:com.samsung.android.app.watchmanager
+package:com.facebook.services
+package:com.google.android.modulemetadata
+package:com.sec.android.service.health
+package:com.facebook.katana
+package:com.facebook.system
+package:com.sec.android.app.shealth
+package:com.samsung.android.app.watchmanagerstub
+package:com.facebook.appmanager
+===== 29d816ac550b7ece bluetooth pairing hints =====
+  name: Galaxy S9 de José Ramón
+Bluetooth Service not connected
+07-23 11:59:48.632--HFBMS-PSC onServiceDisconnected
+07-26 22:36:25.968--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+07-26 22:36:28.691--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+07-28 11:34:37.219--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+07-28 11:34:48.622--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+07-31 09:26:04.013--HFBMS-onServiceConnected will be called for com.android.systemui
+07-31 09:26:04.013--HFBMS-onServiceConnected will be called for com.android.server.telecom
+07-31 09:26:04.014--HFBMS-onServiceConnected will be called for android
+07-31 09:26:04.019--HFBMS-onServiceConnected will be called for com.android.settings
+07-31 09:26:04.020--HFBMS-onServiceConnected will be called for android
+07-31 09:26:04.020--HFBMS-onServiceConnected will be called for com.android.systemui
+07-31 09:26:04.021--HFBMS-onServiceConnected will be called for com.android.server.telecom
+07-31 09:26:04.021--HFBMS-onServiceConnected will be called for com.google.android.googlequicksearchbox
+07-31 09:26:04.024--HFBMS-onServiceConnected will be called for com.whatsapp
+07-31 09:26:04.025--HFBMS-onServiceConnected will be called for com.android.phone
+07-31 09:26:04.083--HFBMS-onServiceConnected will be called for com.android.systemui
+07-31 09:26:04.568--HFBMS-PSC onServiceConnected
+07-31 09:26:10.193--HFCM-isWatch : false(240418)
+07-31 09:26:10.217--AdapterProp -- Connection status :: [Connecting]1, [Connected]0, [Disconnecting]0
+07-31 09:26:10.272--AdapterProp -- Connection status :: [Connecting]2, [Connected]0, [Disconnecting]0
+07-31 09:26:12.544--BluetoothRemoteDevices -- ACTION_ACL_CONNECTED, device is D0DAD7, linktype is 1
+07-31 09:26:12.989--HFSM-connected device : D0DAD7_155
+07-31 09:26:13.055--AdapterProp -- Connection status :: [Connecting]1, [Connected]1, [Disconnecting]0
+07-31 09:26:13.500--AdapterProp -- Connection status :: [Connecting]0, [Connected]2, [Disconnecting]0
+07-31 09:26:13.527--A2DPBD-"José Ramón’s AirPods PrX(D0:DA:D7,AAC) connected"{"CCOD":"2","PCOD":"514"}
+07-31 10:01:10.103--A2DPSM-Connected ConnectionEvent device : 0A:4, state : 0
+07-31 10:01:10.105--AdapterProp -- Connection status :: [Connecting]0, [Connected]1, [Disconnecting]0
+07-31 10:01:10.136--AdapterProp -- Connection status :: [Connecting]0, [Connected]0, [Disconnecting]0
+07-31 10:01:10.215--BluetoothRemoteDevices -- ACTION_ACL_DISCONNECTED, device is D0DAD7, reason is 19, linktype is 1
+08-02 19:15:45.521--HFBMS-onServiceConnected will be called for android
+08-02 19:15:46.041--HFBMS-onServiceConnected will be called for com.android.systemui
+08-02 19:15:46.057--HFBMS-onServiceConnected will be called for com.android.systemui
+08-02 19:15:46.931--HFBMS-onServiceConnected will be called for com.android.phone
+08-02 19:15:47.894--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-02 19:15:47.986--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-02 19:15:48.051--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+08-02 19:15:49.716--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+08-02 19:15:50.171--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-02 19:15:50.171--HFBMS-onServiceConnected will be called for android
+08-02 19:15:50.172--HFBMS-onServiceConnected will be called for android
+08-02 19:15:50.172--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-02 19:15:50.173--HFBMS-PSC onServiceConnected
+08-10 14:13:55.103--HFBMS-onServiceConnected will be called for android
+08-10 14:13:56.174--HFBMS-onServiceConnected will be called for com.android.systemui
+08-10 14:13:56.197--HFBMS-onServiceConnected will be called for com.android.systemui
+08-10 14:13:56.902--HFBMS-onServiceConnected will be called for com.android.phone
+08-10 14:13:58.508--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-10 14:13:58.629--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-10 14:13:58.636--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+08-10 14:14:00.231--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+08-10 14:14:00.614--HFBMS-onServiceConnected will be called for android
+08-10 14:14:00.615--HFBMS-onServiceConnected will be called for com.android.phone
+08-10 14:14:00.616--HFBMS-onServiceConnected will be called for com.android.systemui
+08-10 14:14:00.618--HFBMS-onServiceConnected will be called for com.android.systemui
+08-10 14:14:00.618--HFBMS-onServiceConnected will be called for android
+08-10 14:14:00.618--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-10 14:14:00.618--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-10 14:14:00.627--HFBMS-PSC onServiceConnected
+08-16 20:37:42.991--HFBMS-onServiceConnected will be called for android
+08-16 20:37:43.994--HFBMS-onServiceConnected will be called for com.android.systemui
+08-16 20:37:44.011--HFBMS-onServiceConnected will be called for com.android.systemui
+08-16 20:37:45.332--HFBMS-onServiceConnected will be called for com.android.phone
+08-16 20:37:45.635--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-16 20:37:45.719--HFBMS-onServiceConnected will be called for com.android.server.telecom
+08-16 20:37:45.751--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+08-16 20:37:47.367--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+08-16 20:37:47.693--HFBMS-PSC onServiceConnected
+09-10 09:06:06.147--HFBMS-onServiceConnected will be called for android
+09-10 09:06:07.118--HFBMS-onServiceConnected will be called for com.android.systemui
+09-10 09:06:07.138--HFBMS-onServiceConnected will be called for com.android.systemui
+09-10 09:06:08.577--HFBMS-onServiceConnected will be called for com.android.phone
+09-10 09:06:09.323--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-10 09:06:09.437--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-10 09:06:09.547--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+09-10 09:06:11.252--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+09-10 09:06:11.661--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-10 09:06:11.661--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-10 09:06:11.661--HFBMS-onServiceConnected will be called for android
+09-10 09:06:11.662--HFBMS-PSC onServiceConnected
+09-29 17:45:43.460--HFBMS-onServiceConnected will be called for android
+09-29 17:45:44.402--HFBMS-onServiceConnected will be called for com.android.systemui
+09-29 17:45:44.416--HFBMS-onServiceConnected will be called for com.android.systemui
+09-29 17:45:45.171--HFBMS-onServiceConnected will be called for com.android.phone
+09-29 17:45:46.432--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-29 17:45:46.537--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-29 17:45:46.934--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+09-29 17:45:48.520--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+09-29 17:45:48.884--HFBMS-onServiceConnected will be called for android
+09-29 17:45:48.884--HFBMS-onServiceConnected will be called for android
+09-29 17:45:48.884--HFBMS-onServiceConnected will be called for com.android.phone
+09-29 17:45:48.884--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-29 17:45:48.885--HFBMS-onServiceConnected will be called for com.android.server.telecom
+09-29 17:45:48.886--HFBMS-onServiceConnected will be called for com.android.systemui
+09-29 17:45:48.886--HFBMS-onServiceConnected will be called for com.android.systemui
+09-29 17:45:48.898--HFBMS-PSC onServiceConnected
+10-25 12:26:57.685--HFBMS-onServiceConnected will be called for android
+10-25 12:26:58.609--HFBMS-onServiceConnected will be called for com.android.systemui
+10-25 12:26:58.621--HFBMS-onServiceConnected will be called for com.android.systemui
+10-25 12:26:59.829--HFBMS-onServiceConnected will be called for com.android.phone
+10-25 12:27:00.626--HFBMS-onServiceConnected will be called for com.android.server.telecom
+10-25 12:27:00.718--HFBMS-onServiceConnected will be called for com.android.server.telecom
+10-25 12:27:00.968--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+10-25 12:27:02.578--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+10-25 12:27:02.938--HFBMS-onServiceConnected will be called for com.android.server.telecom
+10-25 12:27:02.938--HFBMS-onServiceConnected will be called for com.android.server.telecom
+10-25 12:27:02.938--HFBMS-onServiceConnected will be called for android
+10-25 12:27:02.938--HFBMS-onServiceConnected will be called for android
+10-25 12:27:02.938--HFBMS-onServiceConnected will be called for com.android.systemui
+10-25 12:27:02.939--HFBMS-onServiceConnected will be called for com.android.phone
+10-25 12:27:02.939--HFBMS-onServiceConnected will be called for com.android.systemui
+10-25 12:27:02.966--HFBMS-PSC onServiceConnected
+11-10 17:14:37.990--HFBMS-onServiceConnected will be called for android
+11-10 17:14:38.990--HFBMS-onServiceConnected will be called for com.android.systemui
+11-10 17:14:39.018--HFBMS-onServiceConnected will be called for com.android.systemui
+11-10 17:14:39.845--HFBMS-onServiceConnected will be called for com.android.phone
+11-10 17:14:41.227--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-10 17:14:41.302--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-10 17:14:41.315--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+11-10 17:14:42.883--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+11-10 17:14:43.248--HFBMS-onServiceConnected will be called for android
+11-10 17:14:43.248--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-10 17:14:43.248--HFBMS-onServiceConnected will be called for android
+11-10 17:14:43.250--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-10 17:14:43.250--HFBMS-onServiceConnected will be called for com.android.phone
+11-10 17:14:43.254--HFBMS-onServiceConnected will be called for com.android.systemui
+11-10 17:14:43.254--HFBMS-onServiceConnected will be called for com.android.systemui
+11-10 17:14:43.266--HFBMS-onServiceConnected will be called for com.android.systemui
+11-10 17:14:43.273--HFBMS-PSC onServiceConnected
+11-19 08:51:09.189--HFBMS-onServiceConnected will be called for android
+11-19 08:51:09.612--HFBMS-onServiceConnected will be called for com.android.systemui
+11-19 08:51:09.625--HFBMS-onServiceConnected will be called for com.android.systemui
+11-19 08:51:10.503--HFBMS-onServiceConnected will be called for com.android.phone
+11-19 08:51:11.750--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-19 08:51:11.817--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-19 08:51:11.822--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+11-19 08:51:13.475--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+11-19 08:51:13.815--HFBMS-PSC onServiceConnected
+11-29 08:49:37.546--HFBMS-onServiceConnected will be called for android
+11-29 08:49:38.508--HFBMS-onServiceConnected will be called for com.android.systemui
+11-29 08:49:38.523--HFBMS-onServiceConnected will be called for com.android.systemui
+11-29 08:49:39.281--HFBMS-onServiceConnected will be called for com.android.phone
+11-29 08:49:41.109--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-29 08:49:41.180--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+11-29 08:49:41.188--HFBMS-onServiceConnected will be called for com.android.server.telecom
+11-29 08:49:42.761--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+11-29 08:49:43.135--HFBMS-PSC onServiceConnected
+12-05 16:30:52.507--HFBMS-onServiceConnected will be called for android
+12-05 16:30:53.312--HFBMS-onServiceConnected will be called for com.android.systemui
+12-05 16:30:53.348--HFBMS-onServiceConnected will be called for com.android.systemui
+12-05 16:30:54.140--HFBMS-onServiceConnected will be called for com.android.phone
+12-05 16:30:55.715--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-05 16:30:55.777--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-05 16:30:56.432--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+12-05 16:30:58.259--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for android
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for com.android.systemui
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for android
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for com.android.systemui
+12-05 16:30:58.775--HFBMS-onServiceConnected will be called for com.android.phone
+12-05 16:30:58.785--HFBMS-PSC onServiceConnected
+12-31 16:34:14.980--HFBMS-onServiceConnected will be called for android
+12-31 16:34:15.919--HFBMS-onServiceConnected will be called for com.android.systemui
+12-31 16:34:15.934--HFBMS-onServiceConnected will be called for com.android.systemui
+12-31 16:34:17.239--HFBMS-onServiceConnected will be called for com.android.phone
+12-31 16:34:17.924--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-31 16:34:18.011--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-31 16:34:18.115--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+12-31 16:34:19.891--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+12-31 16:34:20.306--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-31 16:34:20.306--HFBMS-onServiceConnected will be called for android
+12-31 16:34:20.306--HFBMS-onServiceConnected will be called for android
+12-31 16:34:20.306--HFBMS-onServiceConnected will be called for com.android.server.telecom
+12-31 16:34:20.307--HFBMS-onServiceConnected will be called for com.android.systemui
+12-31 16:34:20.307--HFBMS-onServiceConnected will be called for com.android.systemui
+12-31 16:34:20.308--HFBMS-onServiceConnected will be called for com.android.phone
+12-31 16:34:20.329--HFBMS-onServiceConnected will be called for com.android.systemui
+12-31 16:34:20.368--HFBMS-PSC onServiceConnected
+07-21 03:40:39.881--HFBMS-onServiceConnected will be called for android
+07-21 03:40:40.473--HFBMS-onServiceConnected will be called for android
+07-21 03:40:41.089--HFBMS-onServiceConnected will be called for com.android.systemui
+07-21 03:40:41.107--HFBMS-onServiceConnected will be called for com.android.systemui
+07-21 03:40:41.769--HFBMS-onServiceConnected will be called for com.android.phone
+07-21 03:40:43.391--HFBMS-onServiceConnected will be called for com.android.server.telecom
+07-21 03:40:43.422--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+07-21 03:40:43.440--HFBMS-onServiceConnected will be called for com.android.server.telecom
+07-21 03:40:44.938--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+07-21 03:40:45.266--HFBMS-onServiceConnected will be called for com.android.server.telecom
+07-21 03:40:45.267--HFBMS-onServiceConnected will be called for com.android.server.telecom
+07-21 03:40:45.268--HFBMS-onServiceConnected will be called for android
+07-21 03:40:45.269--HFBMS-onServiceConnected will be called for android
+07-21 03:40:45.270--HFBMS-onServiceConnected will be called for com.android.phone
+07-21 03:40:45.272--HFBMS-onServiceConnected will be called for com.android.systemui
+07-21 03:40:45.273--HFBMS-onServiceConnected will be called for com.android.systemui
+07-21 03:40:45.287--HFBMS-onServiceConnected will be called for com.android.systemui
+07-21 03:40:45.316--HFBMS-PSC onServiceConnected
+01-20 18:15:37.889--HFBMS-onServiceConnected will be called for android
+===== RF8M21J8XRT props =====
+SM-G970F
+12
+===== RF8M21J8XRT wearable/meta packages =====
+package:com.samsung.android.app.galaxyfinder
+package:com.samsung.android.app.watchmanager
+package:com.facebook.services
+package:com.google.android.modulemetadata
+package:com.samsung.android.shealthmonitor
+package:com.facebook.katana
+package:com.facebook.stella
+package:com.facebook.system
+package:com.samsung.android.app.watchmanagerstub
+package:com.google.android.overlay.modules.modulemetadata.forframework
+package:com.facebook.appmanager
+===== RF8M21J8XRT bluetooth pairing hints =====
+  name: S10e von José Ramón
+  Name: S10e von José Ramón
+  ConnectionState: STATE_CONNECTED
+  MaxConnectedAudioDevices: 2
+  Bonded devices:
+    (Connected) C8:BD:4D:2D:41:F6 [ DUAL ] Watch4 von José Ramón (AudioSource,Handsfree,AvrcpController,HSP_AG,Handsfree_AG,5e8945b0-9525-11e3-a5e2-0800200c9a66,0000ae00-ebae-4526-9511-8357c35d7be2)
+    (Connected) 6F:F2:A3:7C:16:D6 [  LE  ] RB Meta 00D5 (No uuid)
+    (Connected) 98:59:49:69:ED:DD [BR/EDR] RB Meta 00D5 (Handsfree,AudioSink,AvrcpController,MNS,00000000-deca-fade-deca-deafdecacaff,8b0d2687-42a4-44cb-9436-fba3b9b96de2,9b26d8c0-a8ed-440b-95b0-c4714a518bcc,f7a96061-a1b3-40de-aff0-e78ec45a151e)
+  Metadata Changes:
+Metadata:
+    60:3E:5F:3E:4A:F1 {profile connection policy(A2DP=-1|A2DP_SINK=-1|HEADSET=-1|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=-1|enabled=-1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    E8:85:4B:AB:E5:D3 {profile connection policy(A2DP=100|A2DP_SINK=-1|HEADSET=100|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=1|enabled=1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    D0:DA:D7:0A:49:43 {profile connection policy(A2DP=100|A2DP_SINK=-1|HEADSET=100|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=1|enabled=1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    98:59:49:69:ED:DD {profile connection policy(A2DP=100|A2DP_SINK=-1|HEADSET=100|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=1|enabled=1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    58:3E:9B:DF:14:FF {profile connection policy(A2DP=-1|A2DP_SINK=-1|HEADSET=-1|HEADSET_CLIENT=-1|HID_HOST=100|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=-1|enabled=-1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    00:25:D1:42:72:57 {profile connection policy(A2DP=100|A2DP_SINK=-1|HEADSET=100|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=1|enabled=1), custom metadata(manufacturer_name=Marshall Group|model_name=MAJOR V|software_version=IoT_SDK_for_BT_Audio_V3.9.0.AB156x|hardware_version=FAST_PAIR_C511D8|companion_app=com.zoundindustries.marshallbt|main_icon=content://com.google.android.gms.fileprovider/nearby_bluetooth_metadata/c511d8main.png|is_untethered_headset=false|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=content://com.google.android.gms.nearby.fastpair/links?address=00%3A25%3AD1%3A42%3A72%3A57|device_type=Default|main_battery=null|main_charging=null|main_low_battery_threshold=20|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    14:87:6A:60:6E:50 {profile connection policy(A2DP=100|A2DP_SINK=-1|HEADSET=100|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=1|enabled=1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    C8:BD:4D:2D:41:F6 {profile connection policy(A2DP=-1|A2DP_SINK=-1|HEADSET=100|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=-1|enabled=-1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=Watch|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+    6F:F2:A3:7C:16:D6 {profile connection policy(A2DP=-1|A2DP_SINK=-1|HEADSET=-1|HEADSET_CLIENT=-1|HID_HOST=-1|PAN=-1|PBAP=-1|PBAP_CLIENT=-1|MAP=-1|MAP_CLIENT=-1|SAP=-1|HEARING_AID=-1|LE_AUDIO=-1), optional codec(support=-1|enabled=-1), custom metadata(manufacturer_name=null|model_name=null|software_version=null|hardware_version=null|companion_app=null|main_icon=null|is_untethered_headset=null|untethered_left_icon=null|untethered_right_icon=null|untethered_case_icon=null|untethered_left_battery=null|untethered_right_battery=null|untethered_case_battery=null|untethered_left_charging=null|untethered_right_charging=null|untethered_case_charging=null|enhanced_settings_ui_uri=null|device_type=null|main_battery=null|main_charging=null|main_low_battery_threshold=null|untethered_left_low_battery_threshold=null|untethered_right_low_battery_threshold=null|untethered_case_low_battery_threshold=null)}
+  SemMetadata Changes:
+SemMetadata:
+                                           appName|  scanType|  scanMode|  scanFeat|       bgd|batchDelay|     count|   results|  duration|                     startTime|                      stopTime|
+                                           appName|   advType|   advMode|     count|  duration|                     startTime|                      stopTime|
+      app_if: 4, appName: android.uid.system
+      app_if: 7, appName: com.google.uid.shared
+      app_if: 12, appName: com.samsung.android.mcfds
+      app_if: 11, appName: android.uid.system
+      app_if: 14, appName: com.samsung.android.mcfds
+      app_if: 16, appName: com.google.uid.shared
+      app_if: 15, appName: com.google.uid.shared
+      app_if: 17, appName: android.uid.mdxkit
+      app_if: 8, appName: android.uid.bcmgr
+      app_if: 6, appName: com.samsung.android.mcfserver
+      app_if: 5, appName: com.samsung.android.mcfserver
+      app_if: 13, appName: com.facebook.stella
+appIf: 1, app: AdvertiserInfo [if=1, appName=com.google.uid.shared, appUid=10075, appPid=2069, startTime: 2026-06-23T13:18:22.691, lsLegacy=false]
+appIf: 0, app: AdvertiserInfo [if=0, appName=com.samsung.android.mcfds, appUid=10080, appPid=5108, startTime: 2026-06-23T13:18:26.337, lsLegacy=true]
+appIf: 3, app: AdvertiserInfo [if=3, appName=com.google.uid.shared, appUid=10075, appPid=2069, startTime: 2026-06-23T13:18:23.598, lsLegacy=true]
+  isInbandRingingEnabled: true
+  isInbandRingingSupported: true
+  mInbandRingingRuntimeDisable: false
+    mIsWatch: false
+    mCurrentState: Connected
+    mInbandRingtoneSupport: true
+    StateMachine: name=HeadsetStateMachine state=Connected
+       rec[0]: time=06-23 15:20:00.064 processed=Disconnected org=Disconnected dest=Connecting what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_CONNECTION_STATE_CHANGED[1], valInt=2, valInt2=0, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[4]: time=06-23 15:20:00.349 processed=Connecting org=Connecting dest=Connected what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_CONNECTION_STATE_CHANGED[1], valInt=3, valInt2=0, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[5]: time=06-23 15:20:00.384 processed=Connected org=Connected dest=<null> what=10(0xa) DEVICE_STATE_CHANGED: arg1=0, arg2=0, obj=HeadsetDeviceState[hasCellularService=1, isRoaming=1, signalStrength2, batteryCharge=5]
+       rec[6]: time=06-23 15:20:00.500 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_BIA[20], valInt=0, valInt2=0, valString=null, valObject=HeadsetAgIndicatorEnableState[service=true, roam=true, signal=false, battery=false], device=98:59:49:69:ED:DD
+       rec[7]: time=06-23 15:20:00.717 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_NOISE_REDUCTION[9], valInt=0, valInt2=0, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[8]: time=06-23 15:20:00.722 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_AT_COPS[13], valInt=0, valInt2=0, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[9]: time=06-23 15:20:00.731 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_VOLUME_CHANGED[6], valInt=0, valInt2=15, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[10]: time=06-23 15:20:00.747 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_SUBSCRIBER_NUMBER_REQUEST[11], valInt=0, valInt2=0, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[11]: time=06-23 15:20:00.822 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_AT_CLCC[14], valInt=0, valInt2=0, valString=null, valObject=null, device=98:59:49:69:ED:DD
+       rec[12]: time=06-23 15:20:00.894 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_UNKNOWN_AT[15], valInt=0, valInt2=0, valString=+XAPL=01AB-0102-0001,2, valObject=null, device=98:59:49:69:ED:DD
+       rec[13]: time=06-23 15:20:00.909 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_UNKNOWN_AT[15], valInt=0, valInt2=0, valString=+IPHONEACCEV=1,1,9, valObject=null, device=98:59:49:69:ED:DD
+       rec[14]: time=06-23 15:20:01.368 processed=Connected org=Connected dest=<null> what=321(0x141) SEND_MESSAGE_TO_HEADSET: arg1=0, arg2=0, obj=com.samsung.bt.hfp.vsc.VendorSpecificCommandVO@43e7909
+      curState=Connected
+    mIsWatch: true
+    mCurrentState: Connected
+    mInbandRingtoneSupport: false
+    StateMachine: name=HeadsetStateMachine state=Connected
+       rec[0]: time=06-23 15:18:26.341 processed=Disconnected org=Disconnected dest=Connecting what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_CONNECTION_STATE_CHANGED[1], valInt=2, valInt2=0, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[6]: time=06-23 15:18:28.893 processed=Connecting org=Connecting dest=Connected what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_CONNECTION_STATE_CHANGED[1], valInt=3, valInt2=0, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[7]: time=06-23 15:18:28.918 processed=Connected org=Connected dest=<null> what=10(0xa) DEVICE_STATE_CHANGED: arg1=0, arg2=0, obj=HeadsetDeviceState[hasCellularService=1, isRoaming=1, signalStrength2, batteryCharge=5]
+       rec[8]: time=06-23 15:18:29.756 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_BIA[20], valInt=0, valInt2=0, valString=null, valObject=HeadsetAgIndicatorEnableState[service=true, roam=true, signal=false, battery=true], device=C8:BD:4D:2D:41:F6
+       rec[9]: time=06-23 15:18:29.911 processed=Connected org=Connected dest=<null> what=321(0x141) SEND_MESSAGE_TO_HEADSET: arg1=0, arg2=0, obj=com.samsung.bt.hfp.vsc.VendorSpecificCommandVO@fdfde6c
+       rec[10]: time=06-23 15:18:31.518 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_NOISE_REDUCTION[9], valInt=0, valInt2=0, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[11]: time=06-23 15:18:31.543 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_UNKNOWN_AT[15], valInt=0, valInt2=0, valString=+ANDROID=?, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[12]: time=06-23 15:18:31.981 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_AT_COPS[13], valInt=0, valInt2=0, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[13]: time=06-23 15:18:32.082 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_VOLUME_CHANGED[6], valInt=0, valInt2=5, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[14]: time=06-23 15:18:32.103 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_SUBSCRIBER_NUMBER_REQUEST[11], valInt=0, valInt2=0, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[15]: time=06-23 15:18:32.236 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=EVENT_TYPE_AT_CLCC[14], valInt=0, valInt2=0, valString=null, valObject=null, device=C8:BD:4D:2D:41:F6
+       rec[16]: time=06-23 15:20:00.384 processed=Connected org=Connected dest=<null> what=10(0xa) DEVICE_STATE_CHANGED: arg1=0, arg2=0, obj=HeadsetDeviceState[hasCellularService=1, isRoaming=1, signalStrength2, batteryCharge=5]
+       rec[17]: time=06-23 15:20:01.367 processed=Connected org=Connected dest=<null> what=321(0x141) SEND_MESSAGE_TO_HEADSET: arg1=0, arg2=0, obj=com.samsung.bt.hfp.vsc.VendorSpecificCommandVO@d646ed3
+      curState=Connected
+  Disconnected Call history
+  mMaxConnectedAudioDevices: 2
+  mNotifiedConnectedDevices:
+    mConnectionState: CONNECTED, mLastConnectionState: CONNECTING
+    mCodecConfig: {codecName:AAC,mCodecType:1,mCodecPriority:100000,mSampleRate:0x1(44100),mBitsPerSample:0x1(16),mChannelMode:0x2(STEREO),mCodecSpecific1:0,mCodecSpecific2:0,mCodecSpecific3:0,mCodecSpecific4:0}
+      {codecName:AAC,mCodecType:1,mCodecPriority:2001,mSampleRate:0x1(44100),mBitsPerSample:0x1(16),mChannelMode:0x2(STEREO),mCodecSpecific1:0,mCodecSpecific2:0,mCodecSpecific3:0,mCodecSpecific4:0}
+      {codecName:SBC,mCodecType:0,mCodecPriority:1001,mSampleRate:0x1(44100),mBitsPerSample:0x1(16),mChannelMode:0x3(MONO|STEREO),mCodecSpecific1:0,mCodecSpecific2:0,mCodecSpecific3:0,mCodecSpecific4:0}
+    StateMachine: name=A2dpStateMachine state=Connected
+       rec[0]: time=06-23 15:19:59.518 processed=Disconnected org=Disconnected dest=Connecting what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=A2dpStackEvent {type:EVENT_TYPE_CONNECTION_STATE_CHANGED, device:98:59:49:69:ED:DD, value1:CONNECTING}
+       rec[4]: time=06-23 15:19:59.595 processed=Connecting org=Connecting dest=Connected what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=A2dpStackEvent {type:EVENT_TYPE_CONNECTION_STATE_CHANGED, device:98:59:49:69:ED:DD, value1:CONNECTED}
+       rec[5]: time=06-23 15:19:59.610 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=A2dpStackEvent {type:EVENT_TYPE_CODEC_CONFIG_CHANGED, device:98:59:49:69:ED:DD, value1:2}
+       rec[6]: time=06-23 15:19:59.619 processed=Connected org=Connected dest=<null> what=101(0x65) STACK_EVENT: arg1=0, arg2=0, obj=A2dpStackEvent {type:EVENT_TYPE_CODEC_CONFIG_CHANGED, device:98:59:49:69:ED:DD, value1:2}
+      curState=Connected
+  mPanIfName: bt-pan
+  sRemoteDeviceName: null
+  OUI            Name                          Channel   MTU       MPL       Version   Support   Msg Type  L param   Trans     Retry     Charset   
+      Device Address    : Device Name    : Vol : AbsVol
+      985949_D          : RB Meta 00D5   :  90 : true
+    TITLE : 0,    PHOTO : 0,    URL : 0,    BDAY : 0,    NICKNAME : 0,    SORT-STRING : 0
+    TITLE : 0,    PHOTO : 0,    URL : 0,    BDAY : 0,    NICKNAME : 0,    SORT-STRING : 0
+  OUI            Name                          Channel   MTU       MPL       Support        P Selector     V Selector     Type      Form      Repo
+  06-23 15:19:59.745 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:30.802 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:28.596 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:28.477 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:26.045 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:23.561 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:23.062 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.623 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.623 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+  06-23 15:18:22.622 CONNECTED    6f:f2:a3:7c:16:d6
+Bond Events: 
+    Connected: true
+  Last acquired timer name : bta_dm.pm_timer
+  Max acquired timer name : bta_dm.pm_timer
+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
+===== RF8M90QE7LX props =====
+SM-G970F
+12
+===== RF8M90QE7LX wearable/meta packages =====
+package:com.samsung.android.app.galaxyfinder
+package:com.facebook.services
+package:com.google.android.modulemetadata
+package:com.facebook.katana
+package:com.facebook.system
+package:com.samsung.android.app.watchmanagerstub
+package:com.google.android.overlay.modules.modulemetadata.forframework
+package:com.facebook.appmanager
+===== RF8M90QE7LX bluetooth pairing hints =====
+  name: Galaxy S10e
+  Name: Galaxy S10e
+  ConnectionState: STATE_DISCONNECTED
+  MaxConnectedAudioDevices: 2
+  Bonded devices:
+  Metadata Changes:
+Metadata:
+  SemMetadata Changes:
+SemMetadata:
+                                           appName|  scanType|  scanMode|  scanFeat|       bgd|batchDelay|     count|   results|  duration|                     startTime|                      stopTime|
+                                           appName|   advType|   advMode|     count|  duration|                     startTime|                      stopTime|
+      app_if: 4, appName: android.uid.bcmgr
+      app_if: 6, appName: android.uid.system
+      app_if: 5, appName: com.google.uid.shared
+Bond Events: 
+  Last acquired timer name : btm.read_local_name_timer
+  Max acquired timer name : btm.read_local_name_timer
+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
+03-19 11:24:47.090--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+03-19 11:24:48.642--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+03-19 11:56:51.810--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+03-19 11:56:53.606--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+06-07 00:02:34.910--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+06-07 00:02:36.962--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+06-07 00:03:01.427--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+06-07 00:03:03.179--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+06-12 17:38:12.742--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 1
+06-12 17:38:14.260--BluetoothManagerService BLUETOOTH_SERVICE_CONNECTED: 2
+[exit-code] 0
+
+$ zsh -lc s=RF8M21J8XRT; echo "===== $s focused packages ====="; timeout 15 adb -s "$s" shell pm list packages | grep -Ei "hydracam|keepeyeonball|stella|facebook|meta|watchmanager|wear|health" || true; echo "===== $s companion device associations ====="; timeout 15 adb -s "$s" shell dumpsys companiondevice || true; echo "===== $s developer settings ====="; timeout 10 adb -s "$s" shell settings get global adb_enabled; timeout 10 adb -s "$s" shell settings get global adb_wifi_enabled; timeout 10 adb -s "$s" shell settings get global development_settings_enabled
+===== RF8M21J8XRT focused packages =====
+package:com.samsung.android.app.watchmanager
+package:com.facebook.services
+package:com.alicia.hydracamclient
+package:com.google.android.modulemetadata
+package:com.samsung.android.shealthmonitor
+package:com.facebook.katana
+package:com.facebook.stella
+package:com.facebook.system
+package:com.amaia23.hydracam
+package:com.samsung.android.app.watchmanagerstub
+package:com.google.android.overlay.modules.modulemetadata.forframework
+package:com.facebook.appmanager
+===== RF8M21J8XRT companion device associations =====
+Companion Device Associations:
+  u0: com.samsung.android.waterplugin - C8:BD:4D:2D:41:F6
+  u0: com.facebook.stella - 6F:F2:A3:7C:16:D6
+  u0: com.samsung.android.waterplugin - 44:EA:30:58:7F:A2
+===== RF8M21J8XRT developer settings =====
+1
+0
+1
+[exit-code] 0
+
+$ zsh -lc adb -s RF8M21J8XRT exec-out screencap -p > logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/screenshots/RF8M21J8XRT-current-screen.png
+[exit-code] 0
+
+$ timeout 15 adb -s RF8M21J8XRT shell screenrecord --time-limit 5 /sdcard/hydracam-wearable-phone-connected.mp4
+[exit-code] 0
+
+$ adb -s RF8M21J8XRT pull /sdcard/hydracam-wearable-phone-connected.mp4 logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/video/RF8M21J8XRT-phone-connected.mp4
+
+[stderr]
+/sdcard/hydracam-wearable-phone-connected.mp4: 1 file pulled, 0 skipped. 6.7 MB/s (68311 bytes in 0.010s)
+[exit-code] 0
+
+$ zsh -lc timeout 20 adb -s RF8M21J8XRT logcat -d -t 500 > logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/device-logs/RF8M21J8XRT-logcat-tail.txt; cp logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/commands.log logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/device-logs/commands-transcript.log

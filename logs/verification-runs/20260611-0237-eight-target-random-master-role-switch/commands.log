@@ -1,0 +1,584 @@
+# HydraCam evidence run command log
+
+$ flutter devices
+Found 8 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.103
+
+Checking for wireless devices...
+
+No wireless devices were found.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ git status -sb
+## master-jose-2025...github/master-jose-2025
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+9885e6503930304946     device usb:2-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+RF8M21J8XRT            device usb:2-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:2
+RF8M90QE7LX            device usb:0-1.4 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1
+
+[exit-code] 0
+
+$ flutter devices
+Found 9 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  sdk gphone64 arm64 (mobile)  • emulator-5554                            • android-arm64  • Android 14 (API 34) (emulator)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.103
+
+Checking for wireless devices...
+
+No wireless devices were found.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+9885e6503930304946     device usb:2-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:3
+RF8M21J8XRT            device usb:2-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:2
+RF8M90QE7LX            device usb:0-1.4 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1
+emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:5
+
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-prime-only --no-use-latest-warm-summary --auto-ios-bridge-hosts --fast-ios-launch --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/physical-ios-warm-prime
++ flutter devices
++ xcrun devicectl device process launch --device 00008101-000A68811E43001E --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "00008101-000A68811E43001E"} com.keepeyeonball
++ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
++ flutter devices
++ adb devices -l
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/physical-ios-warm-prime
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --runtime-role-switch --role-switch-only --fast-ios-launch --role-switch-verify-timeout 12 --standby-launch-timeout 90 --timeout 90 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-role-switch
++ flutter devices
++ adb devices -l
++ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             35.2s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
++ adb -s 9885e6503930304946 forward --remove-all
++ adb -s RF8M21J8XRT forward --remove-all
++ adb -s RF8M90QE7LX forward --remove-all
++ adb -s emulator-5554 forward --remove-all
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+run_rotating_master_slave_matrix failed: Local automation port(s) already occupied: 6402
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --runtime-role-switch --role-switch-only --fast-ios-launch --role-switch-verify-timeout 12 --standby-launch-timeout 90 --timeout 90 --android-port-base 6500 --skip-build --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-role-switch-port6500
++ flutter devices
++ adb devices -l
++ adb -s 9885e6503930304946 forward --remove-all
++ adb -s RF8M21J8XRT forward --remove-all
++ adb -s RF8M90QE7LX forward --remove-all
++ adb -s emulator-5554 forward --remove-all
++ adb -s 9885e6503930304946 shell ip -f inet addr show wlan0
++ adb -s 9885e6503930304946 shell ip route get 1.1.1.1
++ adb -s RF8M21J8XRT shell ip -f inet addr show wlan0
++ adb -s RF8M21J8XRT shell ip route get 1.1.1.1
++ adb -s RF8M90QE7LX shell ip -f inet addr show wlan0
++ adb -s RF8M90QE7LX shell ip route get 1.1.1.1
++ adb -s emulator-5554 shell ip -f inet addr show wlan0
++ adb -s emulator-5554 shell ip route get 1.1.1.1
++ ipconfig getifaddr en0
++ adb -s 9885e6503930304946 install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
++ adb -s RF8M21J8XRT install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
++ adb -s RF8M90QE7LX install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
++ adb -s emulator-5554 install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s emulator-5554 forward tcp:6503 tcp:4762
+6503
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
+Performing Streamed Install
+Success
++ adb -s RF8M90QE7LX forward tcp:6502 tcp:4762
+6502
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
+Performing Streamed Install
+Success
++ adb -s RF8M21J8XRT forward tcp:6501 tcp:4762
+6501
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
+Performing Streamed Install
+Success
++ adb -s 9885e6503930304946 forward tcp:6500 tcp:4762
+6500
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ xcrun devicectl device info processes --device 00008101-000A68811E43001E --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-cvwckcle.json --quiet
++ xcrun devicectl device process terminate --device 00008101-000A68811E43001E --pid 1419 --quiet
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-r7uty6e5.json --quiet
++ pkill -x HydraCam
++ xcrun simctl terminate 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.keepeyeonball
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId emulator-5554
++ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M21J8XRT
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M90QE7LX
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ xcrun devicectl device info processes --device 00008101-000A68811E43001E --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-zftap6st.json --quiet
++ xcrun devicectl device info processes --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --json-output /var/folders/6s/dp27g8gn26j9mp36sjfxb9tw0000gn/T/hydracam-devicectl-processes-yljzgald.json --quiet
++ pkill -x HydraCam
++ xcrun simctl terminate 5CF4A12E-A8B5-4285-AE86-407B9067CB5F com.keepeyeonball
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am force-stop com.amaia23.hydracam
++ adb -s 9885e6503930304946 forward --remove-all
++ adb -s RF8M21J8XRT forward --remove-all
++ adb -s RF8M90QE7LX forward --remove-all
++ adb -s emulator-5554 forward --remove-all
+
+[stderr]
+run_rotating_master_slave_matrix failed: Automation bridge did not become healthy for RF8M90QE7LX at http://127.0.0.1:6502: last_health={}, last_error=GET /healthz failed: timed out
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --prime-then-immediate-role-switch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --role-switch-verify-timeout 12 --standby-launch-timeout 90 --timeout 90 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-prime-then-immediate
++ flutter devices
++ adb devices -l
++ adb -s 9885e6503930304946 forward tcp:6500 tcp:4762
+6500
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s 9885e6503930304946 shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s RF8M21J8XRT forward tcp:6501 tcp:4762
+6501
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s emulator-5554 forward tcp:6503 tcp:4762
+6503
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s emulator-5554 shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
++ adb -s 9885e6503930304946 shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am force-stop com.amaia23.hydracam
++ adb -s emulator-5554 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId emulator-5554
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M21J8XRT
++ adb -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 9885e6503930304946
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-prime-then-immediate
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --prime-then-immediate-role-switch --fast-ios-launch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --role-switch-verify-timeout 12 --standby-launch-timeout 90 --timeout 90 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-prime-then-immediate-fast-ios
++ flutter devices
++ adb devices -l
++ xcrun devicectl device process launch --device 00008101-000A68811E43001E --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE": "standby", "HYDRACAM_AUTOMATION_TARGET_ID": "00008101-000A68811E43001E"} com.keepeyeonball
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-prime-then-immediate-fast-ios
+[exit-code] 1
+
+$ adb devices -l
+List of devices attached
+9885e6503930304946     device usb:2-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:4
+RF8M21J8XRT            device usb:2-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:3
+emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:1
+
+[exit-code] 0
+
+$ flutter devices
+Found 8 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  sdk gphone64 arm64 (mobile)  • emulator-5554                            • android-arm64  • Android 14 (API 34) (emulator)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.103
+
+Checking for wireless devices...
+
+No wireless devices were found.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ flutter devices
+Found 8 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.103
+
+Checking for wireless devices...
+
+No wireless devices were found.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+9885e6503930304946     device usb:2-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:4
+RF8M21J8XRT            device usb:2-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:3
+RF8M90QE7LX            device usb:0-1.4 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:5
+
+[exit-code] 0
+
+$ flutter devices
+Found 9 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  sdk gphone64 arm64 (mobile)  • emulator-5554                            • android-arm64  • Android 14 (API 34) (emulator)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.103
+
+Checking for wireless devices...
+
+No wireless devices were found.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+9885e6503930304946     device usb:2-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:4
+RF8M21J8XRT            device usb:2-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:3
+RF8M90QE7LX            device usb:0-1.4 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:5
+emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:6
+
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --prime-then-immediate-role-switch --fast-ios-launch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --role-switch-verify-timeout 20 --standby-launch-timeout 300 --timeout 180 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-continuation-pass-attempt
+
+$ adb devices -l
+List of devices attached
+9885e6503930304946     device usb:2-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:4
+RF8M21J8XRT            device usb:2-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:3
+RF8M90QE7LX            device usb:0-1.4 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:2
+emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:1
+
+[exit-code] 0
+
+$ flutter devices
+Found 9 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  sdk gphone64 arm64 (mobile)  • emulator-5554                            • unsupported    • Android null (API null) (unsupported)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPhone 16 Plus (mobile)      • 5CF4A12E-A8B5-4285-AE86-407B9067CB5F     • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.103
+
+Checking for wireless devices...
+
+No wireless devices were found.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.
+
+[stderr]
+Error 1 retrieving device properties for sdk gphone64 arm64:
+adb: device 'emulator-5554' not found
+
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --dry-run --prime-then-immediate-role-switch --fast-ios-launch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --role-switch-verify-timeout 20 --standby-launch-timeout 300 --timeout 180 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/dry-run-eight-target-after-recovery
++ flutter devices
++ adb devices -l
+{
+  "captureTargetCount": 7,
+  "repeatRoleSwitchCycles": 1,
+  "roleSwitchOnly": true,
+  "rotationCount": 1,
+  "rotations": [
+    {
+      "clientCount": 7,
+      "clientDeviceIds": [
+        "9885e6503930304946",
+        "RF8M21J8XRT",
+        "emulator-5554",
+        "00008101-000A68811E43001E",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "macos",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F"
+      ],
+      "knownBlocker": null,
+      "master": {
+        "bridgeUrl": "http://127.0.0.1:6502",
+        "captureEnabled": true,
+        "deviceId": "RF8M90QE7LX",
+        "expectedResult": "capture",
+        "knownBlocker": null,
+        "label": "SM G970F (mobile)",
+        "lens": "autoBack",
+        "platform": "android",
+        "profile": "standard1080p30",
+        "runtime": "Android 12 (API 31)"
+      },
+      "masterDeviceId": "RF8M90QE7LX"
+    }
+  ],
+  "runtimeRoleSwitch": true,
+  "sharedBarrierPerRotation": true,
+  "status": "dry_run",
+  "targetCount": 8,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6500",
+      "captureEnabled": true,
+      "deviceId": "9885e6503930304946",
+      "expectedResult": "capture",
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "label": "SM G935F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 8.0.0 (API 26)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6501",
+      "captureEnabled": true,
+      "deviceId": "RF8M21J8XRT",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G970F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12 (API 31)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6502",
+      "captureEnabled": true,
+      "deviceId": "RF8M90QE7LX",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G970F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12 (API 31)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6503",
+      "captureEnabled": true,
+      "deviceId": "emulator-5554",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "sdk gphone64 arm64 (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 14 (API 34) (emulator)"
+    },
+    {
+      "bridgeUrl": "http://169.254.13.252:4762",
+      "captureEnabled": true,
+      "deviceId": "00008101-000A68811E43001E",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "Jos\u00e9 Ram\u00f3n\u2019s iPhone (mobile)",
+      "lens": "ultraWide",
+      "platform": "ios_physical",
+      "profile": "sport1080p60",
+      "runtime": "iOS 26.5 23F77"
+    },
+    {
+      "bridgeUrl": "http://169.254.193.202:4762",
+      "captureEnabled": true,
+      "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "iPad (5) (mobile)",
+      "lens": "autoBack",
+      "platform": "ios_physical",
+      "profile": "standard1080p30",
+      "runtime": "iOS 17.7.11 21H461"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "captureEnabled": true,
+      "deviceId": "macos",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "macOS (desktop)",
+      "lens": "autoBack",
+      "platform": "macos",
+      "profile": "standard1080p30",
+      "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4771",
+      "captureEnabled": false,
+      "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "expectedResult": "launch_only",
+      "knownBlocker": null,
+      "label": "iPhone 16 Plus (mobile)",
+      "lens": "autoBack",
+      "platform": "ios_simulator",
+      "profile": "standard1080p30",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)"
+    }
+  ]
+}
+[exit-code] 0
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --prime-then-immediate-role-switch --fast-ios-launch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --role-switch-verify-timeout 20 --standby-launch-timeout 300 --timeout 180 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-after-recovery
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --prime-then-immediate-role-switch --fast-ios-launch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id RF8M90QE7LX --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id RF8M90QE7LX --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M90QE7LX --role-switch-verify-timeout 20 --standby-launch-timeout 300 --timeout 180 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-after-adb-timeouts
++ flutter devices
++ adb devices -l
++ adb -s RF8M90QE7LX forward tcp:6502 tcp:4762
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
+warning: timed out granting android.permission.CAMERA on RF8M90QE7LX; continuing
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
+warning: timed out granting android.permission.RECORD_AUDIO on RF8M90QE7LX; continuing
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
+warning: timed out granting android.permission.ACCESS_FINE_LOCATION on RF8M90QE7LX; continuing
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
+warning: timed out granting android.permission.ACCESS_COARSE_LOCATION on RF8M90QE7LX; continuing
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
+warning: timed out granting android.permission.READ_EXTERNAL_STORAGE on RF8M90QE7LX; continuing
++ adb -s emulator-5554 forward tcp:6503 tcp:4762
+6503
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
+warning: timed out force-stopping com.amaia23.hydracam on RF8M90QE7LX; continuing
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M90QE7LX
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/eight-target-random-master-after-adb-timeouts
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --dry-run --prime-then-immediate-role-switch --fast-ios-launch --no-use-latest-warm-summary --no-auto-ios-bridge-hosts --ios-host 00008101-000A68811E43001E=169.254.13.252 --ios-host 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63=169.254.193.202 --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id emulator-5554 --role-switch-verify-timeout 20 --standby-launch-timeout 300 --timeout 180 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/dry-run-seven-target-fallback-master-emulator
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-summary logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/dry-run-eight-target-after-recovery/summary.json --prime-then-immediate-role-switch --fast-ios-launch --no-auto-ios-bridge-hosts --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id emulator-5554 --role-switch-verify-timeout 20 --standby-launch-timeout 300 --timeout 180 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-emulator-warm-summary
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-emulator-warm-summary
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-summary logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/dry-run-eight-target-after-recovery/summary.json --immediate-role-switch --no-auto-ios-bridge-hosts --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id emulator-5554 --role-switch-verify-timeout 20 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-emulator-immediate
+
+[stderr]
+run_rotating_master_slave_matrix failed: Warm summary is missing masterHosts for: emulator-5554
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-summary logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-emulator-immediate-forwarded/warm-summary-emulator-master.json --immediate-role-switch --no-auto-ios-bridge-hosts --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id emulator-5554 --role-switch-verify-timeout 20 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-emulator-immediate-forwarded
+=== Rotation master emulator-5554 ===
++ adb -s emulator-5554 logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s RF8M21J8XRT logcat -d -t 400
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-emulator-immediate-forwarded
+[exit-code] 1
+
+$ python3 scripts/run_rotating_master_slave_matrix.py --warm-summary logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-rf8m21-immediate/warm-summary-rf8m21-master.json --immediate-role-switch --no-auto-ios-bridge-hosts --target-id 9885e6503930304946 --target-id RF8M21J8XRT --target-id emulator-5554 --target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --target-id 00008101-000A68811E43001E --target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --target-id macos --expect-target-id 9885e6503930304946 --expect-target-id RF8M21J8XRT --expect-target-id emulator-5554 --expect-target-id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --expect-target-id 00008101-000A68811E43001E --expect-target-id 5CF4A12E-A8B5-4285-AE86-407B9067CB5F --expect-target-id macos --master-id RF8M21J8XRT --role-switch-verify-timeout 20 --android-port-base 6500 --run-dir logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-rf8m21-immediate
+=== Rotation master RF8M21J8XRT ===
++ adb -s RF8M21J8XRT logcat -d -t 400
++ adb -s 9885e6503930304946 logcat -d -t 400
++ adb -s emulator-5554 logcat -d -t 400
+logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/device-logs/seven-target-fallback-master-rf8m21-immediate
+[exit-code] 1

@@ -1,0 +1,67 @@
+{
+  "acceptanceChecks": [
+    "Physical iPad launches the current app through the mechanical capture repro",
+    "Photo/video capture either succeeds or records an actionable hardware blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--run-dir",
+        "logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline",
+        "--profile",
+        "standard1080p30",
+        "--lens",
+        "autoBack",
+        "--record-seconds",
+        "4",
+        "--timeout",
+        "240"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T05:04:21.098156+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS hardware",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "single physical capture target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-screenshot-unavailable.txt",
+    "video/ipad-video-unavailable.txt",
+    "device-logs/ipad-devicectl-details.json",
+    "device-logs/ipad-devicectl-details.log",
+    "device-logs/ipad-devicectl-processes.json",
+    "device-logs/ipad-devicectl-processes.log",
+    "device-logs/ipad-flutter-run.log"
+  ],
+  "item": {
+    "slug": "regular-evaluation-tier-a-ipad-hardware-baseline",
+    "source": "docs/control/regular-evaluation-plan.md#physical-ios-hardware-lane",
+    "title": "Baseline regular evaluation Tier A physical iOS hardware lane"
+  },
+  "notes": [
+    "Physical iPad debug build installed/launched, but ios_capture_repro could not discover an identity-ready automation bridge on 192.168.178.0/24:4762; Flutter physical screenshot was unsupported and CoreDevice process streaming failed, both recorded as blocker artifacts."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

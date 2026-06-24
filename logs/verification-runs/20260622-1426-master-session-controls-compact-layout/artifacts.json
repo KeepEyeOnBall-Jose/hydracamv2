@@ -1,0 +1,217 @@
+{
+  "acceptanceChecks": [
+    "Session information and controls share one panel on the Master main page",
+    "Active-session controls wrap without overflow on compact portrait and landscape viewports",
+    "Relevant Flutter tests and analyzer pass",
+    "Connected hardware smoke is attempted or explicit blocker is recorded"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/session_info_widget_test.dart",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:29:43.081135+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:29:52.820860+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:30:16.438229+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:32:21.431971+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "logs/verification-runs/20260622-1426-master-session-controls-compact-layout/device-logs/mba13_master_ui_smoke.sh"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T12:40:03.256015+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "logs/verification-runs/20260622-1426-master-session-controls-compact-layout/device-logs/mba13_master_ui_smoke.sh"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T12:40:53.201665+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "logs/verification-runs/20260622-1426-master-session-controls-compact-layout/device-logs/mba13_master_ui_smoke.sh"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-22T12:43:21.664215+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "logs/verification-runs/20260622-1426-master-session-controls-compact-layout/device-logs/mba13_master_ui_smoke.sh"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-22T12:46:21.555777+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260622-1426-master-session-controls-compact-layout/device-logs/validate_master_ui_evidence.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:46:54.992161+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:47:36.374196+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/widgets/session_info_widget_test.dart",
+        "test/master/master_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:48:21.372811+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:48:34.017379+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:48:41.702124+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260622-1426-master-session-controls-compact-layout/device-logs/validate_master_ui_evidence.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:48:41.729988+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "android-phone",
+      "name": "Samsung SM-G935F",
+      "notes": [
+        "Installed automation debug APK from this checkout via joss-macbook-air.tail6ce139.ts.net; captured 360x640 Master page screenshot and screenrecord."
+      ],
+      "os": "Android 8.0.0",
+      "role": "Master page portrait smoke over MBA13/Tailscale"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "android-phone",
+      "name": "Samsung SM-G970F",
+      "notes": [
+        "Installed automation debug APK from this checkout via joss-macbook-air.tail6ce139.ts.net; captured 674x360 Master page screenshot and screenrecord."
+      ],
+      "os": "Android 12",
+      "role": "Master page landscape smoke over MBA13/Tailscale"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/master-compact-9885e6503930304946.png",
+    "screenshots/master-compact-RF8M90QE7LX.png",
+    "screenshots/system-master-compact-9885e6503930304946.png",
+    "screenshots/system-master-compact-RF8M90QE7LX.png",
+    "video/master-compact-9885e6503930304946.mp4",
+    "video/master-compact-RF8M90QE7LX.mp4",
+    "device-logs/mba13/adb-devices-before.txt",
+    "device-logs/mba13/android-version-9885e6503930304946.txt",
+    "device-logs/mba13/android-version-RF8M90QE7LX.txt",
+    "device-logs/mba13/capture-response-9885e6503930304946.json",
+    "device-logs/mba13/capture-response-RF8M90QE7LX.json",
+    "device-logs/mba13/health-9885e6503930304946.json",
+    "device-logs/mba13/health-RF8M90QE7LX.json",
+    "device-logs/mba13/install-9885e6503930304946.txt",
+    "device-logs/mba13/install-RF8M90QE7LX.txt",
+    "device-logs/mba13/launch-master-9885e6503930304946.txt",
+    "device-logs/mba13/launch-master-RF8M90QE7LX.txt",
+    "device-logs/mba13/logcat-9885e6503930304946.txt",
+    "device-logs/mba13/logcat-RF8M90QE7LX.txt",
+    "device-logs/mba13/model-9885e6503930304946.txt",
+    "device-logs/mba13/model-RF8M90QE7LX.txt",
+    "device-logs/mba13/screenrecord-9885e6503930304946.txt",
+    "device-logs/mba13/screenrecord-RF8M90QE7LX.txt",
+    "device-logs/mba13_master_ui_smoke.sh",
+    "device-logs/mba13_remote_master_ui_capture.sh",
+    "device-logs/validate_master_ui_evidence.py"
+  ],
+  "item": {
+    "slug": "master-session-controls-compact-layout",
+    "source": "user request 2026-06-22 unify Session information and buttons panel to reduce wasted space and overflow",
+    "title": "master session controls compact layout"
+  },
+  "notes": [
+    "Unified Master session information and controls into one compact responsive panel.",
+    "Widget tests cover active-session controls at 360x640 and 640x360 without tester exceptions.",
+    "MBA13 Tailscale hardware smoke installed and launched on SM-G935F and SM-G970F; screenshots, screenrecords, health responses, and logcats copied locally.",
+    "Post-hardening rerun passed targeted widget tests, analyzer, diff check, and local hardware evidence validator."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

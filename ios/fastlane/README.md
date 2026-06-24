@@ -13,12 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-## Repo wrapper
-
-From the repository root, prefer `scripts/ios_fastlane.sh ios <lane>` instead
-of running `bundle exec fastlane` directly. The wrapper selects the Homebrew
-Ruby/Bundler path used by `ios/Gemfile.lock`.
-
 ## iOS
 
 ### ios build_store
@@ -45,13 +39,26 @@ Upload a new beta build to TestFlight
 
 Upload the latest local IPA to TestFlight without rebuilding
 
+Prefer the repo wrapper for local uploads:
+
+```sh
+bash scripts/testflight_release_and_invite.sh
+```
+
+For direct fastlane lane calls, run them through `scripts/ios_fastlane.sh` from
+the repo root so the pinned Ruby/Bundler path is used.
+
+For unattended uploads, keep App Store Connect API exports outside the repo in
+`~/.hydracam/secrets/app-store-connect.env`. The repo wrapper and readiness
+gate auto-source that file when it exists.
+
 ### ios device
 
 ```sh
 [bundle exec] fastlane ios device
 ```
 
-Build for physical device
+Build an icon-launchable Profile app for physical iPhone development
 
 ----
 

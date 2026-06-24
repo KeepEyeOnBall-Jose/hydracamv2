@@ -1,0 +1,807 @@
+--------- beginning of main
+06-15 19:54:18.526  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   38 msec):(type=0, bufIndex=5, size=23.26)
+06-15 19:54:18.533  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 130: Failed to deserialize versioned key blob.  Assuming unversioned.
+06-15 19:54:18.533  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 74: Failed to deserialize unversioned blob (may be a HW-backed key)
+--------- beginning of system
+06-15 19:54:18.533  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:790) entered get_key_characteristics function.
+06-15 19:54:18.537  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x00000009, ret = 0x00000000
+06-15 19:54:18.537  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: SIZE:256 EC SIG VERI SHA256 AUTH 
+06-15 19:54:18.537  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: 20231010160603 
+06-15 19:54:18.537  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:804) exit get_key_characteristics function, returns 0
+06-15 19:54:18.537  3111  3111 D SoftKeymaster: system/keymaster/soft_keymaster_context.cpp, Line 884: Module "Keymaster MDFPP Mobicore HAL" accepted key
+06-15 19:54:18.542  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:838) entered export_key function.
+06-15 19:54:18.545  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x0000000B, ret = 0x00000000
+06-15 19:54:18.545  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:854) exit export_key function, returns 0
+06-15 19:54:18.589  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   63 msec):(type=0, bufIndex=6, size=23.26)
+06-15 19:54:18.603  5567  5567 E adbd    : recv: OPEN 00000101 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-15 19:54:18.603  5567  5567 E adbd    : service_to_fd: tcp:4762
+06-15 19:54:18.604  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:18.605  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   16 msec):(type=0, bufIndex=7, size=23.26)
+06-15 19:54:18.616  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   11 msec):(type=0, bufIndex=8, size=23.26)
+06-15 19:54:18.616  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(  429 msec)
+06-15 19:54:18.616  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=9, m_reqBufCount=9, m_allowedMaxBufCount=9) --- dumpBufferInfo ---
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=180] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=171] .addr=0xf36d3000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=181] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=172] .addr=0xf36cb000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=182] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=173] .addr=0xf36c3000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=183] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=174] .addr=0xf36bb000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=184] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=175] .addr=0xf36b3000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=185] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=176] .addr=0xf36ab000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=186] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=177] .addr=0xf36a3000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.616  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=187] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.617  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=178] .addr=0xf369b000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.617  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=188] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:18.617  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=179] .addr=0xf368d000 .size=32768 .position=0 .permission=1]
+06-15 19:54:18.617  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-15 19:54:18.617  4707  8741 D ExynosCameraBufferManager: DEBUG:duration time(  434 msec):(alloc)
+06-15 19:54:18.621  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-15 19:54:18.634  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   13 msec):(type=0, bufIndex=0, size=23.26)
+06-15 19:54:18.648  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   14 msec):(type=0, bufIndex=1, size=23.26)
+06-15 19:54:18.660  4978  5758 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:18.667  4978  5758 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:18.683  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   34 msec):(type=0, bufIndex=2, size=23.26)
+06-15 19:54:18.690  6066  6066 D io_stats: !@   8,0 r 1364506 74819792 w 831330 19592976 d 85754 16168968 f 287569 287104 iot 1657990 1508663 th 374944 0 0 pt 0 inp 0 0 184530.448
+06-15 19:54:18.724  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   41 msec):(type=0, bufIndex=3, size=23.26)
+06-15 19:54:18.786  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   62 msec):(type=0, bufIndex=4, size=23.26)
+06-15 19:54:18.819  8705  8705 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+06-15 19:54:18.868  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   81 msec):(type=0, bufIndex=5, size=23.26)
+06-15 19:54:18.890  8705  8705 W SoLoader: Loading notifgateway-jni on the main thread
+06-15 19:54:18.891  8705  8705 W SoLoader[NativeDeps]: Falling back to custom ELF parsing when loading libnotifgateway.so, this can be slow
+06-15 19:54:18.987  5567  5567 E adbd    : recv: OPEN 00000103 00000000 00a8:65 78 65 63 3A 72 75 6E 2D 61 73 20 27 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 27 20 27 63 61 74 27 20 27 2F 64 61 74 61 2F 75 73 65 72 2F 30 2F 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 2F 61 70 70 5F 66 6C 75 74 74 65 72 2F 61 75 74 6F 6D 61 74 69 6F 6E 2D 73 63 72 65 65 6E 73 68 6F 74 73 2F 39 38 38 35 65 36 35 30 33 39 33 30 33 30 34 39 34 36 2D 73 65 74 75 70 2D 32 30 32 36 2D 30 36 2D 31 35 54 31 39 2D 35 34 2D 31 38 2D 39 32 34 39 39 31 2E 70 6E 67 27 00 
+06-15 19:54:18.987  5567  5567 E adbd    : service_to_fd: exec:run-as 'com.amaia23.hydracam' 'cat' '/data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/9885e6503930304946-setup-2026-06-15T19-54-18-924991.png'
+06-15 19:54:19.034  8705  8705 W SoLoader: Loading simplejni on the main thread
+06-15 19:54:19.035  8705  8705 W SoLoader: Loading simplejni on the main thread
+06-15 19:54:19.042  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(  174 msec):(type=0, bufIndex=6, size=23.26)
+06-15 19:54:19.124  4978  5758 I EDMNativeHelperService: isCameraEnabled
+06-15 19:54:19.125  4978  5758 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-15 19:54:19.219  8788  8788 W SELinux : SELinux selinux_android_compute_policy_index : Policy Index[2],  Con:u:r:runas:s0 RAM:SEPF_SM-G935F_8.0.0_0018, [-1 -1 -1 -1 0 1]
+06-15 19:54:19.220  8788  8788 I SELinux : SELinux: seapp_context_lookup: seinfo=untrusted, level=s0:c512,c768, pkgname=com.amaia23.hydracam 
+06-15 19:54:19.334  3202  3202 I android.hardware.wifi@1.0-service: installApfPacketFilter
+06-15 19:54:19.334  3202  3202 D WifiHAL : Setting APF program, halHandle = 0x7ec084e2e0
+06-15 19:54:19.334  3202  3202 I WifiHAL : 
+06-15 19:54:19.334  3202  3202 I WifiHAL : createRequest: APF set program request
+06-15 19:54:19.336  8705  8705 D NetworkSecurityConfig: Using Network Security Config from resource fb_network_security_config debugBuild: false
+06-15 19:54:19.336  3202  3202 I WifiHAL : Done!
+06-15 19:54:19.345  8705  8705 W DGW     : W[reportSoftError:36] pingInterval: value 43200000 outside valid range [5000, 600000]
+06-15 19:54:19.346  8705  8705 W DGW     : W[reportSoftError:36] bgPingInterval: value 43200000ms outside valid range [5000ms, 600000ms]
+06-15 19:54:19.346  8705  8705 W DGW     : W[reportSoftError:36] stopBgPingDelay: value 3155695200s outside valid range [0s, 600s]
+06-15 19:54:19.356  8705  8705 I DGW     : I[startConnection:417] ConnectivityManager start connection.
+06-15 19:54:19.367  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:19.375  8705  8791 I DGW     : I[sendRequest:85] StreamGroupConnectivityAwareNetworkLayer[notifgateway] buffering request with connection state: 0
+06-15 19:54:19.387  8705  8705 D ConnectivityManager: requestNetwork; CallingUid : 10035, CallingPid : 8705
+06-15 19:54:19.389  4978  5758 D ConnectivityService: listenForNetwork for uid/pid:10035/8705 NetworkRequest [ LISTEN id=806, [ Transports: CELLULAR|WIFI|BLUETOOTH|ETHERNET|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND] ]
+06-15 19:54:19.390  5567  5567 E adbd    : recv: OPEN 00000106 00000000 001f:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 2C 72 61 77 3A 77 6D 20 73 69 7A 65 00 
+06-15 19:54:19.390  5567  5567 E adbd    : service_to_fd: shell,v2,TERM=dumb,raw:wm size
+06-15 19:54:19.390  4978  5209 D ConnectivityService: rematching NetworkAgentInfo [WIFI () - 507]
+06-15 19:54:19.391  4978  5209 D ConnectivityService:  network has: [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&FOREGROUND LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -60]
+06-15 19:54:19.391  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 805. No change.
+06-15 19:54:19.391  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 3. No change.
+06-15 19:54:19.391  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 565. No change.
+06-15 19:54:19.391  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 1. No change.
+06-15 19:54:19.391  4978  5209 D ConnectivityService: sending mNetworkRequests to WWSM through Network Monitor [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN]
+06-15 19:54:19.391  4978  5209 D ConnectivityService: multi(falsetruefalse)
+06-15 19:54:19.391  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 702. No change.
+06-15 19:54:19.392  4978  5209 D ConnectivityService: sending notification AVAILABLE for NetworkRequest [ LISTEN id=806, [ Transports: CELLULAR|WIFI|BLUETOOTH|ETHERNET|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND] ]
+06-15 19:54:19.393  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: EvaluatingState{ when=-1ms what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:19.393  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: MaybeNotifyState{ when=-1ms what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:19.393  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: DefaultState{ when=-2ms what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:19.393  4978  5209 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=806, [ Transports: CELLULAR|WIFI|BLUETOOTH|ETHERNET|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND] ]
+06-15 19:54:19.394  4978  5209 D ConnectivityService: sending notification IP_CHANGED for NetworkRequest [ LISTEN id=806, [ Transports: CELLULAR|WIFI|BLUETOOTH|ETHERNET|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&FOREGROUND] ]
+06-15 19:54:19.397  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(  355 msec):(type=0, bufIndex=7, size=23.26)
+06-15 19:54:19.441  4978  5758 D SamsungAlarmManager: setInexact Intent (T:2/F:4/AC:false) 20260615T200419 - CU:10035/CP:8705
+06-15 19:54:19.478  4978  5758 D ConnectivityService: filterNetworkStateForUid() uid: 10035 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:19.494  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   97 msec):(type=0, bufIndex=8, size=23.26)
+06-15 19:54:19.524  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(   30 msec):(type=0, bufIndex=9, size=23.26)
+06-15 19:54:19.524  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(  901 msec)
+06-15 19:54:19.524  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=10, m_reqBufCount=10, m_allowedMaxBufCount=10) --- dumpBufferInfo ---
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=199] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=189] .addr=0xf3685000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=200] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=190] .addr=0xf367d000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=201] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=191] .addr=0xf3675000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=202] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=192] .addr=0xf366d000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=203] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=193] .addr=0xf3665000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=204] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=194] .addr=0xf365d000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.524  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=205] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=195] .addr=0xf364f000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=206] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=196] .addr=0xf3647000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=207] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=197] .addr=0xf363f000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[0]=208] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[1]=198] .addr=0xf3637000 .size=32768 .position=0 .permission=1]
+06-15 19:54:19.525  4707  8741 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-15 19:54:19.525  4707  8741 D ExynosCameraBufferManager: DEBUG:duration time(  908 msec):(alloc)
+06-15 19:54:19.525  4707  8741 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_setBuffers[6842]):alloc buffer done - camera ID: 0
+06-15 19:54:19.525  4707  8741 D ExynosCamera3: DEBUG:duration time( 1435 msec):(m_setBuffers)
+06-15 19:54:19.526  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(31)
+06-15 19:54:19.526  4707  8738 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(processCaptureRequest[1591]):Start FrameFactory requestKey(0) m_flushFlag(0/0)
+06-15 19:54:19.527  4707  8796 E ExynosCamera3: [CAM_ID(0)][]-INFO(m_setSetfile[3655]) configMode(0), dualMode(0)
+06-15 19:54:19.527  4707  8796 D ExynosCamera3Parameters: DEBUG(setSetfileYuvRange[3829]):m_cameraId(0) : general[setfile(0) YUV range(0)] : reprocesing[setfile(5) YUV range(0)]
+06-15 19:54:19.527  4707  8796 D ExynosCamera3Parameters: DEBUG(setSetfileYuvRange[3829]):m_cameraId(0) : general[setfile(0) YUV range(0)] : reprocesing[setfile(5) YUV range(0)]
+06-15 19:54:19.527  4707  8796 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_setupPipeline[3694]): Use REPROCESSING_BAYER_MODE_PURE_ALWAYS_ON
+06-15 19:54:19.527  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(setBufferManager[1067])
+06-15 19:54:19.527  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(setBufferManager[1067])
+06-15 19:54:19.527  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(initPipes[586])
+06-15 19:54:19.527  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[597])
+06-15 19:54:19.527  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[619]):SensorSize(4032x3024)
+06-15 19:54:19.527  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[628]:Set framerate (denominator=30)
+06-15 19:54:19.527  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setParam[538])
+06-15 19:54:19.527  4707  8796 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-15 19:54:19.527  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[687]):DepthMapSize 504x282
+06-15 19:54:19.527  4707  8796 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setupPipe[348])
+06-15 19:54:19.527  4707  8796 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setupPipe[357]):set new sensorIds
+06-15 19:54:19.527  4707  8796 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setPipeInfo[307])
+06-15 19:54:19.527  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1534])
+06-15 19:54:19.527  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1613]): set pipeInfos on FLITE : setFormat(4032, 3024) and reqBuffers(32).
+06-15 19:54:19.528  4707  8796 D ExynosCameraNode: [CAM_ID(0)][FLITE]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.528  4707  8796 D ExynosCameraNode: [CAM_ID(0)][FLITE]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 844257602, yuvRange 7
+06-15 19:54:19.528  4707  8796 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-15 19:54:19.528  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1534])
+06-15 19:54:19.528  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1613]): set pipeInfos on CAM0VC2 : setFormat(504, 282) and reqBuffers(7).
+06-15 19:54:19.528  4707  8796 D ExynosCameraNode: [CAM_ID(0)][CAM0VC2]-DEBUG(setSize[404]):w (504) h (282)
+06-15 19:54:19.528  4707  8796 D ExynosCameraNode: [CAM_ID(0)][CAM0VC2]-DEBUG(m_setFmt[1214]):type 9, 504 x 282, format 844257602, yuvRange 7
+06-15 19:54:19.528  4707  8796 I ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-INFO(setupPipe[383]):setupPipe() is succeed (0) setupPipe (2)
+06-15 19:54:19.528  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setControl[466])
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[734]):BNS scale down ratio(1.0), size (4032x3024)
+06-15 19:54:19.528  4707  8796 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(updateHwSensorSize):curHwSensor size(4032x3024) newHwSensor size(4032x3024)
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_setupConfig[1101])
+06-15 19:54:19.528  4707  8796 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_setDeviceInfo[1230])
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1397])
+06-15 19:54:19.528  4707  8796 E ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(getHwPictureFormat):m_cameraInfo.pictureFormat(1448695129)
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1434]):MaxSensorSize 4032x3024 bayerFormat 32525942
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1437]):BnsSize 4032x3024 BcropSize 4032x3024 BdsSize 4032x3024
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1445]):YUV[0] Size 1920x1080 Format 31324d4e
+06-15 19:54:19.528  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1445]):YUV[1] Size 1920x1080 Format 3132564e
+06-15 19:54:19.529  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1445]):YUV[2] Size 4032x3024 Format 3132564e
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(setupPipe[155])
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(setupPipe[165]):set new sensorIds
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7143697) [src nodeNum : 101][nodeNums : 110][otf : 1][leader : 1][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7146000) [src nodeNum : 110][nodeNums : 111][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7146000) [src nodeNum : 110][nodeNums : 112][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setPipeInfo[2888])
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on 3AA_OUTPUT, setFormat(32, 64) and reqBuffers(9)
+06-15 19:54:19.529  4707  8796 D ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-DEBUG(setSize[404]):w (32) h (64)
+06-15 19:54:19.529  4707  8796 W ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-WARN(setFormat[724]):name(3AA_OUTPUT) fd 30, bytesperline(0) < width(32), height(64)
+06-15 19:54:19.529  4707  8796 D ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-DEBUG(m_setFmt[1214]):type 10, 32 x 64, format 844257602, yuvRange 7
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on 3AA_CAPTURE, setFormat(4032, 3024) and reqBuffers(9)
+06-15 19:54:19.529  4707  8796 D ExynosCameraNode: [CAM_ID(0)][3AA_CAPTURE]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.529  4707  8796 D ExynosCameraNode: [CAM_ID(0)][3AA_CAPTURE]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 844257602, yuvRange 7
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.529  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on 3AA_PREVIEW, setFormat(4032, 3024) and reqBuffers(9)
+06-15 19:54:19.529  4707  8796 D ExynosCameraNode: [CAM_ID(0)][3AA_PREVIEW]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.529  4707  8796 D ExynosCameraNode: [CAM_ID(0)][3AA_PREVIEW]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 844257602, yuvRange 7
+06-15 19:54:19.529  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(setupPipe[226]):setupPipe() is succeed, Pipe(4), prepare(2)
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(setupPipe[155])
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(setupPipe[165]):set new sensorIds
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7146496) [src nodeNum : 112][nodeNums : 130][otf : 0][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7151120) [src nodeNum : 130][nodeNums : 131][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7158800) [src nodeNum : 160][nodeNums : 170][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7158800) [src nodeNum : 160][nodeNums : 171][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7158800) [src nodeNum : 160][nodeNums : 172][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7151120) [src nodeNum : 130][nodeNums : 132][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.530  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7151376) [src nodeNum : 131][nodeNums : 160][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-15 19:54:19.548  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(30)
+06-15 19:54:19.552  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(29)
+06-15 19:54:19.557  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(28)
+06-15 19:54:19.562  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(27)
+06-15 19:54:19.591  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setPipeInfo[2888])
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on ISP_OUTPUT, setFormat(4032, 3024) and reqBuffers(9)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-DEBUG(m_setFmt[1214]):type 10, 4032 x 3024, format 844257602, yuvRange 7
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on ISP_CAPTURE, setFormat(4032, 3024) and reqBuffers(10)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][ISP_CAPTURE]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][ISP_CAPTURE]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 1448695129, yuvRange 7
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_PREVIEW, setFormat(1920, 1080) and reqBuffers(32)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW]-DEBUG(setSize[404]):w (1920) h (1080)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW]-DEBUG(m_setFmt[1214]):type 9, 1920 x 1080, format 825380174, yuvRange 7
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_PREVIEW_CALLBACK, setFormat(1920, 1080) and reqBuffers(32)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW_CALLBACK]-DEBUG(setSize[404]):w (1920) h (1080)
+06-15 19:54:19.592  4707  8796 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW_CALLBACK]-DEBUG(m_setFmt[1214]):type 9, 1920 x 1080, format 825382478, yuvRange 7
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.592  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_RECORDING, setFormat(4032, 3024) and reqBuffers(1)
+06-15 19:54:19.593  4707  8796 D ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.593  4707  8796 W ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-WARN(setFormat[724]):name(MCSC_RECORDING) fd 38, bytesperline(0) < width(4032), height(3024)
+06-15 19:54:19.593  4707  8796 D ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 825382478, yuvRange 7
+06-15 19:54:19.593  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(setupPipe[226]):setupPipe() is succeed, Pipe(7), prepare(0)
+06-15 19:54:19.594  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(0)
+06-15 19:54:19.594  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(1)
+06-15 19:54:19.595  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(2)
+06-15 19:54:19.596  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(3)
+06-15 19:54:19.596  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(4)
+06-15 19:54:19.597  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(5)
+06-15 19:54:19.598  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(6)
+06-15 19:54:19.598  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(7)
+06-15 19:54:19.599  4707  8796 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(8)
+06-15 19:54:19.603  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(0)
+06-15 19:54:19.609  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(1)
+06-15 19:54:19.613  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(2)
+06-15 19:54:19.617  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(3)
+06-15 19:54:19.624  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(4)
+06-15 19:54:19.627  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(26)
+06-15 19:54:19.629  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(5)
+06-15 19:54:19.635  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(6)
+06-15 19:54:19.640  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(7)
+06-15 19:54:19.644  4707  8796 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(8)
+06-15 19:54:19.644  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(mapBuffers[664]):Map buffer Success!
+06-15 19:54:19.644  4707  8796 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_frameFactoryStartThreadFunc[3436]):prepare 2
+06-15 19:54:19.644  4707  8796 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_searchFrameFromList[2951]):list is empty
+06-15 19:54:19.645  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(prepare[237])
+06-15 19:54:19.653  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(start[266])
+06-15 19:54:19.653  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_startNode[3439])
+06-15 19:54:19.653  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(start[282]):start() is succeed, Pipe(7)
+06-15 19:54:19.653  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(start[266])
+06-15 19:54:19.653  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_startNode[3439])
+06-15 19:54:19.659  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(start[282]):start() is succeed, Pipe(4)
+06-15 19:54:19.659  4707  8796 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(start[291])
+06-15 19:54:19.659  4707  8796 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-15 19:54:19.659  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(prepare[234])
+06-15 19:54:19.659  4707  8796 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-WRN(m_putBuffer[1720]):Capture node putbuffer is Zero, frameCount(0)
+06-15 19:54:19.659  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3548]):(3AA_OUTPUT):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-15 19:54:19.659  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3548]):(3AA_CAPTURE):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-15 19:54:19.659  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3548]):(3AA_PREVIEW):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-15 19:54:19.659  4707  8796 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-WRN(m_putBuffer[1720]):Capture node putbuffer is Zero, frameCount(1)
+06-15 19:54:19.660  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(prepare[259]):prepare() is succeed, Pipe(4), prepare(2)
+06-15 19:54:19.660  4707  8796 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(sensorStream[390])
+06-15 19:54:19.663  4978  5112 D SamsungAlarmManager: Expired : 4
+06-15 19:54:19.664  4978  5112 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260615T195659, SetElapsed=430206111, nowELAPSED=430046322
+06-15 19:54:19.664  4978  5112 V SamsungAlarmManager: Sending to uid : 1000 listener=android.app.AlarmManager$ListenerWrapper@8cef2f0 alarm=Alarm{9adcac8 type 2 when 430046322 android}
+06-15 19:54:19.667  4978  4978 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260615T195703 - CU:1000/CP:4978
+06-15 19:54:19.671  4978  4978 D StorageManagerService: getExternalStorageMountMode : 3
+06-15 19:54:19.672  4978  4978 D StorageManagerService: getExternalStorageMountMode : 3
+06-15 19:54:19.672  4978  4978 D StorageManagerService: getExternalStorageMountMode : final mountMode=3, uid : 10037, packageName : com.android.vending
+06-15 19:54:19.673  4978  4978 I ApplicationPolicy: isApplicationExternalStorageWhitelisted:com.android.vending user:0
+06-15 19:54:19.673  4978  4978 D ApplicationPolicy: isApplicationExternalStorageWhitelisted: DO is not enabled on user 0. Allowed.
+06-15 19:54:19.673  4978  4978 D ActivityManager: package  com.android.vending, user - 0 is SDcard whitelisted
+06-15 19:54:19.673  4978  4978 I ApplicationPolicy: isApplicationExternalStorageBlacklisted:com.android.vending user:0
+06-15 19:54:19.673  4978  4978 D ApplicationPolicy: isApplicationExternalStorageBlacklisted: DO is not enabled on user 0. Allowed.
+06-15 19:54:19.681  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(startPipes[776]):Starting Success!
+06-15 19:54:19.681  4707  8796 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(startInitialThreads[937]):start pre-ordered initial pipe thread
+06-15 19:54:19.681  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(startThread[124]):pipeId=0
+06-15 19:54:19.681  4707  8796 I ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-INFO(startThread[384]):startThread is succeed (0)
+06-15 19:54:19.682  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(startThread[124]):pipeId=4
+06-15 19:54:19.682  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(startThread[342])
+06-15 19:54:19.682  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(startThread[353]):startThread is succeed, Pipe(4)
+06-15 19:54:19.682  4707  8796 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(startThread[124]):pipeId=7
+06-15 19:54:19.682  4707  8801 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-WRN(m_putBuffer[1720]):Capture node putbuffer is Zero, frameCount(2)
+06-15 19:54:19.682  4707  8796 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(startThread[342])
+06-15 19:54:19.683  4707  8796 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(startThread[353]):startThread is succeed, Pipe(7)
+06-15 19:54:19.683  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setBufferManager[1067])
+06-15 19:54:19.683  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[208])
+06-15 19:54:19.683  4707  8805 E ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(getHwPictureFormat):m_cameraInfo.pictureFormat(1448695129)
+06-15 19:54:19.683  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[258]): MaxPreviewSize(4032x3024), HwPreviewSize(1920x1080)
+06-15 19:54:19.683  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[259]): MaxPixtureSize(4032x3024), HwPixtureSize(4032x2268)
+06-15 19:54:19.683  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[260]): PictureSize(1920x1080)
+06-15 19:54:19.683  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[261]): MaxThumbnailSize(504x376)
+06-15 19:54:19.683  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[262]): PreviewBayerCropSize(4032x3024)
+06-15 19:54:19.683  4707  8805 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(needSerialization[1263]):PIPE_3AA_REPROCESSING serialized operation enabled
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setupPipe[155])
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setupPipe[165]):set new sensorIds
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23920897) [src nodeNum : 101][nodeNums : 120][otf : 0][leader : 1][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23930896) [src nodeNum : 140][nodeNums : 141][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23936272) [src nodeNum : 161][nodeNums : 173][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23936272) [src nodeNum : 161][nodeNums : 174][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946256) [src nodeNum : 200][nodeNums : 200][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946256) [src nodeNum : 200][nodeNums : 200][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946512) [src nodeNum : 201][nodeNums : 201][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946512) [src nodeNum : 201][nodeNums : 201][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23925776) [src nodeNum : 120][nodeNums : 122][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23926288) [src nodeNum : 122][nodeNums : 140][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23930896) [src nodeNum : 140][nodeNums : 142][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.684  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23931408) [src nodeNum : 142][nodeNums : 161][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-15 19:54:19.692  8812  8812 E Zygote  : isWhitelistProcess - Process is Whitelisted
+06-15 19:54:19.693  8812  8812 E libpersona: scanKnoxPersonas
+06-15 19:54:19.693  8812  8812 E libpersona: Couldn't open the File - /data/system/users/0/personalist.xml - No such file or directory
+06-15 19:54:19.693  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(25)
+06-15 19:54:19.693  4978  4978 I ActivityManager: Start proc 8812:com.android.vending/u0a37 for service com.android.vending/com.google.android.finsky.scheduler.process.mainimpl.PhoneskyJobServiceMain
+06-15 19:54:19.694  8705  8791 I DGW     : I[onStateChanged:168] StreamGroupConnectivityAwareNetworkLayer processing buffered requests
+06-15 19:54:19.695  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setPipeInfo[2888])
+06-15 19:54:19.695  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.695  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on REPROCESSING_3AA_OUTPUT, setFormat(4032, 3024) and reqBuffers(32)
+06-15 19:54:19.695  4707  8805 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-DEBUG(setSize[404]):w (4032) h (3024)
+06-15 19:54:19.695  4707  8805 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-WARN(setFormat[724]):name(REPROCESSING_3AA_OUTPUT) fd 41, bytesperline(0) < width(4032), height(3024)
+06-15 19:54:19.695  4707  8805 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-DEBUG(m_setFmt[1214]):type 10, 4032 x 3024, format 844257602, yuvRange 7
+06-15 19:54:19.696  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.696  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on REPROCESSING_ISP_CAPTURE_M2M, setFormat(4032, 2268) and reqBuffers(32)
+06-15 19:54:19.696  4707  8805 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-DEBUG(setSize[404]):w (4032) h (2268)
+06-15 19:54:19.696  4707  8805 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-WARN(setFormat[724]):name(REPROCESSING_ISP_CAPTURE_M2M) fd 42, bytesperline(0) < width(4032), height(2268)
+06-15 19:54:19.696  4707  8805 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-DEBUG(m_setFmt[1214]):type 9, 4032 x 2268, format 1448695129, yuvRange 7
+06-15 19:54:19.696  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.696  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_CAPTURE_MAIN, setFormat(4032, 2268) and reqBuffers(32)
+06-15 19:54:19.696  4707  8805 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-DEBUG(setSize[404]):w (4032) h (2268)
+06-15 19:54:19.696  4707  8805 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-WARN(setFormat[724]):name(MCSC_CAPTURE_MAIN) fd 43, bytesperline(0) < width(4032), height(2268)
+06-15 19:54:19.696  4707  8805 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-DEBUG(m_setFmt[1214]):type 9, 4032 x 2268, format 1448695129, yuvRange 7
+06-15 19:54:19.696  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.696  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_CAPTURE_THUMBNAIL, setFormat(504, 376) and reqBuffers(32)
+06-15 19:54:19.696  4707  8805 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-DEBUG(setSize[404]):w (504) h (376)
+06-15 19:54:19.696  4707  8805 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-WARN(setFormat[724]):name(MCSC_CAPTURE_THUMBNAIL) fd 44, bytesperline(0) < width(504), height(376)
+06-15 19:54:19.696  4707  8805 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-DEBUG(m_setFmt[1214]):type 9, 504 x 376, format 1448695129, yuvRange 7
+06-15 19:54:19.698  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.698  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_JPEG_DST, setFormat(4032, 2268) and reqBuffers(32)
+06-15 19:54:19.698  4707  8805 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_DST]-DEBUG(setSize[461]):w (4032) h (2268)
+06-15 19:54:19.698  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.698  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_JPEG_SRC, setFormat(4032, 2268) and reqBuffers(32)
+06-15 19:54:19.698  4707  8805 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_SRC]-DEBUG(setSize[461]):w (4032) h (2268)
+06-15 19:54:19.698  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.698  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_THUMBNAIL_SRC, setFormat(504, 376) and reqBuffers(32)
+06-15 19:54:19.698  4707  8805 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_SRC]-DEBUG(setSize[461]):w (504) h (376)
+06-15 19:54:19.699  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-15 19:54:19.699  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_THUMBNAIL_DST, setFormat(504, 376) and reqBuffers(32)
+06-15 19:54:19.699  4707  8805 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_DST]-DEBUG(setSize[461]):w (504) h (376)
+06-15 19:54:19.699  4707  8805 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(setupPipe[226]):setupPipe() is succeed, Pipe(201), prepare(0)
+06-15 19:54:19.699  4707  8805 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_startReprocessingFrameFactory[7326]):- IN -
+06-15 19:54:19.699  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(startPipes[623])
+06-15 19:54:19.699  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(start[266])
+06-15 19:54:19.699  4707  8805 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_startNode[3439])
+06-15 19:54:19.700  8812  8812 W SELinux : SELinux selinux_android_compute_policy_index : Policy Index[2],  Con:u:r:zygote:s0 RAM:SEPF_SM-G935F_8.0.0_0018, [-1 -1 -1 -1 0 1]
+06-15 19:54:19.701  8812  8812 I SELinux : SELinux: seapp_context_lookup: seinfo=gmscore, level=s0:c512,c768, pkgname=com.android.vending 
+06-15 19:54:19.704  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 130: Failed to deserialize versioned key blob.  Assuming unversioned.
+06-15 19:54:19.704  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 74: Failed to deserialize unversioned blob (may be a HW-backed key)
+06-15 19:54:19.704  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:790) entered get_key_characteristics function.
+06-15 19:54:19.705  4707  8805 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(start[282]):start() is succeed, Pipe(201)
+06-15 19:54:19.706  4707  8805 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(startPipes[671]):Starting Reprocessing [SCC>ISP] Success!
+06-15 19:54:19.706  4707  8805 D ExynosCamera3: DEBUG:duration time(    7 msec):(m_startReprocessingFrameFactory)
+06-15 19:54:19.708  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x00000009, ret = 0x00000000
+06-15 19:54:19.708  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: SIZE:256 EC SIG VERI SHA256 AUTH 
+06-15 19:54:19.708  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: 20231010160603 
+06-15 19:54:19.708  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:804) exit get_key_characteristics function, returns 0
+06-15 19:54:19.709  3111  3111 D SoftKeymaster: system/keymaster/soft_keymaster_context.cpp, Line 884: Module "Keymaster MDFPP Mobicore HAL" accepted key
+06-15 19:54:19.710  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 130: Failed to deserialize versioned key blob.  Assuming unversioned.
+06-15 19:54:19.710  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 74: Failed to deserialize unversioned blob (may be a HW-backed key)
+06-15 19:54:19.710  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:790) entered get_key_characteristics function.
+06-15 19:54:19.714  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x00000009, ret = 0x00000000
+06-15 19:54:19.714  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: SIZE:256 EC SIG VERI SHA256 AUTH 
+06-15 19:54:19.714  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: 20231010160603 
+06-15 19:54:19.714  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:804) exit get_key_characteristics function, returns 0
+06-15 19:54:19.714  3111  3111 D SoftKeymaster: system/keymaster/soft_keymaster_context.cpp, Line 884: Module "Keymaster MDFPP Mobicore HAL" accepted key
+06-15 19:54:19.714  4707  8802 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2254]):InternalFrame(5) frameCount(0)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-15 19:54:19.715  4707  8803 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(m_putBuffer[1573]):Internal Frame(5), frameCount(0) (0)
+06-15 19:54:19.715  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_putBuffer[1864]):clean frame, frameCount(0)
+06-15 19:54:19.715  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_completeFrame[2816]):NOT DONE frameCount(0)
+06-15 19:54:19.715  4707  8803 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-WARN(m_putBufferThreadFunc[1507]):m_putbuffer fail, ret(-38)
+06-15 19:54:19.717  8812  8812 D ActivityThread: Added TimaKeyStore provider
+06-15 19:54:19.718  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 130: Failed to deserialize versioned key blob.  Assuming unversioned.
+06-15 19:54:19.718  3111  3111 D SoftKeymaster: system/keymaster/auth_encrypted_key_blob.cpp, Line 74: Failed to deserialize unversioned blob (may be a HW-backed key)
+06-15 19:54:19.718  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:790) entered get_key_characteristics function.
+06-15 19:54:19.720  4978  5758 I ActivityManager: DSS on for com.android.vending and scale is 1.0
+06-15 19:54:19.721  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(24)
+06-15 19:54:19.724  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x00000009, ret = 0x00000000
+06-15 19:54:19.724  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: SIZE:256 EC SIG VERI SHA256 AUTH 
+06-15 19:54:19.724  3111  3111 D keymaster_tee: [DEBUG]: (keymaster_params_log.c:270) KEY_PARAMS: 20231010160603 
+06-15 19:54:19.724  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:804) exit get_key_characteristics function, returns 0
+06-15 19:54:19.724  3111  3111 D SoftKeymaster: system/keymaster/soft_keymaster_context.cpp, Line 884: Module "Keymaster MDFPP Mobicore HAL" accepted key
+06-15 19:54:19.724  3111  3111 D SoftKeymaster: system/keymaster/soft_keymaster_device.cpp, Line 710: Requested digest(s) supported for algorithm 3 and purpose 2
+06-15 19:54:19.724  3111  3111 D SoftKeymaster: system/keymaster/soft_keymaster_device.cpp, Line 1245: Operation supported by Keymaster MDFPP Mobicore HAL, passing through to keymaster1 module
+06-15 19:54:19.724  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:879) entered begin function.
+06-15 19:54:19.732  4978  5031 E memtrack: Couldn't load memtrack module
+06-15 19:54:19.732  4978  5031 W android.os.Debug: failed to get memory consumption info: -1
+06-15 19:54:19.735  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x0000000E, ret = 0x00000000
+06-15 19:54:19.736  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:888) exit begin function, returns 0
+06-15 19:54:19.738  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:899) entered update function.
+06-15 19:54:19.739  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x0000000F, ret = 0x00000000
+06-15 19:54:19.740  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:909) exit update function, returns 0
+06-15 19:54:19.740  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:899) entered update function.
+06-15 19:54:19.742  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x0000000F, ret = 0x00000000
+06-15 19:54:19.743  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:909) exit update function, returns 0
+06-15 19:54:19.744  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:899) entered update function.
+06-15 19:54:19.746  4707  8802 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2254]):InternalFrame(5) frameCount(1)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-15 19:54:19.746  4707  8803 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(m_putBuffer[1573]):Internal Frame(5), frameCount(1) (0)
+06-15 19:54:19.746  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_putBuffer[1864]):clean frame, frameCount(1)
+06-15 19:54:19.746  8812  8812 I zygote64: no shared libraies, dex_files: 1
+06-15 19:54:19.746  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_completeFrame[2816]):NOT DONE frameCount(1)
+06-15 19:54:19.746  4707  8803 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-WARN(m_putBufferThreadFunc[1507]):m_putbuffer fail, ret(-38)
+06-15 19:54:19.750  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x0000000F, ret = 0x00000000
+06-15 19:54:19.750  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:909) exit update function, returns 0
+06-15 19:54:19.751  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:743) entered add_rng_entropy function.
+06-15 19:54:19.751  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_tc_api.c:988) ******PRNG ENTROPY***NWD****
+06-15 19:54:19.753  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x00000007, ret = 0x00000000
+06-15 19:54:19.753  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:754) exit add_rng_entropy function, returns 0
+06-15 19:54:19.762  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:919) entered finish function.
+06-15 19:54:19.776  3111  3111 D keymaster_tee: [DEBUG]: (nwd_keymaster_mobicore.c:353) TLC_COMMAND(e): cmd = 0x00000010, ret = 0x00000000
+06-15 19:54:19.776  3111  3111 I keymaster_tee: [INFO]:  (nwd_keymaster_mdfpp.cpp:929) exit finish function, returns 0
+06-15 19:54:19.779  4711  4711 W keystore: ENTER remove operation from uid 10035
+06-15 19:54:19.813  4707  8802 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2254]):InternalFrame(5) frameCount(2)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-15 19:54:19.813  4707  8803 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(m_putBuffer[1573]):Internal Frame(5), frameCount(2) (0)
+06-15 19:54:19.813  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_putBuffer[1864]):clean frame, frameCount(2)
+06-15 19:54:19.813  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_completeFrame[2816]):NOT DONE frameCount(2)
+06-15 19:54:19.813  4707  8803 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-WARN(m_putBufferThreadFunc[1507]):m_putbuffer fail, ret(-38)
+06-15 19:54:19.827  8705  8791 W DGW     : W[onSuccessfulResponse:926] StreamGroupTransport[notifgateway] on successful response. DGW is now connected.
+06-15 19:54:19.847  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(ISP_OUTPUT):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-15 19:54:19.847  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(MCSC_PREVIEW):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 378, 4032, 2268 / 0, 0, 1920, 1080)
+06-15 19:54:19.848  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(MCSC_PREVIEW_CALLBACK):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 378, 4032, 2268 / 0, 0, 1920, 1080)
+06-15 19:54:19.848  4707  8803 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(MCSC_RECORDING):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-15 19:54:19.876  8812  8812 W ResourceType: ResTable_typeSpec entry count inconsistent: given 6216, previously 6217
+06-15 19:54:19.886  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(23)
+06-15 19:54:19.892  4707  8810 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_monitorThreadFunc[8024]):@FIMC_IS_SYNC 1247
+06-15 19:54:19.892  4707  8810 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(syncLog[1299])
+06-15 19:54:19.918  4707  8738 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(22)
+06-15 19:54:19.938  8812  8812 I Finsky  : [2] Process created at version: 51.7.21-24 [0] [PR] 923613381
+06-15 19:54:19.939  3202  3202 I android.hardware.wifi@1.0-service: getLinkLayerStats
+06-15 19:54:19.963  8795  8795 W ADebug  : Failed to get property persist.sys.media.traces
+06-15 19:54:19.964  4707  8811 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_internalFrameThreadFunc):wait timeout
+06-15 19:54:19.967  8795  8795 E appproc : Enhanced Zygote ASLR: ro.knox.enhance.zygote.aslr != 1. Enhanced Zygote ASLR is DISABLED!
+06-15 19:54:19.967  8795  8795 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+06-15 19:54:19.982  8812  8832 I Finsky  : [9343] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2268.
+06-15 19:54:20.002  8812  8832 I Finsky  : [9343] Finished reading experiment flags from file [Se-xCc4LzNyh3UrKMIU2sUf-PUKz4oQEbpKZDMuaFno] numFlags=2008.
+06-15 19:54:20.044  8812  8834 I Finsky  : [9345] Finished reading experiment flags from file [Epfin6iFtxjuJzeNtvJ5io9XFLfIfGexxoswUCqoRo8] numFlags=2019.
+06-15 19:54:20.047  8812  8830 I Finsky  : [9341] Process started for unknown session.
+06-15 19:54:20.059  8812  8812 I Finsky  : [2] Profiling: Starting up (1)
+06-15 19:54:20.064  8812  8834 I Finsky  : [9345] Finished reading experiment flags from file [uaCV2_npamCOcdkUez35Nz8sUxJDQZpFINE0EnI3XfM] numFlags=2019.
+06-15 19:54:20.073  8812  8831 I Finsky  : [9342] akgc - Registering in memory receiver for android.intent.action.PACKAGE_ADDED and android.intent.action.PACKAGE_REMOVED
+06-15 19:54:20.094  8795  8795 D ICU     : Timezone override file found: /data/misc/zoneinfo/current/icu/icu_tzdata.dat
+06-15 19:54:20.098  8812  8812 I Finsky  : [2] AsyncInit: Mandatory tasks are executed!
+06-15 19:54:20.110  4978  5758 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:20.117  8812  8832 I Finsky  : [9343] Subscription detail: N/A
+06-15 19:54:20.123  8795  8795 I app_process: find the special shared library, skip check
+06-15 19:54:20.126  8812  8833 I Finsky  : [9344] Device is ineligible for platform Cronet and will use embedded Cronet instead.
+06-15 19:54:20.128  4978  5758 D PackageManager: setEnabledSetting : userId = 0 packageName = com.android.vending cmp = com.android.vending.AssetBrowserActivity newState = 1 callingPackage = 10037/com.android.vending
+06-15 19:54:20.137  4978  6459 I EDMNativeHelperService: isCameraEnabled
+06-15 19:54:20.139  4978  6459 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-15 19:54:20.149  8812  8830 I Finsky  : [9341] playLoggingServerUrl: https://play.googleapis.com/play/log
+06-15 19:54:20.149  8812  8830 I Finsky  : [9341] playLoggingServerTimestampUrl: https://play.googleapis.com/play/log/timestamp
+06-15 19:54:20.156  8795  8795 E SemAffinityControl: SemAffinityControl: registerfunction enter
+06-15 19:54:20.162  8795  8795 D AndroidRuntime: Calling main entry com.android.commands.wm.Wm
+06-15 19:54:20.167  8795  8795 D AndroidRuntime: Shutting down VM
+06-15 19:54:20.170  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:20.195  4719  5023 I chatty  : uid=0(root) /system/bin/netd identical 5 lines
+06-15 19:54:20.200  4978  5760 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:20.202  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:20.224  8812  8864 D ConnectivityManager: requestNetwork; CallingUid : 10037, CallingPid : 8812
+06-15 19:54:20.227  4978  5758 D ConnectivityService: listenForNetwork for uid/pid:10037/8812 NetworkRequest [ LISTEN id=807, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-15 19:54:20.228  4978  5209 D ConnectivityService: rematching NetworkAgentInfo [WIFI () - 507]
+06-15 19:54:20.228  4978  5209 D ConnectivityService:  network has: [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&FOREGROUND LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -60]
+06-15 19:54:20.228  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 805. No change.
+06-15 19:54:20.228  8812  8833 W linker  : "/data/app/com.android.vending-TPFX_M5V9CN2E4_OxzJjyg==/split_config.arm64_v8a.apk!/lib/arm64-v8a/libcronet.149.0.7827.48.so" unused DT entry: type 0x70000001 arg 0x0
+06-15 19:54:20.228  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 3. No change.
+06-15 19:54:20.228  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 565. No change.
+06-15 19:54:20.228  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 1. No change.
+06-15 19:54:20.228  4978  5209 D ConnectivityService: sending mNetworkRequests to WWSM through Network Monitor [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN]
+06-15 19:54:20.228  4978  5209 D ConnectivityService: multi(falsetruefalse)
+06-15 19:54:20.228  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 702. No change.
+06-15 19:54:20.228  4978  5209 D ConnectivityService: sending notification AVAILABLE for NetworkRequest [ LISTEN id=807, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-15 19:54:20.229  4978  5209 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ LISTEN id=807, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-15 19:54:20.229  4978  5209 D ConnectivityService: sending notification IP_CHANGED for NetworkRequest [ LISTEN id=807, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-15 19:54:20.230  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: EvaluatingState{ when=-2ms what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:20.230  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: MaybeNotifyState{ when=-2ms what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:20.230  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: DefaultState{ when=-2ms what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:20.242  8812  8812 I Finsky  : [2] This process start was not selected for Play memory metrics collection.
+06-15 19:54:20.242  8812  8833 I cn_CronetLibraryLoader: Cronet version: 149.0.7827.48, arch: aarch64
+06-15 19:54:20.242  8812  8831 W Settings: Setting download_manager_max_bytes_over_mobile has moved from android.provider.Settings.Secure to android.provider.Settings.Global.
+06-15 19:54:20.243  8812  8831 I Finsky  : [9342] SettingNotFoundException, fall through to G.downloadBytesOverMobileMaximum
+06-15 19:54:20.244  8812  8831 W Settings: Setting download_manager_recommended_max_bytes_over_mobile has moved from android.provider.Settings.Secure to android.provider.Settings.Global.
+06-15 19:54:20.245  8812  8831 I Finsky  : [9342] SettingNotFoundException, fall through to G.downloadBytesOverMobileRecommended
+06-15 19:54:20.246  8812  8831 I Finsky  : [9342] registerListener
+06-15 19:54:20.246  8812  8847 I Finsky  : [9358] CronetEngine is present. Using Cronet for the networking stack.
+06-15 19:54:20.250  4978  6459 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:20.256  8812  8857 I Finsky  : [9362] CronetEngine is present. Using Cronet for the networking stack.
+06-15 19:54:20.259  5567  5567 E adbd    : recv: OPEN 00000109 00000000 0038:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 2C 72 61 77 3A 69 6E 70 75 74 20 73 77 69 70 65 20 35 34 30 20 31 34 39 37 20 35 34 30 20 34 32 32 20 34 35 30 00 
+06-15 19:54:20.259  5567  5567 E adbd    : service_to_fd: shell,v2,TERM=dumb,raw:input swipe 540 1497 540 422 450
+06-15 19:54:20.281  8812  8831 I Finsky  : [9342] DFS: Listener added for sxj@fd8e342
+06-15 19:54:20.281  8812  8831 I Finsky  : [9342] registerListener
+06-15 19:54:20.284  4978  6364 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:20.285  4978  6364 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:20.288  8812  8834 I Finsky  : [9345] ApplicationRestrictions: {}
+06-15 19:54:20.288  8812  8831 I Finsky  : [9342] Enqueuing libraries load for -1121305181
+06-15 19:54:20.294  8812  8856 I Finsky  : [9361] Starting libraries load for -1121305181
+06-15 19:54:20.331  4978  6364 D ActivityManager: The following uid has registered to recieve broadcast for proxy related updates 10037
+06-15 19:54:20.332  4978  6364 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:971 com.android.server.am.ActivityManagerService.requestKnoxVpnToSendProxyBroadcast:29654 com.android.server.am.ActivityManagerService.registerReceiver:23333 android.app.IActivityManager$Stub.onTransact:176 com.android.server.am.ActivityManagerService.onTransact:3869 
+06-15 19:54:20.335  4978  4978 D KnoxVpnEngineService: Vpn Receiver : com.samsung.android.knox.intent.action.VPN_PROXY_BROADCAST_INTERNAL
+06-15 19:54:20.336  4978  5166 I KnoxVpnEngineService: vpn handle : Message received
+06-15 19:54:20.352  8812  8812 I Finsky  : [2] SCH: job service start with id 9776.
+06-15 19:54:20.375  8812  8882 I zygote64: IncrementDisableThreadFlip blocked for 14.639ms
+06-15 19:54:20.376  8812  8835 I zygote64: IncrementDisableThreadFlip blocked for 9.271ms
+06-15 19:54:20.398  8812  8812 I Finsky  : [2] onSubscriptionsChanged
+06-15 19:54:20.461  8812  8891 I Finsky  : [9376] VerifyApps: Setup app restrictions monitor
+06-15 19:54:20.466  8812  8891 I Finsky  : [9376] VerifyApps: Device wide unknown source restriction updated
+06-15 19:54:20.471  8812  8891 I Finsky  : [9376] VerifyApps: Updating ADI Warn Mode activity enabled state
+06-15 19:54:20.484  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [CONTACT contacts(3962) data(28657) accounts({vnd.sec.contact.phone (1)=1, com.google (9)=3967, com.whatsapp (5)=1237}) accounts deleted({}) calls([logtype:100 cnt:2, logtype:300 cnt:5, logtype:1000 cnt:1]) countryIso(DE) userId(0)  ]
+06-15 19:54:20.484  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [ agr({[5]=8, [9 ,5 ,5]=16, [9 ,9]=8, [1]=1, [9 ,9 ,5]=6, [9 ,5]=1191, [9]=2732})  ]
+06-15 19:54:20.484  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [ actCnt({android.process.acore(6484)=1, com.samsung.android.contacts(6771)=6})  ]
+06-15 19:54:20.484  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [PROFILE contacts(0) data(0) accounts({})  ]
+06-15 19:54:20.484  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [SAPROFILE contacts(1) data(3) accounts({vnd.sec.contact.phone (1)=1})  ]
+06-15 19:54:20.489  8812  8847 I Finsky  : [9358] VerifyApps: Resolving target for ADI Warn Mode activity
+06-15 19:54:20.506  6484  6596 E ContactsProvider_EventLog: Flush buffer to file cnt : 1 size : 1Kb duration : 3ms lastUpdatedAfter : 11759 ms mFlush_time_threasold : 2000 mCurrentSize : 681
+06-15 19:54:20.512  8812  8847 I Finsky  : [9358] VerifyApps: Feature flag disabled, ADI Warn Mode activity target not resolved
+06-15 19:54:20.518  4978  6364 D PackageManager: setEnabledSetting : userId = 0 packageName = com.android.vending cmp = com.google.android.finsky.verifier.impl.scan.adi.AdiWarnModeTrampolineActivity newState = 0 callingPackage = 10037/com.android.vending
+06-15 19:54:20.533  8879  8879 W ADebug  : Failed to get property persist.sys.media.traces
+06-15 19:54:20.537  8879  8879 E appproc : Enhanced Zygote ASLR: ro.knox.enhance.zygote.aslr != 1. Enhanced Zygote ASLR is DISABLED!
+06-15 19:54:20.537  8879  8879 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+06-15 19:54:20.555  8812  8847 I Finsky  : [9358] VerifyApps: Successfully updated the ADI Warn Mode activity to disabled
+06-15 19:54:20.582  8812  8833 I Finsky  : [9344] RECEIVER_SINGLE_USER_SETTINGS#logWorkEndAndFinishGoAsync: SUCCESS
+06-15 19:54:20.617  8879  8879 D ICU     : Timezone override file found: /data/misc/zoneinfo/current/icu/icu_tzdata.dat
+06-15 19:54:20.634  8879  8879 I app_process: find the special shared library, skip check
+06-15 19:54:20.656  8879  8879 E SemAffinityControl: SemAffinityControl: registerfunction enter
+06-15 19:54:20.661  8879  8879 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+06-15 19:54:20.668  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=540.0, y[0]=1497.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532419, downTime=184532419, deviceId=3, source=0x1002 }
+06-15 19:54:20.672  4978  5758 D InputDispatcher: Inject motion (8879): action=0x0, eventTime=184532419000000, displayId=0
+06-15 19:54:20.679  4978  5135 I InputDispatcher: Delivering touch to (5415): action: 0x4, toolType: 0
+06-15 19:54:20.679  4978  5135 I InputDispatcher: Delivering touch to (8193): action: 0x0, toolType: 0
+06-15 19:54:20.684 15994 20601 I GetConfigSnapshotOp: (REDACTED) Succeeded but not registered: %s
+06-15 19:54:20.689  4978  5135 D PowerManagerService: [s] UserActivityState : 4 -> 1
+06-15 19:54:20.694 22421 22431 W zygote64: Suspending all threads took: 5.259ms
+06-15 19:54:20.708  8193  8193 D ViewRootImpl@e9f05b3[MainActivity]: ViewPostIme pointer 0
+06-15 19:54:20.719  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=1497.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532419, downTime=184532419, deviceId=3, source=0x1002 }
+06-15 19:54:20.730  8812  8905 I Finsky  : [9390] SCH: Satisfied jobs for 9776 are: 12-1
+06-15 19:54:20.754  8812  8893 I Finsky  : [9378] Resetting scheduler db
+06-15 19:54:20.773  8812  8893 I Finsky  : [9378] SCH: Job 12-1 starting
+06-15 19:54:20.774  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 1-1337, CT: 1781543165944, Constraints: [{ L: 43185749, D: 86385749, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-15 19:54:20.774  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 10-168, CT: 1781543165109, Constraints: [{ L: 0, D: 86400000, C: CHARGING_NONE, I: IDLE_REQUIRED, N: NET_ANY, B: BATTERY_ANY }]
+06-15 19:54:20.775  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 12-1, CT: 1781546045024, Constraints: [{ L: 15000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-15 19:54:20.775  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 24-77777777, CT: 1781499968435, Constraints: [{ L: 1, D: 82800000, C: CHARGING_NONE, I: IDLE_REQUIRED, N: NET_NONE, B: BATTERY_ANY }]
+06-15 19:54:20.776  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 26-1414141414, CT: 1781523001583, Constraints: [{ L: 43199998, D: 44099998, C: CHARGING_NONE, I: IDLE_NONE, N: NET_NONE, B: BATTERY_ANY }]
+06-15 19:54:20.776  8812  8812 I Finsky  : [2] WM::SCH: Logging work start for 12-1
+06-15 19:54:20.777  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 34-411, CT: 1781499970923, Constraints: [{ L: 604800000, D: 2481260564, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-15 19:54:20.777  8812  8812 I Finsky  : [2] [ContentSync] job started
+06-15 19:54:20.797  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 34-418, CT: 1781499970918, Constraints: [{ L: 604800000, D: 2560536521, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-15 19:54:20.812  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 34-419, CT: 1781499970920, Constraints: [{ L: 0, D: 1296000000, C: CHARGING_REQUIRED, I: IDLE_REQUIRED, N: NET_UNMETERED, B: BATTERY_ANY }, { L: 0, D: 1296000000, C: CHARGING_NONE, I: IDLE_REQUIRED, N: NET_UNMETERED, B: BATTERY_NOT_LOW }]
+06-15 19:54:20.813  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 34-420, CT: 1781524145078, Constraints: [{ L: 604799826, D: 1900799826, C: CHARGING_NONE, I: IDLE_NONE, N: NET_UNMETERED, B: BATTERY_NOT_LOW }]
+06-15 19:54:20.813  8812  8857 I Finsky  : [9362] SCH: Scheduling phonesky job Id: 34-421, CT: 1781499970922, Constraints: [{ L: 47736011, D: 1343736011, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-15 19:54:20.832  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=1088.5, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532590, downTime=184532590, deviceId=3, source=0x1002 }
+06-15 19:54:20.842  8812  8847 I Finsky  : [9358] SCH: canceling system job 9776
+06-15 19:54:20.845  4978  5759 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260615T195703 - CU:1000/CP:4978
+06-15 19:54:20.848  4978  5759 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260615T201941 - CU:1000/CP:4978
+06-15 19:54:20.848  4978  5759 D JobServiceContext: sendStopMessageLocked stop reason: cancel() called by app
+06-15 19:54:20.850  8812  8812 I Finsky  : [2] SCH: system job 9776 received onStopJob signal.
+06-15 19:54:20.850  8812  8812 I Finsky  : [2] SCH: system job 9776 stopped.
+06-15 19:54:20.863  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=1014.44446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532621, downTime=184532621, deviceId=3, source=0x1002 }
+06-15 19:54:20.868  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=1004.8889, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532625, downTime=184532625, deviceId=3, source=0x1002 }
+06-15 19:54:20.872  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=992.94446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532630, downTime=184532630, deviceId=3, source=0x1002 }
+06-15 19:54:20.875  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=988.1666, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532632, downTime=184532632, deviceId=3, source=0x1002 }
+06-15 19:54:20.877  8812  8847 I Finsky  : [9358] SCH: Scheduling 1 system job(s)
+06-15 19:54:20.877  8812  8847 I Finsky  : [9358] SCH: Scheduling system job Id: 9792, L: 0, D: 83490816, C: false, I: false, N: 1
+06-15 19:54:20.877  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=981.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532635, downTime=184532635, deviceId=3, source=0x1002 }
+06-15 19:54:20.880  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=976.2222, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532637, downTime=184532637, deviceId=3, source=0x1002 }
+06-15 19:54:20.881  4978  5759 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:20.882  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=971.44446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532639, downTime=184532639, deviceId=3, source=0x1002 }
+06-15 19:54:20.884  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=964.2778, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532642, downTime=184532642, deviceId=3, source=0x1002 }
+06-15 19:54:20.889  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=954.7222, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532646, downTime=184532646, deviceId=3, source=0x1002 }
+06-15 19:54:20.892  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=947.55554, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532649, downTime=184532649, deviceId=3, source=0x1002 }
+06-15 19:54:20.893  8156  8156 D AcmsServiceMonitor: StopSvcRunnable - run
+06-15 19:54:20.897  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=933.2222, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532655, downTime=184532655, deviceId=3, source=0x1002 }
+06-15 19:54:20.901  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=926.05554, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532658, downTime=184532658, deviceId=3, source=0x1002 }
+06-15 19:54:20.903  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=918.88885, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532661, downTime=184532661, deviceId=3, source=0x1002 }
+06-15 19:54:20.905  8812  8834 I Finsky  : [9345] Initializing pausers from value store.
+06-15 19:54:20.906  8812  8834 I Finsky  : [9345] IQ::HLD: Callers (Pausers) in PauseUpdatesCallersValueStore: []
+06-15 19:54:20.909  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=904.55554, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532667, downTime=184532667, deviceId=3, source=0x1002 }
+06-15 19:54:20.913  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=897.3889, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532670, downTime=184532670, deviceId=3, source=0x1002 }
+06-15 19:54:20.919  8156  8156 D AcmsJobIntentService: Enter Oncreate
+06-15 19:54:20.919  8156  8156 D AcmsServiceMonitor: AcmsServiceMonitor.getAcmsSvcMonitor() - Enter
+06-15 19:54:20.920  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=878.2778, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532678, downTime=184532678, deviceId=3, source=0x1002 }
+06-15 19:54:20.923  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=871.1111, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532681, downTime=184532681, deviceId=3, source=0x1002 }
+06-15 19:54:20.926  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=863.94446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532684, downTime=184532684, deviceId=3, source=0x1002 }
+06-15 19:54:20.927  8812  8847 I Finsky  : [9358] SCH: no pending jobs to schedule.
+06-15 19:54:20.930  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=854.38885, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532688, downTime=184532688, deviceId=3, source=0x1002 }
+06-15 19:54:20.936  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=842.44446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532693, downTime=184532693, deviceId=3, source=0x1002 }
+06-15 19:54:20.937  4978  5135 D PowerManagerService: [api] userActivityFromNative : 20 (event: 2 flags: 0) eventTime = 184532693
+06-15 19:54:20.939  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=832.8889, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532697, downTime=184532697, deviceId=3, source=0x1002 }
+06-15 19:54:20.943  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=825.7222, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532700, downTime=184532700, deviceId=3, source=0x1002 }
+06-15 19:54:20.946  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=816.1667, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532704, downTime=184532704, deviceId=3, source=0x1002 }
+06-15 19:54:20.948  8156  8925 D AcmsJobIntentService: Enter onHandleWork
+06-15 19:54:20.949  8156  8925 D AcmsJobIntentService: destroy ACMS process
+06-15 19:54:20.949  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=809.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532707, downTime=184532707, deviceId=3, source=0x1002 }
+06-15 19:54:20.952  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=801.8334, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532710, downTime=184532710, deviceId=3, source=0x1002 }
+06-15 19:54:20.953  8156  8156 I AcmsJobIntentService: onDestroy
+06-15 19:54:20.953  8156  8156 D AcmsServiceMonitor: getSvcCounter - Counter value: 0
+06-15 19:54:20.953  8156  8156 I AcmsJobIntentService: cleanUp - inside service clean up
+06-15 19:54:20.954  8156  8156 D AcmsServiceMonitor: getSvcCounter - Counter value: 0
+06-15 19:54:20.954  8156  8156 D AcmsJobIntentService: killing acms process
+06-15 19:54:20.954  8156  8156 I Process : Sending signal. PID: 8156 SIG: 9
+06-15 19:54:20.957  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=792.2778, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532714, downTime=184532714, deviceId=3, source=0x1002 }
+06-15 19:54:20.960  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=782.7222, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532718, downTime=184532718, deviceId=3, source=0x1002 }
+06-15 19:54:20.963  4978  5758 D StorageManagerService: getExternalStorageMountMode : 3
+06-15 19:54:20.964  4978  5758 D StorageManagerService: getExternalStorageMountMode : 3
+06-15 19:54:20.964  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=775.55554, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532721, downTime=184532721, deviceId=3, source=0x1002 }
+06-15 19:54:20.964  4978  5758 D StorageManagerService: getExternalStorageMountMode : final mountMode=3, uid : 10037, packageName : com.android.vending
+06-15 19:54:20.965  4978  5758 I ApplicationPolicy: isApplicationExternalStorageWhitelisted:com.android.vending user:0
+06-15 19:54:20.965  4978  5758 D ApplicationPolicy: isApplicationExternalStorageWhitelisted: DO is not enabled on user 0. Allowed.
+06-15 19:54:20.965  4978  5758 D ActivityManager: package  com.android.vending, user - 0 is SDcard whitelisted
+06-15 19:54:20.965  4978  5758 I ApplicationPolicy: isApplicationExternalStorageBlacklisted:com.android.vending user:0
+06-15 19:54:20.965  4978  5758 D ApplicationPolicy: isApplicationExternalStorageBlacklisted: DO is not enabled on user 0. Allowed.
+06-15 19:54:20.968  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=766.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532725, downTime=184532725, deviceId=3, source=0x1002 }
+06-15 19:54:20.973  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=754.0556, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532730, downTime=184532730, deviceId=3, source=0x1002 }
+06-15 19:54:20.980  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=744.5, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532734, downTime=184532734, deviceId=3, source=0x1002 }
+06-15 19:54:20.984  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=725.38885, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532742, downTime=184532742, deviceId=3, source=0x1002 }
+06-15 19:54:20.989  8926  8926 E Zygote  : isWhitelistProcess - Process is Whitelisted
+06-15 19:54:20.990  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=713.44446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532747, downTime=184532747, deviceId=3, source=0x1002 }
+06-15 19:54:20.990  8926  8926 E libpersona: scanKnoxPersonas
+06-15 19:54:20.990  8926  8926 E libpersona: Couldn't open the File - /data/system/users/0/personalist.xml - No such file or directory
+06-15 19:54:20.993  8926  8926 W SELinux : SELinux selinux_android_compute_policy_index : Policy Index[2],  Con:u:r:zygote:s0 RAM:SEPF_SM-G935F_8.0.0_0018, [-1 -1 -1 -1 0 1]
+06-15 19:54:20.993  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=703.8889, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532751, downTime=184532751, deviceId=3, source=0x1002 }
+06-15 19:54:20.994  8926  8926 I SELinux : SELinux: seapp_context_lookup: seinfo=gmscore, level=s0:c512,c768, pkgname=com.android.vending:background 
+06-15 19:54:20.996  4978  5758 I ActivityManager: Start proc 8926:com.android.vending:background/u0a37 for service com.android.vending/com.google.frameworks.client.data.android.server.play.BackgroundProcessEndpointService
+06-15 19:54:20.997  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=696.7222, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532754, downTime=184532754, deviceId=3, source=0x1002 }
+06-15 19:54:20.999  4978  5759 I ActivityManager: Process ACMS.Process (pid 8156) has died: fore SVC (93,1206)
+06-15 19:54:21.000  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=687.1667, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532758, downTime=184532758, deviceId=3, source=0x1002 }
+06-15 19:54:21.003  5711 22034 D ForegroundUtils: could not check pending caller
+06-15 19:54:21.005  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=677.6111, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532762, downTime=184532762, deviceId=3, source=0x1002 }
+06-15 19:54:21.011  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=663.2778, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532768, downTime=184532768, deviceId=3, source=0x1002 }
+06-15 19:54:21.011  8926  8926 D ActivityThread: Added TimaKeyStore provider
+06-15 19:54:21.011  8812  8812 I Finsky  : [2] SCH: job service start with id 9792.
+06-15 19:54:21.016  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=648.94446, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532774, downTime=184532774, deviceId=3, source=0x1002 }
+06-15 19:54:21.020  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=639.3889, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532778, downTime=184532778, deviceId=3, source=0x1002 }
+06-15 19:54:21.021  4978  5098 I ActivityManager: DSS on for com.android.vending and scale is 1.0
+06-15 19:54:21.058  8926  8926 I zygote64: no shared libraies, dex_files: 1
+06-15 19:54:21.059  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=548.6111, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532816, downTime=184532816, deviceId=3, source=0x1002 }
+06-15 19:54:21.062  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=539.05554, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532820, downTime=184532820, deviceId=3, source=0x1002 }
+06-15 19:54:21.065  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=531.88885, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532823, downTime=184532823, deviceId=3, source=0x1002 }
+06-15 19:54:21.071  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=517.55554, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532829, downTime=184532829, deviceId=3, source=0x1002 }
+06-15 19:54:21.077  8812  8905 I Finsky  : [9390] SCH: Satisfied jobs for 9792 are: 12-1
+06-15 19:54:21.082  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=491.27777, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532840, downTime=184532840, deviceId=3, source=0x1002 }
+06-15 19:54:21.104  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=540.0, y[0]=441.11108, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532861, downTime=184532861, deviceId=3, source=0x1002 }
+06-15 19:54:21.113  8879  8879 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=540.0, y[0]=422.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=184532871, downTime=184532871, deviceId=3, source=0x1002 }
+06-15 19:54:21.114  4978  5759 D InputDispatcher: Inject motion (8879): action=0x1, eventTime=184532871000000, displayId=0
+06-15 19:54:21.115  4978  5135 I InputDispatcher: Delivering touch to (8193): action: 0x1, toolType: 0
+06-15 19:54:21.115  8193  8193 D ViewRootImpl@e9f05b3[MainActivity]: ViewPostIme pointer 1
+06-15 19:54:21.115  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:21.117  8879  8879 D AndroidRuntime: Shutting down VM
+06-15 19:54:21.125  4978  8231 D GameManagerService: identifyGamePackage. com.amaia23.hydracam
+06-15 19:54:21.126  4978  8231 D GamePkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-15 19:54:21.126  4978  8231 D CustomFrequencyManagerService: acquireDVFSLockLocked : type : DVFS_MIN_LIMIT  frequency : 832000  uid : 1000  pid : 4978  pkgName : GESTURE_DETECTED@CPU_MIN@65
+06-15 19:54:21.143  4978  5759 I EDMNativeHelperService: isCameraEnabled
+06-15 19:54:21.144  4978  5759 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-15 19:54:21.247  8926  8926 W ResourceType: ResTable_typeSpec entry count inconsistent: given 6216, previously 6217
+06-15 19:54:21.270  8812  8875 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+06-15 19:54:21.304  8812  8832 I Finsky  : [9343] SysUA: Disable SystemUpdateActivity, because Android is lower than Q
+06-15 19:54:21.306  4978  5098 D PackageManager: setEnabledSetting : userId = 0 packageName = com.android.vending cmp = com.google.android.finsky.systemupdateactivity.SystemUpdateActivity newState = 2 callingPackage = 10037/com.android.vending
+06-15 19:54:21.319  4978  5759 D PackageManager: setEnabledSetting : userId = 0 packageName = com.android.vending cmp = com.google.android.finsky.hibernation.impl.UnhibernateActivity newState = 1 callingPackage = 10037/com.android.vending
+06-15 19:54:21.321  8812  8847 I Finsky  : [9358] SysUA: Set SystemUpdateActivity enabled state to 2
+06-15 19:54:21.321  8812  8857 I Finsky  : [9362] Set UnhibernateActivity enabled state to 1
+06-15 19:54:21.328  4978  5098 D PackageManager: setEnabledSetting : userId = 0 packageName = com.android.vending cmp = com.google.android.finsky.activities.DebugActivity newState = 2 callingPackage = 10037/com.android.vending
+06-15 19:54:21.330  4978  5098 D PackageManager: setEnabledSetting : userId = 0 packageName = com.android.vending cmp = com.google.android.finsky.systemcomponentupdateui.common.SystemComponentUpdateActivity newState = 1 callingPackage = 10037/com.android.vending
+06-15 19:54:21.333  8812  8847 I Finsky  : [9358] SysCUA: Set {com.android.vending/com.google.android.finsky.systemcomponentupdateui.common.SystemComponentUpdateActivity} enabled state to 1
+06-15 19:54:21.431  8812  8876 I cn_CronetUrlRequestContext: destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@5e653d2
+06-15 19:54:21.468  8926  8926 I Finsky:background: [2] Process created at version: 51.7.21-24 [0] [PR] 923613381
+06-15 19:54:21.480  8926  8926 I Finsky:background: [2] [BGP] Initializing early flags...
+06-15 19:54:21.480  8926  8926 I Finsky:background: [2] [BGP] Initializing Gservices...
+06-15 19:54:21.484  8926  8926 I Finsky:background: [2] [BGP] Initializing flags...
+06-15 19:54:21.531  8926  8926 I Finsky:background: [2] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2268.
+06-15 19:54:21.643  8812  8856 I Finsky  : [9361] Loaded library for account: [eHw38Q_RqEAwQJYCrHJpFCFRHiYSUOPjvlKStzm8NUo]
+06-15 19:54:21.644  8812  8856 I Finsky  : [9361] Loaded library for account: [D9HMEgNFW4M14ulr3iT8e0DolbAjT51hxHXKYB_cikY]
+06-15 19:54:21.644  8812  8856 I Finsky  : [9361] Finished loading 2 libraries.
+06-15 19:54:21.647  8812  8952 I Finsky  : [9399] PSR: Package cache is empty, setup cache.
+06-15 19:54:21.648  8926  8926 I Finsky:background: [2] Finished reading experiment flags from file [Epfin6iFtxjuJzeNtvJ5io9XFLfIfGexxoswUCqoRo8] numFlags=2019.
+06-15 19:54:21.677  8926  8926 I Finsky:background: [2] Finished reading experiment flags from file [uaCV2_npamCOcdkUez35Nz8sUxJDQZpFINE0EnI3XfM] numFlags=2019.
+06-15 19:54:21.682  8926  8926 I Finsky:background: [2] [BGP] Initializing crash detector...
+06-15 19:54:21.689  8926  8926 I Finsky:background: [2] akfs - Registering in memory receiver for android.intent.action.PACKAGE_ADDED and android.intent.action.PACKAGE_REMOVED
+06-15 19:54:21.784  8926  8926 I Finsky:background: [2] This process start was not selected for Play memory metrics collection.
+06-15 19:54:21.793  4978  4978 D CustomFrequencyManagerService: releaseDVFSLockLocked : Getting Lock type frm List : DVFS_MIN_LIMIT  frequency : 832000  uid : 1000  pid : 4978  tag : GESTURE_DETECTED@CPU_MIN@65
+06-15 19:54:21.892  8926  8962 W Settings: Setting download_manager_max_bytes_over_mobile has moved from android.provider.Settings.Secure to android.provider.Settings.Global.
+06-15 19:54:21.894  8926  8962 I Finsky:background: [9358] SettingNotFoundException, fall through to G.downloadBytesOverMobileMaximum
+06-15 19:54:21.895  8926  8962 W Settings: Setting download_manager_recommended_max_bytes_over_mobile has moved from android.provider.Settings.Secure to android.provider.Settings.Global.
+06-15 19:54:21.902  8926  8962 I Finsky:background: [9358] SettingNotFoundException, fall through to G.downloadBytesOverMobileRecommended
+06-15 19:54:21.903  8926  8962 I Finsky:background: [9358] registerListener
+06-15 19:54:21.919  8926  8962 I Finsky:background: [9358] DFS: Listener added for sxj@251fc32
+06-15 19:54:21.919  8926  8962 I Finsky:background: [9358] registerListener
+06-15 19:54:21.921  8926  8962 I Finsky:background: [9358] registerListener
+06-15 19:54:21.922  8926  8962 I Finsky:background: [9358] DFS: Listener added for aorv@b6585f5
+06-15 19:54:21.948  8926  8966 D ConnectivityManager: requestNetwork; CallingUid : 10037, CallingPid : 8926
+06-15 19:54:21.961  4978  5098 D ConnectivityService: requestNetwork for uid/pid:10037/8926 NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-15 19:54:21.962  4978  5209 D ConnectivityService: rematching NetworkAgentInfo [WIFI () - 507]
+06-15 19:54:21.962  4978  5209 D ConnectivityService:  network has: [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&FOREGROUND LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps SignalStrength: -60]
+06-15 19:54:21.962  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 805. No change.
+06-15 19:54:21.962  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 3. No change.
+06-15 19:54:21.962  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 565. No change.
+06-15 19:54:21.962  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 1. No change.
+06-15 19:54:21.963  4978  5209 D ConnectivityService:   checking if request is satisfied: NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-15 19:54:21.963  4978  5209 D ConnectivityService: currentScore = 0, newScore = 60
+06-15 19:54:21.963  4978  5209 D ConnectivityService: rematch for NetworkAgentInfo [WIFI () - 507]
+06-15 19:54:21.963  4978  5209 D ConnectivityService:    accepting network in place of null
+06-15 19:54:21.963  4978  5209 D ConnectivityService: sending new Min Network Score(60): NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-15 19:54:21.964  4978  5209 D ConnectivityService: MultiNetwork Request(TransportType - Wi-Fi request). Internet Capability doesn't required (false)
+06-15 19:54:21.964  4978  5209 D ConnectivityService: sending mNetworkRequests to WWSM through Network Monitor [ Transports: WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN]
+06-15 19:54:21.964  4978  5175 D WIFI    : got request NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-15 19:54:21.964  4978  5209 D ConnectivityService: multi(falsetruefalse)
+06-15 19:54:21.964  4978  5175 D WIFI    :   my score=60, my filter=[ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps]
+06-15 19:54:21.964  4978  5175 D WIFI    : evalRequest
+06-15 19:54:21.964  4978  5175 D WIFI    :   needNetworkFor
+06-15 19:54:21.964  4978  5175 D WIFI_UT : got request NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-15 19:54:21.964  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: EvaluatingState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:21.964  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: MaybeNotifyState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:21.964  4978  5175 D WIFI_UT :   my score=2147483647, my filter=[ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps]
+06-15 19:54:21.964  4978  5175 D WIFI_UT : evalRequest
+06-15 19:54:21.964  4978 19331 D NetworkMonitor/NetworkAgentInfo [WIFI () - 507]: DefaultState{ when=0 what=151659 arg1=1 obj=Bundle[{UID=10020, requestID=745}] target=com.android.internal.util.StateMachine$SmHandler }
+06-15 19:54:21.964  4978  5175 D WIFI_UT :   needNetworkFor
+06-15 19:54:21.965  4978  5209 D ConnectivityService: Network NetworkAgentInfo [WIFI () - 507] was already satisfying request 702. No change.
+06-15 19:54:21.965  4978  5206 D WIFI_P2P: got request NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-15 19:54:21.965  4978  5206 D WIFI_P2P:   my score=60, my filter=[ Transports: WIFI Capabilities: WIFI_P2P&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=1048576Kbps LinkDnBandwidth>=1048576Kbps]
+06-15 19:54:21.965  4978  5206 D WIFI_P2P: evalRequest
+06-15 19:54:21.965  4978  5206 D WIFI_P2P:   done
+06-15 19:54:21.965  4978  5209 D ConnectivityService: sending notification AVAILABLE for NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-15 19:54:21.965  5738  5738 D PhoneSwitcherNetworkRequstListener: got request NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-15 19:54:21.965  5738  5738 D PhoneSwitcherNetworkRequstListener:   my score=101, my filter=[ Transports: CELLULAR Capabilities: MMS&SUPL&DUN&FOTA&IMS&CBS&IA&RCS&XCAP&EIMS&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&ENT1 Specifier: <android.net.MatchAllNetworkSpecifier@0>]
+06-15 19:54:21.966  5738  5738 D PhoneSwitcherNetworkRequstListener: evalRequest
+06-15 19:54:21.966  5738  5738 D PhoneSwitcherNetworkRequstListener:   needNetworkFor
+06-15 19:54:21.966  4978  5209 D ConnectivityService: sending notification CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-15 19:54:21.967  4978  5209 D ConnectivityService: sending notification IP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-15 19:54:21.968  4978  5392 D Ethernet: got request NetworkRequest [ TRACK_DEFAULT id=808, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ] with score 60
+06-15 19:54:21.968  4978  5392 D Ethernet:   my score=-1, my filter=[ Transports: ETHERNET Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN LinkUpBandwidth>=100000Kbps LinkDnBandwidth>=100000Kbps]
+06-15 19:54:21.969  4978  5392 D Ethernet: evalRequest
+06-15 19:54:21.969  4978  5392 D Ethernet:   done
+06-15 19:54:21.983  4978  5758 D ConnectivityService: filterNetworkStateForUid() uid: 10037 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JuJo", failover: false, available: true, roaming: false, metered: false]
+06-15 19:54:21.986  8926  8954 I Finsky:background: [9352] IQ: start evaluating install requests.
+06-15 19:54:21.986  8926  8954 I Finsky:background: [9352] IQ: no jobs active. Skipping
+06-15 19:54:21.993  8926  8962 I Finsky:background: [9358] IV2: IQv2 is disabled. Recovering all active installs: []
+06-15 19:54:22.021  8926  8954 I Finsky:background: [9352] IQ: 0 scheduled install statuses found to proceed. 
+06-15 19:54:22.022  8926  8966 I Finsky:background: [9362] IQ: Pruning inactive install requests
+06-15 19:54:22.024  8812  8975 I Finsky  : [9405] SM: There are no stale sessions to be pruned
+06-15 19:54:22.038  8926  8966 I Finsky:background: [9362] Resetting scheduler db
+06-15 19:54:22.040  8812  8812 I Finsky  : [2] Connecting InstallListener to SplitInstallService broadcaster...
+06-15 19:54:22.057  8926  8955 I Finsky:background: [9353] SCH: Scheduling phonesky job Id: 47-15, CT: 1781543161681, Constraints: [{ L: 3600000, D: 21590080, C: CHARGING_NONE, I: IDLE_REQUIRED, N: NET_NONE, B: BATTERY_ANY }]
+06-15 19:54:22.086  8926  8954 I Finsky:background: [9352] SCH: Scheduling 0 system job(s)
+06-15 19:54:22.104  8926  8957 I Finsky:background: [9355] IQ: start evaluating install requests.
+06-15 19:54:22.104  8926  8957 I Finsky:background: [9355] IQ: no jobs active. Skipping
+06-15 19:54:22.107  8926  8957 I Finsky:background: [9355] IQ: 0 scheduled install statuses found to proceed. 
+06-15 19:54:22.145  4978  5758 I EDMNativeHelperService: isCameraEnabled
+06-15 19:54:22.146  4978  5758 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-15 19:54:22.952  3202  3202 I android.hardware.wifi@1.0-service: getLinkLayerStats
+06-15 19:54:23.028  4978  5130 I TLC_TIMA_PKM_initialize: initializing...
+06-15 19:54:23.028  4978  5130 I TLC_TIMA_PKM_initialize: root = 0, root_strlen = 1
+06-15 19:54:23.028  4978  5130 I TLC_TIMA_PKM_initialize: process = ffffffff00000000000000000000000a, process_strlen = 32
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: input max_sendmsg_size = 262196
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: input max_recvmsg_size = 262196
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: root = 0, root_len = 1
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: process = ffffffff00000000000000000000000a, process_strlen = 32
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: aligned max_sendmsg_size = 262208
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: aligned max_recvmsg_size = 262208
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: device_id = 0x0
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: tlc_open() was called
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: Opening MobiCore device
+06-15 19:54:23.029  4978  5130 I TeeDriverClient: driver client open [hardware/samsung_slsi/exynos8890/mobicore/ClientLib/src/driver_client.cpp:103]
+06-15 19:54:23.029  4978  5130 I TZ: mc_tlc_communication: Allocating message buffer for TCI
+06-15 19:54:23.030  4978  5130 I TZ: mc_tlc_communication: Opening the session
+06-15 19:54:23.056  4978  5130 I TZ: mc_tlc_communication: tlc_open() succeeded
+06-15 19:54:23.057  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info1
+06-15 19:54:23.070  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info2
+06-15 19:54:23.075  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info3
+06-15 19:54:23.080  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info4
+06-15 19:54:23.086  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info5
+06-15 19:54:23.090  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info6
+06-15 19:54:23.095  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info7
+06-15 19:54:23.110  4978  5130 E TLC_TIMA_PKM_initialize: tima_pkm : /system/etc/tima/kern_sec_info8
+06-15 19:54:23.113  4978  5130 I TLC_TIMA_PKM_initialize: Trustlet response is completed
+06-15 19:54:23.147  4978  5098 I EDMNativeHelperService: isCameraEnabled
+06-15 19:54:23.150  4978  5098 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-15 19:54:23.187  5567  5567 E adbd    : recv: OPEN 0000010a 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-15 19:54:23.187  5567  5567 E adbd    : service_to_fd: tcp:4762
+06-15 19:54:23.188  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:23.426  4978  5098 D BatteryService: !@BatteryListener : batteryPropertiesChanged!
+06-15 19:54:23.427  4978  5098 D BatteryService: level:100, scale:100, status:5, health:2, present:true, voltage: 4055, temperature: 293, technology: Li-ion, AC powered:false, USB powered:true, POGO powered:false, Wireless powered:false, icon:17303851, invalid charger:0, maxChargingCurrent:0, maxChargingVoltage:0, chargeCounter:0
+06-15 19:54:23.427  4978  5098 D BatteryService: online:4, current avg:-671, charge type:0, power sharing:false, high voltage charger:false, capacity:280000, batterySWSelfDischarging:false, misc_event:65536, current_event:0, current_now:-317
+06-15 19:54:23.428  4978  4978 D BatteryService: Sending ACTION_BATTERY_CHANGED.
+06-15 19:54:23.432  4978  4978 I MotionRecognitionService: Plugged
+06-15 19:54:23.433  4978  4978 D MotionRecognitionService:   mCableConnection= 1
+06-15 19:54:23.433  4978  4978 D MotionRecognitionService: setPowerConnected : mGripEnabled = false
+06-15 19:54:23.434  4978  4978 D SamsungPhoneWindowManager: ACTION_BATTERY_CHANGED - Level :: 100, battStatus :: 5
+06-15 19:54:23.438  4978  5041 D UsbDeviceManager: handleMessage -> MSG_UPDATE_CHARGING_STATE = 1
+06-15 19:54:23.447  5415  5415 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-15 19:54:23.451  5415  5415 D BatteryController: onReceive-ACTION_BATTERY_CHANGED : mLevel=100, mBatteryStatus=5
+06-15 19:54:23.469  4561  4561 V HeadsetService: Received Intent.ACTION_BATTERY_CHANGED
+06-15 19:54:23.474  4561  4673 D HeadsetStateMachine: Disconnected process message: 10, size: 0
+06-15 19:54:23.476  5415  5415 D PowerUI : priorPlugType = 2 mPlugType =  2
+06-15 19:54:23.485  5567  5567 E adbd    : recv: OPEN 0000010c 00000000 00b5:65 78 65 63 3A 72 75 6E 2D 61 73 20 27 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 27 20 27 63 61 74 27 20 27 2F 64 61 74 61 2F 75 73 65 72 2F 30 2F 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 2F 61 70 70 5F 66 6C 75 74 74 65 72 2F 61 75 74 6F 6D 61 74 69 6F 6E 2D 73 63 72 65 65 6E 73 68 6F 74 73 2F 39 38 38 35 65 36 35 30 33 39 33 30 33 30 34 39 34 36 2D 73 65 74 75 70 2D 61 66 74 65 72 2D 73 63 72 6F 6C 6C 2D 32 30 32 36 2D 30 36 2D 31 35 54 31 39 2D 35 34 2D 32 33 2D 34 33 39 34 37 37 2E 70 6E 67 27 00 
+06-15 19:54:23.485  5567  5567 E adbd    : service_to_fd: exec:run-as 'com.amaia23.hydracam' 'cat' '/data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/9885e6503930304946-setup-after-scroll-2026-06-15T19-54-23-439477.png'
+06-15 19:54:23.530  8982  8982 W SELinux : SELinux selinux_android_compute_policy_index : Policy Index[2],  Con:u:r:runas:s0 RAM:SEPF_SM-G935F_8.0.0_0018, [-1 -1 -1 -1 0 1]
+06-15 19:54:23.532  8982  8982 I SELinux : SELinux: seapp_context_lookup: seinfo=untrusted, level=s0:c512,c768, pkgname=com.amaia23.hydracam 
+06-15 19:54:23.562  5567  5567 E adbd    : recv: OPEN 0000010d 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-15 19:54:23.562  5567  5567 E adbd    : service_to_fd: tcp:4762
+06-15 19:54:23.564  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-15 19:54:23.676  5567  5567 E adbd    : recv: OPEN 00000110 00000000 004b:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 3A 65 78 70 6F 72 74 20 41 4E 44 52 4F 49 44 5F 4C 4F 47 5F 54 41 47 53 3D 27 27 3B 20 65 78 65 63 20 6C 6F 67 63 61 74 20 27 2D 64 27 20 27 2D 74 27 20 27 38 30 30 27 00 
+06-15 19:54:23.676  5567  5567 E adbd    : service_to_fd: shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '800'
+06-15 19:54:23.692  6066  6066 D io_stats: !@   8,0 r 1365828 74863344 w 831526 19596088 d 85775 16169508 f 287616 287151 iot 1658730 1509207 th 323444 0 0 pt 0 inp 3 50 184535.450

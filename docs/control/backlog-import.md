@@ -1319,10 +1319,17 @@ and asset standards are decided.
 - Labels: `hydracam`, `mobile`, `ux`, `session`, `metadata`, `players`,
   `venues`.
 - Priority: Medium.
-- Disposition: Planned only; do not implement until this item is selected for
-  a focused session UX pass.
+- Disposition: Implemented in the 2026-06-23 focused session UX pass.
 - Implementation plan:
   `docs/superpowers/plans/2026-06-22-human-readable-session-names.md`.
+- Implementation evidence:
+  `logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/`.
+  The app now persists optional `displayName` metadata, keeps backend GUIDs for
+  technical identity, generates editable preset-based defaults in master setup,
+  and uses readable titles across active, previous, detail, fetched-session, and
+  media-selection surfaces. The current iOS distribution artifact was rebuilt as
+  `1.4.0+19`; TestFlight upload remains blocked until App Store Connect API
+  credentials are available in the local environment.
 - Body: Replace primary operator-facing session labels that show backend GUIDs
   or other long technical identifiers with readable session names. The app
   should auto-generate sensible defaults from activity preset, venue/court,

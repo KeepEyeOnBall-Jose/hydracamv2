@@ -1,0 +1,116 @@
+{
+  "acceptanceChecks": [
+    "RF8M90QE7LX is unlocked with keyguard cleared before route launch",
+    "HydraCam setup and standby routes launch with identity-matched automation bridge",
+    "Setup and standby screenshots are captured with no Flutter overflow markers"
+  ],
+  "commands": [
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "dumpsys",
+        "window"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T10:12:50.544466+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T10:12:50.797300+00:00"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked",
+        "--skip-build",
+        "--timeout",
+        "45"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T10:13:05.446389+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T10:15:15.127953+00:00"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked",
+        "--skip-build",
+        "--timeout",
+        "45"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T10:15:27.398061+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "Samsung SM-G970F",
+      "notes": [
+        "Unlocked via supplied pattern 7-8-5-2 before route smoke."
+      ],
+      "os": "Android 12 (API 31)",
+      "role": "setup and standby UI smoke target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M90QE7LX-setup-after-scroll.png",
+    "screenshots/RF8M90QE7LX-setup.png",
+    "screenshots/RF8M90QE7LX-standby.png",
+    "video/RF8M90QE7LX-standby-proof.mp4",
+    "device-logs/RF8M90QE7LX/setup-bridge-logs.json",
+    "device-logs/RF8M90QE7LX/setup-logcat.txt",
+    "device-logs/RF8M90QE7LX/setup-result.json",
+    "device-logs/RF8M90QE7LX/standby-bridge-logs.json",
+    "device-logs/RF8M90QE7LX/standby-logcat.txt",
+    "device-logs/RF8M90QE7LX/standby-result.json"
+  ],
+  "item": {
+    "slug": "test-android-apps-hardware-ui-smoke-unlocked",
+    "source": "AGENTS.md#Validation Policy; docs/control/regular-evaluation-plan.md#Single Android Hardware Lane",
+    "title": "Android hardware UI smoke after unlock"
+  },
+  "notes": [
+    "Unlocked RF8M90QE7LX with supplied 7-8-5-2 pattern, dismissed MTP prompt with Deny, reran setup/standby hardware UI smoke, both routes passed with screenshots, logs, and video."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

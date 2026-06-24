@@ -1,0 +1,892 @@
+{
+  "acceptanceChecks": [
+    "Create a small accessible test-set folder with one few-second video per camera",
+    "Upload the test clips through the HydraCam legacy upload-media contract into a backend session",
+    "Verify media-timeline imports the legacy session into a new event",
+    "Verify media-timeline processing status reaches complete or document the exact blocked stage"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:41:37.917916+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 10 curl -f -sS -X POST http://localhost:3009/api/services/start-all"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:41:48.978930+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 5 curl -f -sS http://localhost:3009/api/services"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:41:53.832090+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-hide_banner",
+        "-y",
+        "-ss",
+        "10",
+        "-t",
+        "3",
+        "-i",
+        "/Users/jose/src/work/media-timeline/test-data/integration_test_data/20251220_171028_segment.mp4",
+        "-vf",
+        "scale=640:-2,fps=30,format=yuv420p",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "30",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:42:27.109388+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-hide_banner",
+        "-y",
+        "-ss",
+        "10",
+        "-t",
+        "3",
+        "-i",
+        "/Users/jose/src/work/media-timeline/test-data/integration_test_data/IMG_2927_segment.MOV",
+        "-vf",
+        "scale=640:-2,fps=30,format=yuv420p",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "30",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:42:27.895373+00:00"
+    },
+    {
+      "command": [
+        "ffmpeg",
+        "-hide_banner",
+        "-y",
+        "-ss",
+        "10",
+        "-t",
+        "3",
+        "-i",
+        "/Users/jose/src/work/media-timeline/test-data/integration_test_data/20251220_171059_segment.mp4",
+        "-vf",
+        "scale=640:-2,fps=30,format=yuv420p",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "30",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-movflags",
+        "+faststart",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:42:28.270194+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 5 curl -f -sS http://localhost:3009/api/services"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:42:28.554505+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "for f in logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/*.mp4; do echo \"\"; ffprobe -v error -show_entries format=duration,size -show_entries stream=index,codec_type,codec_name,width,height,avg_frame_rate -of json \"\"; done"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-14T07:42:51.230406+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 20 curl -f -sS http://localhost:3009/api/services"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:42:51.315305+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 10 curl -f -sS http://localhost:3001/health"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:42:52.762700+00:00"
+    },
+    {
+      "command": [
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration,size",
+        "-show_entries",
+        "stream=index,codec_type,codec_name,width,height,avg_frame_rate",
+        "-of",
+        "json",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:43:35.766493+00:00"
+    },
+    {
+      "command": [
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration,size",
+        "-show_entries",
+        "stream=index,codec_type,codec_name,width,height,avg_frame_rate",
+        "-of",
+        "json",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:43:35.796168+00:00"
+    },
+    {
+      "command": [
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration,size",
+        "-show_entries",
+        "stream=index,codec_type,codec_name,width,height,avg_frame_rate",
+        "-of",
+        "json",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:43:35.847686+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/tools/legacy_upload_test_media.py",
+        "--session-id",
+        "codex-multicamera-flow-20260614-0941",
+        "--court-guid",
+        "c36f8207-ca83-46e6-bdc9-f8aecdd7ce80",
+        "--output",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/legacy-upload-result.json",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:44:27.618348+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS https://hydracam.azurewebsites.net/HydraCam/Details/489 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/legacy-session-489-details.html"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:45:18.787445+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/hydra/import/489 -d '{\"runAnalyses\":false}'"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:45:21.750803+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/hydracam/sessions/local-status -d '{\"sessionIds\":[489]}'"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:45:22.987213+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS http://localhost:3001/api/hydra/489/manifest -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydra-489-manifest.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:45:37.574988+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/hydracam/sessions/local-status -d '{\"sessionIds\":[489]}' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-local-status.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:45:37.603299+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status?eventId=hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-processing-status-before.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:46:09.821066+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 60 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/system/processing-status/enqueue-missing -d '{\"eventId\":\"hydracam-489\",\"pipelines\":[\"pose_estimation\",\"racket_tracking\",\"audio_graph\"],\"includePartial\":true}' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-enqueue-missing.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:46:18.844513+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=staged' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-staged-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:46:34.855451+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:46:34.919666+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status?eventId=hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-processing-status-after-enqueue.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:46:34.956233+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3006/api/jobs?limit=20' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-after-enqueue.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:46:47.398502+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-1.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:47:29.996760+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status?eventId=hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-processing-status-poll-1.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:47:30.058492+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/events/hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-event-hydracam-489.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:47:43.652411+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3001/api/media/events/hydracam-489/videos' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-event-hydracam-489-videos.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:47:43.766357+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3006/api/jobs?status=pending&limit=100' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/job-queue-pending-100.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:48:00.820914+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3006/api/jobs?videoId=37cf07f2-52a6-4caa-8b00-8cef22eea330&limit=50' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/job-queue-37cf07f2.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:48:00.844763+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "timeout 30 curl -f -sS 'http://localhost:3006/health' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/job-queue-health.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:48:00.870191+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3006/api/workers",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-workers.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:50:04.905216+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3006/api/workers/metrics",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-workers-metrics.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:50:09.330370+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3006/api/jobs/stats",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-stats.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:50:13.330908+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3006/api/jobs?video_id=37cf07f2-52a6-4caa-8b00-8cef22eea330&limit=20",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-video-37cf07f2.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:50:19.109525+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3006/api/jobs?video_id=ca043f52-a9ec-4b90-b154-2412a25a7e72&limit=20",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-video-ca043f52.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:50:26.037398+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3006/api/jobs?video_id=afbed374-715a-4bcd-84e1-3cd137793b41&limit=20",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-video-afbed374.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:50:30.364940+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3020/api/unified/process-video",
+        "-d",
+        "{\"video_id\":\"37cf07f2-52a6-4caa-8b00-8cef22eea330\",\"frame_skip\":15,\"max_frames\":15,\"batch_size\":1,\"description\":\"HydraCam 489 camera 1 tiny unified pose+racket proof\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-start.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:52:09.947948+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3020/api/unified/process-video",
+        "-d",
+        "{\"video_id\":\"ca043f52-a9ec-4b90-b154-2412a25a7e72\",\"frame_skip\":15,\"max_frames\":15,\"batch_size\":1,\"description\":\"HydraCam 489 camera 2 tiny unified pose+racket proof\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-start.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:52:15.339523+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3020/api/unified/process-video",
+        "-d",
+        "{\"video_id\":\"afbed374-715a-4bcd-84e1-3cd137793b41\",\"frame_skip\":15,\"max_frames\":15,\"batch_size\":1,\"description\":\"HydraCam 489 camera 3 tiny unified pose+racket proof\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-start.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:52:21.065958+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/c53e138a",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-status-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:52:34.292915+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/980f855d",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-status-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:52:39.806644+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/fbb5501e",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-status-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:52:44.914858+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3004/api/labels/coverage/37cf07f2-52a6-4caa-8b00-8cef22eea330?summary=1",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-1-after-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:01.565611+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3004/api/labels/coverage/ca043f52-a9ec-4b90-b154-2412a25a7e72?summary=1",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-2-after-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:06.280429+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3004/api/labels/coverage/afbed374-715a-4bcd-84e1-3cd137793b41?summary=1",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-3-after-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:11.195704+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3001/api/system/processing-coverage/refresh",
+        "-d",
+        "{\"eventId\":\"hydracam-489\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-processing-coverage-refresh-after-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:16.888759+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-after-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:22.323462+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=staged",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-staged-after-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:27.069177+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3020/api/unified/process-video",
+        "-d",
+        "{\"video_id\":\"37cf07f2-52a6-4caa-8b00-8cef22eea330\",\"frame_skip\":1,\"batch_size\":1,\"description\":\"HydraCam 489 camera 1 full tiny clip unified pose+racket proof\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-full-start.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:50.777163+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3020/api/unified/process-video",
+        "-d",
+        "{\"video_id\":\"ca043f52-a9ec-4b90-b154-2412a25a7e72\",\"frame_skip\":1,\"batch_size\":1,\"description\":\"HydraCam 489 camera 2 full tiny clip unified pose+racket proof\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-full-start.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:53:56.602350+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3020/api/unified/process-video",
+        "-d",
+        "{\"video_id\":\"afbed374-715a-4bcd-84e1-3cd137793b41\",\"frame_skip\":1,\"batch_size\":1,\"description\":\"HydraCam 489 camera 3 full tiny clip unified pose+racket proof\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-full-start.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:54:02.624448+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/ea76313b",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-full-status-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:54:17.504963+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/b064de73",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-full-status-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:54:21.726333+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/0c82b540",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-full-status-0.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:54:26.101903+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/ea76313b",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-full-status-1.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:55:13.049160+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/b064de73",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-full-status-1.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:55:20.143125+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3020/api/jobs/0c82b540",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-full-status-1.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:55:24.729530+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3004/api/labels/coverage/37cf07f2-52a6-4caa-8b00-8cef22eea330?summary=1",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-1-after-full-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:55:46.338994+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3004/api/labels/coverage/ca043f52-a9ec-4b90-b154-2412a25a7e72?summary=1",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-2-after-full-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:55:51.632215+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3004/api/labels/coverage/afbed374-715a-4bcd-84e1-3cd137793b41?summary=1",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-3-after-full-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:55:56.943714+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "-H",
+        "Content-Type: application/json",
+        "-X",
+        "POST",
+        "http://localhost:3001/api/system/processing-coverage/refresh",
+        "-d",
+        "{\"eventId\":\"hydracam-489\"}",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-processing-coverage-refresh-after-full-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:56:04.164624+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "-f",
+        "-sS",
+        "http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full",
+        "-o",
+        "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-after-full-unified.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-14T07:56:10.999644+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [
+    "video/test-set/camera-1-right-corner-20251220_171028-3s.mp4",
+    "video/test-set/camera-2-left-corner-20251220_171059-3s.mp4",
+    "video/test-set/camera-3-center-IMG_2927-3s.mp4",
+    "device-logs/cv-unified-camera-1-full-start.json",
+    "device-logs/cv-unified-camera-1-full-status-0.json",
+    "device-logs/cv-unified-camera-1-full-status-1.json",
+    "device-logs/cv-unified-camera-1-start.json",
+    "device-logs/cv-unified-camera-1-status-0.json",
+    "device-logs/cv-unified-camera-2-full-start.json",
+    "device-logs/cv-unified-camera-2-full-status-0.json",
+    "device-logs/cv-unified-camera-2-full-status-1.json",
+    "device-logs/cv-unified-camera-2-start.json",
+    "device-logs/cv-unified-camera-2-status-0.json",
+    "device-logs/cv-unified-camera-3-full-start.json",
+    "device-logs/cv-unified-camera-3-full-status-0.json",
+    "device-logs/cv-unified-camera-3-full-status-1.json",
+    "device-logs/cv-unified-camera-3-start.json",
+    "device-logs/cv-unified-camera-3-status-0.json",
+    "device-logs/job-queue-37cf07f2.json",
+    "device-logs/job-queue-health.json",
+    "device-logs/job-queue-pending-100.json",
+    "device-logs/label-store-coverage-camera-1-after-full-unified.json",
+    "device-logs/label-store-coverage-camera-1-after-unified.json",
+    "device-logs/label-store-coverage-camera-2-after-full-unified.json",
+    "device-logs/label-store-coverage-camera-2-after-unified.json",
+    "device-logs/label-store-coverage-camera-3-after-full-unified.json",
+    "device-logs/label-store-coverage-camera-3-after-unified.json",
+    "device-logs/legacy-session-489-details.html",
+    "device-logs/legacy-upload-result.json",
+    "device-logs/media-timeline-event-hydracam-489-videos.json",
+    "device-logs/media-timeline-event-hydracam-489.json",
+    "device-logs/media-timeline-hydra-489-manifest.json",
+    "device-logs/media-timeline-hydracam-489-enqueue-missing.json",
+    "device-logs/media-timeline-hydracam-489-local-status.json",
+    "device-logs/media-timeline-hydracam-489-processing-status-after-enqueue.json",
+    "device-logs/media-timeline-hydracam-489-processing-status-before.json",
+    "device-logs/media-timeline-hydracam-489-processing-status-poll-1.json",
+    "device-logs/media-timeline-hydracam-489-readiness-full-0.json",
+    "device-logs/media-timeline-hydracam-489-readiness-full-1.json",
+    "device-logs/media-timeline-hydracam-489-readiness-full-after-full-unified.json",
+    "device-logs/media-timeline-hydracam-489-readiness-full-after-unified.json",
+    "device-logs/media-timeline-hydracam-489-readiness-staged-0.json",
+    "device-logs/media-timeline-hydracam-489-readiness-staged-after-unified.json",
+    "device-logs/media-timeline-job-queue-after-enqueue.json",
+    "device-logs/media-timeline-job-queue-stats.json",
+    "device-logs/media-timeline-job-queue-video-37cf07f2.json",
+    "device-logs/media-timeline-job-queue-video-afbed374.json",
+    "device-logs/media-timeline-job-queue-video-ca043f52.json",
+    "device-logs/media-timeline-job-queue-workers-metrics.json",
+    "device-logs/media-timeline-job-queue-workers.json",
+    "device-logs/media-timeline-processing-coverage-refresh-after-full-unified.json",
+    "device-logs/media-timeline-processing-coverage-refresh-after-unified.json"
+  ],
+  "item": {
+    "slug": "hydracam-multicamera-legacy-mediatimeline-flow",
+    "source": "user goal 2026-06-14",
+    "title": "HydraCam multi-camera upload to legacy and media-timeline processing proof"
+  },
+  "notes": [
+    "Three tiny per-camera HydraCam clips uploaded to legacy session 489, imported as media-timeline event hydracam-489, and reached full processing readiness after CV Compute unified full-frame processing."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

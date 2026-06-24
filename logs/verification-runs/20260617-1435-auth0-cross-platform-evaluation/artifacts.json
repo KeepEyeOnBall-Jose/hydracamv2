@@ -1,0 +1,150 @@
+{
+  "acceptanceChecks": [
+    "HydraCam Auth0 code path is statically mapped and analyzer/tests identify current breakages",
+    "Every immediately runnable platform is inventoried and either tested or recorded with a concrete blocker",
+    "media-timeline auth gap and reuse path are mapped from current code"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/services/auth0_service_test.dart",
+        "test/services/user_service_test.dart",
+        "test/screens/login_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T12:39:15.233046+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub",
+        "lib/services/auth0_service.dart",
+        "lib/services/auth0_m2m_service.dart",
+        "lib/services/user_service.dart",
+        "lib/screens/login_screen.dart",
+        "test/services/auth0_service_test.dart",
+        "test/services/user_service_test.dart",
+        "test/screens/login_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T12:39:28.544683+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-f",
+        "-sS",
+        "https://keepeyeonball.eu.auth0.com/.well-known/openid-configuration"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T12:44:20.299964+00:00"
+    },
+    {
+      "command": [
+        "gtimeout",
+        "180",
+        "flutter",
+        "build",
+        "macos",
+        "--debug",
+        "--no-pub"
+      ],
+      "returnCode": 124,
+      "startedAt": "2026-06-17T12:48:52.372650+00:00"
+    },
+    {
+      "command": [
+        "gtimeout",
+        "120",
+        "flutter",
+        "build",
+        "web",
+        "--debug",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T12:51:57.919926+00:00"
+    },
+    {
+      "command": [
+        "gtimeout",
+        "240",
+        "flutter",
+        "build",
+        "ios",
+        "--debug",
+        "--no-codesign",
+        "--no-pub"
+      ],
+      "returnCode": 124,
+      "startedAt": "2026-06-17T12:52:35.707704+00:00"
+    },
+    {
+      "command": [
+        "gtimeout",
+        "420",
+        "flutter",
+        "build",
+        "ios",
+        "--debug",
+        "--no-codesign",
+        "--no-pub"
+      ],
+      "returnCode": 124,
+      "startedAt": "2026-06-17T12:56:48.471195+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS hardware",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11 21H461",
+      "role": "auth platform inventory"
+    },
+    {
+      "identifier": "macos",
+      "kind": "desktop",
+      "name": "macOS",
+      "notes": [],
+      "os": "macOS 26.4.1 25E253",
+      "role": "unsupported Auth0 interactive platform"
+    },
+    {
+      "identifier": "chrome",
+      "kind": "web",
+      "name": "Chrome",
+      "notes": [],
+      "os": "Chrome 149.0.7827.115",
+      "role": "unsupported Auth0 interactive platform"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/interactive-mobile-login-not-captured.txt",
+    "video/interactive-mobile-login-not-captured.txt",
+    "device-logs/platform-inventory.txt"
+  ],
+  "item": {
+    "slug": "auth0-cross-platform-evaluation",
+    "source": "user-goal#auth0-cross-project",
+    "title": "Evaluate Auth0 implementation and cross-project reuse"
+  },
+  "notes": [
+    "HydraCam auth tests/analyzer and web build passed; media-timeline Auth0 provider switch implemented and focused-tested; real mobile Google/Auth0 login remains credential/browser-step gated; macOS/iOS build lanes timed out.",
+    "HydraCam auth tests/analyzer and web build passed; media-timeline Auth0 provider switch implemented and focused-tested; real mobile Google/Auth0 login remains credential/browser-step gated; macOS/iOS build lanes timed out."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

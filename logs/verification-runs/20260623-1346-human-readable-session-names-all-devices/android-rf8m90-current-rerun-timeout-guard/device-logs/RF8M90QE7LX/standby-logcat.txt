@@ -1,0 +1,550 @@
+--------- beginning of main
+06-23 15:22:14.848 24738 24738 D ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+--------- beginning of system
+06-23 15:22:14.865   982  1015 I ActivityManager: Force stopping com.amaia23.hydracam appid=10325 user=0: from pid 24738
+06-23 15:22:14.873   982  1015 I ActivityManager: Killing 24639:com.amaia23.hydracam/u0a325 (adj 0): stop com.amaia23.hydracam due to from pid 24738
+06-23 15:22:14.876   982  1045 I libprocessgroup: Successfully killed process cgroup uid 10325 pid 24639 in 0ms
+06-23 15:22:14.878   982  1015 D ActivityManager: proc ProcessRecord{e6e6af3 24639:com.amaia23.hydracam/u0a325} already removed. so we skip next process.
+06-23 15:22:14.878   982  1015 W ActivityTaskManager: Force removing ActivityRecord{19c7744 u0 com.amaia23.hydracam/.MainActivity t383 f}}: app died, no saved state
+06-23 15:22:14.878   982  1015 I ActivityTaskManager: Removing activity ActivityRecord{19c7744 u0 com.amaia23.hydracam/.MainActivity t383 f}}(appDied)  from stack callers=com.android.server.wm.ActivityRecord.handleAppDied:4286 com.android.server.wm.WindowProcessController.handleAppDied:1287 com.android.server.wm.ActivityTaskManagerService$LocalService.handleAppDied:7108 com.android.server.am.ActivityManagerService.handleAppDiedLocked:3649 com.android.server.am.ProcessList.removeProcessLocked:3771 
+06-23 15:22:14.879   982  1015 D InputTransport: Input channel destroyed: '3fe5559', fd=980
+06-23 15:22:14.879   982  1015 W InputManager-JNI: Input channel object '3fe5559 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity (client)' was disposed without first being removed with the input manager!
+06-23 15:22:14.879   982  1015 D InputTransport: Input channel destroyed: '3fe5559', fd=981
+06-23 15:22:14.879   982  1015 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-23 15:22:14.882   708  6159 I CameraService: onUidStateChanged: uid=10201, procState is changed. (17 -> 10)
+06-23 15:22:14.882   597   597 I Layer   : id=6685 removeFromCurrentState 3fe5559 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0 (109)
+06-23 15:22:14.883   597   644 I SurfaceFlinger: id=6687 createSurf (0x0),-1 flag=24004, Task=383#1
+06-23 15:22:14.885   597   898 I SurfaceFlinger: id=6685 Removed 3fe5559 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0 (110)
+06-23 15:22:14.888   982  1015 D ActivityTaskManager: Top Process State changed to PROCESS_STATE_TOP_SLEEPING#2
+06-23 15:22:14.891   982  1035 W ActivityTaskManager: Can't find TaskDisplayArea to determine support for multi window. Task id=383 attached=false
+06-23 15:22:14.892   982  1035 W ActivityTaskManager: Can't find TaskDisplayArea to determine support for multi window. Task id=383 attached=false
+06-23 15:22:14.892   982  1035 W ActivityTaskManager: Can't find TaskDisplayArea to determine support for multi window. Task id=383 attached=false
+06-23 15:22:14.894   597   597 I Layer   : id=6682 removeFromCurrentState ActivityRecord{19c7744 u0 com.amaia23.hydracam/.MainActivity t383}#0 (110)
+06-23 15:22:14.894   597   597 I Layer   : id=6681 removeFromCurrentState Task=383#0 (110)
+06-23 15:22:14.894   597   597 I Layer   : id=6687 removeFromCurrentState Task=383#1 (110)
+06-23 15:22:14.894   597   597 I SurfaceFlinger: id=6682 Removed ActivityRecord{19c7744 u0 com.amaia23.hydracam/.MainActivity t383}#0 (110)
+06-23 15:22:14.895   597   597 I SurfaceFlinger: id=6687 Removed Task=383#1 (110)
+06-23 15:22:14.896   597   597 I Layer   : id=6685 Destroyed 3fe5559 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0
+06-23 15:22:14.897   597   597 I Layer   : id=6687 Destroyed Task=383#1
+06-23 15:22:14.897   597   597 I Layer   : id=6682 Destroyed ActivityRecord{19c7744 u0 com.amaia23.hydracam/.MainActivity t383}#0
+06-23 15:22:14.904   982   982 D SamsungAlarmManager: Remove alarm for next reason : android.intent.action.PACKAGE_RESTARTED : package: com.amaia23.hydracam
+06-23 15:22:14.911  1324  1324 E PhoneInterfaceManager: [PhoneIntfMgr] getCarrierPackageNamesForIntentAndPhone: No UICC
+06-23 15:22:14.911  1324  1324 D CarrierSvcBindHelper: No carrier app for: 0
+06-23 15:22:14.912  1324  1324 E PhoneInterfaceManager: [PhoneIntfMgr] getCarrierPackageNamesForIntentAndPhone: No UICC
+06-23 15:22:14.912  1324  1324 D CarrierSvcBindHelper: No carrier app for: 1
+06-23 15:22:14.913  1655  1655 D RegisteredNfcFServicesCache: Service unchanged, not updating
+06-23 15:22:14.916   982  1043 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_RESTARTED dat=package:com.amaia23.hydracam flg=0x10 (has extras) } to android/com.kddi.android.CpaNotiReceiver
+06-23 15:22:14.919   708  6159 I CameraService: onUidStateChanged: uid=10201, procState is changed. (10 -> 19)
+06-23 15:22:14.923   982  1042 W UsageStatsService: Unexpected activity event reported! (com.amaia23.hydracam/com.amaia23.hydracam.MainActivity event : 23 instanceId : 147988567)
+06-23 15:22:14.925  1777  1777 I RecentsView: onTaskRemoved() taskId : 383
+06-23 15:22:14.925  1777  1777 I RecentsView: onTaskRemoved() taskId : 383
+06-23 15:22:14.988 24743 24743 D ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+06-23 15:22:14.993   982  1043 I SemDvfsHyPerManager: acquire hyper - APP_LAUNCH/982@34, type = -999
+06-23 15:22:14.993   982  1015 D ActivityTaskManager: startActivityAsUser: callingPid=24743, callingUid=2000, caller=com.android.server.wm.ActivityTaskManagerService.startActivityAsUser:1757 com.android.server.am.ActivityManagerService.startActivityAsUserWithFeature:3543 com.android.server.am.ActivityManagerShellCommand.runStartActivity:624 com.android.server.am.ActivityManagerShellCommand.onCommand:204 com.android.modules.utils.BasicShellCommandHandler.exec:97 android.os.ShellCommand.exec:38 com.android.server.am.ActivityManagerService.onShellCommand:10527 
+06-23 15:22:14.995   564   605 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 516670  [982 / 34]    HINT : APP_LAUNCH    list : 
+06-23 15:22:14.995   982  1015 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity (has extras)} from uid 2000
+06-23 15:22:14.996   982  1015 D ActivityTaskManager: TaskLaunchParamsModifier:task=null activity=ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@181024200
+06-23 15:22:14.996   982  1015 D [secipm]: mSecIpmManager Preload com.amaia23.hydracam dex files
+06-23 15:22:14.996   982  1015 D ActivityTaskManager: TaskLaunchParamsModifier:task=null activity=ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t-1} display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@181024200 non-freeform-display display-area=DefaultTaskDisplayArea@181024200 maximized-bounds
+06-23 15:22:14.996   982  1015 I SemDvfsHyPerManager: acquire hyper - AMS_ACT_START/982@17, type = -999
+06-23 15:22:14.996   982  1015 D ActivityManagerPerformance: AMP_acquire() ACT_START
+06-23 15:22:14.996   982  2274 D PkgPredictorService-IpmAdcpController: create a new DexPreloadTask pkg:com.amaia23.hydracam  path:/data/app/~~NuLZAGk_VYRTeqSsVILYJQ==/com.amaia23.hydracam-kOD9L2qv0VuFaDaGt3Mnew==
+06-23 15:22:14.997   982  1015 W ActivityTaskManager: Can't find TaskDisplayArea to determine support for multi window. Task id=384 attached=false
+06-23 15:22:14.997  3187  3187 I SemDvfsHyPerManager: acquire hyper - APP_START_SHORT/3187@13, type = -999
+06-23 15:22:14.997   597   898 I SurfaceFlinger: id=6688 createSurf (0x0),-1 flag=24004, Task=384#0
+06-23 15:22:15.000   982  1015 D ActivityTaskManager: Top Process State changed to PROCESS_STATE_TOP_SLEEPING#2
+06-23 15:22:15.000   982  1015 D ActivityTaskManager: TaskLaunchParamsModifier:task=Task{4ff29df #384 type=standard A=10325:com.amaia23.hydracam U=0 visible=false mode=fullscreen translucent=true sz=0} activity=ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t-1} display-from-task=0 display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@181024200 non-freeform-display display-area=DefaultTaskDisplayArea@181024200 maximized-bounds
+06-23 15:22:15.001   564   605 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 499517  [982 / 17]    HINT : AMS_ACT_START    list : 
+06-23 15:22:15.001   982  1015 D CompatibilityChangeReporter: Compat change id reported: 174042980; UID 10325; state: DISABLED
+06-23 15:22:15.001   564   605 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 5121613  [3187 / 13]    HINT : APP_START    list : [TIMEOUT / 1500] 
+06-23 15:22:15.002   982  1015 D CompatibilityChangeReporter: Compat change id reported: 184838306; UID 10325; state: DISABLED
+06-23 15:22:15.002   982  1015 D CompatibilityChangeReporter: Compat change id reported: 185004937; UID 10325; state: DISABLED
+06-23 15:22:15.002   982  1015 D CompatibilityChangeReporter: Compat change id reported: 181136395; UID 10325; state: DISABLED
+06-23 15:22:15.002   982  1015 D CompatibilityChangeReporter: Compat change id reported: 174042936; UID 10325; state: DISABLED
+06-23 15:22:15.003   597   898 I SurfaceFlinger: id=6689 createSurf (0x0),-1 flag=80004, ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t384}#0
+06-23 15:22:15.004   982  1015 W WindowManager: Prepare app transition: mNextAppTransitionRequests=[TRANSIT_OPEN], mNextAppTransitionFlags=, displayId: 0 Callers=com.android.server.wm.DisplayContent.prepareAppTransition:6369 com.android.server.wm.DisplayContent.prepareAppTransition:6364 com.android.server.wm.Task.startActivityLocked:8727 com.android.server.wm.ActivityStarter.startActivityInner:2911 com.android.server.wm.ActivityStarter.startActivityUnchecked:2324 
+06-23 15:22:15.005   982  1015 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10325; state: DISABLED
+06-23 15:22:15.005   982  1015 D ActivityTaskManager: Add starting com.android.server.wm.ActivityRecord$AddStartingWindow@e0f62c: typeParam=43
+06-23 15:22:15.005   982  1015 D MARsPolicyManager: onPackageResumedFG pkgName = com.amaia23.hydracam, userId = 0
+06-23 15:22:15.006  1349  1349 D ShellTaskOrganizer: addStartingWindow: info=StartingWindowInfo{taskId=384 targetActivityInfo=null displayId=0 topActivityType=1 preferredStartingWindowType=2b insetsState=null topWindowLayoutParams=null mainWindowLayoutParams=null splashScreenThemeResId 7f0e00a2
+06-23 15:22:15.006   982  1015 W WindowManager: Prepare app transition: mNextAppTransitionRequests=[TRANSIT_OPEN, TRANSIT_OPEN], mNextAppTransitionFlags=, displayId: 0 Callers=com.android.server.wm.DisplayContent.prepareAppTransition:6369 com.android.server.wm.Task.resumeTopActivityInnerLocked:8409 com.android.server.wm.Task.resumeTopActivityInnerLocked:8142 com.android.server.wm.Task.resumeTopActivityUncheckedLocked:8040 com.android.server.wm.RootWindowContainer.resumeFocusedTasksTopActivities:2809 
+06-23 15:22:15.006  1349  1546 D StartingSurfaceDrawer: addSplashScreen com.amaia23.hydracam theme=7f0e00a2 task=384 suggestType=3
+06-23 15:22:15.007   982  1015 I SemDvfsHyPerManager: acquire hyper - AMS_RESUME_TAIL/982@19, type = -999
+06-23 15:22:15.007   982  1015 I SemDvfsHyPerManager: acquire hyper - AMS_ACT_LAZY/982@20, type = -999
+06-23 15:22:15.007   982  1015 D ActivityManagerPerformance: AMP_acquire() TAIL
+06-23 15:22:15.007   982  1015 D ActivityManagerPerformance: AMP_release() ACT_START
+06-23 15:22:15.007   564   605 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 501520  [982 / 19]    HINT : AMS_RESUME_TAIL    list : 
+06-23 15:22:15.007   564   605 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 499517
+06-23 15:22:15.008   982  1015 I SemDvfsHyPerManager: acquire hyper - AMS_APP_LAUNCH/982@18, type = -999
+06-23 15:22:15.008   564   605 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 500518  [982 / 18]    HINT : AMS_APP_LAUNCH    list : 
+06-23 15:22:15.009  3187  3187 I SemDvfsHyPerManager: acquire hyper - APP_START/3187@14, type = -999
+06-23 15:22:15.010   564   605 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 5124815  [3187 / 14]    HINT : APP_START    list : 
+06-23 15:22:15.010   982  1015 D InputTransport: Input channel constructed: '40f868a', fd=894
+06-23 15:22:15.010   982  1015 D InputTransport: Input channel constructed: '40f868a', fd=980
+06-23 15:22:15.010   982  1015 D InputTransport: Input channel constructed: '40f868a', fd=981
+06-23 15:22:15.010   597   898 I SurfaceFlinger: id=6690 createSurf (0x0),-1 flag=80004, 40f868a Splash Screen com.amaia23.hydracam#0
+06-23 15:22:15.011   982  1015 D InputTransport: Input channel destroyed: '40f868a', fd=981
+06-23 15:22:15.011  1349  1546 I ViewRootImpl@41d63a2[hydracam]: setView = android.widget.FrameLayout@b109169 TM=true
+06-23 15:22:15.012   982  1034 W ActivityManager: ProcessRecord{e6e6af3 0:com.amaia23.hydracam/u0a325} is attached to a previous process 24639
+06-23 15:22:15.013   982  1034 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10325; state: DISABLED
+06-23 15:22:15.013   982  1034 D CompatibilityChangeReporter: Compat change id reported: 177438394; UID 10325; state: DISABLED
+06-23 15:22:15.013   982  1034 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 10325; state: DISABLED
+06-23 15:22:15.013   982  1034 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 10325; state: ENABLED
+06-23 15:22:15.014   982  1015 V WindowManager: Relayout Window{40f868a u0 Splash Screen com.amaia23.hydracam}: viewVisibility=0 req=1080x2280 d0
+06-23 15:22:15.014   597   898 I SurfaceFlinger: id=6691 createSurf (1x1),-3 flag=40004, Splash Screen com.amaia23.hydracam$_1349#0
+06-23 15:22:15.015   982  1015 D WindowManager: makeSurface duration=1 name=Splash Screen com.amaia23.hydracam$_1349
+06-23 15:22:15.016   982  1015 V WindowManager: Relayout hash=40f868a, pid=1349: mAttrs={(0,0)(fillxfill) sim={adjust=pan} ty=APPLICATION_STARTING fmt=TRANSLUCENT wanim=0x1030001
+06-23 15:22:15.016   982  1015 V WindowManager:   fl=81030118
+06-23 15:22:15.016   982  1015 V WindowManager:   pfl=36000010
+06-23 15:22:15.016   982  1015 V WindowManager:   apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+06-23 15:22:15.016   982  1015 V WindowManager:   bhv=DEFAULT
+06-23 15:22:15.016   982  1015 V WindowManager:   fitSides= naviIconColor=0}
+06-23 15:22:15.017  1349  1546 I ViewRootImpl@41d63a2[hydracam]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)0 dur=3 res=0x7 s={true 479870121632} ch=true fn=-1
+06-23 15:22:15.017  1349  1580 D OpenGLRenderer: eglCreateWindowSurface
+06-23 15:22:15.017  1349  1546 I ViewRootImpl@41d63a2[hydracam]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.performTraversals:4198 android.view.ViewRootImpl.doTraversal:2924 
+06-23 15:22:15.017  1349  1546 D ViewRootImpl@41d63a2[hydracam]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-23 15:22:15.017  1349  1546 D ViewRootImpl@41d63a2[hydracam]: Creating frameCompleteCallback
+06-23 15:22:15.017  1349  2074 D ViewRootImpl@41d63a2[hydracam]: Received frameDrawingCallback frameNum=1. Creating transactionCompleteCallback=false
+06-23 15:22:15.023  1349  1580 D ViewRootImpl@41d63a2[hydracam]: Received frameCompleteCallback  lastAcquiredFrameNum=1 lastAttemptedDrawFrameNum=1
+06-23 15:22:15.024  1349  1546 I ViewRootImpl@41d63a2[hydracam]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-23 15:22:15.024  1349  1546 I ViewRootImpl@41d63a2[hydracam]: [DP] rdf()
+06-23 15:22:15.024  1349  1546 D ViewRootImpl@41d63a2[hydracam]: reportDrawFinished (fn: -1) 
+06-23 15:22:15.024   982  1015 D WindowManager: finishDrawingWindow: Window{40f868a u0 Splash Screen com.amaia23.hydracam} mDrawState=DRAW_PENDING
+06-23 15:22:15.025   982  1035 D TaskOrganizerController: Task appeared taskId=384
+06-23 15:22:15.025  1349  1349 D FullscreenTaskListener: Fullscreen Task Appeared: #384, caller=com.android.wm.shell.ShellTaskOrganizer.onTaskAppeared:387 com.android.wm.shell.ShellTaskOrganizer.onTaskAppeared:376 android.window.TaskOrganizer$1.lambda$onTaskAppeared$4$TaskOrganizer$1:297 
+06-23 15:22:15.050   982  4043 D InputMethodManagerService: removeClient
+06-23 15:22:15.050   536   536 I Zygote  : Process 24639 exited due to signal 9 (Killed)
+06-23 15:22:15.050   982  1015 V ActivityManager: Got obituary of 24639:com.amaia23.hydracam
+06-23 15:22:15.051   982  1034 W ActivityManager: setHasOverlayUi called on unknown pid: 24639
+06-23 15:22:15.051   982  1044 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10325; state: ENABLED
+06-23 15:22:15.051   560   560 I Sensors : batch(0) - accelerometer_sensor try to batching with 180000000
+06-23 15:22:15.052 13610 13610 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-23 15:22:15.052   982  3236 D SensorService: Calling activate off
+06-23 15:22:15.053   560   560 I Sensors : batch(0) - accelerometer_sensor try to batching with 180000000
+06-23 15:22:15.055   982  3236 D SensorService: Calling activate off
+06-23 15:22:15.057   536   536 D Zygote  : Forked child process 24753
+06-23 15:22:15.058   982  1044 I ActivityManager: Start proc 24753:com.amaia23.hydracam/u0a325 for top-activity {com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+06-23 15:22:15.066 24753 24753 I maia23.hydraca: Late-enabling -Xcheck:jni
+06-23 15:22:15.088 13610 13615 I adbd    : jdwp connection from 24753
+06-23 15:22:15.089 24753 24753 E USNET   : USNET: appName: com.amaia23.hydracam
+06-23 15:22:15.091 24753 24753 D ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+06-23 15:22:15.095 24753 24753 D ActivityThread: setConscryptValidator
+06-23 15:22:15.095 24753 24753 D ActivityThread: setConscryptValidator - put
+06-23 15:22:15.098   982  4682 I ActivityManager: DSS OFF for com.amaia23.hydracam
+06-23 15:22:15.101   982  4682 I DexController: getTaskHasActivityIsWaitingToRun: r=ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t384}, app=ProcessRecord{c7d4918 24753:com.amaia23.hydracam/u0a325}
+06-23 15:22:15.101   982  4682 D ActivityManager: attachApplicationLocked() app=ProcessRecord{c7d4918 24753:com.amaia23.hydracam/u0a325} app.isolatedEntryPoint=null instr2=null
+06-23 15:22:15.101   982  4682 V WindowManager: rotationForOrientation(orient=SCREEN_ORIENTATION_NOSENSOR (5), last=ROTATION_0 (0)); user=ROTATION_0 (0) 
+06-23 15:22:15.101   982  4682 D WindowManager: rotationForOrientation, orientationSource=Window{31b2d7a u0 NotificationShade}
+06-23 15:22:15.101   982  4682 V WindowManager: Computed rotation=ROTATION_0 (0) for display id=0 based on lastOrientation=SCREEN_ORIENTATION_NOSENSOR (5) and oldRotation=ROTATION_0 (0), caller=com.android.server.wm.DisplayRotation.updateOrientation:407 com.android.server.wm.DisplayContent.updateOrientation:1939 com.android.server.wm.DisplayContent.updateOrientation:1877 com.android.server.wm.RootWindowContainer.ensureVisibilityAndConfig:2207 com.android.server.wm.ActivityTaskSupervisor.realStartActivityLocked:939 com.android.server.wm.RootWindowContainer.startActivityForAttachedApplicationIfNeeded:2361 
+06-23 15:22:15.102   982  4682 D TspStateManager: updateCustomValue customSetting=
+06-23 15:22:15.102   982  4682 D TspStateManager: updateCustomValue customSetting=
+06-23 15:22:15.102   982  1189 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_CREATE, pkgName: com.amaia23.hydracam, userId: 0
+06-23 15:22:15.102   982  4682 D SGM:PkgDataHelper: notifyAppCreate(), pkgName: com.amaia23.hydracam, userId: 0, sendRet: true
+06-23 15:22:15.102   982  4682 D InputDispatcher: Focused application set to (0): 4b9e07e
+06-23 15:22:15.103   982  4682 D SGM:GameManager: TaskStackListener.onTaskFocusChanged(), taskId=384, focused=true
+06-23 15:22:15.103   982  4682 D SGM:GameManager:   sendRunningComponentFocus(), pkgName: com.amaia23.hydracam, userId: 0
+06-23 15:22:15.103   982  1189 D SGM:GameManager: onLooperPrepared(), msg: MSG_TASK_FOCUSED, pkgName: com.amaia23.hydracam, userId: 0
+06-23 15:22:15.103   982  1189 D SGM:GameManager: handleTaskFocused().
+06-23 15:22:15.103   982  1189 D SGM:GameManager:   handleTaskFocused(), pkgName: com.amaia23.hydracam, userID:0
+06-23 15:22:15.103   982  1189 D SGM:GameManager: handleResume().
+06-23 15:22:15.103   982  1189 D SGM:NetworkLimit: callRelease
+06-23 15:22:15.103   982  1189 D SGM:SystemHelper: callReleaseBlock needReleaseBlock:false
+06-23 15:22:15.103   982  1189 D SGM:GameManager:   handleResume(). device is locked yet. ignore
+06-23 15:22:15.103   982  4682 W WindowManager: Execute app transition: mNextAppTransitionRequests=[TRANSIT_OPEN, TRANSIT_OPEN], mNextAppTransitionFlags=, displayId: 0 Callers=com.android.server.wm.RootWindowContainer.executeAppTransitionForAllDisplay:2706 com.android.server.wm.ActivityTaskSupervisor.reportResumedActivityLocked:2255 com.android.server.wm.ActivityRecord.completeResumeLocked:6361 com.android.server.wm.Task.minimalResumeActivityLocked:7470 com.android.server.wm.ActivityTaskSupervisor.realStartActivityLocked:1162 
+06-23 15:22:15.108   982  1034 D SGM:GameManager: noteResumeComponent(), received pkgName: com.amaia23.hydracam, userId: 0
+06-23 15:22:15.108   982  1034 I GameSDK@LifeCycle: noteResumeComponent(): package name  : com.amaia23.hydracam
+06-23 15:22:15.108   982  1032 D NetworkPolicy: onUidStateChanged() uid: 10325, isForeground(false, 12)
+06-23 15:22:15.108   982   982 I CocktailBarManagerServiceContainer: handleMessage: entry what = 5
+06-23 15:22:15.108   982  1032 D SSRM:LoadDetectMonitor: PID = 24753, UID = 10325
+06-23 15:22:15.108   982  1189 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_RESUME, pkgName: com.amaia23.hydracam, userid: 0
+06-23 15:22:15.108   982  1189 D SGM:GameManager: handleResume().
+06-23 15:22:15.109   982  1189 D SGM:NetworkLimit: callRelease
+06-23 15:22:15.109   982  1189 D SGM:SystemHelper: callReleaseBlock needReleaseBlock:false
+06-23 15:22:15.109   982  1189 D SGM:GameManager:   handleResume(). device is locked yet. ignore
+06-23 15:22:15.109   982  2306 I MediaSessionMonitor: Media session stopped : controllerList empty
+06-23 15:22:15.110  5828  5828 I Utils   : HomePackage : com.sec.android.app.launcher, resumePackageName : com.amaia23.hydracam
+06-23 15:22:15.117 24753 24753 D ActivityThread: handleBindApplication()++ app=com.amaia23.hydracam
+06-23 15:22:15.118 24753 24753 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10325; state: ENABLED
+06-23 15:22:15.240   982  1395 D MdnieScenarioControlService:  packageName : com.amaia23.hydracam    className : com.amaia23.hydracam.MainActivity
+06-23 15:22:15.240   982  1395 V MdnieScenarioControlService: setUIMode from UI function(3)
+06-23 15:22:15.308   564 24749 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 501520
+06-23 15:22:15.341   982  1395 V MdnieScenarioControlService: mAclOffEnabled : true mAclPreviewState : false mAclCompensationState : false
+06-23 15:22:15.605   982  1034 W ActivityTaskManager: Activity top resumed state loss timeout for ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t384}
+06-23 15:22:15.605   982  1034 W ActivityTaskManager: Activity pause timeout for ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t384}
+06-23 15:22:15.605   982  1034 D SGM:GameManager: notePauseComponent(), received pkgName: com.amaia23.hydracam, userId: 0
+06-23 15:22:15.606   982   982 I CocktailBarManagerServiceContainer: handleMessage: entry what = 6
+06-23 15:22:15.701   564 24746 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 516670
+06-23 15:22:15.705  1777  2924 I RecentModel: onTaskStackChangedBackground
+06-23 15:22:15.787 24753 24753 V GraphicsEnvironment: ANGLE Developer option for 'com.amaia23.hydracam' set to: 'default'
+06-23 15:22:15.787 24753 24753 V GraphicsEnvironment: App is not on the allowlist for updatable production driver.
+06-23 15:22:15.792 24753 24753 D LoadedApk: LoadedApk::makeApplication() appContext.mOpPackageName=com.amaia23.hydracam appContext.mBasePackageName=com.amaia23.hydracam
+06-23 15:22:15.792 24753 24753 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+06-23 15:22:15.798 21896 21896 I wpa_supplicant: Heartbeat 33349
+06-23 15:22:15.841 24753 24753 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+06-23 15:22:15.882 24753 24753 D ActivityThread: handleBindApplication() --
+06-23 15:22:15.895 24753 24773 D OpenGLRenderer: RenderThread::requireGlContext()
+06-23 15:22:15.912 24753 24773 D OpenGLRenderer: RenderThread::setGrContext()
+06-23 15:22:15.945   982  1399 I GenerationRegistry: mBackingStore.isClosed() : false
+06-23 15:22:15.990 24753 24783 I ResourceExtractor: Found extracted resources res_timestamp-19-1782220913243
+06-23 15:22:15.990 24753 24782 D FlutterJNI: Beginning load of flutter...
+06-23 15:22:16.006 24753 24782 D FlutterJNI: flutter (null) was loaded normally!
+06-23 15:22:16.012   564 24750 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 500518
+06-23 15:22:16.015 24753 24784 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+06-23 15:22:16.068 13610 13610 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-23 15:22:16.085 24753 24753 W maia23.hydraca: Accessing hidden method Landroid/view/SurfaceControl$Builder;->setHidden(Z)Landroid/view/SurfaceControl$Builder; (blocked, linking, denied)
+06-23 15:22:16.092   516   516 E audit   : type=1400 audit(1782220936.089:389506): avc:  denied  { read } for  pid=24753 comm="maia23.hydracam" name="max_map_count" dev="proc" ino=7276850 scontext=u:r:untrusted_app:s0:c69,c257,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:22:16.092   516   516 E audit   : type=1300 audit(1782220936.089:389506): arch=c00000b7 syscall=56 success=no exit=-13 a0=ffffff9c a1=6dac4b007f a2=0 a3=0 items=0 ppid=536 pid=24753 auid=4294967295 uid=10325 gid=10325 euid=10325 suid=10325 fsuid=10325 egid=10325 sgid=10325 fsgid=10325 tty=(none) ses=4294967295 comm="maia23.hydracam" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c69,c257,c512,c768 key=(null)
+06-23 15:22:16.092   516   516 E audit   : type=1327 audit(1782220936.089:389506): proctitle="com.amaia23.hydracam"
+06-23 15:22:16.114  5828  5828 I Utils   : isCurrentUser current = 0, ownerId = 0
+06-23 15:22:16.115  5828  5828 I TrayVisibilityController: getComputedTrayVisible : keyguardState = 2
+06-23 15:22:16.115  5828  5828 I TrayVisibilityController: updateTrayVisible: State=2 visible=1 mCurrentVisible=1 specificMode=0
+06-23 15:22:16.115  5828  5828 I TrayStateController: onNotifyUpdateTray: state=0
+06-23 15:22:16.137 24753 24785 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+06-23 15:22:16.198   460   460 D io_stats: !@   8,0 r 2737080 92153836 w 5772526 239903632 d 0 0 f 0 0 iot 3285968 0 th 0 0 0 pt 0 inp 0 0 497757.631
+06-23 15:22:16.503   564 24748 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 5121613
+06-23 15:22:16.634 24753 24791 I flutter : The Dart VM service is listening on http://127.0.0.1:35929/bd_aUy3pGyI=/
+06-23 15:22:17.082 13610 13610 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-23 15:22:17.118  5828  5828 I Utils   : isCurrentUser current = 0, ownerId = 0
+06-23 15:22:17.118  5828  5828 I TrayVisibilityController: getComputedTrayVisible : keyguardState = 2
+06-23 15:22:17.119  5828  5828 I TrayVisibilityController: updateTrayVisible: State=2 visible=1 mCurrentVisible=1 specificMode=0
+06-23 15:22:17.119  5828  5828 I TrayStateController: onNotifyUpdateTray: state=0
+06-23 15:22:17.728   708 11475 I CameraService: onUidStateChanged: uid=10201, procState is changed. (19 -> 10)
+06-23 15:22:17.741   708 11475 I CameraService: onUidStateChanged: uid=10201, procState is changed. (10 -> 17)
+06-23 15:22:17.781 24753 24753 D FlutterGeolocator: Attaching Geolocator to activity
+06-23 15:22:17.856   982  3236 W ServiceManager: Permission failure: android.permission.HIGH_SAMPLING_RATE_SENSORS from uid=10325 pid=24753
+06-23 15:22:18.026 24753 24753 W maia23.hydraca: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+06-23 15:22:18.026 24753 24753 W maia23.hydraca: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+06-23 15:22:18.026 24753 24753 W maia23.hydraca: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+06-23 15:22:18.027 24753 24753 W maia23.hydraca: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+06-23 15:22:18.045  1349  1349 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+06-23 15:22:18.047  1349  1559 D Tile.WifiTile: handleUpdateState isTransient=false transientEnabling =false cb.isTransient=false state.state = 2 mStateBeforeClick.value =false enabled =true
+06-23 15:22:18.077 24753 24753 D FlutterRenderer: Width is zero. 0,0
+06-23 15:22:18.089 13610 13610 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-23 15:22:18.095 24753 24753 I DecorView: [INFO] isPopOver=false, config=true
+06-23 15:22:18.095 24753 24753 I DecorView: updateCaptionType >> DecorView@9150110[], isFloating=false, isApplication=true, hasWindowControllerCallback=true, hasWindowDecorCaption=false
+06-23 15:22:18.095 24753 24753 D DecorView: setCaptionType = 0, this = DecorView@9150110[]
+06-23 15:22:18.104 24753 24753 I DecorView: getCurrentDensityDpi: from real metrics. densityDpi=480 msg=resources_loaded
+06-23 15:22:18.149 24753 24753 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=false
+06-23 15:22:18.154   982  3236 D InputTransport: Input channel constructed: 'fe262b6', fd=898
+06-23 15:22:18.154   982  3236 D InputTransport: Input channel constructed: 'fe262b6', fd=981
+06-23 15:22:18.154   982  3236 D InputTransport: Input channel constructed: 'fe262b6', fd=982
+06-23 15:22:18.157   597   645 I SurfaceFlinger: id=6692 createSurf (0x0),-1 flag=80004, fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0
+06-23 15:22:18.158   982  3236 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+06-23 15:22:18.159   982  3236 D InputTransport: Input channel destroyed: 'fe262b6', fd=982
+06-23 15:22:18.165 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: setView = com.android.internal.policy.DecorView@9150110 TM=true
+06-23 15:22:18.657 24753 24753 I flutter : Log registered: {message: Get token, timestamp: 2026-06-23 15:22:18.605846, function: null, file: null}
+06-23 15:22:18.663 24753 24753 I flutter : Log registered: {message: Fetch token, timestamp: 2026-06-23 15:22:18.662528, function: null, file: null}
+06-23 15:22:19.011   564 24751 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 5124815
+06-23 15:22:19.098 13610 13610 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-23 15:22:19.226   982  1297 D NetdEventListenerService: DNS Requested by : 131, 10325, 0
+06-23 15:22:19.329   982  1297 D NetdEventListenerService: DNS Requested by : 131, 10325, 0
+06-23 15:22:19.719 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: stopped(true) old=false
+06-23 15:22:19.735 24753 24753 I Choreographer: Skipped 93 frames!  The application may be doing too much work on its main thread.
+06-23 15:22:19.835   982  1147 D SamsungAlarmManager: Expired : 8
+06-23 15:22:19.835   982  1147 V SamsungAlarmManager: Sending to uid : 1000 action=com.sec.android.alarm.refresh.battery_stats alarm=Alarm{e67128e type 3 origWhen 1437556901 whenElapsed 1437556901 com.sec.android.sdhms}
+06-23 15:22:19.836   982  1147 D ActivityManager: Received BROADCAST intent 0x5bb037d Key{broadcastIntent pkg=com.sec.android.sdhms intent=act=com.sec.android.alarm.refresh.battery_stats flags=0x4000000 u=0} requestCode=0 sent=0 from uid 1000
+06-23 15:22:19.841   982  1147 V SamsungAlarmManager: Sending to uid : 1000 L=b6fee03:*job.delay* alarm=Alarm{7281ebc type 3 origWhen 1437639303 whenElapsed 1437639303 android}
+06-23 15:22:19.843   982  1147 V SamsungAlarmManager: setLocked to kernel - W:1438435803 / NW:1437659920, now=1437650098
+06-23 15:22:19.844   982   982 D SamsungAlarmManager: setInexact (T:3/F:0/AC:false) 20260623T152310 now=1437650100 - CU:1000/CP:982/L:b6fee03:*job.delay*
+06-23 15:22:19.844   982   982 V SamsungAlarmManager: setLocked to kernel - W:1438435803 / NW:1437659920, now=1437650100
+06-23 15:22:19.866 21829 21829 I Finsky  : [2] SCH: job service start with id 9099.
+06-23 15:22:19.882 21829 24500 I Finsky  : [417] SCH: Satisfied jobs for 9099 are: 12-1
+06-23 15:22:19.884 21829 24805 I Finsky  : [419] SCH: Job 12-1 starting
+06-23 15:22:19.885 21829 21829 I Finsky  : [2] WM::SCH: Logging work start for 12-1
+06-23 15:22:19.885 21829 21829 I Finsky  : [2] [ContentSync] job started
+06-23 15:22:19.903   982  1051 D BatteryExternalStatsWorker: update stats : get-stats (63)
+06-23 15:22:19.903   982  1051 D BatteryExternalStatsWorker: WifiActivityEnergyInfo was updated
+06-23 15:22:19.905   982  1051 D BatteryExternalStatsWorker: BluetoothActivityEnergyInfo was updated
+06-23 15:22:19.915   982  4682 D TelephonyManager: requestModemActivityInfo: Sending result to app: ModemActivityInfo{ mTimestamp=1437650170 mSleepTimeMs=1282744302 mIdleTimeMs=69023983 mTxTimeMs[]=[0, 0, 0, 0, 0] mRxTimeMs=74045639}
+06-23 15:22:19.916   982  1051 D BatteryExternalStatsWorker: ModemActivityInfo was updated
+06-23 15:22:19.933   982  1051 E system_server: Cannot read thread CPU times for PID 982
+06-23 15:22:19.939   982  1051 D BatteryExternalStatsWorker: done updateExternalStatsLocked
+06-23 15:22:19.943 24753 24753 I SurfaceView@c92bd1: onWindowVisibilityChanged(4) false io.flutter.embedding.android.FlutterSurfaceView{c92bd1 G.E...... ......I. 0,0-0,0} of ViewRootImpl@c3d260e[MainActivity]
+06-23 15:22:19.949 24753 24753 D FlutterRenderer: Width is zero. 0,0
+06-23 15:22:19.952   982  3236 V WindowManager: Relayout Window{fe262b6 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=4 req=0x0 d0
+06-23 15:22:19.960   982  3236 V WindowManager: Relayout hash=fe262b6, pid=24753: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-23 15:22:19.960   982  3236 V WindowManager:   fl=81810100
+06-23 15:22:19.960   982  3236 V WindowManager:   pfl=12020040
+06-23 15:22:19.960   982  3236 V WindowManager:   vsysui=500
+06-23 15:22:19.960   982  3236 V WindowManager:   apr=LIGHT_NAVIGATION_BARS
+06-23 15:22:19.960   982  3236 V WindowManager:   bhv=DEFAULT
+06-23 15:22:19.960   982  3236 V WindowManager:   fitSides= naviIconColor=0
+06-23 15:22:19.960   982  3236 V WindowManager:   sfl=100000}
+06-23 15:22:19.969 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(0,0)4 dur=15 res=0x1 s={false 0} ch=false fn=-1
+06-23 15:22:19.972   535   657 D IptablesRestoreController: [iptables debug]iptables-restore execute *filter
+06-23 15:22:19.972   535   657 D IptablesRestoreController: -nvx -L tetherctrl_counters
+06-23 15:22:19.972   535   657 D IptablesRestoreController: COMMIT
+06-23 15:22:19.973   535   657 D IptablesRestoreController: [iptables debug]iptables-restore execute done, res : 0
+06-23 15:22:19.973   535   657 D IptablesRestoreController: [iptables debug]iptables-restore execute *filter
+06-23 15:22:19.973   535   657 D IptablesRestoreController: -nvx -L tetherctrl_counters
+06-23 15:22:19.973   535   657 D IptablesRestoreController: COMMIT
+06-23 15:22:19.974   535   657 D IptablesRestoreController: [iptables debug]iptables-restore execute done, res : 0
+06-23 15:22:19.992 24753 24753 D FlutterGeolocator: Creating service.
+06-23 15:22:20.037   982  1399 I SemBatteryUsageStatsProvider: makeWakeupReasonListName WhiteList Tag/tableName=Abort: Device alarmtimer failed to suspend: -16
+06-23 15:22:20.038  3187  3610 I SDHMS:o : Polling event handleUpdatedDeltaLocked will starts.
+06-23 15:22:20.039  3187  3610 I SDHMS:o : handleUpdatedDeltaLocked : 2026-06-23 15:10:46.645 ~ 2026-06-23 15:22:20.039   reason=POLLING
+06-23 15:22:20.039  3187  3610 I SDHMS:o : Polling event handleUpdatedDeltaLocked finished.
+06-23 15:22:20.040   982  1399 D SamsungAlarmManager: setInexact (T:3/F:8/AC:false) 20260623T153220 now=1437650295 - CU:1000/CP:3187/OP:PendingIntent{ee6c72e: PendingIntentRecord{5bb037d com.sec.android.sdhms broadcastIntent}}
+06-23 15:22:20.040   982  1399 V SamsungAlarmManager: setLocked to kernel - W:1438435803 / NW:1437659920, now=1437650296
+06-23 15:22:20.049  3187  3297 I SDHMS:BarTender:Gatherer:BatteryStats: BarTender addStats To DB (9 ms)
+06-23 15:22:20.057  3187  3297 I SDHMS:BarTender:Gatherer:BatteryStats: BarTender addStats To ExtDB (8 ms)
+06-23 15:22:20.057  3187  3297 I SDHMS:BarTender:Gatherer:BatteryStats: refreshBatteryStats completed (17 ms)
+06-23 15:22:20.074  1581 21906 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 17 up
+06-23 15:22:20.108 13610 13610 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-23 15:22:20.134 24753 24753 D FlutterGeolocator: Binding to location service.
+06-23 15:22:20.138   982  1009 I system_server: Background young concurrent copying GC freed 335992(19MB) AllocSpace objects, 110(3752KB) LOS objects, 21% free, 78MB/100MB, paused 10.536ms,275us total 141.661ms
+06-23 15:22:20.146   982  1011 W System  : A resource failed to call release. 
+06-23 15:22:20.184   982  1011 W System  : A resource failed to call release. 
+06-23 15:22:20.200   460   460 D io_stats: !@   8,0 r 2737080 92153836 w 5772585 239904188 d 0 0 f 0 0 iot 3286004 0 th 0 0 0 pt 0 inp 0 0 497761.633
+06-23 15:22:20.220 24753 24753 I flutter : Log registered: {message: M2M token obtained successfully, timestamp: 2026-06-23 15:22:20.218734, function: null, file: null}
+06-23 15:22:20.233   982  1297 D NetdEventListenerService: DNS Requested by : 131, 10325, 0
+06-23 15:22:20.249   982  1276 I SemWifiServiceDetector: Traff. tracking resumed
+06-23 15:22:20.276   982  1297 D NetdEventListenerService: DNS Requested by : 131, 10325, 4
+06-23 15:22:20.281   982  1297 D NetdEventListenerService: DNS Requested by : 131, 10325, 4
+06-23 15:22:20.322 24753 24753 I flutter : Log registered: {message: Launch config from intent: role=standby, preferredMasterIp=null, targetId=RF8M90QE7LX, forceSlaveMode=null, manualLaunch=null, timestamp: 2026-06-23 15:22:20.321705, function: null, file: null}
+06-23 15:22:20.340   982  3236 V WindowManager: Setting visibility of Window{fe262b6 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: false, caller=com.android.server.wm.WindowContainer.sendAppVisibilityToClients:1110 com.android.server.wm.WindowToken.setClientVisible:448 com.android.server.wm.ActivityRecord.setClientVisible:7034 com.android.server.wm.ActivityRecord.notifyAppStopped:5910 com.android.server.wm.ActivityRecord.activityStopped:6554 
+06-23 15:22:20.341   982  1035 I WindowManager: Reparenting to leash, surface=Surface(name=fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5a7b592, leashParent=Surface(name=ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t384})/@0x2a6fb63
+06-23 15:22:20.342   597   645 I SurfaceFlinger: id=6693 createSurf (0x0),-1 flag=24000, Surface(name=fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5a7b592 - animation-leash of starting_reveal#0
+06-23 15:22:20.342   982  1035 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5a7b592 - animation-leash of starting_reveal)/@0x3436360
+06-23 15:22:20.367  1349  2073 I ViewRootImpl@41d63a2[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@b92e48f fN = 2 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-23 15:22:20.367  1349  2073 I ViewRootImpl@41d63a2[hydracam]: mWNT: merge t to BBQ
+06-23 15:22:20.367  1349  2073 I ViewRootImpl@41d63a2[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@4c9131c fN = 2 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-23 15:22:20.367  1349  2073 I ViewRootImpl@41d63a2[hydracam]: mWNT: merge t to BBQ
+06-23 15:22:20.384  1349  2074 I ViewRootImpl@41d63a2[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@117db25 fN = 3 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-23 15:22:20.384  1349  2074 I ViewRootImpl@41d63a2[hydracam]: mWNT: merge t to BBQ
+06-23 15:22:20.399  1349  2073 I ViewRootImpl@41d63a2[hydracam]: mWNT: t = android.view.SurfaceControl$Transaction@f8bc4fa fN = 4 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+06-23 15:22:20.399  1349  2073 I ViewRootImpl@41d63a2[hydracam]: mWNT: merge t to BBQ
+06-23 15:22:20.416  1349  1580 D OpenGLRenderer: setSurface called with nullptr
+06-23 15:22:20.416  1349  1580 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-23 15:22:20.416  1349  1580 D OpenGLRenderer: destroyEglSurface
+06-23 15:22:20.421   982  4682 V WindowManager: Relayout Window{40f868a u0 Splash Screen com.amaia23.hydracam}: viewVisibility=8 req=1080x2280 d0
+06-23 15:22:20.422   982  4682 E WindowManager: win=Window{40f868a u0 Splash Screen com.amaia23.hydracam} destroySurfaces: appStopped=true win.mWindowRemovalAllowed=false win.mRemoveOnExit=false win.mViewVisibility=8 caller=com.android.server.wm.WindowManagerService.tryStartExitingAnimation:2971 com.android.server.wm.WindowManagerService.relayoutWindow:2695 com.android.server.wm.Session.relayout:242 android.view.IWindowSession$Stub.onTransact:790 com.android.server.wm.Session.onTransact:176 android.os.Binder.execTransactInternal:1215 android.os.Binder.execTransact:1179 
+06-23 15:22:20.422 24753 24753 D FlutterGeolocator: Geolocator foreground service connected
+06-23 15:22:20.422 24753 24753 D FlutterGeolocator: Initializing Geolocator services
+06-23 15:22:20.423 24753 24753 D FlutterGeolocator: Flutter engine connected. Connected engine count 1
+06-23 15:22:20.425 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: handleAppVisibility mAppVisible=true visible=false
+06-23 15:22:20.425   982  4682 I WindowManager: Destroying surface Surface(name=Splash Screen com.amaia23.hydracam$_1349)/@0x838c019 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4246 com.android.server.wm.WindowState.destroySurface:4220 com.android.server.wm.WindowManagerService.tryStartExitingAnimation:2971 com.android.server.wm.WindowManagerService.relayoutWindow:2695 com.android.server.wm.Session.relayout:242 android.view.IWindowSession$Stub.onTransact:790 
+06-23 15:22:20.431   597   597 I Layer   : id=6691 removeFromCurrentState Splash Screen com.amaia23.hydracam$_1349#0 (113)
+06-23 15:22:20.432   982  4682 V WindowManager: Relayout hash=40f868a, pid=1349: mAttrs={(0,0)(fillxfill) sim={adjust=pan} ty=APPLICATION_STARTING fmt=TRANSLUCENT wanim=0x1030001
+06-23 15:22:20.432   982  4682 V WindowManager:   fl=81030118
+06-23 15:22:20.432   982  4682 V WindowManager:   pfl=36000010
+06-23 15:22:20.432   982  4682 V WindowManager:   apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+06-23 15:22:20.432   982  4682 V WindowManager:   bhv=DEFAULT
+06-23 15:22:20.432   982  4682 V WindowManager:   fitSides= naviIconColor=0}
+06-23 15:22:20.435  1349  1546 I ViewRootImpl@41d63a2[hydracam]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)8 dur=13 res=0x5 s={false 0} ch=true fn=5
+06-23 15:22:20.435  1349  1546 I ViewRootImpl@41d63a2[hydracam]: dispatchDetachedFromWindow
+06-23 15:22:20.435   597   645 I SurfaceFlinger: id=6691 Removed Splash Screen com.amaia23.hydracam$_1349#0 (113)
+06-23 15:22:20.436   982  4682 I WindowManager: Cancelling animation restarting=false, leash=Surface(name=Surface(name=fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5a7b592 - animation-leash of starting_reveal)/@0x3436360
+06-23 15:22:20.436   982  4682 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{4b9e07e u0 com.amaia23.hydracam/.MainActivity t384})/@0x2a6fb63, destroy=false, surface=Surface(name=fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5a7b592
+06-23 15:22:20.436   982  4682 D InputTransport: Input channel destroyed: '40f868a', fd=894
+06-23 15:22:20.436   982  4682 W InputManager-JNI: Input channel object '40f868a Splash Screen com.amaia23.hydracam (client)' was disposed without first being removed with the input manager!
+06-23 15:22:20.436   982  4682 D InputTransport: Input channel destroyed: '40f868a', fd=980
+06-23 15:22:20.441  1349  1546 D InputTransport: Input channel destroyed: '40f868a', fd=181
+06-23 15:22:20.448   597   597 I Layer   : id=6693 removeFromCurrentState Surface(name=fe262b6 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity)/@0x5a7b592 - animation-leash of starting_reveal#0 (113)
+06-23 15:22:20.448   597   597 I Layer   : id=6690 removeFromCurrentState 40f868a Splash Screen com.amaia23.hydracam#0 (113)
+06-23 15:22:20.448   597   597 I SurfaceFlinger: id=6690 Removed 40f868a Splash Screen com.amaia23.hydracam#0 (113)
+06-23 15:22:20.448   597   597 I Layer   : id=6691 Destroyed Splash Screen com.amaia23.hydracam$_1349#0
+06-23 15:22:20.449   597   597 I Layer   : id=6690 Destroyed 40f868a Splash Screen com.amaia23.hydracam#0
+06-23 15:22:20.454 24753 24753 I SurfaceView@c92bd1: onWindowVisibilityChanged(8) false io.flutter.embedding.android.FlutterSurfaceView{c92bd1 G.E...... ......I. 0,0-0,0} of ViewRootImpl@c3d260e[MainActivity]
+06-23 15:22:20.459 24753 24773 D OpenGLRenderer: setSurface called with nullptr
+06-23 15:22:20.460   982  4682 V WindowManager: Relayout Window{fe262b6 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=8 req=0x0 d0
+06-23 15:22:20.466   982  4682 V WindowManager: Relayout hash=fe262b6, pid=24753: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-23 15:22:20.466   982  4682 V WindowManager:   fl=81810100
+06-23 15:22:20.466   982  4682 V WindowManager:   pfl=12020040
+06-23 15:22:20.466   982  4682 V WindowManager:   vsysui=500
+06-23 15:22:20.466   982  4682 V WindowManager:   apr=LIGHT_NAVIGATION_BARS
+06-23 15:22:20.466   982  4682 V WindowManager:   bhv=DEFAULT
+06-23 15:22:20.466   982  4682 V WindowManager:   fitSides= naviIconColor=0
+06-23 15:22:20.466   982  4682 V WindowManager:   sfl=100000}
+06-23 15:22:20.469 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(0,0)8 dur=8 res=0x1 s={false 0} ch=false fn=-1
+06-23 15:22:20.471 24753 24753 D FlutterRenderer: Width is zero. 0,0
+06-23 15:22:20.472 24753 24753 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-23 15:22:20.479 24753 24753 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-23 15:22:20.478092, function: null, file: null}
+06-23 15:22:20.535 24753 24753 I flutter : Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-06-23 15:22:20.534504, function: null, file: null}
+06-23 15:22:20.587 24753 24753 I flutter : Log registered: {message: Permission request completed.
+06-23 15:22:20.587 24753 24753 I flutter : Granted: [Permission.camera, Permission.locationWhenInUse, Permission.microphone]
+06-23 15:22:20.587 24753 24753 I flutter : Denied: [], timestamp: 2026-06-23 15:22:20.586167, function: requestAllPermissions, file: PermissionService}
+06-23 15:22:20.591 24753 24753 I flutter : Log registered: {message: Retrieved existing Device ID: b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-23 15:22:20.590699, function: null, file: null}
+06-23 15:22:20.592 24753 24753 I flutter : Log registered: {message: Device ID: b59b5fe8-6a61-4387-8617-181f3a5111cd, timestamp: 2026-06-23 15:22:20.591618, function: null, file: null}
+06-23 15:22:20.592 24753 24753 I flutter : Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-23 15:22:20.592114, function: null, file: null}
+06-23 15:22:20.620   982  3236 V WindowManager: Relayout Window{fe262b6 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=8 req=0x0 d0
+06-23 15:22:20.623   982  3236 V WindowManager: Relayout hash=fe262b6, pid=24753: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-23 15:22:20.623   982  3236 V WindowManager:   fl=81810180
+06-23 15:22:20.623   982  3236 V WindowManager:   pfl=12020040
+06-23 15:22:20.623   982  3236 V WindowManager:   vsysui=500
+06-23 15:22:20.623   982  3236 V WindowManager:   apr=LIGHT_NAVIGATION_BARS
+06-23 15:22:20.623   982  3236 V WindowManager:   bhv=DEFAULT
+06-23 15:22:20.623   982  3236 V WindowManager:   fitSides= naviIconColor=0
+06-23 15:22:20.623   982  3236 V WindowManager:   sfl=100000}
+06-23 15:22:20.627 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(0,0)8 dur=8 res=0x1 s={false 0} ch=false fn=-1
+06-23 15:22:20.726   982  4682 D DARUtil : Device owner status not updated yet...
+06-23 15:22:20.726   982  4682 D DARUtil : Not an enterprise user : 0
+06-23 15:22:20.726   982  4682 D DARUtil : Device owner status not updated yet...
+06-23 15:22:20.726   982  4682 D DARUtil : Not an enterprise user : 0
+06-23 15:22:20.759   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.08210305]
+06-23 15:22:20.760   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.06588381]
+06-23 15:22:20.760   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.96925473]
+06-23 15:22:20.760   982  1276 D SemNscXgbMsL1: 1 sample inference time: 0.776539 msecs
+06-23 15:22:20.761   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.369577 msecs
+06-23 15:22:20.763   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.585577 msecs
+06-23 15:22:20.806   476   476 W keymaster_tee: [WRN]begin req PARAMS: A1 P2 D4 
+06-23 15:22:20.812   475 21248 I keystore2: keystore2::security_level: In create_operation. Success to create IKeystoreOperation. 10325, None
+06-23 15:22:20.856 24753 24753 I flutter : Log registered: {message: Backend warm-up completed., timestamp: 2026-06-23 15:22:20.855347, function: null, file: null}
+06-23 15:22:20.909 24753 24753 I flutter : Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-23 15:22:20.909099, function: null, file: null}
+06-23 15:22:21.146   982 24825 D WifiConnectivityMonitor.DnsPingerHandler: setCurrentLinkProperties: lp={InterfaceName: wlan0 LinkAddresses: [ fe80::d887:99ff:fea8:dc4b/64,192.168.178.160/24,fd4e:301d:1ba7:0:d887:99ff:fea8:dc4b/64,fd4e:301d:1ba7:0:7008:3b1b:4b0b:5385/64,2001:9e8:1653:3600:d887:99ff:fea8:dc4b/64,2001:9e8:1653:3600:7008:3b1b:4b0b:5385/64 ] DnsAddresses: [ /2001:9e8:1653:3600:464e:6dff:febe:f3dc,/fd4e:301d:1ba7:0:464e:6dff:febe:f3dc,/192.168.178.1 ] Domains: fritz.box MTU: 1500 ServerAddress: /192.168.178.1 TcpBufferSizes: 524288,1048576,4194304,524288,1048576,4194304 Routes: [ fe80::/64 -> :: wlan0 mtu 0,fd4e:301d:1ba7::/64 -> fe80::464e:6dff:febe:f3dc wlan0 mtu 0,fd4e:301d:1ba7::/64 -> :: wlan0 mtu 0,2001:9e8:1645:de00::/64 -> fe80::464e:6dff:febe:f3dc wlan0 mtu 0,::/0 -> fe80::464e:6dff:febe:f3dc wlan0 mtu 0,2001:9e8:1653:3600::/56 -> fe80::464e:6dff:febe:f3dc wlan0 mtu 0,2001:9e8:1653:3600::/64 -> :: wlan0 mtu 0,192.168.178.0/24 -> 0.0.0.0 wlan0 mtu 0,0.0.0.0/0 -> 192.168.178.1 wlan0 mtu 0 ]}
+06-23 15:22:21.266   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.094496585]
+06-23 15:22:21.266   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.13434534]
+06-23 15:22:21.266   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.9463868]
+06-23 15:22:21.266   982  1276 D SemNscXgbMsL1: 1 sample inference time: 0.978038 msecs
+06-23 15:22:21.268   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.663961 msecs
+06-23 15:22:21.270   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.220269 msecs
+06-23 15:22:21.465   982 24826 D WifiConnectivityMonitor.DnsThread:  [|214] [] []
+06-23 15:22:21.466   982  1286 D WifiConnectivityMonitor.NetworkStatsAnalyzer: DNS resultType : 0, responseTime : 214
+06-23 15:22:21.466   982  1284 D OpenNetworkQos[4.00]: updateBssidLatestDnsResultType - result: 0
+06-23 15:22:21.466   982  1284 D OpenNetworkQos[4.00]: updateBssidNoInternet: mBssidNoInternet = false
+06-23 15:22:21.466   982  1284 D OpenNetworkQos[4.00]: getOpenNetworkQosNoInternetStatus: false
+06-23 15:22:21.466   982  1284 D OpenNetworkQos[4.00]: getOpenNetworkQosScores: 23 20 0 
+06-23 15:22:21.466   982  1284 D SettingsProvider: isChangeAllowed() : name = wifi_wcm_qos_sharing_score_summary
+06-23 15:22:21.467   982  1284 I WifiProfileShare: network QoS data was changed (internet), updateQoSData networkType: true, qosData: false
+06-23 15:22:21.467   982  2326 V WifiProfileShare.Caster: checkAndGetShareData - device locked
+06-23 15:22:21.527 24753 24753 I flutter : Log registered: {message: Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-23 15:22:21.526697, function: null, file: null}
+06-23 15:22:21.528 24753 24753 I flutter : Log registered: {message: Navigating to AutomationStandbyScreen, timestamp: 2026-06-23 15:22:21.527850, function: null, file: null}
+06-23 15:22:21.772   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.060149252]
+06-23 15:22:21.773   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.033961453]
+06-23 15:22:21.773   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.9590053]
+06-23 15:22:21.773   982  1276 D SemNscXgbMsL1: 1 sample inference time: 0.974269 msecs
+06-23 15:22:21.775   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.693308 msecs
+06-23 15:22:21.776   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.289 msecs
+06-23 15:22:22.201   460   460 D io_stats: !@   8,0 r 2737080 92153836 w 5772612 239904416 d 0 0 f 0 0 iot 3286020 0 th 0 0 0 pt 0 inp 0 0 497763.634
+06-23 15:22:22.279   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.083831094]
+06-23 15:22:22.279   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.08999618]
+06-23 15:22:22.280   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.9298017]
+06-23 15:22:22.280   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.056461 msecs
+06-23 15:22:22.282   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.916615 msecs
+06-23 15:22:22.285   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 3.254615 msecs
+06-23 15:22:22.293   516   516 E audit   : type=1400 audit(1782220942.289:389507): avc:  denied  { write } for  pid=30197 comm="ThreadPoolForeg" name="traced_producer" dev="tmpfs" ino=26145 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock_file permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:22:22.293   516   516 E audit   : type=1300 audit(1782220942.289:389507): arch=c00000b7 syscall=203 success=no exit=-13 a0=a7 a1=6e5a5c3a10 a2=1e a3=ffffffff95cd0fd5 items=0 ppid=536 pid=30197 auid=4294967295 uid=10075 gid=10075 euid=10075 suid=10075 fsuid=10075 egid=10075 sgid=10075 fsgid=10075 tty=(none) ses=4294967295 comm="ThreadPoolForeg" exe="/system/bin/app_process64" subj=u:r:gmscore_app:s0:c512,c768 key=(null)
+06-23 15:22:22.293   516   516 E audit   : type=1327 audit(1782220942.289:389507): proctitle="com.google.android.gms"
+06-23 15:22:22.789   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.13783813]
+06-23 15:22:22.790   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.080235995]
+06-23 15:22:22.790   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.9515264]
+06-23 15:22:22.790   982  1276 D SemNscXgbMsL1: 1 sample inference time: 0.929461 msecs
+06-23 15:22:22.792   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.755923 msecs
+06-23 15:22:22.793   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.230038 msecs
+06-23 15:22:23.113   982  4682 D SGM:GameManager: identifyForegroundApp. com.amaia23.hydracam, mCurrentUserId: 0, callerUserId: 0
+06-23 15:22:23.114   982  4682 D SGM:PkgDataHelper: getGamePkgData(). com.amaia23.hydracam
+06-23 15:22:23.114  4126  4183 I a       : [#CMH#] Is foreground game app: false
+06-23 15:22:23.295   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.055617258]
+06-23 15:22:23.296   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.0708381]
+06-23 15:22:23.296   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.9072478]
+06-23 15:22:23.296   982  1276 D SemNscXgbMsL1: 1 sample inference time: 0.764269 msecs
+06-23 15:22:23.298   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.396692 msecs
+06-23 15:22:23.299   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.117693 msecs
+06-23 15:22:23.306 21829 21829 I Finsky  : [2] App states replicator found 16 unowned apps
+06-23 15:22:23.318 21829 21865 I Finsky  : [287] Completed 0 account content syncs with 0 successful.
+06-23 15:22:23.319 21829 21829 I Finsky  : [2] [ContentSync] Installation state replication succeeded.
+06-23 15:22:23.319 21829 21829 I Finsky  : [2] SCH: jobFinished: 12-1. TimeElapsed: 3433ms.
+06-23 15:22:23.319 21829 21829 I Finsky  : [2] WM::SCH: Logging work end for 12-1
+06-23 15:22:23.334 21829 21866 I Finsky  : [288] SCH: Scheduling phonesky job Id: 1-1337, CT: 1782206247833, Constraints: [{ L: 43178249, D: 86378249, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-23 15:22:23.334 21829 21866 I Finsky  : [288] SCH: Scheduling phonesky job Id: 34-532, CT: 1782177219031, Constraints: [{ L: 604800000, D: 2590771253, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-23 15:22:23.334 21829 21866 I Finsky  : [288] SCH: Scheduling phonesky job Id: 34-538, CT: 1782177219033, Constraints: [{ L: 77940214, D: 1373940214, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-23 15:22:23.340 21829 21868 I Finsky  : [290] SCH: Scheduling 1 system job(s)
+06-23 15:22:23.341 21829 21868 I Finsky  : [290] SCH: Scheduling system job Id: 9104, L: 28482742, D: 71682742, C: false, I: false, N: 1
+06-23 15:22:23.350 21829 24805 I Finsky  : [419] SCH: job service finished with id 9099.
+06-23 15:22:23.728   982  1127 I AppOps  : updateUidProcState uid: 1000 procState: 0 capability:15
+06-23 15:22:23.802   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.033862866]
+06-23 15:22:23.802   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.07782402]
+06-23 15:22:23.803   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.8704607]
+06-23 15:22:23.803   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.240615 msecs
+06-23 15:22:23.805   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.017539 msecs
+06-23 15:22:23.807   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.562654 msecs
+06-23 15:22:24.202   460   460 D io_stats: !@   8,0 r 2737080 92153836 w 5772679 239904916 d 0 0 f 0 0 iot 3286032 0 th 0 0 0 pt 0 inp 0 0 497765.635
+06-23 15:22:24.309   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.029571025]
+06-23 15:22:24.310   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.033959538]
+06-23 15:22:24.310   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.916986]
+06-23 15:22:24.310   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.2105 msecs
+06-23 15:22:24.313   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.978461 msecs
+06-23 15:22:24.314   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.593538 msecs
+06-23 15:22:24.587  3187  3607 I SDHMS:C : SIOP:: AP:225(358,110) BAT:320(320,0) USB:342(342,0) CHG:334(334,0) PA:332(332,0) WIFI:319(319,0) LRP:323(323,0) LRF:323(323) LRB:319(319) 
+06-23 15:22:24.817   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.04415229]
+06-23 15:22:24.818   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.10864212]
+06-23 15:22:24.818   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.915227]
+06-23 15:22:24.818   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.140231 msecs
+06-23 15:22:24.820   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 1.958192 msecs
+06-23 15:22:24.822   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.483654 msecs
+06-23 15:22:25.117 13610 13610 W adbd    : timeout expired while flushing socket, closing
+06-23 15:22:25.325   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.04415229]
+06-23 15:22:25.326   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.10864212]
+06-23 15:22:25.326   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.915227]
+06-23 15:22:25.326   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.107115 msecs
+06-23 15:22:25.328   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.047385 msecs
+06-23 15:22:25.330   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.519269 msecs
+06-23 15:22:25.799 21896 21896 I wpa_supplicant: Heartbeat 33350
+06-23 15:22:25.832   982  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.04415229]
+06-23 15:22:25.833   982  1276 D SemNscXgbMsL1: Probability - Real time: [0.10864212]
+06-23 15:22:25.833   982  1276 D SemNscXgbMsL1: Probability - Non real time: [0.915227]
+06-23 15:22:25.833   982  1276 D SemNscXgbMsL1: 1 sample inference time: 1.101808 msecs
+06-23 15:22:25.836   982  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 2.198692 msecs
+06-23 15:22:25.837   982  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 1.484962 msecs
+06-23 15:22:25.888 24753 24753 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-23 15:22:25.887781, function: null, file: null}
+06-23 15:22:25.928 24753 24753 D PhoneWindow: forceLight changed to false [com.amaia23.hydracam/com.amaia23.hydracam.MainActivity] from com.android.internal.policy.PhoneWindow.updateForceLightNavigationBar:4319 com.android.internal.policy.PhoneWindow.setNavigationBarColor:4011 io.flutter.plugin.platform.PlatformPlugin.setSystemChromeSystemUIOverlayStyle:574 io.flutter.plugin.platform.PlatformPlugin.access$700:37 io.flutter.plugin.platform.PlatformPlugin$1.setSystemUiOverlayStyle:125 
+06-23 15:22:25.929 24753 24753 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-23 15:22:25.947 24753 24827 D ProfileInstaller: Installing profile for com.amaia23.hydracam
+06-23 15:22:25.947   982  1043 W BroadcastQueue: Permission Denial: broadcasting Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) } from null (pid=-1, uid=-1) requires com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION due to registered receiver BroadcastFilter{65b77a7 10325/u0 ReceiverList{f132866 24753 com.amaia23.hydracam/10325/u0 remote:ad238c1}}
+06-23 15:22:25.982 24753 24753 I DecorView: notifyKeepScreenOnChanged: keepScreenOn=true
+06-23 15:22:25.985   982  3236 V WindowManager: Relayout Window{fe262b6 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: viewVisibility=8 req=0x0 d0
+06-23 15:22:25.990   982  3236 V WindowManager: Relayout hash=fe262b6, pid=24753: mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+06-23 15:22:25.990   982  3236 V WindowManager:   fl=81810180
+06-23 15:22:25.990   982  3236 V WindowManager:   pfl=12020040
+06-23 15:22:25.990   982  3236 V WindowManager:   vsysui=2500
+06-23 15:22:25.990   982  3236 V WindowManager:   apr=LIGHT_STATUS_BARS
+06-23 15:22:25.990   982  3236 V WindowManager:   bhv=DEFAULT
+06-23 15:22:25.990   982  3236 V WindowManager:   fitSides= naviIconColor=0}
+06-23 15:22:25.994 24753 24753 I ViewRootImpl@c3d260e[MainActivity]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(0,0)8 dur=7 res=0x1 s={false 0} ch=false fn=-1
+06-23 15:22:25.996 24753 24753 D FlutterRenderer: Width is zero. 0,0
+06-23 15:22:26.205   460   460 D io_stats: !@   8,0 r 2737080 92153836 w 5772696 239905512 d 0 0 f 0 0 iot 3286044 0 th 0 0 0 pt 0 inp 0 0 497767.637
+06-23 15:22:26.261   982  1276 I SemWifiServiceDetector: Traff. tracking suspended
+06-23 15:22:27.490   982  1233 D DeviceStorageMonitorService: check() STORAGE TOTAL > 64G
+06-23 15:22:27.492   982  1233 W DeviceStorageMonitorService: updateBroadcasts(/data) oldLevel:0, newLevel:0, seq:1
+06-23 15:22:27.493   428   436 E vold    : getUsedF2fsFileNode -> Cannot Get Used FileNode Number (errno=25 Inappropriate ioctl for device)
+06-23 15:22:27.494   982  1233 D DeviceStorageMonitorService: Cannot get USED FILE NODE NUMBER!!!
+06-23 15:22:27.494   982  1233 D DeviceStorageMonitorService: Available File Node Number is [-1]
+06-23 15:22:27.494   982  1233 W DeviceStorageMonitorService: updateBroadcasts_filenode(/data) fn_oldLevel:0, fn_newLevel:0, seq:1
+06-23 15:22:29.665   982  1147 D SamsungAlarmManager: Expired : 8
+06-23 15:22:29.666   982  1147 V SamsungAlarmManager: Sending to uid : 10075 action=GmsAlarm:FusedLocation:throttling_delivery:36 alarm=Alarm{1889ec type 3 origWhen 1437659920 whenElapsed 1437659920 com.google.android.gms}
+06-23 15:22:29.667   982  1147 D ActivityManager: Received BROADCAST intent 0x37093c1 Key{broadcastIntent pkg=com.google.android.gms/fused_location_provider intent=act=GmsAlarm:FusedLocation:throttling_delivery:36 flg=0x50000000 pkg=com.google.android.gms flags=0x44000000 u=0} requestCode=0 sent=0 from uid 1000
+06-23 15:22:29.679   982  1043 I AppOps  : updateUidProcState uid: 10075 procState: 5 capability:15
+06-23 15:22:29.684   982  1147 V SamsungAlarmManager: setLocked to kernel - W:1438435803 / NW:1437689564, now=1437659940
+06-23 15:22:29.700   915  9393 I FusedLocation: (REDACTED) location delivery to %s blocked - too close
+06-23 15:22:29.703   915  9393 I FusedLocation: (REDACTED) location delivery to %s blocked - too close
+06-23 15:22:29.704   915  9393 I FusedLocation: (REDACTED) location delivery to %s blocked - too close
+06-23 15:22:29.707   982  1582 D SLocation: PositionManager - PassiveonLocationChanged fused 1782220949688
+06-23 15:22:29.710   982  1582 W SLocation: PositionManager - do not refresh last location about fused location
+06-23 15:22:29.710   982  1582 D SLocation: ARDistanceBigData - BIGDATA ARD - receive location
+06-23 15:22:29.710   982  1582 D SLocation: ARDistanceBigData - BIGDATA ARD disabled, onReceiveLocation
+06-23 15:22:29.711   982  1582 D SLocation: PositionManager - receive fused location
+06-23 15:22:29.716   982  4682 D SamsungAlarmManager: setExact (T:3/F:33/AC:false) 20260623T155229 now=1437659971 - CU:10075/CP:915/OP:PendingIntent{bb9d431: PendingIntentRecord{bac7716 com.google.android.gms/fused_location_provider broadcastIntent}}
+06-23 15:22:29.716   982  4682 V SamsungAlarmManager: setLocked to kernel - W:1438435803 / NW:1437689564, now=1437659972
+06-23 15:22:29.731   982  4682 D ActivityManager: Received SERVICE intent 0x68c3b20 Key{startService pkg=com.google.android.gms/com.google.android.gms.findmydevice intent=act=com.google.android.gms.findmydevice.spot.locationreporting.ASSIGN_LOCATION cat=[targeted_intent_op_prefix:.findmydevice.spot.locationreporting.LocationAssigningIntentOperation,SelfLocationUpdate] dat= typ=*/* pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService clip={text/vnd.android.intent hasLabel(0) {I:}} flags=0x2000000 u=0} requestCode=0 from uid 10075
+06-23 15:22:29.744   982  4682 D SamsungAlarmManager: setInexact (T:3/F:0/AC:false) 20360620T152229 now=1437660000 - CU:10075/CP:915/OP:PendingIntent{5282a84: PendingIntentRecord{526826d com.google.android.gms/com.google.android.gms.container startService}}
+06-23 15:22:29.744   982  4682 V SamsungAlarmManager: setLocked to kernel - W:1438435803 / NW:1437689564, now=1437660000
+06-23 15:22:29.768 30197 30197 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.onboardingconsent.api.ConsentManagerApiService.START dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsApiService }
+06-23 15:22:29.768 30197 30197 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.onboardingconsent.api.ConsentManagerApiService.START dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsApiService }
+06-23 15:22:29.779 30197 30264 I ConsentManagerApiServic: (REDACTED) ConsentManagerApiService onGetService success %s
+06-23 15:22:29.790   915   915 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-23 15:22:29.893   982  1247 D UsbStatsMonitor: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 17703855194138
+06-23 15:22:30.210   460   460 D io_stats: !@   8,0 r 2737080 92153836 w 5772741 239905776 d 0 0 f 0 0 iot 3286052 0 th 0 0 0 pt 0 inp 0 0 497771.642
+06-23 15:22:30.467  1349  1349 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+06-23 15:22:30.470  1349  1559 D Tile.WifiTile: handleUpdateState isTransient=false transientEnabling =false cb.isTransient=false state.state = 2 mStateBeforeClick.value =false enabled =true
+06-23 15:22:30.836   475 24822 I keystore2: keystore2::watchdog: Watchdog thread idle -> terminating. Have a great day.
+06-23 15:22:32.985 24753 24753 I flutter : Log registered: {message: Automation request failure: TimeoutException after 0:00:05.000000: Automation screenshot frame wait timed out.
+06-23 15:22:32.985 24753 24753 I flutter : #0      AutomationScreenshotService.capture.<anonymous closure> (package:hydracam/automation/automation_screenshot_service.dart:32:24)
+06-23 15:22:32.985 24753 24753 I flutter : #1      _rootRun (dart:async/zone_root.dart:27:47)
+06-23 15:22:32.985 24753 24753 I flutter : #2      _CustomZone.run (dart:async/zone.dart:726:19)
+06-23 15:22:32.985 24753 24753 I flutter : #3      Future.timeout.<anonymous closure> (dart:async/future_impl.dart:1054:34)
+06-23 15:22:32.985 24753 24753 I flutter : <asynchronous suspension>
+06-23 15:22:32.985 24753 24753 I flutter : #4      AutomationScreenshotService.capture (package:hydracam/automation/automation_screenshot_service.dart:30:5)
+06-23 15:22:32.985 24753 24753 I flutter : <asynchronous suspension>
+06-23 15:22:32.986 24753 24753 I flutter : #5      AutomationBridge._handleRequest (package:hydracam/automation/automation_bridge.dart:209:24)
+06-23 15:22:32.986 24753 24753 I flutter : <asynchronous suspension>
+06-23 15:22:32.986 24753 24753 I flutter : , timestamp: 2026-06-23 15:22:32.973992, function: null, file: null}

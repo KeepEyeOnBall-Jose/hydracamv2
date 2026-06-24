@@ -1,0 +1,234 @@
+{
+  "acceptanceChecks": [
+    "Connected Android phone inventory is captured",
+    "Meta DAT entitlement passes with GH_TOKEN from gh auth token",
+    "Ray-Ban Meta pairing/DAT source is detected or a concrete pairing blocker is recorded",
+    "Galaxy Watch4 Wear OS debug/BODY_SENSORS path is detected or a concrete permission blocker is recorded",
+    "A real clap/flash wearable replay pack is captured or blocked on a specific missing device capability"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:18:43.434526+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "45",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:18:46.542403+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:19:02.731396+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:19:05.911415+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "GH_TOKEN=\"$(gh auth token)\" python3 scripts/check_wearable_replay_readiness.py dat --check-network --timeout-seconds 15"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:19:38.554446+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "25",
+        "adb",
+        "mdns",
+        "services"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:19:48.103953+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "for s in 29d816ac550b7ece RF8M21J8XRT RF8M90QE7LX; do echo \"===== $s props =====\"; timeout 10 adb -s \"$s\" shell getprop ro.product.model; timeout 10 adb -s \"$s\" shell getprop ro.build.version.release; echo \"===== $s wearable/meta packages =====\"; timeout 15 adb -s \"$s\" shell pm list packages | grep -Ei \"facebook|meta|oculus|stella|samsung.android.app.watch|wear|galaxy|health\" || true; echo \"===== $s bluetooth pairing hints =====\"; timeout 20 adb -s \"$s\" shell dumpsys bluetooth_manager | grep -Ei \"ray|ban|meta|galaxy|watch|wear|buds|rb|name|bond|connected\" | head -200 || true; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:20:08.110338+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "s=RF8M21J8XRT; echo \"===== $s focused packages =====\"; timeout 15 adb -s \"$s\" shell pm list packages | grep -Ei \"hydracam|keepeyeonball|stella|facebook|meta|watchmanager|wear|health\" || true; echo \"===== $s companion device associations =====\"; timeout 15 adb -s \"$s\" shell dumpsys companiondevice || true; echo \"===== $s developer settings =====\"; timeout 10 adb -s \"$s\" shell settings get global adb_enabled; timeout 10 adb -s \"$s\" shell settings get global adb_wifi_enabled; timeout 10 adb -s \"$s\" shell settings get global development_settings_enabled"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:20:56.663127+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "adb -s RF8M21J8XRT exec-out screencap -p > logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/screenshots/RF8M21J8XRT-current-screen.png"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:21:24.289495+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "15",
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "5",
+        "/sdcard/hydracam-wearable-phone-connected.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:21:29.781397+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "pull",
+        "/sdcard/hydracam-wearable-phone-connected.mp4",
+        "logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/video/RF8M21J8XRT-phone-connected.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:21:40.626259+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "timeout 20 adb -s RF8M21J8XRT logcat -d -t 500 > logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/device-logs/RF8M21J8XRT-logcat-tail.txt; cp logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/commands.log logs/verification-runs/20260623-1518-wearable-replay-real-device-phone-connected/device-logs/commands-transcript.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:21:47.002237+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "s=RF8M21J8XRT; for p in com.amaia23.hydracam com.facebook.stella com.samsung.android.app.watchmanager com.samsung.android.waterplugin com.samsung.android.shealthmonitor; do echo \"===== $p =====\"; timeout 10 adb -s \"$s\" shell dumpsys package \"$p\" | grep -E \"versionName=|versionCode=|firstInstallTime=|lastUpdateTime=\" || true; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T13:21:54.711271+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android physical",
+      "name": "SM G960F",
+      "notes": [],
+      "os": "Android 10 API 29",
+      "role": "candidate paired phone / HydraCam camera"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android physical",
+      "name": "SM G970F RF8M21J8XRT",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "candidate paired phone / HydraCam camera"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS physical",
+      "name": "Jose Ramon iPhone 12 Pro",
+      "notes": [],
+      "os": "iOS 26.5",
+      "role": "candidate paired phone / HydraCam camera"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS physical",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "candidate HydraCam camera"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android physical",
+      "name": "SM G970F RF8M90QE7LX",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "candidate paired phone / HydraCam camera"
+    },
+    {
+      "identifier": "physical-nearby-not-yet-proven",
+      "kind": "wearable",
+      "name": "Ray-Ban Meta glasses",
+      "notes": [
+        "User reports glasses nearby; host must prove pairing through a reachable phone/DAT path."
+      ],
+      "os": "Meta wearable firmware unknown",
+      "role": "POV/audio source"
+    },
+    {
+      "identifier": "physical-nearby-not-yet-proven",
+      "kind": "wearable",
+      "name": "Galaxy Watch4",
+      "notes": [
+        "User reports watch nearby; BODY_SENSORS proof requires a reachable Wear OS debug target or install path."
+      ],
+      "os": "Wear OS unknown",
+      "role": "HR/motion/marker source"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M21J8XRT-current-screen.png",
+    "video/RF8M21J8XRT-phone-connected.mp4",
+    "device-logs/RF8M21J8XRT-logcat-tail.txt",
+    "device-logs/commands-transcript.log"
+  ],
+  "item": {
+    "slug": "wearable-replay-real-device-phone-connected",
+    "source": "docs/control/wearable-replay-integration-plan.md#full-hardware-evidence",
+    "title": "Rerun physical wearable replay proof after phone connection"
+  },
+  "notes": [
+    "RF8M21J8XRT is the active paired wearable phone.",
+    "Bluetooth reports connected Watch4 von Jose Ramon and RB Meta 00D5.",
+    "DAT entitlement passes with GH_TOKEN from gh auth token.",
+    "Full proof remains blocked on real DAT SDK stream integration and a visible Wear OS ADB target for BODY_SENSORS/Health Services proof."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

@@ -1,0 +1,19 @@
+Android hardware UI smoke blocked before app launch.
+
+Target selected from Flutter inventory:
+- Samsung SM-G970F / RF8M90QE7LX / Android 12 (API 31)
+
+Observed host/tooling results:
+- `flutter devices --device-timeout 10` listed RF8M90QE7LX, but the wrapper
+  command timed out with exit 124 after printing the complete device list.
+- `adb devices -l` died with SIGKILL / exit -9.
+- `scripts/run_hardware_ui_e2e.py --device RF8M90QE7LX --route setup --route standby`
+  failed before build/install/launch because its first `adb devices -l` command
+  died with SIGKILL.
+- The default `python3` resolves to
+  `/Library/Frameworks/Python.framework/Versions/3.13/bin/python3` and hung on
+  simple helper invocations; `/usr/bin/python3` worked and was used for the
+  evidence helper and UI runner.
+
+No screenshots or video were captured because the test did not reach APK build,
+install, app launch, or an automation bridge.

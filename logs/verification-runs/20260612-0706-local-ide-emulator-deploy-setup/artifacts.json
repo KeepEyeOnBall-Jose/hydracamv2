@@ -1,0 +1,158 @@
+{
+  "acceptanceChecks": [
+    "Toolchain inventory identifies the local IDE, Flutter, Android, and Xcode paths",
+    "Android and iOS simulator/emulator lanes are runnable or produce a recorded blocker",
+    "Release/deploy preflight reports current credential/signing blockers"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:07:21.980486+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "emulators"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:07:22.078877+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:07:23.237699+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:07:59.202466+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:07:59.226805+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "doctor",
+        "-v"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:08:14.731577+00:00"
+    },
+    {
+      "command": [
+        "scripts/check_store_readiness.sh",
+        "local"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T05:08:24.880901+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/boot_and_verify_emulators.py",
+        "--count",
+        "1",
+        "--avd-base",
+        "Pixel_7",
+        "--start",
+        "--timeout",
+        "180"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:08:37.800862+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:08:46.733858+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "monkey",
+        "-p",
+        "com.amaia23.hydracam",
+        "-c",
+        "android.intent.category.LAUNCHER",
+        "1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:40:13.824502+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "emulator-5554",
+      "kind": "Android emulator",
+      "name": "Pixel_7 Android emulator",
+      "notes": [],
+      "os": "Android 16 API 36",
+      "role": "single app instance"
+    },
+    {
+      "identifier": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "kind": "iOS simulator",
+      "name": "iPhone 16 Plus simulator",
+      "notes": [],
+      "os": "iOS 18.4 simulator",
+      "role": "single app instance"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/android-emulator-hydracam-launch.png",
+    "screenshots/android-emulator.png",
+    "screenshots/ios-simulator.png",
+    "device-logs/android-emulator-after-launch-logcat.txt",
+    "device-logs/android-emulator-logcat.txt",
+    "device-logs/ios-simulator.log"
+  ],
+  "item": {
+    "slug": "local-ide-emulator-deploy-setup",
+    "source": "docs/control/local-ide-emulator-deploy-playbook.md",
+    "title": "Validate local IDE, emulator, and deploy setup"
+  },
+  "notes": [
+    "flutter doctor -v passed with no issues on Flutter 3.44.1, Android SDK 36, Xcode 26.5, CocoaPods 1.16.2.",
+    "VS Code, Android Studio, Xcode workspace, and Simulator were opened through macOS entrypoints; Computer Use GUI inspection failed because the plugin runtime app is missing.",
+    "Android emulator-5554 booted and HydraCam package com.amaia23.hydracam launched to Master Control through ADB; screenshot and logcat captured.",
+    "iPhone 16 Plus simulator was booted and showing HydraCam Prepare Camera; screenshot and simulator log captured.",
+    "Store readiness preflight is blocked for upload by unavailable iOS distribution signing identity and missing App Store Connect / Google Play credentials plus public URL environment variables.",
+    "Direct flutter run on emulator-5554 was interrupted after a long assembleDebug wait, so current-checkout Android debug rebuild remains unproven in this pack."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

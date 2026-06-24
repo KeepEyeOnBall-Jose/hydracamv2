@@ -1,0 +1,429 @@
+{
+  "acceptanceChecks": [
+    "Connected Android hardware runs setup and standby routes with screenshots, logs, and no Flutter overflow markers",
+    "Android emulator runs setup and standby routes or records a concrete emulator/tooling blocker",
+    "Physical iPad installs or launches the current automation build and records screenshot/log evidence or a concrete device/tooling blocker",
+    "iOS simulator launches the current app and records screenshot/log evidence or a concrete simulator/tooling blocker",
+    "macOS target builds and launches the current app or records a concrete desktop blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:50:46.247326+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "list",
+        "devices",
+        "available"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:50:46.313768+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:50:46.490965+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "emulators"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:52:45.864902+00:00"
+    },
+    {
+      "command": [
+        "emulator",
+        "-list-avds"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:52:47.104507+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "emulators",
+        "--launch",
+        "Medium_Phone_API_36"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:53:08.319864+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:53:35.074861+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "575ecf2cbd24",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-hardware-ui"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T04:55:33.553545+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:01:03.852831+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--skip-build",
+        "--device",
+        "575ecf2cbd24",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-hardware-ui"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T05:05:13.045309+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--skip-build",
+        "--include-emulators",
+        "--device",
+        "emulator-5554",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/android-emulator-ui"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T05:06:33.825946+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--simulator",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=ios-simulator-iphone16plus"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:12:46.311605+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "install",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "build/ios/iphonesimulator/Runner.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:15:01.631396+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "launch",
+        "--terminate-running-process",
+        "--env",
+        "HYDRACAM_AUTOMATION_ROLE",
+        "setup",
+        "--env",
+        "HYDRACAM_AUTOMATION_TARGET_ID",
+        "ios-simulator-iphone16plus",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 148,
+      "startedAt": "2026-06-12T05:16:00.853464+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "launch",
+        "--terminate-running-process",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:17:44.872697+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "privacy",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "grant",
+        "microphone",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:20:15.802199+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "privacy",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "grant",
+        "camera",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:20:15.941803+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "launch",
+        "--terminate-running-process",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:20:53.544699+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:42:47.586041+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "build/ios/iphoneos/Runner.app",
+        "--json-output",
+        "logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/device-logs/ipad-devicectl-install.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:44:32.995284+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"setup\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:45:26.976929+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--device-id",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--timeout",
+        "45",
+        "--run-dir",
+        "logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/ipad-bridge-scan"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T05:46:47.733936+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "macos",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_ROLE=setup",
+        "--dart-define=HYDRACAM_AUTOMATION_TARGET_ID=macos-local"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:49:02.470611+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "terminate",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:50:22.280803+00:00"
+    },
+    {
+      "command": [
+        "pkill",
+        "-x",
+        "HydraCam"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T05:50:23.155000+00:00"
+    },
+    {
+      "command": [
+        "open",
+        "-n",
+        "build/macos/Build/Products/Debug/HydraCam.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T05:50:32.447238+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "575ecf2cbd24",
+      "kind": "Android hardware",
+      "name": "Xiaomi 2201116PG",
+      "notes": [
+        "Debug automation APK build succeeded, but adb install was blocked by device policy: INSTALL_FAILED_USER_RESTRICTED / install canceled by user."
+      ],
+      "os": "Android 13 API 33",
+      "role": "setup and standby route smoke"
+    },
+    {
+      "identifier": "emulator-5554",
+      "kind": "Android emulator",
+      "name": "Medium_Phone_API_36",
+      "notes": [
+        "APK installed and launched; setup route failed because /healthz exposed automation=true for emulator-5554 but commands was empty, and standby failed while clearing logcat."
+      ],
+      "os": "Android 16 API 36",
+      "role": "setup and standby route smoke"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 / CoreDevice 0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS physical",
+      "name": "iPad 6th generation",
+      "notes": [
+        "Profile automation build, devicectl install, and devicectl launch succeeded; display was active/unlocked, but automation bridge was not reachable on known IPv4 hosts, scanned LAN, or IPv6 host."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "setup route smoke"
+    },
+    {
+      "identifier": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "kind": "iOS simulator",
+      "name": "iPhone 16 Plus simulator",
+      "notes": [
+        "Flutter simulator debug build, simctl install, launch, automation /healthz, capture_screenshot, system screenshot, log capture, and short video succeeded; initial system screenshot still showed the microphone permission prompt."
+      ],
+      "os": "iOS 18.4 simulator",
+      "role": "setup route smoke"
+    },
+    {
+      "identifier": "macos-local",
+      "kind": "macOS desktop",
+      "name": "Local macOS",
+      "notes": [
+        "Flutter macOS debug build, app launch, automation /healthz, capture_screenshot, process capture, and unified-log capture succeeded."
+      ],
+      "os": "macOS 26.4.1 25E253",
+      "role": "setup route smoke"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/android-emulator-5554-native.png",
+    "screenshots/ios-simulator-iphone16plus-setup-flutter.png",
+    "screenshots/ios-simulator-iphone16plus-setup-permissions-granted.png",
+    "screenshots/ios-simulator-iphone16plus-setup.png",
+    "screenshots/macos-setup-flutter.png",
+    "video/ios-simulator-iphone16plus-setup.mp4",
+    "device-logs/android-emulator-5554-healthz.json",
+    "device-logs/android-emulator-5554-logcat.txt",
+    "device-logs/ios-simulator-iphone16plus-capture_screenshot.json",
+    "device-logs/ios-simulator-iphone16plus-healthz.json",
+    "device-logs/ios-simulator-iphone16plus-log.txt",
+    "device-logs/ios-simulator-xcodebuildmcp-build_run_sim.log",
+    "device-logs/ipad-169-254-193-202-healthz.json",
+    "device-logs/ipad-192-168-178-104-healthz.json",
+    "device-logs/ipad-devicectl-install.json",
+    "device-logs/ipad-displays.json",
+    "device-logs/ipad-ipv6-healthz.json",
+    "device-logs/ipad-lockstate.json",
+    "device-logs/ipad-processes.json",
+    "device-logs/macos-capture_screenshot.json",
+    "device-logs/macos-hydracam-log.txt",
+    "device-logs/macos-local-healthz.json",
+    "device-logs/macos-process.txt"
+  ],
+  "item": {
+    "slug": "visual-makeover-cross-platform-smoke",
+    "source": "docs/control/hydracam-visual-makeover-plan.md",
+    "title": "Visual makeover cross-platform device smoke"
+  },
+  "notes": [
+    "Cross-platform smoke attempted across connected Android hardware, Android emulator, physical iPad, iOS simulator, and macOS. iOS simulator and macOS passed; physical Android was blocked by device install policy; Android emulator launched with unregistered automation commands; physical iPad installed/launched but bridge was unreachable."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}

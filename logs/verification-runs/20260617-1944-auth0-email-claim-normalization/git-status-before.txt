@@ -1,0 +1,125 @@
+## codex/hydracam-visual-makeover
+ M .vscode/launch.json
+ M .vscode/tasks.json
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/hydracam-mobo-media-timeline-merge-plan.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/fastlane/Fastfile
+ M lib/app_theme.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/models/captured_photo.dart
+ M lib/models/captured_video.dart
+ M lib/screens/camera_selection_screen.dart
+ M lib/screens/camera_setup_preview_screen.dart
+ M lib/screens/courts_screen.dart
+ M lib/screens/log_screen.dart
+ M lib/screens/login_screen.dart
+ M lib/screens/master_video_recording_screen.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/previous_sessions_screen.dart
+ M lib/screens/role_selection_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/sports_centers_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/alert_utils.dart
+ M lib/services/auth0_m2m_service.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/log_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/storage_service.dart
+ M lib/services/uploader_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/animated_countdown_timer.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M logs/android_emulator_inventory.json
+ M logs/android_sdk_state.json
+ M scripts/android_wifi_preflight.py
+ M scripts/build_store_artifacts.sh
+ M scripts/check_store_readiness.sh
+ M scripts/run_rotating_master_slave_matrix.py
+ M test/automation/automation_standby_screen_test.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/master/master_screen_test.dart
+ M test/screens/login_screen_test.dart
+ M test/screens/media_selection_screen_test.dart
+ M test/screens/previous_sessions_screen_test.dart
+ M test/screens/session_details_screen_test.dart
+ M test/screens/uploader_info_screen_test.dart
+ M test/services/auth0_service_test.dart
+ M test/services/hydracam_api_service_test.dart
+ M test/services/log_service_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/storage_service_test.dart
+ M test/services/uploader_service_test.dart
+ M test/services/user_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/slave/slave_screen_sync_chip_test.dart
+ M test/widgets/add_gallery_media_button_test.dart
+ M test/widgets/camera_setup_preview_screen_test.dart
+ M test/widgets/hydra_cam_app_bar_test.dart
+ M test/widgets/media_list_widget_test.dart
+?? .vscode/extensions.json
+?? docs/control/android-auth-sign-in-decision.md
+?? docs/control/baseline-functionality-and-support.md
+?? docs/control/cross-project-api-data-map.md
+?? docs/control/fleet-operations-plan.md
+?? docs/control/hydracam-visual-makeover-plan.md
+?? docs/control/local-ide-emulator-deploy-playbook.md
+?? docs/control/regular-evaluation-plan.md
+?? docs/control/user-flow-fsm-diagrams.md
+?? docs/control/user-flow-tracker.md
+?? lib/services/fleet_heartbeat_service.dart
+?? lib/services/gallery_session_attachment_service.dart
+?? lib/widgets/hydracam_surface.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? scripts/google_play_internal_release.sh
+?? scripts/run_android_always_on_lab_soak.py
+?? scripts/run_hardware_ui_e2e.py
+?? scripts/test_android_wifi_preflight.py
+?? scripts/test_run_android_always_on_lab_soak.py
+?? scripts/testflight_release_and_invite.sh
+?? store-site/
+?? test/screens/navigation_list_screens_test.dart
+?? test/screens/role_selection_screen_test.dart
+?? test/services/fleet_heartbeat_service_test.dart
+?? test/services/gallery_persistence_service_test.dart
+?? test/services/gallery_session_attachment_service_test.dart
+?? test/theme/
+?? test/widgets/hydracam_surface_test.dart

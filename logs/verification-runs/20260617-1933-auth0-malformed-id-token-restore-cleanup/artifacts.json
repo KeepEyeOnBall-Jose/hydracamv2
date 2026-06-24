@@ -1,0 +1,120 @@
+{
+  "acceptanceChecks": [
+    "Startup restore returns false for malformed stored ID tokens instead of throwing",
+    "Malformed stored credentials are cleared from secure storage and in-memory AuthService state"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:34:03.408874+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/auth0_service_test.dart",
+        "--name",
+        "Auth0 startup restore clears malformed stored credentials",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:34:16.160847+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/auth0_service_test.dart",
+        "--name",
+        "Auth0 startup restore clears malformed stored credentials",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T17:34:30.617493+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/auth0_service_test.dart",
+        "--name",
+        "Auth0 startup restore clears malformed stored credentials",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:35:16.965673+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/auth0_service_test.dart",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:35:34.390762+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:35:43.190697+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:35:46.871534+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:36:00.075725+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:36:21.242752+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "auth0-malformed-id-token-restore-cleanup",
+    "source": "docs/control/backlog-import.md#11-make-mobile-auth0-login-recoverable-and-release-safe",
+    "title": "Reject malformed stored Auth0 credentials without restoring partial state"
+  },
+  "notes": [
+    "Tier D auth recovery proof: malformed stored Auth0 ID token restore first threw during payload decode, then returned false, cleared secure credentials, cleared in-memory state, and focused/full Flutter gates passed."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

@@ -1,0 +1,190 @@
+{
+  "deviceActions": [
+    {
+      "action": "The iOS app launch path ran, but the automation bridge never appeared at the expected host. Keep the device unlocked and foregrounded, confirm it is on the same Wi-Fi, and reinstall or relaunch a current automation-enabled HydraCam build before rerunning the warm-prime matrix.",
+      "bridgeUrl": "http://169.254.13.252:4762",
+      "code": "ios_launch_no_bridge",
+      "deviceId": "00008101-000A68811E43001E",
+      "platform": "ios_physical"
+    },
+    {
+      "action": "Warm the automation bridge for macOS (desktop) at http://127.0.0.1:4762, then rerun --prime-then-immediate-role-switch.",
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "code": "warm_bridge_missing",
+      "deviceId": "macos",
+      "platform": "macos"
+    },
+    {
+      "action": "Warm the automation bridge for iPhone 16 Plus (mobile) at http://127.0.0.1:4771, then rerun --prime-then-immediate-role-switch.",
+      "bridgeUrl": "http://127.0.0.1:4771",
+      "code": "warm_bridge_missing",
+      "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "platform": "ios_simulator"
+    }
+  ],
+  "finalMissingWarmBridgeDeviceIds": [
+    "00008101-000A68811E43001E",
+    "macos",
+    "5CF4A12E-A8B5-4285-AE86-407B9067CB5F"
+  ],
+  "finalMissingWarmBridges": [
+    {
+      "bridgeUrl": "http://169.254.13.252:4762",
+      "deviceId": "00008101-000A68811E43001E",
+      "platform": "ios_physical"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "deviceId": "macos",
+      "platform": "macos"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4771",
+      "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "platform": "ios_simulator"
+    }
+  ],
+  "initialMissingWarmBridgeDeviceIds": [
+    "9885e6503930304946",
+    "RF8M21J8XRT",
+    "emulator-5554",
+    "00008101-000A68811E43001E",
+    "macos",
+    "5CF4A12E-A8B5-4285-AE86-407B9067CB5F"
+  ],
+  "initialMissingWarmBridges": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6500",
+      "deviceId": "9885e6503930304946",
+      "platform": "android"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6501",
+      "deviceId": "RF8M21J8XRT",
+      "platform": "android"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6503",
+      "deviceId": "emulator-5554",
+      "platform": "android"
+    },
+    {
+      "bridgeUrl": "http://169.254.13.252:4762",
+      "deviceId": "00008101-000A68811E43001E",
+      "platform": "ios_physical"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "deviceId": "macos",
+      "platform": "macos"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4771",
+      "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "platform": "ios_simulator"
+    }
+  ],
+  "launchAttempted": true,
+  "launchError": "Automation bridge did not become healthy for 00008101-000A68811E43001E at http://169.254.13.252:4762: last_health={}",
+  "masterHosts": {},
+  "status": "failed",
+  "targetCount": 8,
+  "targets": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6500",
+      "captureEnabled": true,
+      "deviceId": "9885e6503930304946",
+      "expectedResult": "capture",
+      "knownBlocker": "s7_exynos_camera_timeout",
+      "label": "SM G935F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 8.0.0 (API 26)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6501",
+      "captureEnabled": true,
+      "deviceId": "RF8M21J8XRT",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G970F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12 (API 31)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6502",
+      "captureEnabled": true,
+      "deviceId": "RF8M90QE7LX",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "SM G970F (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 12 (API 31)"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6503",
+      "captureEnabled": true,
+      "deviceId": "emulator-5554",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "sdk gphone64 arm64 (mobile)",
+      "lens": "autoBack",
+      "platform": "android",
+      "profile": "standard1080p30",
+      "runtime": "Android 14 (API 34) (emulator)"
+    },
+    {
+      "bridgeUrl": "http://169.254.13.252:4762",
+      "captureEnabled": true,
+      "deviceId": "00008101-000A68811E43001E",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "Jos\u00e9 Ram\u00f3n\u2019s iPhone (mobile)",
+      "lens": "ultraWide",
+      "platform": "ios_physical",
+      "profile": "sport1080p60",
+      "runtime": "iOS 26.5 23F77"
+    },
+    {
+      "bridgeUrl": "http://169.254.193.202:4762",
+      "captureEnabled": true,
+      "deviceId": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "iPad (5) (mobile)",
+      "lens": "autoBack",
+      "platform": "ios_physical",
+      "profile": "standard1080p30",
+      "runtime": "iOS 17.7.11 21H461"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4762",
+      "captureEnabled": true,
+      "deviceId": "macos",
+      "expectedResult": "capture",
+      "knownBlocker": null,
+      "label": "macOS (desktop)",
+      "lens": "autoBack",
+      "platform": "macos",
+      "profile": "standard1080p30",
+      "runtime": "macOS 26.4.1 25E253 darwin-arm64"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:4771",
+      "captureEnabled": false,
+      "deviceId": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "expectedResult": "launch_only",
+      "knownBlocker": null,
+      "label": "iPhone 16 Plus (mobile)",
+      "lens": "autoBack",
+      "platform": "ios_simulator",
+      "profile": "standard1080p30",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-4 (simulator)"
+    }
+  ]
+}

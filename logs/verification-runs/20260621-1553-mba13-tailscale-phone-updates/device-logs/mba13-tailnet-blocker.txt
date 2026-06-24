@@ -1,0 +1,37 @@
+MBA13 Tailscale blocker, 2026-06-21.
+
+Remote host:
+- joss-macbook-air.tail6ce139.ts.net
+- Tailscale IP: 100.113.103.99
+
+Observed state:
+- SSH worked initially with sshpass and tempass.txt.
+- ADB on MBA13 initially saw:
+  - RF8M21J8XRT, authorized SM G970F / Android 12 API 31.
+  - 9885e6503930304946, unauthorized.
+- The current checkout was synced to /Users/jose/src/work/hydracamv2-mba13-deploy.
+- The MBA13 built a debug APK successfully.
+- The MBA13-built APK could not update RF8M21J8XRT because the installed package was signed with this Mac's debug certificate.
+- A local matching-key APK was built and rsynced to MBA13 as:
+  /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk
+
+Blocker:
+- After the local-signed APK transfer completed, the MBA13 went offline on Tailscale.
+- nc to joss-macbook-air.tail6ce139.ts.net:22 timed out repeatedly.
+- /Applications/Tailscale.app/Contents/MacOS/Tailscale status reported joss-macbook-air offline, last seen 5-7 minutes ago.
+- /Applications/Tailscale.app/Contents/MacOS/Tailscale ping --timeout=10s --c 5 joss-macbook-air returned no replies.
+
+Ready retry command after MBA13 wakes/reconnects:
+
+sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=20 -o StrictHostKeyChecking=accept-new jose@joss-macbook-air.tail6ce139.ts.net '/Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT install -r /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk && /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity && /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell pidof com.amaia23.hydracam && /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell dumpsys package com.amaia23.hydracam | grep -E "versionCode|versionName|firstInstallTime|lastUpdateTime"'
+
+Continuation retry, 2026-06-21:
+- Tailscale status still reported joss-macbook-air offline, last seen 10m ago.
+- nc -vz -G 5 joss-macbook-air.tail6ce139.ts.net 22 timed out.
+- /Applications/Tailscale.app/Contents/MacOS/Tailscale ping --timeout=5s --c 2 joss-macbook-air returned no replies.
+
+Third retry, 2026-06-21:
+- Tailscale status reported joss-macbook-air offline, last seen 12m ago, with rx 0.
+- /Applications/Tailscale.app/Contents/MacOS/Tailscale ping --timeout=5s --c 2 joss-macbook-air returned no replies.
+- nc -vz -G 5 joss-macbook-air.tail6ce139.ts.net 22 timed out.
+- adb devices -l on this Mac listed no attached devices, so there is no local fallback path for the phones connected to MBA13.

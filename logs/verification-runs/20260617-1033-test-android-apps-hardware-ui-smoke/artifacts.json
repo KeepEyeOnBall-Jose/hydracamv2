@@ -1,0 +1,361 @@
+{
+  "acceptanceChecks": [
+    "ADB inventory returns at least one supported Android API 24+ target",
+    "HydraCam debug automation APK builds, installs, and launches setup plus standby routes on selected Android hardware",
+    "Screenshots and device logs are captured with no Flutter overflow markers"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:33:30.722937+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "30",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 124,
+      "startedAt": "2026-06-17T08:33:30.839981+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": -9,
+      "startedAt": "2026-06-17T08:34:01.095576+00:00"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-V"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:34:05.056092+00:00"
+    },
+    {
+      "command": [
+        "type",
+        "python3"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:34:05.072854+00:00"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke",
+        "--build-timeout",
+        "300",
+        "--timeout",
+        "45"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T08:34:24.017756+00:00"
+    },
+    {
+      "command": [
+        "ls",
+        "-l",
+        "/opt/homebrew/bin/adb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:37:15.831443+00:00"
+    },
+    {
+      "command": [
+        "file",
+        "/opt/homebrew/bin/adb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:37:23.868197+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "version"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:37:23.893630+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:37:23.989099+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "PATH=/Users/jose/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin",
+        "/usr/bin/python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke",
+        "--build-timeout",
+        "300",
+        "--timeout",
+        "45"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T08:37:31.822758+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "config",
+        "--list"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:38:02.536356+00:00"
+    },
+    {
+      "command": [
+        "ls",
+        "-ld",
+        "/Applications/Android Studio.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:38:02.691312+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "config",
+        "--android-studio-dir",
+        "/Applications/Android Studio.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:38:07.621216+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "PATH=/Users/jose/Library/Android/sdk/platform-tools:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin",
+        "/usr/bin/python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke",
+        "--build-timeout",
+        "300",
+        "--timeout",
+        "45"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T08:38:14.170072+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "http://127.0.0.1:6700/healthz"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:41:46.752837+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "120",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type:application/json",
+        "--data",
+        "name:manual-standby",
+        "pixelRatio:1",
+        "http://127.0.0.1:6700/commands/capture_screenshot"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:42:03.033902+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "120",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "--data-binary",
+        "{\"name\":\"manual-standby\",\"pixelRatio\":1}",
+        "http://127.0.0.1:6700/commands/capture_screenshot"
+      ],
+      "returnCode": 28,
+      "startedAt": "2026-06-17T08:42:21.076227+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "PATH=/Users/jose/Library/Android/sdk/platform-tools:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin",
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "input",
+        "keyevent",
+        "224"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:45:33.157334+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "PATH=/Users/jose/Library/Android/sdk/platform-tools:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin",
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "input",
+        "swipe",
+        "540",
+        "1900",
+        "540",
+        "300",
+        "600"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:45:33.278774+00:00"
+    },
+    {
+      "command": [
+        "which",
+        "adb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:50:33.673893+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:50:33.794680+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "dumpsys",
+        "window"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:50:33.816342+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:52:52.443020+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "dumpsys",
+        "power"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:52:52.457639+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "dumpsys",
+        "window"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T08:52:52.594236+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "Samsung SM-G970F",
+      "notes": [
+        "Visible via flutter devices, but direct adb inventory was killed with SIGKILL before install or launch."
+      ],
+      "os": "Android 12 (API 31)",
+      "role": "setup and standby UI smoke target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M90QE7LX-system-screencap.png",
+    "device-logs/RF8M90QE7LX/manual-logcat-after-bridge-timeout.txt",
+    "device-logs/RF8M90QE7LX/manual-logcat-tail.txt",
+    "device-logs/RF8M90QE7LX/setup-result.json",
+    "device-logs/RF8M90QE7LX/standby-result.json",
+    "device-logs/adb-discovery-blocker.txt"
+  ],
+  "item": {
+    "slug": "test-android-apps-hardware-ui-smoke",
+    "source": "AGENTS.md#Validation Policy; docs/control/regular-evaluation-plan.md#Single Android Hardware Lane",
+    "title": "Android hardware UI smoke via Test Android Apps plugin"
+  },
+  "notes": [
+    "Blocked before app launch: adb devices -l died with SIGKILL, including inside run_hardware_ui_e2e.py. Flutter inventory still listed RF8M90QE7LX as Samsung SM-G970F Android 12/API 31.",
+    "No screenshots or video were captured because the runner never reached build/install/launch.",
+    "After correcting PATH and Flutter Android Studio config, the APK built and installed on RF8M90QE7LX, but setup/standby screenshot proof is blocked because the Android target is locked/keyguard bouncer is active.",
+    "Continuation check: adb resolves to SDK platform-tools and RF8M90QE7LX is ADB-visible, but dumpsys window still shows keyguard Bouncer active.",
+    "Second continuation check: RF8M90QE7LX remains ADB-visible and awake, but keyguard Bouncer is still active; physical credential unlock is required before rerunning setup/standby UI smoke."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

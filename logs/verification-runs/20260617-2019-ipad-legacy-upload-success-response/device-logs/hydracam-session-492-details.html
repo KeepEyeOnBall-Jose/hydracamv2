@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Basic page settings -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> - HydraCam</title>
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="/css/HomeStyles.css" />
+    <link rel="stylesheet" href="/css/CustomButtonStyles.css" />
+
+    <!-- Include jQuery once -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100;200;300;400;500;600;700;800;900;1000&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap & main CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css?v=g_jmuFeF1o85BfgNmmvzI-zBg4aGEd-xPC3bOLEhyXc" />
+    <link rel="stylesheet" href="/css/profile-day.css?v=m0ZVXhY_5D_-ixRy1sZDlb9CgNBvyTWHlQu6Zu0ITn0" />
+    <link rel="stylesheet" href="/css/sidebar.css?v=MqWJqv-KcsCu9Bw_CgMwnW2NkgDgZbvQ_ZkDDL5azQs" />
+
+    <!-- Font Awesome / Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+
+    <!-- Chart library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Additional style overrides -->
+    <style>
+
+        /* Example: if you remove body padding, you can rely on .mt-5 in the container below */
+        body {
+            /* padding-top: 80px; */
+        }
+
+
+            .sidebar-panel a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidebar-panel a:hover {
+                    color: #f1f1f1;
+                }
+
+        /* Push main content to avoid hidden content behind navbar if needed */
+        main {
+            margin-top: 80px; /* Or .mt-5 in the container */
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header b-cbewxouny1>
+        <nav b-cbewxouny1 class="navbar navbar-expand-sm navbar-light navbar-background-soft-blue border-bottom box-shadow mb-3 fixed-top">
+            <div b-cbewxouny1 class="container-fluid">
+                <!-- Left: brand link (Home) -->
+                <a class="navbar-brand" href="/">
+                    HydraCam
+                </a>
+
+                <!-- Right: Profile/Login only (NO language selector) -->
+                <div b-cbewxouny1 class="d-flex align-items-center">
+                        <a class="nav-link text-dark" href="/Account/Login">
+                            Identificarse
+                        </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN content -->
+    <div b-cbewxouny1 class="container mt-5">
+        <main b-cbewxouny1 role="main" class="pb-3">
+            
+
+<h2>Session Details</h2>
+
+    <a href="/HydraCam/AssignCourtToSession?sessionId=492" class="btn btn-warning">Assign Court</a>
+
+
+
+<!-- Session details -->
+
+<p>Session: codex-manual-ipad-video-upload-20260617-2030</p>
+<p>GUID: d034de8b-8757-4ffc-92a4-423f196fdea1</p>
+<p>Start Time: 17/6/2026 20:29:21</p>
+<p>End Time: </p>
+
+<hr />
+<div style="height:10px;"></div>
+
+<h3>Google Drive Links</h3>
+    <p>No Google Drive links available for this session.</p>
+
+
+<hr />
+<div style="height:10px;"></div>
+
+<!-- Participants -->
+
+<h3>Participants</h3>
+    <p>No participants assigned to this session.</p>
+
+<!-- Button to assign users -->
+<a class="btn btn-primary" href="/HydraCam/AssignUsersToSession?sessionId=492">Assign Users</a>
+
+
+
+<hr />
+<div style="height:10px;"></div>
+
+<h3>Photos</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Blob Path</th>
+            <th>Format</th>
+            <th>Width</th>
+            <th>Height</th>
+            <th>File Size (KB)</th>
+            <th>Capture Date</th>
+            <th>Received Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h4>Upload Photos</h4>
+<form id="photoUploadForm" method="post" enctype="multipart/form-data" action="/HydraCam/UploadMedia">
+    <input type="hidden" name="hydraCamSessionId" value="492" />
+    <input type="hidden" name="isPhoto" value="true" />
+    <input type="file" name="files" multiple onchange="toggleUploadButton('photoUploadForm', 'photoUploadButton')" />
+    <button type="button" id="photoUploadButton" class="btn btn-secondary" onclick="uploadMediaFiles('photoUploadForm')" disabled>Upload Photos</button>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8J3hyhiDkmRCnFZVOLtzpHnGfgTvNPD1o3r17Zb7HS6urNioSmcb2Tn58qyjsYinMzJhnbyNqVuQxRjKIEyb_tsNZaXkN93kZSoyHgbiWoU2oFy8JMqti2KcE0OpVFl-tsyp-mSMNjwJnhIAe3nvE9Q" /></form>
+
+
+
+
+<hr />
+<div style="height:10px;"></div>
+
+
+<h3>Videos</h3>
+    <a href="/HydraCam/VideoGallery?sessionId=492" class="btn btn-info">View Video Gallery</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Blob Path</th>
+            <th>Format</th>
+            <th>Duration (s)</th>
+            <th>Width</th>
+            <th>Height</th>
+            <th>File Size (MB)</th>
+            <th>Frame Rate (fps)</th>
+            <th>Start Recording</th>
+            <th>End Recording</th>
+            <th>Received Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>d034de8b-8757-4ffc-92a4-423f196fdea1_1b1fd43a-2d15-4cc5-95fa-6780aba3e04a_20260617_18.29.25</td>
+                <td><a href="https://keob2.blob.core.windows.net/hydracam/d034de8b-8757-4ffc-92a4-423f196fdea1/videos/d034de8b-8757-4ffc-92a4-423f196fdea1_1b1fd43a-2d15-4cc5-95fa-6780aba3e04a_20260617_18.29.25.mp4" target="_blank">View Video</a></td>
+                <td>mp4</td>
+                <td>0</td>
+                <td>1080</td>
+                <td>720</td>
+                <td>19,03093433380127</td>
+                <td>30</td>
+                <td>17/6/2026 18:29:25</td>
+                <td>17/6/2026 18:29:37</td>
+                <td>17/6/2026 18:29:37</td>
+                <td>
+                    <form method="post" class="d-inline" action="/HydraCam/DeleteVideo">
+                        <input type="hidden" name="videoId" value="454" />
+                        <button type="submit" class="btn btn-link p-0" title="Delete Video">
+                            <span class="material-symbols-outlined" style="color: red;">delete</span>
+                        </button>
+                    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8J3hyhiDkmRCnFZVOLtzpHnGfgTvNPD1o3r17Zb7HS6urNioSmcb2Tn58qyjsYinMzJhnbyNqVuQxRjKIEyb_tsNZaXkN93kZSoyHgbiWoU2oFy8JMqti2KcE0OpVFl-tsyp-mSMNjwJnhIAe3nvE9Q" /></form>
+                    <a class="btn btn-link p-0" title="Edit Video Metadata" href="/HydraCam/EditVideo/454">
+                        <span class="material-symbols-outlined">edit</span>
+                    </a>
+                    <button type="button" class="btn btn-link p-0" title="View Metadata"
+                            data-bs-toggle="modal" data-bs-target="#videoMetadataModal-454">
+                        <span class="material-symbols-outlined">info</span>
+                    </button>
+                </td>
+            </tr>
+            <!-- Modal for Video Metadata -->
+            <div class="modal fade" id="videoMetadataModal-454" tabindex="-1" aria-labelledby="videoMetadataModalLabel-454" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Video Metadata - d034de8b-8757-4ffc-92a4-423f196fdea1_1b1fd43a-2d15-4cc5-95fa-6780aba3e04a_20260617_18.29.25</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Name:</strong> d034de8b-8757-4ffc-92a4-423f196fdea1_1b1fd43a-2d15-4cc5-95fa-6780aba3e04a_20260617_18.29.25</p>
+                            <p><strong>MD5:</strong> </p>
+                            <p><strong>Start Recording Date:</strong> 17/6/2026 18:29:25</p>
+                            <p><strong>End Recording Date:</strong> 17/6/2026 18:29:37</p>
+                            <p><strong>Received Date:</strong> 17/6/2026 18:29:37</p>
+                            <p><strong>Duration:</strong> 0 seconds</p>
+                            <p><strong>Resolution:</strong> 1080 x 720</p>
+                            <p><strong>File Size:</strong> 19,03093433380127 MB</p>
+                            <p><strong>Frame Rate:</strong> 30 fps</p>
+                            <p><strong>Format:</strong> mp4</p>
+                            <p><strong>Blob Path:</strong> https://keob2.blob.core.windows.net/hydracam/d034de8b-8757-4ffc-92a4-423f196fdea1/videos/d034de8b-8757-4ffc-92a4-423f196fdea1_1b1fd43a-2d15-4cc5-95fa-6780aba3e04a_20260617_18.29.25.mp4</p>
+                            <p><strong>Slave Device ID:</strong> 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </tbody>
+</table>
+
+
+<h4>Upload Videos</h4>
+<form id="videoUploadForm" method="post" enctype="multipart/form-data" action="/HydraCam/UploadMedia">
+    <input type="hidden" name="hydraCamSessionId" value="492" />
+    <input type="hidden" name="isPhoto" value="false" />
+    <input type="file" name="files" multiple onchange="toggleUploadButton('videoUploadForm', 'videoUploadButton')" />
+    <button type="button" id="videoUploadButton" class="btn btn-secondary" onclick="uploadMediaFiles('videoUploadForm')" disabled>Upload Videos</button>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8J3hyhiDkmRCnFZVOLtzpHnGfgTvNPD1o3r17Zb7HS6urNioSmcb2Tn58qyjsYinMzJhnbyNqVuQxRjKIEyb_tsNZaXkN93kZSoyHgbiWoU2oFy8JMqti2KcE0OpVFl-tsyp-mSMNjwJnhIAe3nvE9Q" /></form>
+
+
+
+<!-- Progress Overlay -->
+<div id="progressOverlay" style="display:none; position:fixed; bottom:20px; right:20px; padding:10px; background:rgba(0,0,0,0.8); color:white;">
+    <p id="progressText">Uploading...</p>
+    <p id="fileCountText"></p> <!-- Display the file count progress here -->
+    <progress id="progressBar" value="0" max="100" style="width:100%;"></progress>
+</div>
+
+<script>
+    async function uploadMediaFiles(formId) {
+        const form = document.getElementById(formId);
+        const formData = new FormData(form);
+        const files = formData.getAll('files');
+
+        if (files.length === 0) return;
+
+        document.getElementById('progressOverlay').style.display = 'block';
+        const progressText = document.getElementById('progressText');
+        const progressBar = document.getElementById('progressBar');
+        const fileCountText = document.getElementById('fileCountText');
+
+        let totalUploaded = 0;
+        const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const singleFileForm = new FormData();
+            singleFileForm.append('files', file);
+            singleFileForm.append('sessionId', formData.get('sessionId'));
+            singleFileForm.append('hydraCamSessionId', formData.get('hydraCamSessionId'));
+            singleFileForm.append('isPhoto', formData.get('isPhoto'));
+
+            // Actualizar el progreso de archivo actual (e.g., "File 1/3")
+            fileCountText.textContent = `File ${i + 1} of ${files.length}`;
+
+            // Mostrar progreso de subida
+            progressText.textContent = `Uploading ${file.name}...`;
+
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: singleFileForm,
+            });
+
+            if (response.ok) {
+                totalUploaded += file.size;
+                const progress = Math.round((totalUploaded / totalSize) * 100);
+                progressBar.value = progress;
+                progressText.textContent = `Processing ${file.name}...`;
+
+                // Espera a que el servidor procese el archivo antes de proceder con el siguiente
+                await response.text();  // Para esperar a que el servidor complete el procesamiento
+            } else {
+                progressText.textContent = `Error uploading ${file.name}!`;
+            }
+        }
+
+        // Finalización
+        progressText.textContent = 'Upload complete!';
+        fileCountText.textContent = ''; // Clear the file count text
+        setTimeout(() => {
+            document.getElementById('progressOverlay').style.display = 'none';
+            window.location.reload(); // Reload the page after all files are processed
+        }, 3000);
+    }
+
+    function toggleUploadButton(formId, buttonId) {
+        const form = document.getElementById(formId);
+        const filesInput = form.querySelector('input[type="file"]');
+        const button = document.getElementById(buttonId);
+
+        if (filesInput.files.length > 0) {
+            button.disabled = false;
+            button.classList.remove('btn-secondary');
+            button.classList.add('btn-primary');
+        } else {
+            button.disabled = true;
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-secondary');
+        }
+    }
+
+</script>
+
+
+
+
+<hr />
+<div style="height:15px;"></div>
+
+<a href="/HydraCam" class="btn btn-secondary">Back to List</a>
+<a class="btn btn-primary" href="/HydraCam/EditSession/492">Edit Session</a>
+<form method="post" style="display:inline;" action="/HydraCam/DeleteSession">
+    <input type="hidden" name="id" value="492" />
+    <button type="submit" class="btn btn-danger">Delete Session</button>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8J3hyhiDkmRCnFZVOLtzpHnGfgTvNPD1o3r17Zb7HS6urNioSmcb2Tn58qyjsYinMzJhnbyNqVuQxRjKIEyb_tsNZaXkN93kZSoyHgbiWoU2oFy8JMqti2KcE0OpVFl-tsyp-mSMNjwJnhIAe3nvE9Q" /></form>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-top footer text-muted">
+    <div class="container d-flex flex-column align-items-center justify-content-center">
+        <!-- Copyright -->
+        <div>
+            &copy; 2025 - HydraCam
+        </div>
+    </div>
+</footer>
+
+    <!-- SCRIPTS -->
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=hRQyftXiu1lLX2P9Ly9xa4gHJgLeR1uGN5qegUobtGo"></script>
+    
+</body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "acceptanceChecks": [
+    "iOS simulator launches HydraCam integration platform smoke without Flutter exceptions",
+    "Simulator screenshot and device logs are captured"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "test",
+        "integration_test/platform_test.dart",
+        "-d",
+        "5CF4A12E-A8B5-4285-AE86-407B9067CB5F"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T04:58:32.459658+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "5CF4A12E-A8B5-4285-AE86-407B9067CB5F",
+      "kind": "iOS simulator",
+      "name": "iPhone 16 Plus",
+      "notes": [],
+      "os": "iOS 18.4",
+      "role": "single app instance"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/iphone-16-plus-platform-smoke.png",
+    "video/iphone-16-plus-platform-smoke.mp4",
+    "device-logs/iphone-16-plus-last5m.log"
+  ],
+  "item": {
+    "slug": "regular-evaluation-tier-b-simulator-baseline",
+    "source": "docs/control/regular-evaluation-plan.md#quick-lanes",
+    "title": "Baseline regular evaluation Tier B simulator lane"
+  },
+  "notes": [
+    "iOS simulator platform integration smoke passed 5/5; screenshot and last-5-minute simulator log captured.",
+    "iOS simulator platform integration smoke passed 5/5; screenshot, screen recording, and last-5-minute simulator log captured."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

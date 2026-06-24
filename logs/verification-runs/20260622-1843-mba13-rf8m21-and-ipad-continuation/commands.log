@@ -1,0 +1,649 @@
+# HydraCam evidence run command log
+
+$ ssh mba13 set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIAL=RF8M21J8XRT; echo APK; ls -lh "$APK"; shasum -a 256 "$APK"; echo INSTALL; $ADB -s $SERIAL install -r "$APK" || $ADB -s $SERIAL install --no-streaming -r "$APK"; echo LAUNCH; $ADB -s $SERIAL shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; echo PID; $ADB -s $SERIAL shell pidof com.amaia23.hydracam; echo PACKAGE; $ADB -s $SERIAL shell dumpsys package com.amaia23.hydracam | egrep "Package \[com.amaia23.hydracam\]|versionName|versionCode|firstInstallTime|lastUpdateTime"; echo SCREENSHOT; $ADB -s $SERIAL exec-out screencap -p > /tmp/hydracam-RF8M21J8XRT-foreground.png; echo VIDEO; $ADB -s $SERIAL shell rm -f /sdcard/hydracam-deploy-proof.mp4; $ADB -s $SERIAL shell screenrecord --time-limit 5 /sdcard/hydracam-deploy-proof.mp4; $ADB -s $SERIAL pull /sdcard/hydracam-deploy-proof.mp4 /tmp/hydracam-RF8M21J8XRT-foreground.mp4; echo LOGCAT; $ADB -s $SERIAL logcat -d -t 500 > /tmp/hydracam-RF8M21J8XRT-logcat.txt
+APK
+-rw-r--r--@ 1 jose  staff   162M Jun 22 18:36 /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk
+33d019a86384dc4ce1dcb47dc391eb4eb2984392dffd54ed3f3e03cdaa43631e  /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk
+INSTALL
+Performing Streamed Install
+Success
+LAUNCH
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+PID
+20461
+PACKAGE
+  Package [com.amaia23.hydracam] (818299a):
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    firstInstallTime=2026-06-07 14:44:29
+    lastUpdateTime=2026-06-22 18:44:24
+SCREENSHOT
+VIDEO
+LOGCAT
+
+[stderr]
+/sdcard/hydracam-deploy-proof.mp4: 1 file pulled, 0 skipped. 20.0 MB/s (921141 bytes in 0.044s)
+[exit-code] 0
+
+$ ssh mba13 echo ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo IOS; xcrun devicectl list devices; echo IPAD_DETAILS; xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 20 2>&1 || true; echo IPAD_INSTALL_RETRY; xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app 2>&1 || true; echo USB_SCAN; system_profiler SPUSBDataType -detailLevel mini | egrep -i "iPad|iPhone|Apple Mobile|Samsung|Android" || true; echo LIBIMOBILEDEVICE; command -v idevicepair || true; command -v idevice_id || true
+ADB
+List of devices attached
+9885e6503930304946     device usb:0-1.3.3 product:hero2ltexx model:SM_G935F device:hero2lte transport_id:11
+RF8M21J8XRT            device usb:0-1.3.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:14
+RF8M90QE7LX            device usb:0-1.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:13
+
+IOS
+Name                  Hostname                              Identifier                             State                Model                     
+-------------------   -----------------------------------   ------------------------------------   ------------------   --------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   available            iPad7,5                   
+IPAD_DETAILS
+Gathering device information…
+WARNING: Unable to retrieve complete information for this device. The best available information will be returned.
+         Error: The device must be paired before it can be connected.
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags: 
+▿ hardwareProperties:
+    • cpuType: arm64 (type: 16777228, subtype: 0)
+    • deviceType: iPad
+    • ecid: 4003463842304166
+    • hardwareModel: J71bAP
+    • platform: iOS
+    • productType: iPad7,5
+    ▿ supportedCPUTypes:
+        • arm64 (type: 16777228, subtype: 0)
+        • unknown-12-13 (type: 12, subtype: 13)
+    • supportedDeviceFamilies: [1, 2]
+    • udid: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: false
+    • name: iPad (5)
+    • osBuildUpdate: 21H461
+    • osVersionNumber: 17.7.11
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+▿ connectionProperties:
+    • isMobileDeviceOnly: false
+    ▿ potentialHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    • pairingState: unpaired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelState: disconnected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Initiate Pairing (com.apple.coredevice.feature.inititatepairing)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+• visibilityClass: default
+IPAD_INSTALL_RETRY
+ERROR: The device must be paired before it can be connected. (com.apple.dt.CoreDeviceError error 2 (0x02))
+       ----------------------------------------
+           The device must be paired before it can be connected. (com.apple.dt.RemotePairingError error 2 (0x02))
+USB_SCAN
+LIBIMOBILEDEVICE
+[exit-code] 0
+
+$ ssh mba13 echo IDEVICEPAIR_ATTEMPT; if command -v brew >/dev/null 2>&1; then brew list libimobiledevice >/dev/null 2>&1 && echo LIBIMOBILEDEVICE_INSTALLED || echo LIBIMOBILEDEVICE_NOT_INSTALLED; fi; if command -v idevicepair >/dev/null 2>&1; then idevicepair -u 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 pair 2>&1 || true; idevicepair -u 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 validate 2>&1 || true; else echo IDEVICEPAIR_NOT_FOUND; fi
+IDEVICEPAIR_ATTEMPT
+IDEVICEPAIR_NOT_FOUND
+[exit-code] 0
+
+$ ssh mba13 echo DEVICETOOL_TOP; xcrun devicectl --help 2>&1 | sed -n "1,240p"; echo HELP_PAIR_SEARCH; xcrun devicectl --help 2>&1 | grep -i pair || true; xcrun devicectl help 2>&1 | grep -i pair || true; xcrun devicectl help device 2>&1 | grep -i pair || true; xcrun devicectl help manage 2>&1 || true; echo XCRUN_FIND; find /Applications/Xcode.app/Contents/Developer/usr/bin -maxdepth 1 -iname "*device*" -o -iname "*pair*" | sort
+DEVICETOOL_TOP
+OVERVIEW: Core Device Device Control: a command line utility for exercising
+Core Device functionality.
+
+devicectl is a Core Device command line utility that you can use to interact
+with devices connected to this host. Automation and integrating with other
+tools is supported via JSON output captured to a file, which is versioned and
+will remain stable across releases. Standard output is meant for human
+consumption and is not guaranteed to be stable across releases.
+
+USAGE: devicectl [--verbose] [--quiet] [--timeout <seconds>] [--json-output <path>] [--log-output <path>] <subcommand>
+
+OUTPUT OPTIONS:
+  -v, --verbose           If given, provide more logging output than normal.
+  -q, --quiet             If given, output will include only errors.
+  -t, --timeout <seconds> The overall command timeout in seconds. If this limit
+                          is exceeded the command is abandoned as a failure.
+  -j, --json-output <path>
+                          An optional path to write a JSON file with command
+                          results.
+        Note: JSON output to a user-provided file on disk is the ONLY supported
+        interface for scripts/programs to consume command output.
+  -l, --log-output <path> An optional path to write all logging otherwise
+                          passed to stdout/stderr.
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  device                  Commands to interact with devices.
+  diagnose                Gather diagnostic information for debugging or filing
+                          bug reports.
+  list                    List things that devicectl knows about.
+  manage                  Commands to change state between the system and
+                          devices, or between devices themselves.
+
+  See 'devicectl help <subcommand>' for detailed help.
+HELP_PAIR_SEARCH
+OVERVIEW: Commands to change state between the system and devices, or between
+devices themselves.
+
+Allows users to prepare devices for use, disconnect existing device
+connections, and set up relationships between devices themselves or between
+accessories and devices.
+
+USAGE: devicectl manage [--verbose] [--quiet] [--timeout <seconds>] [--json-output <path>] [--log-output <path>] <subcommand>
+
+OUTPUT OPTIONS:
+  -v, --verbose           If given, provide more logging output than normal.
+  -q, --quiet             If given, output will include only errors.
+  -t, --timeout <seconds> The overall command timeout in seconds. If this limit
+                          is exceeded the command is abandoned as a failure.
+  -j, --json-output <path>
+                          An optional path to write a JSON file with command
+                          results.
+        Note: JSON output to a user-provided file on disk is the ONLY supported
+        interface for scripts/programs to consume command output.
+  -l, --log-output <path> An optional path to write all logging otherwise
+                          passed to stdout/stderr.
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  ddis                    Commands used to manage the set of developer disk
+                          images present on the host.
+  loggingProfile          Commands used to manage the Core Device logging
+                          profile.
+  pair                    Pair with a given device.
+  unpair                  Unpair a manually paired device.
+
+  See 'devicectl help manage <subcommand>' for detailed help.
+XCRUN_FIND
+/Applications/Xcode.app/Contents/Developer/usr/bin/devicectl
+/Applications/Xcode.app/Contents/Developer/usr/bin/xcdevice
+[exit-code] 0
+
+$ ssh mba13 echo FINAL_ALL_DEVICE_PROCESSES; /Users/jose/Library/Android/sdk/platform-tools/adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M90QE7LX shell pidof com.amaia23.hydracam; xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i "keepeyeonball\|Runner" || true
+FINAL_ALL_DEVICE_PROCESSES
+25331
+20461
+22201
+4193   /private/var/containers/Bundle/Application/1F9FFF65-2F02-4D75-A5E2-D7DE8B78CDB2/Runner.app/Runner                                                                                                 
+[exit-code] 0
+
+$ ssh mba13 echo PAIR_HELP; xcrun devicectl help manage pair 2>&1; echo PAIR_ATTEMPT_COREDEVICE_ID; xcrun devicectl manage pair --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 60 2>&1 || true; echo PAIR_STATE_AFTER; xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 20 2>&1 || true; echo INSTALL_AFTER_PAIR; xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app 2>&1 || true
+PAIR_HELP
+OVERVIEW: Pair with a given device.
+
+This command attempts to pair with a device discovered by CoreDevice.
+
+USAGE: devicectl manage pair --device <uuid|ecid|serial_number|udid|name|dns_name> [--columns <columns> ...] [--hide-default-columns] [--hide-headers] [--verbose] [--quiet] [--timeout <seconds>] [--json-output <path>] [--log-output <path>]
+
+DEVICE OPTIONS:
+  -d, --device <uuid|ecid|serial_number|udid|name|dns_name>
+                          The identifier, ECID, serial number, UDID,
+                          user-provided name, or DNS name of the device.
+
+FORMATTING OPTIONS:
+  --columns <columns>     If specified, additional data columns to print.
+                          Specify '*' (in quotes) for all data columns.
+  --hide-default-columns  Hide default data columns and only print those
+                          specified with --columns.
+  --hide-headers          Hide data column headers.
+
+OUTPUT OPTIONS:
+  -v, --verbose           If given, provide more logging output than normal.
+  -q, --quiet             If given, output will include only errors.
+  -t, --timeout <seconds> The overall command timeout in seconds. If this limit
+                          is exceeded the command is abandoned as a failure.
+  -j, --json-output <path>
+                          An optional path to write a JSON file with command
+                          results.
+        Note: JSON output to a user-provided file on disk is the ONLY supported
+        interface for scripts/programs to consume command output.
+  -l, --log-output <path> An optional path to write all logging otherwise
+                          passed to stdout/stderr.
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+PAIR_ATTEMPT_COREDEVICE_ID
+Paired with device:
+Name       Hostname                  Identifier                             State                Model  
+--------   -----------------------   ------------------------------------   ------------------   -------
+iPad (5)   iPad-5.coredevice.local   0A947DBD-A462-5BAA-AB84-17F143D41619   available (paired)   iPad7,5
+PAIR_STATE_AFTER
+Gathering device information…
+Current device information:
+• identifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• tags: 
+▿ hardwareProperties:
+    • cpuType: arm64 (type: 16777228, subtype: 0)
+    • deviceType: iPad
+    • ecid: 4003463842304166
+    • hardwareModel: J71bAP
+    • internalStorageCapacity: 32000000000
+    • isProductionFused: true
+    • marketingName: iPad (6th generation) (Model A1893)
+    • platform: iOS
+    • productType: iPad7,5
+    • reality: physical
+    • serialNumber: DMPW528HJF8K
+    ▿ supportedCPUTypes:
+        • arm64 (type: 16777228, subtype: 0)
+        • unknown-12-13 (type: 12, subtype: 13)
+    • supportedDeviceFamilies: [1, 2]
+    • thinningProductType: iPad7,5
+    • udid: 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63
+▿ deviceProperties:
+    • bootState: booted
+    • ddiServicesAvailable: true
+    • developerModeStatus: enabled
+    • hasInternalOSBuild: false
+    • name: iPad (5)
+    • osBuildUpdate: 21H461
+    • osVersionNumber: 17.7.11
+    ▿ providerSpecificValues:
+        • hasAMRestorableDeviceRef: true
+    • rootFileSystemIsWritable: false
+    • bootedFromSnapshot: true
+    • bootedSnapshotName: com.apple.os.update-87253FEA1A5E1C6202739DA5112B7F7F03A085FE06EEA031E7CF9B829F4E11AE
+    • supportsCheckedAllocations: false
+▿ connectionProperties:
+    • authenticationType: manualPairing
+    • isMobileDeviceOnly: false
+    • lastConnectionDate: 2026-06-22 16:46:00 +0000
+    ▿ localHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    ▿ potentialHostnames:
+        • iPad-5.coredevice.local
+        • 0A947DBD-A462-5BAA-AB84-17F143D41619.coredevice.local
+        • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63.coredevice.local
+    • pairingState: paired
+    • transportType: wired
+    • tunnelTransportProtocol: tcp
+    • tunnelIPAddress: fd08:e014:ba87::1
+    • tunnelState: connected
+▿ capabilities:
+    • Acquire Usage Assertion (com.apple.coredevice.feature.acquireusageassertion)
+    • Application Control (com.apple.coredevice.feature.applicationcontrol)
+    • Capture Sysdiagnose (com.apple.coredevice.feature.capturesysdiagnose)
+    • Create Service Connection (com.apple.dt.serviceconnection.create)
+    • Create Service Socket (com.apple.dt.servicesocket.create)
+    • Disable Developer Disk Image Services (com.apple.coredevice.feature.disableddiservices)
+    • Disconnect from Device (com.apple.coredevice.feature.disconnectdevice)
+    • Fetch Application Icons (com.apple.coredevice.feature.fetchappicons)
+    • Fetch AuthListing Identifiers (com.apple.coredevice.feature.getauthlistingidentifiers)
+    • Fetch Developer Disk Image Services Metadata (com.apple.coredevice.feature.fetchddimetadata)
+    • Fetch Extended Device Info (com.apple.coredevice.feature.getdeviceinfo)
+    • Get Display Information (com.apple.coredevice.feature.getdisplayinfo)
+    • Get Lock State (com.apple.coredevice.feature.getlockstate)
+    • Install Application (com.apple.coredevice.feature.installapp)
+    • Install Root (com.apple.coredevice.feature.installroot)
+    • Launch Application (com.apple.coredevice.feature.launchapplication)
+    • List Files (com.apple.coredevice.feature.listFiles)
+    • List Roots (com.apple.coredevice.feature.listroots)
+    • Modify Tags (com.apple.coredevice.feature.tags)
+    • Modify credentials for default users for a device (com.apple.coredevice.feature.default.user.credentials)
+    • Monitor Process for Termination (com.apple.coredevice.feature.monitorprocesstermination)
+    • Post Darwin Notification (com.apple.dt.customer.postdarwinnotification)
+    • Process Control (com.apple.coredevice.feature.processcontrol)
+    • Query MobileGestalt (com.apple.coredevice.feature.querymobilegestalt)
+    • Reboot Device (com.apple.coredevice.feature.rebootdevice)
+    • Send Memory Warning to Process (com.apple.coredevice.feature.sendmemorywarningtoprocess)
+    • Send Signal to Process (com.apple.coredevice.feature.sendsignaltoprocess)
+    • Service Hub Profile (com.apple.dt.profile)
+    • Spawn Executable (com.apple.coredevice.feature.spawnexecutable)
+    • Stream Application List (com.apple.coredevice.feature.streamapplist)
+    • Stream Process List (com.apple.coredevice.feature.streamprocesslist)
+    • Transfer Files (com.apple.coredevice.feature.transferFiles)
+    • Uninstall Application (com.apple.coredevice.feature.uninstallapp)
+    • Uninstall Root (com.apple.coredevice.feature.uninstallroot)
+    • Unpair Device (com.apple.coredevice.feature.unpairdevice)
+• visibilityClass: default
+INSTALL_AFTER_PAIR
+18:46:26  Acquired tunnel connection to device.
+18:46:26  Enabling developer disk image services.
+18:46:26  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/6278B507-C512-4C8A-9EE1-941BBBD7F14C/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1664
+• options: 
+[exit-code] 0
+
+$ ssh mba13 echo FINAL_FLUTTER; zsh -lc "flutter devices --device-timeout 10"; echo FINAL_IOS_LIST; xcrun devicectl list devices
+FINAL_FLUTTER
+Found 7 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.116
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+FINAL_IOS_LIST
+Name                  Hostname                              Identifier                             State                Model                                        
+-------------------   -----------------------------------   ------------------------------------   ------------------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   available (paired)   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ ssh mba13 DEVICE=0A947DBD-A462-5BAA-AB84-17F143D41619; BUNDLE=com.keepeyeonball; echo IPAD_LAUNCH; xcrun devicectl device process launch --device "$DEVICE" --terminate-existing "$BUNDLE"; sleep 3; echo IPAD_APPS; xcrun devicectl device info apps --device "$DEVICE" | grep -A14 -B2 "$BUNDLE"; echo IPAD_PROCESS; xcrun devicectl device info processes --device "$DEVICE" | grep -i "keepeyeonball\|Runner\|HydraCam"; echo IPAD_DISPLAY; xcrun devicectl device info displays --device "$DEVICE"; echo IPAD_LOCK; xcrun devicectl device info lockState --device "$DEVICE"
+IPAD_LAUNCH
+18:47:16  Acquired tunnel connection to device.
+18:47:16  Enabling developer disk image services.
+18:47:16  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+IPAD_APPS
+IPAD_PROCESS
+IPAD_DISPLAY
+18:47:27  Acquired tunnel connection to device.
+18:47:27  Enabling developer disk image services.
+18:47:27  Acquired usage assertion.
+Current Displays:
+▿ 1: LCD (primary):
+    • bounds: (0.0, 0.0, 1536.0, 2048.0)
+    • currentOrientation: rot270
+    • displayId: 1
+    • name: LCD
+    • nativeOrientation: rot0
+    • pointScale: 2
+    • nativeSize: (1536.0, 2048.0)
+    • primary: true
+Main display backlight state: backlight is on and active
+Main display orientation: landscapeLeft, non-flat orientation: landscapeLeft, orientation not locked
+IPAD_LOCK
+18:47:27  Acquired tunnel connection to device.
+18:47:27  Acquired usage assertion.
+Current device lock state:
+• deviceIdentifier: 0A947DBD-A462-5BAA-AB84-17F143D41619
+• passcodeRequired: false
+• unlockedSinceBoot: true
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 0
+
+$ ssh mba13 echo FINAL_FLUTTER; zsh -lc "flutter devices --device-timeout 10"; echo FINAL_ANDROID_PROCESSES; for serial in 9885e6503930304946 RF8M21J8XRT RF8M90QE7LX; do echo $serial; /Users/jose/Library/Android/sdk/platform-tools/adb -s $serial shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s $serial shell dumpsys package com.amaia23.hydracam | egrep "versionName|versionCode|lastUpdateTime"; done; echo FINAL_IOS_PROCESSES; xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i "keepeyeonball\|Runner"; xcrun devicectl device info apps --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -A6 -B2 com.keepeyeonball; xcrun devicectl device info processes --device 0A947DBD-A462-5BAA-AB84-17F143D41619 | grep -i "keepeyeonball\|Runner"; xcrun devicectl device info apps --device 0A947DBD-A462-5BAA-AB84-17F143D41619 | grep -A6 -B2 com.keepeyeonball; echo SIGNING; security find-identity -p codesigning -v || true
+FINAL_FLUTTER
+Found 7 connected devices:
+  SM G935F (mobile)            • 9885e6503930304946                       • android-arm64  • Android 8.0.0 (API 26)
+  SM G970F (mobile)            • RF8M21J8XRT                              • android-arm64  • Android 12 (API 31)
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.116
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+FINAL_ANDROID_PROCESSES
+9885e6503930304946
+25331
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    lastUpdateTime=2026-06-22 18:38:36
+RF8M21J8XRT
+20461
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    lastUpdateTime=2026-06-22 18:44:24
+RF8M90QE7LX
+22201
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    lastUpdateTime=2026-06-22 18:38:22
+FINAL_IOS_PROCESSES
+4193   /private/var/containers/Bundle/Application/1F9FFF65-2F02-4D75-A5E2-D7DE8B78CDB2/Runner.app/Runner                                                                                                 
+Name       Bundle Identifier   Version   Bundle Version
+--------   -----------------   -------   --------------
+HydraCam   com.keepeyeonball   1.4.0     18            
+SIGNING
+     0 valid identities found
+
+[stderr]
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+[exit-code] 0
+
+$ ssh mba13 DEVICE=0A947DBD-A462-5BAA-AB84-17F143D41619; BUNDLE=com.keepeyeonball; rm -f /tmp/ipad-apps.json /tmp/ipad-processes.json /tmp/ipad-apps.log /tmp/ipad-processes.log; echo RETRY_IPAD_APPS_JSON; xcrun devicectl device info apps --device "$DEVICE" --timeout 60 --json-output /tmp/ipad-apps.json --log-output /tmp/ipad-apps.log 2>&1 || true; if [[ -f /tmp/ipad-apps.json ]]; then python3 - <<"PY"
+import json
+p="/tmp/ipad-apps.json"
+data=json.load(open(p))
+text=json.dumps(data)
+print("JSON_HAS_BUNDLE", "com.keepeyeonball" in text)
+if "com.keepeyeonball" in text:
+    print(text[text.find("com.keepeyeonball")-300:text.find("com.keepeyeonball")+500])
+PY
+fi; echo APPS_LOG; sed -n "1,160p" /tmp/ipad-apps.log 2>/dev/null || true; echo RETRY_IPAD_PROCESS_JSON; xcrun devicectl device info processes --device "$DEVICE" --timeout 60 --json-output /tmp/ipad-processes.json --log-output /tmp/ipad-processes.log 2>&1 || true; if [[ -f /tmp/ipad-processes.json ]]; then python3 - <<"PY"
+import json
+p="/tmp/ipad-processes.json"
+data=json.load(open(p))
+text=json.dumps(data)
+print("JSON_HAS_RUNNER", "Runner" in text or "keepeyeonball" in text)
+for needle in ("keepeyeonball", "Runner"):
+    i=text.find(needle)
+    if i!=-1:
+        print(text[max(0,i-300):i+500])
+        break
+PY
+fi; echo PROCESS_LOG; sed -n "1,160p" /tmp/ipad-processes.log 2>/dev/null || true; echo RELAUNCH_WITH_JSON; xcrun devicectl device process launch --device "$DEVICE" --terminate-existing "$BUNDLE" --timeout 60 --json-output /tmp/ipad-launch.json --log-output /tmp/ipad-launch.log 2>&1 || true; cat /tmp/ipad-launch.json 2>/dev/null || true; sed -n "1,160p" /tmp/ipad-launch.log 2>/dev/null || true
+RETRY_IPAD_APPS_JSON
+18:48:30  Acquired tunnel connection to device.
+18:48:30  Enabling developer disk image services.
+18:48:30  Acquired usage assertion.
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+JSON_HAS_BUNDLE False
+APPS_LOG
+18:48:30  Acquired tunnel connection to device.
+18:48:30  Enabling developer disk image services.
+18:48:30  Acquired usage assertion.
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+Saving JSON output file to /tmp/ipad-apps.json
+RETRY_IPAD_PROCESS_JSON
+18:48:31  Acquired tunnel connection to device.
+18:48:31  Enabling developer disk image services.
+18:48:31  Acquired usage assertion.
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+JSON_HAS_RUNNER False
+PROCESS_LOG
+18:48:31  Acquired tunnel connection to device.
+18:48:31  Enabling developer disk image services.
+18:48:31  Acquired usage assertion.
+ERROR: The operation couldn’t be completed. (CoreDevice.ActionError error 3.)
+       NSDebugDescription = This operation could not be performed due to an error in StreamingAction: This operation could not be performed due to an error in StreamingAction: Couldn't get the message from the device.
+Saving JSON output file to /tmp/ipad-processes.json
+RELAUNCH_WITH_JSON
+18:48:41  Acquired tunnel connection to device.
+18:48:41  Enabling developer disk image services.
+18:48:41  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "--terminate-existing",
+      "com.keepeyeonball",
+      "--timeout",
+      "60",
+      "--json-output",
+      "/tmp/ipad-launch.json",
+      "--log-output",
+      "/tmp/ipad-launch.log"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.31"
+  },
+  "result" : {
+    "deviceIdentifier" : "0A947DBD-A462-5BAA-AB84-17F143D41619",
+    "launchOptions" : {
+      "activatedWhenStarted" : true,
+      "arguments" : [
+
+      ],
+      "environmentVariables" : {
+        "TERM" : "vt100"
+      },
+      "platformSpecificOptions" : {
+
+      },
+      "startStopped" : false,
+      "terminateExistingInstances" : true,
+      "user" : {
+        "active" : true
+      }
+    },
+    "process" : {
+      "auditToken" : [
+        4294967295,
+        501,
+        501,
+        501,
+        501,
+        21573,
+        0,
+        54103
+      ],
+      "executable" : "file:///private/var/containers/Bundle/Application/6278B507-C512-4C8A-9EE1-941BBBD7F14C/Runner.app/Runner",
+      "processIdentifier" : 21573
+    }
+  }
+}
+18:48:41  Acquired tunnel connection to device.
+18:48:41  Enabling developer disk image services.
+18:48:41  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+Saving JSON output file to /tmp/ipad-launch.json
+[exit-code] 0
+
+$ ssh mba13 bash -lc 'set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; IOS_APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; IOS_BUNDLE=com.keepeyeonball; ANDROIDS="9885e6503930304946 RF8M21J8XRT RF8M90QE7LX"; IOS_TARGETS="AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A 0A947DBD-A462-5BAA-AB84-17F143D41619"; RUN=/tmp/hydracam-all-hardware-redeploy-$(date +%Y%m%d-%H%M%S); mkdir -p "$RUN"; echo RUN_DIR=$RUN; echo START_ALL $(date -u +%Y-%m-%dT%H:%M:%SZ); pids=""; for serial in $ANDROIDS; do ( set -e; echo TARGET_START android $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r "$APK" || $ADB -s $serial install --no-streaming -r "$APK"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf "PID="; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d "\r"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep "versionName|versionCode|lastUpdateTime"; echo TARGET_END android $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > "$RUN/$serial.log" 2>&1 & pids="$pids $!"; done; for device in $IOS_TARGETS; do ( set -e; echo TARGET_START ios $device $(date -u +%Y-%m-%dT%H:%M:%SZ); xcrun devicectl device install app --device "$device" "$IOS_APP"; xcrun devicectl device process launch --device "$device" --terminate-existing "$IOS_BUNDLE" --timeout 60 --json-output "$RUN/$device-launch.json" --log-output "$RUN/$device-launch-xcode.log"; python3 - "$RUN/$device-launch.json" <<"PY"
+import json, sys
+p=sys.argv[1]
+data=json.load(open(p))
+proc=data.get("result",{}).get("process",{})
+print("PID=%s" % proc.get("processIdentifier"))
+print("EXEC=%s" % proc.get("executable"))
+PY
+ echo TARGET_END ios $device $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > "$RUN/$device.log" 2>&1 & pids="$pids $!"; done; deploy_status=0; for pid in $pids; do wait $pid || deploy_status=1; done; echo END_ALL $(date -u +%Y-%m-%dT%H:%M:%SZ); for file in "$RUN"/*.log; do echo ==== $(basename "$file") ====; cat "$file"; done; exit $deploy_status'
+RUN_DIR=/tmp/hydracam-all-hardware-redeploy-20260622-184948
+START_ALL 2026-06-22T16:49:48Z
+END_ALL 2026-06-22T16:50:19Z
+==== 0A947DBD-A462-5BAA-AB84-17F143D41619-launch-xcode.log ====
+18:49:53  Acquired tunnel connection to device.
+18:49:53  Enabling developer disk image services.
+18:49:54  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+Saving JSON output file to /tmp/hydracam-all-hardware-redeploy-20260622-184948/0A947DBD-A462-5BAA-AB84-17F143D41619-launch.json
+==== 0A947DBD-A462-5BAA-AB84-17F143D41619.log ====
+TARGET_START ios 0A947DBD-A462-5BAA-AB84-17F143D41619 2026-06-22T16:49:48Z
+18:49:49  Acquired tunnel connection to device.
+18:49:49  Enabling developer disk image services.
+18:49:49  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/2092F30B-D9DF-4C94-AB01-6EA015B3125C/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1672
+• options: 
+18:49:53  Acquired tunnel connection to device.
+18:49:53  Enabling developer disk image services.
+18:49:54  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+PID=21576
+EXEC=file:///private/var/containers/Bundle/Application/2092F30B-D9DF-4C94-AB01-6EA015B3125C/Runner.app/Runner
+TARGET_END ios 0A947DBD-A462-5BAA-AB84-17F143D41619 2026-06-22T16:49:54Z
+==== 9885e6503930304946.log ====
+TARGET_START android 9885e6503930304946 2026-06-22T16:49:48Z
+Performing Streamed Install
+Success
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+PID=27511
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    lastUpdateTime=2026-06-22 18:50:14
+TARGET_END android 9885e6503930304946 2026-06-22T16:50:19Z
+==== AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A-launch-xcode.log ====
+18:49:51  Acquired tunnel connection to device.
+18:49:51  Enabling developer disk image services.
+18:49:51  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+Saving JSON output file to /tmp/hydracam-all-hardware-redeploy-20260622-184948/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A-launch.json
+==== AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A.log ====
+TARGET_START ios AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A 2026-06-22T16:49:48Z
+18:49:49  Acquired tunnel connection to device.
+18:49:49  Enabling developer disk image services.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/991E26EF-4626-4828-BC56-CBF7B7F6EDA4/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9AE68C29-BCF0-468A-80A2-5D38F03AFCDD
+• databaseSequenceNumber: 2104
+• options: 
+18:49:51  Acquired tunnel connection to device.
+18:49:51  Enabling developer disk image services.
+18:49:51  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+PID=4260
+EXEC=file:///private/var/containers/Bundle/Application/991E26EF-4626-4828-BC56-CBF7B7F6EDA4/Runner.app/Runner
+TARGET_END ios AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A 2026-06-22T16:49:51Z
+==== RF8M21J8XRT.log ====
+TARGET_START android RF8M21J8XRT 2026-06-22T16:49:48Z
+Performing Streamed Install
+Success
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+PID=22194
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    lastUpdateTime=2026-06-22 18:50:03
+TARGET_END android RF8M21J8XRT 2026-06-22T16:50:03Z
+==== RF8M90QE7LX.log ====
+TARGET_START android RF8M90QE7LX 2026-06-22T16:49:48Z
+Performing Streamed Install
+Success
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+PID=23250
+    versionCode=18 minSdk=24 targetSdk=35
+    versionName=1.4.0
+    lastUpdateTime=2026-06-22 18:50:02
+TARGET_END android RF8M90QE7LX 2026-06-22T16:50:04Z
+[exit-code] 0

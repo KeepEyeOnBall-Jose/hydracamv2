@@ -1,0 +1,531 @@
+{
+  "acceptanceChecks": [
+    "MBA13 is reachable over Tailscale and has a native Flutter/Android/iOS dev environment inventoried",
+    "Remote deploy checkout is synced to current published branch state or an explicit source-sync blocker is recorded",
+    "Every MBA13-connected ADB-authorized Android device receives the current HydraCam build and launch/process/package proof",
+    "Every MBA13-connected paired iOS device receives the current signed HydraCam app or has an explicit signing/device blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:30:55.997165+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "hostname; whoami; sw_vers; uname -m; echo PATH=$PATH; command -v brew || true; command -v git || true; command -v ruby || true; command -v pod || true; command -v xcodebuild || true; xcode-select -p 2>/dev/null || true; security find-identity -p codesigning -v || true; /Users/jose/development/flutter/bin/flutter --version || flutter --version || true; /Users/jose/Library/Android/sdk/platform-tools/adb version || adb version || true; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l || true; xcrun devicectl list devices || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:30:56.106443+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && grep -qxF \"$(cat ~/.ssh/jose_mba13_ed25519.pub)\" ~/.ssh/authorized_keys || printf \"%s\\n\" \"$(cat ~/.ssh/jose_mba13_ed25519.pub)\" >> ~/.ssh/authorized_keys && grep -F \"jose-mbp-to-joss-macbook-air-20260621\" ~/.ssh/authorized_keys >/dev/null && echo KEY_AUTHORIZED"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T16:31:35.020970+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "ls-remote",
+        "--heads",
+        "github",
+        "codex/hydracam-visual-makeover",
+        "master-jose-2025"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:31:35.854295+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--branch",
+        "--porcelain=v2"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:31:36.300182+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--stat"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:31:36.408138+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && grep -qxF 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAT4mKd0aDETEaVe3oVwRRP4rBlY2qnGuUa9vxfmeIcC jose-mbp-to-joss-macbook-air-20260621' ~/.ssh/authorized_keys || printf '%s\\n' 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAT4mKd0aDETEaVe3oVwRRP4rBlY2qnGuUa9vxfmeIcC jose-mbp-to-joss-macbook-air-20260621' >> ~/.ssh/authorized_keys; grep -F 'jose-mbp-to-joss-macbook-air-20260621' ~/.ssh/authorized_keys >/dev/null && echo KEY_AUTHORIZED"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-22T16:32:30.465672+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "zsh -lc \"echo LOGIN_PATH=\\$PATH; command -v brew || true; command -v pod || true; command -v flutter || true; /opt/homebrew/bin/brew --version 2>/dev/null | head -5 || true; /opt/homebrew/bin/pod --version 2>/dev/null || true; flutter doctor -v || /Users/jose/development/flutter/bin/flutter doctor -v\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:32:30.988087+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "if [[ -d build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app ]]; then echo LOCAL_TRANSFER_APP_EXISTS; /usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/Info.plist; codesign -dv --verbose=4 build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app 2>&1 | sed -n \"1,80p\"; security cms -D -i build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/embedded.mobileprovision > /tmp/hydracam-embedded-profile.plist; /usr/libexec/PlistBuddy -c \"Print :ProvisionedDevices\" /tmp/hydracam-embedded-profile.plist 2>/dev/null || true; else echo LOCAL_TRANSFER_APP_MISSING; fi"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:32:42.217520+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=8",
+        "mba13",
+        "echo KEY_SSH_OK; hostname; whoami"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-22T16:32:42.283252+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "set -e; echo DEPLOY_DIR; ls -ld /Users/jose/src/work/hydracamv2-mba13-deploy; echo GIT; git -C /Users/jose/src/work/hydracamv2-mba13-deploy status -sb 2>&1 || true; echo FLUTTER_DEVICES; zsh -lc \"flutter devices --device-timeout 10\"; echo ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo IOS; xcrun devicectl list devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:33:24.181191+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:33:37.662388+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "git ls-remote https://github.com/KeepEyeOnBall-Jose/hydracamv2.git refs/heads/codex/hydracam-visual-makeover refs/heads/master-jose-2025"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:34:00.169434+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "xcrun devicectl help device manage 2>&1 || true; xcrun devicectl help device 2>&1 | sed -n \"1,180p\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:34:01.455205+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb reconnect; sleep 5; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:34:02.430133+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "set -e; PUB=\"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAT4mKd0aDETEaVe3oVwRRP4rBlY2qnGuUa9vxfmeIcC jose-mbp-to-joss-macbook-air-20260621\"; mkdir -p \"$HOME/.ssh\"; chmod 700 \"$HOME/.ssh\"; touch \"$HOME/.ssh/authorized_keys\"; chmod 600 \"$HOME/.ssh/authorized_keys\"; grep -qxF \"$PUB\" \"$HOME/.ssh/authorized_keys\" || printf \"%s\\n\" \"$PUB\" >> \"$HOME/.ssh/authorized_keys\"; grep -F \"jose-mbp-to-joss-macbook-air-20260621\" \"$HOME/.ssh/authorized_keys\" >/dev/null && echo KEY_AUTHORIZED"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:34:46.209973+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "set -e; P=/Users/jose/src/work/hydracamv2-published; if [[ ! -d \"$P/.git\" ]]; then rm -rf \"$P\"; git clone --branch codex/hydracam-visual-makeover https://github.com/KeepEyeOnBall-Jose/hydracamv2.git \"$P\"; fi; git -C \"$P\" fetch origin codex/hydracam-visual-makeover; git -C \"$P\" checkout codex/hydracam-visual-makeover; git -C \"$P\" reset --hard origin/codex/hydracam-visual-makeover; git -C \"$P\" status -sb; git -C \"$P\" rev-parse HEAD"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:34:47.084613+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=8",
+        "mba13",
+        "echo KEY_SSH_OK; hostname; whoami"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:34:57.397322+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "set -e; mkdir -p \"$HOME/.android\"; if [[ -f \"$HOME/.android/debug.keystore\" ]]; then mkdir -p \"$HOME/.android/debug-keystore-backups\"; cp \"$HOME/.android/debug.keystore\" \"$HOME/.android/debug-keystore-backups/debug.keystore.$(date +%Y%m%d-%H%M%S)\"; fi; echo REMOTE_DEBUG_KEY_READY_DIR=\"$HOME/.android\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:35:25.226853+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-az",
+        "--delete",
+        "--exclude=.git/",
+        "--exclude=tempass.txt",
+        "--exclude=.dart_tool/",
+        "--exclude=build/",
+        "--exclude=android/.gradle/",
+        "--exclude=android/app/build/",
+        "--exclude=ios/Pods/",
+        "--exclude=macos/Pods/",
+        "--exclude=.worktrees/",
+        "--exclude=worktrees/",
+        "--exclude=logs/verification-runs/",
+        "--exclude=.DS_Store",
+        "./",
+        "mba13:/Users/jose/src/work/hydracamv2-mba13-deploy/"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:35:25.821372+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-az",
+        "/Users/jose/.android/debug.keystore",
+        "mba13:/Users/jose/.android/debug.keystore"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:35:28.013989+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && zsh -lc \"flutter pub get && flutter build apk --debug\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:35:38.462318+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && ls -lh build/app/outputs/flutter-apk/app-debug.apk && shasum -a 256 build/app/outputs/flutter-apk/app-debug.apk && unzip -t build/app/outputs/flutter-apk/app-debug.apk >/tmp/hydracam-apk-unzip.txt && tail -5 /tmp/hydracam-apk-unzip.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:37:14.734549+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIALS=\"9885e6503930304946 RF8M90QE7LX\"; rm -f /tmp/hydracam-android-deploy-*.log; pids=\"\"; for serial in $SERIALS; do ( set -e; echo START_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r \"$APK\" || $ADB -s $serial install --no-streaming -r \"$APK\"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf \"PID=\"; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d \"\\r\"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep \"Package \\[com.amaia23.hydracam\\]|versionName|versionCode|firstInstallTime|lastUpdateTime\"; echo END_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > /tmp/hydracam-android-deploy-$serial.log 2>&1 & pids=\"$pids $!\"; done; status=0; for pid in $pids; do wait $pid || status=1; done; for serial in $SERIALS; do echo ==== $serial ====; cat /tmp/hydracam-android-deploy-$serial.log; done; exit $status"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T16:37:35.738670+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIALS=\"9885e6503930304946 RF8M90QE7LX\"; find /tmp -maxdepth 1 -name \"hydracam-android-deploy-*.log\" -delete; pids=\"\"; for serial in $SERIALS; do ( set -e; echo START_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r \"$APK\" || $ADB -s $serial install --no-streaming -r \"$APK\"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf \"PID=\"; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d \"\\r\"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep \"Package \\[com.amaia23.hydracam\\]|versionName|versionCode|firstInstallTime|lastUpdateTime\"; echo END_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > /tmp/hydracam-android-deploy-$serial.log 2>&1 & pids=\"$pids $!\"; done; status=0; for pid in $pids; do wait $pid || status=1; done; for serial in $SERIALS; do echo ==== $serial ====; cat /tmp/hydracam-android-deploy-$serial.log; done; exit $status"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T16:37:53.206360+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "bash -lc 'set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIALS=\"9885e6503930304946 RF8M90QE7LX\"; find /tmp -maxdepth 1 -name \"hydracam-android-deploy-*.log\" -delete; pids=\"\"; for serial in $SERIALS; do ( set -e; echo START_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r \"$APK\" || $ADB -s $serial install --no-streaming -r \"$APK\"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf \"PID=\"; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d \"\\r\"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep \"Package \\[com.amaia23.hydracam\\]|versionName|versionCode|firstInstallTime|lastUpdateTime\"; echo END_ANDROID_DEPLOY $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > /tmp/hydracam-android-deploy-$serial.log 2>&1 & pids=\"$pids $!\"; done; deploy_status=0; for pid in $pids; do wait $pid || deploy_status=1; done; for serial in $SERIALS; do echo ==== $serial ====; cat /tmp/hydracam-android-deploy-$serial.log; done; exit $deploy_status'"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:38:10.540853+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:39:06.805365+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; if [[ -d \"$APP\" ]]; then echo REMOTE_IOS_APP_EXISTS; /usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" \"$APP/Info.plist\"; codesign -dv --verbose=4 \"$APP\" 2>&1 | sed -n \"1,70p\"; else echo REMOTE_IOS_APP_MISSING; fi"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:39:06.863593+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T16:39:07.525077+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A; BUNDLE=com.keepeyeonball; xcrun devicectl device install app --device \"$DEVICE\" \"$APP\"; xcrun devicectl device process launch --device \"$DEVICE\" --terminate-existing \"$BUNDLE\"; sleep 3; xcrun devicectl device info apps --device \"$DEVICE\" | grep -A14 -B2 \"$BUNDLE\"; xcrun devicectl device info processes --device \"$DEVICE\" | grep -i \"keepeyeonball\\|Runner\\|HydraCam\"; xcrun devicectl device info lockState --device \"$DEVICE\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:39:25.945656+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo FINAL_FLUTTER_DEVICES; zsh -lc \"flutter devices --device-timeout 10\"; echo FINAL_ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo FINAL_IOS; xcrun devicectl list devices; echo FINAL_PROCESSES_ANDROID; /Users/jose/Library/Android/sdk/platform-tools/adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M90QE7LX shell pidof com.amaia23.hydracam; echo FINAL_IPHONE_PROCESS; xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i \"keepeyeonball\\|Runner\\|HydraCam\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:40:22.551402+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:40:37.978878+00:00"
+    },
+    {
+      "command": [
+        "ls",
+        "-lh",
+        "logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/video",
+        "logs/verification-runs/20260622-1830-mba13-all-connected-devices-redeploy/screenshots"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:42:08.558901+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android hardware",
+      "name": "MBA13 Samsung S7 edge",
+      "notes": [],
+      "os": "Android 8.0 API 26",
+      "role": "remote deployment target"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "MBA13 Samsung S10e RF8M90QE7LX",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "remote deployment target"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS hardware",
+      "name": "MBA13 Jose Ramon iPhone",
+      "notes": [],
+      "os": "iOS 26.5",
+      "role": "remote deployment target"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android hardware",
+      "name": "MBA13 Samsung S10e RF8M21J8XRT",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "blocked remote deployment target: ADB unauthorized"
+    },
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS hardware",
+      "name": "MBA13 iPad 5",
+      "notes": [],
+      "os": "iPadOS unknown, CoreDevice iPad7,5",
+      "role": "blocked remote deployment target: CoreDevice unpaired"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/9885e6503930304946-foreground.png",
+    "screenshots/RF8M90QE7LX-foreground.png",
+    "device-logs/9885e6503930304946-deploy.log",
+    "device-logs/9885e6503930304946-logcat.txt",
+    "device-logs/RF8M90QE7LX-deploy.log",
+    "device-logs/RF8M90QE7LX-logcat.txt"
+  ],
+  "item": {
+    "slug": "mba13-all-connected-devices-redeploy",
+    "source": "user goal 2026-06-22 remote MBA13 deploy",
+    "title": "Deploy HydraCam from remote MBA13 to all connected devices"
+  },
+  "notes": [
+    "MBA13 toolchain and published checkout are ready, and deployable connected devices were updated: Android 9885e6503930304946, Android RF8M90QE7LX, and iPhone AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A. Full all-connected completion is blocked by RF8M21J8XRT being ADB-unauthorized and iPad 0A947DBD-A462-5BAA-AB84-17F143D41619 being CoreDevice-unpaired."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "blocked",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

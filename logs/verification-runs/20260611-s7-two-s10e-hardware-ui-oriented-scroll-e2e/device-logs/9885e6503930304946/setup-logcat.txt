@@ -1,0 +1,802 @@
+--------- beginning of main
+06-11 10:58:51.596  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_enumStreamInfo[513]):HAL_PIXEL_FORMAT_BLOB format(0x21) usage(0x20003) stream_type(0)
+06-11 10:58:51.596  4707 31932 I ExynosCameraStreamManager: INFO(m_insert[568]):inserted stream and id is (3)
+06-11 10:58:51.596  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_enumStreamInfo[638]):Out
+06-11 10:58:51.596  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_enumStreamInfo[472]):In
+06-11 10:58:51.596  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_enumStreamInfo[556]):HAL_PIXEL_FORMAT_YCbCr_420_888 format(0x23) usage(0x20003) stream_type(0)
+06-11 10:58:51.596  4707 31932 I ExynosCameraStreamManager: INFO(m_insert[568]):inserted stream and id is (4)
+06-11 10:58:51.596  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_enumStreamInfo[638]):Out
+06-11 10:58:51.596  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_setStreamInfo[466]):out
+06-11 10:58:51.597  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(m_setParamCropRegion):size0(4032, 3024, 4032, 3024)
+06-11 10:58:51.597  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(m_setParamCropRegion):size(0, 0, 4032, 3024), level(0)
+06-11 10:58:51.597  4707 31932 I ExynosCamera3: [CAM_ID(0)][]-INFO(configureStreams[1146]):list_index 0 streamId 1
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1147]):stream_type 0
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1148]):size 1920x1080
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1149]):format 22
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1150]):usage 20100
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1151]):max_buffers 9
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1171]):registerStream 2 registerbuffer 17
+06-11 10:58:51.597  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(checkYuvSize[885]):curYuvSize 4032x3024 newYuvSize 1920x1080 outputPortId 0
+06-11 10:58:51.597  4707 31932 D ExynosCamera3Parameters: DEBUG(checkYuvSize):setRestartPreviewChecked true
+06-11 10:58:51.597  4707 31932 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(m_setRestartPreviewChecked):setRestartPreviewChecked(during SetParameters) true
+06-11 10:58:51.597  4707 31932 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.597  4707 31932 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(checkUseDepthMap[5559]): depthMapW(504), depthMapH (282) getUseDepthMap(1)
+06-11 10:58:51.597  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(checkYuvFormat[1220]):curYuvFormat NV21 newYuvFormat NM21 outputPortId 0
+06-11 10:58:51.597  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1285]):Create buffer manager(PREVIEW)
+06-11 10:58:51.601  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][none]-DEBUG(ServiceExynosCameraBufferManager[3058])
+06-11 10:58:51.601  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_createBufferManager):BufferManager(PREVIEW_STREAM_BUF) created
+06-11 10:58:51.601  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1297]):planeCount 2+1
+06-11 10:58:51.601  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1299]):planeSize[0] 2073600 planeSize[1] 1036800
+06-11 10:58:51.601  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1301]):bytesPerLine[0] 0
+06-11 10:58:51.603  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.603  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(m_alloc[3306]):
+06-11 10:58:51.603  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=32, m_reqBufCount=32, m_allowedMaxBufCount=32) --- dumpBufferInfo ---
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[2]=54] .addr=0xf3b2d000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[2]=55] .addr=0xf3b1e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[2]=56] .addr=0xf3b14000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[2]=57] .addr=0xf3b0a000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.604  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[2]=58] .addr=0xf3b02000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[2]=59] .addr=0xf3afa000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[2]=60] .addr=0xf3af2000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[2]=61] .addr=0xf3aea000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[2]=62] .addr=0xf3a5d000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.605  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[2]=63] .addr=0xf3a4d000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[10].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[10].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[10].fd[2]=64] .addr=0xf3a45000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[11].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[11].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[11].fd[2]=65] .addr=0xf3a3d000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[12].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[12].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[12].fd[2]=66] .addr=0xf3a35000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[13].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[13].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[13].fd[2]=67] .addr=0xf3a2d000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[14].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.606  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[14].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[14].fd[2]=68] .addr=0xf3a25000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[15].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[15].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[15].fd[2]=69] .addr=0xf3a1d000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[16].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[16].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[16].fd[2]=70] .addr=0xf3a10000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[17].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[17].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[17].fd[2]=71] .addr=0xf39f9000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[18].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[18].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[18].fd[2]=72] .addr=0xf39f1000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[19].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[19].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.607  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[19].fd[2]=73] .addr=0xf39e9000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[20].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[20].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[20].fd[2]=74] .addr=0xf39e1000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[21].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[21].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[21].fd[2]=75] .addr=0xf39d9000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[22].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[22].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[22].fd[2]=76] .addr=0xf39d1000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[23].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[23].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[23].fd[2]=77] .addr=0xf39c9000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[24].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[24].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[24].fd[2]=78] .addr=0xf39c1000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[25].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[25].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.608  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[25].fd[2]=79] .addr=0xf39b6000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[26].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[26].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[26].fd[2]=80] .addr=0xf39ae000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[27].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[27].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[27].fd[2]=81] .addr=0xf399e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[28].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[28].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[28].fd[2]=82] .addr=0xf3996000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[29].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[29].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[29].fd[2]=83] .addr=0xf398e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[30].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[30].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[30].fd[2]=84] .addr=0xf3986000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[31].fd[0]=-1] .addr=0x0 .size=2073600 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[31].fd[1]=-1] .addr=0x0 .size=1036800 .position=3 .permission=0]
+06-11 10:58:51.609  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[31].fd[2]=85] .addr=0xf397e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.610  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.610  4707 31932 D ExynosCameraBufferManager: DEBUG:duration time(    9 msec):(alloc)
+06-11 10:58:51.610  4707 31932 D ExynosCameraStreamManager: DEBUG(setBufferManager[306]):m_bufferManager(0xe7f1f000)
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1309]):previewBufferMgr - 0xe7f1f000
+06-11 10:58:51.610  4707 31932 I ExynosCamera3: [CAM_ID(0)][]-INFO(configureStreams[1146]):list_index 1 streamId 3
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1147]):stream_type 0
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1148]):size 1920x1080
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1149]):format 21
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1150]):usage 20003
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1151]):max_buffers 3
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1171]):registerStream 2 registerbuffer 17
+06-11 10:58:51.610  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(setParameters):newPicture Size (1920x1080), ratioId(0)
+06-11 10:58:51.610  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(setParameters[1659]): Picture size changed: cur(0x0) -> new(1920x1080)
+06-11 10:58:51.610  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(setParameters[1661]): HwPicture size changed: cur(4032x3024) -> new(4032x2268)
+06-11 10:58:51.610  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1377]):Create buffer manager(JPEG)
+06-11 10:58:51.612  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][none]-DEBUG(ServiceExynosCameraBufferManager[3058])
+06-11 10:58:51.612  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_createBufferManager):BufferManager(JPEG_STREAM_BUF) created
+06-11 10:58:51.612  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1388]):planeCount 1
+06-11 10:58:51.612  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1390]):planeSize[0] 4147200
+06-11 10:58:51.612  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1392]):bytesPerLine[0] 0
+06-11 10:58:51.613  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-DEBUG(m_alloc[3306]):
+06-11 10:58:51.613  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=32, m_reqBufCount=32, m_allowedMaxBufCount=32) --- dumpBufferInfo ---
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[10].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[11].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[12].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[13].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[14].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.613  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[15].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[16].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[17].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[18].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[19].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[20].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[21].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[22].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[23].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[24].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[25].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[26].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[27].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[28].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[29].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[30].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[31].fd[0]=-1] .addr=0x0 .size=4147200 .position=3 .permission=0]
+06-11 10:58:51.614  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][JPEG_STREAM_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.614  4707 31932 D ExynosCameraBufferManager: DEBUG:duration time(    2 msec):(alloc)
+06-11 10:58:51.615  4707 31932 D ExynosCameraStreamManager: DEBUG(setBufferManager[306]):m_bufferManager(0xe7f20400)
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1400]):jpegBufferMgr - 0xe7f20400
+06-11 10:58:51.615  4707 31932 I ExynosCamera3: [CAM_ID(0)][]-INFO(configureStreams[1146]):list_index 2 streamId 4
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1147]):stream_type 0
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1148]):size 1920x1080
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1149]):format 23
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1150]):usage 20003
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1151]):max_buffers 9
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1171]):registerStream 2 registerbuffer 17
+06-11 10:58:51.615  4707 31932 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(checkYuvSize[885]):curYuvSize 4032x3024 newYuvSize 1920x1080 outputPortId 1
+06-11 10:58:51.615  4707 31932 D ExynosCamera3Parameters: DEBUG(checkYuvSize):setRestartPreviewChecked true
+06-11 10:58:51.615  4707 31932 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(m_setRestartPreviewChecked):setRestartPreviewChecked(during SetParameters) true
+06-11 10:58:51.615  4707 31932 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.615  4707 31932 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(checkUseDepthMap[5559]): depthMapW(504), depthMapH (282) getUseDepthMap(1)
+06-11 10:58:51.615  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1433]):Create buffer manager(PREVIEW_CB)
+06-11 10:58:51.617  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][none]-DEBUG(ServiceExynosCameraBufferManager[3058])
+06-11 10:58:51.618  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_createBufferManager):BufferManager(PREVIEW_CB_STREAM_BUF) created
+06-11 10:58:51.618  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1444]):planeCount 1
+06-11 10:58:51.618  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1446]):planeSize[0] 3110400
+06-11 10:58:51.618  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1448]):bytesPerLine[0] 0
+06-11 10:58:51.619  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.619  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-DEBUG(m_alloc[3306]):
+06-11 10:58:51.620  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=32, m_reqBufCount=32, m_allowedMaxBufCount=32) --- dumpBufferInfo ---
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=86] .addr=0xf3976000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=87] .addr=0xf396e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=88] .addr=0xf3966000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=89] .addr=0xf395e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=90] .addr=0xf3956000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=91] .addr=0xf394e000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=92] .addr=0xf393c000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=93] .addr=0xf3934000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.620  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=94] .addr=0xf392c000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[1]=95] .addr=0xf3924000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[10].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[10].fd[1]=96] .addr=0xf391c000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[11].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[11].fd[1]=97] .addr=0xf3914000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[12].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[12].fd[1]=98] .addr=0xf390c000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[13].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[13].fd[1]=99] .addr=0xf3904000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[14].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[14].fd[1]=100] .addr=0xf38fc000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[15].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[15].fd[1]=101] .addr=0xf38f4000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[16].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[16].fd[1]=102] .addr=0xf38ec000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.621  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[17].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[17].fd[1]=103] .addr=0xf38dd000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[18].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[18].fd[1]=104] .addr=0xf38d5000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[19].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[19].fd[1]=105] .addr=0xf38cd000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[20].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[20].fd[1]=106] .addr=0xf38c5000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[21].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[21].fd[1]=107] .addr=0xf38bd000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[22].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[22].fd[1]=108] .addr=0xf38b2000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[23].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[23].fd[1]=109] .addr=0xf38aa000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[24].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[24].fd[1]=110] .addr=0xf38a2000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[25].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[25].fd[1]=111] .addr=0xf389a000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[26].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[26].fd[1]=112] .addr=0xf3892000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.622  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[27].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[27].fd[1]=113] .addr=0xf388a000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[28].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[28].fd[1]=114] .addr=0xf387c000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[29].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[29].fd[1]=115] .addr=0xf3874000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[30].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[30].fd[1]=116] .addr=0xf386c000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[31].fd[0]=-1] .addr=0x0 .size=3110400 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 I ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[31].fd[1]=117] .addr=0xf3860000 .size=32768 .position=3 .permission=0]
+06-11 10:58:51.623  4707 31932 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_CB_STREAM_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.623  4707 31932 D ExynosCameraBufferManager: DEBUG:duration time(    5 msec):(alloc)
+06-11 10:58:51.623  4707 31932 D ExynosCameraStreamManager: DEBUG(setBufferManager[306]):m_bufferManager(0xe819ec00)
+06-11 10:58:51.623  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1455]):preivewCallbackBufferMgr - 0xe819ec00
+06-11 10:58:51.624  4707 31932 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(configureStreams[1473]):Out
+06-11 10:58:51.624  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_setBuffers[6699]):alloc buffer - camera ID: 0
+06-11 10:58:51.624  4707 31932 I ExynosCamera3Interface: INFO(HAL3_camera_device_configure_streams[270]):out =====
+06-11 10:58:51.624  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-(m_setBuffers):HW Sensor MAX width x height = 4032x3024
+06-11 10:58:51.624  4707 31932 D ExynosCamera3Interface: DEBUG:duration time(   29 msec):(HAL3_camera_device_configure_streams)
+06-11 10:58:51.624  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-(m_setBuffers):Preview BDS width x height = 4032x3024
+06-11 10:58:51.624  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-(m_setBuffers):PreviewSize(Max) width x height = 4032x3024
+06-11 10:58:51.624  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_allocBuffers[6652]):setInfo(planeCount=2, minBufCount=7, maxBufCount=7, type=0, allocMode=1)
+06-11 10:58:51.625  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.625  4707 32342 E ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(getHwPictureFormat):m_cameraInfo.pictureFormat(1448695129)
+06-11 10:58:51.625  4707 32342 I ExynosCamera3: [CAM_ID(0)][]-(m_setReprocessingBuffer[7167]):Max Picture size 4032x3024 format 56595559
+06-11 10:58:51.625  4707 32342 I ExynosCamera3: [CAM_ID(0)][]-(m_setReprocessingBuffer[7170]):MAX Thumbnail size 504x376
+06-11 10:58:51.625  4707 32342 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_allocBuffers[6652]):setInfo(planeCount=2, minBufCount=1, maxBufCount=32, type=4, allocMode=0)
+06-11 10:58:51.625  4707 32342 E ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-ERR(m_defaultAlloc[1127]):buffer[0].fd[1] = 19 already allocated
+06-11 10:58:51.625  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.625  4707 32342 D ExynosCameraBufferManager: DEBUG(m_defaultAlloc[1063]):SYNC_FORCE_CACHED
+06-11 10:58:51.625  4707 32342 E ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-ERR(m_defaultAlloc[1127]):buffer[0].fd[0] = 23 already allocated
+06-11 10:58:51.625  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=4, bufIndex=0, size=0.00)
+06-11 10:58:51.625  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.625  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=1, m_reqBufCount=1, m_allowedMaxBufCount=32) --- dumpBufferInfo ---
+06-11 10:58:51.625  4707 32342 I ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=23] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.625  4707 32342 I ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=19] .addr=0xf3b8d000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.625  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][YUV_CAPTURE_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: DEBUG:duration time(    1 msec):(alloc)
+06-11 10:58:51.626  4707 32342 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_allocBuffers[6652]):setInfo(planeCount=2, minBufCount=1, maxBufCount=32, type=1, allocMode=0)
+06-11 10:58:51.626  4707 32342 E ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-ERR(m_defaultAlloc[1127]):buffer[0].fd[1] = 25 already allocated
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.626  4707 32342 E ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-ERR(m_defaultAlloc[1127]):buffer[0].fd[0] = 26 already allocated
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=0, size=0.00)
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=1, m_reqBufCount=1, m_allowedMaxBufCount=32) --- dumpBufferInfo ---
+06-11 10:58:51.626  4707 32342 I ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=26] .addr=0x0 .size=379008 .position=0 .permission=1]
+06-11 10:58:51.626  4707 32342 I ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=25] .addr=0xf3b85000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: [CAM_ID(0)][THUMBNAIL_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.626  4707 32342 D ExynosCameraBufferManager: DEBUG:duration time(    0 msec):(alloc)
+06-11 10:58:51.630  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    5 msec):(type=0, bufIndex=0, size=23.26)
+06-11 10:58:51.632  4707 31932 D Camera3-Device: Set real time priority for request queue thread (tid 32339)
+06-11 10:58:51.635  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    5 msec):(type=0, bufIndex=1, size=23.26)
+06-11 10:58:51.636 32218 32321 D SyncCaptureSessionImpl: [androidx.camera.camera2.internal.SynchronizedCaptureSessionImpl@112822d] Session onConfigured()
+06-11 10:58:51.637 32218 32321 D CaptureSession: Attempting to send capture request onConfigured
+06-11 10:58:51.637 32218 32321 D CaptureSession: Issuing request for session.
+06-11 10:58:51.637 32218 32321 D Camera2CaptureRequestBuilder: createCaptureRequest
+06-11 10:58:51.638  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=2, size=23.26)
+06-11 10:58:51.640 32218 32321 D Camera2CaptureRequestBuilder: applyAeFpsRange: expectedFrameRateRange = [0, 0]
+06-11 10:58:51.640 32218 32321 D Camera2CaptureRequestBuilder: applyVideoStabilization: mode = null
+06-11 10:58:51.641  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=3, size=23.26)
+06-11 10:58:51.644  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=4, size=23.26)
+06-11 10:58:51.647  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=5, size=23.26)
+06-11 10:58:51.648  4978  6260 I EDMNativeHelperService: isCameraEnabled
+06-11 10:58:51.649  4978  6463 I EDMNativeHelperService: isCameraEnabled
+--------- beginning of system
+06-11 10:58:51.649  4978  6463 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-11 10:58:51.649  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    2 msec):(type=0, bufIndex=6, size=23.26)
+06-11 10:58:51.649  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(   24 msec)
+06-11 10:58:51.649  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=7, m_reqBufCount=7, m_allowedMaxBufCount=7) --- dumpBufferInfo ---
+06-11 10:58:51.649  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=125] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.649  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=118] .addr=0xf3853000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.649  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=126] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.649  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=119] .addr=0xf384b000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.649  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=127] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.650  4978  6260 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=120] .addr=0xf3840000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=128] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=121] .addr=0xf3838000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=129] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=122] .addr=0xf382a000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=130] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=123] .addr=0xf3821000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=131] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=124] .addr=0xf380f000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][FLITE_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: DEBUG:duration time(   26 msec):(alloc)
+06-11 10:58:51.650  4707 32341 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.650  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_setBuffers[6756]):Depth Map Size width x height = 504x378
+06-11 10:58:51.650  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_allocBuffers[6652]):setInfo(planeCount=2, minBufCount=7, maxBufCount=7, type=1, allocMode=1)
+06-11 10:58:51.650  4707 31932 D Camera3-Device: submitRequestsHelper: mInterfaceLock.lock()
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.650  4707 31932 D Camera3-Status: markComponent: Component 1 is now active
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=0, size=0.36)
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=1, size=0.36)
+06-11 10:58:51.650  4707 31932 D Camera3-Device: submitRequestsHelper: mInterfaceLock.unlock()
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=2, size=0.36)
+06-11 10:58:51.650  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=3, size=0.36)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    1 msec):(type=1, bufIndex=4, size=0.36)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=5, size=0.36)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=1, bufIndex=6, size=0.36)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    1 msec)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=7, m_reqBufCount=7, m_allowedMaxBufCount=7) --- dumpBufferInfo ---
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=140] .addr=0xf36f8000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=132] .addr=0xf3807000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=141] .addr=0xf3563000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=133] .addr=0xf37ff000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=142] .addr=0xf3418000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=134] .addr=0xf37f4000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=143] .addr=0xf335d000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=136] .addr=0xf37ec000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=144] .addr=0xf1415000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=137] .addr=0xf37e4000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=145] .addr=0xeabd3000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=138] .addr=0xf37dc000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=146] .addr=0xea561000 .size=381024 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=139] .addr=0xf37d4000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][DEPTH_MAP_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: DEBUG:duration time(    1 msec):(alloc)
+06-11 10:58:51.651  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_setBuffers[6783]):m_allocBuffers(DepthMap Buffer) 504 x 378,            planeSize(381024), planeCount(2), maxBufferCount(7)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=0, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=1, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=2, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=3, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=4, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=5, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=6, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=7, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    0 msec):(type=0, bufIndex=8, size=0.00)
+06-11 10:58:51.651  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.652  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=9, m_reqBufCount=9, m_allowedMaxBufCount=9) --- dumpBufferInfo ---
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=156] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=147] .addr=0xf37cc000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=157] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=148] .addr=0xf37c4000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=158] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=149] .addr=0xf37b4000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=159] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=150] .addr=0xf37ac000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=160] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=151] .addr=0xf37a4000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=161] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=152] .addr=0xf379c000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=162] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=153] .addr=0xf3794000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=163] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=154] .addr=0xf378c000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=164] .addr=0x0 .size=4096 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=155] .addr=0xf3784000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.652  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][3AA_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.652  4707 32341 D ExynosCameraBufferManager: DEBUG:duration time(    1 msec):(alloc)
+06-11 10:58:51.652 32218 32321 D CaptureSession: CameraCaptureSession.onConfigured() mState=OPENED
+06-11 10:58:51.652  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.654 32218 32321 D CaptureSession: CameraCaptureSession.onReady() OPENED
+06-11 10:58:51.655  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=0, size=23.26)
+06-11 10:58:51.658  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=1, size=23.26)
+06-11 10:58:51.661  4707 32339 D Camera3-Status: markComponent: Component 2 is now active
+06-11 10:58:51.661  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=2, size=23.26)
+06-11 10:58:51.661  4707 32339 D Camera3-Status: markComponent: Component 0 is now active
+06-11 10:58:51.664  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=3, size=23.26)
+06-11 10:58:51.667  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=4, size=23.26)
+06-11 10:58:51.670  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=5, size=23.26)
+06-11 10:58:51.673  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=6, size=23.26)
+06-11 10:58:51.675  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    2 msec):(type=0, bufIndex=7, size=23.26)
+06-11 10:58:51.678  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=8, size=23.26)
+06-11 10:58:51.678  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(   26 msec)
+06-11 10:58:51.678  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=9, m_reqBufCount=9, m_allowedMaxBufCount=9) --- dumpBufferInfo ---
+06-11 10:58:51.678  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=174] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.678  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=165] .addr=0xf36f0000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.678  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=175] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.678  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=166] .addr=0xf36e3000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.678  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=176] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.678  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=167] .addr=0xf36db000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=179] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=168] .addr=0xf36d3000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=182] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=169] .addr=0xf36cb000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=183] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=170] .addr=0xf36c3000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=184] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=171] .addr=0xf36bb000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=185] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=172] .addr=0xf36b3000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=186] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=173] .addr=0xf36ab000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.679  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][ISP_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.679  4707 32341 D ExynosCameraBufferManager: DEBUG:duration time(   27 msec):(alloc)
+06-11 10:58:51.680  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(    0 msec)
+06-11 10:58:51.683  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=0, size=23.26)
+06-11 10:58:51.686  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=1, size=23.26)
+06-11 10:58:51.689  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    2 msec):(type=0, bufIndex=2, size=23.26)
+06-11 10:58:51.691  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    2 msec):(type=0, bufIndex=3, size=23.26)
+06-11 10:58:51.694  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=4, size=23.26)
+06-11 10:58:51.697  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=5, size=23.26)
+06-11 10:58:51.700  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=6, size=23.26)
+06-11 10:58:51.703  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=7, size=23.26)
+06-11 10:58:51.706  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    3 msec):(type=0, bufIndex=8, size=23.26)
+06-11 10:58:51.713  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1195]):duration time(    7 msec):(type=0, bufIndex=9, size=23.26)
+06-11 10:58:51.713  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(m_defaultAlloc[1215]):Duration time of buffer allocation(   32 msec)
+06-11 10:58:51.713  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(alloc[241]):Allocate the buffer succeeded (m_allocatedBufCount=10, m_reqBufCount=10, m_allowedMaxBufCount=10) --- dumpBufferInfo ---
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[0]=197] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[0].fd[1]=187] .addr=0xf36a3000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[0]=198] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[1].fd[1]=188] .addr=0xf369b000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[0]=199] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[2].fd[1]=189] .addr=0xf368d000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[0]=200] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[3].fd[1]=190] .addr=0xf3685000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[0]=201] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[4].fd[1]=191] .addr=0xf367d000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[0]=202] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[5].fd[1]=192] .addr=0xf3675000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[0]=203] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[6].fd[1]=193] .addr=0xf366d000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[0]=204] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[7].fd[1]=194] .addr=0xf3665000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[0]=205] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[8].fd[1]=195] .addr=0xf365d000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[0]=206] .addr=0x0 .size=24385536 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 I ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-INFO(dumpBufferInfo[1489]):[m_buffer[9].fd[1]=196] .addr=0xf364f000 .size=32768 .position=0 .permission=1]
+06-11 10:58:51.713  4707 32341 D ExynosCameraBufferManager: [CAM_ID(0)][MCSC_BUF]-DEBUG(alloc[244]):------------------------------------------------------------------
+06-11 10:58:51.713  4707 32341 D ExynosCameraBufferManager: DEBUG:duration time(   34 msec):(alloc)
+06-11 10:58:51.713  4707 32341 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_setBuffers[6842]):alloc buffer done - camera ID: 0
+06-11 10:58:51.714  4707 32341 D ExynosCamera3: DEBUG:duration time(   90 msec):(m_setBuffers)
+06-11 10:58:51.714  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(31)
+06-11 10:58:51.714  4707 32339 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(processCaptureRequest[1591]):Start FrameFactory requestKey(0) m_flushFlag(0/0)
+06-11 10:58:51.715  4707 32346 E ExynosCamera3: [CAM_ID(0)][]-INFO(m_setSetfile[3655]) configMode(0), dualMode(0)
+06-11 10:58:51.715  4707 32346 D ExynosCamera3Parameters: DEBUG(setSetfileYuvRange[3829]):m_cameraId(0) : general[setfile(0) YUV range(0)] : reprocesing[setfile(5) YUV range(0)]
+06-11 10:58:51.715  4707 32346 D ExynosCamera3Parameters: DEBUG(setSetfileYuvRange[3829]):m_cameraId(0) : general[setfile(0) YUV range(0)] : reprocesing[setfile(5) YUV range(0)]
+06-11 10:58:51.715  4707 32346 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_setupPipeline[3694]): Use REPROCESSING_BAYER_MODE_PURE_ALWAYS_ON
+06-11 10:58:51.715  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(setBufferManager[1067])
+06-11 10:58:51.715  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(setBufferManager[1067])
+06-11 10:58:51.715  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(initPipes[586])
+06-11 10:58:51.715  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[597])
+06-11 10:58:51.715  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[619]):SensorSize(4032x3024)
+06-11 10:58:51.715  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[628]:Set framerate (denominator=30)
+06-11 10:58:51.715  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setParam[538])
+06-11 10:58:51.715  4707 32346 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.715  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[687]):DepthMapSize 504x282
+06-11 10:58:51.715  4707 32346 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setupPipe[348])
+06-11 10:58:51.715  4707 32346 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setupPipe[357]):set new sensorIds
+06-11 10:58:51.715  4707 32346 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setPipeInfo[307])
+06-11 10:58:51.715  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1534])
+06-11 10:58:51.716  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1613]): set pipeInfos on FLITE : setFormat(4032, 3024) and reqBuffers(32).
+06-11 10:58:51.716  4707 32346 D ExynosCameraNode: [CAM_ID(0)][FLITE]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.716  4707 32346 D ExynosCameraNode: [CAM_ID(0)][FLITE]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 844257602, yuvRange 7
+06-11 10:58:51.716  4707 32346 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.716  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1534])
+06-11 10:58:51.716  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(m_setNodeInfo[1613]): set pipeInfos on CAM0VC2 : setFormat(504, 282) and reqBuffers(7).
+06-11 10:58:51.716  4707 32346 D ExynosCameraNode: [CAM_ID(0)][CAM0VC2]-DEBUG(setSize[404]):w (504) h (282)
+06-11 10:58:51.716  4707 32346 D ExynosCameraNode: [CAM_ID(0)][CAM0VC2]-DEBUG(m_setFmt[1214]):type 9, 504 x 282, format 844257602, yuvRange 7
+06-11 10:58:51.716  4707 32346 I ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-INFO(setupPipe[383]):setupPipe() is succeed (0) setupPipe (2)
+06-11 10:58:51.716  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(setControl[466])
+06-11 10:58:51.716  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(m_initFlitePipe[734]):BNS scale down ratio(1.0), size (4032x3024)
+06-11 10:58:51.716  4707 32346 I ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(updateHwSensorSize):curHwSensor size(4032x3024) newHwSensor size(4032x3024)
+06-11 10:58:51.716  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_setupConfig[1101])
+06-11 10:58:51.716  4707 32346 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.716  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_setDeviceInfo[1230])
+06-11 10:58:51.717  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1397])
+06-11 10:58:51.717  4707 32346 E ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(getHwPictureFormat):m_cameraInfo.pictureFormat(1448695129)
+06-11 10:58:51.717  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1434]):MaxSensorSize 4032x3024 bayerFormat 32525942
+06-11 10:58:51.717  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1437]):BnsSize 4032x3024 BcropSize 4032x3024 BdsSize 4032x3024
+06-11 10:58:51.717  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1445]):YUV[0] Size 1920x1080 Format 31324d4e
+06-11 10:58:51.717  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1445]):YUV[1] Size 1920x1080 Format 3132564e
+06-11 10:58:51.717  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(m_initPipes[1445]):YUV[2] Size 4032x3024 Format 3132564e
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(setupPipe[155])
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(setupPipe[165]):set new sensorIds
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7143697) [src nodeNum : 101][nodeNums : 110][otf : 1][leader : 1][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7146000) [src nodeNum : 110][nodeNums : 111][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7146000) [src nodeNum : 110][nodeNums : 112][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setPipeInfo[2888])
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on 3AA_OUTPUT, setFormat(32, 64) and reqBuffers(9)
+06-11 10:58:51.717  4707 32346 D ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-DEBUG(setSize[404]):w (32) h (64)
+06-11 10:58:51.717  4707 32346 W ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-WARN(setFormat[724]):name(3AA_OUTPUT) fd 28, bytesperline(0) < width(32), height(64)
+06-11 10:58:51.717  4707 32346 D ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-DEBUG(m_setFmt[1214]):type 10, 32 x 64, format 844257602, yuvRange 7
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.717  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on 3AA_CAPTURE, setFormat(4032, 3024) and reqBuffers(9)
+06-11 10:58:51.718  4707 32346 D ExynosCameraNode: [CAM_ID(0)][3AA_CAPTURE]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.718  4707 32346 D ExynosCameraNode: [CAM_ID(0)][3AA_CAPTURE]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 844257602, yuvRange 7
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on 3AA_PREVIEW, setFormat(4032, 3024) and reqBuffers(9)
+06-11 10:58:51.718  4707 32346 D ExynosCameraNode: [CAM_ID(0)][3AA_PREVIEW]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.718  4707 32346 D ExynosCameraNode: [CAM_ID(0)][3AA_PREVIEW]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 844257602, yuvRange 7
+06-11 10:58:51.718  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(setupPipe[226]):setupPipe() is succeed, Pipe(4), prepare(2)
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(setupPipe[155])
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(setupPipe[165]):set new sensorIds
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7146496) [src nodeNum : 112][nodeNums : 130][otf : 0][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7151120) [src nodeNum : 130][nodeNums : 131][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7158800) [src nodeNum : 160][nodeNums : 170][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7158800) [src nodeNum : 160][nodeNums : 171][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7158800) [src nodeNum : 160][nodeNums : 172][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.718  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7151120) [src nodeNum : 130][nodeNums : 132][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.719  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setInput[2867]): setInput(sensorIds : 7151376) [src nodeNum : 131][nodeNums : 160][otf : 1][leader : 0][reprocessing : 0][unique sensorId : 109]
+06-11 10:58:51.719  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(30)
+06-11 10:58:51.724  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(29)
+06-11 10:58:51.730  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(28)
+06-11 10:58:51.735  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(27)
+06-11 10:58:51.774  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setPipeInfo[2888])
+06-11 10:58:51.774  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.774  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on ISP_OUTPUT, setFormat(4032, 3024) and reqBuffers(9)
+06-11 10:58:51.774  4707 32346 D ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.775  4707 32346 D ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-DEBUG(m_setFmt[1214]):type 10, 4032 x 3024, format 844257602, yuvRange 7
+06-11 10:58:51.775  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.775  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on ISP_CAPTURE, setFormat(4032, 3024) and reqBuffers(10)
+06-11 10:58:51.775  4707 32346 D ExynosCameraNode: [CAM_ID(0)][ISP_CAPTURE]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.775  4707 32346 D ExynosCameraNode: [CAM_ID(0)][ISP_CAPTURE]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 1448695129, yuvRange 7
+06-11 10:58:51.775  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.775  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_PREVIEW, setFormat(1920, 1080) and reqBuffers(32)
+06-11 10:58:51.775  4707 32346 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW]-DEBUG(setSize[404]):w (1920) h (1080)
+06-11 10:58:51.775  4707 32346 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW]-DEBUG(m_setFmt[1214]):type 9, 1920 x 1080, format 825380174, yuvRange 7
+06-11 10:58:51.776  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.776  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_PREVIEW_CALLBACK, setFormat(1920, 1080) and reqBuffers(32)
+06-11 10:58:51.776  4707 32346 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW_CALLBACK]-DEBUG(setSize[404]):w (1920) h (1080)
+06-11 10:58:51.776  4707 32346 D ExynosCameraNode: [CAM_ID(0)][MCSC_PREVIEW_CALLBACK]-DEBUG(m_setFmt[1214]):type 9, 1920 x 1080, format 825382478, yuvRange 7
+06-11 10:58:51.776  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.776  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_RECORDING, setFormat(4032, 3024) and reqBuffers(1)
+06-11 10:58:51.776  4707 32346 D ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.776  4707 32346 W ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-WARN(setFormat[724]):name(MCSC_RECORDING) fd 36, bytesperline(0) < width(4032), height(3024)
+06-11 10:58:51.776  4707 32346 D ExynosCameraNode: [CAM_ID(0)][MCSC_RECORDING]-DEBUG(m_setFmt[1214]):type 9, 4032 x 3024, format 825382478, yuvRange 7
+06-11 10:58:51.777  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(setupPipe[226]):setupPipe() is succeed, Pipe(7), prepare(0)
+06-11 10:58:51.777  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(0)
+06-11 10:58:51.778  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(1)
+06-11 10:58:51.779  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(2)
+06-11 10:58:51.780  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(3)
+06-11 10:58:51.781  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(4)
+06-11 10:58:51.781  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(5)
+06-11 10:58:51.782  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(6)
+06-11 10:58:51.783  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(7)
+06-11 10:58:51.784  4707 32346 I ExynosCameraNode: [CAM_ID(0)][3AA_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(8)
+06-11 10:58:51.791  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(0)
+06-11 10:58:51.797  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(1)
+06-11 10:58:51.801  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(26)
+06-11 10:58:51.803  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(2)
+06-11 10:58:51.809  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(3)
+06-11 10:58:51.814  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(4)
+06-11 10:58:51.819  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(5)
+06-11 10:58:51.824  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(6)
+06-11 10:58:51.830  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(7)
+06-11 10:58:51.834  4707 32346 I ExynosCameraNode: [CAM_ID(0)][ISP_OUTPUT]-INFO(prepareBuffer[939]):prepareBuffers(8)
+06-11 10:58:51.834  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(mapBuffers[664]):Map buffer Success!
+06-11 10:58:51.834  4707 32346 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_frameFactoryStartThreadFunc[3436]):prepare 2
+06-11 10:58:51.834  4707 32346 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_searchFrameFromList[2951]):list is empty
+06-11 10:58:51.835  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(prepare[237])
+06-11 10:58:51.843  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(start[266])
+06-11 10:58:51.843  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_startNode[3439])
+06-11 10:58:51.843  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(start[282]):start() is succeed, Pipe(7)
+06-11 10:58:51.843  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(start[266])
+06-11 10:58:51.843  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_startNode[3439])
+06-11 10:58:51.849  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(start[282]):start() is succeed, Pipe(4)
+06-11 10:58:51.849  4707 32346 D ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-DEBUG(start[291])
+06-11 10:58:51.850  4707 32346 D ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-DEBUG(getUseDepthMap[5537]): m_flaguseDepthMap(1)
+06-11 10:58:51.850  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(prepare[234])
+06-11 10:58:51.850  4707 32346 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-WRN(m_putBuffer[1720]):Capture node putbuffer is Zero, frameCount(0)
+06-11 10:58:51.850  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3548]):(3AA_OUTPUT):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-11 10:58:51.850  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3548]):(3AA_CAPTURE):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-11 10:58:51.850  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(m_checkNodeGroupInfo[3548]):(3AA_PREVIEW):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-11 10:58:51.850  4707 32346 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-WRN(m_putBuffer[1720]):Capture node putbuffer is Zero, frameCount(1)
+06-11 10:58:51.850  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(prepare[259]):prepare() is succeed, Pipe(4), prepare(2)
+06-11 10:58:51.850  4707 32346 D ExynosCameraPipeFlite: [CAM_ID(0)][PIPE_FLITE]-DEBUG(sensorStream[390])
+06-11 10:58:51.867  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(25)
+06-11 10:58:51.874  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(startPipes[776]):Starting Success!
+06-11 10:58:51.874  4707 32346 I ExynosCamera3FrameFactoryPreview: [CAM_ID(0)][FactoryBack]-INFO(startInitialThreads[937]):start pre-ordered initial pipe thread
+06-11 10:58:51.874  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(startThread[124]):pipeId=0
+06-11 10:58:51.874  4707 32346 I ExynosCameraPipe: [CAM_ID(0)][PIPE_FLITE]-INFO(startThread[384]):startThread is succeed (0)
+06-11 10:58:51.874  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(startThread[124]):pipeId=4
+06-11 10:58:51.874  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(startThread[342])
+06-11 10:58:51.875  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(startThread[353]):startThread is succeed, Pipe(4)
+06-11 10:58:51.875  4707 32346 I ExynosCamera3FrameFactory: [CAM_ID(0)][FactoryBack]-INFO(startThread[124]):pipeId=7
+06-11 10:58:51.875  4707 32348 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-WRN(m_putBuffer[1720]):Capture node putbuffer is Zero, frameCount(2)
+06-11 10:58:51.875  4707 32346 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(startThread[342])
+06-11 10:58:51.875  4707 32346 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(startThread[353]):startThread is succeed, Pipe(7)
+06-11 10:58:51.876  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setBufferManager[1067])
+06-11 10:58:51.876  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[208])
+06-11 10:58:51.876  4707 32352 E ExynosCamera3Parameters: [CAM_ID(0)][ParametersBack]-INFO(getHwPictureFormat):m_cameraInfo.pictureFormat(1448695129)
+06-11 10:58:51.876  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[258]): MaxPreviewSize(4032x3024), HwPreviewSize(1920x1080)
+06-11 10:58:51.876  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[259]): MaxPixtureSize(4032x3024), HwPixtureSize(4032x2268)
+06-11 10:58:51.876  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[260]): PictureSize(1920x1080)
+06-11 10:58:51.876  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[261]): MaxThumbnailSize(504x376)
+06-11 10:58:51.876  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(initPipes[262]): PreviewBayerCropSize(4032x3024)
+06-11 10:58:51.876  4707 32352 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(needSerialization[1263]):PIPE_3AA_REPROCESSING serialized operation enabled
+06-11 10:58:51.876  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setupPipe[155])
+06-11 10:58:51.876  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(setupPipe[165]):set new sensorIds
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23920897) [src nodeNum : 101][nodeNums : 120][otf : 0][leader : 1][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23930896) [src nodeNum : 140][nodeNums : 141][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23936272) [src nodeNum : 161][nodeNums : 173][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23936272) [src nodeNum : 161][nodeNums : 174][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946256) [src nodeNum : 200][nodeNums : 200][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946256) [src nodeNum : 200][nodeNums : 200][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946512) [src nodeNum : 201][nodeNums : 201][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23946512) [src nodeNum : 201][nodeNums : 201][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23925776) [src nodeNum : 120][nodeNums : 122][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23926288) [src nodeNum : 122][nodeNums : 140][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23930896) [src nodeNum : 140][nodeNums : 142][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.877  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setInput[2867]): setInput(sensorIds : 23931408) [src nodeNum : 142][nodeNums : 161][otf : 1][leader : 0][reprocessing : 1][unique sensorId : 109]
+06-11 10:58:51.888  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setPipeInfo[2888])
+06-11 10:58:51.888  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.888  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on REPROCESSING_3AA_OUTPUT, setFormat(4032, 3024) and reqBuffers(32)
+06-11 10:58:51.888  4707 32352 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-DEBUG(setSize[404]):w (4032) h (3024)
+06-11 10:58:51.888  4707 32352 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-WARN(setFormat[724]):name(REPROCESSING_3AA_OUTPUT) fd 39, bytesperline(0) < width(4032), height(3024)
+06-11 10:58:51.888  4707 32352 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_3AA_OUTPUT]-DEBUG(m_setFmt[1214]):type 10, 4032 x 3024, format 844257602, yuvRange 7
+06-11 10:58:51.888  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.888  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on REPROCESSING_ISP_CAPTURE_M2M, setFormat(4032, 2268) and reqBuffers(32)
+06-11 10:58:51.888  4707 32352 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-DEBUG(setSize[404]):w (4032) h (2268)
+06-11 10:58:51.889  4707 32352 W ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-WARN(setFormat[724]):name(REPROCESSING_ISP_CAPTURE_M2M) fd 40, bytesperline(0) < width(4032), height(2268)
+06-11 10:58:51.889  4707 32352 D ExynosCameraNode: [CAM_ID(0)][REPROCESSING_ISP_CAPTURE_M2M]-DEBUG(m_setFmt[1214]):type 9, 4032 x 2268, format 1448695129, yuvRange 7
+06-11 10:58:51.906  4707 32349 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2254]):InternalFrame(5) frameCount(0)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-11 10:58:51.906  4707 32350 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(m_putBuffer[1573]):Internal Frame(5), frameCount(0) (0)
+06-11 10:58:51.906  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_putBuffer[1864]):clean frame, frameCount(0)
+06-11 10:58:51.906  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_completeFrame[2816]):NOT DONE frameCount(0)
+06-11 10:58:51.907  4707 32350 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-WARN(m_putBufferThreadFunc[1507]):m_putbuffer fail, ret(-38)
+06-11 10:58:51.907  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.907  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_CAPTURE_MAIN, setFormat(4032, 2268) and reqBuffers(32)
+06-11 10:58:51.908  4707 32352 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-DEBUG(setSize[404]):w (4032) h (2268)
+06-11 10:58:51.908  4707 32352 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-WARN(setFormat[724]):name(MCSC_CAPTURE_MAIN) fd 41, bytesperline(0) < width(4032), height(2268)
+06-11 10:58:51.908  4707 32352 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_MAIN]-DEBUG(m_setFmt[1214]):type 9, 4032 x 2268, format 1448695129, yuvRange 7
+06-11 10:58:51.908  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.908  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on MCSC_CAPTURE_THUMBNAIL, setFormat(504, 376) and reqBuffers(32)
+06-11 10:58:51.908  4707 32352 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-DEBUG(setSize[404]):w (504) h (376)
+06-11 10:58:51.908  4707 32352 W ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-WARN(setFormat[724]):name(MCSC_CAPTURE_THUMBNAIL) fd 42, bytesperline(0) < width(504), height(376)
+06-11 10:58:51.908  4707 32352 D ExynosCameraNode: [CAM_ID(0)][MCSC_CAPTURE_THUMBNAIL]-DEBUG(m_setFmt[1214]):type 9, 504 x 376, format 1448695129, yuvRange 7
+06-11 10:58:51.908  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.908  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_JPEG_DST, setFormat(4032, 2268) and reqBuffers(32)
+06-11 10:58:51.909  4707 32352 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_DST]-DEBUG(setSize[461]):w (4032) h (2268)
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_JPEG_SRC, setFormat(4032, 2268) and reqBuffers(32)
+06-11 10:58:51.909  4707 32352 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_JPEG_SRC]-DEBUG(setSize[461]):w (4032) h (2268)
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_THUMBNAIL_SRC, setFormat(504, 376) and reqBuffers(32)
+06-11 10:58:51.909  4707 32352 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_SRC]-DEBUG(setSize[461]):w (504) h (376)
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[2977])
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_setNodeInfo[3057]):set pipeInfos on HWFC_THUMBNAIL_DST, setFormat(504, 376) and reqBuffers(32)
+06-11 10:58:51.909  4707 32352 D ExynosCameraNodeJpegHAL: [CAM_ID(0)][HWFC_THUMBNAIL_DST]-DEBUG(setSize[461]):w (504) h (376)
+06-11 10:58:51.909  4707 32352 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(setupPipe[226]):setupPipe() is succeed, Pipe(201), prepare(0)
+06-11 10:58:51.909  4707 32352 D ExynosCamera3: [CAM_ID(0)][]-DEBUG(m_startReprocessingFrameFactory[7326]):- IN -
+06-11 10:58:51.909  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(startPipes[623])
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(start[266])
+06-11 10:58:51.909  4707 32352 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-DEBUG(m_startNode[3439])
+06-11 10:58:51.911  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(24)
+06-11 10:58:51.920  4707 32352 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA_REPROCESSING]-INFO(start[282]):start() is succeed, Pipe(201)
+06-11 10:58:51.920  4707 32352 I ExynosCamera3FrameReprocessingFactory: [CAM_ID(0)][ReprocessingFactory]-INFO(startPipes[671]):Starting Reprocessing [SCC>ISP] Success!
+06-11 10:58:51.920  4707 32352 D ExynosCamera3: DEBUG:duration time(   11 msec):(m_startReprocessingFrameFactory)
+06-11 10:58:51.939  4707 32349 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2254]):InternalFrame(5) frameCount(1)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-11 10:58:51.939  4707 32350 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(m_putBuffer[1573]):Internal Frame(5), frameCount(1) (0)
+06-11 10:58:51.939  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_putBuffer[1864]):clean frame, frameCount(1)
+06-11 10:58:51.939  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_completeFrame[2816]):NOT DONE frameCount(1)
+06-11 10:58:51.939  4707 32350 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-WARN(m_putBufferThreadFunc[1507]):m_putbuffer fail, ret(-38)
+06-11 10:58:52.006  4707 32349 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-INFO(m_getBuffer[2254]):InternalFrame(5) frameCount(2)                    : captureNodeCount == 0 || checkRet(0) != NO_ERROR.                    so, setFrameState(FRAME_STATE_SKIPPED)
+06-11 10:58:52.006  4707 32350 I ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-INFO(m_putBuffer[1573]):Internal Frame(5), frameCount(2) (0)
+06-11 10:58:52.006  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_putBuffer[1864]):clean frame, frameCount(2)
+06-11 10:58:52.006  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_completeFrame[2816]):NOT DONE frameCount(2)
+06-11 10:58:52.006  4707 32350 W ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-WARN(m_putBufferThreadFunc[1507]):m_putbuffer fail, ret(-38)
+06-11 10:58:52.041  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(ISP_OUTPUT):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-11 10:58:52.041  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(MCSC_PREVIEW):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 378, 4032, 2268 / 0, 0, 1920, 1080)
+06-11 10:58:52.041  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(MCSC_PREVIEW_CALLBACK):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 378, 4032, 2268 / 0, 0, 1920, 1080)
+06-11 10:58:52.041  4707 32350 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_ISP]-DEBUG(m_checkNodeGroupInfo[3548]):(MCSC_RECORDING):oldCropSize(0, 0, 0, 0 / 0, 0, 0, 0) -> newCropSize(0, 0, 4032, 3024 / 0, 0, 4032, 3024)
+06-11 10:58:52.078  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(23)
+06-11 10:58:52.081  4707 32357 I ExynosCamera3: [CAM_ID(0)][]-INFO(m_monitorThreadFunc[8024]):@FIMC_IS_SYNC 1246
+06-11 10:58:52.081  4707 32357 D ExynosCameraMCPipe: [CAM_ID(0)][PIPE_3AA]-DEBUG(syncLog[1299])
+06-11 10:58:52.081 32218 32359 D ProfileInstaller: Installing profile for com.amaia23.hydracam
+06-11 10:58:52.113  4707 32339 D ExynosCameraBufferManager: [CAM_ID(0)][PREVIEW_STREAM_BUF]-DEBUG(getIndexByHandle[3160]): assigned new buffer handle(0x0) Index(22)
+06-11 10:58:52.156  4707 32358 W ExynosCamera3: [CAM_ID(0)][]-WARN(m_internalFrameThreadFunc):wait timeout
+06-11 10:58:52.359  5567  5567 E adbd    : recv: OPEN 000004e5 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-11 10:58:52.360  5567  5567 E adbd    : service_to_fd: tcp:4762
+06-11 10:58:52.360  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-11 10:58:52.651  4978  6260 I EDMNativeHelperService: isCameraEnabled
+06-11 10:58:52.652  4978  6260 I chatty  : uid=1000(system) Binder:4978_E identical 1 line
+06-11 10:58:52.788  5567  5567 E adbd    : recv: OPEN 000004e7 00000000 00a8:65 78 65 63 3A 72 75 6E 2D 61 73 20 27 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 27 20 27 63 61 74 27 20 27 2F 64 61 74 61 2F 75 73 65 72 2F 30 2F 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 2F 61 70 70 5F 66 6C 75 74 74 65 72 2F 61 75 74 6F 6D 61 74 69 6F 6E 2D 73 63 72 65 65 6E 73 68 6F 74 73 2F 39 38 38 35 65 36 35 30 33 39 33 30 33 30 34 39 34 36 2D 73 65 74 75 70 2D 32 30 32 36 2D 30 36 2D 31 31 54 31 30 2D 35 38 2D 35 32 2D 37 31 31 30 31 34 2E 70 6E 67 27 00 
+06-11 10:58:52.788  5567  5567 E adbd    : service_to_fd: exec:run-as 'com.amaia23.hydracam' 'cat' '/data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/9885e6503930304946-setup-2026-06-11T10-58-52-711014.png'
+06-11 10:58:52.823 32364 32364 W SELinux : SELinux selinux_android_compute_policy_index : Policy Index[2],  Con:u:r:runas:s0 RAM:SEPF_SM-G935F_8.0.0_0018, [-1 -1 -1 -1 0 1]
+06-11 10:58:52.825 32364 32364 I SELinux : SELinux: seapp_context_lookup: seinfo=untrusted, level=s0:c512,c768, pkgname=com.amaia23.hydracam 
+06-11 10:58:52.863  5567  5567 E adbd    : recv: OPEN 000004ea 00000000 001f:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 2C 72 61 77 3A 77 6D 20 73 69 7A 65 00 
+06-11 10:58:52.865  5567  5567 E adbd    : service_to_fd: shell,v2,TERM=dumb,raw:wm size
+06-11 10:58:53.247 32365 32365 W ADebug  : Failed to get property persist.sys.media.traces
+06-11 10:58:53.252 32365 32365 E appproc : Enhanced Zygote ASLR: ro.knox.enhance.zygote.aslr != 1. Enhanced Zygote ASLR is DISABLED!
+06-11 10:58:53.252 32365 32365 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+06-11 10:58:53.329 32365 32365 D ICU     : Timezone override file found: /data/misc/zoneinfo/current/icu/icu_tzdata.dat
+06-11 10:58:53.341 32365 32365 I app_process: find the special shared library, skip check
+06-11 10:58:53.363 32365 32365 E SemAffinityControl: SemAffinityControl: registerfunction enter
+06-11 10:58:53.368 32365 32365 D AndroidRuntime: Calling main entry com.android.commands.wm.Wm
+06-11 10:58:53.372 32365 32365 D AndroidRuntime: Shutting down VM
+06-11 10:58:53.424  5567  5567 E adbd    : recv: OPEN 000004ed 00000000 0037:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 2C 72 61 77 3A 69 6E 70 75 74 20 73 77 69 70 65 20 39 36 30 20 38 34 32 20 39 36 30 20 32 33 37 20 34 35 30 00 
+06-11 10:58:53.424  5567  5567 E adbd    : service_to_fd: shell,v2,TERM=dumb,raw:input swipe 960 842 960 237 450
+06-11 10:58:53.654  4978  6260 I EDMNativeHelperService: isCameraEnabled
+06-11 10:58:53.656  4978  6260 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-11 10:58:53.704 32375 32375 W ADebug  : Failed to get property persist.sys.media.traces
+06-11 10:58:53.707 32375 32375 E appproc : Enhanced Zygote ASLR: ro.knox.enhance.zygote.aslr != 1. Enhanced Zygote ASLR is DISABLED!
+06-11 10:58:53.707 32375 32375 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+06-11 10:58:53.779 32375 32375 D ICU     : Timezone override file found: /data/misc/zoneinfo/current/icu/icu_tzdata.dat
+06-11 10:58:53.791 32375 32375 I app_process: find the special shared library, skip check
+06-11 10:58:53.812 32375 32375 E SemAffinityControl: SemAffinityControl: registerfunction enter
+06-11 10:58:53.816 32375 32375 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+06-11 10:58:53.821 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=960.0, y[0]=842.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565240, downTime=42565240, deviceId=3, source=0x1002 }
+06-11 10:58:53.821  4978  6260 D InputDispatcher: Inject motion (32375): action=0x0, eventTime=42565240000000, displayId=0
+06-11 10:58:53.822  4978  5135 I InputDispatcher: Delivering touch to (5415): action: 0x4, toolType: 0
+06-11 10:58:53.822  4978  5135 I InputDispatcher: Delivering touch to (32218): action: 0x0, toolType: 0
+06-11 10:58:53.876  6066  6066 D io_stats: !@   8,0 r 413206 24145564 w 177387 7224288 d 19578 5547676 f 48491 48284 iot 406310 381965 th 346736 0 0 pt 0 inp 0 0 42565.299
+06-11 10:58:53.884 32218 32218 D ViewRootImpl@e0a8f17[MainActivity]: ViewPostIme pointer 0
+06-11 10:58:53.894 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=960.0, y[0]=842.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565240, downTime=42565240, deviceId=3, source=0x1002 }
+06-11 10:58:53.926  3202  3202 I android.hardware.wifi@1.0-service: getLinkLayerStats
+06-11 10:58:54.145 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=960.0, y[0]=401.02225, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565568, downTime=42565568, deviceId=3, source=0x1002 }
+06-11 10:58:54.182 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=960.0, y[0]=351.2778, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565605, downTime=42565605, deviceId=3, source=0x1002 }
+06-11 10:58:54.203 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=960.0, y[0]=323.04443, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565626, downTime=42565626, deviceId=3, source=0x1002 }
+06-11 10:58:54.264 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_MOVE, actionButton=0, id[0]=0, x[0]=960.0, y[0]=239.6889, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565688, downTime=42565688, deviceId=3, source=0x1002 }
+06-11 10:58:54.266  4978  5135 D PowerManagerService: [api] userActivityFromNative : 20 (event: 2 flags: 0) eventTime = 42565688
+06-11 10:58:54.270 32375 32375 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=960.0, y[0]=237.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=42565693, downTime=42565693, deviceId=3, source=0x1002 }
+06-11 10:58:54.271  4978  6463 D InputDispatcher: Inject motion (32375): action=0x1, eventTime=42565693000000, displayId=0
+06-11 10:58:54.271  4978  5135 I InputDispatcher: Delivering touch to (32218): action: 0x1, toolType: 0
+06-11 10:58:54.291 32218 32218 D ViewRootImpl@e0a8f17[MainActivity]: ViewPostIme pointer 1
+06-11 10:58:54.293 32375 32375 D AndroidRuntime: Shutting down VM
+06-11 10:58:54.658  4978  6463 I EDMNativeHelperService: isCameraEnabled
+06-11 10:58:54.659  4978  6463 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-11 10:58:55.645  4978  8231 D SSRM:t  : SIOP:: AP = 470, PST = 385 (W:6), BAT = 346, CHG = 430, CP = 343
+06-11 10:58:55.657  4706  9957 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;outDevice
+06-11 10:58:55.657  4706  9957 V APM_AudioPolicyManager: getNewOutputDevice() selected device 0
+06-11 10:58:55.657  4706  9957 V APM_AudioPolicyManager: ### curdevice : 2
+06-11 10:58:55.658  4706  9957 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;outDevice
+06-11 10:58:55.658  4706  9957 V APM_AudioPolicyManager: getNewOutputDevice() selected device 0
+06-11 10:58:55.658  4706  9957 V APM_AudioPolicyManager: ### curdevice : 2
+06-11 10:58:55.658  4706  9957 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;outDevice
+06-11 10:58:55.659  4706  9957 V APM_AudioPolicyManager: getNewOutputDevice() selected device 0
+06-11 10:58:55.659  4706  9957 V APM_AudioPolicyManager: ### curdevice : 2
+06-11 10:58:55.661  4978  6463 I EDMNativeHelperService: isCameraEnabled
+06-11 10:58:55.662  4978  6463 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10193) cxtInfo.mContainerId(0)
+06-11 10:58:55.669  4706  9957 V APM_AudioPolicyManager: getAudioPolicyConfig: audioParam;activeStream
+06-11 10:58:55.669  4706  9957 V APM_AudioPolicyManager: ### active stream : 0
+06-11 10:58:55.669  4978  8231 D AudioService: active stream is 0x0
+06-11 10:58:56.396  5567  5567 E adbd    : recv: OPEN 000004ee 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-11 10:58:56.396  5567  5567 E adbd    : service_to_fd: tcp:4762
+06-11 10:58:56.398  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-11 10:58:56.603  5567  5567 E adbd    : recv: OPEN 000004f0 00000000 00b5:65 78 65 63 3A 72 75 6E 2D 61 73 20 27 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 27 20 27 63 61 74 27 20 27 2F 64 61 74 61 2F 75 73 65 72 2F 30 2F 63 6F 6D 2E 61 6D 61 69 61 32 33 2E 68 79 64 72 61 63 61 6D 2F 61 70 70 5F 66 6C 75 74 74 65 72 2F 61 75 74 6F 6D 61 74 69 6F 6E 2D 73 63 72 65 65 6E 73 68 6F 74 73 2F 39 38 38 35 65 36 35 30 33 39 33 30 33 30 34 39 34 36 2D 73 65 74 75 70 2D 61 66 74 65 72 2D 73 63 72 6F 6C 6C 2D 32 30 32 36 2D 30 36 2D 31 31 54 31 30 2D 35 38 2D 35 36 2D 35 36 32 38 36 32 2E 70 6E 67 27 00 
+06-11 10:58:56.603  5567  5567 E adbd    : service_to_fd: exec:run-as 'com.amaia23.hydracam' 'cat' '/data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/9885e6503930304946-setup-after-scroll-2026-06-11T10-58-56-562862.png'
+06-11 10:58:56.642 32390 32390 W SELinux : SELinux selinux_android_compute_policy_index : Policy Index[2],  Con:u:r:runas:s0 RAM:SEPF_SM-G935F_8.0.0_0018, [-1 -1 -1 -1 0 1]
+06-11 10:58:56.643 32390 32390 I SELinux : SELinux: seapp_context_lookup: seinfo=untrusted, level=s0:c512,c768, pkgname=com.amaia23.hydracam 
+06-11 10:58:56.668  4978  6463 I EDMNativeHelperService: isCameraEnabled
+06-11 10:58:56.669  5567  5567 E adbd    : recv: OPEN 000004f1 00000000 0009:74 63 70 3A 34 37 36 32 00 
+06-11 10:58:56.669  5567  5567 E adbd    : service_to_fd: tcp:4762
+06-11 10:58:56.675  4719  5023 D DnsProxyListener: DNSDBG::dns addrinfo af 0
+06-11 10:58:56.804  5567  5567 E adbd    : recv: OPEN 000004f4 00000000 004b:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 3A 65 78 70 6F 72 74 20 41 4E 44 52 4F 49 44 5F 4C 4F 47 5F 54 41 47 53 3D 27 27 3B 20 65 78 65 63 20 6C 6F 67 63 61 74 20 27 2D 64 27 20 27 2D 74 27 20 27 38 30 30 27 00 
+06-11 10:58:56.804  5567  5567 E adbd    : service_to_fd: shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '800'

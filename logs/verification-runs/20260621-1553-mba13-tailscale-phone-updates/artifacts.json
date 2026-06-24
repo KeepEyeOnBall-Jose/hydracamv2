@@ -1,0 +1,1358 @@
+{
+  "acceptanceChecks": [
+    "Remote MBA13 is reachable over Tailscale SSH and has a synced current checkout",
+    "Current HydraCam Android debug APK builds on MBA13",
+    "Every ADB-authorized phone connected to MBA13 receives the update, launches HydraCam, and has pid/package proof",
+    "Every non-updated connected phone has an explicit blocker recorded"
+  ],
+  "commands": [
+    {
+      "command": [
+        "pwd"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T13:53:29.705244+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T13:53:33.724449+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "zsh",
+        "-lc",
+        "mkdir -p /Users/jose/src/work/hydracamv2-mba13-deploy"
+      ],
+      "returnCode": 64,
+      "startedAt": "2026-06-21T13:54:01.024577+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "mkdir -p /Users/jose/src/work/hydracamv2-mba13-deploy"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T13:54:17.276392+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-az",
+        "--delete",
+        "--exclude=.git/",
+        "--exclude=tempass.txt",
+        "--exclude=.dart_tool/",
+        "--exclude=build/",
+        "--exclude=android/.gradle/",
+        "--exclude=android/app/build/",
+        "--exclude=ios/Pods/",
+        "--exclude=macos/Pods/",
+        "--exclude=.worktrees/",
+        "--exclude=worktrees/",
+        "--exclude=logs/verification-runs/",
+        "--exclude=.DS_Store",
+        "-e",
+        "sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new",
+        "./",
+        "jose@joss-macbook-air.tail6ce139.ts.net:/Users/jose/src/work/hydracamv2-mba13-deploy/"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T13:54:27.347838+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && /Users/jose/development/flutter/bin/flutter pub get"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T13:55:21.412270+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && /Users/jose/development/flutter/bin/flutter build apk --debug"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T13:55:44.591510+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "ls -lh /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk && shasum -a 256 /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk && /Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:05:07.762149+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT install -r /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-21T14:05:33.784682+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell dumpsys package com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:06:15.362716+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "apk_path=$(/Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell pm path com.amaia23.hydracam | sed s/package:// | tr -d \"\\r\" | head -n 1); echo INSTALLED_APK_PATH=$apk_path; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT pull \"$apk_path\" /tmp/hydracam-installed-rf8.apk; signer=$(find /Users/jose/Library/Android/sdk/build-tools -name apksigner -type f | sort -V | tail -n 1); echo APKSIGNER=$signer; \"$signer\" verify --print-certs /tmp/hydracam-installed-rf8.apk; \"$signer\" verify --print-certs /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:06:42.042276+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:07:11.005935+00:00"
+    },
+    {
+      "command": [
+        "zsh",
+        "-lc",
+        "ls -lh build/app/outputs/flutter-apk/app-debug.apk; shasum -a 256 build/app/outputs/flutter-apk/app-debug.apk; signer=$(find \"$HOME/Library/Android/sdk/build-tools\" -name apksigner -type f | sort -V | tail -n 1); echo APKSIGNER=$signer; \"$signer\" verify --print-certs build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:07:50.797805+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-az",
+        "-e",
+        "sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new",
+        "build/app/outputs/flutter-apk/app-debug.apk",
+        "jose@joss-macbook-air.tail6ce139.ts.net:/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:08:05.856183+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "ls -lh /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk; shasum -a 256 /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-06-21T14:12:30.092516+00:00"
+    },
+    {
+      "command": [
+        "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
+        "status"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:20:54.111307+00:00"
+    },
+    {
+      "command": [
+        "nc",
+        "-vz",
+        "-G",
+        "5",
+        "joss-macbook-air.tail6ce139.ts.net",
+        "22"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-21T14:20:54.144341+00:00"
+    },
+    {
+      "command": [
+        "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
+        "ping",
+        "--timeout=5s",
+        "--c",
+        "2",
+        "joss-macbook-air"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-21T14:20:59.157495+00:00"
+    },
+    {
+      "command": [
+        "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
+        "status"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:22:58.045305+00:00"
+    },
+    {
+      "command": [
+        "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
+        "ping",
+        "--timeout=5s",
+        "--c",
+        "2",
+        "joss-macbook-air"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-21T14:22:58.079246+00:00"
+    },
+    {
+      "command": [
+        "nc",
+        "-vz",
+        "-G",
+        "5",
+        "joss-macbook-air.tail6ce139.ts.net",
+        "22"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-21T14:23:08.130634+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-21T14:23:13.154231+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "hostname; date; ls -lh /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk; shasum -a 256 /Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:45:31.554238+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb kill-server; /Users/jose/Library/Android/sdk/platform-tools/adb start-server; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:45:57.424498+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "pkill -f \"Android File Transfer\" || true; sleep 2; /Users/jose/Library/Android/sdk/platform-tools/adb kill-server; /Users/jose/Library/Android/sdk/platform-tools/adb start-server; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; ps ax | egrep -i \"adb|Android File Transfer|mtp|openmtp\" | grep -v egrep || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:46:15.813600+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "system_profiler SPUSBDataType -detailLevel mini"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:46:35.534044+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "ioreg -p IOUSB -l -w 0 | /usr/bin/grep -E \"\\\"USB Product Name\\\"|\\\"USB Vendor Name\\\"|\\\"USB Serial Number\\\"|\\\"idVendor\\\"|\\\"idProduct\\\"\" || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:47:02.361802+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "xcrun devicectl list devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:47:26.427546+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=6",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && IOS_XCODE_DESTINATION_ID=00008101000A68811E43001E IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 IOS_BUNDLE_ID=com.keepeyeonball scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 70,
+      "startedAt": "2026-06-22T11:48:23.013613+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-az",
+        "-e",
+        "sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=20 -o StrictHostKeyChecking=accept-new",
+        "scripts/ios_icon_launch_dev.sh",
+        "jose@joss-macbook-air.tail6ce139.ts.net:/Users/jose/src/work/hydracamv2-mba13-deploy/scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:50:13.860627+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && IOS_XCODE_DESTINATION_ID=00008101000A68811E43001E IOS_XCODE_DESTINATION=platform=iOS,id=00008101000A68811E43001E IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 IOS_BUNDLE_ID=com.keepeyeonball scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 70,
+      "startedAt": "2026-06-22T11:50:25.021180+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-az",
+        "-e",
+        "sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=20 -o StrictHostKeyChecking=accept-new",
+        "scripts/ios_icon_launch_dev.sh",
+        "jose@joss-macbook-air.tail6ce139.ts.net:/Users/jose/src/work/hydracamv2-mba13-deploy/scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:53:34.504020+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && IOS_XCODE_DESTINATION_ID=00008101000A68811E43001E IOS_XCODE_DESTINATION=platform=iOS,arch=arm64,id=00008101000A68811E43001E IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 IOS_BUNDLE_ID=com.keepeyeonball scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 70,
+      "startedAt": "2026-06-22T11:53:45.913863+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && IOS_XCODE_DESTINATION_ID=00008101-000A68811E43001E IOS_XCODE_DESTINATION=platform=iOS,arch=arm64,id=00008101-000A68811E43001E IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 IOS_BUNDLE_ID=com.keepeyeonball scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 65,
+      "startedAt": "2026-06-22T11:55:14.664905+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && grep -R \"FLUTTER_ROOT\\|xcode_backend\\|/opt/homebrew/Caskroom/flutter\" -n ios/Flutter ios/Runner.xcodeproj/project.pbxproj | head -80"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:55:44.911803+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && which flutter && flutter --version && ls -ld /Users/jose/development/flutter /opt/homebrew/Caskroom/flutter/3.29.3/flutter 2>&1"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T11:55:45.769954+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "ls -ld /Users/jose/development/flutter /Users/jose/development/flutter/bin/flutter /opt/homebrew/bin/flutter /opt/homebrew/Caskroom/flutter/3.29.3/flutter 2>&1; /Users/jose/development/flutter/bin/flutter --version"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:56:02.365936+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && sed -n \"1,80p\" ios/Flutter/Generated.xcconfig && sed -n \"1,80p\" ios/Flutter/flutter_export_environment.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:56:24.787010+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && rm -rf .dart_tool ios/Flutter/Generated.xcconfig ios/Flutter/flutter_export_environment.sh ios/Flutter/ephemeral build/ios-icon-profile && flutter pub get && grep -R \"FLUTTER_ROOT\\|FLUTTER_APPLICATION_PATH\\|PACKAGE_CONFIG\" -n ios/Flutter .dart_tool/package_config.json | head -80"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:56:46.075139+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && IOS_XCODE_DESTINATION_ID=00008101-000A68811E43001E IOS_XCODE_DESTINATION=platform=iOS,arch=arm64,id=00008101-000A68811E43001E IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 IOS_BUNDLE_ID=com.keepeyeonball scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 65,
+      "startedAt": "2026-06-22T11:57:05.742843+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy/ios && export PATH=\"/Users/jose/development/flutter/bin:/opt/homebrew/bin:/usr/local/bin:$PATH\" && pod install"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:57:51.481621+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "cd /Users/jose/src/work/hydracamv2-mba13-deploy && export PATH=\"/Users/jose/development/flutter/bin:$PATH\" && IOS_XCODE_DESTINATION_ID=00008101-000A68811E43001E IOS_XCODE_DESTINATION=platform=iOS,arch=arm64,id=00008101-000A68811E43001E IOS_DEVICE=AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A IOS_DEVELOPMENT_TEAM=4RRY2QT7H8 IOS_BUNDLE_ID=com.keepeyeonball scripts/ios_icon_launch_dev.sh"
+      ],
+      "returnCode": 65,
+      "startedAt": "2026-06-22T11:58:06.518010+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "security find-identity -p codesigning -v; ls -l \"$HOME/Library/MobileDevice/Provisioning Profiles\" 2>&1 | sed -n \"1,120p\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:58:42.697981+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-lc",
+        "export PATH=\"$PATH\"; flutter pub get && cd ios && pod install"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:59:11.466134+00:00"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Profile",
+        "-destination",
+        "generic/platform=iOS",
+        "-derivedDataPath",
+        "build/ios-mba13-transfer-profile",
+        "-allowProvisioningUpdates",
+        "CODE_SIGN_STYLE=Automatic",
+        "DEVELOPMENT_TEAM=4RRY2QT7H8",
+        "clean",
+        "build"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T11:59:19.571242+00:00"
+    },
+    {
+      "command": [
+        "sh",
+        "-lc",
+        "APP=build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; ls -ld \"$APP\"; /usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" \"$APP/Info.plist\"; codesign -dv --verbose=4 \"$APP\" 2>&1 | sed -n \"1,80p\"; TMP=$(mktemp /tmp/hydracam-built-profile.XXXXXX.plist); security cms -D -i \"$APP/embedded.mobileprovision\" > \"$TMP\"; /usr/libexec/PlistBuddy -c \"Print :ExpirationDate\" \"$TMP\"; /usr/libexec/PlistBuddy -c \"Print :ProvisionedDevices\" \"$TMP\" | grep 00008101-000A68811E43001E; rm -f \"$TMP\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:00:14.421257+00:00"
+    },
+    {
+      "command": [
+        "rsync",
+        "-aEz",
+        "--delete",
+        "-e",
+        "sshpass -f tempass.txt ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o BatchMode=no -o ConnectTimeout=20 -o StrictHostKeyChecking=accept-new",
+        "build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/",
+        "jose@joss-macbook-air.tail6ce139.ts.net:/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app/"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:00:31.344128+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; ls -ld \"$APP\"; /usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" \"$APP/Info.plist\"; codesign -dv --verbose=4 \"$APP\" 2>&1 | sed -n \"1,90p\"; xcrun devicectl device install app --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A \"$APP\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:01:02.198089+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "xcrun devicectl device process launch --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A --terminate-existing com.keepeyeonball; sleep 3; xcrun devicectl device info apps --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -A12 -B2 com.keepeyeonball; xcrun devicectl device process list --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i \"keepeyeonball\\|Runner\""
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T12:01:22.635257+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "xcrun devicectl device process --help; echo PROCESS_LIST_HELP; xcrun devicectl device process list --help 2>&1; echo DEVICE_HELP; xcrun devicectl device --help | sed -n \"1,220p\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:01:40.039745+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "xcrun devicectl device info --help; echo INFO_SUBCOMMANDS; xcrun devicectl help device info 2>&1; echo COPY_HELP; xcrun devicectl help device copy 2>&1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:01:54.619819+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i \"keepeyeonball\\|Runner\\|HydraCam\"; xcrun devicectl device info displays --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A; xcrun devicectl device info lockState --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:02:08.579034+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "echo ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo USB_ANDROID_SCAN; system_profiler SPUSBDataType -detailLevel mini | egrep -i \"Samsung|Android|Xiaomi|SM-|Galaxy|iPhone\" || true; echo IOS; xcrun devicectl list devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:02:54.599365+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb kill-server; /Users/jose/Library/Android/sdk/platform-tools/adb start-server; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:03:14.115323+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; $ADB kill-server; $ADB start-server; $ADB reconnect offline || true; $ADB reconnect || true; $ADB devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:10:32.160544+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "sleep 8; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:10:48.322833+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; backup=\"$HOME/.android/adbkey-backup-$(date +%Y%m%d-%H%M%S)\"; mkdir -p \"$backup\"; if ls \"$HOME\"/.android/adbkey* >/dev/null 2>&1; then mv \"$HOME\"/.android/adbkey* \"$backup\"/; fi; echo \"ADB_KEY_BACKUP=$backup\"; $ADB kill-server || true; $ADB start-server; sleep 5; $ADB devices -l"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-22T12:11:17.556814+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; backup=\"$HOME/.android/adbkey-backup-$(date +%Y%m%d-%H%M%S)\"; mkdir -p \"$backup\"; find \"$HOME/.android\" -maxdepth 1 -type f -name \"adbkey*\" -exec mv {} \"$backup\" \\;; echo \"ADB_KEY_BACKUP=$backup\"; ls -la \"$backup\"; $ADB kill-server || true; $ADB start-server; sleep 8; $ADB devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:11:40.899816+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk; $ADB -s 9885e6503930304946 install -r \"$APK\"; $ADB -s 9885e6503930304946 shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; echo PID=$($ADB -s 9885e6503930304946 shell pidof com.amaia23.hydracam | tr -d \"\\r\"); $ADB -s 9885e6503930304946 shell dumpsys package com.amaia23.hydracam | egrep \"versionName|versionCode|firstInstallTime|lastUpdateTime|Package \\[com.amaia23.hydracam\\]\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:12:19.027427+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:13:11.438384+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb devices -l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:15:22.408567+00:00"
+    },
+    {
+      "command": [
+        "sshpass",
+        "-f",
+        "tempass.txt",
+        "ssh",
+        "-o",
+        "PreferredAuthentications=password",
+        "-o",
+        "PubkeyAuthentication=no",
+        "-o",
+        "BatchMode=no",
+        "-o",
+        "ConnectTimeout=20",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=12",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "jose@joss-macbook-air.tail6ce139.ts.net",
+        "ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug-local-signed.apk; $ADB -s RF8M90QE7LX install -r \"$APK\"; $ADB -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; echo PID=$($ADB -s RF8M90QE7LX shell pidof com.amaia23.hydracam | tr -d \"\\r\"); $ADB -s RF8M90QE7LX shell dumpsys package com.amaia23.hydracam | egrep \"versionName|versionCode|firstInstallTime|lastUpdateTime|Package \\[com.amaia23.hydracam\\]\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T12:15:38.870500+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "ios-phone",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [
+        "MBA13 devicectl reported the iPhone available and paired.",
+        "Fresh local Profile app signed for team 4RRY2QT7H8 was transferred to MBA13, installed as com.keepeyeonball, launched, and observed running as PID 2427."
+      ],
+      "os": "iOS 26.5",
+      "role": "installed-and-launched"
+    },
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "android-phone",
+      "name": "Samsung S7 edge",
+      "notes": [
+        "Authorized on MBA13 after regenerating the MBA13 ADB key.",
+        "Installed app-debug-local-signed.apk with adb install -r, launched com.amaia23.hydracam/.MainActivity, observed PID 10552, and verified versionName 1.4.0 / versionCode 18."
+      ],
+      "os": "Android",
+      "role": "installed-and-launched"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "android-phone",
+      "name": "Samsung S10e",
+      "notes": [
+        "Authorized on MBA13 after the user accepted the USB debugging prompt.",
+        "Installed app-debug-local-signed.apk with adb install -r, launched com.amaia23.hydracam/.MainActivity, observed PID 13728, and verified versionName 1.4.0 / versionCode 18."
+      ],
+      "os": "Android",
+      "role": "installed-and-launched"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/README.md",
+    "video/README.md",
+    "device-logs/mba13-tailnet-blocker.txt",
+    "device-logs/resumed-current-state.md"
+  ],
+  "item": {
+    "slug": "mba13-tailscale-phone-updates",
+    "source": "user goal 2026-06-21 install current HydraCam updates on phones connected to mba13 over Tailscale",
+    "title": "mba13 tailscale phone update deploy"
+  },
+  "notes": [
+    "MBA13 remote sync and Android build passed; phone install blocked after MBA13 went offline on Tailscale before final ADB install/launch proof.",
+    "RF8M21J8XRT rejected MBA13-built APK due debug signer mismatch; local matching-key APK was built and transferred for retry.",
+    "9885e6503930304946 remains blocked by ADB unauthorized state.",
+    "Continuation retry: MBA13 still offline on Tailscale; nc port 22 and Tailscale ping both timed out.",
+    "Third consecutive goal turn hit the same external blocker: MBA13 is offline on Tailscale, SSH port 22 times out, Tailscale ping gets no reply, and no phones are locally attached to this Mac.",
+    "Resumed after MBA13 came back online at joss-macbook-air.tail6ce139.ts.net.",
+    "Connected iPhone was installed and launched with a fresh locally signed com.keepeyeonball Profile build transferred to MBA13.",
+    "MBA13 native iOS signing remains blocked by zero local identities/profiles and rejected javier@keepeyeonball.com account login.",
+    "Current Android devices 9885e6503930304946 and RF8M90QE7LX were later authorized, installed, launched, and verified at versionName 1.4.0 / versionCode 18.",
+    "After the user accepted USB debugging, RF8M90QE7LX authorized as SM_G970F and was installed/launched at versionName 1.4.0 / versionCode 18.",
+    "9885e6503930304946 also installed/launched successfully at versionName 1.4.0 / versionCode 18 after ADB authorization was refreshed."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

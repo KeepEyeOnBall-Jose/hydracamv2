@@ -1,0 +1,398 @@
+{
+  "acceptanceChecks": [
+    "Current working tree passes Flutter analyzer and focused tests or records exact blockers",
+    "Current app builds, installs, launches, and captures setup/standby screenshots on every available attached Android phone",
+    "Current app launches on the available attached iPhone with an identity-matched automation bridge and capture smoke or records exact blocker",
+    "Available attached phones pass a current-source role-switch smoke or record exact blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:23:28.637064+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:23:40.048555+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:23:57.106573+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M21J8XRT",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation",
+        "--timeout",
+        "240",
+        "--build-timeout",
+        "480"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:24:05.349995+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "00008101-000A68811E43001E",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "10.10.103.0/24",
+        "--timeout",
+        "420",
+        "--run-dir",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/ios-capture-repro",
+        "--profile",
+        "standard1080p30",
+        "--lens",
+        "autoBack"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T15:26:12.881517+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:31:27.682057+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:31:37.737740+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:31:55.511288+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M21J8XRT",
+        "--device",
+        "RF8M90QE7LX",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation",
+        "--timeout",
+        "240",
+        "--build-timeout",
+        "480"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:32:01.132716+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "00008101-000A68811E43001E",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "10.10.103.0/24",
+        "--timeout",
+        "420",
+        "--run-dir",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/ios-capture-repro-after-gallery-timeout",
+        "--profile",
+        "standard1080p30",
+        "--lens",
+        "autoBack"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:33:25.885009+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--prime-then-immediate-role-switch",
+        "--no-use-latest-warm-summary",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--ios-bridge-scan-subnet",
+        "10.10.103.0/24",
+        "--target-id",
+        "RF8M21J8XRT",
+        "--target-id",
+        "RF8M90QE7LX",
+        "--target-id",
+        "00008101-000A68811E43001E",
+        "--expect-target-id",
+        "RF8M21J8XRT",
+        "--expect-target-id",
+        "RF8M90QE7LX",
+        "--expect-target-id",
+        "00008101-000A68811E43001E",
+        "--run-dir",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/three-phone-role-switch"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T15:35:22.382514+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/run_rotating_master_slave_matrix.py",
+        "--prime-then-immediate-role-switch",
+        "--no-use-latest-warm-summary",
+        "--fast-ios-launch",
+        "--ios-profile-build-install",
+        "--ios-host",
+        "00008101-000A68811E43001E=10.10.103.208",
+        "--no-auto-ios-bridge-hosts",
+        "--target-id",
+        "RF8M21J8XRT",
+        "--target-id",
+        "RF8M90QE7LX",
+        "--target-id",
+        "00008101-000A68811E43001E",
+        "--expect-target-id",
+        "RF8M21J8XRT",
+        "--expect-target-id",
+        "RF8M90QE7LX",
+        "--expect-target-id",
+        "00008101-000A68811E43001E",
+        "--run-dir",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/three-phone-role-switch-explicit-ios-host"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-12T15:36:25.994948+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "svc",
+        "wifi",
+        "enable"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:38:10.446431+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "disable"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:38:10.573233+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "svc",
+        "wifi",
+        "enable"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:38:10.693666+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "ip",
+        "-f",
+        "inet",
+        "addr",
+        "show",
+        "wlan0"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:38:35.600166+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "ip",
+        "route",
+        "get",
+        "1.1.1.1"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:38:35.668212+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "ip",
+        "-f",
+        "inet",
+        "addr",
+        "show",
+        "wlan0"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:38:35.724669+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "shell",
+        "ip",
+        "route",
+        "get",
+        "1.1.1.1"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-06-12T15:38:35.785194+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "shell",
+        "screenrecord",
+        "--time-limit",
+        "3",
+        "/sdcard/hydracam-cleanup-evidence.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:39:15.489388+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M21J8XRT",
+        "pull",
+        "/sdcard/hydracam-cleanup-evidence.mp4",
+        "logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/video/RF8M21J8XRT-cleanup-evidence.mp4"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-12T15:39:25.073532+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e RF8M90QE7LX",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "setup and standby UI smoke"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e RF8M21J8XRT",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "setup and standby UI smoke"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS hardware",
+      "name": "Jose Ramon iPhone",
+      "notes": [],
+      "os": "iOS 26.5 23F77",
+      "role": "physical iOS launch and capture smoke"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M21J8XRT-setup-after-scroll.png",
+    "screenshots/RF8M21J8XRT-setup.png",
+    "screenshots/RF8M21J8XRT-standby.png",
+    "screenshots/RF8M90QE7LX-setup-after-scroll.png",
+    "screenshots/RF8M90QE7LX-setup.png",
+    "screenshots/RF8M90QE7LX-standby.png",
+    "device-logs/RF8M21J8XRT/setup-bridge-logs.json",
+    "device-logs/RF8M21J8XRT/setup-logcat.txt",
+    "device-logs/RF8M21J8XRT/setup-result.json",
+    "device-logs/RF8M21J8XRT/standby-bridge-logs.json",
+    "device-logs/RF8M21J8XRT/standby-logcat.txt",
+    "device-logs/RF8M21J8XRT/standby-result.json",
+    "device-logs/RF8M90QE7LX/setup-bridge-logs.json",
+    "device-logs/RF8M90QE7LX/setup-logcat.txt",
+    "device-logs/RF8M90QE7LX/setup-result.json",
+    "device-logs/RF8M90QE7LX/standby-bridge-logs.json",
+    "device-logs/RF8M90QE7LX/standby-logcat.txt",
+    "device-logs/RF8M90QE7LX/standby-result.json"
+  ],
+  "item": {
+    "slug": "cleanup-attached-phone-validation",
+    "source": "docs/control/status-and-roadmap.md#release-profile-real-device-smoke-readiness",
+    "title": "Validate current attached phone build/deploy smoke"
+  },
+  "notes": [
+    "Static gates passed after the gallery timeout fix. Android debug APK rebuilt, installed, and setup/standby hardware UI smoke passed on RF8M21J8XRT and RF8M90QE7LX. iPhone debug launch/capture repro passed after bounding gallery persistence; current iOS Profile automation app built and installed, and warm-bridge prime passed for both Android phones plus iPhone. Three-phone role switching did not run rotations because Android LAN preflight could not resolve wlan0 Wi-Fi IPs: RF8M21J8XRT routed over rmnet0/cellular and RF8M90QE7LX had no route after airplane/Wi-Fi toggles."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

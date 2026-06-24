@@ -1,0 +1,2703 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover
+ M .vscode/launch.json
+ M .vscode/tasks.json
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/hydracam-mobo-media-timeline-merge-plan.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/fastlane/Fastfile
+ M lib/app_theme.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/master/master_screen.dart
+ M lib/screens/camera_selection_screen.dart
+ M lib/screens/camera_setup_preview_screen.dart
+ M lib/screens/courts_screen.dart
+ M lib/screens/log_screen.dart
+ M lib/screens/login_screen.dart
+ M lib/screens/master_video_recording_screen.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/previous_sessions_screen.dart
+ M lib/screens/role_selection_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/sports_centers_screen.dart
+ M lib/services/alert_utils.dart
+ M lib/services/battery_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/storage_service.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/animated_countdown_timer.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M logs/android_emulator_inventory.json
+ M logs/android_sdk_state.json
+ M scripts/android_wifi_preflight.py
+ M scripts/build_store_artifacts.sh
+ M scripts/check_store_readiness.sh
+ M scripts/run_rotating_master_slave_matrix.py
+ M test/automation/automation_standby_screen_test.dart
+ M test/slave/slave_screen_sync_chip_test.dart
+ M test/widgets/camera_setup_preview_screen_test.dart
+ M test/widgets/hydra_cam_app_bar_test.dart
+?? .vscode/extensions.json
+?? docs/control/baseline-functionality-and-support.md
+?? docs/control/cross-project-api-data-map.md
+?? docs/control/fleet-operations-plan.md
+?? docs/control/hydracam-visual-makeover-plan.md
+?? docs/control/local-ide-emulator-deploy-playbook.md
+?? docs/control/regular-evaluation-plan.md
+?? docs/control/user-flow-fsm-diagrams.md
+?? docs/control/user-flow-tracker.md
+?? lib/services/fleet_heartbeat_service.dart
+?? lib/widgets/hydracam_surface.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? scripts/google_play_internal_release.sh
+?? scripts/run_android_always_on_lab_soak.py
+?? scripts/run_hardware_ui_e2e.py
+?? scripts/test_android_wifi_preflight.py
+?? scripts/test_run_android_always_on_lab_soak.py
+?? scripts/testflight_release_and_invite.sh
+?? store-site/
+?? test/screens/role_selection_screen_test.dart
+?? test/services/fleet_heartbeat_service_test.dart
+?? test/services/gallery_persistence_service_test.dart
+?? test/theme/
+?? test/widgets/hydracam_surface_test.dart
+[exit-code] 0
+
+$ timeout 30 flutter devices --device-timeout 10
+Found 5 connected devices:
+  SM G970F (mobile)            • RF8M90QE7LX                              • android-arm64  • Android 12 (API 31)
+  iPad (5) (mobile)            • 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 • ios            • iOS 17.7.11 21H461
+  José Ramón’s iPhone (mobile) • 00008101-000A68811E43001E                • ios            • iOS 26.5 23F77
+  macOS (desktop)              • macos                                    • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+  Chrome (web)                 • chrome                                   • web-javascript • Google Chrome 149.0.7827.115
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. Visit https://flutter.dev/setup/ for troubleshooting tips.
+[exit-code] 124
+
+$ timeout 20 adb devices -l
+[exit-code] -9
+
+$ /usr/bin/python3 -V
+Python 3.9.6
+[exit-code] 0
+
+$ type python3
+python3 is /Library/Frameworks/Python.framework/Versions/3.13/bin/python3
+[exit-code] 0
+
+$ /usr/bin/python3 scripts/run_hardware_ui_e2e.py --device RF8M90QE7LX --route setup --route standby --run-dir logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke --build-timeout 300 --timeout 45
++ adb devices -l
+
+[stderr]
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 658, in <module>
+    raise SystemExit(main())
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 651, in main
+    return run_hardware_ui_e2e(args)
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 533, in run_hardware_ui_e2e
+    discover_adb_devices(include_emulators=args.include_emulators),
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 113, in discover_adb_devices
+    result = run_command(
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 65, in run_command
+    return subprocess.run(
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 528, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['adb', 'devices', '-l']' died with <Signals.SIGKILL: 9>.
+[exit-code] 1
+
+$ ls -l /opt/homebrew/bin/adb
+lrwxr-xr-x@ 1 jose  admin  71 Jun 17 10:34 /opt/homebrew/bin/adb -> /opt/homebrew/Caskroom/android-platform-tools/37.0.0/platform-tools/adb
+[exit-code] 0
+
+$ file /opt/homebrew/bin/adb
+/opt/homebrew/bin/adb: broken symbolic link to /opt/homebrew/Caskroom/android-platform-tools/37.0.0/platform-tools/adb
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb version
+Android Debug Bridge version 1.0.41
+Version 37.0.0-14910828
+Installed as /Users/jose/Library/Android/sdk/platform-tools/adb
+Running on Darwin 25.4.0 (arm64)
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb devices -l
+List of devices attached
+RF8M90QE7LX            device usb:2-1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1
+
+[exit-code] 0
+
+$ env PATH=/Users/jose/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin /usr/bin/python3 scripts/run_hardware_ui_e2e.py --device RF8M90QE7LX --route setup --route standby --run-dir logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke --build-timeout 300 --timeout 45
++ adb devices -l
++ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Could not find the Android Studio installation at the manually configured path "/Applications/Android Studio 3.app".
+
+Please verify that the path is correct and update it by running this command: flutter config --android-studio-dir '<path>'
+To have flutter search for Android Studio installations automatically, remove
+the configured path by running this command: flutter config --android-studio-dir
+
+Traceback (most recent call last):
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 658, in <module>
+    raise SystemExit(main())
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 651, in main
+    return run_hardware_ui_e2e(args)
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 539, in run_hardware_ui_e2e
+    apk = build_apk(args)
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 152, in build_apk
+    run_command(
+  File "/Users/jose/src/work/hydracamv2/scripts/run_hardware_ui_e2e.py", line 65, in run_command
+    return subprocess.run(
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 528, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['flutter', 'build', 'apk', '--debug', '--dart-define=HYDRACAM_AUTOMATION=true']' returned non-zero exit status 1.
+[exit-code] 1
+
+$ flutter config --list
+All Settings:
+  enable-web: true
+  enable-linux-desktop: (Not set)
+  enable-macos-desktop: true
+  enable-windows-desktop: (Not set)
+  enable-android: (Not set)
+  enable-ios: true
+  enable-fuchsia: (Not set) (Unavailable)
+  enable-custom-devices: (Not set)
+  cli-animations: (Not set)
+  enable-native-assets: (Not set)
+  enable-dart-data-assets: (Not set) (Unavailable)
+  enable-swift-package-manager: true
+  omit-legacy-version-file: (Not set)
+  enable-windowing: (Not set) (Unavailable)
+  enable-accessibility-evaluations: (Not set) (Unavailable)
+  enable-lldb-debugging: (Not set)
+  enable-uiscene-migration: (Not set)
+  enable-riscv64: (Not set)
+  jdk-dir: /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
+  android-studio-dir: /Applications/Android Studio 3.app
+
+[exit-code] 0
+
+$ ls -ld /Applications/Android Studio.app
+drwxr-xr-x@ 3 jose  staff  96 May  4 13:20 /Applications/Android Studio.app
+[exit-code] 0
+
+$ flutter config --android-studio-dir /Applications/Android Studio.app
+Setting "android-studio-dir" value to "/Applications/Android Studio.app".
+
+You may need to restart any open editors for them to read new settings.
+[exit-code] 0
+
+$ env PATH=/Users/jose/Library/Android/sdk/platform-tools:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin /usr/bin/python3 scripts/run_hardware_ui_e2e.py --device RF8M90QE7LX --route setup --route standby --run-dir logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke --build-timeout 300 --timeout 45
++ adb devices -l
++ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             28.6s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
++ adb -s RF8M90QE7LX forward --remove-all
++ adb -s RF8M90QE7LX install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
++ adb -s RF8M90QE7LX forward tcp:6700 tcp:4762
+6700
++ adb -s RF8M90QE7LX logcat -c
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role setup --es automationTargetId RF8M90QE7LX
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M90QE7LX logcat -c
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M90QE7LX
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
+logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Warning: Flutter support for your project's Gradle version (8.10.2) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /Users/jose/src/work/hydracamv2/android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.7.3) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 8.11.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of com.android.application. 
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.1.0) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.2.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/Users/jose/src/work/hydracamv2/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android. 
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/Users/jose/src/work/hydracamv2/android/build.gradle) by the ext.kotlin_version property.
+
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, camera_android_camerax, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, shared_preferences_android, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+
+Exception occurred while executing 'grant':
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.WRITE_EXTERNAL_STORAGE
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1577)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_IMAGES
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1535)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_VIDEO
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1535)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+[exit-code] 1
+
+$ curl --max-time 10 http://127.0.0.1:6700/healthz
+{"status":"ok","automation":true,"automationTargetId":"RF8M90QE7LX","commands":["capture_screenshot","set_role"]}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   113    0   113    0     0   4033      0 --:--:-- --:--:-- --:--:--  4185
+[exit-code] 0
+
+$ curl --max-time 120 -X POST -H Content-Type:application/json --data name:manual-standby pixelRatio:1 http://127.0.0.1:6700/commands/capture_screenshot
+{"error":"bridge_failure","details":"FormatException: Unexpected character (at character 1)\nname:manual-standby\n^\n"}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (6) Could not resolve host: pixelRatio
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   138    0   119  100    19   2088    333 --:--:-- --:--:-- --:--:--  2464
+[exit-code] 0
+
+$ curl --max-time 120 -X POST -H Content-Type: application/json --data-binary {"name":"manual-standby","pixelRatio":1} http://127.0.0.1:6700/commands/capture_screenshot
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    40    0     0  100    40      0     39  0:00:01  0:00:01 --:--:--    40
+100    40    0     0  100    40      0     19  0:00:02  0:00:02 --:--:--    19
+100    40    0     0  100    40      0     13  0:00:03  0:00:03 --:--:--    13
+100    40    0     0  100    40      0      9  0:00:04  0:00:04 --:--:--     9
+100    40    0     0  100    40      0      7  0:00:05  0:00:05 --:--:--     7
+100    40    0     0  100    40      0      6  0:00:06  0:00:06 --:--:--     0
+100    40    0     0  100    40      0      5  0:00:08  0:00:07  0:00:01     0
+100    40    0     0  100    40      0      4  0:00:10  0:00:08  0:00:02     0
+100    40    0     0  100    40      0      4  0:00:10  0:00:09  0:00:01     0
+100    40    0     0  100    40      0      3  0:00:13  0:00:10  0:00:03     0
+100    40    0     0  100    40      0      3  0:00:13  0:00:11  0:00:02     0
+100    40    0     0  100    40      0      3  0:00:13  0:00:12  0:00:01     0
+100    40    0     0  100    40      0      3  0:00:13  0:00:13 --:--:--     0
+100    40    0     0  100    40      0      2  0:00:20  0:00:14  0:00:06     0
+100    40    0     0  100    40      0      2  0:00:20  0:00:15  0:00:05     0
+100    40    0     0  100    40      0      2  0:00:20  0:00:16  0:00:04     0
+100    40    0     0  100    40      0      2  0:00:20  0:00:17  0:00:03     0
+100    40    0     0  100    40      0      2  0:00:20  0:00:18  0:00:02     0
+100    40    0     0  100    40      0      2  0:00:20  0:00:19  0:00:01     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:20  0:00:20     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:21  0:00:19     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:22  0:00:18     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:23  0:00:17     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:24  0:00:16     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:25  0:00:15     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:26  0:00:14     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:27  0:00:13     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:28  0:00:12     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:29  0:00:11     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:30  0:00:10     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:31  0:00:09     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:32  0:00:08     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:33  0:00:07     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:34  0:00:06     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:35  0:00:05     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:36  0:00:04     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:37  0:00:03     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:38  0:00:02     0
+100    40    0     0  100    40      0      1  0:00:40  0:00:39  0:00:01     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:40 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:41 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:42 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:43 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:44 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:45 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:46 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:47 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:48 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:49 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:50 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:51 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:52 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:53 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:54 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:55 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:56 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:57 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:58 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:00:59 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:00 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:01 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:02 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:03 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:04 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:05 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:06 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:07 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:08 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:09 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:10 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:11 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:12 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:13 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:14 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:15 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:16 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:17 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:18 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:19 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:20 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:21 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:22 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:23 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:24 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:25 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:26 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:27 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:28 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:29 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:30 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:31 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:32 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:33 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:34 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:35 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:36 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:37 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:38 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:39 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:40 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:41 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:42 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:43 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:44 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:45 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:46 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:47 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:48 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:49 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:50 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:51 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:52 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:53 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:54 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:55 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:56 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:57 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:58 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:01:59 --:--:--     0
+100    40    0     0    0    40      0      0 --:--:--  0:02:00 --:--:--     0
+curl: (28) Operation timed out after 120006 milliseconds with 0 bytes received
+[exit-code] 28
+
+$ env PATH=/Users/jose/Library/Android/sdk/platform-tools:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin adb -s RF8M90QE7LX shell input keyevent 224
+[exit-code] 0
+
+$ env PATH=/Users/jose/Library/Android/sdk/platform-tools:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Applications/Codex.app/Contents/Resources:/Users/jose/.local/bin adb -s RF8M90QE7LX shell input swipe 540 1900 540 300 600
+[exit-code] 0
+
+$ which adb
+/Users/jose/Library/Android/sdk/platform-tools/adb
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+RF8M90QE7LX            device usb:2-1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1
+
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell dumpsys window
+
+WINDOW MANAGER LAST ANR (dumpsys window lastanr)
+  <no ANR has occurred since boot>
+
+WINDOW MANAGER POLICY STATE (dumpsys window policy)
+    mSafeMode=false mSystemReady=true mSystemBooted=true
+    mCameraLensCoverState=CAMERA_LENS_COVER_ABSENT
+    mWakeGestureEnabledSetting=true
+    mUiMode=UI_MODE_TYPE_NORMALmEnableCarDockHomeCapture=true
+    mLidKeyboardAccessibility=0 mLidNavigationAccessibility=0 getLidBehavior=LID_BEHAVIOR_NONE
+    mLongPressOnBackBehavior=LONG_PRESS_BACK_NOTHING
+    mLongPressOnHomeBehavior=LONG_PRESS_HOME_ASSIST
+    mDoubleTapOnHomeBehavior=DOUBLE_TAP_HOME_NOTHING
+    mShortPressOnPowerBehavior=SHORT_PRESS_POWER_GO_TO_SLEEP
+    mLongPressOnPowerBehavior=LONG_PRESS_POWER_GLOBAL_ACTIONS
+    mVeryLongPressOnPowerBehavior=VERY_LONG_PRESS_POWER_NOTHING
+    mDoublePressOnPowerBehavior=MULTI_PRESS_POWER_LAUNCH_CAMERA
+    mTriplePressOnPowerBehavior=MULTI_PRESS_POWER_NOTHING
+    mPowerVolUpBehavior=POWER_VOLUME_UP_BEHAVIOR_NOTHING
+    mShortPressOnSleepBehavior=SHORT_PRESS_SLEEP_GO_TO_SLEEP
+    mShortPressOnWindowBehavior=SHORT_PRESS_WINDOW_PICTURE_IN_PICTURE
+    mAllowStartActivityForLongPressOnPowerDuringSetup=false
+    mHasSoftInput=true mHapticTextHandleEnabled=true
+    mDismissImeOnBackKeyPressed=false mIncallPowerBehavior=sleep
+    mIncallBackBehavior=<nothing> mEndcallBehavior=sleep
+    mDisplayHomeButtonHandlers=mDisplayId = -1, mHomePressed = false
+mDisplayId = 0, mHomePressed = false
+    mKeyguardOccluded=false mKeyguardOccludedChanged=false mPendingKeyguardOccluded=false
+    mAllowLockscreenWhenOnDisplays=false mLockScreenTimeout=30000 mLockScreenTimerActive=false
+    mKeyMapping.size=0
+    KeyCombination rules:
+      KEYCODE_VOLUME_UP + KEYCODE_POWER
+      KEYCODE_APP_SWITCH + KEYCODE_BACK
+      KEYCODE_VOLUME_DOWN + KEYCODE_POWER
+      KEYCODE_VOLUME_DOWN + KEYCODE_VOLUME_UP
+    KeyCombination ActiveRules:
+    KeyCombination mDownTimes:
+    SingleKey rules:
+      KeyCode=KEYCODE_POWER, LongPress=true, VeryLongPress=false, MaxMultiPressCount=2
+    WakeGestureListener
+      mTriggerRequested=false
+      mSensor=null
+    KeyguardServiceDelegate
+      showing=true
+      showingAndNotOccluded=true
+      inputRestricted=true
+      occluded=false
+      secure=true
+      dreaming=false
+      systemIsReady=true
+      deviceHasKeyguard=true
+      enabled=true
+      offReason=OFF_BECAUSE_OF_TIMEOUT
+      currentUser=0
+      bootCompleted=true
+      screenState=SCREEN_STATE_ON
+      interactiveState=INTERACTIVE_STATE_AWAKE
+      KeyguardStateMonitor
+        mIsShowing=true
+        mSimSecure=false
+        mInputRestricted=true
+        mTrusted=false
+        mCurrentUserId=0
+    Looper state:
+      Looper (android.ui, tid 24) {8b8c2d4}
+        (Total messages: 0, polling=true, quitting=false)
+
+    --- PhoneWindowManagerExt ---
+
+    KeyCustomization info state: 1.0
+    All KeyCustomizationInfo
+    KEY_PRESS_DOWN OR UP ---
+    KEY_PRESS_LONG ---
+        KEY_CODE(26) :
+          id: 1000, keyCode 26, action: 0, intent: Intent { act=android.intent.action.MAIN cmp=globalAction/globalAction }
+    KEY_PRESS_DOUBLE ---
+        KEY_CODE(26) :
+          id: 2001, keyCode 26, action: 1, intent is null.
+    KEY_PRESS_TRIPLE ---
+    KEY_PRESS_QUADRUPLE ---
+
+    Last KeyCustomizationInfo
+    KEY_PRESS_DOWN OR UP ---
+    KEY_PRESS_LONG ---
+          id: 1000, keyCode 26, action: 0, intent: Intent { act=android.intent.action.MAIN cmp=globalAction/globalAction }
+    KEY_PRESS_DOUBLE ---
+          id: 2001, keyCode 26, action: 1, intent is null.
+    KEY_PRESS_TRIPLE ---
+    KEY_PRESS_QUADRUPLE ---
+    UserId:0
+    XmlFileErrorCode=SUCCESS
+        mWakingUpReason=WAKE_REASON_PLUGGED_IN
+    mFocusedWindow=Bouncer
+    mTopActivityWindow=Window{6c57aa5 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}
+      KEYCODE_HOME=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      KEYCODE_ENDCALL=[]
+      KEYCODE_SYSRQ=[]
+      1064=[]
+      1001=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      KEYCODE_POWER=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      1082=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      KEYCODE_APP_SWITCH=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+    mBixbyComponentName=ComponentInfo{com.samsung.android.bixby.agent/com.samsung.android.bixby.WinkService}
+    maxMultiPressPowerCount=2
+    mQuadruplePressOnPowerBehavior=0
+    mIsInteractionControlEnabled=false mIsPowerKeyBlocked=true mIsVolumeKeyBlocked=true
+    mIsHapticsEnabled=true mIsAssistHapticEnabled=false mIsHapticsSupported=true mNavBarVirtualKeyHapticFeedbackEnabled=true
+    mEmergencyModeEnabled=false
+    mDexKeyguardOccluded=false mDexKeyguardOccludedChanged=false mPendingDexKeyguardOccluded=false
+    mWakeUpReasonFingerprintTriggered=false mWakeAndUnlockTriggered=false mWakeAndUnfoldedTriggered=false
+    mIsPogoKeyboardConnected=false
+    mIsDoubleTapToWakeUpSupported=true mIsDoubleTapToWakeUp=true
+    mQuickLaunchCameraBehavior=3
+    cameraSensorToggleSupported=true    micSensorToggleSupported=true
+
+WINDOW MANAGER ANIMATOR STATE (dumpsys window animator)
+    DisplayContentsAnimator #0:
+      Window #0: WindowStateAnimator{5ffbc7d com.android.systemui.ImageWallpaper}
+      Window #1: WindowStateAnimator{10608ee com.android.settings/com.android.settings.homepage.SettingsHomepageActivity}
+      Window #2: WindowStateAnimator{eff8772 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+      Window #3: WindowStateAnimator{23d97c3 }
+      Window #4: WindowStateAnimator{c5e818f com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}
+      Window #5: WindowStateAnimator{350ec1c com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+      Window #6: WindowStateAnimator{b0d4025 dismiss-button-overlay}
+      Window #7: WindowStateAnimator{23aa8be InputMethod}
+      Window #8: WindowStateAnimator{32efe35 StatusBar}
+      Window #9: WindowStateAnimator{e7492ca NotificationShade}
+      Window #10: WindowStateAnimator{e983c3b com.samsung.android.app.cocktailbarservice/com.samsung.android.app.cocktailbarservice.CocktailBarService}
+      Window #11: WindowStateAnimator{9cdcf58 Bouncer}
+      Window #12: WindowStateAnimator{7de48b1 NavigationBar0}
+      Window #13: WindowStateAnimator{db11196 ShellDropTarget}
+      Window #14: WindowStateAnimator{7c46117 LockscreenShortcutBlur}
+
+
+
+WINDOW MANAGER SESSIONS (dumpsys window sessions)
+  Session Session{4cd1d4 3855:u0a10234}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@2fc8904
+    mPackageName=com.samsung.android.app.spage
+  Session Session{11cbef4 1777:u0a10137}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@45dbeed
+    mPackageName=com.sec.android.app.launcher
+  Session Session{25ea8c3 5126:u0a10050}:
+    mNumWindow=0 mCanAddInternalSystemWindow=false mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@464b122
+    mPackageName=com.samsung.android.providers.media
+  Session Session{284696e 15659:u0a10225}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@fcdc5fa
+    mPackageName=com.samsung.android.calendar
+  Session Session{a5968f2 982:1000}:
+    mNumWindow=0 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@68a519a
+    mPackageName=android
+  Session Session{b2f63b9 5828:u0a10045}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@f3b3170
+    mPackageName=com.samsung.android.app.cocktailbarservice
+  Session Session{b4e7024 3676:u0a10219}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@7c0bd6e
+    mPackageName=com.samsung.android.honeyboard
+  Session Session{c07a295 4285:u0a10103}:
+    mNumWindow=0 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@f2232a8
+    mPackageName=com.sec.android.app.camera
+  Session Session{ce35968 1349:u0a10035}:
+    mNumWindow=8 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@7dc5c0f
+    mPackageName=com.android.systemui
+  Session Session{f291fd2 15363:1000}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@64ba7ab
+    mPackageName=com.android.settings
+  Session Session{f5ba39f 21521:u0a10325}:
+    mNumWindow=1 mCanAddInternalSystemWindow=false mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@48eae08
+    mPackageName=com.amaia23.hydracam
+
+WINDOW MANAGER DISPLAY CONTENTS (dumpsys window displays)
+  mLastOrientationSource=WindowedMagnification:0:31@248560967
+  deepestLastOrientationSource=Window{31b2d7a u0 NotificationShade}
+  overrideConfig={1.1 ?mcc?mnc [en_IE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.3944 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0}
+  Display: mDisplayId=0 rootTasks=9
+    init=1080x2280 480dpi cur=1080x2280 app=1080x2020 rng=1080x1008-2020x2019
+    deferred=false mLayoutNeeded=false mTouchExcludeRegion=SkRegion((0,0,1080,2280))
+
+    initCutout=DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}
+    baseCutout=DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}
+
+    initRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=96, center=Point(96, 96)}, RoundedCorner{position=TopRight, radius=96, center=Point(984, 96)}, RoundedCorner{position=BottomRight, radius=96, center=Point(984, 2184)}, RoundedCorner{position=BottomLeft, radius=96, center=Point(96, 2184)}]}
+    baseRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=96, center=Point(96, 96)}, RoundedCorner{position=TopRight, radius=96, center=Point(984, 96)}, RoundedCorner{position=BottomRight, radius=96, center=Point(984, 2184)}, RoundedCorner{position=BottomLeft, radius=96, center=Point(96, 2184)}]}
+
+  mLayoutSeq=8665
+  mCurrentFocus=Window{cc5ae83 u0 Bouncer}
+  mFocusedApp=ActivityRecord{5a0ca93 u0 com.amaia23.hydracam/.MainActivity t336}
+
+  displayId=0
+  mWallpaperTarget=null
+  mLastWallpaperX=0.5 mLastWallpaperY=0.5
+  mLastWallpaperDisplayOffsetX=0 mLastWallpaperDisplayOffsetY=0
+
+  Display areas in top down Z order:
+    * Leaf:36:36
+    * HideDisplayCutout:32:35
+      * OneHanded:32:35
+        * FullscreenMagnification:33:35
+          * Leaf:33:35
+        * Leaf:32:32
+    * WindowedMagnification:0:31
+      * HideDisplayCutout:26:31
+        * OneHanded:26:31
+          * FullscreenMagnification:29:31
+            * Leaf:29:31
+          * Leaf:28:28
+          * FullscreenMagnification:26:27
+            * Leaf:26:27
+      * Leaf:24:25
+      * HideDisplayCutout:20:23
+        * OneHanded:20:23
+          * FullscreenMagnification:20:23
+            * Leaf:20:23
+      * OneHanded:19:19
+        * FullscreenMagnification:19:19
+          * Leaf:19:19
+      * HideDisplayCutout:18:18
+        * OneHanded:18:18
+          * FullscreenMagnification:18:18
+            * Leaf:18:18
+      * OneHanded:17:17
+        * FullscreenMagnification:17:17
+          * Leaf:17:17
+      * HideDisplayCutout:0:16
+        * OneHanded:2:16
+          * ImePlaceholder:15:16
+            * ImeContainer
+          * FullscreenMagnification:2:14
+            * Leaf:3:14
+            * DefaultTaskDisplayArea
+        * OneHandedBackgroundPanel:0:1
+          * OneHanded:0:1
+            * FullscreenMagnification:0:1
+              * Leaf:0:1
+
+  Task display areas in top down Z order:
+    TaskDisplayArea DefaultTaskDisplayArea
+      overrideConfig={0.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=undefined mAlwaysOnTop=undefined mRotation=undefined mPopOver=undefined mFreeformTaskPinningState=unpinned} ?fontWeightAdjustment ff=0 bf=-1 bts=-1 desktop/? dm/? ?dc ?dcui ?dcaf enb/? themeSeq=0}
+      mPreferredTopFocusableRootTask=Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1}
+      mLastFocusedRootTask=Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1}
+      Application tokens in top down Z order:
+      * Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1}
+        mDimAnimInfo mOwner=Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * ActivityRecord{5a0ca93 u0 com.amaia23.hydracam/.MainActivity t336}
+      * Task{dedc27 #334 type=standard I=com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity U=0 visible=false mode=fullscreen translucent=true sz=1}
+        mDimAnimInfo mOwner=Task{dedc27 #334 type=standard I=com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity U=0 visible=false mode=fullscreen translucent=true sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * ActivityRecord{2ab4ee6 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity t334}
+      * Task{956a783 #1 type=home ?? U=0 visible=false mode=fullscreen translucent=true sz=1}
+        mDimAnimInfo mOwner=Task{956a783 #1 type=home ?? U=0 visible=false mode=fullscreen translucent=true sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * Task{7d72e5f #224 type=home A=10137:com.sec.android.app.launcher.activities.LauncherActivity U=0 rootTaskId=1 visible=false mode=fullscreen translucent=true sz=1}
+          mDimAnimInfo mOwner=Task{7d72e5f #224 type=home A=10137:com.sec.android.app.launcher.activities.LauncherActivity U=0 rootTaskId=1 visible=false mode=fullscreen translucent=true sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+          bounds=[0,0][1080,2280]
+          * ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+      * Task{deac7bd #324 type=standard A=1000:com.android.settings.root U=0 visible=false mode=fullscreen translucent=true sz=3}
+        mDimAnimInfo mOwner=Task{deac7bd #324 type=standard A=1000:com.android.settings.root U=0 visible=false mode=fullscreen translucent=true sz=3} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * ActivityRecord{1fc2c28 u0 com.sec.android.app.myfiles/.external.ui.AnalyzeStorageActivity t324}
+        * ActivityRecord{519185b u0 com.android.settings.intelligence/.search.SearchActivity t324}
+        * ActivityRecord{d07f314 u0 com.android.settings/.homepage.SettingsHomepageActivity t324}
+      * Task{3416d00 #2 type=undefined ?? U=0 visible=false mode=fullscreen translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{3416d00 #2 type=undefined ?? U=0 visible=false mode=fullscreen translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+      * Task{119939 #3 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{119939 #3 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+      * Task{7e98ff5 #4 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{7e98ff5 #4 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+      * Task{ebeada6 #5 type=undefined ?? U=0 visible=false mode=split-screen-primary translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{ebeada6 #5 type=undefined ?? U=0 visible=false mode=split-screen-primary translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,1114]
+      * Task{4cd218a #6 type=undefined ?? U=0 visible=false mode=split-screen-secondary translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{4cd218a #6 type=undefined ?? U=0 visible=false mode=split-screen-secondary translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,1138][1080,2280]
+
+  mScreenRotationAnimation:
+    mSurface=null mWidth=2280 mHeight=1080
+    mEnteringBlackFrame=null
+    mCurRotation=0 mOriginalRotation=1
+    mOriginalWidth=2280 mOriginalHeight=1080
+    mStarted=true mAnimRunning=false mFinishAnimReady=true mFinishAnimStartTime=-1
+    mRotateExitAnimation=null {alpha=1.0 matrix=[1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]}
+    mRotateEnterAnimation=null {alpha=1.0 matrix=[1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]}
+    mSnapshotInitialMatrix=[0.0, -1.0, 1080.0][1.0, 0.0, 0.0][0.0, 0.0, 1.0]
+    mForceDefaultOrientation=false
+  rootHomeTask=Task=1
+  rootSplitScreenPrimaryTask=Task=5
+
+  PinnedTaskController
+    mIsImeShowing=false
+    mImeHeight=0
+    mAspectRatio=-1.0
+    mMinAspectRatio=0.41841003
+    mMaxAspectRatio=2.39
+    mActions=[]
+
+  DisplayFrames w=1080 h=2280 r=0
+
+  DisplayPolicy
+    mCarDockEnablesAccelerometer=true mDeskDockEnablesAccelerometer=true
+    mDockMode=EXTRA_DOCK_STATE_UNDOCKED mLidState=LID_ABSENT
+    mAwake=true mScreenOnEarly=true mScreenOnFully=true
+    mKeyguardDrawComplete=true mWindowManagerDrawComplete=true
+    mHdmiPlugged=false
+    mLastBehavior=SHOW_TRANSIENT_BARS_BY_SWIPE
+    mShowingDream=false mDreamingLockscreen=true
+    mStatusBar=Window{7a8bd07 u0 StatusBar}
+    mExpandedPanel=Window{31b2d7a u0 NotificationShade}
+    isKeyguardShowing=true
+    mNavigationBar=Window{64142ae u0 NavigationBar0}
+    mNavBarOpacityMode=0
+    mNavigationBarCanMove=true
+    mNavigationBarPosition=4
+    mNavigationBarHeightForRotationDefault=[144, 144, 144, 144]
+    mCurrentUserResources
+     .mUserId=0
+     .getAssets().getApkPaths()=[/system/framework/framework-res.apk, /system/system_ext/overlay/GmsConfigOverlayCommon.apk, /system/system_ext/overlay/GmsConfigOverlayGSA.apk, /system/system_ext/overlay/GmsConfigOverlayGeotz.apk, /system/system_ext/overlay/GooglePermissionControllerFrameworkOverlay.apk, /system/system_ext/overlay/ModuleMetadataGoogleOverlay.apk, /vendor/overlay/framework-res__auto_generated_rro_vendor.apk]
+     .getDimensionPixelSize(R.dimen.navigation_bar_height)=144
+    mFocusedWindow=Window{cc5ae83 u0 Bouncer}
+    mTopFullscreenOpaqueOrDimmingWindowState=Window{cc5ae83 u0 Bouncer}
+    mTopIsFullscreen=false
+    mForceStatusBar=false mAllowLockscreenWhenOn=false
+    mRemoteInsetsControllerControlsSystemBars=false
+    Looper state:
+      Looper (android.ui, tid 24) {8b8c2d4}
+        (Total messages: 0, polling=true, quitting=false)
+
+    DisplayPolicyExt
+      CoverPolicyController
+        mLastCoverAppCovered=false
+      mIsOneHandOpEnabled=false
+      mHasOneHandOpSpec=false
+      mIsInputFilterRegistered=false
+      mReasonToStart=SYSTEM_BOOTED
+      mOneHandOpController=null      mOneHandOpHandler=null
+
+  DisplayRotation
+    mCurrentAppOrientation=SCREEN_ORIENTATION_NOSENSOR
+    mLastOrientation=5
+    mRotation=0 mDeferredRotationPauseCount=0
+    mLandscapeRotation=ROTATION_90 mSeascapeRotation=ROTATION_270
+    mPortraitRotation=ROTATION_0 mUpsideDownRotation=ROTATION_180
+    mSupportAutoRotation=true
+    WindowOrientationListener
+      mEnabled=true
+      mCurrentRotation=ROTATION_0
+      mSensorType=null
+      mSensor={Sensor name="AutoRotation Sensor", vendor="Samsung Electronics", version=16, type=27, maxRange=255.0, resolution=1.0, power=0.001, minDelay=0}
+      mRate=2
+      OrientationSensorJudge
+        mDesiredRotation=-1
+        mProposedRotation=-1
+        mTouching=false
+        mTouchEndedTimestampNanos=902643666291664
+        mLastRotationResolution=1
+
+    mCarDockRotation=-1 mDeskDockRotation=-1
+    mUserRotationMode=USER_ROTATION_LOCKED mUserRotation=ROTATION_0 mCameraRotationMode=0 mAllowAllRotations=false
+    mDemoHdmiRotation=ROTATION_90 mDemoHdmiRotationLock=false mUndockedHdmiRotation=-1
+    mLidOpenRotation=-1
+    mFixedToUserRotation=false
+    mRotatingSeamlessly=false mSeamlessRotationCount=0
+
+  InputConsumers:
+    name=recents_animation_input_consumer pid=1777 user=UserHandle{0}
+
+  WindowInsetsStateController
+    InsetsState
+      mDisplayFrame=Rect(0, 0 - 1080, 2280)
+      mDisplayCutout=DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}
+      mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=96, center=Point(96, 96)}, RoundedCorner{position=TopRight, radius=96, center=Point(984, 96)}, RoundedCorner{position=BottomRight, radius=96, center=Point(984, 2184)}, RoundedCorner{position=BottomLeft, radius=96, center=Point(96, 2184)}]}
+      mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(811, 0 - 943, 117) rotation=0}
+        InsetsSource type=ITYPE_STATUS_BAR frame=[0,0][1080,117] visible=true
+        InsetsSource type=ITYPE_NAVIGATION_BAR frame=[0,2136][1080,2280] visible=true
+        InsetsSource type=ITYPE_LEFT_GESTURES frame=[0,0][0,2280] visible=true
+        InsetsSource type=ITYPE_RIGHT_GESTURES frame=[1080,0][1080,2280] visible=true
+        InsetsSource type=ITYPE_TOP_MANDATORY_GESTURES frame=[0,0][1080,153] visible=true
+        InsetsSource type=ITYPE_BOTTOM_MANDATORY_GESTURES frame=[0,2136][1080,2280] visible=true
+        InsetsSource type=ITYPE_LEFT_DISPLAY_CUTOUT frame=[0,0][-2147483648,2280] visible=true
+        InsetsSource type=ITYPE_TOP_DISPLAY_CUTOUT frame=[0,0][1080,116] visible=true
+        InsetsSource type=ITYPE_RIGHT_DISPLAY_CUTOUT frame=[2147483647,0][1080,2280] visible=true
+        InsetsSource type=ITYPE_BOTTOM_DISPLAY_CUTOUT frame=[0,2147483647][1080,2280] visible=true
+        InsetsSource type=ITYPE_TOP_TAPPABLE_ELEMENT frame=[0,0][1080,117] visible=true
+        InsetsSource type=ITYPE_BOTTOM_TAPPABLE_ELEMENT frame=[0,2136][1080,2280] visible=true
+        InsetsSource type=ITYPE_IME frame=[0,0][0,0] visible=false
+    Control map:
+      ITYPE_IME -> Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+      ITYPE_NAVIGATION_BAR -> Window{cc5ae83 u0 Bouncer}
+      ITYPE_STATUS_BAR -> Window{cc5ae83 u0 Bouncer}
+    InsetsSourceProviders:
+      ImeInsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_IME frame=[0,0][0,0] visible=false
+        mControl=InsetsSourceControl type=ITYPE_IME mLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4 mSurfacePosition=Point(0, 117) mInsetsHint=Insets{left=0, top=0, right=0, bottom=0} mSkipAnimationOnce=false mControlledByPolicy=false
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{e0975e0 u0 InputMethod}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4
+        mControlTarget=Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+        mImeShowing=false
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_BOTTOM_TAPPABLE_ELEMENT frame=[0,2136][1080,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_TOP_TAPPABLE_ELEMENT frame=[0,0][1080,117] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{7a8bd07 u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_BOTTOM_MANDATORY_GESTURES frame=[0,2136][1080,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_TOP_MANDATORY_GESTURES frame=[0,0][1080,153] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{7a8bd07 u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_RIGHT_GESTURES frame=[1080,0][1080,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_LEFT_GESTURES frame=[0,0][0,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_NAVIGATION_BAR frame=[0,2136][1080,2280] visible=true
+        mControl=InsetsSourceControl type=ITYPE_NAVIGATION_BAR mLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1 mSurfacePosition=Point(0, 2136) mInsetsHint=Insets{left=0, top=0, right=0, bottom=144} mSkipAnimationOnce=false mControlledByPolicy=false
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,2136][1080,2280]
+        mWin=Window{64142ae u0 NavigationBar0}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1
+        mControlTarget=Window{cc5ae83 u0 Bouncer}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_STATUS_BAR frame=[0,0][1080,117] visible=true
+        mControl=InsetsSourceControl type=ITYPE_STATUS_BAR mLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58 mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=117, right=0, bottom=0} mSkipAnimationOnce=false mControlledByPolicy=false
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{7a8bd07 u0 StatusBar}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58
+        mControlTarget=Window{cc5ae83 u0 Bouncer}
+
+WINDOW MANAGER TOKENS (dumpsys window tokens)
+  All tokens:
+  Display #0
+  ActivityRecord{d07f314 u0 com.android.settings/.homepage.SettingsHomepageActivity t324}
+  WindowToken{4fa3c22 android.os.BinderProxy@fa65c04}
+  WindowToken{3394ae7 android.os.BinderProxy@cc340a6}
+  WindowToken{65a620a android.os.BinderProxy@b598275}
+  WindowToken{9082635 android.os.BinderProxy@d351838}
+  WindowToken{2aaf29 android.os.BinderProxy@99eeff3}
+  ActivityRecord{1fc2c28 u0 com.sec.android.app.myfiles/.external.ui.AnalyzeStorageActivity t324}
+  ActivityRecord{2ab4ee6 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity t334}
+  ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+  WindowToken{d193efc android.os.BinderProxy@5ad3ef}
+  ActivityRecord{5a0ca93 u0 com.amaia23.hydracam/.MainActivity t336}
+  ActivityRecord{519185b u0 com.android.settings.intelligence/.search.SearchActivity t324}
+  WindowToken{21995a5 android.os.BinderProxy@5967b0f}
+  WindowToken{39ea746 android.os.BinderProxy@e912188}
+  WallpaperWindowToken{9e4304e token=android.os.Binder@8344f49}
+  WindowToken{e33862c android.os.Binder@c1f9df}
+
+WINDOW MANAGER WINDOWS (dumpsys window windows)
+  Window #0 Window{12a26b3 u0 LockscreenShortcutBlur}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@fa65c04
+    mOwnerUid=10035 showForAllUsers=false package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=SECURE_SYSTEM_OVERLAY fmt=TRANSLUCENT
+      fl=1000538
+      pfl=12000000
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE naviIconColor=0}
+    Requested w=1080 h=2280 mLayoutSeq=8400
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{7c46117 LockscreenShortcutBlur}:
+    mLastFreezeDuration=+273ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #1 Window{1023541 u0 ShellDropTarget}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@db6371a
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=always ty=DRAG fmt=TRANSLUCENT
+      fl=1000208
+      pfl=92000050
+      bhv=DEFAULT naviIconColor=0 mwfl=10}
+    Requested w=1080 h=2280 mLayoutSeq=8
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{db11196 ShellDropTarget}:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    mOrientationChanging=false configOrientationChanging=true mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #2 Window{64142ae u0 NavigationBar0}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@eba64b0
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR fmt=TRANSLUCENT receive insets ignoring z-order
+      fl=21840068
+      pfl=33000000
+      bhv=DEFAULT naviIconColor=0}
+    Requested w=1080 h=144 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    ContainerAnimator:
+      mLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1 mAnimationType=insets_animation
+      Animation: com.android.server.wm.InsetsSourceProvider$ControlAdapter@caca9f6
+        ControlAdapter mCapturedLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1
+    WindowStateAnimator{7de48b1 NavigationBar0}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mLastFreezeDuration=+366ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=3195
+    mDrawLock=WakeLock{cbf427a held=false, refCount=10}
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #3 Window{cc5ae83 u0 Bouncer}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@cc340a6
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=TOP CENTER_VERTICAL sim={adjust=resize} layoutInDisplayCutoutMode=shortEdges ty=KEYGUARD_DIALOG fmt=TRANSLUCENT if=DISABLE_USER_ACTIVITY userActivityTimeout=10000
+      fl=85022542
+      pfl=12000000
+      vsysui=500
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE dimAmount=0.1375 screenDimDuration=0 naviIconColor=0
+      sfl=40040}
+    Requested w=1080 h=0 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    WindowStateAnimator{9cdcf58 Bouncer}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #4 Window{c3c5098 u0 com.samsung.android.app.cocktailbarservice/com.samsung.android.app.cocktailbarservice.CocktailBarService}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{b2f63b9 5828:u0a10045} mClient=android.os.BinderProxy@b598275
+    mOwnerUid=10045 showForAllUsers=true package=com.samsung.android.app.cocktailbarservice appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,442)(67x342) gr=TOP RIGHT CENTER sim={adjust=nothing} layoutInDisplayCutoutMode=shortEdges ty=2226 fmt=TRANSPARENT
+      fl=81800548
+      pfl=2000050
+      vsysui=2000
+      apr=LIGHT_STATUS_BARS
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE
+      fitTypes=NAVIGATION_BARS CAPTION_BAR dimAmount=0.0 dimDuration=0 naviIconColor=0
+      sfl=200000}
+    Requested w=67 h=342 mLayoutSeq=8661
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{e983c3b com.samsung.android.app.cocktailbarservice/com.samsung.android.app.cocktailbarservice.CocktailBarService}:
+    mLastFreezeDuration=+1d9h21m11s188ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=33
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #5 Window{31b2d7a u0 NotificationShade}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@72b279c
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=TOP CENTER_VERTICAL sim={adjust=resize} layoutInDisplayCutoutMode=always ty=2040 fmt=TRANSLUCENT or=SCREEN_ORIENTATION_NOSENSOR if=DISABLE_USER_ACTIVITY userActivityTimeout=5000
+      fl=81860040
+      pfl=1a000000
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE screenDimDuration=0 naviIconColor=0
+      sfl=42000}
+    Requested w=1080 h=2280 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    UdcCutoutInfo: mUseLayoutInUdcCutout=true mUseConfigurationInUdcCutout=false
+    WindowStateAnimator{e7492ca NotificationShade}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mLastFreezeDuration=+1d9h21m11s575ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=1445
+    mDrawLock=WakeLock{80caa2b held=false, refCount=912}
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #6 Window{7a8bd07 u0 StatusBar}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@332e721
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillx117) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+      fl=81000008
+      pfl=13000000
+      bhv=DEFAULT naviIconColor=0
+      sfl=2000}
+    Requested w=1080 h=117 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    ContainerAnimator:
+      mLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58 mAnimationType=insets_animation
+      Animation: com.android.server.wm.InsetsSourceProvider$ControlAdapter@b9181f7
+        ControlAdapter mCapturedLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58
+    UdcCutoutInfo: mUseLayoutInUdcCutout=true mUseConfigurationInUdcCutout=false
+    WindowStateAnimator{32efe35 StatusBar}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mLastFreezeDuration=+461ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=39253
+    mDrawLock=WakeLock{4a1c021 held=false, refCount=408}
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #7 Window{e0975e0 u0 InputMethod}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{b4e7024 3676:u0a10219} mClient=android.os.BinderProxy@447c7e3
+    mOwnerUid=10219 showForAllUsers=false package=com.samsung.android.honeyboard appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=BOTTOM CENTER_VERTICAL sim={adjust=pan} ty=INPUT_METHOD fmt=TRANSPARENT wanim=0x7f130170 preferredMinDisplayRefreshRate=60.0 receive insets ignoring z-order
+      fl=81800108
+      pfl=12000000
+      vsysui=10
+      apr=LIGHT_NAVIGATION_BARS
+      bhv=DEFAULT
+      fitTypes=STATUS_BARS NAVIGATION_BARS
+      fitSides=LEFT TOP RIGHT
+      fitIgnoreVis dimDuration=150 naviIconColor=0}
+    Requested w=1080 h=2163 mLayoutSeq=7415
+    mIsImWindow=true mIsWallpaper=false mIsFloatingLayer=true
+    mPolicyVisibility=false mLegacyPolicyVisibilityAfterAnim=false mAppOpVisibility=true parentHidden=false mPermanentlyHidden=false mHiddenWhileSuspended=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    ContainerAnimator:
+      mLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4 mAnimationType=insets_animation
+      Animation: com.android.server.wm.InsetsSourceProvider$ControlAdapter@19b1387
+        ControlAdapter mCapturedLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4
+    WindowStateAnimator{23aa8be InputMethod}:
+    mOrientationChanging=false configOrientationChanging=false mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #8 Window{7d8c985 u0 dismiss-button-overlay}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@5ad3ef
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(1080x2280) gr=TOP START CENTER sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=2605 fmt=TRANSPARENT
+      fl=1000338
+      pfl=12000050
+      bhv=DEFAULT naviIconColor=0
+      sfl=20000}
+    Requested w=1080 h=2280 mLayoutSeq=8072
+    mPolicyVisibility=false mLegacyPolicyVisibilityAfterAnim=false mAppOpVisibility=true parentHidden=false mPermanentlyHidden=false mHiddenWhileSuspended=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{b0d4025 dismiss-button-overlay}:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #9 Window{39a9b4a u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}:
+    mDisplayId=0 rootTaskId=336 mSession=Session{f5ba39f 21521:u0a10325} mClient=android.os.BinderProxy@97dd8b5
+    mOwnerUid=10325 showForAllUsers=false package=com.amaia23.hydracam appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+      fl=81810180
+      pfl=16020040
+      vsysui=500
+      bhv=DEFAULT
+      fitSides= naviIconColor=0}
+    Requested w=1080 h=2280 mLayoutSeq=8632
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{350ec1c com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}:
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #10 Window{6c57aa5 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}:
+    mDisplayId=0 rootTaskId=334 mSession=Session{284696e 15659:u0a10225} mClient=android.os.BinderProxy@733809c
+    mOwnerUid=10225 showForAllUsers=false package=com.samsung.android.calendar appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION wanim=0x10302f2 userActivityTimeout=6000
+      fl=818b0501
+      pfl=1a020040
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE
+      fitSides= screenDimDuration=0 naviIconColor=0 cm=1}
+    Requested w=1080 h=2280 mLayoutSeq=8624
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{c5e818f com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}:
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #11 Window{1f72ed1 u0 com.samsung.android.app.spage}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{4cd1d4 3855:u0a10234} mClient=android.os.BinderProxy@dfff9f8
+    mOwnerUid=10234 showForAllUsers=false package=com.samsung.android.app.spage appop=NONE
+    mAttrs={(0,0)(0xfill) sim={adjust=pan} ty=APPLICATION_PANEL fmt=RGBA_8888
+      fl=1000018
+      pfl=42000040
+      bhv=DEFAULT
+      fitTypes=STATUS_BARS NAVIGATION_BARS CAPTION_BAR naviIconColor=0}
+    Requested w=0 h=0 mLayoutSeq=75
+    mParentWindow=Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity} mLayoutAttached=true
+    mPolicyVisibility=true mLegacyPolicyVisibilityAfterAnim=true mAppOpVisibility=true parentHidden=true mPermanentlyHidden=false mHiddenWhileSuspended=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{23d97c3 }:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    mOrientationChanging=false configOrientationChanging=true mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #12 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{11cbef4 1777:u0a10137} mClient=android.os.BinderProxy@ad2b2db
+    mOwnerUid=10137 showForAllUsers=false package=com.sec.android.app.launcher appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=nothing forwardNavigation} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION fmt=TRANSPARENT wanim=0x10302f2
+      fl=81910100
+      pfl=1e020040
+      vsysui=1700
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE
+      fitSides= naviIconColor=0}
+    Requested w=1080 h=2280 mLayoutSeq=8479
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{eff8772 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}:
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    mWallpaperX=0.5 mWallpaperY=0.5
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #13 Window{9d5671e u0 com.android.settings/com.android.settings.homepage.SettingsHomepageActivity}:
+    mDisplayId=0 rootTaskId=324 mSession=Session{f291fd2 15363:1000} mClient=android.os.BinderProxy@bffdf59
+    mOwnerUid=1000 showForAllUsers=false package=com.android.settings appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION wanim=0x10302f2
+      fl=81810100
+      pfl=12020040
+      vsysui=2010
+      apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+      bhv=DEFAULT
+      fitSides= naviIconColor=0
+      sfl=100001}
+    Requested w=1080 h=2280 mLayoutSeq=7388
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{10608ee com.android.settings/com.android.settings.homepage.SettingsHomepageActivity}:
+    mOrientationChanging=false configOrientationChanging=false mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #14 Window{5d1646a u0 com.android.systemui.ImageWallpaper}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@bdb9255
+    mOwnerUid=10035 showForAllUsers=false package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(2280x2280) gr=TOP START CENTER layoutInDisplayCutoutMode=always ty=WALLPAPER fmt=RGBX_8888 wanim=0x1030314
+      fl=14318
+      pfl=2000004
+      bhv=DEFAULT naviIconColor=0
+      sfl=8}
+    Requested w=2280 h=2280 mLayoutSeq=8479
+    mIsImWindow=false mIsWallpaper=true mIsFloatingLayer=true
+    mHasSurface=true isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{5ffbc7d com.android.systemui.ImageWallpaper}:
+      Surface: shown=false layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    mWallpaperX=0.5 mWallpaperY=0.5
+    mWallpaperZoomOut=0.0
+    mWallpaperDisplayOffsetX=0 mWallpaperDisplayOffsetY=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+
+  mGlobalConfiguration={1.1 ?mcc?mnc [en_IE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.3944 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0}
+  mHasPermanentDpad=false
+  mTopFocusedDisplayId=0
+  imeInputTarget in display# 0 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+  imeControlTarget in display# 0 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+  imeRelativeTarget in display# 0 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+  mInTouchMode=true
+  mBlurEnabled=false
+  mLastDisplayFreezeDuration=+372ms due to Window{6c12e2 u0 PowerUI.ChargerAnimationViewLp}
+  mLastWakeLockHoldingWindow=null mLastWakeLockObscuringWindow=null
+  mHighResTaskSnapshotScale=1.0
+  SnapshotCache
+    Entry taskId=334
+      topApp=ActivityRecord{2ab4ee6 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity t334}
+      snapshot=TaskSnapshot{ mId=1781685596358 mTopActivityComponent=com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity mSnapshot=android.hardware.HardwareBuffer@64a2b4 (1080x2280) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2280) mContentInsets=[0,0][0,0] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=false mHasImeSurface=false
+    Entry taskId=224
+      topApp=ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+      snapshot=TaskSnapshot{ mId=1781631152102 mTopActivityComponent=com.sec.android.app.launcher/com.android.launcher3.uioverrides.QuickstepLauncher mSnapshot=android.hardware.HardwareBuffer@fa44edd (1080x2280) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2280) mContentInsets=[0,117][0,144] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=true mHasImeSurface=false
+    Entry taskId=1
+      topApp=ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+      snapshot=TaskSnapshot{ mId=1781631152086 mTopActivityComponent=com.sec.android.app.launcher/com.android.launcher3.uioverrides.QuickstepLauncher mSnapshot=android.hardware.HardwareBuffer@4eb1a52 (1080x2280) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2280) mContentInsets=[0,117][0,144] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=true mHasImeSurface=false
+  MaxSnapshotCache=6
+  SplitModeMaxCacheSize=0
+WINDOW MANAGER TRACE (dumpsys window trace)
+Status: Disabled
+Log level: 1
+Buffer size: 2097152 bytes
+Buffer usage: 0 bytes
+Elements in the buffer: 0
+WINDOW MANAGER LOGGING (dumpsys window logging)
+ProtoLog status: Disabled
+Enabled log groups: 
+  Proto: TEST_GROUP WM_DEBUG_ADD_REMOVE WM_DEBUG_APP_TRANSITIONS WM_DEBUG_APP_TRANSITIONS_ANIM WM_DEBUG_BOOT WM_DEBUG_CONFIGURATION WM_DEBUG_CONTAINERS WM_DEBUG_DRAW WM_DEBUG_FOCUS WM_DEBUG_FOCUS_LIGHT WM_DEBUG_IME WM_DEBUG_IMMERSIVE WM_DEBUG_KEEP_SCREEN_ON WM_DEBUG_LOCKTASK WM_DEBUG_ORIENTATION WM_DEBUG_RECENTS_ANIMATIONS WM_DEBUG_REMOTE_ANIMATIONS WM_DEBUG_RESIZE WM_DEBUG_SCREEN_ON WM_DEBUG_STARTING_WINDOW WM_DEBUG_STATES WM_DEBUG_SWITCH WM_DEBUG_SYNC_ENGINE WM_DEBUG_TASKS WM_DEBUG_WINDOW_MOVEMENT WM_DEBUG_WINDOW_ORGANIZER WM_DEBUG_WINDOW_TRANSITIONS WM_ERROR WM_FORCE_DEBUG_ADD_REMOVE WM_FORCE_DEBUG_APP_TRANSITIONS WM_FORCE_DEBUG_APP_TRANSITIONS_ANIM WM_FORCE_DEBUG_BOOT WM_FORCE_DEBUG_DRAW WM_FORCE_DEBUG_FOCUS WM_FORCE_DEBUG_FOCUS_LIGHT WM_FORCE_DEBUG_IME WM_FORCE_DEBUG_KEEP_SCREEN_ON WM_FORCE_DEBUG_ORIENTATION WM_FORCE_DEBUG_RECENTS_ANIMATIONS WM_FORCE_DEBUG_REMOTE_ANIMATIONS WM_FORCE_DEBUG_RESIZE WM_FORCE_DEBUG_SCREEN_ON WM_FORCE_DEBUG_STARTING_WINDOW WM_FORCE_DEBUG_WINDOW_MOVEMENT WM_FORCE_SHOW_SURFACE_ALLOC WM_FORCE_SHOW_TRANSACTIONS WM_SHOW_SURFACE_ALLOC WM_SHOW_TRANSACTIONS
+  Logcat: WM_DEBUG_RECENTS_ANIMATIONS WM_DEBUG_REMOTE_ANIMATIONS WM_DEBUG_WINDOW_TRANSITIONS WM_ERROR WM_FORCE_DEBUG_ADD_REMOVE WM_FORCE_DEBUG_APP_TRANSITIONS WM_FORCE_DEBUG_APP_TRANSITIONS_ANIM WM_FORCE_DEBUG_BOOT WM_FORCE_DEBUG_DRAW WM_FORCE_DEBUG_FOCUS WM_FORCE_DEBUG_FOCUS_LIGHT WM_FORCE_DEBUG_IME WM_FORCE_DEBUG_KEEP_SCREEN_ON WM_FORCE_DEBUG_ORIENTATION WM_FORCE_DEBUG_RECENTS_ANIMATIONS WM_FORCE_DEBUG_REMOTE_ANIMATIONS WM_FORCE_DEBUG_RESIZE WM_FORCE_DEBUG_SCREEN_ON WM_FORCE_DEBUG_STARTING_WINDOW WM_FORCE_DEBUG_WINDOW_MOVEMENT WM_FORCE_SHOW_SURFACE_ALLOC WM_FORCE_SHOW_TRANSACTIONS
+Logging definitions loaded: 0
+WINDOW MANAGER HIGH REFRESH RATE BLACKLIST (dumpsys window refresh)
+High Refresh Rate Denylist
+  Packages:
+WINDOW MANAGER CONSTANTS (dumpsys window constants):
+  system_gesture_exclusion_log_debounce_millis=1500
+  system_gesture_exclusion_limit_dp=200
+  system_gestures_excluded_by_pre_q_sticky_immersive=false
+
+[exit-code] 0
+
+$ adb devices -l
+List of devices attached
+RF8M90QE7LX            device usb:2-1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1
+
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell dumpsys power
+POWER MANAGER (dumpsys power)
+
+Power Manager State:
+  Settings power_manager_constants:
+    no_cached_wake_locks=true
+  mDirty=0x0
+  mWakefulness=Awake
+  mWakefulnessChanging=false
+  mIsPowered=true
+  mPlugType=2
+  mBatteryLevel=100
+  mBatteryLevelWhenDreamStarted=93
+  mDockState=0
+  mStayOn=true
+  mProximityPositive=false
+  mBootCompleted=true
+  mSystemReady=true
+  mEnhancedDischargeTimeElapsed=0
+  mLastEnhancedDischargeTimeUpdatedElapsed=0
+  mEnhancedDischargePredictionIsPersonalized=false
+  mHalAutoSuspendModeEnabled=false
+  mHalInteractiveModeEnabled=true
+  mWakeLockSummary=0x0
+  mNotifyLongScheduled=+21s461ms
+  mNotifyLongDispatched=-54s43ms
+  mNotifyLongNextCheck=(none)
+  mRequestWaitForNegativeProximity=false
+  mInterceptedPowerKeyForProximity=false
+  mInterceptedKeyForProximity=false
+  mSandmanScheduled=false
+  mBatteryLevelLow=false
+  mLightDeviceIdleMode=false
+  mDeviceIdleMode=false
+  mDeviceIdleWhitelist=[1000, 1001, 2000, 5003, 5006, 5010, 5012, 5022, 5025, 5278, 10034, 10036, 10040, 10045, 10050, 10055, 10056, 10060, 10061, 10062, 10067, 10072, 10075, 10076, 10077, 10078, 10082, 10083, 10087, 10089, 10097, 10098, 10101, 10102, 10104, 10105, 10106, 10109, 10112, 10113, 10114, 10116, 10119, 10139, 10140, 10145, 10166, 10168, 10173, 10174, 10179, 10183, 10190, 10204, 10216, 10226, 10228, 10238, 10240, 10246]
+  mDeviceIdleTempWhitelist=[]
+  mLastWakeTime=346051895 (3279774 ms ago)
+  mLastSleepTime=345706809 (3624860 ms ago)
+  mLastSleepReason=timeout
+  mLastInteractivePowerHintTime=344749632 (4582037 ms ago)
+  mLastScreenBrightnessBoostTime=0 (349331669 ms ago)
+  mScreenBrightnessBoostInProgress=false
+  mDefaultDisplayReadyByProximity=true
+  mHoldingWakeLockSuspendBlocker=false
+  mHoldingDisplaySuspendBlocker=true
+  mLastFlipTime=312703630
+  mIsFaceDown=false
+
+Settings and Configuration:
+  mDecoupleHalAutoSuspendModeFromDisplayConfig=true
+  mDecoupleHalInteractiveModeFromDisplayConfig=true
+  mWakeUpWhenPluggedOrUnpluggedConfig=true
+  mWakeUpWhenPluggedOrUnpluggedInTheaterModeConfig=false
+  mTheaterModeEnabled=false
+  mSuspendWhenScreenOffDueToProximityConfig=true
+  mDreamsSupportedConfig=true
+  mDreamsEnabledByDefaultConfig=false
+  mDreamsActivatedOnSleepByDefaultConfig=false
+  mDreamsActivatedOnDockByDefaultConfig=true
+  mDreamsEnabledOnBatteryConfig=false
+  mDreamsBatteryLevelMinimumWhenPoweredConfig=-1
+  mDreamsBatteryLevelMinimumWhenNotPoweredConfig=15
+  mDreamsBatteryLevelDrainCutoffConfig=5
+  mDreamsEnabledSetting=false
+  mDreamsActivateOnSleepSetting=true
+  mDreamsActivateOnDockSetting=false
+  mDozeAfterScreenOff=true
+  mMinimumScreenOffTimeoutConfig=3000
+  mMaximumScreenDimDurationConfig=20000
+  mMaximumScreenDimRatioConfig=0.333
+  mAttentiveTimeoutConfig=-1
+  mAttentiveTimeoutSetting=-1
+  mAttentiveWarningDurationConfig=30000
+  mScreenOffTimeoutSetting=30000
+  mSleepTimeoutSetting=-1
+  mMaximumScreenOffTimeoutFromDeviceAdmin=9223372036854775807 (enforced=false)
+  mStayOnWhilePluggedInSetting=7
+  mScreenBrightnessModeSetting=0
+  mScreenBrightnessOverrideFromWindowManager=NaN
+  mUserActivityTimeoutOverrideFromWindowManager=10000
+  mHeadlessStayOn=false
+  mUserActivityTimeoutForDexOverrideFromWindowManager=-1
+  mUserInactiveOverrideFromWindowManager=false
+  mDozeScreenStateOverrideFromDreamManager=4
+  mDrawWakeLockOverrideFromSidekick=false
+  mDozeScreenBrightnessOverrideFromDreamManager=71
+  mScreenBrightnessMinimum=0.0
+  mScreenBrightnessMaximum=1.0
+  mScreenBrightnessDefault=0.4862745
+  mDoubleTapWakeEnabled=false
+  mIsVrModeEnabled=false
+  mIsLowPersistenceMode=false
+  mIsLowPersistenceModeAllowed=true
+  mForegroundProfile=0
+  mUserId=0
+  mLastWakeUpReason: 113
+  mOutdoorModeSetting: false
+  mAutoBrightnessLowerLimit=-1
+  mAutoBrightnessUpperLimit=-1
+  mAutoBrightnessLimitLastCaller=
+  mLastAutoBrightnessLimitTime=0
+  SEC_FEATURE_MIRROR_LINK: true
+  SEC_FEATURE_USE_GED_DOZE: true
+  SEC_FEATURE_SEAMLESS_AOD: false
+  SEC_FEATURE_WA_WAITING_AOD_WHEN_WAKINGUP_FROM_DOZE: true
+  SEC_FEATURE_WAKEUP_WHEN_PLUG_CHANGED: true
+  SEC_FEATURE_AOD_LOOK_CHARGING_UI: false
+  mAodMode: false
+  mShouldWaitForTransitionToAodUi: false
+  SEC_FEATURE_DEX_DUAL_VIEW: true
+  SEC_FEATURE_ENSURE_TRANSITION_TO_DOZING: false
+
+Attentive timeout: -1 ms
+Sleep timeout: -1 ms
+Screen off timeout: 10000 ms
+Screen dim duration: 0 ms
+Screen dim duration override: 0 ms
+SQD Screen dim duration override: -1 ms
+Screen off timeout for DeX: 600000 ms
+
+Smart Stay:
+  USE_SMART_STAY: true
+  USE_PRE_SMART_STAY: false
+  mSmartStayEnabledSetting: false
+  SmartStayDelay: 2750
+  mNextTimeoutForSmartStay: -1
+  mPendingMessageSmartStay: false
+  mPendingMessagePreSmartStay: false
+  mFaceDetected: false
+  mIsBadCurrentConsumptionDevice: true
+
+Wakelock Blacklist App id: size=0
+
+UID states (changing=false changed=false):
+  UID 1000:   ACTIVE  count=0 state=0
+  UID 1001:   ACTIVE  count=0 state=0
+  UID 1002:   ACTIVE  count=0 state=0
+  UID 1027:   ACTIVE  count=0 state=0
+  UID 1068:   ACTIVE  count=0 state=0
+  UID 1073:   ACTIVE  count=0 state=0
+  UID 5004: INACTIVE  count=0 state=19
+  UID 5006: INACTIVE  count=0 state=8
+  UID 5012: INACTIVE  count=0 state=19
+  UID 5013:   ACTIVE  count=0 state=5
+  UID u0a35:   ACTIVE  count=0 state=1
+  UID u0a39: INACTIVE  count=0 state=19
+  UID u0a45: INACTIVE  count=0 state=8
+  UID u0a49:   ACTIVE  count=0 state=5
+  UID u0a50: INACTIVE  count=0 state=10
+  UID u0a61: INACTIVE  count=0 state=19
+  UID u0a75:   ACTIVE  count=0 state=5
+  UID u0a82:   ACTIVE  count=0 state=6
+  UID u0a90: INACTIVE  count=0 state=19
+  UID u0a96: INACTIVE  count=0 state=19
+  UID u0a103: INACTIVE  count=0 state=18
+  UID u0a112:   ACTIVE  count=0 state=5
+  UID u0a137:   ACTIVE  count=0 state=5
+  UID u0a143:   ACTIVE  count=0 state=5
+  UID u0a178: INACTIVE  count=0 state=19
+  UID u0a201: INACTIVE  count=0 state=17
+  UID u0a215: INACTIVE  count=0 state=19
+  UID u0a219:   ACTIVE  count=0 state=7
+  UID u0a225: INACTIVE  count=0 state=15
+  UID u0a234:   ACTIVE  count=0 state=5
+  UID u0a237: INACTIVE  count=0 state=19
+  UID u0a251: INACTIVE  count=0 state=19
+  UID u0a252:   ACTIVE  count=0 state=0
+  UID u0a253:   ACTIVE  count=0 state=5
+  UID u0a325: INACTIVE  count=0 state=12
+  UID u0ai0: INACTIVE  count=0 state=19
+  UID u0i85: INACTIVE  count=0 state=19
+
+Looper state:
+  Looper (PowerManagerService, tid 50) {e06b202}
+    Message 0: { when=+21s458ms what=4 target=android.os.Handler }
+    Message 1: { when=+2m21s439ms callback=com.android.server.power.PowerManagerService$13 target=android.os.Handler }
+    (Total messages: 2, polling=true, quitting=false)
+Clear Cover:
+  mIsCoverClosed: false
+  mlastUpdateCoverStateReason: updateCoverState called on closed = false
+  mlastUpdateCoverStateTime: = 346044704 (3286965 ms ago)
+  mFeatureCoverSysfs: true
+  mCoverType: -1 at 346042119 (3289550 ms ago)
+  mlastUpdateCoverTypeReason: setCoverType = -1
+  mScreenBrightnessForClearCoverConfig=NaN
+  mBrightnessLimitByCoverConfig: -1
+Master Brightness Limit:
+  mMasterBrightnessLowerLimit: -1
+  mMasterBrightnessUpperLimit: -1
+  mMasterBrightnessLimitLastCaller: 
+  mMasterBrightnessLimitPeriod: 0
+  mMasterBrightnessLimitRunning: false
+  mLastRequestedLimitationOfBrightness: 485
+  mTargetBrightnessForLimit : 0
+
+FTA mode: false
+SEC_USE_FACTORY_BINARY: false
+
+Wake Locks: size=0
+
+Suspend Blockers: size=4
+  PowerManagerService.WakeLocks: ref count=0
+  PowerManagerService.Display: ref count=1
+  PowerManagerService.Broadcasts: ref count=0
+  PowerManagerService.WirelessChargerDetector: ref count=0
+
+Wake Locks History: size=51
+  06-07 12:13:22.855 (ElapsedTime: 85971ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 15:55:40.915 (ElapsedTime: 387627ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 16:02:35.110 (ElapsedTime: 408791ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 16:46:04.130 (ElapsedTime: 2606396ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 16:49:13.325 (ElapsedTime: 158668ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 16:56:06.003 (ElapsedTime: 180139ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 17:03:02.026 (ElapsedTime: 272429ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 17:10:06.592 (ElapsedTime: 303305ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 18:05:46.242 (ElapsedTime: 253630ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 18:30:04.104 (ElapsedTime: 117783ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 18:37:23.983 (ElapsedTime: 317636ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 18:43:53.007 (ElapsedTime: 225212ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 19:05:13.141 (ElapsedTime: 1159998ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 19:15:46.845 (ElapsedTime: 621818ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 19:28:56.795 (ElapsedTime: 738354ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 19:52:21.046 (ElapsedTime: 1353770ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 21:24:28.275 (ElapsedTime: 5457130ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 21:44:55.973 (ElapsedTime: 1128442ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 21:53:18.238 (ElapsedTime: 413405ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 21:59:50.143 (ElapsedTime: 312071ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 22:04:34.903 (ElapsedTime: 209212ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 22:33:14.260 (ElapsedTime: 1648269ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 22:37:21.123 (ElapsedTime: 220195ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 22:49:59.161 (ElapsedTime: 664581ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 22:54:22.211 (ElapsedTime: 179013ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 23:08:24.090 (ElapsedTime: 646321ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-07 23:11:58.803 (ElapsedTime: 187149ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-08 03:18:14.117 (ElapsedTime: 14637353ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-08 14:42:56.072 (ElapsedTime: 41045737ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-08 14:48:06.916 (ElapsedTime: 247514ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-08 15:57:55.311 (ElapsedTime: 4172153ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-08 17:46:19.144 (ElapsedTime: 6465871ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-08 18:46:55.391 (ElapsedTime: 1892709ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-08 18:59:04.862 (ElapsedTime: 569902ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-09 09:37:03.806 (ElapsedTime: 13686513ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-09 14:40:49.960 (ElapsedTime: 17761247ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-09 14:50:12.918 (ElapsedTime: 332003ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-10 02:28:01.963 (ElapsedTime: 41762758ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-10 20:33:37.401 (ElapsedTime: 314702ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-10 20:35:54.621 (ElapsedTime: 137152ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-10 21:49:08.735 (ElapsedTime: 1781475ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-11 10:56:27.850 (ElapsedTime: 1803366ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-11 10:59:24.102 (ElapsedTime: 161308ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-11 11:57:29.518 (ElapsedTime: 3474178ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-12 17:33:02.289 (ElapsedTime: 452252ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-12 18:13:53.553 (ElapsedTime: 2436663ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10325} displayId=-1)   android.os.Binder@2a29713 
+  06-15 18:33:20.424 (ElapsedTime: 3099844ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-15 19:30:19.946 (ElapsedTime: 122299ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-15 19:45:08.088 (ElapsedTime: 127885ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-15 20:28:58.127 (ElapsedTime: 2548937ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+  06-15 20:52:28.271 (ElapsedTime: 845218ms)  SCREEN_BRIGHT_WAKE_LOCK        'WindowManager' ON_AFTER_RELEASE (uid=1000 pid=982 ws=WorkSource{10103} displayId=-1)   android.os.Binder@2a29713 
+
+Display Power: com.android.server.power.PowerManagerService$4@4f44d50
+
+mFreezingScreenBrightness: false
+
+WakeUp History size: 100
+ [1]   06-11 21:04:16.122 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [2]   06-11 22:21:16.111 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [3]   06-11 22:21:21.121 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [4]   06-12 04:10:58.102 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [5]   06-12 04:11:03.112 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [6]   06-12 05:50:02.645 1000  ON  WAKE_REASON_APPLICATION                             com.samsung.android.calendar  
+ [7]   06-12 05:50:08.917 1000  OFF timeout                                             com.samsung.android.calendar  
+ [8]   06-12 06:50:41.115 1000  ON  WAKE_REASON_POWER_BUTTON                            com.samsung.android.calendar  
+ [9]   06-12 06:50:47.638 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [10]  06-12 06:50:49.676 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [11]  06-12 06:52:01.012 1000  OFF timeout                                             com.google.android.googlequicksearchbox
+ [12]  06-12 16:53:11.097 1000  ON  WAKE_REASON_POWER_BUTTON                            com.google.android.googlequicksearchbox
+ [13]  06-12 16:53:16.107 1000  OFF timeout                                             com.google.android.googlequicksearchbox
+ [14]  06-12 17:01:36.403 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.google.android.googlequicksearchbox
+ [15]  06-12 18:13:53.169 1000  OFF power_button                                        com.amaia23.hydracam          
+ [16]  06-12 18:13:53.472 1000  ON  WAKE_REASON_PLUGGED_IN                              com.amaia23.hydracam          
+ [17]  06-12 18:13:54.193 1000  OFF power_button                                        com.amaia23.hydracam          
+ [18]  06-12 18:13:55.177 1000  ON  WAKE_REASON_POWER_BUTTON                            com.amaia23.hydracam          
+ [19]  06-12 18:14:33.270 1000  OFF power_button                                        com.amaia23.hydracam          
+ [20]  06-12 21:18:24.119 1000  ON  WAKE_REASON_POWER_BUTTON                            com.amaia23.hydracam          
+ [21]  06-12 21:18:25.372 1000  OFF power_button                                        com.amaia23.hydracam          
+ [22]  06-12 21:29:44.099 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [23]  06-12 21:29:49.014 1000  OFF timeout                                             com.amaia23.hydracam          
+ [24]  06-12 21:53:10.108 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [25]  06-12 21:53:15.011 1000  OFF timeout                                             com.amaia23.hydracam          
+ [26]  06-12 21:57:46.084 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [27]  06-12 21:57:53.794 1000  OFF timeout                                             com.amaia23.hydracam          
+ [28]  06-12 22:29:40.103 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [29]  06-12 22:29:45.015 1000  OFF timeout                                             com.amaia23.hydracam          
+ [30]  06-12 22:58:40.092 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [31]  06-12 22:58:45.005 1000  OFF timeout                                             com.amaia23.hydracam          
+ [32]  06-12 22:58:47.187 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [33]  06-12 22:58:52.190 1000  OFF timeout                                             com.amaia23.hydracam          
+ [34]  06-12 22:59:11.096 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [35]  06-12 22:59:16.014 1000  OFF timeout                                             com.amaia23.hydracam          
+ [36]  06-12 22:59:39.096 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [37]  06-12 22:59:44.009 1000  OFF timeout                                             com.amaia23.hydracam          
+ [38]  06-12 23:00:04.098 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [39]  06-12 23:00:09.008 1000  OFF timeout                                             com.amaia23.hydracam          
+ [40]  06-12 23:00:21.098 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.amaia23.hydracam          
+ [41]  06-12 23:00:26.007 1000  OFF timeout                                             com.amaia23.hydracam          
+ [42]  06-14 00:53:27.119 1000  ON  WAKE_REASON_POWER_BUTTON                            com.amaia23.hydracam          
+ [43]  06-14 00:53:31.121 1000  OFF power_button                                        com.sec.android.app.camera    
+ [44]  06-14 22:11:04.125 1000  ON  WAKE_REASON_POWER_BUTTON                            com.amaia23.hydracam          
+ [45]  06-14 22:11:09.133 1000  OFF timeout                                             com.amaia23.hydracam          
+ [46]  06-14 22:12:44.117 1000  ON  WAKE_REASON_POWER_BUTTON                            com.amaia23.hydracam          
+ [47]  06-14 22:12:47.936 1000  OFF power_button                                        com.amaia23.hydracam          
+ [48]  06-15 05:50:02.877 1000  ON  WAKE_REASON_APPLICATION                             com.samsung.android.calendar  
+ [49]  06-15 05:50:09.212 1000  OFF timeout                                             com.samsung.android.calendar  
+ [50]  06-15 16:08:56.111 1000  ON  WAKE_REASON_POWER_BUTTON                            com.samsung.android.calendar  
+ [51]  06-15 16:09:05.506 1000  OFF timeout                                             com.samsung.android.calendar  
+ [52]  06-15 16:09:13.898 1000  ON  WAKE_REASON_POWER_BUTTON                            com.samsung.android.calendar  
+ [53]  06-15 16:51:33.619 1000  OFF timeout                                             com.amaia23.hydracam          
+ [54]  06-15 16:51:58.122 1000  ON  WAKE_REASON_POWER_BUTTON                            com.amaia23.hydracam          
+ [55]  06-15 16:52:22.791 1000  OFF power_button                                        com.sec.android.app.myfiles   
+ [56]  06-15 17:41:21.115 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.myfiles   
+ [57]  06-15 17:41:25.505 1000  OFF power_button                                        com.sec.android.app.myfiles   
+ [58]  06-15 17:41:26.391 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.myfiles   
+ [59]  06-15 17:41:31.416 1000  OFF power_button                                        com.sec.android.app.myfiles   
+ [60]  06-15 17:41:31.922 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.myfiles   
+ [61]  06-15 18:33:19.747 1000  OFF power_button                                        com.sec.android.app.camera    
+ [62]  06-15 19:28:15.101 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.camera    
+ [63]  06-15 19:30:49.967 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [64]  06-15 19:42:41.100 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [65]  06-15 19:42:46.117 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [66]  06-15 19:42:58.102 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [67]  06-15 19:45:13.145 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [68]  06-15 19:46:27.112 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [69]  06-15 20:29:03.195 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [70]  06-15 20:38:14.111 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [71]  06-15 20:52:33.329 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [72]  06-15 21:05:19.558 10040 ON  WAKE_REASON_BIXBY                                   com.samsung.android.bixby.agent
+ [73]  06-15 21:05:28.744 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [74]  06-15 22:29:32.103 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [75]  06-15 22:29:44.327 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [76]  06-15 22:31:44.114 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [77]  06-15 22:31:46.640 1000  OFF power_button                                        com.sec.android.app.launcher  
+ [78]  06-15 22:49:15.113 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [79]  06-15 22:49:25.152 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [80]  06-16 05:50:02.929 1000  ON  WAKE_REASON_APPLICATION                             com.samsung.android.calendar  
+ [81]  06-16 05:50:09.299 1000  OFF timeout                                             com.samsung.android.calendar  
+ [82]  06-16 10:24:12.496 1000  ON  WAKE_REASON_POWER_BUTTON                            com.samsung.android.calendar  
+ [83]  06-16 10:24:23.241 1000  OFF timeout                                             com.samsung.android.calendar  
+ [84]  06-16 10:40:08.045 1000  ON  WAKE_REASON_POWER_BUTTON                            com.samsung.android.calendar  
+ [85]  06-16 16:11:26.113 1000  OFF power_button                                        com.sec.android.app.launcher  
+ [86]  06-16 16:44:43.651 1000  ON  WAKE_REASON_PLUGGED_IN                              com.sec.android.app.launcher  
+ [87]  06-16 16:44:48.664 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [88]  06-16 16:44:50.247 1000  ON  WAKE_REASON_PLUGGED_IN                              com.sec.android.app.launcher  
+ [89]  06-16 19:32:29.027 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [90]  06-16 19:32:29.810 1000  ON  WAKE_REASON_POWER_BUTTON                            com.sec.android.app.launcher  
+ [91]  06-16 19:32:31.767 1000  OFF power_button                                        com.sec.android.app.launcher  
+ [92]  06-16 19:42:28.104 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.sec.android.app.launcher  
+ [93]  06-16 19:42:33.006 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [94]  06-16 23:03:56.096 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.sec.android.app.launcher  
+ [95]  06-16 23:04:01.024 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [96]  06-16 23:11:46.087 1000  ON  WAKE_REASON_DOUBLE_TAP                              com.sec.android.app.launcher  
+ [97]  06-16 23:11:51.011 1000  OFF timeout                                             com.sec.android.app.launcher  
+ [98]  06-17 05:50:02.613 1000  ON  WAKE_REASON_APPLICATION                             com.samsung.android.calendar  
+ [99]  06-17 05:50:08.876 1000  OFF timeout                                             com.samsung.android.calendar  
+ [100] 06-17 09:58:14.294 1000  ON  WAKE_REASON_PLUGGED_IN                              com.samsung.android.calendar  
+
+AutoBrightness History size: 15
+ [1]   06-07 00:02:27.703 ShortTermModel: reset data, change configuration
+ [2]   06-07 00:02:34.167 updateAutoBrightness :  81(0.32)     -1 <      5.0 <     44 (adj:+0.0) (1st)
+ [3]   06-07 00:02:50.744 updateAutoBrightness :  82(0.32)     -1 <      7.0 <     58 (adj:+0.0) (1st)
+ [4]   06-07 00:04:06.176 updateAutoBrightness :  92(0.36)      1 <     15.0 <    120 (adj:+0.0) (1st)
+ [5]   06-07 02:52:38.575 updateAutoBrightness :  76(0.30)     -1 <      0.0 <     10 (adj:+0.0)
+ [6]   06-07 07:16:09.571 updateAutoBrightness :  82(0.32)      0 <     10.0 <     80 (adj:+0.0)
+ [7]   06-07 10:52:07.369 updateAutoBrightness : 106(0.42)     30 <     80.0 <    366 (adj:+0.0)
+ [8]   06-07 10:57:04.963 updateAutoBrightness : 105(0.41)      6 <     30.0 <    210 (adj:+0.0)
+ [9]   06-07 12:11:47.230 updateAutoBrightness :  82(0.32)     -1 <      9.0 <     73 (adj:+0.0) (1st)
+ [10]  06-07 12:44:19.187 updateAutoBrightness : 105(0.41)      6 <     28.0 <    199 (adj:+0.0) (1st)
+ [11]  06-07 13:47:04.197 updateAutoBrightness : 105(0.41)      7 <     35.0 <    236 (adj:+0.0) (1st)
+ [12]  06-07 14:35:11.201 updateAutoBrightness :  82(0.32)      0 <     10.0 <     80 (adj:+0.0) (1st)
+ [13]  06-07 14:37:01.713 updateAutoBrightness : 103(0.40)      5 <     24.0 <    176 (adj:+0.0) (1st)
+ [14]  06-07 15:17:14.122 ShortTermModel: reset data, manual
+ [15]  06-07 15:17:14.262 ShortTermModel: reset data, change configuration
+
+Brightness ChangeReason History size: 6
+ [1]   06-07 00:02:27.702 getFinalBrightness : 124 (0.49) -> 124 (0.49), 'Override'
+ [2]   06-07 00:02:34.130 getFinalBrightness : 124 (0.49) -> 124 (0.49)
+ [3]   06-12 18:14:07.321 getFinalBrightness : 105 (0.41) ->  95 (0.37), 'Temporary'
+ [4]   06-12 18:14:07.493 getFinalBrightness : 147 (0.58) -> 132 (0.52)
+ [5]   06-12 18:14:08.736 getFinalBrightness : 127 (0.50) -> 114 (0.45), 'Temporary'
+ [6]   06-12 18:14:09.495 getFinalBrightness :  55 (0.22) ->  50 (0.19)
+
+Battery saving stats:
+  Battery Saver is currently: ON
+    Last ON time: 2026-06-07 00:01:52.291 -10d10h51m1s819ms
+    Times full enabled: 1
+    Times adaptive enabled: 0
+  
+  Drain stats:
+                     Battery saver OFF                          ON
+  NonDoze NonIntr:      0m      0mAh(  0%)      0.0mAh/h         66m    174mAh(  7%)    156.2mAh/h
+             Intr:      0m      0mAh(  0%)      0.0mAh/h         78m   1065mAh( 37%)    814.9mAh/h
+  Deep    NonIntr:      0m      0mAh(  0%)      0.0mAh/h       9465m   2778mAh( 95%)     17.6mAh/h
+             Intr:      0m      0mAh(  0%)      0.0mAh/h        102m   1539mAh( 50%)    904.0mAh/h
+  Light   NonIntr:      0m      0mAh(  0%)      0.0mAh/h         63m     27mAh(  1%)     25.6mAh/h
+             Intr:      0m      0mAh(  0%)      0.0mAh/h          0m      0mAh(  0%)      0.0mAh/h
+
+Battery saver policy (*NOTE* they only apply when battery saver is ON):
+  Settings: battery_saver_constants
+    value: 
+  Settings: (overlay)
+    value: 
+  DeviceConfig: battery_saver
+    location_mode: 
+  mAccessibilityEnabled=false
+  mAutomotiveProjectionActive=false
+  mPolicyLevel=2
+  
+  Policy 'default full'
+    advertise_is_enabled=true
+    disable_vibration=true
+    disable_animation=false
+    defer_full_backup=true
+    defer_keyvalue_backup=true
+    enable_firewall=true
+    enable_datasaver=false
+    disable_launch_boost=true
+    enable_brightness_adjustment=true
+    adjust_brightness_factor=0.9
+    location_mode=1
+    force_all_apps_standby=true
+    force_background_check=true
+    disable_optional_sensors=true
+    disable_aod=true
+    soundtrigger_mode=1
+    enable_quick_doze=true
+    enable_night_mode=false
+    Interactive File values:
+      N/A
+    
+    Noninteractive File values:
+      N/A
+  
+  Policy 'current full'
+    advertise_is_enabled=true
+    disable_vibration=true
+    disable_animation=false
+    defer_full_backup=true
+    defer_keyvalue_backup=true
+    enable_firewall=true
+    enable_datasaver=false
+    disable_launch_boost=true
+    enable_brightness_adjustment=true
+    adjust_brightness_factor=0.9
+    location_mode=1
+    force_all_apps_standby=true
+    force_background_check=true
+    disable_optional_sensors=true
+    disable_aod=true
+    soundtrigger_mode=1
+    enable_quick_doze=true
+    enable_night_mode=false
+    Interactive File values:
+      N/A
+    
+    Noninteractive File values:
+      N/A
+  
+  Policy 'default adaptive'
+    advertise_is_enabled=false
+    disable_vibration=false
+    disable_animation=false
+    defer_full_backup=false
+    defer_keyvalue_backup=false
+    enable_firewall=false
+    enable_datasaver=false
+    disable_launch_boost=false
+    enable_brightness_adjustment=false
+    adjust_brightness_factor=1.0
+    location_mode=0
+    force_all_apps_standby=false
+    force_background_check=false
+    disable_optional_sensors=false
+    disable_aod=false
+    soundtrigger_mode=0
+    enable_quick_doze=false
+    enable_night_mode=false
+    Interactive File values:
+      N/A
+    
+    Noninteractive File values:
+      N/A
+  
+  Policy 'current adaptive'
+    advertise_is_enabled=false
+    disable_vibration=false
+    disable_animation=false
+    defer_full_backup=false
+    defer_keyvalue_backup=false
+    enable_firewall=false
+    enable_datasaver=false
+    disable_launch_boost=false
+    enable_brightness_adjustment=false
+    adjust_brightness_factor=1.0
+    location_mode=0
+    force_all_apps_standby=false
+    force_background_check=false
+    disable_optional_sensors=false
+    disable_aod=false
+    soundtrigger_mode=0
+    enable_quick_doze=false
+    enable_night_mode=false
+    Interactive File values:
+      N/A
+    
+    Noninteractive File values:
+      N/A
+  
+  Policy 'effective'
+    advertise_is_enabled=true
+    disable_vibration=true
+    disable_animation=false
+    defer_full_backup=true
+    defer_keyvalue_backup=true
+    enable_firewall=true
+    enable_datasaver=false
+    disable_launch_boost=true
+    enable_brightness_adjustment=true
+    adjust_brightness_factor=0.9
+    location_mode=1
+    force_all_apps_standby=true
+    force_background_check=true
+    disable_optional_sensors=true
+    disable_aod=true
+    soundtrigger_mode=1
+    enable_quick_doze=true
+    enable_night_mode=false
+    Interactive File values:
+      N/A
+    
+    Noninteractive File values:
+      N/A
+
+Battery saver state machine:
+  Enabled=true
+    full=true
+    adaptive=false
+  mState=5
+  mLastChangedIntReason=8
+  mLastChangedStrReason=lp:true em:false ul:false
+  mBootCompleted=true
+  mSettingsLoaded=true
+  mBatteryStatusSet=true
+  mIsPowered=true
+  mBatteryLevel=100
+  mIsBatteryLevelLow=false
+  mSettingAutomaticBatterySaver=0
+  mSettingBatterySaverEnabled=true
+  mSettingBatterySaverEnabledSticky=true
+  mSettingBatterySaverStickyAutoDisableEnabled=true
+  mSettingBatterySaverStickyAutoDisableThreshold=90
+  mSettingBatterySaverTriggerThreshold=0
+  mBatterySaverStickyBehaviourDisabled=false
+  mDynamicPowerSavingsDefaultDisableThreshold=80
+  mDynamicPowerSavingsDisableThreshold=80
+  mDynamicPowerSavingsEnableBatterySaver=false
+  mLastAdaptiveBatterySaverChangedExternallyElapsed=0
+AttentionDetector:
+ mIsSettingEnabled=false
+ mMaxExtensionMillis=900000
+ mPreDimCheckDurationMillis=2000
+ mEffectivePostDimTimeout=0
+ mLastUserActivityTime(excludingAttention)=348893079
+ mAttentionServiceSupported=false
+ mRequested=false
+
+Profile power states: size=0
+Display Group User Activity:
+  displayGroupId=0
+  userActivitySummary=0x4
+  lastUserActivityTime=348893079 (438642 ms ago)
+  lastUserActivityTimeNoChangeLights=344747873 (4583848 ms ago)
+  mWakeLockSummary=0x0
+
+Wireless Charger Detector State:
+  mGravitySensor={Sensor name="Gravity Sensor", vendor="Samsung Electronics", version=3, type=9, maxRange=19.6133, resolution=5.9604645E-8, power=6.0, minDelay=10000}
+  mPoweredWirelessly=false
+  mAtRest=false
+  mRestX=0.0, mRestY=0.0, mRestZ=0.0
+  mDetectionInProgress=false
+  mDetectionStartTime=0 (never)
+  mMustUpdateRestPosition=false
+  mTotalSamples=0
+  mMovingSamples=0
+  mFirstSampleX=0.0, mFirstSampleY=0.0, mFirstSampleZ=0.0
+  mLastSampleX=0.0, mLastSampleY=0.0, mLastSampleZ=0.0
+FaceDownDetector:
+  mFaceDown=false
+  mActive=true
+  mLastFlipTime=0
+  mSensorMaxLatencyMicros=2000000
+  mUserInteractionBackoffMillis=60000
+  mPreviousResultTime=312709687
+  mPreviousResultType=3
+  mMillisSaved=1270
+  mZAccelerationThreshold=-9.5
+  mAccelerationThreshold=0.2
+  mTimeThreshold=PT1S
+AmbientDisplaySuppressionController:
+ ambientDisplaySuppressed=false
+ mSuppressionTokens={}
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX shell dumpsys window
+
+WINDOW MANAGER LAST ANR (dumpsys window lastanr)
+  <no ANR has occurred since boot>
+
+WINDOW MANAGER POLICY STATE (dumpsys window policy)
+    mSafeMode=false mSystemReady=true mSystemBooted=true
+    mCameraLensCoverState=CAMERA_LENS_COVER_ABSENT
+    mWakeGestureEnabledSetting=true
+    mUiMode=UI_MODE_TYPE_NORMALmEnableCarDockHomeCapture=true
+    mLidKeyboardAccessibility=0 mLidNavigationAccessibility=0 getLidBehavior=LID_BEHAVIOR_NONE
+    mLongPressOnBackBehavior=LONG_PRESS_BACK_NOTHING
+    mLongPressOnHomeBehavior=LONG_PRESS_HOME_ASSIST
+    mDoubleTapOnHomeBehavior=DOUBLE_TAP_HOME_NOTHING
+    mShortPressOnPowerBehavior=SHORT_PRESS_POWER_GO_TO_SLEEP
+    mLongPressOnPowerBehavior=LONG_PRESS_POWER_GLOBAL_ACTIONS
+    mVeryLongPressOnPowerBehavior=VERY_LONG_PRESS_POWER_NOTHING
+    mDoublePressOnPowerBehavior=MULTI_PRESS_POWER_LAUNCH_CAMERA
+    mTriplePressOnPowerBehavior=MULTI_PRESS_POWER_NOTHING
+    mPowerVolUpBehavior=POWER_VOLUME_UP_BEHAVIOR_NOTHING
+    mShortPressOnSleepBehavior=SHORT_PRESS_SLEEP_GO_TO_SLEEP
+    mShortPressOnWindowBehavior=SHORT_PRESS_WINDOW_PICTURE_IN_PICTURE
+    mAllowStartActivityForLongPressOnPowerDuringSetup=false
+    mHasSoftInput=true mHapticTextHandleEnabled=true
+    mDismissImeOnBackKeyPressed=false mIncallPowerBehavior=sleep
+    mIncallBackBehavior=<nothing> mEndcallBehavior=sleep
+    mDisplayHomeButtonHandlers=mDisplayId = -1, mHomePressed = false
+mDisplayId = 0, mHomePressed = false
+    mKeyguardOccluded=false mKeyguardOccludedChanged=false mPendingKeyguardOccluded=false
+    mAllowLockscreenWhenOnDisplays=false mLockScreenTimeout=30000 mLockScreenTimerActive=false
+    mKeyMapping.size=0
+    KeyCombination rules:
+      KEYCODE_VOLUME_UP + KEYCODE_POWER
+      KEYCODE_APP_SWITCH + KEYCODE_BACK
+      KEYCODE_VOLUME_DOWN + KEYCODE_POWER
+      KEYCODE_VOLUME_DOWN + KEYCODE_VOLUME_UP
+    KeyCombination ActiveRules:
+    KeyCombination mDownTimes:
+    SingleKey rules:
+      KeyCode=KEYCODE_POWER, LongPress=true, VeryLongPress=false, MaxMultiPressCount=2
+    WakeGestureListener
+      mTriggerRequested=false
+      mSensor=null
+    KeyguardServiceDelegate
+      showing=true
+      showingAndNotOccluded=true
+      inputRestricted=true
+      occluded=false
+      secure=true
+      dreaming=false
+      systemIsReady=true
+      deviceHasKeyguard=true
+      enabled=true
+      offReason=OFF_BECAUSE_OF_TIMEOUT
+      currentUser=0
+      bootCompleted=true
+      screenState=SCREEN_STATE_ON
+      interactiveState=INTERACTIVE_STATE_AWAKE
+      KeyguardStateMonitor
+        mIsShowing=true
+        mSimSecure=false
+        mInputRestricted=true
+        mTrusted=false
+        mCurrentUserId=0
+    Looper state:
+      Looper (android.ui, tid 24) {8b8c2d4}
+        (Total messages: 0, polling=true, quitting=false)
+
+    --- PhoneWindowManagerExt ---
+
+    KeyCustomization info state: 1.0
+    All KeyCustomizationInfo
+    KEY_PRESS_DOWN OR UP ---
+    KEY_PRESS_LONG ---
+        KEY_CODE(26) :
+          id: 1000, keyCode 26, action: 0, intent: Intent { act=android.intent.action.MAIN cmp=globalAction/globalAction }
+    KEY_PRESS_DOUBLE ---
+        KEY_CODE(26) :
+          id: 2001, keyCode 26, action: 1, intent is null.
+    KEY_PRESS_TRIPLE ---
+    KEY_PRESS_QUADRUPLE ---
+
+    Last KeyCustomizationInfo
+    KEY_PRESS_DOWN OR UP ---
+    KEY_PRESS_LONG ---
+          id: 1000, keyCode 26, action: 0, intent: Intent { act=android.intent.action.MAIN cmp=globalAction/globalAction }
+    KEY_PRESS_DOUBLE ---
+          id: 2001, keyCode 26, action: 1, intent is null.
+    KEY_PRESS_TRIPLE ---
+    KEY_PRESS_QUADRUPLE ---
+    UserId:0
+    XmlFileErrorCode=SUCCESS
+        mWakingUpReason=WAKE_REASON_PLUGGED_IN
+    mFocusedWindow=Bouncer
+    mTopActivityWindow=Window{6c57aa5 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}
+      KEYCODE_HOME=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      KEYCODE_ENDCALL=[]
+      KEYCODE_SYSRQ=[]
+      1064=[]
+      1001=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      KEYCODE_POWER=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      1082=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+      KEYCODE_APP_SWITCH=[com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity]
+    mBixbyComponentName=ComponentInfo{com.samsung.android.bixby.agent/com.samsung.android.bixby.WinkService}
+    maxMultiPressPowerCount=2
+    mQuadruplePressOnPowerBehavior=0
+    mIsInteractionControlEnabled=false mIsPowerKeyBlocked=true mIsVolumeKeyBlocked=true
+    mIsHapticsEnabled=true mIsAssistHapticEnabled=false mIsHapticsSupported=true mNavBarVirtualKeyHapticFeedbackEnabled=true
+    mEmergencyModeEnabled=false
+    mDexKeyguardOccluded=false mDexKeyguardOccludedChanged=false mPendingDexKeyguardOccluded=false
+    mWakeUpReasonFingerprintTriggered=false mWakeAndUnlockTriggered=false mWakeAndUnfoldedTriggered=false
+    mIsPogoKeyboardConnected=false
+    mIsDoubleTapToWakeUpSupported=true mIsDoubleTapToWakeUp=true
+    mQuickLaunchCameraBehavior=3
+    cameraSensorToggleSupported=true    micSensorToggleSupported=true
+
+WINDOW MANAGER ANIMATOR STATE (dumpsys window animator)
+    DisplayContentsAnimator #0:
+      Window #0: WindowStateAnimator{5ffbc7d com.android.systemui.ImageWallpaper}
+      Window #1: WindowStateAnimator{10608ee com.android.settings/com.android.settings.homepage.SettingsHomepageActivity}
+      Window #2: WindowStateAnimator{eff8772 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+      Window #3: WindowStateAnimator{23d97c3 }
+      Window #4: WindowStateAnimator{c5e818f com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}
+      Window #5: WindowStateAnimator{350ec1c com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+      Window #6: WindowStateAnimator{b0d4025 dismiss-button-overlay}
+      Window #7: WindowStateAnimator{23aa8be InputMethod}
+      Window #8: WindowStateAnimator{32efe35 StatusBar}
+      Window #9: WindowStateAnimator{e7492ca NotificationShade}
+      Window #10: WindowStateAnimator{e983c3b com.samsung.android.app.cocktailbarservice/com.samsung.android.app.cocktailbarservice.CocktailBarService}
+      Window #11: WindowStateAnimator{9cdcf58 Bouncer}
+      Window #12: WindowStateAnimator{7de48b1 NavigationBar0}
+      Window #13: WindowStateAnimator{db11196 ShellDropTarget}
+      Window #14: WindowStateAnimator{7c46117 LockscreenShortcutBlur}
+
+
+
+WINDOW MANAGER SESSIONS (dumpsys window sessions)
+  Session Session{4cd1d4 3855:u0a10234}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@2fc8904
+    mPackageName=com.samsung.android.app.spage
+  Session Session{11cbef4 1777:u0a10137}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@45dbeed
+    mPackageName=com.sec.android.app.launcher
+  Session Session{25ea8c3 5126:u0a10050}:
+    mNumWindow=0 mCanAddInternalSystemWindow=false mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@464b122
+    mPackageName=com.samsung.android.providers.media
+  Session Session{284696e 15659:u0a10225}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@fcdc5fa
+    mPackageName=com.samsung.android.calendar
+  Session Session{a5968f2 982:1000}:
+    mNumWindow=0 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@68a519a
+    mPackageName=android
+  Session Session{b2f63b9 5828:u0a10045}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@f3b3170
+    mPackageName=com.samsung.android.app.cocktailbarservice
+  Session Session{b4e7024 3676:u0a10219}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@7c0bd6e
+    mPackageName=com.samsung.android.honeyboard
+  Session Session{c07a295 4285:u0a10103}:
+    mNumWindow=0 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@f2232a8
+    mPackageName=com.sec.android.app.camera
+  Session Session{ce35968 1349:u0a10035}:
+    mNumWindow=8 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@7dc5c0f
+    mPackageName=com.android.systemui
+  Session Session{f291fd2 15363:1000}:
+    mNumWindow=1 mCanAddInternalSystemWindow=true mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@64ba7ab
+    mPackageName=com.android.settings
+  Session Session{f5ba39f 21521:u0a10325}:
+    mNumWindow=1 mCanAddInternalSystemWindow=false mAppOverlaySurfaces={} mAlertWindowSurfaces={} mClientDead=false mSurfaceSession=android.view.SurfaceSession@48eae08
+    mPackageName=com.amaia23.hydracam
+
+WINDOW MANAGER DISPLAY CONTENTS (dumpsys window displays)
+  mLastOrientationSource=WindowedMagnification:0:31@248560967
+  deepestLastOrientationSource=Window{31b2d7a u0 NotificationShade}
+  overrideConfig={1.1 ?mcc?mnc [en_IE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.3944 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0}
+  Display: mDisplayId=0 rootTasks=9
+    init=1080x2280 480dpi cur=1080x2280 app=1080x2020 rng=1080x1008-2020x2019
+    deferred=false mLayoutNeeded=false mTouchExcludeRegion=SkRegion((0,0,1080,2280))
+
+    initCutout=DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}
+    baseCutout=DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}
+
+    initRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=96, center=Point(96, 96)}, RoundedCorner{position=TopRight, radius=96, center=Point(984, 96)}, RoundedCorner{position=BottomRight, radius=96, center=Point(984, 2184)}, RoundedCorner{position=BottomLeft, radius=96, center=Point(96, 2184)}]}
+    baseRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=96, center=Point(96, 96)}, RoundedCorner{position=TopRight, radius=96, center=Point(984, 96)}, RoundedCorner{position=BottomRight, radius=96, center=Point(984, 2184)}, RoundedCorner{position=BottomLeft, radius=96, center=Point(96, 2184)}]}
+
+  mLayoutSeq=8665
+  mCurrentFocus=Window{cc5ae83 u0 Bouncer}
+  mFocusedApp=ActivityRecord{5a0ca93 u0 com.amaia23.hydracam/.MainActivity t336}
+
+  displayId=0
+  mWallpaperTarget=null
+  mLastWallpaperX=0.5 mLastWallpaperY=0.5
+  mLastWallpaperDisplayOffsetX=0 mLastWallpaperDisplayOffsetY=0
+
+  Display areas in top down Z order:
+    * Leaf:36:36
+    * HideDisplayCutout:32:35
+      * OneHanded:32:35
+        * FullscreenMagnification:33:35
+          * Leaf:33:35
+        * Leaf:32:32
+    * WindowedMagnification:0:31
+      * HideDisplayCutout:26:31
+        * OneHanded:26:31
+          * FullscreenMagnification:29:31
+            * Leaf:29:31
+          * Leaf:28:28
+          * FullscreenMagnification:26:27
+            * Leaf:26:27
+      * Leaf:24:25
+      * HideDisplayCutout:20:23
+        * OneHanded:20:23
+          * FullscreenMagnification:20:23
+            * Leaf:20:23
+      * OneHanded:19:19
+        * FullscreenMagnification:19:19
+          * Leaf:19:19
+      * HideDisplayCutout:18:18
+        * OneHanded:18:18
+          * FullscreenMagnification:18:18
+            * Leaf:18:18
+      * OneHanded:17:17
+        * FullscreenMagnification:17:17
+          * Leaf:17:17
+      * HideDisplayCutout:0:16
+        * OneHanded:2:16
+          * ImePlaceholder:15:16
+            * ImeContainer
+          * FullscreenMagnification:2:14
+            * Leaf:3:14
+            * DefaultTaskDisplayArea
+        * OneHandedBackgroundPanel:0:1
+          * OneHanded:0:1
+            * FullscreenMagnification:0:1
+              * Leaf:0:1
+
+  Task display areas in top down Z order:
+    TaskDisplayArea DefaultTaskDisplayArea
+      overrideConfig={0.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=undefined mAlwaysOnTop=undefined mRotation=undefined mPopOver=undefined mFreeformTaskPinningState=unpinned} ?fontWeightAdjustment ff=0 bf=-1 bts=-1 desktop/? dm/? ?dc ?dcui ?dcaf enb/? themeSeq=0}
+      mPreferredTopFocusableRootTask=Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1}
+      mLastFocusedRootTask=Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1}
+      Application tokens in top down Z order:
+      * Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1}
+        mDimAnimInfo mOwner=Task{3e13ad0 #336 type=standard A=10325:com.amaia23.hydracam U=0 visible=true mode=fullscreen translucent=false sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * ActivityRecord{5a0ca93 u0 com.amaia23.hydracam/.MainActivity t336}
+      * Task{dedc27 #334 type=standard I=com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity U=0 visible=false mode=fullscreen translucent=true sz=1}
+        mDimAnimInfo mOwner=Task{dedc27 #334 type=standard I=com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity U=0 visible=false mode=fullscreen translucent=true sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * ActivityRecord{2ab4ee6 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity t334}
+      * Task{956a783 #1 type=home ?? U=0 visible=false mode=fullscreen translucent=true sz=1}
+        mDimAnimInfo mOwner=Task{956a783 #1 type=home ?? U=0 visible=false mode=fullscreen translucent=true sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * Task{7d72e5f #224 type=home A=10137:com.sec.android.app.launcher.activities.LauncherActivity U=0 rootTaskId=1 visible=false mode=fullscreen translucent=true sz=1}
+          mDimAnimInfo mOwner=Task{7d72e5f #224 type=home A=10137:com.sec.android.app.launcher.activities.LauncherActivity U=0 rootTaskId=1 visible=false mode=fullscreen translucent=true sz=1} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+          bounds=[0,0][1080,2280]
+          * ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+      * Task{deac7bd #324 type=standard A=1000:com.android.settings.root U=0 visible=false mode=fullscreen translucent=true sz=3}
+        mDimAnimInfo mOwner=Task{deac7bd #324 type=standard A=1000:com.android.settings.root U=0 visible=false mode=fullscreen translucent=true sz=3} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+        * ActivityRecord{1fc2c28 u0 com.sec.android.app.myfiles/.external.ui.AnalyzeStorageActivity t324}
+        * ActivityRecord{519185b u0 com.android.settings.intelligence/.search.SearchActivity t324}
+        * ActivityRecord{d07f314 u0 com.android.settings/.homepage.SettingsHomepageActivity t324}
+      * Task{3416d00 #2 type=undefined ?? U=0 visible=false mode=fullscreen translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{3416d00 #2 type=undefined ?? U=0 visible=false mode=fullscreen translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+      * Task{119939 #3 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{119939 #3 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+      * Task{7e98ff5 #4 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{7e98ff5 #4 type=undefined ?? U=0 visible=false mode=multi-window translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,2280]
+      * Task{ebeada6 #5 type=undefined ?? U=0 visible=false mode=split-screen-primary translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{ebeada6 #5 type=undefined ?? U=0 visible=false mode=split-screen-primary translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,0][1080,1114]
+      * Task{4cd218a #6 type=undefined ?? U=0 visible=false mode=split-screen-secondary translucent=true sz=0}
+        mDimAnimInfo mOwner=Task{4cd218a #6 type=undefined ?? U=0 visible=false mode=split-screen-secondary translucent=true sz=0} mDimmer=null isDimLayerValid=false isDimming=false mTriggered=false
+        bounds=[0,1138][1080,2280]
+
+  mScreenRotationAnimation:
+    mSurface=null mWidth=2280 mHeight=1080
+    mEnteringBlackFrame=null
+    mCurRotation=0 mOriginalRotation=1
+    mOriginalWidth=2280 mOriginalHeight=1080
+    mStarted=true mAnimRunning=false mFinishAnimReady=true mFinishAnimStartTime=-1
+    mRotateExitAnimation=null {alpha=1.0 matrix=[1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]}
+    mRotateEnterAnimation=null {alpha=1.0 matrix=[1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]}
+    mSnapshotInitialMatrix=[0.0, -1.0, 1080.0][1.0, 0.0, 0.0][0.0, 0.0, 1.0]
+    mForceDefaultOrientation=false
+  rootHomeTask=Task=1
+  rootSplitScreenPrimaryTask=Task=5
+
+  PinnedTaskController
+    mIsImeShowing=false
+    mImeHeight=0
+    mAspectRatio=-1.0
+    mMinAspectRatio=0.41841003
+    mMaxAspectRatio=2.39
+    mActions=[]
+
+  DisplayFrames w=1080 h=2280 r=0
+
+  DisplayPolicy
+    mCarDockEnablesAccelerometer=true mDeskDockEnablesAccelerometer=true
+    mDockMode=EXTRA_DOCK_STATE_UNDOCKED mLidState=LID_ABSENT
+    mAwake=true mScreenOnEarly=true mScreenOnFully=true
+    mKeyguardDrawComplete=true mWindowManagerDrawComplete=true
+    mHdmiPlugged=false
+    mLastBehavior=SHOW_TRANSIENT_BARS_BY_SWIPE
+    mShowingDream=false mDreamingLockscreen=true
+    mStatusBar=Window{7a8bd07 u0 StatusBar}
+    mExpandedPanel=Window{31b2d7a u0 NotificationShade}
+    isKeyguardShowing=true
+    mNavigationBar=Window{64142ae u0 NavigationBar0}
+    mNavBarOpacityMode=0
+    mNavigationBarCanMove=true
+    mNavigationBarPosition=4
+    mNavigationBarHeightForRotationDefault=[144, 144, 144, 144]
+    mCurrentUserResources
+     .mUserId=0
+     .getAssets().getApkPaths()=[/system/framework/framework-res.apk, /system/system_ext/overlay/GmsConfigOverlayCommon.apk, /system/system_ext/overlay/GmsConfigOverlayGSA.apk, /system/system_ext/overlay/GmsConfigOverlayGeotz.apk, /system/system_ext/overlay/GooglePermissionControllerFrameworkOverlay.apk, /system/system_ext/overlay/ModuleMetadataGoogleOverlay.apk, /vendor/overlay/framework-res__auto_generated_rro_vendor.apk]
+     .getDimensionPixelSize(R.dimen.navigation_bar_height)=144
+    mFocusedWindow=Window{cc5ae83 u0 Bouncer}
+    mTopFullscreenOpaqueOrDimmingWindowState=Window{cc5ae83 u0 Bouncer}
+    mTopIsFullscreen=false
+    mForceStatusBar=false mAllowLockscreenWhenOn=false
+    mRemoteInsetsControllerControlsSystemBars=false
+    Looper state:
+      Looper (android.ui, tid 24) {8b8c2d4}
+        (Total messages: 0, polling=true, quitting=false)
+
+    DisplayPolicyExt
+      CoverPolicyController
+        mLastCoverAppCovered=false
+      mIsOneHandOpEnabled=false
+      mHasOneHandOpSpec=false
+      mIsInputFilterRegistered=false
+      mReasonToStart=SYSTEM_BOOTED
+      mOneHandOpController=null      mOneHandOpHandler=null
+
+  DisplayRotation
+    mCurrentAppOrientation=SCREEN_ORIENTATION_NOSENSOR
+    mLastOrientation=5
+    mRotation=0 mDeferredRotationPauseCount=0
+    mLandscapeRotation=ROTATION_90 mSeascapeRotation=ROTATION_270
+    mPortraitRotation=ROTATION_0 mUpsideDownRotation=ROTATION_180
+    mSupportAutoRotation=true
+    WindowOrientationListener
+      mEnabled=true
+      mCurrentRotation=ROTATION_0
+      mSensorType=null
+      mSensor={Sensor name="AutoRotation Sensor", vendor="Samsung Electronics", version=16, type=27, maxRange=255.0, resolution=1.0, power=0.001, minDelay=0}
+      mRate=2
+      OrientationSensorJudge
+        mDesiredRotation=-1
+        mProposedRotation=-1
+        mTouching=false
+        mTouchEndedTimestampNanos=902643666291664
+        mLastRotationResolution=1
+
+    mCarDockRotation=-1 mDeskDockRotation=-1
+    mUserRotationMode=USER_ROTATION_LOCKED mUserRotation=ROTATION_0 mCameraRotationMode=0 mAllowAllRotations=false
+    mDemoHdmiRotation=ROTATION_90 mDemoHdmiRotationLock=false mUndockedHdmiRotation=-1
+    mLidOpenRotation=-1
+    mFixedToUserRotation=false
+    mRotatingSeamlessly=false mSeamlessRotationCount=0
+
+  InputConsumers:
+    name=recents_animation_input_consumer pid=1777 user=UserHandle{0}
+
+  WindowInsetsStateController
+    InsetsState
+      mDisplayFrame=Rect(0, 0 - 1080, 2280)
+      mDisplayCutout=DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}
+      mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=96, center=Point(96, 96)}, RoundedCorner{position=TopRight, radius=96, center=Point(984, 96)}, RoundedCorner{position=BottomRight, radius=96, center=Point(984, 2184)}, RoundedCorner{position=BottomLeft, radius=96, center=Point(96, 2184)}]}
+      mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(811, 0 - 943, 117) rotation=0}
+        InsetsSource type=ITYPE_STATUS_BAR frame=[0,0][1080,117] visible=true
+        InsetsSource type=ITYPE_NAVIGATION_BAR frame=[0,2136][1080,2280] visible=true
+        InsetsSource type=ITYPE_LEFT_GESTURES frame=[0,0][0,2280] visible=true
+        InsetsSource type=ITYPE_RIGHT_GESTURES frame=[1080,0][1080,2280] visible=true
+        InsetsSource type=ITYPE_TOP_MANDATORY_GESTURES frame=[0,0][1080,153] visible=true
+        InsetsSource type=ITYPE_BOTTOM_MANDATORY_GESTURES frame=[0,2136][1080,2280] visible=true
+        InsetsSource type=ITYPE_LEFT_DISPLAY_CUTOUT frame=[0,0][-2147483648,2280] visible=true
+        InsetsSource type=ITYPE_TOP_DISPLAY_CUTOUT frame=[0,0][1080,116] visible=true
+        InsetsSource type=ITYPE_RIGHT_DISPLAY_CUTOUT frame=[2147483647,0][1080,2280] visible=true
+        InsetsSource type=ITYPE_BOTTOM_DISPLAY_CUTOUT frame=[0,2147483647][1080,2280] visible=true
+        InsetsSource type=ITYPE_TOP_TAPPABLE_ELEMENT frame=[0,0][1080,117] visible=true
+        InsetsSource type=ITYPE_BOTTOM_TAPPABLE_ELEMENT frame=[0,2136][1080,2280] visible=true
+        InsetsSource type=ITYPE_IME frame=[0,0][0,0] visible=false
+    Control map:
+      ITYPE_IME -> Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+      ITYPE_NAVIGATION_BAR -> Window{cc5ae83 u0 Bouncer}
+      ITYPE_STATUS_BAR -> Window{cc5ae83 u0 Bouncer}
+    InsetsSourceProviders:
+      ImeInsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_IME frame=[0,0][0,0] visible=false
+        mControl=InsetsSourceControl type=ITYPE_IME mLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4 mSurfacePosition=Point(0, 117) mInsetsHint=Insets{left=0, top=0, right=0, bottom=0} mSkipAnimationOnce=false mControlledByPolicy=false
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{e0975e0 u0 InputMethod}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4
+        mControlTarget=Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+        mImeShowing=false
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_BOTTOM_TAPPABLE_ELEMENT frame=[0,2136][1080,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_TOP_TAPPABLE_ELEMENT frame=[0,0][1080,117] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{7a8bd07 u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_BOTTOM_MANDATORY_GESTURES frame=[0,2136][1080,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_TOP_MANDATORY_GESTURES frame=[0,0][1080,153] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{7a8bd07 u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_RIGHT_GESTURES frame=[1080,0][1080,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_LEFT_GESTURES frame=[0,0][0,2280] visible=true
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{64142ae u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_NAVIGATION_BAR frame=[0,2136][1080,2280] visible=true
+        mControl=InsetsSourceControl type=ITYPE_NAVIGATION_BAR mLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1 mSurfacePosition=Point(0, 2136) mInsetsHint=Insets{left=0, top=0, right=0, bottom=144} mSkipAnimationOnce=false mControlledByPolicy=false
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,2136][1080,2280]
+        mWin=Window{64142ae u0 NavigationBar0}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1
+        mControlTarget=Window{cc5ae83 u0 Bouncer}
+      InsetsSourceProvider
+        mSource=InsetsSource type=ITYPE_STATUS_BAR frame=[0,0][1080,117] visible=true
+        mControl=InsetsSourceControl type=ITYPE_STATUS_BAR mLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58 mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=117, right=0, bottom=0} mSkipAnimationOnce=false mControlledByPolicy=false
+        mIsLeashReadyForDispatching=true mImeOverrideFrame=[0,0][0,0]
+        mWin=Window{7a8bd07 u0 StatusBar}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58
+        mControlTarget=Window{cc5ae83 u0 Bouncer}
+
+WINDOW MANAGER TOKENS (dumpsys window tokens)
+  All tokens:
+  Display #0
+  ActivityRecord{d07f314 u0 com.android.settings/.homepage.SettingsHomepageActivity t324}
+  WindowToken{4fa3c22 android.os.BinderProxy@fa65c04}
+  WindowToken{3394ae7 android.os.BinderProxy@cc340a6}
+  WindowToken{65a620a android.os.BinderProxy@b598275}
+  WindowToken{9082635 android.os.BinderProxy@d351838}
+  WindowToken{2aaf29 android.os.BinderProxy@99eeff3}
+  ActivityRecord{1fc2c28 u0 com.sec.android.app.myfiles/.external.ui.AnalyzeStorageActivity t324}
+  ActivityRecord{2ab4ee6 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity t334}
+  ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+  WindowToken{d193efc android.os.BinderProxy@5ad3ef}
+  ActivityRecord{5a0ca93 u0 com.amaia23.hydracam/.MainActivity t336}
+  ActivityRecord{519185b u0 com.android.settings.intelligence/.search.SearchActivity t324}
+  WindowToken{21995a5 android.os.BinderProxy@5967b0f}
+  WindowToken{39ea746 android.os.BinderProxy@e912188}
+  WallpaperWindowToken{9e4304e token=android.os.Binder@8344f49}
+  WindowToken{e33862c android.os.Binder@c1f9df}
+
+WINDOW MANAGER WINDOWS (dumpsys window windows)
+  Window #0 Window{12a26b3 u0 LockscreenShortcutBlur}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@fa65c04
+    mOwnerUid=10035 showForAllUsers=false package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=SECURE_SYSTEM_OVERLAY fmt=TRANSLUCENT
+      fl=1000538
+      pfl=12000000
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE naviIconColor=0}
+    Requested w=1080 h=2280 mLayoutSeq=8400
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{7c46117 LockscreenShortcutBlur}:
+    mLastFreezeDuration=+273ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #1 Window{1023541 u0 ShellDropTarget}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@db6371a
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=always ty=DRAG fmt=TRANSLUCENT
+      fl=1000208
+      pfl=92000050
+      bhv=DEFAULT naviIconColor=0 mwfl=10}
+    Requested w=1080 h=2280 mLayoutSeq=8
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{db11196 ShellDropTarget}:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    mOrientationChanging=false configOrientationChanging=true mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #2 Window{64142ae u0 NavigationBar0}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@eba64b0
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR fmt=TRANSLUCENT receive insets ignoring z-order
+      fl=21840068
+      pfl=33000000
+      bhv=DEFAULT naviIconColor=0}
+    Requested w=1080 h=144 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    ContainerAnimator:
+      mLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1 mAnimationType=insets_animation
+      Animation: com.android.server.wm.InsetsSourceProvider$ControlAdapter@caca9f6
+        ControlAdapter mCapturedLeash=Surface(name=Surface(name=64142ae NavigationBar0)/@0xc39f74a - animation-leash of insets_animation)/@0xb105bb1
+    WindowStateAnimator{7de48b1 NavigationBar0}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mLastFreezeDuration=+366ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=3195
+    mDrawLock=WakeLock{cbf427a held=false, refCount=10}
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #3 Window{cc5ae83 u0 Bouncer}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@cc340a6
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=TOP CENTER_VERTICAL sim={adjust=resize} layoutInDisplayCutoutMode=shortEdges ty=KEYGUARD_DIALOG fmt=TRANSLUCENT if=DISABLE_USER_ACTIVITY userActivityTimeout=10000
+      fl=85022542
+      pfl=12000000
+      vsysui=500
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE dimAmount=0.1375 screenDimDuration=0 naviIconColor=0
+      sfl=40040}
+    Requested w=1080 h=0 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    WindowStateAnimator{9cdcf58 Bouncer}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #4 Window{c3c5098 u0 com.samsung.android.app.cocktailbarservice/com.samsung.android.app.cocktailbarservice.CocktailBarService}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{b2f63b9 5828:u0a10045} mClient=android.os.BinderProxy@b598275
+    mOwnerUid=10045 showForAllUsers=true package=com.samsung.android.app.cocktailbarservice appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,442)(67x342) gr=TOP RIGHT CENTER sim={adjust=nothing} layoutInDisplayCutoutMode=shortEdges ty=2226 fmt=TRANSPARENT
+      fl=81800548
+      pfl=2000050
+      vsysui=2000
+      apr=LIGHT_STATUS_BARS
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE
+      fitTypes=NAVIGATION_BARS CAPTION_BAR dimAmount=0.0 dimDuration=0 naviIconColor=0
+      sfl=200000}
+    Requested w=67 h=342 mLayoutSeq=8661
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{e983c3b com.samsung.android.app.cocktailbarservice/com.samsung.android.app.cocktailbarservice.CocktailBarService}:
+    mLastFreezeDuration=+1d9h21m11s188ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=33
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #5 Window{31b2d7a u0 NotificationShade}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@72b279c
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=TOP CENTER_VERTICAL sim={adjust=resize} layoutInDisplayCutoutMode=always ty=2040 fmt=TRANSLUCENT or=SCREEN_ORIENTATION_NOSENSOR if=DISABLE_USER_ACTIVITY userActivityTimeout=5000
+      fl=81860040
+      pfl=1a000000
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE screenDimDuration=0 naviIconColor=0
+      sfl=42000}
+    Requested w=1080 h=2280 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    UdcCutoutInfo: mUseLayoutInUdcCutout=true mUseConfigurationInUdcCutout=false
+    WindowStateAnimator{e7492ca NotificationShade}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mLastFreezeDuration=+1d9h21m11s575ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=1445
+    mDrawLock=WakeLock{80caa2b held=false, refCount=912}
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #6 Window{7a8bd07 u0 StatusBar}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@332e721
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillx117) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+      fl=81000008
+      pfl=13000000
+      bhv=DEFAULT naviIconColor=0
+      sfl=2000}
+    Requested w=1080 h=117 mLayoutSeq=8665
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    ContainerAnimator:
+      mLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58 mAnimationType=insets_animation
+      Animation: com.android.server.wm.InsetsSourceProvider$ControlAdapter@b9181f7
+        ControlAdapter mCapturedLeash=Surface(name=Surface(name=7a8bd07 StatusBar)/@0xd330f9f - animation-leash of insets_animation)/@0xf004e58
+    UdcCutoutInfo: mUseLayoutInUdcCutout=true mUseConfigurationInUdcCutout=false
+    WindowStateAnimator{32efe35 StatusBar}:
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mLastFreezeDuration=+461ms
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=39253
+    mDrawLock=WakeLock{4a1c021 held=false, refCount=408}
+    isOnScreen=true
+    isVisible=true
+    mHiddenWhileProfileLockedState=false
+  Window #7 Window{e0975e0 u0 InputMethod}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{b4e7024 3676:u0a10219} mClient=android.os.BinderProxy@447c7e3
+    mOwnerUid=10219 showForAllUsers=false package=com.samsung.android.honeyboard appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(fillxfill) gr=BOTTOM CENTER_VERTICAL sim={adjust=pan} ty=INPUT_METHOD fmt=TRANSPARENT wanim=0x7f130170 preferredMinDisplayRefreshRate=60.0 receive insets ignoring z-order
+      fl=81800108
+      pfl=12000000
+      vsysui=10
+      apr=LIGHT_NAVIGATION_BARS
+      bhv=DEFAULT
+      fitTypes=STATUS_BARS NAVIGATION_BARS
+      fitSides=LEFT TOP RIGHT
+      fitIgnoreVis dimDuration=150 naviIconColor=0}
+    Requested w=1080 h=2163 mLayoutSeq=7415
+    mIsImWindow=true mIsWallpaper=false mIsFloatingLayer=true
+    mPolicyVisibility=false mLegacyPolicyVisibilityAfterAnim=false mAppOpVisibility=true parentHidden=false mPermanentlyHidden=false mHiddenWhileSuspended=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    ContainerAnimator:
+      mLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4 mAnimationType=insets_animation
+      Animation: com.android.server.wm.InsetsSourceProvider$ControlAdapter@19b1387
+        ControlAdapter mCapturedLeash=Surface(name=Surface(name=e0975e0 InputMethod)/@0x9c0100c - animation-leash of insets_animation)/@0xb250dc4
+    WindowStateAnimator{23aa8be InputMethod}:
+    mOrientationChanging=false configOrientationChanging=false mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #8 Window{7d8c985 u0 dismiss-button-overlay}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@5ad3ef
+    mOwnerUid=10035 showForAllUsers=true package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(1080x2280) gr=TOP START CENTER sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=2605 fmt=TRANSPARENT
+      fl=1000338
+      pfl=12000050
+      bhv=DEFAULT naviIconColor=0
+      sfl=20000}
+    Requested w=1080 h=2280 mLayoutSeq=8072
+    mPolicyVisibility=false mLegacyPolicyVisibilityAfterAnim=false mAppOpVisibility=true parentHidden=false mPermanentlyHidden=false mHiddenWhileSuspended=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{b0d4025 dismiss-button-overlay}:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #9 Window{39a9b4a u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}:
+    mDisplayId=0 rootTaskId=336 mSession=Session{f5ba39f 21521:u0a10325} mClient=android.os.BinderProxy@97dd8b5
+    mOwnerUid=10325 showForAllUsers=false package=com.amaia23.hydracam appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} ty=BASE_APPLICATION fmt=TRANSLUCENT wanim=0x1030001
+      fl=81810180
+      pfl=16020040
+      vsysui=500
+      bhv=DEFAULT
+      fitSides= naviIconColor=0}
+    Requested w=1080 h=2280 mLayoutSeq=8632
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{350ec1c com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}:
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #10 Window{6c57aa5 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}:
+    mDisplayId=0 rootTaskId=334 mSession=Session{284696e 15659:u0a10225} mClient=android.os.BinderProxy@733809c
+    mOwnerUid=10225 showForAllUsers=false package=com.samsung.android.calendar appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION wanim=0x10302f2 userActivityTimeout=6000
+      fl=818b0501
+      pfl=1a020040
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE
+      fitSides= screenDimDuration=0 naviIconColor=0 cm=1}
+    Requested w=1080 h=2280 mLayoutSeq=8624
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{c5e818f com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity}:
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #11 Window{1f72ed1 u0 com.samsung.android.app.spage}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{4cd1d4 3855:u0a10234} mClient=android.os.BinderProxy@dfff9f8
+    mOwnerUid=10234 showForAllUsers=false package=com.samsung.android.app.spage appop=NONE
+    mAttrs={(0,0)(0xfill) sim={adjust=pan} ty=APPLICATION_PANEL fmt=RGBA_8888
+      fl=1000018
+      pfl=42000040
+      bhv=DEFAULT
+      fitTypes=STATUS_BARS NAVIGATION_BARS CAPTION_BAR naviIconColor=0}
+    Requested w=0 h=0 mLayoutSeq=75
+    mParentWindow=Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity} mLayoutAttached=true
+    mPolicyVisibility=true mLegacyPolicyVisibilityAfterAnim=true mAppOpVisibility=true parentHidden=true mPermanentlyHidden=false mHiddenWhileSuspended=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{23d97c3 }:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    mOrientationChanging=false configOrientationChanging=true mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #12 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{11cbef4 1777:u0a10137} mClient=android.os.BinderProxy@ad2b2db
+    mOwnerUid=10137 showForAllUsers=false package=com.sec.android.app.launcher appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=nothing forwardNavigation} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION fmt=TRANSPARENT wanim=0x10302f2
+      fl=81910100
+      pfl=1e020040
+      vsysui=1700
+      bhv=SHOW_TRANSIENT_BARS_BY_SWIPE
+      fitSides= naviIconColor=0}
+    Requested w=1080 h=2280 mLayoutSeq=8479
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{eff8772 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}:
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    mWallpaperX=0.5 mWallpaperY=0.5
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #13 Window{9d5671e u0 com.android.settings/com.android.settings.homepage.SettingsHomepageActivity}:
+    mDisplayId=0 rootTaskId=324 mSession=Session{f291fd2 15363:1000} mClient=android.os.BinderProxy@bffdf59
+    mOwnerUid=1000 showForAllUsers=false package=com.android.settings appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION wanim=0x10302f2
+      fl=81810100
+      pfl=12020040
+      vsysui=2010
+      apr=LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS
+      bhv=DEFAULT
+      fitSides= naviIconColor=0
+      sfl=100001}
+    Requested w=1080 h=2280 mLayoutSeq=7388
+    mHasSurface=false isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{10608ee com.android.settings/com.android.settings.homepage.SettingsHomepageActivity}:
+    mOrientationChanging=false configOrientationChanging=false mAppFreezing=false mReportOrientationChanged=true
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+  Window #14 Window{5d1646a u0 com.android.systemui.ImageWallpaper}:
+    mDisplayId=0 rootTaskId=1 mSession=Session{ce35968 1349:u0a10035} mClient=android.os.BinderProxy@bdb9255
+    mOwnerUid=10035 showForAllUsers=false package=com.android.systemui appop=SYSTEM_INTERNAL_WINDOW
+    mAttrs={(0,0)(2280x2280) gr=TOP START CENTER layoutInDisplayCutoutMode=always ty=WALLPAPER fmt=RGBX_8888 wanim=0x1030314
+      fl=14318
+      pfl=2000004
+      bhv=DEFAULT naviIconColor=0
+      sfl=8}
+    Requested w=2280 h=2280 mLayoutSeq=8479
+    mIsImWindow=false mIsWallpaper=true mIsFloatingLayer=true
+    mHasSurface=true isReadyForDisplay()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{5ffbc7d com.android.systemui.ImageWallpaper}:
+      Surface: shown=false layer=0 alpha=1.0 rect=(0.0,0.0)  transform=(1.0, 0.0, 0.0, 1.0)
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    mWallpaperX=0.5 mWallpaperY=0.5
+    mWallpaperZoomOut=0.0
+    mWallpaperDisplayOffsetX=0 mWallpaperDisplayOffsetY=0
+    isOnScreen=false
+    isVisible=false
+    mHiddenWhileProfileLockedState=false
+
+  mGlobalConfiguration={1.1 ?mcc?mnc [en_IE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.3944 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0}
+  mHasPermanentDpad=false
+  mTopFocusedDisplayId=0
+  imeInputTarget in display# 0 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+  imeControlTarget in display# 0 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+  imeRelativeTarget in display# 0 Window{e971178 u0 com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity}
+  mInTouchMode=true
+  mBlurEnabled=false
+  mLastDisplayFreezeDuration=+372ms due to Window{6c12e2 u0 PowerUI.ChargerAnimationViewLp}
+  mLastWakeLockHoldingWindow=null mLastWakeLockObscuringWindow=null
+  mHighResTaskSnapshotScale=1.0
+  SnapshotCache
+    Entry taskId=334
+      topApp=ActivityRecord{2ab4ee6 u0 com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity t334}
+      snapshot=TaskSnapshot{ mId=1781685596358 mTopActivityComponent=com.samsung.android.calendar/com.samsung.android.app.calendarnotification.view.AlertPopupActivity mSnapshot=android.hardware.HardwareBuffer@64a2b4 (1080x2280) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2280) mContentInsets=[0,0][0,0] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=false mHasImeSurface=false
+    Entry taskId=224
+      topApp=ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+      snapshot=TaskSnapshot{ mId=1781631152102 mTopActivityComponent=com.sec.android.app.launcher/com.android.launcher3.uioverrides.QuickstepLauncher mSnapshot=android.hardware.HardwareBuffer@fa44edd (1080x2280) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2280) mContentInsets=[0,117][0,144] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=true mHasImeSurface=false
+    Entry taskId=1
+      topApp=ActivityRecord{3a932b9 u0 com.sec.android.app.launcher/.activities.LauncherActivity t224}
+      snapshot=TaskSnapshot{ mId=1781631152086 mTopActivityComponent=com.sec.android.app.launcher/com.android.launcher3.uioverrides.QuickstepLauncher mSnapshot=android.hardware.HardwareBuffer@4eb1a52 (1080x2280) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2280) mContentInsets=[0,117][0,144] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=true mHasImeSurface=false
+  MaxSnapshotCache=6
+  SplitModeMaxCacheSize=0
+WINDOW MANAGER TRACE (dumpsys window trace)
+Status: Disabled
+Log level: 1
+Buffer size: 2097152 bytes
+Buffer usage: 0 bytes
+Elements in the buffer: 0
+WINDOW MANAGER LOGGING (dumpsys window logging)
+ProtoLog status: Disabled
+Enabled log groups: 
+  Proto: TEST_GROUP WM_DEBUG_ADD_REMOVE WM_DEBUG_APP_TRANSITIONS WM_DEBUG_APP_TRANSITIONS_ANIM WM_DEBUG_BOOT WM_DEBUG_CONFIGURATION WM_DEBUG_CONTAINERS WM_DEBUG_DRAW WM_DEBUG_FOCUS WM_DEBUG_FOCUS_LIGHT WM_DEBUG_IME WM_DEBUG_IMMERSIVE WM_DEBUG_KEEP_SCREEN_ON WM_DEBUG_LOCKTASK WM_DEBUG_ORIENTATION WM_DEBUG_RECENTS_ANIMATIONS WM_DEBUG_REMOTE_ANIMATIONS WM_DEBUG_RESIZE WM_DEBUG_SCREEN_ON WM_DEBUG_STARTING_WINDOW WM_DEBUG_STATES WM_DEBUG_SWITCH WM_DEBUG_SYNC_ENGINE WM_DEBUG_TASKS WM_DEBUG_WINDOW_MOVEMENT WM_DEBUG_WINDOW_ORGANIZER WM_DEBUG_WINDOW_TRANSITIONS WM_ERROR WM_FORCE_DEBUG_ADD_REMOVE WM_FORCE_DEBUG_APP_TRANSITIONS WM_FORCE_DEBUG_APP_TRANSITIONS_ANIM WM_FORCE_DEBUG_BOOT WM_FORCE_DEBUG_DRAW WM_FORCE_DEBUG_FOCUS WM_FORCE_DEBUG_FOCUS_LIGHT WM_FORCE_DEBUG_IME WM_FORCE_DEBUG_KEEP_SCREEN_ON WM_FORCE_DEBUG_ORIENTATION WM_FORCE_DEBUG_RECENTS_ANIMATIONS WM_FORCE_DEBUG_REMOTE_ANIMATIONS WM_FORCE_DEBUG_RESIZE WM_FORCE_DEBUG_SCREEN_ON WM_FORCE_DEBUG_STARTING_WINDOW WM_FORCE_DEBUG_WINDOW_MOVEMENT WM_FORCE_SHOW_SURFACE_ALLOC WM_FORCE_SHOW_TRANSACTIONS WM_SHOW_SURFACE_ALLOC WM_SHOW_TRANSACTIONS
+  Logcat: WM_DEBUG_RECENTS_ANIMATIONS WM_DEBUG_REMOTE_ANIMATIONS WM_DEBUG_WINDOW_TRANSITIONS WM_ERROR WM_FORCE_DEBUG_ADD_REMOVE WM_FORCE_DEBUG_APP_TRANSITIONS WM_FORCE_DEBUG_APP_TRANSITIONS_ANIM WM_FORCE_DEBUG_BOOT WM_FORCE_DEBUG_DRAW WM_FORCE_DEBUG_FOCUS WM_FORCE_DEBUG_FOCUS_LIGHT WM_FORCE_DEBUG_IME WM_FORCE_DEBUG_KEEP_SCREEN_ON WM_FORCE_DEBUG_ORIENTATION WM_FORCE_DEBUG_RECENTS_ANIMATIONS WM_FORCE_DEBUG_REMOTE_ANIMATIONS WM_FORCE_DEBUG_RESIZE WM_FORCE_DEBUG_SCREEN_ON WM_FORCE_DEBUG_STARTING_WINDOW WM_FORCE_DEBUG_WINDOW_MOVEMENT WM_FORCE_SHOW_SURFACE_ALLOC WM_FORCE_SHOW_TRANSACTIONS
+Logging definitions loaded: 0
+WINDOW MANAGER HIGH REFRESH RATE BLACKLIST (dumpsys window refresh)
+High Refresh Rate Denylist
+  Packages:
+WINDOW MANAGER CONSTANTS (dumpsys window constants):
+  system_gesture_exclusion_log_debounce_millis=1500
+  system_gesture_exclusion_limit_dp=200
+  system_gestures_excluded_by_pre_q_sticky_immersive=false
+
+[exit-code] 0

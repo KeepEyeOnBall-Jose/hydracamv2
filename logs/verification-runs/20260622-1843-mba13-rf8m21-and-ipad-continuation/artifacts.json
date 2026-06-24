@@ -1,0 +1,154 @@
+{
+  "acceptanceChecks": [
+    "Newly ADB-authorized RF8M21J8XRT receives the current MBA13-built HydraCam APK and launch/process/package proof",
+    "iPad pairing/install state is rechecked with current MBA13 CoreDevice output"
+  ],
+  "commands": [
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; SERIAL=RF8M21J8XRT; echo APK; ls -lh \"$APK\"; shasum -a 256 \"$APK\"; echo INSTALL; $ADB -s $SERIAL install -r \"$APK\" || $ADB -s $SERIAL install --no-streaming -r \"$APK\"; echo LAUNCH; $ADB -s $SERIAL shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; echo PID; $ADB -s $SERIAL shell pidof com.amaia23.hydracam; echo PACKAGE; $ADB -s $SERIAL shell dumpsys package com.amaia23.hydracam | egrep \"Package \\[com.amaia23.hydracam\\]|versionName|versionCode|firstInstallTime|lastUpdateTime\"; echo SCREENSHOT; $ADB -s $SERIAL exec-out screencap -p > /tmp/hydracam-RF8M21J8XRT-foreground.png; echo VIDEO; $ADB -s $SERIAL shell rm -f /sdcard/hydracam-deploy-proof.mp4; $ADB -s $SERIAL shell screenrecord --time-limit 5 /sdcard/hydracam-deploy-proof.mp4; $ADB -s $SERIAL pull /sdcard/hydracam-deploy-proof.mp4 /tmp/hydracam-RF8M21J8XRT-foreground.mp4; echo LOGCAT; $ADB -s $SERIAL logcat -d -t 500 > /tmp/hydracam-RF8M21J8XRT-logcat.txt"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:44:12.047977+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo ADB; /Users/jose/Library/Android/sdk/platform-tools/adb devices -l; echo IOS; xcrun devicectl list devices; echo IPAD_DETAILS; xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 20 2>&1 || true; echo IPAD_INSTALL_RETRY; xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app 2>&1 || true; echo USB_SCAN; system_profiler SPUSBDataType -detailLevel mini | egrep -i \"iPad|iPhone|Apple Mobile|Samsung|Android\" || true; echo LIBIMOBILEDEVICE; command -v idevicepair || true; command -v idevice_id || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:44:49.218723+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo IDEVICEPAIR_ATTEMPT; if command -v brew >/dev/null 2>&1; then brew list libimobiledevice >/dev/null 2>&1 && echo LIBIMOBILEDEVICE_INSTALLED || echo LIBIMOBILEDEVICE_NOT_INSTALLED; fi; if command -v idevicepair >/dev/null 2>&1; then idevicepair -u 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 pair 2>&1 || true; idevicepair -u 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 validate 2>&1 || true; else echo IDEVICEPAIR_NOT_FOUND; fi"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:45:16.861964+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo DEVICETOOL_TOP; xcrun devicectl --help 2>&1 | sed -n \"1,240p\"; echo HELP_PAIR_SEARCH; xcrun devicectl --help 2>&1 | grep -i pair || true; xcrun devicectl help 2>&1 | grep -i pair || true; xcrun devicectl help device 2>&1 | grep -i pair || true; xcrun devicectl help manage 2>&1 || true; echo XCRUN_FIND; find /Applications/Xcode.app/Contents/Developer/usr/bin -maxdepth 1 -iname \"*device*\" -o -iname \"*pair*\" | sort"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:45:17.565956+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo FINAL_ALL_DEVICE_PROCESSES; /Users/jose/Library/Android/sdk/platform-tools/adb -s 9885e6503930304946 shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M21J8XRT shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s RF8M90QE7LX shell pidof com.amaia23.hydracam; xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i \"keepeyeonball\\|Runner\" || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:45:18.421561+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo PAIR_HELP; xcrun devicectl help manage pair 2>&1; echo PAIR_ATTEMPT_COREDEVICE_ID; xcrun devicectl manage pair --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 60 2>&1 || true; echo PAIR_STATE_AFTER; xcrun devicectl device info details --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --timeout 20 2>&1 || true; echo INSTALL_AFTER_PAIR; xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app 2>&1 || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:45:35.920626+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo FINAL_FLUTTER; zsh -lc \"flutter devices --device-timeout 10\"; echo FINAL_IOS_LIST; xcrun devicectl list devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:46:32.325054+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "DEVICE=0A947DBD-A462-5BAA-AB84-17F143D41619; BUNDLE=com.keepeyeonball; echo IPAD_LAUNCH; xcrun devicectl device process launch --device \"$DEVICE\" --terminate-existing \"$BUNDLE\"; sleep 3; echo IPAD_APPS; xcrun devicectl device info apps --device \"$DEVICE\" | grep -A14 -B2 \"$BUNDLE\"; echo IPAD_PROCESS; xcrun devicectl device info processes --device \"$DEVICE\" | grep -i \"keepeyeonball\\|Runner\\|HydraCam\"; echo IPAD_DISPLAY; xcrun devicectl device info displays --device \"$DEVICE\"; echo IPAD_LOCK; xcrun devicectl device info lockState --device \"$DEVICE\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:47:15.259867+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "echo FINAL_FLUTTER; zsh -lc \"flutter devices --device-timeout 10\"; echo FINAL_ANDROID_PROCESSES; for serial in 9885e6503930304946 RF8M21J8XRT RF8M90QE7LX; do echo $serial; /Users/jose/Library/Android/sdk/platform-tools/adb -s $serial shell pidof com.amaia23.hydracam; /Users/jose/Library/Android/sdk/platform-tools/adb -s $serial shell dumpsys package com.amaia23.hydracam | egrep \"versionName|versionCode|lastUpdateTime\"; done; echo FINAL_IOS_PROCESSES; xcrun devicectl device info processes --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -i \"keepeyeonball\\|Runner\"; xcrun devicectl device info apps --device AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A | grep -A6 -B2 com.keepeyeonball; xcrun devicectl device info processes --device 0A947DBD-A462-5BAA-AB84-17F143D41619 | grep -i \"keepeyeonball\\|Runner\"; xcrun devicectl device info apps --device 0A947DBD-A462-5BAA-AB84-17F143D41619 | grep -A6 -B2 com.keepeyeonball; echo SIGNING; security find-identity -p codesigning -v || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:47:43.076992+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "DEVICE=0A947DBD-A462-5BAA-AB84-17F143D41619; BUNDLE=com.keepeyeonball; rm -f /tmp/ipad-apps.json /tmp/ipad-processes.json /tmp/ipad-apps.log /tmp/ipad-processes.log; echo RETRY_IPAD_APPS_JSON; xcrun devicectl device info apps --device \"$DEVICE\" --timeout 60 --json-output /tmp/ipad-apps.json --log-output /tmp/ipad-apps.log 2>&1 || true; if [[ -f /tmp/ipad-apps.json ]]; then python3 - <<\"PY\"\nimport json\np=\"/tmp/ipad-apps.json\"\ndata=json.load(open(p))\ntext=json.dumps(data)\nprint(\"JSON_HAS_BUNDLE\", \"com.keepeyeonball\" in text)\nif \"com.keepeyeonball\" in text:\n    print(text[text.find(\"com.keepeyeonball\")-300:text.find(\"com.keepeyeonball\")+500])\nPY\nfi; echo APPS_LOG; sed -n \"1,160p\" /tmp/ipad-apps.log 2>/dev/null || true; echo RETRY_IPAD_PROCESS_JSON; xcrun devicectl device info processes --device \"$DEVICE\" --timeout 60 --json-output /tmp/ipad-processes.json --log-output /tmp/ipad-processes.log 2>&1 || true; if [[ -f /tmp/ipad-processes.json ]]; then python3 - <<\"PY\"\nimport json\np=\"/tmp/ipad-processes.json\"\ndata=json.load(open(p))\ntext=json.dumps(data)\nprint(\"JSON_HAS_RUNNER\", \"Runner\" in text or \"keepeyeonball\" in text)\nfor needle in (\"keepeyeonball\", \"Runner\"):\n    i=text.find(needle)\n    if i!=-1:\n        print(text[max(0,i-300):i+500])\n        break\nPY\nfi; echo PROCESS_LOG; sed -n \"1,160p\" /tmp/ipad-processes.log 2>/dev/null || true; echo RELAUNCH_WITH_JSON; xcrun devicectl device process launch --device \"$DEVICE\" --terminate-existing \"$BUNDLE\" --timeout 60 --json-output /tmp/ipad-launch.json --log-output /tmp/ipad-launch.log 2>&1 || true; cat /tmp/ipad-launch.json 2>/dev/null || true; sed -n \"1,160p\" /tmp/ipad-launch.log 2>/dev/null || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:48:28.980314+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "mba13",
+        "bash -lc 'set -e; ADB=/Users/jose/Library/Android/sdk/platform-tools/adb; APK=/Users/jose/src/work/hydracamv2-mba13-deploy/build/app/outputs/flutter-apk/app-debug.apk; IOS_APP=/Users/jose/src/work/hydracamv2-mba13-deploy/build/ios-mba13-transfer-profile/Build/Products/Profile-iphoneos/Runner.app; IOS_BUNDLE=com.keepeyeonball; ANDROIDS=\"9885e6503930304946 RF8M21J8XRT RF8M90QE7LX\"; IOS_TARGETS=\"AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A 0A947DBD-A462-5BAA-AB84-17F143D41619\"; RUN=/tmp/hydracam-all-hardware-redeploy-$(date +%Y%m%d-%H%M%S); mkdir -p \"$RUN\"; echo RUN_DIR=$RUN; echo START_ALL $(date -u +%Y-%m-%dT%H:%M:%SZ); pids=\"\"; for serial in $ANDROIDS; do ( set -e; echo TARGET_START android $serial $(date -u +%Y-%m-%dT%H:%M:%SZ); $ADB -s $serial install -r \"$APK\" || $ADB -s $serial install --no-streaming -r \"$APK\"; $ADB -s $serial shell am start -n com.amaia23.hydracam/.MainActivity; sleep 3; printf \"PID=\"; $ADB -s $serial shell pidof com.amaia23.hydracam | tr -d \"\\r\"; $ADB -s $serial shell dumpsys package com.amaia23.hydracam | egrep \"versionName|versionCode|lastUpdateTime\"; echo TARGET_END android $serial $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > \"$RUN/$serial.log\" 2>&1 & pids=\"$pids $!\"; done; for device in $IOS_TARGETS; do ( set -e; echo TARGET_START ios $device $(date -u +%Y-%m-%dT%H:%M:%SZ); xcrun devicectl device install app --device \"$device\" \"$IOS_APP\"; xcrun devicectl device process launch --device \"$device\" --terminate-existing \"$IOS_BUNDLE\" --timeout 60 --json-output \"$RUN/$device-launch.json\" --log-output \"$RUN/$device-launch-xcode.log\"; python3 - \"$RUN/$device-launch.json\" <<\"PY\"\nimport json, sys\np=sys.argv[1]\ndata=json.load(open(p))\nproc=data.get(\"result\",{}).get(\"process\",{})\nprint(\"PID=%s\" % proc.get(\"processIdentifier\"))\nprint(\"EXEC=%s\" % proc.get(\"executable\"))\nPY\n echo TARGET_END ios $device $(date -u +%Y-%m-%dT%H:%M:%SZ) ) > \"$RUN/$device.log\" 2>&1 & pids=\"$pids $!\"; done; deploy_status=0; for pid in $pids; do wait $pid || deploy_status=1; done; echo END_ALL $(date -u +%Y-%m-%dT%H:%M:%SZ); for file in \"$RUN\"/*.log; do echo ==== $(basename \"$file\") ====; cat \"$file\"; done; exit $deploy_status'"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T16:49:48.119004+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android hardware",
+      "name": "MBA13 Samsung S10e RF8M21J8XRT",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "remote deployment target"
+    },
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS hardware",
+      "name": "MBA13 iPad 5",
+      "notes": [],
+      "os": "iPadOS 17.7.11",
+      "role": "remote deployment target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M21J8XRT-foreground.png",
+    "video/RF8M21J8XRT-foreground.mp4",
+    "device-logs/RF8M21J8XRT-logcat.txt",
+    "device-logs/all-hardware-redeploy/0A947DBD-A462-5BAA-AB84-17F143D41619-launch-xcode.log",
+    "device-logs/all-hardware-redeploy/0A947DBD-A462-5BAA-AB84-17F143D41619-launch.json",
+    "device-logs/all-hardware-redeploy/0A947DBD-A462-5BAA-AB84-17F143D41619.log",
+    "device-logs/all-hardware-redeploy/9885e6503930304946.log",
+    "device-logs/all-hardware-redeploy/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A-launch-xcode.log",
+    "device-logs/all-hardware-redeploy/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A-launch.json",
+    "device-logs/all-hardware-redeploy/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A.log",
+    "device-logs/all-hardware-redeploy/RF8M21J8XRT.log",
+    "device-logs/all-hardware-redeploy/RF8M90QE7LX.log"
+  ],
+  "item": {
+    "slug": "mba13-rf8m21-and-ipad-continuation",
+    "source": "active goal continuation 2026-06-22",
+    "title": "Continue MBA13 all-connected deploy after RF8M21 authorization"
+  },
+  "notes": [
+    "RF8M21J8XRT was deployed after ADB authorization, the iPad was paired with devicectl manage pair, and all five physical MBA13 hardware targets were redeployed and launched in one concurrent batch."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

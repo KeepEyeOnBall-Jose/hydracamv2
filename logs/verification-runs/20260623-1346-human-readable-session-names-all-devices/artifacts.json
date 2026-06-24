@@ -1,0 +1,221 @@
+{
+  "acceptanceChecks": [
+    "Setup flow shows generated session naming controls; created/active sessions use readable display titles instead of GUID-primary UI; physical and emulated UI smoke captures setup and standby without overflow."
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "RF8M21J8XRT",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/android-s10e-current-rerun",
+        "--timeout",
+        "180",
+        "--build-timeout",
+        "300",
+        "--settle-seconds",
+        "2"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T12:24:14.429752+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "integration_test/platform_test.dart",
+        "-d",
+        "6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T12:33:25.052596+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/ios_capture_repro.py",
+        "--launch",
+        "--device-id",
+        "00008101-000A68811E43001E",
+        "--host",
+        "auto",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--run-dir",
+        "logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/ios-iphone-capture-rerun",
+        "--profile",
+        "standard1080p30",
+        "--lens",
+        "autoBack",
+        "--timeout",
+        "240"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T12:36:28.645893+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "29d816ac550b7ece",
+        "install",
+        "-r",
+        "/Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T12:37:36.365629+00:00"
+    },
+    {
+      "command": [
+        "adb",
+        "-s",
+        "RF8M90QE7LX",
+        "install",
+        "-r",
+        "/Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-23T12:37:51.218182+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "HYDRACAM_PRIVACY_POLICY_URL=https://store-site-ten.vercel.app/privacy.html HYDRACAM_SUPPORT_URL=https://store-site-ten.vercel.app/support.html HYDRACAM_ACCOUNT_DELETION_URL=https://store-site-ten.vercel.app/account-deletion.html bash scripts/check_store_readiness.sh upload-ios"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-23T12:39:01.809918+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/testflight_release_and_invite.sh"
+      ],
+      "returnCode": 64,
+      "startedAt": "2026-06-23T12:39:07.270723+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "HYDRACAM_PRIVACY_POLICY_URL=https://store-site-ten.vercel.app/privacy.html HYDRACAM_SUPPORT_URL=https://store-site-ten.vercel.app/support.html HYDRACAM_ACCOUNT_DELETION_URL=https://store-site-ten.vercel.app/account-deletion.html bash scripts/check_store_readiness.sh upload-ios"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-23T12:41:12.542959+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/testflight_release_and_invite.sh"
+      ],
+      "returnCode": 64,
+      "startedAt": "2026-06-23T12:41:23.282026+00:00"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "FASTLANE_SKIP_UPDATE_CHECK=1 FASTLANE_DISABLE_COLORS=1 CI=1 timeout 180 bash scripts/ios_fastlane.sh upload_latest_beta"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-23T12:44:06.602549+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "Android hardware",
+      "name": "SM G970F RF8M21J8XRT",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "setup and standby UI smoke"
+    },
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android hardware",
+      "name": "SM G960F",
+      "notes": [],
+      "os": "Android 10 API 29",
+      "role": "setup and standby UI smoke"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "SM G970F RF8M90QE7LX",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "setup and standby UI smoke"
+    },
+    {
+      "identifier": "6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3",
+      "kind": "iOS simulator",
+      "name": "iPhone 16 Pro Simulator",
+      "notes": [],
+      "os": "iOS 18.4 simulator",
+      "role": "simulator launch/UI screenshot"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "iOS hardware",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11 21H461",
+      "role": "physical iOS launch/capture repro"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E",
+      "kind": "iOS hardware",
+      "name": "Jos\u00e9 Ram\u00f3n\u2019s iPhone",
+      "notes": [],
+      "os": "iOS 26.5 23F77",
+      "role": "physical iOS launch/capture repro"
+    },
+    {
+      "identifier": "emulator-5572",
+      "kind": "Android emulator",
+      "name": "Medium Phone API 36",
+      "notes": [
+        "Booted with patched Terminal.app full-boot verifier and -wipe-data before current APK install."
+      ],
+      "os": "Android 16 API 36",
+      "role": "clean emulator setup and standby UI smoke"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/RF8M21J8XRT-setup-current.png",
+    "screenshots/RF8M21J8XRT-setup.png",
+    "screenshots/RF8M21J8XRT-standby-current.png",
+    "screenshots/RF8M21J8XRT-standby.png",
+    "screenshots/iphone-16-pro-simulator-after-flutter-test.png",
+    "screenshots/iphone-16-pro-simulator-post-permissions.png",
+    "video/video-unavailable.txt",
+    "device-logs/29d816ac550b7ece/setup-result.json"
+  ],
+  "item": {
+    "slug": "human-readable-session-names-all-devices",
+    "source": "docs/control/backlog-import.md#human-readable-session-names",
+    "title": "Human-readable session names"
+  },
+  "notes": [
+    "Implemented human-readable session names and rebuilt iOS IPA 1.4.0+19. Local analyzer/tests passed; physical iPad capture proof showed displayName/displayTitle in automation snapshots; one physical Android S10e setup/standby UI smoke passed. Remaining verification/upload blockers: App Store Connect API key missing, iPhone bridge not discovered after launch, Android S9 and one S10e locked during screenshot capture, iOS simulator remained at camera permission prompt, Android emulator startup produced no adb-visible emulator.",
+    "Continuation improved verification: iOS simulator integration test passed after accepting the camera prompt; physical iPhone capture proof passed with automationTargetId 00008101-000A68811E43001E; current Android versionCode=19 installed on all three attached Android phones, with UI smoke passed on unlocked RF8M21J8XRT and locked-device UI screenshots blocked on 29d816ac550b7ece/RF8M90QE7LX. Android AVDs Hydra_Master_API34 and Pixel_7 disappeared before boot completion. Rebuilt current iOS IPA 1.4.0+19 SHA-256 7b5cda1b0e81322516bb22f95480e8bb041c26615743e381735ef33d4c8a55bd; TestFlight wrapper still exits before upload because App Store Connect API credentials are absent.",
+    "Continuation upload audit: direct fastlane upload_latest_beta reached upload_to_testflight but failed before upload because jose@keepeyeonball.com has no password/session in the non-interactive environment. Keychain attribute checks found no generic or internet password for jose@keepeyeonball.com; ~/.fastlane only has a vectorblanco@gmail.com cookie. altool and Transporter are installed, but no usable API key, p8 triplet, FASTLANE_SESSION, FASTLANE_PASSWORD, or keychain password item is present. TestFlight upload remains externally blocked by App Store Connect authentication.",
+    "Reachable lanes passed on iOS hardware, iOS simulator, two Android phones, and clean Android API 36 emulator.",
+    "RF8M90QE7LX current APK installed but UI smoke is blocked by secure keyguard ON_LOCKED state.",
+    "TestFlight upload waits for local App Store Connect API key env file.",
+    "Current IPA rebuilt after automation timeout patch; upload readiness has only App Store Connect API key missing when public URLs are set."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

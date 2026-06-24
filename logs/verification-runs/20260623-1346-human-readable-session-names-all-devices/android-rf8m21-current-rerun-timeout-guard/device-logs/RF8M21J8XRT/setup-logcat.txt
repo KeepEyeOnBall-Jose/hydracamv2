@@ -1,0 +1,850 @@
+--------- beginning of system
+06-23 15:23:45.063   979  1038 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 5278; state: DISABLED
+06-23 15:23:45.063   979  1038 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 5278; state: ENABLED
+--------- beginning of main
+06-23 15:23:45.065   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.073   539   539 D Zygote  : Forked child process 4323
+06-23 15:23:45.074   979  1039 I ActivityManager: Start proc 4323:com.samsung.android.authfw/5278 for service {com.samsung.android.authfw/com.samsung.android.authfw.pass.PassService}
+06-23 15:23:45.082   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.087 13396  2115 D CCodecBuffers: [c2.android.aac.decoder#102:1D-Input.Impl[N]] codec released a buffer owned by client (index 0)
+06-23 15:23:45.099   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.112  4323  4323 E .android.authf: Not starting debugger since process cannot load the jdwp agent.
+06-23 15:23:45.113   519   519 E audit   : type=1400 audit(1782221025.107:1086): avc:  denied  { getattr } for  pid=3914 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:23:45.113   519   519 E audit   : type=1300 audit(1782221025.107:1086): arch=c00000b7 syscall=44 success=no exit=-13 a0=ac a1=7702b88ab0 a2=7702b88c04 a3=1026671 items=0 ppid=539 pid=3914 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-23 15:23:45.113   519   519 E audit   : type=1327 audit(1782221025.107:1086): proctitle="com.amaia23.hydracam"
+06-23 15:23:45.116  4323  4323 E USNET   : USNET: appName: com.samsung.android.authfw
+06-23 15:23:45.117  4323  4323 D ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+06-23 15:23:45.118  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:45.119   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:45.120  4323  4323 D ActivityThread: setConscryptValidator
+06-23 15:23:45.120  4323  4323 D ActivityThread: setConscryptValidator - put
+06-23 15:23:45.122 13396  2115 D CCodecBuffers: [c2.android.aac.decoder#102:1D-Input.Impl[N]] codec released a buffer owned by client (index 1)
+06-23 15:23:45.122 13396 32203 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.124 13396 32204 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.124 13396 32203 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.124 13396 32204 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.127 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19276979642155068}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19820139)
+06-23 15:23:45.128 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.129 13396 32249 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.131   979  3529 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 5278; state: DISABLED
+06-23 15:23:45.132   979  3529 I ActivityManager: DSS OFF for com.samsung.android.authfw
+06-23 15:23:45.132   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.134   979  3529 D ActivityManager: attachApplicationLocked() app=ProcessRecord{a75c2af 4323:com.samsung.android.authfw/5278} app.isolatedEntryPoint=null instr2=null
+06-23 15:23:45.136   519   519 E audit   : type=1400 audit(1782221025.131:1087): avc:  denied  { getattr } for  pid=3914 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:23:45.137   979  1029 D NetworkPolicy: onUidStateChanged() uid: 5278, isForeground(false, 10)
+06-23 15:23:45.137  5987  5987 D HidDeviceService: handleMessage(): msg.what=8
+06-23 15:23:45.143  4323  4323 D ActivityThread: handleBindApplication()++ app=com.samsung.android.authfw
+06-23 15:23:45.144 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.144  4323  4323 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 5278; state: ENABLED
+06-23 15:23:45.149   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.159 13396  2115 D CCodecBuffers: [c2.android.aac.decoder#102:1D-Input.Impl[N]] codec released a buffer owned by client (index 0)
+06-23 15:23:45.165   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.173   979   992 D InputDispatcher: Inject motion (4314): action=0x1, time=8033537000000, f=0x0, d=0
+06-23 15:23:45.173   979  1173 I InputDispatcher: Delivering touch to (3914): action: 0x1, f=0x0, d=0, '877475b', t=1 +(-116,0)
+06-23 15:23:45.173  3914  3914 I ViewRootImpl@c367562[MainActivity]: ViewPostIme pointer 1
+06-23 15:23:45.174   979   979 I SemDvfsHyPerManager: acquire hyper - SMOOTH_SCROLL/979@24, type = -999
+06-23 15:23:45.174   979   979 I SemDvfsHyPerManager: acquire hyper - GESTURE_DETECTED/979@34, type = -999
+06-23 15:23:45.174   979   979 I SemDvfsHyPerManager: acquire hyper - GESTURE_DETECTED/979@34, type = -999
+06-23 15:23:45.175   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 503530  [979 / 24]    HINT : SMOOTH_SCROLL    list : 
+06-23 15:23:45.180   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 513625  [979 / 34]    HINT : GESTURE_DETECTED    list : [TIMEOUT / 900] 
+06-23 15:23:45.181   571   593 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 503530
+06-23 15:23:45.181   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 513625  [979 / 34]    HINT : GESTURE_DETECTED    list : [TIMEOUT / 900] 
+06-23 15:23:45.182   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.196 13396  3859 D BufferPoolAccessor2.0: bufferpool2 0x786e5adb78 : 4(2097232 size) total buffers - 4(2097232 size) used buffers - 1/6 (recycle/alloc) - 5/2759 (fetch/transfer)
+06-23 15:23:45.199 13396  2115 D CCodecBuffers: [c2.android.aac.decoder#102:1D-Input.Impl[N]] codec released a buffer owned by client (index 2)
+06-23 15:23:45.215   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.224 13396 32588 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.225 13396 32588 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.227 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19276979642155068}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19843586)
+06-23 15:23:45.230 13396 32249 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.231 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.232   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.233 13396 32297 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.237 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.242   979  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.051964775]
+06-23 15:23:45.242   979  1276 D SemNscXgbMsL1: Probability - Real time: [0.06946086]
+06-23 15:23:45.242   979  1276 D SemNscXgbMsL1: Probability - Non real time: [0.944247]
+06-23 15:23:45.242   979  1276 D SemNscXgbMsL1: 1 sample inference time: 0.333461 msecs
+06-23 15:23:45.243   979  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.620154 msecs
+06-23 15:23:45.244   979  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.506231 msecs
+06-23 15:23:45.249   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.252 13396  2115 D CCodecBuffers: [c2.android.aac.decoder#102:1D-Input.Impl[N]] codec released a buffer owned by client (index 0)
+06-23 15:23:45.257   566   920 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 17.000000, 19.000000, 26.000000, 50000.000000, 64000.000000
+06-23 15:23:45.267 13396 32320 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.268 13396 32203 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.269 13396 32320 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.269 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19843586)
+06-23 15:23:45.269 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.269 13396 32247 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.277 13396 32296 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.282 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.282   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.295  4323  4323 I [AUTHFW][PASS]AuthFwApp:  onCreate
+06-23 15:23:45.299   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.300  4323  4323 I [AUTHFW][PASS]PassService: onCreate()
+06-23 15:23:45.302  4323  4323 I [PASS][SDK]m: initialize()
+06-23 15:23:45.303  4323  4323 I [PASS][SDK]n: bind
+06-23 15:23:45.316   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.323 13396 25136 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.324 13396 30843 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.324 13396 30843 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.325 13396 25136 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.328 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19867034)
+06-23 15:23:45.329 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.330 13396 32202 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.332   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.334 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.336  4323  4323 I [AUTHFW][TZ]TzAppFactory: flavor:exynos9820
+06-23 15:23:45.336  4323  4323 I [AUTHFW][TZ]TzAppAsset: AFD
+06-23 15:23:45.337  4323  4323 I [AUTHFW][TZ]TzAppAsset: Found
+06-23 15:23:45.341  4323  4323 I [AUTHFW][TZ]TzAppFactory: use asset ta
+06-23 15:23:45.341  4323  4323 I [AUTHFW][TZ]TzApp: Start using TzAppAsset as TzApp
+06-23 15:23:45.349   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.351 13396  2115 D CCodecBuffers: [c2.android.aac.decoder#102:1D-Input.Impl[N]] codec released a buffer owned by client (index 0)
+06-23 15:23:45.354  4323  4323 I [AUTHFW][PASS]PassService: personaId : 0
+06-23 15:23:45.356   420   429 I servicemanager: Adding 'u:r:platform_app:s0:c512,c768' service (com.samsung.android.pass.IPassService:4323)
+06-23 15:23:45.357  4323  4323 I [AUTHFW][PASS]PassService: onBind()
+06-23 15:23:45.357  4323  4323 I [AUTHFW][PASS]PassService: onBind:PassOperation
+06-23 15:23:45.358 32431 32431 I [AUTHFW][PSDK]PassServiceConnection: onServiceConnected
+06-23 15:23:45.361   979   992 I ActivityManager: Killing 32361:com.samsung.android.samsungpassautofill/u0a181 (adj 925): empty #31
+06-23 15:23:45.363   979  1040 I libprocessgroup: Successfully killed process cgroup uid 10181 pid 32361 in 0ms
+06-23 15:23:45.365  4323  4323 I [PASS][SDK]n: onServiceConnected
+06-23 15:23:45.365  4323  4323 I [PASS][SDK]m: onConnected
+06-23 15:23:45.372 32431 32431 I [PASS][SPASS]SPassApplication: pass connected
+06-23 15:23:45.400   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.412   979  1327 I Pageboost: Launcher App Execution
+06-23 15:23:45.414   539   539 I Zygote  : Process 32361 exited due to signal 9 (Killed)
+06-23 15:23:45.415  5987  5987 D HidDeviceService: handleMessage(): msg.what=8
+06-23 15:23:45.416   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.417   979  3454 I ActivityManager: Killing 30125:com.google.android.projection.gearhead:shared/u0a32 (adj 999): empty #31
+06-23 15:23:45.418   979  3454 I ActivityManager: Killing 32763:com.google.android.apps.turbo:aab/u0a135 (adj 999): empty #32
+06-23 15:23:45.424 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.426 13396 32249 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.427 13396 32206 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.429   979  1040 I libprocessgroup: Successfully killed process cgroup uid 10032 pid 30125 in 10ms
+06-23 15:23:45.432 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.1989025)
+06-23 15:23:45.433 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.433   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.440 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.443 13396 30843 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.450   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.450 13396  3853 V NuMediaExtractor: NuMediaExtractor destructor
+06-23 15:23:45.457 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.468  1363  1363 I wpa_supplicant: wlan0: GAS-QUERY-START addr=f8:5e:42:78:d8:50 dialog_token=106 freq=2437
+06-23 15:23:45.469   979  1206 D HS20    : ANQP initiated on f8:5e:42:78:d8:50
+06-23 15:23:45.469   979  1206 D PasspointManager: ANQP entry not found for: f8:5e:42:78:d8:50:<>
+06-23 15:23:45.474   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to bc:f8:7e:c2:5a:5e for another 639 seconds
+06-23 15:23:45.475   979  1206 D PasspointManager: ANQP entry not found for: bc:f8:7e:c2:5a:5e:<MagentaWLAN-7VQX>
+06-23 15:23:45.475   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to 58:68:7a:18:9c:3e for another 275 seconds
+06-23 15:23:45.476   979  1206 D PasspointManager: ANQP entry not found for: 58:68:7a:18:9c:3e:<MagentaWLAN-238V>
+06-23 15:23:45.476   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to a2:ff:70:a0:20:aa for another 396 seconds
+06-23 15:23:45.477   979  1206 D PasspointManager: ANQP entry not found for: a2:ff:70:a0:20:aa:<Vodafone Homespot>
+06-23 15:23:45.477   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to a2:ff:70:a0:20:ac for another 32 seconds
+06-23 15:23:45.477   979  1206 D PasspointManager: ANQP entry not found for: a2:ff:70:a0:20:ac:<Vodafone Hotspot>
+06-23 15:23:45.478   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to f8:5e:42:78:d8:50 for another 639 seconds
+06-23 15:23:45.478   979  1206 D PasspointManager: ANQP entry not found for: f8:5e:42:78:d8:50:<>
+06-23 15:23:45.479   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to bc:f8:7e:c2:5a:5e for another 639 seconds
+06-23 15:23:45.479   979  1206 D PasspointManager: ANQP entry not found for: bc:f8:7e:c2:5a:5e:<MagentaWLAN-7VQX>
+06-23 15:23:45.479   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to 58:68:7a:18:9c:3e for another 275 seconds
+06-23 15:23:45.480   979  1206 D PasspointManager: ANQP entry not found for: 58:68:7a:18:9c:3e:<MagentaWLAN-238V>
+06-23 15:23:45.480   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to a2:ff:70:a0:20:aa for another 396 seconds
+06-23 15:23:45.480   979  1206 D PasspointManager: ANQP entry not found for: a2:ff:70:a0:20:aa:<Vodafone Homespot>
+06-23 15:23:45.481   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to a2:ff:70:a0:20:ac for another 32 seconds
+06-23 15:23:45.481   979  1206 D PasspointManager: ANQP entry not found for: a2:ff:70:a0:20:ac:<Vodafone Hotspot>
+06-23 15:23:45.481   979  1206 D ANQPRequestManager: Not allowed to send ANQP request to f8:5e:42:78:d8:50 for another 639 seconds
+06-23 15:23:45.482   979  1206 D PasspointManager: ANQP entry not found for: f8:5e:42:78:d8:50:<>
+06-23 15:23:45.484   539   539 I Zygote  : Process 32763 exited due to signal 9 (Killed)
+06-23 15:23:45.489  5987  5987 D HidDeviceService: handleMessage(): msg.what=8
+06-23 15:23:45.500   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.501 13396  3859 I CCodec  : state->set(RELEASING)
+06-23 15:23:45.502 13396  3859 D CCodecBufferChannel: [c2.android.aac.decoder#102] MediaCodec discarded an unknown buffer
+06-23 15:23:45.502 13396  3859 D CCodecBufferChannel: [c2.android.aac.decoder#102] MediaCodec discarded an unknown buffer
+06-23 15:23:45.502 13396  3859 D CCodecBufferChannel: [c2.android.aac.decoder#102] MediaCodec discarded an unknown buffer
+06-23 15:23:45.502 13396  3859 D CCodecBufferChannel: [c2.android.aac.decoder#102] MediaCodec discarded an unknown buffer
+06-23 15:23:45.505   810  3845 I C2SoftAacEnc: Correcting overlapping timestamp: last frame ended at 60031999us but current frame is starting at 0us. Using the last frame's end timestamp 
+06-23 15:23:45.508 13396  4368 I CCodec  : [c2.android.aac.decoder] release(1)
+06-23 15:23:45.508 13396  4368 I CCodec  : state->set(RELEASED)
+06-23 15:23:45.509 13396  3859 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+06-23 15:23:45.509   810   810 V C2Store : in ~ComponentModule
+06-23 15:23:45.509   810   810 V C2Store : unloading dll
+06-23 15:23:45.510 13396  3859 I MediaCodec: Codec shutdown complete
+06-23 15:23:45.510 13396  3859 D MediaCodec: flushMediametrics
+06-23 15:23:45.511 13396  3859 D MediaCodec: flushMediametrics
+06-23 15:23:45.516   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.525 13396 32321 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.525 13396  3844 I CCodec  : state->set(STOPPING)
+06-23 15:23:45.526 13396  3844 D CCodecBufferChannel: [c2.android.aac.encoder#221] MediaCodec discarded an unknown buffer
+06-23 15:23:45.528 13396 30843 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.528 13396  3844 D CCodecBufferChannel: [c2.android.aac.encoder#221] MediaCodec discarded an unknown buffer
+06-23 15:23:45.528 13396 30843 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.529 13396  3770 V MediaMetadataRetriever: SANITIZED_CONTACT_NAME
+06-23 15:23:45.529 13396  3844 I CCodec  : state->set(ALLOCATED)
+06-23 15:23:45.530 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19913699)
+06-23 15:23:45.530 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.531 13396 32321 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.532 13396  3844 I CCodec  : state->set(RELEASING)
+06-23 15:23:45.533   778  6218 V MetadataRetrieverClient: MetadataRetrieverClient constructor pid(13396)
+06-23 15:23:45.533   778  6218 V MediaPlayerService: Create new media retriever from pid 13396
+06-23 15:23:45.534   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.535 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.539 13396  4369 I CCodec  : [c2.android.aac.encoder] release(1)
+06-23 15:23:45.540   979  3484 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(uid/pid:10032/30125, android.os.BinderProxy@316aec0)
+06-23 15:23:45.541   539   539 I Zygote  : Process 30125 exited due to signal 9 (Killed)
+06-23 15:23:45.541 13396  4369 I CCodec  : state->set(RELEASED)
+06-23 15:23:45.542   810  1015 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+06-23 15:23:45.542 13396  3844 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+06-23 15:23:45.542   810  1015 V C2Store : in ~ComponentModule
+06-23 15:23:45.542   810  1015 V C2Store : unloading dll
+06-23 15:23:45.543 13396  3844 I MediaCodec: Codec shutdown complete
+06-23 15:23:45.543   979  1040 I libprocessgroup: Successfully killed process cgroup uid 10135 pid 32763 in 0ms
+06-23 15:23:45.543 13396  3844 D MediaCodec: flushMediametrics
+06-23 15:23:45.543 13396  3844 D MediaCodec: flushMediametrics
+06-23 15:23:45.543  3360  3074 W MediaProvider: Failed to fetch original file descriptor
+06-23 15:23:45.543  3360  3074 W MediaProvider: java.io.IOException: stat failed: ENOENT (No such file or directory)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at com.android.providers.media.MediaProvider.getFileFromFileDescriptor(MediaProvider.java:5940)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at com.android.providers.media.MediaProvider.getOriginalMediaFormatFileDescriptor(MediaProvider.java:5851)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at com.android.providers.media.MediaProvider.openTypedAssetFileCommon(MediaProvider.java:7318)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at com.android.providers.media.MediaProvider.openTypedAssetFile(MediaProvider.java:7299)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at android.content.ContentProvider$Transport.openTypedAssetFile(ContentProvider.java:562)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:327)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1215)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at android.os.Binder.execTransact(Binder.java:1179)
+06-23 15:23:45.543  3360  3074 W MediaProvider: Caused by: android.system.ErrnoException: stat failed: ENOENT (No such file or directory)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at libcore.io.Linux.stat(Native Method)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at libcore.io.ForwardingOs.stat(ForwardingOs.java:853)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at libcore.io.BlockGuardOs.stat(BlockGuardOs.java:420)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at libcore.io.ForwardingOs.stat(ForwardingOs.java:853)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at android.app.ActivityThread$AndroidOs.stat(ActivityThread.java:8625)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at android.system.Os.stat(Os.java:919)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	at com.android.providers.media.MediaProvider.getFileFromFileDescriptor(MediaProvider.java:5934)
+06-23 15:23:45.543  3360  3074 W MediaProvider: 	... 7 more
+06-23 15:23:45.544 13396  3770 V MediaMetadataRetriever: setDataSource(210, 0, 576460752303423487)
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: setDataSource fd=15, offset=0, length=576460752303423487
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: st_dev  = 66319
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: st_mode = 33152
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: st_uid  = 10293
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: st_gid  = 10293
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: st_size = 973098
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: calculated length = 973098
+06-23 15:23:45.545   778  6218 V MetadataRetrieverClient: player type = 4
+06-23 15:23:45.546  5987  5987 D HidDeviceService: handleMessage(): msg.what=8
+06-23 15:23:45.547   674   674 I DrmManagerService(Native): value of perm = 2 return true from DRM FW
+06-23 15:23:45.548   674   674 E SEC_DRM_PLUGIN_Omafl: OmaPlugin::onOpenDecryptSession(fd)::Drm2IsDrmFileByExtFd::file is NOT DRM by extension
+06-23 15:23:45.550   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.551   778  6218 D StagefrightMetadataRetriever: FileSource remote
+06-23 15:23:45.558   767  1407 I MediaExtractorFactory: Created an extractor 'SECMPEG4Extractor' with confidence 0.41
+06-23 15:23:45.559   778  6218 V MetadataRetrieverClient: setDataSource(fd) return(0)
+06-23 15:23:45.559 13396  3770 V MediaMetadataRetriever: setDataSource(fd) return(0)
+06-23 15:23:45.559 13396  3770 V MediaMetadataRetriever: extractMetadata(18)
+06-23 15:23:45.560   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.562 13396  3770 V MediaMetadataRetriever: extractMetadata(19)
+06-23 15:23:45.562   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.563 13396  3770 V MediaMetadataRetriever: extractMetadata(24)
+06-23 15:23:45.563   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.563 13396  3770 V MediaMetadataRetriever: extractMetadata(36)
+06-23 15:23:45.563   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.563 13396  3770 V MediaMetadataRetriever: extractMetadata(35)
+06-23 15:23:45.564   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.564 13396  3770 V MediaMetadataRetriever: extractMetadata(9)
+06-23 15:23:45.564   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.564 13396  3770 V MediaMetadataRetriever: extractMetadata(20)
+06-23 15:23:45.564   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.564 13396  3770 V MediaMetadataRetriever: extractMetadata(23)
+06-23 15:23:45.565   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.565 13396  3770 V MediaMetadataRetriever: extractMetadata(5)
+06-23 15:23:45.565   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.565 13396  3770 V MediaMetadataRetriever: extractMetadata(16)
+06-23 15:23:45.565   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.565 13396  3770 V MediaMetadataRetriever: extractMetadata(4)
+06-23 15:23:45.565   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.566 13396  3770 V MediaMetadataRetriever: extractMetadata(25)
+06-23 15:23:45.566   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.566 13396  3770 V MediaMetadataRetriever: extractMetadata(32)
+06-23 15:23:45.566   778  6218 V MetadataRetrieverClient: extractMetadata
+06-23 15:23:45.567 13396  3770 V MediaMetadataRetriever: destructor
+06-23 15:23:45.567 13396  3770 V MediaMetadataRetriever: disconnect
+06-23 15:23:45.567   778  6218 V MetadataRetrieverClient: disconnect from pid 13396
+06-23 15:23:45.568   778  6218 V MetadataRetrieverClient: MetadataRetrieverClient destructor
+06-23 15:23:45.568   778  6218 V MetadataRetrieverClient: disconnect from pid 13396
+06-23 15:23:45.569 13396  3770 V NuMediaExtractor: NuMediaExtractor SANITIZED_CONTACT_NAME
+06-23 15:23:45.583   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.587   767  1407 I MediaExtractorFactory: Created an extractor 'SECMPEG4Extractor' with confidence 0.41
+06-23 15:23:45.600   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.608   767  2434 D MediaBufferGroup: creating MemoryDealer
+06-23 15:23:45.609 13396  3770 V NuMediaExtractor: selectTrack, track[0]: audio/mp4a-latm
+06-23 15:23:45.617   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.625 13396 31466 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.627 13396 31445 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.628 13396 31466 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.629 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19936915)
+06-23 15:23:45.629 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.630 13396 31466 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.636 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.643 13396  3770 D MediaCodecList: codecHandlesFormat: no format, so no extra checks
+06-23 15:23:45.644 13396  3770 D MediaCodecList: codecHandlesFormat: no format, so no extra checks
+06-23 15:23:45.645 13396  3770 I ACodec  :  [] Now uninitialized
+06-23 15:23:45.646 13396  4371 I ACodec  : [] onAllocateComponent
+06-23 15:23:45.648 13396  4371 I OMXClient: IOmx service obtained
+06-23 15:23:45.648   786  2225 I OMXStore: makeComponentInstance(OMX.Exynos.HEVC.Encoder) in android.hardwar process
+06-23 15:23:45.650   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.656   786  2225 D libexynosv4l2: try node: /dev/video6
+06-23 15:23:45.657   786  2225 D libexynosv4l2: try node: /dev/video7
+06-23 15:23:45.657   786  2225 I libexynosv4l2: node found for device s5p-mfc-enc: /dev/video7
+06-23 15:23:45.658   979  1533 D SensorService: Calling activate off 6
+06-23 15:23:45.658   566   566 I Sensors : PressureSensor old sensor_state 278563, new sensor_state : 1409591086956547 en : 0
+06-23 15:23:45.663   566   566 I Sensors : disable:: pressure_sensor(3)
+06-23 15:23:45.664  2069  4093 D SensorManager: unregisterListener
+06-23 15:23:45.669   786  2225 I libexynosv4l2: open video device /dev/video7
+06-23 15:23:45.671 13396  4371 I ACodec  : [OMX.Exynos.HEVC.Encoder] Now Loaded
+06-23 15:23:45.676 13396  3770 D VQApply : minquality: 1376x1824 outside of shaping range
+06-23 15:23:45.676 13396  3770 D MediaCodec: shapeMediaFormat: deltas(1): AMessage(what = 0x00000000) = {
+06-23 15:23:45.676 13396  3770 D MediaCodec:     int32_t android._encoding-quality-level = 0
+06-23 15:23:45.676 13396  3770 D MediaCodec:   }
+06-23 15:23:45.676 13396  4370 D MediaCodec: flushMediametrics
+06-23 15:23:45.677 13396  4371 I ACodec  : app-pid(13396)
+06-23 15:23:45.680 13396  4371 W OMXUtils: do not know color format 0x7f000011 = 2130706449
+06-23 15:23:45.681 13396  4371 W OMXUtils: do not know color format 0x10 = 16
+06-23 15:23:45.681 13396  4371 W OMXUtils: do not know color format 0x7f00a000 = 2130747392
+06-23 15:23:45.682 13396  4371 W OMXUtils: do not know color format 0x7f000789 = 2130708361
+06-23 15:23:45.685   566   920 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 89.000000, 10.000000, 17.000000, 19.000000, 26.000000, 50000.000000, 64000.000000
+06-23 15:23:45.686 13396  4371 I ACodec  : Success set VideoMinQP(0/0/0) VideoMaxQP(50/50/50)
+06-23 15:23:45.688 13396  4371 I ACodec  : setupVideoEncoder succeeded
+06-23 15:23:45.688 13396  4371 I ACodec  : [OMX.Exynos.HEVC.Encoder] configure, AMessage : AMessage(what = 'conf', target = 41) = {
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t color-transfer = 3
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t color-format = 2130708361
+06-23 15:23:45.688 13396  4371 I ACodec  :   float i-frame-interval = 1.000000
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t level = 64
+06-23 15:23:45.688 13396  4371 I ACodec  :   string mime = "video/hevc"
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t profile = 1
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t width = 1376
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t bitrate = 9891551
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t color-range = 2
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t frame-rate = 30
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t color-standard = 1
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t height = 1824
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t android._encoding-quality-level = 0
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t flags = 1
+06-23 15:23:45.688 13396  4371 I ACodec  :   int32_t encoder = 1
+06-23 15:23:45.688 13396  4371 I ACodec  : }
+06-23 15:23:45.689 13396  4371 W OMXUtils: do not know color format 0x7f000789 = 2130708361
+06-23 15:23:45.689   786  2225 E OMXNodeInstance: getConfig(0xe8984680:Exynos.HEVC.Encoder, ConfigLatency(0x6f800005)) ERROR: UnsupportedIndex(0x8000101a)
+06-23 15:23:45.691   786  2225 E OMXNodeInstance: getConfig(0xe8984680:Exynos.HEVC.Encoder, ConfigAndroidIntraRefresh(0x6f60000a)) ERROR: UnsupportedIndex(0x8000101a)
+06-23 15:23:45.693   420   429 I servicemanager: Found vendor.samsung.frameworks.codecsolution.ISehCodecSolution/default in framework VINTF manifest.
+06-23 15:23:45.694   979  4319 D SehCodecSolutionService: updateMediaStatisticsData: (action=1@1986621044;category=1@1986621044;label=1936222261@1986621044)
+06-23 15:23:45.694   979  4319 D CodecSolution_MediaStatisticsData: MediaStatisticsData: action=1@1986621044;category=1@1986621044;label=1936222261@1986621044
+06-23 15:23:45.694   979  4319 D CodecSolution_MediaStatisticsData: Category.valueOf: 1
+06-23 15:23:45.694   979  4319 D CodecSolution_MediaStatisticsData: Action.valueOf: 1
+06-23 15:23:45.695   979  4319 D CodecSolution_MediaStatisticsData: Label.valueOf: 0x73686835
+06-23 15:23:45.695   979  4319 D CodecSolution_MediaStatisticsData: category: VENC
+06-23 15:23:45.695   979  4319 D CodecSolution_MediaStatisticsData: action: INSTANTIATE
+06-23 15:23:45.695   979  4319 D CodecSolution_MediaStatisticsData: label: SEC_HW_H265
+06-23 15:23:45.695   979   979 D SehCodecSolutionService: handleMessage : 900
+06-23 15:23:45.695   979   979 D SehCodecSolutionService: event : VENC
+06-23 15:23:45.695   979   979 D CodecSolution_Logging: dma : true, feature: VENC, extra: SEC_HW_H265, value: -1
+06-23 15:23:45.695   979   979 D CodecSolution_Logging: insert diagmon log
+06-23 15:23:45.695   979   979 D CodecSolution_Logging: permission granted
+06-23 15:23:45.695   979   979 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1242 vendor.samsung.frameworks.codecsolution.Logging.insertDiagmonLog:78 vendor.samsung.frameworks.codecsolution.Logging.insertLog:54 vendor.samsung.frameworks.codecsolution.Logging.insertLog:46 vendor.samsung.frameworks.codecsolution.SehCodecSolutionService$1.handleMessage:212 
+06-23 15:23:45.697 13396  3770 E EJ3     : reading error with key bitrate-mode, from {color-transfer=3, color-format=2130708361, i-frame-interval=1.0, level=64, mime=video/hevc, profile=1, width=1376, bitrate=9891551, color-range=2, frame-rate=30, color-standard=1, height=1824}
+06-23 15:23:45.698  3411  3411 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.startService:1886 android.content.ContextWrapper.startService:793 android.content.ContextWrapper.startService:793 com.sec.android.diagmonagent.sa.receiver.CFLogReceiver.a:4 com.sec.android.diagmonagent.sa.receiver.CFLogReceiver.onReceive:4 
+06-23 15:23:45.700   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.703   786  2225 D GraphicBufferSource: setting dataspace: 0x104, acquired=0
+06-23 15:23:45.703   786  2225 D GraphicBufferSource: requesting color aspects (R:2(Limited), P:1(BT709_5), M:1(BT709_5), T:3(SMPTE170M))
+06-23 15:23:45.707   786  4373 I EXYNOS_BASE_COMP: [0xe390c820][Exynos_OMX_ComponentStateSet] current:(OMX_StateLoaded) dest:(OMX_StateIdle)
+06-23 15:23:45.708   786  4373 D libexynosv4l2: try node: /dev/video6
+06-23 15:23:45.708   786  4373 D libexynosv4l2: try node: /dev/video7
+06-23 15:23:45.708   786  4373 I libexynosv4l2: node found for device s5p-mfc-enc: /dev/video7
+06-23 15:23:45.713 13396  4371 I ACodec  : [OMX.Exynos.HEVC.Encoder] Now Loaded->Idle
+06-23 15:23:45.717   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.719   786  4373 I libexynosv4l2: open video device /dev/video7
+06-23 15:23:45.727 13396 32207 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.729 13396 32206 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.730 13396   937 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.731 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.19960594)
+06-23 15:23:45.732 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.732 13396 32321 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.733 13396 32207 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.734   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.736 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.738   786  4373 I EXYNOS_BASE_COMP: [0xe390c820][Exynos_OMX_EventHandler] OMX_EventCmdComplete(OMX_StateIdle)
+06-23 15:23:45.740   786  4373 I EXYNOS_BASE_COMP: [0xe390c820][Exynos_OMX_ComponentStateSet] current:(OMX_StateIdle) dest:(OMX_StateExecuting)
+06-23 15:23:45.740   778  7087 W ResourceManagerService: Ignoring request to add new resource entry with value <= 0
+06-23 15:23:45.740   786  4373 I EXYNOS_BASE_COMP: [0xe390c820][Exynos_OMX_ComponentStateSet] OMX_EventCmdComplete(OMX_StateExecuting)
+06-23 15:23:45.743 13396  4371 I ACodec  : [OMX.Exynos.HEVC.Encoder] Now Idle->Executing
+06-23 15:23:45.743   778  7087 I ResourceManagerService: addMediaInfo pid 13396, add (width 1376 height 1824), lowPriority 0, allocated hw codec count, 1
+06-23 15:23:45.744   979  1533 D SehCodecSolutionService: getVideoRecordingParameter id : 3375844294659
+06-23 15:23:45.744   979  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.04336829]
+06-23 15:23:45.744   979  1276 D SemNscXgbMsL1: Probability - Real time: [0.04777525]
+06-23 15:23:45.744   979  1276 D SemNscXgbMsL1: Probability - Non real time: [0.932913]
+06-23 15:23:45.744   979  1276 D SemNscXgbMsL1: 1 sample inference time: 0.168692 msecs
+06-23 15:23:45.745   979  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.441846 msecs
+06-23 15:23:45.745   778  7087 I ResourceManagerService: getMediaResourceInfo (PID : 13396, clientID : 515115722864, non-secure-codec/video-codec:[]:1, 1376x1824 (fps:30) - sw codec : no, encoder : yes)
+06-23 15:23:45.745   979  1533 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.745 13396  4371 I ACodec  : [OMX.Exynos.HEVC.Encoder] Now Executing
+06-23 15:23:45.745   979  1533 V ResourceManagerHelper-JNI: notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.745   979  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.346116 msecs
+06-23 15:23:45.745 31325 31337 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.745 31325 31337 V ResourceManagerHelper-JNI: notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.745   979  1163 I SemMediaResourceHelper: onAdd
+06-23 15:23:45.746  3470  3470 I SemMediaResourceHelper: onAdd
+06-23 15:23:45.746 13396  4370 I MediaCodec: setCodecState state(0), called in 6
+06-23 15:23:45.746  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:45.746 31325 31346 I SemMediaResourceHelper: onAdd
+06-23 15:23:45.746   979  1533 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.746   979  1533 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.746 31325 31346 I DrmMediaResourceHelper: onAdd size = 1
+06-23 15:23:45.746   979  1163 I SemMediaResourceHelper: onState
+06-23 15:23:45.746  3470  3470 I SemMediaResourceHelper: onState
+06-23 15:23:45.746  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:45.748   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:45.748   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:45.749  1380  1380 D PrivacyDotViewController: scheduleUpdate: 
+06-23 15:23:45.749 31325 31337 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.749 31325 31337 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.750  1380  2430 D PrivacyDotViewController: processNextViewState: 
+06-23 15:23:45.750  1380  2430 D PrivacyDotViewController: resolveState ViewState(viewInitialized=true, havingInset=true, isEdgeActive=false, dotTopMargin=45, systemPrivacyEventIsActive=true, shadeExpanded=false, qsExpanded=false, portraitRect=Rect(0, 0 - 931, 117), landscapeRect=Rect(116, 0 - 2136, 72), upsideDownRect=Rect(0, 0 - 1068, 117), seascapeRect=Rect(0, 0 - 2136, 72), layoutRtl=false, rotation=1, height=72, cornerIndex=2, designatedCorner=android.widget.FrameLayout{3fa03e8 I.E...... ......ID 0,45-144,117 #7f0b067a app:id/privacy_dot_right_container})
+06-23 15:23:45.750 31325 31346 I SemMediaResourceHelper: onState
+06-23 15:23:45.750 31325 31346 I DrmMediaResourceHelper: onStateChanged size = 1
+06-23 15:23:45.750 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : truegetCodecState : 0getpid : 13396
+06-23 15:23:45.750   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.753   979  1533 V WindowManager: Relayout Window{21af3a9 u0 ScreenDecorOverlay}: viewVisibility=0 req=149x1008 d0
+06-23 15:23:45.757   979  1533 V WindowManager: Relayout hash=21af3a9, pid=1380: mAttrs={(0,0)(wrapxfill) gr=LEFT CENTER_HORIZONTAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-23 15:23:45.757   979  1533 V WindowManager:   fl=21800128
+06-23 15:23:45.757   979  1533 V WindowManager:   pfl=13000050
+06-23 15:23:45.757   979  1533 V WindowManager:   vsysui=100
+06-23 15:23:45.757   979  1533 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-23 15:23:45.758  1380  2430 I ViewRootImpl@44af5f7[ScreenDecorOverlay]: Relayout returned: old=(0,0,149,1080) new=(0,0,149,1080) req=(149,1008)0 dur=6 res=0x1 s={true 519931182784} ch=false fn=63
+06-23 15:23:45.758   979  4319 V WindowManager: Relayout Window{48aad22 u0 StatusBar}: viewVisibility=0 req=2280x72 d0
+06-23 15:23:45.760   979  4319 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=48aad22 StatusBar)/@0x4052678 - animation-leash of insets_animation)/@0xd3b1919
+06-23 15:23:45.760   979  4319 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{dae2aed android.os.BinderProxy@bcbed17})/@0xba2151, destroy=false, surface=Surface(name=48aad22 StatusBar)/@0x4052678
+06-23 15:23:45.761   979  4319 I WindowManager: Reparenting to leash, surface=Surface(name=48aad22 StatusBar)/@0x4052678, leashParent=Surface(name=WindowToken{dae2aed android.os.BinderProxy@bcbed17})/@0xba2151
+06-23 15:23:45.762   629  1738 I SurfaceFlinger: id=405 createSurf (0x0),-1 flag=24000, Surface(name=48aad22 StatusBar)/@0x4052678 - animation-leash of insets_animation#1
+06-23 15:23:45.762 13396  3770 V NuMediaExtractor: NuMediaExtractor SANITIZED_CONTACT_NAME
+06-23 15:23:45.763   979  4319 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=48aad22 StatusBar)/@0x4052678 - animation-leash of insets_animation)/@0x10395d8
+06-23 15:23:45.765   979  4319 V WindowManager: Relayout hash=48aad22, pid=1380: mAttrs={(0,0)(fillx72) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+06-23 15:23:45.765   979  4319 V WindowManager:   fl=81000008
+06-23 15:23:45.765   979  4319 V WindowManager:   pfl=13000000
+06-23 15:23:45.765   979  4319 V WindowManager:   bhv=DEFAULT naviIconColor=0
+06-23 15:23:45.765   979  4319 V WindowManager:   sfl=2000}
+06-23 15:23:45.766  1380  1380 I ViewRootImpl@147820a[StatusBar]: Relayout returned: old=(0,0,2280,72) new=(0,0,2280,72) req=(2280,72)0 dur=13 res=0x1 s={true 519930624704} ch=false fn=1750
+06-23 15:23:45.767   629   629 I Layer   : id=404 removeFromCurrentState Surface(name=48aad22 StatusBar)/@0x4052678 - animation-leash of insets_animation#0 (114)
+06-23 15:23:45.767   629   629 I SurfaceFlinger: id=404 Removed Surface(name=48aad22 StatusBar)/@0x4052678 - animation-leash of insets_animation#0 (114)
+06-23 15:23:45.768   629   629 I Layer   : id=404 Destroyed Surface(name=48aad22 StatusBar)/@0x4052678 - animation-leash of insets_animation#0
+06-23 15:23:45.775   979  1497 V WindowManager: Relayout Window{d062165 u0 ScreenDecorOverlayBottom}: viewVisibility=0 req=195x1008 d0
+06-23 15:23:45.778   979  1497 V WindowManager: Relayout hash=d062165, pid=1380: mAttrs={(0,0)(wrapxfill) gr=RIGHT CENTER_HORIZONTAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-23 15:23:45.778   979  1497 V WindowManager:   fl=21800128
+06-23 15:23:45.778   979  1497 V WindowManager:   pfl=13000050
+06-23 15:23:45.778   979  1497 V WindowManager:   vsysui=100
+06-23 15:23:45.778   979  1497 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-23 15:23:45.779  1380  2430 I ViewRootImpl@de34ac9[ScreenDecorOverlayBottom]: Relayout returned: old=(2085,0,2280,1080) new=(2085,0,2280,1080) req=(195,1008)0 dur=21 res=0x1 s={true 519931034544} ch=false fn=61
+06-23 15:23:45.787  3914  3914 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_STATUS_BAR on com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+06-23 15:23:45.790   767  2434 I MediaExtractorFactory: Created an extractor 'SECMPEG4Extractor' with confidence 0.41
+06-23 15:23:45.795 13396  3770 V NuMediaExtractor: track of type 'video/hevc' does not publish bitrate
+06-23 15:23:45.800   767  2434 D MediaBufferGroup: creating MemoryDealer
+06-23 15:23:45.801   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.803 13396  3770 V NuMediaExtractor: selectTrack, track[1]: video/hevc
+06-23 15:23:45.803  3914  3914 D FlutterJNI: Sending viewport metrics to the engine.
+06-23 15:23:45.817   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.826 13396  3770 D MediaCodecList: codecHandlesFormat: no format, so no extra checks
+06-23 15:23:45.828 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.829 13396 32206 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.830 13396 32206 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.831 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.1998381)
+06-23 15:23:45.832 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.832 13396 32295 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.833 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.834   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.837 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.839 13396  3770 D MediaCodecList: codecHandlesFormat: no format, so no extra checks
+06-23 15:23:45.841 13396  3770 I ACodec  :  [] Now uninitialized
+06-23 15:23:45.842 13396  4387 I ACodec  : [] onAllocateComponent
+06-23 15:23:45.843 13396  4387 I OMXClient: IOmx service obtained
+06-23 15:23:45.843   786  2225 I OMXStore: makeComponentInstance(OMX.Exynos.hevc.dec) in android.hardwar process
+06-23 15:23:45.848   786  2225 D libexynosv4l2: try node: /dev/video6
+06-23 15:23:45.848   786  2225 I libexynosv4l2: node found for device s5p-mfc-dec: /dev/video6
+06-23 15:23:45.849   786  2225 I libexynosv4l2: open video device /dev/video6
+06-23 15:23:45.850 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] Now Loaded
+06-23 15:23:45.855 13396  4385 D MediaCodec: flushMediametrics
+06-23 15:23:45.856 13396  4385 D SurfaceUtils: connecting to surface 0x790e4cc930, reason connectToSurface
+06-23 15:23:45.856 13396  4385 I MediaCodec: [OMX.Exynos.hevc.dec] setting surface generation to 13717507
+06-23 15:23:45.856 13396  4385 D SurfaceUtils: disconnecting from surface 0x790e4cc930, reason connectToSurface(reconnect)
+06-23 15:23:45.856 13396  4385 D SurfaceUtils: connecting to surface 0x790e4cc930, reason connectToSurface(reconnect)
+06-23 15:23:45.858 13396  4387 I ACodec  : app-pid(13396)
+06-23 15:23:45.858   420   429 I servicemanager: Found vendor.samsung.frameworks.codecsolution.ISehCodecSolution/default in framework VINTF manifest.
+06-23 15:23:45.859   979   979 D SehCodecSolutionService: handleMessage : 202
+06-23 15:23:45.860   420   430 I servicemanager: Found vendor.samsung.frameworks.codecsolution.ISehCodecSolution/default in framework VINTF manifest.
+06-23 15:23:45.860   979   979 I SehCodecSolutionService: pid(13396) pkg(com.facebook.stella)
+06-23 15:23:45.861   979  1497 D SehCodecSolutionService: getH2SCAllowlistStatus : procName(com.facebook.stella), chipVendor(slsi)
+06-23 15:23:45.861   979  1497 D CodecSolution_SCPMV2Helper: isInH2SCAllowlist : procName(com.facebook.stella), chipVendor(slsi)
+06-23 15:23:45.862   786  2225 E OMXNodeInstance: getParameter(0xe8981dd0:Exynos.hevc.dec, ??(0x6f600011)) ERROR: UnsupportedIndex(0x8000101a)
+06-23 15:23:45.864 13396  4387 E ACodec  : failed to set min buffer size to 7340052 (is still 7340032)
+06-23 15:23:45.864 13396  4387 I ACodec  : Success to set 'Reorder Mode'
+06-23 15:23:45.865   786  3525 E OMXNodeInstance: getConfig(0xe8981dd0:Exynos.hevc.dec, ConfigCommonOutputCrop(0x700000f)) ERROR: NotReady(0x80001010)
+06-23 15:23:45.867   420   430 I servicemanager: Found vendor.samsung.frameworks.codecsolution.ISehCodecSolution/default in framework VINTF manifest.
+06-23 15:23:45.868   979  1497 D SehCodecSolutionService: updateMediaStatisticsData: (action=1@1986621044;category=2@1986621044;label=1936222261@1986621044)
+06-23 15:23:45.868   979  1497 D CodecSolution_MediaStatisticsData: MediaStatisticsData: action=1@1986621044;category=2@1986621044;label=1936222261@1986621044
+06-23 15:23:45.869   979  1497 D CodecSolution_MediaStatisticsData: Category.valueOf: 2
+06-23 15:23:45.869   979  1497 D CodecSolution_MediaStatisticsData: Action.valueOf: 1
+06-23 15:23:45.869   979  1497 D CodecSolution_MediaStatisticsData: Label.valueOf: 0x73686835
+06-23 15:23:45.869   979  1497 D CodecSolution_MediaStatisticsData: category: VDEC
+06-23 15:23:45.869   979  1497 D CodecSolution_MediaStatisticsData: action: INSTANTIATE
+06-23 15:23:45.869   979  1497 D CodecSolution_MediaStatisticsData: label: SEC_HW_H265
+06-23 15:23:45.869   979   979 D SehCodecSolutionService: handleMessage : 900
+06-23 15:23:45.870   979   979 D SehCodecSolutionService: event : VDEC
+06-23 15:23:45.870   979   979 D CodecSolution_Logging: dma : true, feature: VDEC, extra: SEC_HW_H265, value: -1
+06-23 15:23:45.870   979   979 D CodecSolution_Logging: insert diagmon log
+06-23 15:23:45.870   979   979 D CodecSolution_Logging: permission granted
+06-23 15:23:45.870   979   979 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1242 vendor.samsung.frameworks.codecsolution.Logging.insertDiagmonLog:78 vendor.samsung.frameworks.codecsolution.Logging.insertLog:54 vendor.samsung.frameworks.codecsolution.Logging.insertLog:46 vendor.samsung.frameworks.codecsolution.SehCodecSolutionService$1.handleMessage:212 
+06-23 15:23:45.875 13396  3770 E EJ3     : reading error with key color-format, from {isDMCMMExtractor=1, track-id=2, level=65536, mime=video/hevc, frame-count=1800, profile=1, language=```, color-standard=1, display-width=1728, track-fourcc=828601960, color-transfer=3, durationUs=60000233, display-height=2304, width=1728, color-range=2, max-input-size=7340052, frame-rate=30, height=2304, csd-0=java.nio.HeapByteBuffer[pos=0 lim=101 cap=101]}
+06-23 15:23:45.877 13396  3770 E EJ3     : reading error with key bitrate, from {isDMCMMExtractor=1, track-id=2, level=65536, mime=video/hevc, frame-count=1800, profile=1, language=```, color-standard=1, display-width=1728, track-fourcc=828601960, color-transfer=3, durationUs=60000233, display-height=2304, width=1728, color-range=2, max-input-size=7340052, frame-rate=30, height=2304, csd-0=java.nio.HeapByteBuffer[pos=0 lim=101 cap=101]}
+06-23 15:23:45.877 13396  3770 E EJ3     : reading error with key bitrate-mode, from {isDMCMMExtractor=1, track-id=2, level=65536, mime=video/hevc, frame-count=1800, profile=1, language=```, color-standard=1, display-width=1728, track-fourcc=828601960, color-transfer=3, durationUs=60000233, display-height=2304, width=1728, color-range=2, max-input-size=7340052, frame-rate=30, height=2304, csd-0=java.nio.HeapByteBuffer[pos=0 lim=101 cap=101]}
+06-23 15:23:45.878 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] Now Loaded->Idle
+06-23 15:23:45.879   786  4389 I EXYNOS_BASE_COMP: [0xe390e670][Exynos_OMX_ComponentStateSet] current:(OMX_StateLoaded) dest:(OMX_StateIdle)
+06-23 15:23:45.879  3411  3411 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.startService:1886 android.content.ContextWrapper.startService:793 android.content.ContextWrapper.startService:793 com.sec.android.diagmonagent.sa.receiver.CFLogReceiver.a:4 com.sec.android.diagmonagent.sa.receiver.CFLogReceiver.onReceive:4 
+06-23 15:23:45.880   786  4389 D libexynosv4l2: try node: /dev/video6
+06-23 15:23:45.880   786  4389 I libexynosv4l2: node found for device s5p-mfc-dec: /dev/video6
+06-23 15:23:45.880   786  4389 I libexynosv4l2: open video device /dev/video6
+06-23 15:23:45.884   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.901   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.912 13396  4387 D SurfaceUtils: set up nativeWindow 0x790e4cc930 for 1728x2304, color 0x105, rotation 0, usage 0x402900
+06-23 15:23:45.913 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] configureOutputBuffersFromNativeWindow setBufferCount : 9, minUndequeuedBuffers : 5
+06-23 15:23:45.914   786  4389 I EXYNOS_BASE_COMP: [0xe390e670][Exynos_OMX_EventHandler] OMX_EventCmdComplete(OMX_StateIdle)
+06-23 15:23:45.915   786  4389 I EXYNOS_BASE_COMP: [0xe390e670][Exynos_OMX_ComponentStateSet] current:(OMX_StateIdle) dest:(OMX_StateExecuting)
+06-23 15:23:45.915   786  4389 I EXYNOS_BASE_COMP: [0xe390e670][Exynos_OMX_ComponentStateSet] OMX_EventCmdComplete(OMX_StateExecuting)
+06-23 15:23:45.915 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] Now Idle->Executing
+06-23 15:23:45.915 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] Now Executing
+06-23 15:23:45.915   778  7087 W ResourceManagerService: Ignoring request to add new resource entry with value <= 0
+06-23 15:23:45.916   778  7087 I ResourceManagerService: addMediaInfo pid 13396, add (width 1728 height 2304), lowPriority 0, allocated hw codec count, 2
+06-23 15:23:45.916   778  7087 I ResourceManagerService: getMediaResourceInfo (PID : 13396, clientID : 515115722864, non-secure-codec/video-codec:[]:1, 1376x1824 (fps:30) - sw codec : no, encoder : yes)
+06-23 15:23:45.916   778  7087 I ResourceManagerService: getMediaResourceInfo (PID : 13396, clientID : 515116765136, non-secure-codec/video-codec:[]:1, 1728x2304 (fps:30) - sw codec : no, encoder : no)
+06-23 15:23:45.916  3470  3470 I SemMediaResourceHelper: onAdd
+06-23 15:23:45.917  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:45.917 31325 31337 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.917 31325 31337 V ResourceManagerHelper-JNI: notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.917 31325 31346 I SemMediaResourceHelper: onAdd
+06-23 15:23:45.916   979  1533 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.917 31325 31346 I DrmMediaResourceHelper: onAdd size = 2
+06-23 15:23:45.917   979  1533 V ResourceManagerHelper-JNI: notify eventType : 1, ext1 : 0, ext2 : 0
+06-23 15:23:45.917   979  1163 I SemMediaResourceHelper: onAdd
+06-23 15:23:45.917 13396  4385 I MediaCodec: setCodecState state(0), called in 6
+06-23 15:23:45.917 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] calling emptyBuffer 1 w/ codec specific data, size : 101
+06-23 15:23:45.918   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.918 31325 31337 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.918 31325 31337 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.918 31325 31346 I SemMediaResourceHelper: onState
+06-23 15:23:45.918 31325 31346 I DrmMediaResourceHelper: onStateChanged size = 2
+06-23 15:23:45.918   979  1533 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.918   979  1533 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.918 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : truegetCodecState : 0getpid : 13396
+06-23 15:23:45.919   979  1163 I SemMediaResourceHelper: onState
+06-23 15:23:45.919 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : falsegetCodecState : 0getpid : 13396
+06-23 15:23:45.923   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:45.923  3470  3470 I SemMediaResourceHelper: onState
+06-23 15:23:45.924  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:45.925   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:45.927   786   902 I EXYNOS_BASE_PORT: [0xe390e670][Exynos_OMX_EmptyThisBuffer] bufferHeader(CSD):0xe8d414b0, nAllocLen:7340032, nFilledLen:101, nOffset:0, nFlags:90
+06-23 15:23:45.930 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.932 13396 32202 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.932 13396 32249 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:45.933   786  4397 D ExynosVideoDecoder: MFC_Decoder_ExtensionEnqueue_Inbuf: DATA with flags(0x20000000)
+06-23 15:23:45.933 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20007724)
+06-23 15:23:45.934 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.935 13396 32320 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:45.937 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:45.943 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:45.961   786  4389 I EXYNOS_BASE_PORT: [0xe390e670][Exynos_OMX_PortDisableProcess] Before disabling output port, do flush
+06-23 15:23:45.962 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] Now handling output port settings change
+06-23 15:23:45.968   786  4389 I EXYNOS_BASE_PORT: [0xe390e670][Exynos_OMX_PortDisableProcess] Disable output Port
+06-23 15:23:45.973   786  4397 D ExynosVideoDecoder: MFC_Decoder_ExtensionEnqueue_Inbuf: DATA with flags(0x20000000)
+06-23 15:23:45.975   786  4389 I EXYNOS_BASE_COMP: [0xe390e670][Exynos_OMX_EventHandler] OMX_EventCmdComplete(Disable/output port)
+06-23 15:23:45.977 13396  4387 D SurfaceUtils: set up nativeWindow 0x790e4cc930 for 1728x2304, color 0x105, rotation 0, usage 0x402900
+06-23 15:23:45.977 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] configureOutputBuffersFromNativeWindow setBufferCount : 13, minUndequeuedBuffers : 5
+06-23 15:23:45.978   786  4389 I EXYNOS_BASE_PORT: [0xe390e670][Exynos_OMX_PortEnableProcess] Enable output Port
+06-23 15:23:45.979   786  4389 I EXYNOS_BASE_COMP: [0xe390e670][Exynos_OMX_EventHandler] OMX_EventCmdComplete(Enable/output port)
+06-23 15:23:45.984   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:45.985   786  4395 I EXYNOS_BASE_PORT: [0xe390e670][Exynos_OMX_InputBufferReturn] bufferHeader(CSD): 0xe8d414b0
+06-23 15:23:45.988 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] Now Executing
+06-23 15:23:45.990 13396  4387 I ACodec  : [OMX.Exynos.hevc.dec] OMX_EventPortSettingsChanged 0x7f030010
+06-23 15:23:45.999 13396  4385 I MediaCodec: setCodecState state(1), called in 6
+06-23 15:23:45.999  3470  3470 I SemMediaResourceHelper: onState
+06-23 15:23:45.999   979  1533 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.999   979  1533 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.999 31325 31337 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.999 31325 31337 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:45.999   979  1163 I SemMediaResourceHelper: onState
+06-23 15:23:45.999  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:46.000 31325 31346 I SemMediaResourceHelper: onState
+06-23 15:23:46.000 31325 31346 I DrmMediaResourceHelper: onStateChanged size = 2
+06-23 15:23:46.000 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : truegetCodecState : 0getpid : 13396
+06-23 15:23:46.000 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : falsegetCodecState : 1getpid : 13396
+06-23 15:23:46.001   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:46.001   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.023 13396  4400 I FileSource: [Read time] time (12140) us > 10000 us, request_size (35526), read_size (35526) offset(247460) mOffset(0)
+06-23 15:23:46.033 13396 32588 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.034 13396 32249 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.034   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.036 13396 32320 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.036  1363  1363 I wpa_supplicant: Heartbeat 800
+06-23 15:23:46.038 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20031403)
+06-23 15:23:46.039 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.040 13396 32588 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.042 13396 32204 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.047 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.064 13396  4383 I CP      : I0623 15:23:46.063995 504894770352 IglDeviceFactoryOpenGl.cpp:124 Successfully created IGL OpenGL device from the current raw OpenGL context!
+06-23 15:23:46.064 13396  4383 I CP      : I0623 15:23:46.064686 504894770352 IglGlobalState.cpp:218 IglGlobalState: mapping context id: 0x77ce8099b8 to thread id: 504894770352
+06-23 15:23:46.082   571  4351 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 513625
+06-23 15:23:46.085   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.101   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.118   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.134 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20054619)
+06-23 15:23:46.134 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.137 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.140   566   920 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 89.000000, 10.000000, 17.000000, 19.000000, 26.000000, 50000.000000, 64000.000000
+06-23 15:23:46.141 13396 32247 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.148 13396 32320 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.149 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.156 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.180   519   519 E audit   : type=1400 audit(1782221026.171:1120): avc:  denied  { getattr } for  pid=3914 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:23:46.180   519   519 E audit   : type=1300 audit(1782221026.171:1120): arch=c00000b7 syscall=44 success=no exit=-13 a0=a2 a1=7702b88c60 a2=7702b88db4 a3=1026671 items=0 ppid=539 pid=3914 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-23 15:23:46.180   519   519 E audit   : type=1327 audit(1782221026.171:1120): proctitle="com.amaia23.hydracam"
+06-23 15:23:46.185   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.188   519   519 E audit   : type=1400 audit(1782221026.183:1121): avc:  denied  { getattr } for  pid=3914 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:23:46.190   786   902 D GraphicBufferSource: got buffer with new dataSpace #104
+06-23 15:23:46.199   786  4374 D OMXNodeInstance: Codec resolved it to (R:2(??), P:1(??), M:1(??), T:3(??)) err=0(NO_ERROR)
+06-23 15:23:46.200 13396  4371 D ACodec  : dataspace changed to 0x10c10000 (R:2(Limited), P:1(BT709_5), M:1(BT709_5), T:3(SMPTE170M)) (R:2(Limited), S:1(BT709), T:3(SMPTE_170M))
+06-23 15:23:46.202   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.219   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.235 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.235 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.236 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.238 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20078067)
+06-23 15:23:46.239 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.241 13396   937 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.248   979  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.035336226]
+06-23 15:23:46.249   979  1276 D SemNscXgbMsL1: Probability - Real time: [0.03598568]
+06-23 15:23:46.249   979  1276 D SemNscXgbMsL1: Probability - Non real time: [0.905044]
+06-23 15:23:46.249   979  1276 D SemNscXgbMsL1: 1 sample inference time: 1.411962 msecs
+06-23 15:23:46.250 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.250   979  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.897884 msecs
+06-23 15:23:46.250 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.251   979  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.658115 msecs
+06-23 15:23:46.255  1380  1380 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:1
+06-23 15:23:46.257  1380  1380 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-23 15:23:46.257  1380  1380 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-23 15:23:46.257  1380  1380 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-23 15:23:46.302   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.319   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.334 13396   936 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.334 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.334 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.336   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.336 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.19632381301436044}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20101516)
+06-23 15:23:46.340 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.341 13396 32321 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.342 13396   938 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.347 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.352   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.402   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.415 13396  4399 W ffmpeg  : [mp4 @ 0x78ffd17c40] Using AVStream.codec.time_base as a timebase hint to the muxer is deprecated. Set AVStream.time_base instead.
+06-23 15:23:46.419   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.420 13396  4370 I MediaCodec: setCodecState state(1), called in 6
+06-23 15:23:46.422 13396 31442 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.423 13396 32249 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.424   979  1533 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:46.424 31325 31337 V ResourceManagerHelper-JNI: JNIMediaResourceHelper::notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:46.424   979  1533 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:46.424 31325 31337 V ResourceManagerHelper-JNI: notify eventType : 3, ext1 : 0, ext2 : 0
+06-23 15:23:46.425 31325 31346 I SemMediaResourceHelper: onState
+06-23 15:23:46.425 31325 31346 I DrmMediaResourceHelper: onStateChanged size = 2
+06-23 15:23:46.425 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : truegetCodecState : 1getpid : 13396
+06-23 15:23:46.425   979  1163 I SemMediaResourceHelper: onState
+06-23 15:23:46.425 31325 31346 I DrmMediaResourceHelper: resource type: 2,,,isSecured :  falseIsEncoder : falsegetCodecState : 1getpid : 13396
+06-23 15:23:46.425  3470  3470 I SemMediaResourceHelper: onState
+06-23 15:23:46.425  3470  3470 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3470@19, type = 1090523139
+06-23 15:23:46.428   571   593 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 6088324  [3470 / 19]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-23 15:23:46.429 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.199948908806184}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20101516)
+06-23 15:23:46.429 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.431 13396 31445 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.432 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.434 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.434 13396 32249 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.434 13396 30843 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.434 13396 30843 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.435 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.199948908806184}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20124732)
+06-23 15:23:46.436 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.436 13396   936 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.441 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.450 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.486   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.502   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.519   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.521   462   462 D io_stats: !@   8,0 r 714346 28973904 w 149638 30033596 d 0 0 f 0 0 iot 226504 0 th 0 0 0 pt 0 inp 0 0 8034.885
+06-23 15:23:46.535 13396   937 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.535 13396   938 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.536 13396   937 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.537 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.199948908806184}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20147948)
+06-23 15:23:46.545 13396   938 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.546   566   920 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 17.000000, 19.000000, 26.000000, 50000.000000, 64000.000000
+06-23 15:23:46.546 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.547  1380  1380 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+06-23 15:23:46.548 13396   936 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.552 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.586   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.603   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.619   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.635 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.635 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.199948908806184}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20171395)
+06-23 15:23:46.635 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.636 13396 32252 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.637 13396 29283 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.641 13396 32588 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.643 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.648 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.653   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.690   582   644 I Unihal  : GlobalMonitor.cpp: PrintInfo: 303: S(4) FWK L(  6)    79/M(T)/R(1)/B(0/1),    80/M(F)/R(0)/B(0/1),    81/M(F)/R(0)/B(0/1),    82/M(F)/R(0)/B(0/1),    83/M(F)/R(0)/B(0/1),    84/M(F)/R(0)/B(0/1), 
+06-23 15:23:46.691   582   644 I Unihal  : GlobalMonitor.cpp: PrintInfo: 310:      HAL L(  6)    79/M(T)/R(1)/B(0/1),    80/M(F)/R(0)/B(0/1),    81/M(F)/R(0)/B(0/1),    82/M(F)/R(0)/B(0/1),    83/M(F)/R(0)/B(0/1),    84/M(F)/R(0)/B(0/1), 
+06-23 15:23:46.703   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.720   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.737 13396 32296 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.737 13396 29280 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.741 13396   938 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.743 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.199948908806184}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20194843)
+06-23 15:23:46.744 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.747 13396 29280 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.748 13396   938 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.751   979  1533 I EDMNativeHelperService: isCameraEnabled
+06-23 15:23:46.753   979  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.03149193]
+06-23 15:23:46.753 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.753   979  1276 D SemNscXgbMsL1: Probability - Real time: [0.021637967]
+06-23 15:23:46.753   979  1276 D SemNscXgbMsL1: Probability - Non real time: [0.92330414]
+06-23 15:23:46.754   979  1276 D SemNscXgbMsL1: 1 sample inference time: 0.428154 msecs
+06-23 15:23:46.755   979  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.924808 msecs
+06-23 15:23:46.755   979  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.832346 msecs
+06-23 15:23:46.756   979  1533 D EDMNativeHelper: isCameraEnabled
+06-23 15:23:46.759 13396   939 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.759 13396 32322 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.760   979  1533 D EDMNativeHelper: checking for camera in EnterpriseDeviceManagerService
+06-23 15:23:46.760   979  1533 D EnterpriseDeviceManagerService: isCameraEnabledNative
+06-23 15:23:46.760   979  1533 D EnterpriseDeviceManagerService: checking for camera in restriction policy
+06-23 15:23:46.763   979  1533 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10367) cxtInfo.mContainerId(0)
+06-23 15:23:46.763 13396   939 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.765 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20494525039149702}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20194843)
+06-23 15:23:46.766 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.767 13396   937 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.769   723  4207 D CameraDeviceClient: vr service found
+06-23 15:23:46.770   723  4207 I CameraDeviceClient: isCameraBlockedByHMT: usbpd_ids: 0000:0000, is camera blocking device: false
+06-23 15:23:46.773 13396 32322 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.773 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.787   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.803   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.820   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.838 13396 32322 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.842 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20494525039149702}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20218524)
+06-23 15:23:46.843 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.844 13396 30843 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.850 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.852 13396   938 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.853 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.920   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.937   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.942 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20494525039149702}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.2024174)
+06-23 15:23:46.944 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.944 13396 25136 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.946 13396 32249 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.949 13396 32322 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:46.950 13396 32206 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:46.952 13396 32249 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:46.954 13396  4400 I FileSource: [Read time] time (17544) us > 10000 us, request_size (40365), read_size (40365) offset(1398484) mOffset(0)
+06-23 15:23:46.957 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:46.987   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:46.997   566   920 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 89.000000, 10.000000, 17.000000, 19.000000, 26.000000, 50000.000000, 64000.000000
+06-23 15:23:47.004   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.021   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.042 13396 32249 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.043 13396   939 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.044 13396   939 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.045 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20494525039149702}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20265187)
+06-23 15:23:47.045 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.046 13396 32322 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.049 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.051 13396 32249 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.073 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20849808416352913}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20265187)
+06-23 15:23:47.074 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.075 13396   936 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.075 13396 32252 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.077 13396 25136 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.078 13396 32321 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.079 13396 32252 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.082 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.087   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.104   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.121   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.143 13396 32322 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.144 13396 32321 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.146 13396 32322 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.157 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20849808416352913}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.202891)
+06-23 15:23:47.158 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.159 13396 32322 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.165 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.191   519   519 E audit   : type=1400 audit(1782221027.183:1155): avc:  denied  { getattr } for  pid=3914 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:23:47.191   519   519 E audit   : type=1300 audit(1782221027.183:1155): arch=c00000b7 syscall=44 success=no exit=-13 a0=9a a1=7702b88c60 a2=7702b88db4 a3=1026671 items=0 ppid=539 pid=3914 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-23 15:23:47.191   519   519 E audit   : type=1327 audit(1782221027.183:1155): proctitle="com.amaia23.hydracam"
+06-23 15:23:47.205   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.211   519   519 E audit   : type=1400 audit(1782221027.203:1156): avc:  denied  { getattr } for  pid=3914 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-23 15:23:47.221   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.238   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.249 13396 32322 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.250 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20849808416352913}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.2031278)
+06-23 15:23:47.251 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.251 13396 30849 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.254 13396 31442 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.262   979  1276 D SemNscXgbMsL1: Probability - Cloud gaming: [0.033862866]
+06-23 15:23:47.262   979  1276 D SemNscXgbMsL1: Probability - Real time: [0.03142635]
+06-23 15:23:47.262 13396 32321 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.262   979  1276 D SemNscXgbMsL1: Probability - Non real time: [0.9179973]
+06-23 15:23:47.262   979  1276 D SemNscXgbMsL1: 1 sample inference time: 0.466654 msecs
+06-23 15:23:47.263   979  1276 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 0.959539 msecs
+06-23 15:23:47.264   979  1276 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 0.711808 msecs
+06-23 15:23:47.266 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.288   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.305   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.322   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.345 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.20849808416352913}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20336229)
+06-23 15:23:47.346 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.348 13396 31442 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.349 13396 32296 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.349 13396   937 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.353 13396 32296 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.380 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.388   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.405   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.417 13396 32321 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.417 13396 32252 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.418 13396 32321 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.422   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.422 13396   936 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.423 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.21205283710392164}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20336229)
+06-23 15:23:47.423 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.426 13396 32297 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.431 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.449   566   920 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 17.000000, 19.000000, 26.000000, 50000.000000, 64000.000000
+06-23 15:23:47.452 13396 30843 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.454 13396   938 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.456 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.21205283710392164}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20360838)
+06-23 15:23:47.456 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.464 13396 32295 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.468 13396 30843 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.469 13396 32297 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.471 13396 13396 I DeviceControlCenterRepository: Ranked device list: [6F:F2:A3:7C:16:D6]
+06-23 15:23:47.471  1363  1363 I wpa_supplicant: wlan0: GAS-QUERY-DONE addr=bc:f8:7e:c2:5a:5e dialog_token=165 freq=2437 status_code=0 result=TIMEOUT
+06-23 15:23:47.473  1363  1363 I wpa_supplicant: wlan0: ANQP-QUERY-DONE addr=bc:f8:7e:c2:5a:5e result=FAILURE
+06-23 15:23:47.505   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.521  2332  2394 I RequestManager_FLP: onOpChanged, op=0 / packageName=com.facebook.stella
+06-23 15:23:47.522   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.539   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-23 15:23:47.557 13396 32321 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.559 13396 13396 I ImportStatusViewModel: Import Status Updated [175420914]: ImportStatus(deviceId=6F:F2:A3:7C:16:D6, incrementalFetchProgress=true, importing=true, complete=false, blocked=false, anyStarted=true, totalPhotos=1, totalVideos=6, ongoingPhotos=1, ongoingVideos=6, processedPhotos=1, processedVideos=2, fetchedPhotos=1, fetchedVideos=6, corruptedMedia=0, corruptedOrFailedMedia=0, unsatisfiedConditions=ImportConditionsList(conditionsList=[], hashCode=0, forceUpdateVersion=0), latestPendingCaptureTimestampMs=1782165709989, latestPendingCaptureThumbnailFilePaths=[/data/user/0/com.facebook.stella/files/media/18/18_photo_115_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/16/16_photo_111_0_none_none_display_thumbnail.jpg, /data/user/0/com.facebook.stella/files/media/15/15_photo_109_0_none_none_display_thumbnail.jpg], importThreshold=1782213630489, firstTimeConnecting=1782220937310, processingDurationMap={16=60236, 18=60281, 19=60262, 13=60296, 14=17636, 15=60121}, processingProgressMap={14=1.0, 19=1.0, 18=0.21205283710392164}, fetchingProgressMap={13=1.0, 15=1.0, 16=1.0, 18=1.0, 19=1.0, 14=1.0}, importTrigger=MANUAL, manualRetryCount=0, autoImportFailedInBackground=false, succeededTimestamp=1782221008566, effectiveProgress=0.20384517)
+06-23 15:23:47.560 13396 13396 I ImportStatusUIModelMapper: Hide progress state, sourceTab=13, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null
+06-23 15:23:47.564 13396   938 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.564 13396   938 I OtaHomeTabBannerProviderImpl: importInactive: false, isDeviceConnected: true, isDeviceInOobe: true, otaArtifactExists: false for device 6F:F2:A3:7C:16:D6
+06-23 15:23:47.567 13396 32321 I FirmwareLaggingManager: isOtaMandatory=false for device 6F:F2:A3:7C:16:D6 (isLagging=false, hasReachedCountdown=false)
+06-23 15:23:47.569 13396 32248 I ImportStatusUIModelMapper: Progress state, sourceTab=12, deviceType=3, deviceId=6F:F2:A3:7C:16:D6, error=null

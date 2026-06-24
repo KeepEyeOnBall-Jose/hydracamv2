@@ -1,0 +1,798 @@
+# HydraCam evidence run command log
+
+$ python3 scripts/run_hardware_ui_e2e.py --device 29d816ac550b7ece --device RF8M21J8XRT --device RF8M90QE7LX --route setup --route standby --run-dir logs/verification-runs/20260623-1346-human-readable-session-names-all-devices --timeout 180 --build-timeout 300 --settle-seconds 2
+
+$ python3 scripts/run_hardware_ui_e2e.py --device RF8M21J8XRT --route setup --route standby --run-dir logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/android-s10e-current-rerun --timeout 180 --build-timeout 300 --settle-seconds 2
++ adb devices -l
++ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+Resolving dependencies...
+Downloading packages...
+  cli_util 0.4.2 (0.5.1 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  image 4.8.0 (4.9.1 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  test_api 0.7.11 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             21.3s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
++ adb -s RF8M21J8XRT forward --remove-all
++ adb -s RF8M21J8XRT install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s RF8M21J8XRT shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
++ adb -s RF8M21J8XRT forward tcp:6700 tcp:4762
+6700
++ adb -s RF8M21J8XRT logcat -c
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity --es role setup --es automationTargetId RF8M21J8XRT
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M21J8XRT exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M21J8XRT-setup-2026-06-23T14-24-54-869387.png > logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/android-s10e-current-rerun/screenshots/RF8M21J8XRT-setup.png
++ adb -s RF8M21J8XRT shell wm size
++ adb -s RF8M21J8XRT shell input swipe 1140 842 1140 237 450
++ adb -s RF8M21J8XRT exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M21J8XRT-setup-after-scroll-2026-06-23T14-24-57-764475.png > logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/android-s10e-current-rerun/screenshots/RF8M21J8XRT-setup-after-scroll.png
++ adb -s RF8M21J8XRT logcat -d -t 800
++ adb -s RF8M21J8XRT logcat -c
++ adb -s RF8M21J8XRT shell am force-stop com.amaia23.hydracam
++ adb -s RF8M21J8XRT shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M21J8XRT
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M21J8XRT exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M21J8XRT-standby-2026-06-23T14-25-03-652715.png > logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/android-s10e-current-rerun/screenshots/RF8M21J8XRT-standby.png
++ adb -s RF8M21J8XRT logcat -d -t 800
+logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/android-s10e-current-rerun
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+
+Exception occurred while executing 'grant':
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.WRITE_EXTERNAL_STORAGE
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1577)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_IMAGES
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1535)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_VIDEO
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1535)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+[exit-code] 0
+
+$ flutter test integration_test/platform_test.dart -d 6A2E7E6A-05F8-47D6-88AE-85E3434AC6D3
+Resolving dependencies...
+Downloading packages...
+  cli_util 0.4.2 (0.5.1 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  image 4.8.0 (4.9.1 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.18.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  test_api 0.7.11 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/jose/src/work/hydracamv2/integration_test/platform_test.dart
+Running Xcode build...                                          
+Xcode build done.                                           50.1s
+00:00 +0: Platform Launch Tests App launches successfully on current platform
+Log registered: {message: Get token, timestamp: 2026-06-23 14:34:36.018089, function: null, file: null}
+Log registered: {message: Fetch token, timestamp: 2026-06-23 14:34:36.022036, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-23 14:34:36.192636, function: null, file: null}
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone]
+Denied: [], timestamp: 2026-06-23 14:34:36.236844, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:36.242182, function: null, file: null}
+Log registered: {message: Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:36.242392, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-23 14:34:36.242534, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-23 14:34:36.275432, function: null, file: null}
+Log registered: {message: M2M token obtained successfully, timestamp: 2026-06-23 14:34:36.476760, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-23 14:34:37.337305, function: null, file: null}
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-23 14:34:41.069501, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-23 14:34:41.069830, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-23 14:34:41.387964, function: null, file: null}
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:34:41.391144, function: null, file: null}
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:34:41.393972, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:41.418937, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:41.428642, function: null, file: null}
+Log registered: {message: Listening for master broadcast on port 4041..., timestamp: 2026-06-23 14:34:41.431600, function: null, file: null}
+Log registered: {message: No master found, switching to Master mode., timestamp: 2026-06-23 14:34:44.435861, function: null, file: null}
+Log registered: {message: Stopped listening for master broadcast., timestamp: 2026-06-23 14:34:44.439877, function: null, file: null}
+Log registered: {message: Cleaned up Slave mode., timestamp: 2026-06-23 14:34:44.440335, function: null, file: null}
+Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-23 14:34:46.590285, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:46.611519, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:46.612903, function: null, file: null}
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-23 14:34:51.635746, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-23 14:34:51.636209, function: null, file: null}
+00:15 +1: Platform Launch Tests App shows SlaveScreen in auto mode
+Log registered: {message: Get token, timestamp: 2026-06-23 14:34:51.648931, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-23 14:34:51.650713, function: null, file: null}
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone]
+Denied: [], timestamp: 2026-06-23 14:34:51.651274, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:51.651515, function: null, file: null}
+Log registered: {message: Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:51.651624, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-23 14:34:51.651744, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-23 14:34:51.654180, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-23 14:34:51.819557, function: null, file: null}
+00:20 +1: Platform Launch Tests App launches successfully on current platform
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-23 14:34:56.661545, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-23 14:34:56.662376, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-23 14:34:56.697975, function: null, file: null}
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:34:56.698657, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:56.719111, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:34:56.720643, function: null, file: null}
+Log registered: {message: Listening for master broadcast on port 4041..., timestamp: 2026-06-23 14:34:56.732062, function: null, file: null}
+Log registered: {message: No master found, switching to Master mode., timestamp: 2026-06-23 14:34:59.735194, function: null, file: null}
+Log registered: {message: Stopped listening for master broadcast., timestamp: 2026-06-23 14:34:59.736129, function: null, file: null}
+Log registered: {message: Cleaned up Slave mode., timestamp: 2026-06-23 14:34:59.736519, function: null, file: null}
+Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-23 14:35:01.775716, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:01.790062, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:01.791386, function: null, file: null}
+00:30 +1: Platform Launch Tests App shows SlaveScreen in auto mode
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-23 14:35:06.818518, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-23 14:35:06.818804, function: null, file: null}
+00:30 +2: Platform Launch Tests Services initialize correctly
+Log registered: {message: Get token, timestamp: 2026-06-23 14:35:06.828550, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-23 14:35:06.830093, function: null, file: null}
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone]
+Denied: [], timestamp: 2026-06-23 14:35:06.830501, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:06.830695, function: null, file: null}
+Log registered: {message: Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:06.830792, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-23 14:35:06.830924, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-23 14:35:06.833527, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-23 14:35:07.266733, function: null, file: null}
+00:35 +2: Platform Launch Tests App launches successfully on current platform
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-23 14:35:11.843903, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-23 14:35:11.844157, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-23 14:35:11.866757, function: null, file: null}
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:35:11.867247, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:11.882596, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:11.883836, function: null, file: null}
+Log registered: {message: Listening for master broadcast on port 4041..., timestamp: 2026-06-23 14:35:11.884898, function: null, file: null}
+Log registered: {message: No master found, switching to Master mode., timestamp: 2026-06-23 14:35:14.888227, function: null, file: null}
+Log registered: {message: Stopped listening for master broadcast., timestamp: 2026-06-23 14:35:14.889017, function: null, file: null}
+Log registered: {message: Cleaned up Slave mode., timestamp: 2026-06-23 14:35:14.889296, function: null, file: null}
+Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-23 14:35:16.927419, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:16.991263, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:16.992447, function: null, file: null}
+00:46 +2: Platform Launch Tests Services initialize correctly
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-23 14:35:21.966894, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-23 14:35:21.967256, function: null, file: null}
+00:46 +3: Platform Launch Tests Platform-specific checks
+Log registered: {message: Get token, timestamp: 2026-06-23 14:35:21.976264, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-23 14:35:21.978056, function: null, file: null}
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone]
+Denied: [], timestamp: 2026-06-23 14:35:21.979040, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:21.979339, function: null, file: null}
+Log registered: {message: Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:21.979515, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-23 14:35:21.979644, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-23 14:35:21.981939, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-23 14:35:22.073501, function: null, file: null}
+00:51 +3: Platform Launch Tests App launches successfully on current platform
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-23 14:35:26.993819, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-23 14:35:26.994291, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-23 14:35:27.022123, function: null, file: null}
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:35:27.022590, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:27.039072, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:27.044862, function: null, file: null}
+Log registered: {message: Listening for master broadcast on port 4041..., timestamp: 2026-06-23 14:35:27.046395, function: null, file: null}
+Log registered: {message: No master found, switching to Master mode., timestamp: 2026-06-23 14:35:30.050621, function: null, file: null}
+Log registered: {message: Stopped listening for master broadcast., timestamp: 2026-06-23 14:35:30.052280, function: null, file: null}
+Log registered: {message: Cleaned up Slave mode., timestamp: 2026-06-23 14:35:30.052804, function: null, file: null}
+Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-23 14:35:32.076506, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:32.196129, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:32.198239, function: null, file: null}
+01:01 +3: Platform Launch Tests Platform-specific checks
+✅ Running on iOS
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-23 14:35:37.115042, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-23 14:35:37.115336, function: null, file: null}
+01:01 +4: Master Mode Tests Can switch to Master mode
+Log registered: {message: Get token, timestamp: 2026-06-23 14:35:37.119627, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-23 14:35:37.120483, function: null, file: null}
+Log registered: {message: Permission request completed.
+Granted: [Permission.camera, Permission.microphone]
+Denied: [], timestamp: 2026-06-23 14:35:37.120854, function: requestAllPermissions, file: PermissionService}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:37.121034, function: null, file: null}
+Log registered: {message: Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:37.121120, function: null, file: null}
+Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-23 14:35:37.121203, function: null, file: null}
+Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-23 14:35:37.123305, function: null, file: null}
+Log registered: {message: Backend warm-up completed., timestamp: 2026-06-23 14:35:37.508087, function: null, file: null}
+01:05 +4: Platform Launch Tests App launches successfully on current platform
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:35:41.384753, function: null, file: null}
+Log registered: {message: Navigation decision: automationEnabled=false, config=null, automationMaster=false, automationStandby=false, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-23 14:35:43.127650, function: null, file: null}
+Log registered: {message: Navigating to SlaveScreen(isAutoMode=true, preferredMasterIp=null, forceSlaveMode=false), timestamp: 2026-06-23 14:35:43.128123, function: null, file: null}
+Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-23 14:35:43.156957, function: null, file: null}
+Log registered: {message: BatteryService: Error reading battery level: PlatformException(UNAVAILABLE, Battery info unavailable, null, null), timestamp: 2026-06-23 14:35:43.157443, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:43.207930, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:43.209245, function: null, file: null}
+Log registered: {message: Listening for master broadcast on port 4041..., timestamp: 2026-06-23 14:35:43.210419, function: null, file: null}
+Log registered: {message: No master found, switching to Master mode., timestamp: 2026-06-23 14:35:46.213066, function: null, file: null}
+Log registered: {message: Stopped listening for master broadcast., timestamp: 2026-06-23 14:35:46.214258, function: null, file: null}
+Log registered: {message: Cleaned up Slave mode., timestamp: 2026-06-23 14:35:46.214772, function: null, file: null}
+Log registered: {message: WebSocket Server successfully started on port 4040, timestamp: 2026-06-23 14:35:49.195782, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:49.214112, function: null, file: null}
+Log registered: {message: Retrieved existing Device ID: 92d03954-da92-4463-a0b8-97bfafaf740b, timestamp: 2026-06-23 14:35:49.215387, function: null, file: null}
+01:19 +4: Master Mode Tests Can switch to Master mode
+Log registered: {message: WebSocket Server stopped, timestamp: 2026-06-23 14:35:55.222361, function: null, file: null}
+Log registered: {message: Stopped broadcasting master discovery message., timestamp: 2026-06-23 14:35:55.222717, function: null, file: null}
+01:19 +5: (tearDownAll)
+01:19 +5: All tests passed!
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ python3 scripts/ios_capture_repro.py --launch --device-id 00008101-000A68811E43001E --host auto --scan-subnet 192.168.178.0/24 --run-dir logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/ios-iphone-capture-rerun --profile standard1080p30 --lens autoBack --timeout 240
+logs/verification-runs/20260623-1346-human-readable-session-names-all-devices/ios-iphone-capture-rerun
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ adb -s RF8M90QE7LX install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ bash -lc HYDRACAM_PRIVACY_POLICY_URL=https://store-site-ten.vercel.app/privacy.html HYDRACAM_SUPPORT_URL=https://store-site-ten.vercel.app/support.html HYDRACAM_ACCOUNT_DELETION_URL=https://store-site-ten.vercel.app/account-deletion.html bash scripts/check_store_readiness.sh upload-ios
+PASS: command available: grep
+PASS: command available: shasum
+PASS: command available: file
+PASS: command available: plutil
+PASS: command available: security
+PASS: iOS distribution signing identity is available
+PASS: iOS Info.plist exists
+PASS: iOS privacy manifest exists
+PASS: iOS Xcode project exists
+PASS: iOS app icon manifest exists
+PASS: iOS fastlane Appfile exists
+PASS: iOS fastlane Fastfile exists
+PASS: iOS fastlane README exists
+PASS: iOS fastlane wrapper exists
+PASS: pubspec.yaml exists
+PASS: Login screen exists
+PASS: Auth0 service exists
+PASS: store privacy checklist exists
+PASS: store privacy policy draft exists
+PASS: store support page draft exists
+PASS: store account deletion page draft exists
+PASS: web index exists
+PASS: web manifest exists
+PASS: store artifact build script exists
+PASS: iOS Info.plist is valid
+PASS: iOS display name is HydraCam
+PASS: iOS camera usage description present
+PASS: iOS microphone usage description present
+PASS: iOS photo library usage description present
+PASS: iOS photo library add usage description present
+PASS: iOS location usage description present
+PASS: iOS local network usage description present
+PASS: iOS Auth0 redirect scheme is com.keepeyeonball
+PASS: iOS Auth0 redirect scheme is not the generic com.hydracam
+PASS: iOS export compliance declares no non-exempt encryption
+PASS: iOS Info.plist omits Dart VM Bonjour services
+PASS: iOS privacy manifest is valid
+PASS: iOS privacy manifest declares UserDefaults access
+PASS: iOS privacy manifest declares UserDefaults reason CA92.1
+PASS: iOS privacy manifest declares file timestamp access
+PASS: iOS privacy manifest declares file timestamp reason C617.1
+PASS: iOS privacy manifest declares disk space access
+PASS: iOS privacy manifest declares low/sufficient disk-space reason E174.1
+PASS: iOS privacy manifest declares display disk-space reason 85F4.1
+PASS: iOS privacy manifest declares photo/video collection
+PASS: iOS privacy manifest declares audio collection
+PASS: iOS privacy manifest declares precise location collection
+PASS: iOS privacy manifest declares email collection
+PASS: iOS privacy manifest declares user ID collection
+PASS: iOS privacy manifest declares device ID collection
+PASS: iOS privacy manifest declares app functionality purpose
+PASS: iOS privacy manifest declares no tracking
+PASS: iOS bundle identifier is com.keepeyeonball
+PASS: iOS privacy manifest is bundled in Runner resources
+PASS: iOS fastlane Appfile targets com.keepeyeonball
+PASS: iOS fastlane builds include the privacy policy URL when configured
+PASS: iOS fastlane builds include the support URL when configured
+PASS: iOS fastlane builds include the account deletion URL when configured
+PASS: iOS fastlane writes store artifact metadata
+PASS: iOS fastlane README points to the repo wrapper
+PASS: pubspec version is 1.4.0+19
+PASS: pubspec description is release-appropriate
+PASS: pubspec includes url_launcher for account deletion URL handoff
+PASS: pubspec declares url_launcher_android for Android Gradle Plugin 8.11.1
+PASS: Login screen exposes an in-app privacy policy path
+PASS: Login screen exposes an in-app support path
+PASS: Login screen exposes an account deletion request path
+PASS: Login screen reads the privacy policy URL Dart define
+PASS: Login screen reads the support URL Dart define
+PASS: Login screen reads the account deletion URL Dart define
+PASS: Auth0 service defaults iOS redirect scheme to com.keepeyeonball
+PASS: Auth0 service defaults Android redirect scheme to com.amaia23.hydracam
+PASS: Auth0 service uses login-callback redirect host
+PASS: Auth0 service omits the generic com.hydracam redirect URI
+PASS: store checklist tracks the privacy policy URL
+PASS: store checklist tracks the support URL
+PASS: store checklist tracks the account deletion URL Dart define
+PASS: store checklist covers media and audio data
+PASS: store checklist covers Auth0 identity data
+PASS: store checklist covers local-network WebSocket behavior
+PASS: privacy policy draft covers Auth0 identity
+PASS: privacy policy draft covers captured media and audio
+PASS: privacy policy draft covers location and network context
+PASS: privacy policy draft covers diagnostics
+PASS: privacy policy draft links account/data deletion expectations
+PASS: support draft covers same-network setup
+PASS: support draft covers camera and microphone permissions
+PASS: support draft covers iOS local network permission
+PASS: support draft covers account/data deletion
+PASS: account deletion draft matches the release Dart define
+PASS: account deletion draft covers Auth0 account data
+PASS: account deletion draft covers backend user records
+PASS: account deletion draft covers uploaded session data
+PASS: account deletion draft covers requester verification
+PASS: account deletion draft covers retention exceptions
+PASS: store build script supports Dart defines
+PASS: store build script compiles the privacy policy URL when configured
+PASS: store build script compiles the support URL when configured
+PASS: store build script compiles the account deletion URL when configured
+PASS: store build script writes store artifact metadata
+PASS: web manifest name is HydraCam
+PASS: web manifest short_name is HydraCam
+PASS: web manifest description is release-appropriate
+PASS: web manifest omits Flutter template metadata
+PASS: web index title is HydraCam
+PASS: web index Apple title is HydraCam
+PASS: web index description is release-appropriate
+PASS: web index omits Flutter template metadata
+PASS: LaunchImage.png is branded-sized (19404 bytes)
+PASS: LaunchImage@2x.png is branded-sized (52222 bytes)
+PASS: LaunchImage@3x.png is branded-sized (83801 bytes)
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@3x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@3x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@3x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@1x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@3x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@1x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@1x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@1x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@2x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@1x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@2x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@1x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@2x.png is a PNG
+PASS: iOS app icon Icon-App-83.5x83.5@2x.png is a PNG
+PASS: iOS app icon Icon-App-1024x1024@1x.png is a PNG
+PASS: iOS app icon manifest references 25 icon files
+FAIL: iOS IPA is stale: /Users/jose/src/work/hydracamv2/lib/l10n/app_localizations.dart is newer than the artifact
+PASS: iOS IPA store metadata sidecar exists
+PASS: iOS IPA store metadata matches the artifact and current build environment
+WARN: App Store Connect API key is not configured
+PASS: HYDRACAM_PRIVACY_POLICY_URL is set to a public HTTPS URL
+PASS: HYDRACAM_SUPPORT_URL is set to a public HTTPS URL
+PASS: HYDRACAM_ACCOUNT_DELETION_URL is set to a public HTTPS URL
+FAIL: upload-ios mode requires an App Store Connect API key
+Summary: 2 failure(s), 1 warning(s)
+[exit-code] 1
+
+$ bash scripts/testflight_release_and_invite.sh
+
+[stderr]
+App Store Connect API credentials are required.
+
+Create one in App Store Connect > Users and Access > Integrations > App Store Connect API,
+then rerun this script with either:
+  APP_STORE_CONNECT_API_KEY_PATH=/path/to/app-store-connect-key.json bash scripts/testflight_release_and_invite.sh
+
+or Apple's .p8 triplet:
+  APP_STORE_CONNECT_API_KEY_P8_PATH=/path/to/AuthKey_XXXXXXXXXX.p8 \
+  APP_STORE_CONNECT_API_KEY_ID=XXXXXXXXXX \
+  APP_STORE_CONNECT_API_ISSUER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx \
+  bash scripts/testflight_release_and_invite.sh
+[exit-code] 64
+
+$ bash -lc HYDRACAM_PRIVACY_POLICY_URL=https://store-site-ten.vercel.app/privacy.html HYDRACAM_SUPPORT_URL=https://store-site-ten.vercel.app/support.html HYDRACAM_ACCOUNT_DELETION_URL=https://store-site-ten.vercel.app/account-deletion.html bash scripts/check_store_readiness.sh upload-ios
+PASS: command available: grep
+PASS: command available: shasum
+PASS: command available: file
+PASS: command available: plutil
+PASS: command available: security
+PASS: iOS distribution signing identity is available
+PASS: iOS Info.plist exists
+PASS: iOS privacy manifest exists
+PASS: iOS Xcode project exists
+PASS: iOS app icon manifest exists
+PASS: iOS fastlane Appfile exists
+PASS: iOS fastlane Fastfile exists
+PASS: iOS fastlane README exists
+PASS: iOS fastlane wrapper exists
+PASS: pubspec.yaml exists
+PASS: Login screen exists
+PASS: Auth0 service exists
+PASS: store privacy checklist exists
+PASS: store privacy policy draft exists
+PASS: store support page draft exists
+PASS: store account deletion page draft exists
+PASS: web index exists
+PASS: web manifest exists
+PASS: store artifact build script exists
+PASS: iOS Info.plist is valid
+PASS: iOS display name is HydraCam
+PASS: iOS camera usage description present
+PASS: iOS microphone usage description present
+PASS: iOS photo library usage description present
+PASS: iOS photo library add usage description present
+PASS: iOS location usage description present
+PASS: iOS local network usage description present
+PASS: iOS Auth0 redirect scheme is com.keepeyeonball
+PASS: iOS Auth0 redirect scheme is not the generic com.hydracam
+PASS: iOS export compliance declares no non-exempt encryption
+PASS: iOS Info.plist omits Dart VM Bonjour services
+PASS: iOS privacy manifest is valid
+PASS: iOS privacy manifest declares UserDefaults access
+PASS: iOS privacy manifest declares UserDefaults reason CA92.1
+PASS: iOS privacy manifest declares file timestamp access
+PASS: iOS privacy manifest declares file timestamp reason C617.1
+PASS: iOS privacy manifest declares disk space access
+PASS: iOS privacy manifest declares low/sufficient disk-space reason E174.1
+PASS: iOS privacy manifest declares display disk-space reason 85F4.1
+PASS: iOS privacy manifest declares photo/video collection
+PASS: iOS privacy manifest declares audio collection
+PASS: iOS privacy manifest declares precise location collection
+PASS: iOS privacy manifest declares email collection
+PASS: iOS privacy manifest declares user ID collection
+PASS: iOS privacy manifest declares device ID collection
+PASS: iOS privacy manifest declares app functionality purpose
+PASS: iOS privacy manifest declares no tracking
+PASS: iOS bundle identifier is com.keepeyeonball
+PASS: iOS privacy manifest is bundled in Runner resources
+PASS: iOS fastlane Appfile targets com.keepeyeonball
+PASS: iOS fastlane builds include the privacy policy URL when configured
+PASS: iOS fastlane builds include the support URL when configured
+PASS: iOS fastlane builds include the account deletion URL when configured
+PASS: iOS fastlane writes store artifact metadata
+PASS: iOS fastlane README points to the repo wrapper
+PASS: pubspec version is 1.4.0+19
+PASS: pubspec description is release-appropriate
+PASS: pubspec includes url_launcher for account deletion URL handoff
+PASS: pubspec declares url_launcher_android for Android Gradle Plugin 8.11.1
+PASS: Login screen exposes an in-app privacy policy path
+PASS: Login screen exposes an in-app support path
+PASS: Login screen exposes an account deletion request path
+PASS: Login screen reads the privacy policy URL Dart define
+PASS: Login screen reads the support URL Dart define
+PASS: Login screen reads the account deletion URL Dart define
+PASS: Auth0 service defaults iOS redirect scheme to com.keepeyeonball
+PASS: Auth0 service defaults Android redirect scheme to com.amaia23.hydracam
+PASS: Auth0 service uses login-callback redirect host
+PASS: Auth0 service omits the generic com.hydracam redirect URI
+PASS: store checklist tracks the privacy policy URL
+PASS: store checklist tracks the support URL
+PASS: store checklist tracks the account deletion URL Dart define
+PASS: store checklist covers media and audio data
+PASS: store checklist covers Auth0 identity data
+PASS: store checklist covers local-network WebSocket behavior
+PASS: privacy policy draft covers Auth0 identity
+PASS: privacy policy draft covers captured media and audio
+PASS: privacy policy draft covers location and network context
+PASS: privacy policy draft covers diagnostics
+PASS: privacy policy draft links account/data deletion expectations
+PASS: support draft covers same-network setup
+PASS: support draft covers camera and microphone permissions
+PASS: support draft covers iOS local network permission
+PASS: support draft covers account/data deletion
+PASS: account deletion draft matches the release Dart define
+PASS: account deletion draft covers Auth0 account data
+PASS: account deletion draft covers backend user records
+PASS: account deletion draft covers uploaded session data
+PASS: account deletion draft covers requester verification
+PASS: account deletion draft covers retention exceptions
+PASS: store build script supports Dart defines
+PASS: store build script compiles the privacy policy URL when configured
+PASS: store build script compiles the support URL when configured
+PASS: store build script compiles the account deletion URL when configured
+PASS: store build script writes store artifact metadata
+PASS: web manifest name is HydraCam
+PASS: web manifest short_name is HydraCam
+PASS: web manifest description is release-appropriate
+PASS: web manifest omits Flutter template metadata
+PASS: web index title is HydraCam
+PASS: web index Apple title is HydraCam
+PASS: web index description is release-appropriate
+PASS: web index omits Flutter template metadata
+PASS: LaunchImage.png is branded-sized (19404 bytes)
+PASS: LaunchImage@2x.png is branded-sized (52222 bytes)
+PASS: LaunchImage@3x.png is branded-sized (83801 bytes)
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@3x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@3x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@3x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@1x.png is a PNG
+PASS: iOS app icon Icon-App-57x57@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@2x.png is a PNG
+PASS: iOS app icon Icon-App-60x60@3x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@1x.png is a PNG
+PASS: iOS app icon Icon-App-20x20@2x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@1x.png is a PNG
+PASS: iOS app icon Icon-App-29x29@2x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@1x.png is a PNG
+PASS: iOS app icon Icon-App-40x40@2x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@1x.png is a PNG
+PASS: iOS app icon Icon-App-50x50@2x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@1x.png is a PNG
+PASS: iOS app icon Icon-App-72x72@2x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@1x.png is a PNG
+PASS: iOS app icon Icon-App-76x76@2x.png is a PNG
+PASS: iOS app icon Icon-App-83.5x83.5@2x.png is a PNG
+PASS: iOS app icon Icon-App-1024x1024@1x.png is a PNG
+PASS: iOS app icon manifest references 25 icon files
+PASS: iOS IPA exists and is current: 7b5cda1b0e81322516bb22f95480e8bb041c26615743e381735ef33d4c8a55bd
+PASS: iOS IPA store metadata sidecar exists
+PASS: iOS IPA store metadata matches the artifact and current build environment
+WARN: App Store Connect API key is not configured
+PASS: HYDRACAM_PRIVACY_POLICY_URL is set to a public HTTPS URL
+PASS: HYDRACAM_SUPPORT_URL is set to a public HTTPS URL
+PASS: HYDRACAM_ACCOUNT_DELETION_URL is set to a public HTTPS URL
+FAIL: upload-ios mode requires an App Store Connect API key
+Summary: 1 failure(s), 1 warning(s)
+[exit-code] 1
+
+$ bash scripts/testflight_release_and_invite.sh
+
+[stderr]
+App Store Connect API credentials are required.
+
+Create one in App Store Connect > Users and Access > Integrations > App Store Connect API,
+then rerun this script with either:
+  APP_STORE_CONNECT_API_KEY_PATH=/path/to/app-store-connect-key.json bash scripts/testflight_release_and_invite.sh
+
+or Apple's .p8 triplet:
+  APP_STORE_CONNECT_API_KEY_P8_PATH=/path/to/AuthKey_XXXXXXXXXX.p8 \
+  APP_STORE_CONNECT_API_KEY_ID=XXXXXXXXXX \
+  APP_STORE_CONNECT_API_ISSUER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx \
+  bash scripts/testflight_release_and_invite.sh
+[exit-code] 64
+
+$ bash -lc FASTLANE_SKIP_UPDATE_CHECK=1 FASTLANE_DISABLE_COLORS=1 CI=1 timeout 180 bash scripts/ios_fastlane.sh upload_latest_beta
+[14:44:07]: ------------------------------
+[14:44:07]: --- Step: default_platform ---
+[14:44:07]: ------------------------------
+[14:44:07]: Driving the lane 'ios upload_latest_beta' 🚀
+[14:44:07]: ----------------------------------
+[14:44:07]: --- Step: upload_to_testflight ---
+[14:44:07]: ----------------------------------
+[14:44:07]: Login to App Store Connect (jose@keepeyeonball.com)
+-------------------------------------------------------------------------------------
+Please provide your Apple Developer Program account credentials
+The login information you enter will be stored in your macOS Keychain
+You can also pass the password using the `FASTLANE_PASSWORD` environment variable
+See more information about it on GitHub: https://github.com/fastlane/fastlane/tree/master/credentials_manager
+-------------------------------------------------------------------------------------
++-------------------------------------------+
+|               Lane Context                |
++------------------+------------------------+
+| DEFAULT_PLATFORM | ios                    |
+| PLATFORM_NAME    | ios                    |
+| LANE_NAME        | ios upload_latest_beta |
++------------------+------------------------+
+[14:44:07]: Called from Fastfile at line 142
+[14:44:07]: ```
+[14:44:07]:     140:	  desc "Upload the latest local IPA to TestFlight without rebuilding"
+[14:44:07]:     141:	  lane :upload_latest_beta do
+[14:44:07]:  => 142:	    upload_to_testflight(testflight_upload_options(latest_ipa))
+[14:44:07]:     143:	  end
+[14:44:07]:     144:	
+[14:44:07]: ```
+[14:44:07]: Missing password for user jose@keepeyeonball.com, and running in non-interactive shell
+
++-------------------------------------------+
+|             fastlane summary              |
++------+----------------------+-------------+
+| Step | Action               | Time (in s) |
++------+----------------------+-------------+
+| 1    | default_platform     | 0           |
+| 💥   | upload_to_testflight | 0           |
++------+----------------------+-------------+
+
+[14:44:08]: fastlane finished with errors
+
+Looking for related GitHub issues on fastlane/fastlane...
+
+Found no similar issues. To create a new issue, please visit:
+https://github.com/fastlane/fastlane/issues/new
+Run `fastlane env` to append the fastlane environment to your issue
+
+[stderr]
+bundler: failed to load command: fastlane (/opt/homebrew/lib/ruby/gems/3.4.0/bin/fastlane)
+/opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/credentials_manager/lib/credentials_manager/account_manager.rb:135:in 'CredentialsManager::AccountManager#ask_for_login': [!] Missing password for user jose@keepeyeonball.com, and running in non-interactive shell (RuntimeError)
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/credentials_manager/lib/credentials_manager/account_manager.rb:56:in 'CredentialsManager::AccountManager#password'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/client.rb:383:in 'Spaceship::Client#login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/client.rb:355:in 'Spaceship::Client.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/tunes/spaceship.rb:24:in 'Spaceship::Tunes.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/connect_api/client.rb:56:in 'Spaceship::ConnectAPI::Client.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/connect_api/spaceship.rb:85:in 'Spaceship::ConnectAPI.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/pilot/lib/pilot/manager.rb:36:in 'Pilot::Manager#login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/pilot/lib/pilot/manager.rb:19:in 'Pilot::Manager#start'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/pilot/lib/pilot/build_manager.rb:17:in 'Pilot::BuildManager#upload'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/upload_to_testflight.rb:34:in 'Fastlane::Actions::UploadToTestflightAction.run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in 'block (2 levels) in Fastlane::Runner#execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in 'Fastlane::Actions.execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in 'block in Fastlane::Runner#execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in 'Dir.chdir'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in 'Fastlane::Runner#execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in 'Fastlane::Runner#trigger_action_by_name'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in 'Fastlane::FastFile#method_missing'
+	from Fastfile:142:in 'block (2 levels) in Fastlane::FastFile#parsing_binding'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane.rb:41:in 'Fastlane::Lane#call'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:49:in 'block in Fastlane::Runner#execute'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in 'Dir.chdir'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in 'Fastlane::Runner#execute'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in 'Fastlane::LaneManager.cruise_lane'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in 'Fastlane::CommandLineHandler.handle'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in 'block (2 levels) in Fastlane::CommandsGenerator#run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/command.rb:187:in 'Commander::Command#call'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/command.rb:157:in 'Commander::Command#run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in 'Commander::Runner#run_active_command'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in 'Commander::Runner#run!'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in 'Commander::Delegates#run!'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in 'Fastlane::CommandsGenerator#run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in 'Fastlane::CommandsGenerator.start'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in 'Fastlane::CLIToolsDistributor.take_off'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/bin/fastlane:23:in '<top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Kernel#load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Gem.activate_and_load_bin_path'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/bin/fastlane:25:in '<top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Kernel.load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Bundler::CLI::Exec#kernel_load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli/exec.rb:23:in 'Bundler::CLI::Exec#run'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli.rb:456:in 'Bundler::CLI#exec'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/command.rb:28:in 'Bundler::Thor::Command#run'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in 'Bundler::Thor::Invocation#invoke_command'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor.rb:538:in 'Bundler::Thor.dispatch'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli.rb:35:in 'Bundler::CLI.dispatch'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/base.rb:584:in 'Bundler::Thor::Base::ClassMethods#start'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli.rb:29:in 'Bundler::CLI.start'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/bundler-2.7.2/exe/bundle:28:in 'block in <top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/friendly_errors.rb:118:in 'Bundler.with_friendly_errors'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/bundler-2.7.2/exe/bundle:20:in '<top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Kernel#load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Gem.activate_and_load_bin_path'
+	from /opt/homebrew/opt/ruby/bin/bundle:25:in '<main>'
+/opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/credentials_manager/lib/credentials_manager/account_manager.rb:135:in 'CredentialsManager::AccountManager#ask_for_login': Missing password for user jose@keepeyeonball.com, and running in non-interactive shell (RuntimeError)
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/credentials_manager/lib/credentials_manager/account_manager.rb:56:in 'CredentialsManager::AccountManager#password'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/client.rb:383:in 'Spaceship::Client#login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/client.rb:355:in 'Spaceship::Client.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/tunes/spaceship.rb:24:in 'Spaceship::Tunes.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/connect_api/client.rb:56:in 'Spaceship::ConnectAPI::Client.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/spaceship/lib/spaceship/connect_api/spaceship.rb:85:in 'Spaceship::ConnectAPI.login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/pilot/lib/pilot/manager.rb:36:in 'Pilot::Manager#login'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/pilot/lib/pilot/manager.rb:19:in 'Pilot::Manager#start'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/pilot/lib/pilot/build_manager.rb:17:in 'Pilot::BuildManager#upload'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/upload_to_testflight.rb:34:in 'Fastlane::Actions::UploadToTestflightAction.run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in 'block (2 levels) in Fastlane::Runner#execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in 'Fastlane::Actions.execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in 'block in Fastlane::Runner#execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in 'Dir.chdir'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in 'Fastlane::Runner#execute_action'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in 'Fastlane::Runner#trigger_action_by_name'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in 'Fastlane::FastFile#method_missing'
+	from Fastfile:142:in 'block (2 levels) in Fastlane::FastFile#parsing_binding'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane.rb:41:in 'Fastlane::Lane#call'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:49:in 'block in Fastlane::Runner#execute'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in 'Dir.chdir'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in 'Fastlane::Runner#execute'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in 'Fastlane::LaneManager.cruise_lane'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in 'Fastlane::CommandLineHandler.handle'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in 'block (2 levels) in Fastlane::CommandsGenerator#run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/command.rb:187:in 'Commander::Command#call'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/command.rb:157:in 'Commander::Command#run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in 'Commander::Runner#run_active_command'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in 'Commander::Runner#run!'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in 'Commander::Delegates#run!'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in 'Fastlane::CommandsGenerator#run'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in 'Fastlane::CommandsGenerator.start'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in 'Fastlane::CLIToolsDistributor.take_off'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/gems/fastlane-2.228.0/bin/fastlane:23:in '<top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Kernel#load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Gem.activate_and_load_bin_path'
+	from /opt/homebrew/lib/ruby/gems/3.4.0/bin/fastlane:25:in '<top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Kernel.load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Bundler::CLI::Exec#kernel_load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli/exec.rb:23:in 'Bundler::CLI::Exec#run'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli.rb:456:in 'Bundler::CLI#exec'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/command.rb:28:in 'Bundler::Thor::Command#run'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in 'Bundler::Thor::Invocation#invoke_command'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor.rb:538:in 'Bundler::Thor.dispatch'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli.rb:35:in 'Bundler::CLI.dispatch'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/base.rb:584:in 'Bundler::Thor::Base::ClassMethods#start'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/cli.rb:29:in 'Bundler::CLI.start'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/bundler-2.7.2/exe/bundle:28:in 'block in <top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/bundler/friendly_errors.rb:118:in 'Bundler.with_friendly_errors'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/bundler-2.7.2/exe/bundle:20:in '<top (required)>'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Kernel#load'
+	from /opt/homebrew/Cellar/ruby/3.4.7/lib/ruby/3.4.0/rubygems.rb:319:in 'Gem.activate_and_load_bin_path'
+	from /opt/homebrew/opt/ruby/bin/bundle:25:in '<main>'
+[exit-code] 1

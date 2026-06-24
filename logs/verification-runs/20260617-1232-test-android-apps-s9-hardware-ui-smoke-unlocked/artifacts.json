@@ -1,0 +1,69 @@
+{
+  "acceptanceChecks": [
+    "S9/G960F device 29d816ac550b7ece is attached and keyguard clear before route launch",
+    "HydraCam setup and standby routes launch with identity-matched automation bridge",
+    "Setup and standby screenshots are captured with no Flutter overflow markers"
+  ],
+  "commands": [
+    {
+      "command": [
+        "env",
+        "PATH=/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.local/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Users/jose/.local/bin:/Applications/Codex.app/Contents/Resources",
+        "/usr/bin/python3",
+        "scripts/run_hardware_ui_e2e.py",
+        "--device",
+        "29d816ac550b7ece",
+        "--route",
+        "setup",
+        "--route",
+        "standby",
+        "--run-dir",
+        "logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked",
+        "--skip-build",
+        "--timeout",
+        "45"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T10:33:11.892049+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android hardware",
+      "name": "Samsung SM-G960F",
+      "notes": [
+        "Saved local unlock command for the same 7-8-5-2 pattern in .codex-local/android-unlock-commands.md; keyguard preflight reported clear before smoke."
+      ],
+      "os": "Android 10 (API 29)",
+      "role": "setup and standby UI smoke target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/29d816ac550b7ece-setup-after-scroll.png",
+    "screenshots/29d816ac550b7ece-setup.png",
+    "screenshots/29d816ac550b7ece-standby.png",
+    "video/29d816ac550b7ece-standby-proof.mp4",
+    "device-logs/29d816ac550b7ece/setup-bridge-logs.json",
+    "device-logs/29d816ac550b7ece/setup-logcat.txt",
+    "device-logs/29d816ac550b7ece/setup-result.json",
+    "device-logs/29d816ac550b7ece/standby-bridge-logs.json",
+    "device-logs/29d816ac550b7ece/standby-logcat.txt",
+    "device-logs/29d816ac550b7ece/standby-result.json"
+  ],
+  "item": {
+    "slug": "test-android-apps-s9-hardware-ui-smoke-unlocked",
+    "source": "AGENTS.md#Validation Policy; docs/control/regular-evaluation-plan.md#Single Android Hardware Lane",
+    "title": "Android S9 hardware UI smoke after unlock command setup"
+  },
+  "notes": [
+    "S9/G960F 29d816ac550b7ece used the saved local unlock-command setup for the same 7-8-5-2 pattern; preflight reported keyguard clear, then setup and standby hardware UI smoke passed with screenshots, logs, and video."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

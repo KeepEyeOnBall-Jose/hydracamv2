@@ -1,0 +1,60 @@
+PASS: lib/models/wearable_replay.dart exists
+PASS: lib/services/wearable_replay_bridge_service.dart exists
+PASS: lib/services/wearable_replay_service.dart exists
+PASS: lib/services/wearable_replay_simulation_service.dart exists
+PASS: lib/services/wearable_replay_upload_service.dart exists
+PASS: integration_test/wearable_replay_channel_test.dart exists
+PASS: test/models/wearable_replay_test.dart exists
+PASS: test/services/wearable_replay_bridge_service_test.dart exists
+PASS: test/services/wearable_replay_service_test.dart exists
+PASS: test/services/wearable_replay_simulation_service_test.dart exists
+PASS: test/services/wearable_replay_upload_service_test.dart exists
+PASS: test/services/wearable_replay_live_upload_test.dart exists
+PASS: docs/control/wearable-replay-integration-plan.md exists
+PASS: Android declares BLUETOOTH_CONNECT for DAT
+PASS: Android declares DAT application id metadata
+PASS: Android declares DAT analytics opt-out metadata
+PASS: Android declares DAT callback scheme intent filter
+PASS: Android Gradle defines DAT redirect scheme placeholder
+PASS: Android Gradle defaults DAT application id to developer mode
+PASS: iOS declares DAT callback scheme
+PASS: iOS MWDAT developer MetaAppID is configured
+PASS: iOS MWDAT callback URL is configured
+PASS: iOS MWDAT analytics opt-out is configured
+PASS: iOS allows Meta AI callback query scheme
+PASS: iOS declares Meta wearable external accessory protocol
+PASS: iOS declares Bluetooth/external accessory background modes
+PASS: iOS declares Bluetooth usage description
+PASS: Wear module depends on Wear OS Health Services
+PASS: Wear module declares BODY_SENSORS
+PASS: Wear telemetry registers MeasureClient heart-rate callback
+PASS: Wear telemetry merges Android motion sensors
+PASS: Dart bridge exposes rolling POV fallback capability
+PASS: Simulation falls back to rollingHighlight when DAT is unavailable
+PASS: Simulation records fallback reason
+PASS: Android native bridge advertises rolling fallback
+PASS: iOS native bridge advertises rolling fallback
+PASS: Native integration test asserts rollingHighlight
+PASS: Upload service depends on http_parser for multipart MIME types
+PASS: Upload service imports MediaType
+PASS: Upload service parses POV media count
+PASS: Upload service attaches multipart content types
+PASS: Upload service includes calibration sidecars
+PASS: Upload service maps JSONL sidecars to NDJSON MIME
+PASS: Upload service maps MP4 POV media to video/mp4
+PASS: Upload unit test asserts POV media MIME
+PASS: Live upload proof is gated by HYDRACAM_WEARABLE_LIVE_UPLOAD
+PASS: Live upload proof writes a generated wearable manifest
+PASS: Live upload proof records clap-flash calibration sidecar
+PASS: Live upload proof verifies <=50 ms calibration target
+PASS: Live upload proof posts generated manifest to media-timeline
+PASS: Live upload proof verifies media-timeline POV media count
+PASS: Live upload proof verifies rolling-highlight replay metadata
+PASS: Simulation proof sends watch haptic feedback
+PASS: Simulation proof sends glasses audio feedback
+PASS: Live upload proof persists both feedback channels
+PASS: Control doc records live upload proof command
+PASS: Default Android build keeps private Meta DAT SDK artifacts gated
+PASS: Default iOS build keeps private Meta DAT SDK artifacts gated
+PASS: Control doc records DAT dependencies as hardware-lane gated
+wearable replay readiness passed: 59 check(s)

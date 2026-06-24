@@ -1,0 +1,123 @@
+{
+  "apk": "/Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk",
+  "devAutoLogin": {
+    "email": "",
+    "enabled": false,
+    "hasGuid": false,
+    "hasProfilePicture": false
+  },
+  "devices": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6700",
+      "descriptor": "usb:0-1.4.1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:2",
+      "localPort": 6700,
+      "serial": "RF8M21J8XRT"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6701",
+      "descriptor": "usb:0-1.4.2 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:1",
+      "localPort": 6701,
+      "serial": "RF8M90QE7LX"
+    }
+  ],
+  "finishedAt": "2026-06-23T03:29:05.747113",
+  "routeResults": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6700",
+      "failures": [
+        "POST /commands/capture_screenshot failed: Remote end closed connection without response"
+      ],
+      "health": {
+        "automation": true,
+        "automationTargetId": "RF8M21J8XRT",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "label": "Prepare Camera",
+      "route": "setup",
+      "serial": "RF8M21J8XRT",
+      "status": "failed"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6700",
+      "failures": [],
+      "health": {
+        "automation": true,
+        "automationTargetId": "RF8M21J8XRT",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "label": "Waiting for role assignment",
+      "route": "standby",
+      "screenshot": "screenshots/RF8M21J8XRT-standby.png",
+      "screenshotBytes": 20118,
+      "screenshotResponse": {
+        "command": "capture_screenshot",
+        "result": {
+          "appDataContainerSource": "Documents/automation-screenshots/RF8M21J8XRT-standby-2026-06-23T03-26-57-004688.png",
+          "byteLength": 20118,
+          "filePath": "/data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M21J8XRT-standby-2026-06-23T03-26-57-004688.png",
+          "height": 360,
+          "pixelRatio": 1.0,
+          "width": 674
+        },
+        "status": "ok"
+      },
+      "serial": "RF8M21J8XRT",
+      "status": "passed"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6701",
+      "failures": [
+        "POST /commands/capture_screenshot failed: timed out"
+      ],
+      "health": {
+        "automation": true,
+        "automationTargetId": "RF8M90QE7LX",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "label": "Prepare Camera",
+      "route": "setup",
+      "serial": "RF8M90QE7LX",
+      "status": "failed"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6701",
+      "failures": [
+        "POST /commands/capture_screenshot failed: timed out"
+      ],
+      "health": {
+        "automation": true,
+        "automationTargetId": "RF8M90QE7LX",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "label": "Waiting for role assignment",
+      "route": "standby",
+      "serial": "RF8M90QE7LX",
+      "status": "failed"
+    }
+  ],
+  "routes": [
+    "setup",
+    "standby"
+  ],
+  "scrollCheckRoutes": [
+    "setup"
+  ],
+  "startedAt": "2026-06-23T03:25:32.932562",
+  "status": "failed"
+}

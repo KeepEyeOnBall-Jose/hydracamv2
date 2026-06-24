@@ -1,0 +1,838 @@
+--------- beginning of main
+06-12 17:32:40.114   576   576 I ExynosCameraSec: [CAM(0)][Back_0]-(m_waitReadRomThreadEnd[31136]):
+06-12 17:32:40.114   576   576 I SecCameraUtil: INFO(isEEprom[219]): SAMSUNG_EEPROM_REAR is not defined
+06-12 17:32:40.114   576   576 I ExynosCameraSec: [CAM(0)][Back_0]-(m_waitReadRomThreadEnd[31148]):m_readRomThread waiting time : duration time(    0 msec)
+06-12 17:32:40.114   576   576 I ExynosCameraSec: [CAM(0)][Back_0]-(m_waitReadRomThreadEnd[31150]):m_readRomThread join
+06-12 17:32:40.114   576   576 I ExynosCameraBufferSupplier: [CAM(0)][BufferSupplier]-(createBufferManager[181]):[SKIP_BUF]Created. P 5,-1,-1,-1,-1, T 1
+06-12 17:32:40.115   576 27859 I ExynosCamera: [CAM(0)][Back_0]-(m_startPictureBufferThreadFunc[5683]):
+06-12 17:32:40.115   576 27859 I ExynosCameraBufferManager: [CAM(0)][CAPTURE_CB_BUF]-(m_defaultAlloc[934]):duration time (    0 msec) alloc count=1, total count=1, type=3, size=18289152, batchSize=1, reserved count=1, cache => 0 
+06-12 17:32:40.115   576 27859 I ExynosCameraBufferManager: DEBUG:duration time(    0 msec):(alloc)
+06-12 17:32:40.115  1353  1353 D PrivacyDotViewController: scheduleUpdate: 
+06-12 17:32:40.115   576   576 I ExynosCameraBufferManager: [CAM(0)][SKIP_BUF]-(m_defaultAlloc[934]):duration time (    0 msec) alloc count=6, total count=6, type=0, size=4096, batchSize=1, reserved count=0, non-cache => 0 0 0 0 0 0 
+06-12 17:32:40.115   576   576 I ExynosCameraBufferManager: DEBUG:duration time(    1 msec):(alloc)
+06-12 17:32:40.115   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(fastenAeStable[115]): Start
+06-12 17:32:40.115   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(fastenAeStable[180]):numFrames = 6 hwSensorW = 1008 hwSensorH = 756 sensorFrameRate = 120
+06-12 17:32:40.115   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipesFastenAeStable[2096]):Set framerate (denominator=120)
+06-12 17:32:40.115   576   576 W ExynosCameraNode: [CAM(0)][FLITE]-(setFormat[750]):name(FLITE) fd 112, bytesperline(0) < width(32), height(64)
+06-12 17:32:40.115   576 27859 I ExynosCameraBufferManager: [CAM(0)][YUV_CAP_BUF]-(m_defaultAlloc[934]):duration time (    0 msec) alloc count=1, total count=1, type=5, size=18289152, batchSize=1, reserved count=1, cache => 0 
+06-12 17:32:40.115   576 27859 I ExynosCameraBufferManager: DEBUG:duration time(    0 msec):(alloc)
+06-12 17:32:40.115   576 27859 I ExynosCameraBufferManager: [CAM(0)][THUMB_BUF]-(m_defaultAlloc[934]):duration time (    0 msec) alloc count=1, total count=1, type=1, size=294912, batchSize=1, reserved count=0, cache => 0 
+06-12 17:32:40.115   576 27859 I ExynosCameraBufferManager: DEBUG:duration time(    0 msec):(alloc)
+06-12 17:32:40.115   576   576 W ExynosCameraNode: [CAM(0)][3AA_CAPTURE]-(setFormat[750]):name(3AA_CAPTURE) fd 140, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.115   576   576 W ExynosCameraNode: [CAM(0)][3AA_PREVIEW]-(setFormat[750]):name(3AA_PREVIEW) fd 141, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.116   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(setupPipe[241]):setupPipe() is succeed, Pipe(5), prepare(2)
+06-12 17:32:40.116   576   576 W ExynosCameraNode: [CAM(0)][ISP_OUTPUT]-(setFormat[750]):name(ISP_OUTPUT) fd 143, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.116   576   576 W ExynosCameraNode: [CAM(0)][ISP_CAPTURE]-(setFormat[750]):name(ISP_CAPTURE) fd 144, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.116   576   576 W ExynosCameraNode: [CAM(0)][MCSC_PREVIEW]-(setFormat[750]):name(MCSC_PREVIEW) fd 145, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.116   576   576 W ExynosCameraNode: [CAM(0)][MCSC_PREVIEW_CALLBACK]-(setFormat[750]):name(MCSC_PREVIEW_CALLBACK) fd 146, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.116   576   576 W ExynosCameraNode: [CAM(0)][MCSC_RECORDING]-(setFormat[750]):name(MCSC_RECORDING) fd 147, bytesperline(0) < width(1008), height(756)
+06-12 17:32:40.116   576   576 W ExynosCameraNode: [CAM(0)][MCSC_DS]-(setFormat[750]):name(MCSC_DS) fd 148, bytesperline(0) < width(640), height(480)
+06-12 17:32:40.116   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(setupPipe[241]):setupPipe() is succeed, Pipe(10), prepare(0)
+06-12 17:32:40.116   576 27859 I ExynosCameraBufferManager: [CAM(0)][DSCALEYUVSTALL_BUF]-(m_defaultAlloc[934]):duration time (    0 msec) alloc count=2, total count=2, type=3, size=3110400, batchSize=1, reserved count=2, cache => 0 0 
+06-12 17:32:40.116   576 27859 I ExynosCameraBufferManager: DEBUG:duration time(    1 msec):(alloc)
+06-12 17:32:40.116   576 27859 I ExynosCamera: DEBUG:duration time(    1 msec):(m_startPictureBufferThreadFunc)
+06-12 17:32:40.116 27808 27850 I VSET/CameraUtil: getCameraCharacteristics: 1
+06-12 17:32:40.120 27808 27808 I VSET/CameraUtil: getPrimaryFrontCameraId: 1
+06-12 17:32:40.120 27808 27849 I VSET/CameraUtil: getCameraCharacteristics: 1
+06-12 17:32:40.122   976  2480 D SensorService: Calling batch handle==49 flags=0 rate=100000000 timeout== 0
+06-12 17:32:40.122   576 27851 I Unihal  : BaseFilter.cpp: PostInitialize: 232: BaseFilter(SOCIAL_IMAGE_ENHANCEMENT,0xf2cc88e0) starts the post init.
+06-12 17:32:40.127   629  1960 I SurfaceFlinger: id=15265 createSurf (0x0),-1 flag=80004, WindowToken{cee100e android.os.BinderProxy@d3ed609}#0
+06-12 17:32:40.128   576 27851 E ArcSoft_C: ARC_SIE_GetPrjLibKey={ArcSoft_Solution_82}
+06-12 17:32:40.129   576 27851 I sie_interface.arc.v1: IEVersion - lBuild = 88, version = ArcSoft_ImageEnhancement_1.0.120211001.88_#21486-9-B11789, buildDate = 09/17/2021
+06-12 17:32:40.129   976  3741 D InputTransport: Input channel constructed: '3154a2f', fd=816
+06-12 17:32:40.129   976  3741 D InputTransport: Input channel constructed: '3154a2f', fd=834
+06-12 17:32:40.129   976  3741 D InputTransport: Input channel constructed: '3154a2f', fd=835
+06-12 17:32:40.130   629  1960 I SurfaceFlinger: id=15266 createSurf (0x0),-1 flag=80004, 3154a2f ScreenDecorOverlay#0
+06-12 17:32:40.131   976  3741 D InputTransport: Input channel destroyed: '3154a2f', fd=835
+06-12 17:32:40.132 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.132 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.133 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.133   576 27851 E VNS     : ARC_BASE_0 version info: 2.2.-480831879.35, 10/12/2020
+06-12 17:32:40.133   576 27851 E VNS     : ARC_BASE_1 version info: 2.0.120211001.337, 09/17/2021
+06-12 17:32:40.133 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.133 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.133  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: setView = com.android.systemui.RegionInterceptingFrameLayout@38f9a7 TM=true
+06-12 17:32:40.133 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.133 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.134 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.134 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.134 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.134 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.134 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.134 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.135 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136   576 27851 I Unihal  : BaseFilter.cpp: PostInitialize: 245: BaseFilter(SOCIAL_IMAGE_ENHANCEMENT,0xf2cc88e0) finishes the post init. state(3).
+06-12 17:32:40.136   576 27851 I Unihal  : BaseFilter.cpp: PostInitialize: 232: BaseFilter(FUNC_JPEG_ENCODER,0xf2cc6ec0) starts the post init.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136   576 27851 I Unihal  : BaseFilter.cpp: PostInitialize: 245: BaseFilter(FUNC_JPEG_ENCODER,0xf2cc6ec0) finishes the post init. state(3).
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.136 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.137 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138   629  1960 I SurfaceFlinger: id=15267 createSurf (0x0),-1 flag=80004, WindowToken{7f1f1a android.os.BinderProxy@5f5c9c5}#0
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138 27808 27849 E KeyMaker: 'createKey' will be removed any time soon. Please do not use.
+06-12 17:32:40.138   976  3797 D InputTransport: Input channel constructed: '9b65a4b', fd=835
+06-12 17:32:40.138   976  3797 D InputTransport: Input channel constructed: '9b65a4b', fd=849
+06-12 17:32:40.138   976  3797 D InputTransport: Input channel constructed: '9b65a4b', fd=854
+06-12 17:32:40.139 27808 27808 I VSET/CameraUtil: getUnihalVersion (1) : 2.03
+06-12 17:32:40.139 27808 27808 I VSET/SettingsFeature: initUnihalFeature: E 2.03
+06-12 17:32:40.139 27808 27808 I VSET/CameraUtil: getPrimaryFrontCameraId: direct Return -> 1
+06-12 17:32:40.139   629  1960 I SurfaceFlinger: id=15268 createSurf (0x0),-1 flag=80004, 9b65a4b ScreenDecorOverlayBottom#0
+06-12 17:32:40.140 27808 27861 I VSET/CameraUtil: getCameraCharacteristics: 1
+06-12 17:32:40.140   976  3797 D InputTransport: Input channel destroyed: '9b65a4b', fd=854
+06-12 17:32:40.140  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: setView = com.android.systemui.RegionInterceptingFrameLayout@6e5b0f9 TM=true
+06-12 17:32:40.141  1353  2450 D PrivacyDotViewController: scheduleUpdate: 
+--------- beginning of system
+06-12 17:32:40.148   458   458 D io_stats: !@   8,0 r 10271433 363978924 w 3568068 145414180 d 0 0 f 0 0 iot 3466248 0 th 0 0 0 pt 0 inp 0 2 240556.929
+06-12 17:32:40.149   976  1414 V WindowManager: Relayout Window{3154a2f u0 ScreenDecorOverlay}: viewVisibility=0 req=1080x117 d0
+06-12 17:32:40.149   629   660 I SurfaceFlinger: id=15269 createSurf (1x1),-3 flag=40004, ScreenDecorOverlay$_1353#0
+06-12 17:32:40.150   576   576 W ExynosCameraNode: [CAM(0)][PIPE_VRA]-(setFormat[750]):name(PIPE_VRA) fd 151, bytesperline(0) < width(640), height(480)
+06-12 17:32:40.150   976  1414 D WindowManager: makeSurface duration=2 name=ScreenDecorOverlay$_1353
+06-12 17:32:40.151   576   576 I ExynosCameraPipe: [CAM(0)][PIPE_VRA]-(setupPipe[165]):setupPipe() is succeed (23) prepare (0)
+06-12 17:32:40.151   576   576 I ExynosCameraUtils: INFO(setMetaCtlAeTargetFpsRange):aeTargetFpsRange(min=120, min=120)
+06-12 17:32:40.152   576   576 I ExynosCameraUtils: INFO(setMetaCtlAeTargetFpsRange):aeTargetFpsRange(min=120, min=120)
+06-12 17:32:40.152   576   576 I ExynosCameraUtils: INFO(setMetaCtlAeTargetFpsRange):aeTargetFpsRange(min=120, min=120)
+06-12 17:32:40.152   576   576 I ExynosCameraUtils: INFO(setMetaCtlAeTargetFpsRange):aeTargetFpsRange(min=120, min=120)
+06-12 17:32:40.153   576   576 I ExynosCameraUtils: INFO(setMetaCtlAeTargetFpsRange):aeTargetFpsRange(min=120, min=120)
+06-12 17:32:40.153 27808 27808 I VSET/CameraUtil: isSupportedSegmentationMode: true
+06-12 17:32:40.153   576   576 I ExynosCameraUtils: INFO(setMetaCtlAeTargetFpsRange):aeTargetFpsRange(min=120, min=120)
+06-12 17:32:40.153   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(start[296]):start() is succeed, Pipe(10)
+06-12 17:32:40.153 27808 27808 I VSET/CameraUtil: getPrimaryFrontCameraId: direct Return -> 1
+06-12 17:32:40.154 27808 27856 I VSET/CameraUtil: getCameraCharacteristics: 1
+06-12 17:32:40.155 27808 27808 I VSET/CameraUtil: isSupportedAutoFramingMode: false
+06-12 17:32:40.155   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(instantOn[842]):instantOn() is succeed, Pipe(5), Frames(6)
+06-12 17:32:40.155 27808 27808 I VSET/SettingsFeature: initUnihalFeature: X supportedList {SETTINGS_SEGMENTATION_MODE_MENU;SETTINGS_BACKGROUND_COLOR_CONFIGURATION_MENU;SETTINGS_BACKGROUND_BLUR_MODE_MENU;SETTINGS_BACKGROUND_IMAGE_CONFIGURATION_MENU;}
+06-12 17:32:40.156   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(fastenAeStable[377]): Start S_STREAM
+06-12 17:32:40.158   976  1414 V WindowManager: Relayout hash=3154a2f, pid=1353: mAttrs={(0,0)(fillxwrap) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-12 17:32:40.158   976  1414 V WindowManager:   fl=21800128
+06-12 17:32:40.158   976  1414 V WindowManager:   pfl=13000050
+06-12 17:32:40.158   976  1414 V WindowManager:   vsysui=100
+06-12 17:32:40.158   976  1414 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-12 17:32:40.161  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,117) req=(1080,117)0 dur=10 res=0x7 s={true 498728102688} ch=true fn=-1
+06-12 17:32:40.161  1353  1614 D OpenGLRenderer: eglCreateWindowSurface
+06-12 17:32:40.164  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.performTraversals:4198 android.view.ViewRootImpl.doTraversal:2924 
+06-12 17:32:40.164  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-12 17:32:40.164  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Creating frameCompleteCallback
+06-12 17:32:40.167  1353  2158 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Received frameDrawingCallback frameNum=1. Creating transactionCompleteCallback=false
+06-12 17:32:40.175  1353  1614 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Received frameCompleteCallback  lastAcquiredFrameNum=1 lastAttemptedDrawFrameNum=1
+06-12 17:32:40.177  1353  1353 W Looper  : Slow dispatch took 12ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:40.183   976  5544 V WindowManager: Relayout Window{9b65a4b u0 ScreenDecorOverlayBottom}: viewVisibility=0 req=1080x117 d0
+06-12 17:32:40.184   629  1960 I SurfaceFlinger: id=15270 createSurf (1080x1),-3 flag=40004, ScreenDecorOverlayBottom$_1353#0
+06-12 17:32:40.185   976  5544 D WindowManager: makeSurface duration=2 name=ScreenDecorOverlayBottom$_1353
+06-12 17:32:40.188  1353  3400 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Resizing android.view.ViewRootImpl@419769f: frame=[0,2163][1080,2280] reportDraw=true forceLayout=false backDropFrame=Rect(0, 0 - 1080, 117)
+06-12 17:32:40.189 27808 27808 I VSET/VTCameraSettingApplication: onCreate
+06-12 17:32:40.190 27808 27808 I VSET/VTCameraSettingApplication: onCreate: policy version 2024021604
+06-12 17:32:40.190   976  5544 V WindowManager: Relayout hash=9b65a4b, pid=1353: mAttrs={(0,0)(fillxwrap) gr=BOTTOM CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-12 17:32:40.190   976  5544 V WindowManager:   fl=21800128
+06-12 17:32:40.190   976  5544 V WindowManager:   pfl=13000050
+06-12 17:32:40.190   976  5544 V WindowManager:   vsysui=100
+06-12 17:32:40.190   976  5544 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-12 17:32:40.192 27808 27808 I VSET/SettingsActivity: ActivateSettingActivityForSupportedCases: country true
+06-12 17:32:40.192  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Relayout returned: old=(0,0,1080,2280) new=(0,2163,1080,2280) req=(1080,117)0 dur=9 res=0x7 s={true 498728163728} ch=true fn=-1
+06-12 17:32:40.193  1353  1614 D OpenGLRenderer: eglCreateWindowSurface
+06-12 17:32:40.193  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.performTraversals:4198 android.view.ViewRootImpl.doTraversal:2924 
+06-12 17:32:40.193  1353  2450 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-12 17:32:40.193  1353  2450 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Creating frameCompleteCallback
+06-12 17:32:40.194  1353  2159 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Received frameDrawingCallback frameNum=1. Creating transactionCompleteCallback=false
+06-12 17:32:40.197  1353  1614 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Received frameCompleteCallback  lastAcquiredFrameNum=1 lastAttemptedDrawFrameNum=1
+06-12 17:32:40.197   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.197   976  1414 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.vtcamerasettings cmp = com.samsung.android.vtcamerasettings.settings.SettingsActivity newState = 1 callingPackage = 1000/com.samsung.android.vtcamerasettings
+06-12 17:32:40.198 27808 27808 I VSET/SettingsFeature: initUnihalFeature: E 2.03
+06-12 17:32:40.198 27808 27808 I VSET/CameraUtil: getPrimaryFrontCameraId: direct Return -> 1
+06-12 17:32:40.198 27808 27850 I VSET/CameraUtil: getCameraCharacteristics: 1
+06-12 17:32:40.198  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-12 17:32:40.198  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: [DP] rdf()
+06-12 17:32:40.198  1353  2450 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: reportDrawFinished (fn: -1) 
+06-12 17:32:40.199  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-12 17:32:40.199  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] rdf()
+06-12 17:32:40.199  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: reportDrawFinished (fn: -1) 
+06-12 17:32:40.199   976  5544 D WindowManager: finishDrawingWindow: Window{9b65a4b u0 ScreenDecorOverlayBottom} mDrawState=DRAW_PENDING
+06-12 17:32:40.201  1353  2450 D PrivacyDotViewController: processNextViewState: 
+06-12 17:32:40.201  1353  2450 D PrivacyDotViewController: resolveState ViewState(viewInitialized=true, havingInset=false, isEdgeActive=false, dotTopMargin=80, systemPrivacyEventIsActive=false, shadeExpanded=false, qsExpanded=false, portraitRect=Rect(0, 0 - 931, 117), landscapeRect=Rect(116, 0 - 2268, 72), upsideDownRect=Rect(0, 0 - 1068, 117), seascapeRect=Rect(0, 0 - 2164, 72), layoutRtl=false, rotation=0, height=117, cornerIndex=1, designatedCorner=android.widget.FrameLayout{24763b5 I.E...... ......ID 1068,0-1080,117 #7f0b067a app:id/privacy_dot_right_container})
+06-12 17:32:40.202   976  1414 V WindowManager: Relayout Window{3154a2f u0 ScreenDecorOverlay}: viewVisibility=0 req=1080x197 d0
+06-12 17:32:40.202 27808 27808 I VSET/CameraUtil: isSupportedSegmentationMode: true
+06-12 17:32:40.202 27808 27808 I VSET/CameraUtil: getPrimaryFrontCameraId: direct Return -> 1
+06-12 17:32:40.202 27808 27849 I VSET/CameraUtil: getCameraCharacteristics: 1
+06-12 17:32:40.203  1353  3130 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: Resizing android.view.ViewRootImpl@bc4ca4a: frame=[0,0][1080,197] reportDraw=true forceLayout=false backDropFrame=Rect(0, 0 - 1080, 197)
+06-12 17:32:40.203   976  1414 V WindowManager: Relayout hash=3154a2f, pid=1353: mAttrs={(0,0)(fillxwrap) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+06-12 17:32:40.203   976  1414 V WindowManager:   fl=21800128
+06-12 17:32:40.203   976  1414 V WindowManager:   pfl=13000050
+06-12 17:32:40.203   976  1414 V WindowManager:   vsysui=100
+06-12 17:32:40.203   976  1414 V WindowManager:   bhv=DEFAULT naviIconColor=0}
+06-12 17:32:40.204   976  5544 D WindowManager: finishDrawingWindow: Window{3154a2f u0 ScreenDecorOverlay} mDrawState=DRAW_PENDING
+06-12 17:32:40.204  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: Relayout returned: old=(0,0,1080,117) new=(0,0,1080,197) req=(1080,197)0 dur=2 res=0x3 s={true 498728102688} ch=false fn=2
+06-12 17:32:40.204  1353  1614 D OpenGLRenderer: setSurface() destroyed EGLSurface
+06-12 17:32:40.204  1353  1614 D OpenGLRenderer: destroyEglSurface
+06-12 17:32:40.204  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.performTraversals:4198 android.view.ViewRootImpl.doTraversal:2924 
+06-12 17:32:40.204  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-12 17:32:40.204  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Creating frameCompleteCallback
+06-12 17:32:40.205 27808 27808 I VSET/CameraUtil: isSupportedAutoFramingMode: false
+06-12 17:32:40.205 27808 27808 I VSET/SettingsFeature: initUnihalFeature: X supportedList {SETTINGS_SEGMENTATION_MODE_MENU;SETTINGS_BACKGROUND_COLOR_CONFIGURATION_MENU;SETTINGS_BACKGROUND_BLUR_MODE_MENU;SETTINGS_BACKGROUND_IMAGE_CONFIGURATION_MENU;}
+06-12 17:32:40.205 27808 27808 I VSET/GlobalSettingDatabaseHelper: init: 
+06-12 17:32:40.205  1353  1614 D OpenGLRenderer: eglCreateWindowSurface
+06-12 17:32:40.205 27808 27808 I VSET/GlobalSettingDatabaseHelper: sync: 
+06-12 17:32:40.205   976  1414 I GenerationRegistry: mBackingStore.isClosed() : false
+06-12 17:32:40.205  1353  2158 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Received frameDrawingCallback frameNum=2. Creating transactionCompleteCallback=false
+06-12 17:32:40.206   976  1414 I GenerationRegistry: mBackingStore.isClosed() : false
+06-12 17:32:40.208  1353  1614 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Received frameCompleteCallback  lastAcquiredFrameNum=2 lastAttemptedDrawFrameNum=2
+06-12 17:32:40.209  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-12 17:32:40.209  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] rdf()
+06-12 17:32:40.209  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: reportDrawFinished (fn: 2) 
+06-12 17:32:40.209  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: handleResized, msg = 5 frames=ClientWindowFrames{frame=[0,2163][1080,2280] display=[0,0][1080,2280] backdrop=[0,0][1080,117]} forceNextWindowRelayout=false displayId=0 frameChanged=false backdropFrameChanged=true configChanged=false displayChanged=false mNextDrawUseBlastSync=false mergedConfiguration={mGlobalConfig={1.1 214mcc4mnc [en_DE,de_DE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.13546 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0} mOverrideConfig={1.1 214mcc4mnc [en_DE,de_DE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.13545 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0}}
+06-12 17:32:40.209  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.handleResized:2235 android.view.ViewRootImpl.access$1200:303 
+06-12 17:32:40.209  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: handleResized, msg = 5 frames=ClientWindowFrames{frame=[0,0][1080,197] display=[0,0][1080,2280] backdrop=[0,0][1080,197]} forceNextWindowRelayout=false displayId=0 frameChanged=false backdropFrameChanged=false configChanged=false displayChanged=false mNextDrawUseBlastSync=false mergedConfiguration={mGlobalConfig={1.1 214mcc4mnc [en_DE,de_DE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.13546 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0} mOverrideConfig={1.1 214mcc4mnc [en_DE,de_DE] ldltr sw360dp w360dp h673dp 480dpi nrml long port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2280) mAppBounds=Rect(0, 116 - 1080, 2136) mMaxBounds=Rect(0, 0 - 1080, 2280) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0 mPopOver=undefined mFreeformTaskPinningState=undefined} s.13545 fontWeightAdjustment=0 ff=0 bf=0 bts=0 desktop/d dm/n ?dc ?dcui ?dcaf enb/d themeSeq=0}}
+06-12 17:32:40.210  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11442 android.view.ViewRootImpl.handleResized:2235 android.view.ViewRootImpl.access$1200:303 
+06-12 17:32:40.210 27808 27808 I VSET/SALogCommon: init: setSAConfiguration
+06-12 17:32:40.211   976  5544 D WindowManager: finishDrawingWindow: Window{3154a2f u0 ScreenDecorOverlay} mDrawState=HAS_DRAWN
+06-12 17:32:40.211 27808 27808 I VSET/SALogCommon: registerSettingPref: already registered
+06-12 17:32:40.214  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-12 17:32:40.214  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Creating frameCompleteCallback
+06-12 17:32:40.215 27808 27808 I VSET/CameraProxyWorker: init: 
+06-12 17:32:40.218 27808 27808 I VSET/CameraProxyWorker: init: v 2
+06-12 17:32:40.218 27808 27808 I VSET/VSETFeature: isDefaultOffCounty: DE
+06-12 17:32:40.218  1353  2159 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Received frameDrawingCallback frameNum=3. Creating transactionCompleteCallback=false
+06-12 17:32:40.218 27808 27808 I VSET/VSETPreference: getVSETEnabled: update first lunch time false
+06-12 17:32:40.218 27808 27808 I VSET/CameraProxyWorker: applySegmentationMode: 0
+06-12 17:32:40.219 27808 27808 I VSET/AppInfoRepository: getGalleryPickerInfo: 0
+06-12 17:32:40.220   976  5544 I CameraService_worker: applyRequests requests size = 3
+06-12 17:32:40.221  1353  1614 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: Received frameCompleteCallback  lastAcquiredFrameNum=3 lastAttemptedDrawFrameNum=3
+06-12 17:32:40.221 27808 27808 W VSET/ObserveCameraStateService: onCreate
+06-12 17:32:40.221  1353  2450 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Creating frameDrawingCallback nextDrawUseBlastSync=false reportNextDraw=true hasBlurUpdates=false
+06-12 17:32:40.221  1353  2450 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Creating frameCompleteCallback
+06-12 17:32:40.221 27808 27808 I VSET/ObserveCameraStateService: initAppRepository 
+06-12 17:32:40.221 27808 27808 I VSET/VSETFeature: isDefaultOffCounty: DE
+06-12 17:32:40.222 27808 27808 I VSET/VSETPreference: getVSETEnabled: update first lunch time false
+06-12 17:32:40.222  1353  2158 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Received frameDrawingCallback frameNum=3. Creating transactionCompleteCallback=false
+06-12 17:32:40.222   629   629 D SurfaceFlinger: Display 0 HWC layers:
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c56410 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2136.0 |    0    0 1080 2136 | SurfaceView - com.amaia23.hydracam/c[...]acam.MainActivity@76eddd1@0(BLAST)#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c49090 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.amaia23.hydracam/com.amaia23.hydracam.MainActivity$_27705#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c58b70 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0    0 1080  117 | StatusBar$_1353#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c48d30 | 0100 | RGBA_8888    |    0.0    0.0   67.0  320.0 | 1013  357 1080  677 | com.samsung.android.app.cocktailbars[...]arservice.CocktailBarService$_8288#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c507d0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  144.0 |    0 2136 1080 2280 | NavigationBar0$_1353#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c4cf90 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  197.0 |    0    0 1080  197 | ScreenDecorOverlay$_1353#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger:      DEVICE | 0x7ae4c465d0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0  117.0 |    0 2163 1080
+06-12 17:32:40.222   629   629 D SurfaceFlinger:  2280 | ScreenDecorOverlayBottom$_1353#0
+06-12 17:32:40.222   629   629 D SurfaceFlinger: 
+06-12 17:32:40.222   976  5544 I CameraService_worker:   PersistableBundle[{key.i32=[30], key.tagName=samsung.android.unihal.videoMode}]
+06-12 17:32:40.222   976  5544 I CameraService_worker:   PersistableBundle[{key.i32=[0], key.tagName=samsung.android.unihal.videoAutoFramingMode}]
+06-12 17:32:40.223   976  5544 I CameraService_worker:   PersistableBundle[{key.i32=[0], key.tagName=samsung.android.unihal.videoSegmentationMode}]
+06-12 17:32:40.223   976  5544 I CameraService_worker: sendExtraRequestsToRequestInjector updated size = 3
+06-12 17:32:40.223 27808 27808 I VSET/AudioStateManagerImpl: start: 
+06-12 17:32:40.223 27808 27808 I VSET/AudioStateManagerImpl: isInitialized: not initialized. 
+06-12 17:32:40.223 27808 27808 I VSET/ObserveCameraStateService: onCreate : unihal 2.03
+06-12 17:32:40.223   976  5544 I CameraService_worker:   PersistableBundle[{key.i32=[30], key.tagName=samsung.android.unihal.videoMode}]
+06-12 17:32:40.223 27808 27808 I VSET/VSETFeature: isDefaultOffCounty: DE
+06-12 17:32:40.223   976  5544 I CameraService_worker:   PersistableBundle[{key.i32=[0], key.tagName=samsung.android.unihal.videoAutoFramingMode}]
+06-12 17:32:40.223 27808 27808 I VSET/VSETPreference: getVSETEnabled: update first lunch time false
+06-12 17:32:40.224 27808 27808 I VSET/ObserveCameraStateService: observe segmentationEnabled: true
+06-12 17:32:40.224   976  5544 I CameraService_worker:   PersistableBundle[{key.i32=[0], key.tagName=samsung.android.unihal.videoSegmentationMode}]
+06-12 17:32:40.224 27808 27808 I VSET/ObserveCameraStateService: onStartCommand : unihal 2.03
+06-12 17:32:40.224  1353  1614 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: Received frameCompleteCallback  lastAcquiredFrameNum=3 lastAttemptedDrawFrameNum=3
+06-12 17:32:40.225  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-12 17:32:40.225  1353  2450 I ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: [DP] rdf()
+06-12 17:32:40.225  1353  2450 D ViewRootImpl@d2e4ef2[ScreenDecorOverlayBottom]: reportDrawFinished (fn: -1) 
+06-12 17:32:40.225 27808 27808 I VSET/ObserveCameraStateService: initAppRepository is created already
+06-12 17:32:40.225  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:5000 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+06-12 17:32:40.225  1353  2450 I ViewRootImpl@c816bcb[ScreenDecorOverlay]: [DP] rdf()
+06-12 17:32:40.225  1353  2450 D ViewRootImpl@c816bcb[ScreenDecorOverlay]: reportDrawFinished (fn: 2) 
+06-12 17:32:40.225   976  1414 D WindowManager: finishDrawingWindow: Window{9b65a4b u0 ScreenDecorOverlayBottom} mDrawState=HAS_DRAWN
+06-12 17:32:40.225 27808 27808 I VSET/ObserveCameraStateService: onStartCommand: true
+06-12 17:32:40.226   739 27186 E CameraService: applyExtraRequestsToRequestInjector
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: tag(samsung.android.unihal.videoMode) found
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: i32 type data found count(1) = [ 30 ]
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: tag(samsung.android.unihal.videoAutoFramingMode) found
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: i32 type data found count(1) = [ 0 ]
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: tag(samsung.android.unihal.videoSegmentationMode) found
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: i32 type data found count(1) = [ 0 ]
+06-12 17:32:40.226   739 27186 I CameraService: applyExtraRequestsToRequestInjector: # of changed request = 3
+06-12 17:32:40.226   739 27186 I CameraService: applyExtraRequestsToRequestInjector: Skip Request Injector ExtraRequests to existing client(com.amaia23.hydracam)
+06-12 17:32:40.226   976  1414 D WindowManager: finishDrawingWindow: Window{3154a2f u0 ScreenDecorOverlay} mDrawState=HAS_DRAWN
+06-12 17:32:40.226   739 27186 D CameraService: applyExtraRequestsToRequestInjector: Apply Request Injector ExtraRequests done. Save it.
+06-12 17:32:40.226   976  5544 I CameraService_worker: sendExtraRequestsToRequestInjector done
+06-12 17:32:40.227 27808 27808 I VSET/SettingsActivity: ActivateSettingActivityForSupportedCases: country true
+06-12 17:32:40.229   976  5544 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.vtcamerasettings cmp = com.samsung.android.vtcamerasettings.settings.SettingsActivity newState = 1 callingPackage = 1000/com.samsung.android.vtcamerasettings
+06-12 17:32:40.230 27808 27808 I VSET/ObserveCameraStateService: onStartCommand: update SALogging status
+06-12 17:32:40.231 27808 27808 I VSET/VSETFeature: isDefaultOffCounty: DE
+06-12 17:32:40.231 27808 27808 I VSET/VSETPreference: getVSETEnabled: update first lunch time false
+06-12 17:32:40.233 27808 27808 I VSET/AppInfoRepository: isSupportedP: ---, false
+06-12 17:32:40.234 27808 27808 I VSET/ObserveCameraStateService: updateAppInfoRepository: E 
+06-12 17:32:40.234 27808 27808 I VSET/ObserveCameraStateService: initAppRepository is created already
+06-12 17:32:40.236   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(fastenAeStable[386]): End S_STREAM
+06-12 17:32:40.236   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(forceDone[579]):forceDone() is succeed, Pipe(5)
+06-12 17:32:40.237   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(instantOff[876]):instantOff() is succeed, Pipe(5)
+06-12 17:32:40.237   576   576 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(stop[351]):stop() is succeed, Pipe(10)
+06-12 17:32:40.237   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(fastenAeStable[442]):set framerate (denominator=30)
+06-12 17:32:40.238   576   576 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(fastenAeStable[470]):Done
+06-12 17:32:40.239   576   576 I ExynosCameraBufferManager: DEBUG:duration time(    1 msec):(m_free)
+06-12 17:32:40.239   576   576 I SehCamDevSession@5.0-impl: [CAMKPI] camera3->process_capture_request : X
+06-12 17:32:40.239   576 27894 I ExynosCameraSec: [CAM(0)][Back_0]-(m_sensorListenerThreadFunc[30615]):
+06-12 17:32:40.239   576 27892 I ExynosCameraSec: [CAM(0)][Back_0]-(m_frameFactoryStartThreadFunc[579]):
+06-12 17:32:40.240   576 27892 I ExynosCameraSec: [CAM(0)][Back_0]-(m_frameFactoryStartThreadFunc[703]):opening hint(0)
+06-12 17:32:40.240   576 27892 I ExynosCameraSec: [CAM(0)][Back_0]-(m_setSetfile_Flagship[1564]):configMode(0), PIPMode(0)
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(initPipes[478]):
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreviewSec: [CAM(0)][Back_0]-(m_setupConfig[256]):
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_setDeviceInfo[731]):
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1060]):
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1139]):MaxSensorSize 4032x3024 bayerFormat BG12
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1141]):BnsSize 4032x3024 BcropSize 4032x3024 BdsSize 2688x2016
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1143]):DS Size 640x480 Format NV16 Buffer count 10
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1145]):HwPictureSize(4032x2268)
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1146]):MaxThumbnailSize(512x384)
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1176]):YUV[0] Size 1920x1080 Format NM21 PixelSizeNum 0 Buffer count 32
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1176]):YUV[1] Size 0x0 Format NV21 PixelSizeNum 0 Buffer count 1
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1176]):YUV[2] Size 1920x1080 Format NV21 PixelSizeNum 0 Buffer count 32
+06-12 17:32:40.240   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(m_initPipes[1195]):Set framerate (denominator=30)
+06-12 17:32:40.240   576 27892 W ExynosCameraNode: [CAM(0)][FLITE]-(setFormat[750]):name(FLITE) fd 112, bytesperline(0) < width(32), height(64)
+06-12 17:32:40.240   576 27894 I SensorListener: enableSensor : numSensors=42/42, sen_list = 0xf27c18d0/0xf27c18d0
+06-12 17:32:40.241 27808 27808 I VSET/VisionServerHelper: isNeedUpdated: last app : 250013000, installed app : 250013000
+06-12 17:32:40.241 27808 27808 I VSET/VisionServerHelper: isNeedUpdated: fast request
+06-12 17:32:40.241   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(setupPipe[241]):setupPipe() is succeed, Pipe(5), prepare(2)
+06-12 17:32:40.242   576 27892 W ExynosCameraNode: [CAM(0)][MCSC_DS]-(setFormat[750]):name(MCSC_DS) fd 148, bytesperline(0) < width(640), height(480)
+06-12 17:32:40.242   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(setupPipe[241]):setupPipe() is succeed, Pipe(10), prepare(0)
+06-12 17:32:40.242   576 27892 W ExynosCameraNode: [CAM(0)][PIPE_VRA]-(setFormat[750]):name(PIPE_VRA) fd 151, bytesperline(0) < width(640), height(480)
+06-12 17:32:40.243   576 27892 I ExynosCameraPipe: [CAM(0)][PIPE_VRA]-(setupPipe[165]):setupPipe() is succeed (23) prepare (0)
+06-12 17:32:40.243   576 27892 I ExynosCameraFrameFactory: [CAM(0)][Back_0]-(m_initFlitePipe[241]):
+06-12 17:32:40.243   576 27892 I ExynosCameraFrameFactory: [CAM(0)][Back_0]-(m_initFlitePipe[254]):SensorSize(4032x3024)
+06-12 17:32:40.243   576 27892 I ExynosCameraFrameFactory: [CAM(0)][Back_0]-(m_initFlitePipe[271]):BNS scale down ratio(1.0), size (4032x3024)
+06-12 17:32:40.243   576 27892 I ExynosCameraParameters: [CAM(0)][Back_0]-(updateHwSensorSize[818]):curHwSensor size(4032x3024) newHwSensor size(4032x3024)
+06-12 17:32:40.243   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(mapBuffers[563]):Map buffer Success!
+06-12 17:32:40.243   576 27892 I ExynosCameraSec: [CAM(0)][Back_0]-(m_initUniPP[33242]):IN
+06-12 17:32:40.243   576 27892 I ExynosCameraSec: [CAM(0)][Back_0]-(m_initUniPP[33292]):OUT
+06-12 17:32:40.246   976  2480 D SensorService: Calling batch handle==1 flags=0 rate=100000000 timeout== 0
+06-12 17:32:40.246   562   562 I Sensors : batch(0) - accelerometer_sensor try to batching with 100000000
+06-12 17:32:40.250   576 27892 E SensorListener: Sensor(1) is not enabled yet!
+06-12 17:32:40.251   576 27892 E SensorListener: Sensor(1) is not enabled yet!
+06-12 17:32:40.251   576 27892 E SensorListener: Sensor(1) is not enabled yet!
+06-12 17:32:40.252   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(start[296]):start() is succeed, Pipe(10)
+06-12 17:32:40.252   562   562 I Sensors : flush accelerometer_sensor
+06-12 17:32:40.255   576 27894 I SensorListener: enableSensor : numSensors=42/42, sen_list = 0xf27c18d0/0xf27c18d0
+06-12 17:32:40.255   976  2480 D SensorService: Calling batch handle==2 flags=0 rate=100000000 timeout== 0
+06-12 17:32:40.255   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(start[296]):start() is succeed, Pipe(5)
+06-12 17:32:40.256   562   562 I Sensors : batch(2) - gyro_sensor try to batching with 100000000
+06-12 17:32:40.256   562   562 I Sensors : GyroSensor old sensor_state 16385, new sensor_state : 1409591086694403 en : 1
+06-12 17:32:40.259   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(prepare[268]):prepare() is succeed, Pipe(5), prepare(2/2)
+06-12 17:32:40.259   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(sensorStream[446]):
+06-12 17:32:40.259   562   562 I Sensors : enable:: gyro_sensor(2)
+06-12 17:32:40.260   576 27894 I SensorListener: enableSensor : numSensors=42/42, sen_list = 0xf27c18d0/0xf27c18d0
+06-12 17:32:40.261   976  2480 D SensorService: Calling batch handle==16777217 flags=0 rate=10000000 timeout== 0
+06-12 17:32:40.263   562   562 D android.hardware.sensors@2.0-service.multihal: Als_common::setDelay, handle : 1 time : 10000000ns
+06-12 17:32:40.264   562   562 D android.hardware.sensors@2.0-service.multihal: Als_common::enable, handle : 1, mode : 1, en : 1
+06-12 17:32:40.264   562   562 D android.hardware.sensors@2.0-service.multihal: Als_common::sendCommand, send enable command
+06-12 17:32:40.276   576 27894 E SensorListener: ERR(initSensor[908]):failed to open hrm alc sensor's name
+06-12 17:32:40.276   576 27894 I SensorListener: enableSensor : numSensors=42/42, sen_list = 0xf27c18d0/0xf27c18d0
+06-12 17:32:40.277   976  2480 D SensorService: Calling batch handle==49 flags=0 rate=100000000 timeout== 0
+06-12 17:32:40.280   562  1117 E Sensors : Sensor : Meta event
+06-12 17:32:40.295   515   515 E audit   : type=1400 audit(1781278360.293:56515): avc:  denied  { write } for  pid=18266 comm="ThreadPoolForeg" name="traced_producer" dev="tmpfs" ino=9748 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock_file permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:40.295   515   515 E audit   : type=1300 audit(1781278360.293:56515): arch=c00000b7 syscall=203 success=no exit=-13 a0=4d a1=72be547fb0 a2=1e a3=ffffffff95d78514 items=0 ppid=535 pid=18266 auid=4294967295 uid=10075 gid=10075 euid=10075 suid=10075 fsuid=10075 egid=10075 sgid=10075 fsgid=10075 tty=(none) ses=4294967295 comm="ThreadPoolForeg" exe="/system/bin/app_process64" subj=u:r:gmscore_app:s0:c512,c768 key=(null)
+06-12 17:32:40.295   515   515 E audit   : type=1327 audit(1781278360.293:56515): proctitle="com.google.android.gms.unstable"
+06-12 17:32:40.322   576 27892 I ExynosCameraFrameFactoryPreviewSec: [CAM(0)][Back_0]-(startPipes[870]):Starting Success!
+06-12 17:32:40.322   576 27892 I ExynosCameraFrameFactoryPreview: [CAM(0)][Back_0]-(startInitialThreads[581]):start pre-ordered initial pipe thread
+06-12 17:32:40.322   576 27892 I ExynosCameraFrameFactoryBase: [CAM(0)][Back_0]-(startThread[231]):pipeId=5
+06-12 17:32:40.323   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA]-(startThread[383]):startThread is succeed, Pipe(5), standby(0)
+06-12 17:32:40.324   576 27892 I ExynosCameraFrameFactoryBase: [CAM(0)][Back_0]-(startThread[231]):pipeId=10
+06-12 17:32:40.324   576 27892 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP]-(startThread[383]):startThread is succeed, Pipe(10), standby(0)
+06-12 17:32:40.324   576 27892 I ExynosCameraFrameFactoryBase: [CAM(0)][Back_0]-(startThread[231]):pipeId=23
+06-12 17:32:40.324   576 27892 I ExynosCameraPipe: [CAM(0)][PIPE_VRA]-(startThread[319]):IN
+06-12 17:32:40.325   576 27892 I ExynosCameraPipe: [CAM(0)][PIPE_VRA]-(startThread[328]):startThread is succeed Pipe(23)
+06-12 17:32:40.325   576 27892 I ExynosCameraSec: [CAM(0)][Back_0]-(m_frameFactoryStartThreadFunc[888]):Threads run start
+06-12 17:32:40.327   576 27907 I ExynosCamera: [CAM(0)][Back_0]-(m_mainPreviewThreadFunc[1284]):Wait to run FrameFactory. state(3)
+06-12 17:32:40.327   576 27892 I ExynosCameraSec: DEBUG:duration time(   88 msec):(m_frameFactoryStartThreadFunc)
+06-12 17:32:40.327   576 27901 W ExynosCameraParameters: [CAM(0)][Back_0]-(m_getReprocessing3aaIspOtf[5965]):Processed bayer must using 3AA-ISP M2M. but, Current mode(1)
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[69]):
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[173]):MaxPreviewSize(4032x3024), HwPreviewSize(0x0)
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[175]):MaxPictureSize(4032x3024), HwPictureSize(4032x2268), MaxTetraPictureSize(0x0)
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[176]):MaxThumbnailSize(512x384)
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[177]):PreviewBayerCropSize(4032x3024)
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[179]):DS Size 640x480 Format NV16 Buffer count 10
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[212]):YUV_STALL[3] Size 0x0 Format NV21 PixelSizeNum 0
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[212]):YUV_STALL[4] Size 1920x1080 Format NV21 PixelSizeNum 0
+06-12 17:32:40.328   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(initPipes[212]):YUV_STALL[5] Size 1920x1080 Format NV21 PixelSizeNum 0
+06-12 17:32:40.329   576 27901 I ExynosCameraMCPipe: [CAM(0)][PIPE_3AA_REPROCESSING]-(setupPipe[241]):setupPipe() is succeed, Pipe(202), prepare(0)
+06-12 17:32:40.329   576 27901 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP_REPROCESSING]-(needSerialization[1270]):PIPE_ISP_REPROCESSING serialized operation enabled
+06-12 17:32:40.329   576 27901 W ExynosCameraNode: [CAM(0)][REPROCESSING_ISP_CAPTURE_M2M]-(setFormat[750]):name(REPROCESSING_ISP_CAPTURE_M2M) fd 161, bytesperline(0) < width(4032), height(2268)
+06-12 17:32:40.330   576 27901 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_YUV_1]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_YUV_1) fd 167, bytesperline(0) < width(1920), height(1080)
+06-12 17:32:40.330   576 27901 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_YUV_2]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_YUV_2) fd 168, bytesperline(0) < width(1920), height(1080)
+06-12 17:32:40.330   576 27901 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_MAIN]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_MAIN) fd 169, bytesperline(0) < width(4032), height(2268)
+06-12 17:32:40.331   576 27901 W ExynosCameraNode: [CAM(0)][REPROCESSING_MCSC_CAPTURE_THUMBNAIL]-(setFormat[750]):name(REPROCESSING_MCSC_CAPTURE_THUMBNAIL) fd 170, bytesperline(0) < width(512), height(384)
+06-12 17:32:40.331   576 27901 W ExynosCameraNode: [CAM(0)][MCSC_DS_REPROCESSING]-(setFormat[750]):name(MCSC_DS_REPROCESSING) fd 171, bytesperline(0) < width(640), height(480)
+06-12 17:32:40.331   576 27901 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP_REPROCESSING]-(setupPipe[241]):setupPipe() is succeed, Pipe(207), prepare(0)
+06-12 17:32:40.342   576 27901 W ExynosCameraNode: [CAM(0)][PIPE_VRA_REPROCESSING]-(setFormat[750]):name(PIPE_VRA_REPROCESSING) fd 174, bytesperline(0) < width(640), height(480)
+06-12 17:32:40.343   576 27901 I ExynosCameraPipe: [CAM(0)][PIPE_VRA_REPROCESSING]-(setupPipe[165]):setupPipe() is succeed (219) prepare (0)
+06-12 17:32:40.343   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(startPipes[842]):
+06-12 17:32:40.343   576 27901 I ExynosCameraMCPipe: [CAM(0)][PIPE_ISP_REPROCESSING]-(start[296]):start() is succeed, Pipe(207)
+06-12 17:32:40.343   576 27901 I ExynosCameraFrameReprocessingFactory: [CAM(0)][Back_0]-(startPipes[892]):Starting Reprocessing [SCC>ISP] Success!
+06-12 17:32:40.343   576 27901 I ExynosCamera: DEBUG:duration time(    0 msec):(m_startReprocessingFrameFactory)
+06-12 17:32:40.355   576 27902 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13071]):first frame(F1(7) T2) 3AA DONE
+06-12 17:32:40.376   576 27904 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13155]):first frame(F1(7)), type(2) ISP DONE
+06-12 17:32:40.377   576 27904 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13347]):============= First Preview time ==================
+06-12 17:32:40.377   576 27904 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13348]):= configureStream ~ first frame  : 532 msec
+06-12 17:32:40.377   576 27904 I ExynosCameraSec: [CAM(0)][Back_0]-(m_handlePreviewFrame[13349]):===================================================
+06-12 17:32:40.377   576 27855 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureResult: 1312: Receiving first full metadata from HAL. : frameNumber=0
+06-12 17:32:40.378   576 27855 I Unihal  : FwkCaptureManager.cpp: synchronized_uni_process_capture_result: 1173: Transmitting first full metadata to FWK. : frameNumber=0
+06-12 17:32:40.378   576 27855 I SehCamDevSession@5.0-impl: [CAMKPI] camera3->process_capture_result : E
+06-12 17:32:40.379   576 27855 I SehCamDevSession@5.0-impl: [CAMKPI] camera3->process_capture_result : X
+06-12 17:32:40.379   576 27855 I Unihal  : HalCaptureMediator.cpp: ProcessCaptureResult: 1327: Receiving first 0xf2d48608(PREVIEW) buffer from HAL. : frameNumber=0
+06-12 17:32:40.379   576 27855 I Unihal  : FwkCaptureManager.cpp: synchronized_uni_process_capture_result: 1188: Transmitting first 0xf2d48608(PREVIEW) buffer to FWK. : frameNumber=0
+06-12 17:32:40.379   739   912 D Camera3-OutputStream: returnBufferCheckedLocked: First frame for stream 0, width 1920, height 1080, format 34
+06-12 17:32:40.414  1353  1353 W LooperSlow: RunCallback: type=1, action=android.animation.AnimationHandler$1@5654dc3, token=FRAME_CALLBACK_TOKEN, latencyMillis=48, dur=33ms
+06-12 17:32:40.430   976  1414 V WindowManager: Relayout Window{6c2cdc u0 StatusBar}: viewVisibility=0 req=1080x117 d0
+06-12 17:32:40.435 27705 27754 D ImageReaderSurfaceProducer: ImageTextureEntry can't wait on the fence on Android < 33
+06-12 17:32:40.437   515   515 E audit   : type=1400 audit(1781278360.433:56516): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:40.438   515   515 E audit   : type=1300 audit(1781278360.433:56516): arch=c00000b7 syscall=44 success=no exit=-13 a0=90 a1=7216448db0 a2=7216448f04 a3=1026671 items=0 ppid=535 pid=27705 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-12 17:32:40.448   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.465   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.473   976  1414 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0xdadc8fd
+06-12 17:32:40.476   976  1414 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1, destroy=false, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8
+06-12 17:32:40.481   976  1414 I WindowManager: Reparenting to leash, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8, leashParent=Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1
+06-12 17:32:40.488   629  1960 I SurfaceFlinger: id=15271 createSurf (0x0),-1 flag=24000, Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1
+06-12 17:32:40.489   976  1414 D WindowManager: makeSurface duration=8 leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x769649c
+06-12 17:32:40.506   976  1414 V WindowManager: Relayout hash=6c2cdc, pid=1353: mAttrs={(0,0)(fillx117) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+06-12 17:32:40.506   976  1414 V WindowManager:   fl=81000008
+06-12 17:32:40.506   976  1414 V WindowManager:   pfl=13001000
+06-12 17:32:40.506   976  1414 V WindowManager:   bhv=DEFAULT naviIconColor=0
+06-12 17:32:40.506   976  1414 V WindowManager:   sfl=2000}
+06-12 17:32:40.510  1353  1353 I ViewRootImpl@55a15ca[StatusBar]: Relayout returned: old=(0,0,1080,117) new=(0,0,1080,117) req=(1080,117)0 dur=91 res=0x1 s={true 498725286128} ch=false fn=44221
+06-12 17:32:40.512  1353  1353 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:0
+06-12 17:32:40.512  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-12 17:32:40.512  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-12 17:32:40.512  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-12 17:32:40.513  1353  1353 E IndicatorGardenAlgorithmBasicCutout: NOT MATCH !!!! resourceHeight:117, cutoutHeight:116 ([IndicatorGardenInputProperty]  Rotation(0-0,90-1,180-2,270-3)0, Density:3.0, ScreenWidthSize:1080, CoverSidePadding:0, mIndicatorGardenCenterOffset:13, mCameraCutoutCropSize:0, mGardenPaddingStart:24, mIndicatorCornerPadding:58, mCameraSidePadding:30, mCameraTopMargin:25, DpCutout:DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}) 
+06-12 17:32:40.513  1353  1353 E IndicatorGardenAlgorithmBasicCutout: NOT MATCH !!!! resourceHeight:117, cutoutHeight:116 ([IndicatorGardenInputProperty]  Rotation(0-0,90-1,180-2,270-3)0, Density:3.0, ScreenWidthSize:1080, CoverSidePadding:0, mIndicatorGardenCenterOffset:13, mCameraCutoutCropSize:0, mGardenPaddingStart:24, mIndicatorCornerPadding:58, mCameraSidePadding:30, mCameraTopMargin:25, DpCutout:DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}) 
+06-12 17:32:40.515   629   629 I Layer   : id=15256 removeFromCurrentState Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0 (136)
+06-12 17:32:40.520   629   660 I SurfaceFlinger: id=15256 Removed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0 (136)
+06-12 17:32:40.521  1353  1353 W LooperSlow: RunCallback: type=3, action=android.view.ViewRootImpl$TraversalRunnable@f6b4105, token=null, latencyMillis=139, dur=107ms
+06-12 17:32:40.521  1353  1353 W Looper  : Slow dispatch took 139ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:40.526  1353  1353 W Looper  : Slow delivery took 124ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:40.533   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.534   629   629 I Layer   : id=15256 Destroyed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0
+06-12 17:32:40.538   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:40.541   576 27908 I ExynosCamera: [CAM(0)][Back_0]-(m_monitorThreadFunc[7405]):@FIMC_IS_SYNC 4792
+06-12 17:32:40.543  1353  1353 W Looper  : Drained
+06-12 17:32:40.543  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:40.548   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.559   976  5544 W ActivityManager: stopServiceToken startId 13 is last, but have 1 remaining args
+06-12 17:32:40.568   976  1414 D SamsungAlarmManager: Cancel Alarm calling from uid:10075 pid :8987 / OP:PendingIntent{12f8ea5: PendingIntentRecord{a612a84 com.google.android.gms/com.google.android.gms.container startService}}
+06-12 17:32:40.571   976  1414 V SamsungAlarmManager: setLocked to kernel - W:600951881 / NW:600905337, now=600893972
+06-12 17:32:40.581   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.601  1353  1353 W Looper  : Slow dispatch took 18ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:40.633   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.644  1353  1353 W Looper  : Slow dispatch took 11ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:40.650   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.732   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.766   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.849   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.866   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.950   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.967   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:40.987   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:41.067   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.076 27705 27910 D ProfileInstaller: Installing profile for com.amaia23.hydracam
+06-12 17:32:41.083   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.133   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.150   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.208   565 27802 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 7146107
+06-12 17:32:41.210  1878 27829 I SecHAL  : device_sleep: NFC can be going to sleep
+06-12 17:32:41.234   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.250   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.322   515   515 E audit   : type=1400 audit(1781278361.317:56532): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:41.322   515   515 E audit   : type=1300 audit(1781278361.317:56532): arch=c00000b7 syscall=44 success=no exit=-13 a0=a2 a1=7216448db0 a2=7216448f04 a3=1026671 items=0 ppid=535 pid=27705 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-12 17:32:41.322   515   515 E audit   : type=1327 audit(1781278361.317:56532): proctitle="com.amaia23.hydracam"
+06-12 17:32:41.334   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.351   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.354   515   515 E audit   : type=1400 audit(1781278361.349:56533): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:41.367   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.406 27916 27916 D ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+06-12 17:32:41.417   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.434   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.441   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:41.492 27921 27921 D ProcessState: Binder ioctl to enable oneway spam detection failed: Invalid argument
+06-12 17:32:41.501   976  1414 D InputDispatcher: Inject motion (27921): action=0x0, time=240558279000000, f=0x0, d=0
+06-12 17:32:41.503   976  1172 I InputDispatcher: Delivering touch to (1353): action: 0x4, f=0x0, d=0, '73350de', t=1 
+06-12 17:32:41.503   976  1172 I InputDispatcher: Delivering touch to (27705): action: 0x0, f=0x0, d=0, '56d92a8', t=1 
+06-12 17:32:41.506   976  1172 D PowerManagerService: UserActivityStateListenerState: 1
+06-12 17:32:41.513  3763  3763 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3763@17, type = 1090523139
+06-12 17:32:41.514   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 7146107  [3763 / 17]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-12 17:32:41.522   976  1025 I GestureDetector: obtain mCurrentDownEvent. id: -700614628 caller: com.android.server.wm.SystemGesturesPointerEventListener.onPointerEvent:179 com.android.server.wm.PointerEventDispatcher.onInputEvent:71 android.view.InputEventReceiver.dispatchInputEvent:259 
+06-12 17:32:41.523   976  1025 I GestureDetector: obtain mCurrentDownEvent. id: -700614628 caller: com.android.server.wm.SystemPerformancePointerEventListener.onPointerEvent:89 com.android.server.wm.PointerEventDispatcher.onInputEvent:71 android.view.InputEventReceiver.dispatchInputEvent:259 
+06-12 17:32:41.530 27705 27705 I ViewRootImpl@c15300e[MainActivity]: ViewPostIme pointer 0
+06-12 17:32:41.543   976  1025 I GestureDetector: obtain mCurrentMotionEventRaw. action: 2 id: -908600109
+06-12 17:32:41.543   976  1025 I GestureDetector: obtain mCurrentMotionEventRaw. action: 2 id: -908600109
+06-12 17:32:41.551   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.568   576 27907 W ExynosCameraSec: [CAM(0)][Back_0]-(m_getSensorListenerData[31519]):skip the Rotation data. ret -11
+06-12 17:32:41.606  3763  3763 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3763@17, type = 1090523139
+06-12 17:32:41.607   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 7146107  [3763 / 17]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-12 17:32:41.617   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.634   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.718   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.722  3763  3763 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3763@17, type = 1090523139
+06-12 17:32:41.722   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 7146107  [3763 / 17]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-12 17:32:41.726 14212 14212 I wpa_supplicant: Heartbeat 16381
+06-12 17:32:41.735   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.768   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.836  3763  3763 I SemDvfsHyPerManager: acquire hyper - CameraTABoost/3763@17, type = 1090523139
+06-12 17:32:41.836   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 7146107  [3763 / 17]    HINT :      list : [TABoost / 0] [TIMEOUT / 1500] 
+06-12 17:32:41.845   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:41.851   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.868   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.919   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.933   976  1172 D PowerManagerService: [api] userActivityFromNative : 200 (event: 2 flags: 0 displayId: 0) eventTime = 240558714
+06-12 17:32:41.935   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:41.948   976  1414 D InputDispatcher: Inject motion (27921): action=0x1, time=240558729000000, f=0x0, d=0
+06-12 17:32:41.948   976  1172 I InputDispatcher: Delivering touch to (27705): action: 0x1, f=0x0, d=0, '56d92a8', t=1 
+06-12 17:32:41.948 27705 27705 I ViewRootImpl@c15300e[MainActivity]: ViewPostIme pointer 1
+06-12 17:32:41.957   976   976 I SemDvfsHyPerManager: acquire hyper - GESTURE_DETECTED/976@25, type = -999
+06-12 17:32:41.958   976   976 I SemDvfsHyPerManager: acquire hyper - GESTURE_DETECTED/976@25, type = -999
+06-12 17:32:41.958   976   976 I SemDvfsHyPerManager: acquire hyper - SMOOTH_SCROLL/976@24, type = -999
+06-12 17:32:41.958   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 501526  [976 / 25]    HINT : GESTURE_DETECTED    list : [TIMEOUT / 1342] 
+06-12 17:32:41.960   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 501526  [976 / 25]    HINT : GESTURE_DETECTED    list : [TIMEOUT / 1342] 
+06-12 17:32:41.960   565   599 I HYPER-HAL: [RequestManager.cpp]acquire(): Acquired ID : 500524  [976 / 24]    HINT : SMOOTH_SCROLL    list : 
+06-12 17:32:41.963   565   599 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 500524
+06-12 17:32:41.968   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.035   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.052   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.123  1353  1353 D PrivacyDotViewController: scheduleUpdate: 
+06-12 17:32:42.124  1353  2450 D PrivacyDotViewController: processNextViewState: 
+06-12 17:32:42.124  1353  2450 D PrivacyDotViewController: resolveState ViewState(viewInitialized=true, havingInset=false, isEdgeActive=false, dotTopMargin=80, systemPrivacyEventIsActive=true, shadeExpanded=false, qsExpanded=false, portraitRect=Rect(0, 0 - 931, 117), landscapeRect=Rect(116, 0 - 2268, 72), upsideDownRect=Rect(0, 0 - 1068, 117), seascapeRect=Rect(0, 0 - 2164, 72), layoutRtl=false, rotation=0, height=117, cornerIndex=1, designatedCorner=android.widget.FrameLayout{24763b5 I.E...... ......ID 913,80-1062,197 #7f0b067a app:id/privacy_dot_right_container})
+06-12 17:32:42.135   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.139   976  1414 V WindowManager: Relayout Window{6c2cdc u0 StatusBar}: viewVisibility=0 req=1080x117 d0
+06-12 17:32:42.141   976  1414 I WindowManager: Cancelling animation restarting=true, leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x769649c
+06-12 17:32:42.141   976  1414 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1, destroy=false, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8
+06-12 17:32:42.141   976  1414 I WindowManager: Reparenting to leash, surface=Surface(name=6c2cdc StatusBar)/@0xde31fa8, leashParent=Surface(name=WindowToken{74f4d4f android.os.BinderProxy@7bd1c29})/@0x149dac1
+06-12 17:32:42.142   629   660 I SurfaceFlinger: id=15272 createSurf (0x0),-1 flag=24000, Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#0
+06-12 17:32:42.143   976  1414 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation)/@0x4296d2
+06-12 17:32:42.146   976  1414 V WindowManager: Relayout hash=6c2cdc, pid=1353: mAttrs={(0,0)(fillx117) gr=TOP CENTER_VERTICAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+06-12 17:32:42.146   976  1414 V WindowManager:   fl=81000008
+06-12 17:32:42.146   976  1414 V WindowManager:   pfl=13000000
+06-12 17:32:42.146   976  1414 V WindowManager:   bhv=DEFAULT naviIconColor=0
+06-12 17:32:42.146   976  1414 V WindowManager:   sfl=2000}
+06-12 17:32:42.147  1353  1353 I ViewRootImpl@55a15ca[StatusBar]: Relayout returned: old=(0,0,1080,117) new=(0,0,1080,117) req=(1080,117)0 dur=11 res=0x1 s={true 498725286128} ch=false fn=44229
+06-12 17:32:42.147 27705 27705 D InsetsSourceConsumer: ensureControlAlpha: for ITYPE_STATUS_BAR on com.amaia23.hydracam/com.amaia23.hydracam.MainActivity
+06-12 17:32:42.147  1353  1353 W Looper  : Slow dispatch took 11ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:42.149   458   458 D io_stats: !@   8,0 r 10272445 363996840 w 3568073 145414436 d 0 0 f 0 0 iot 3466364 0 th 0 0 0 pt 0 inp 0 0 240558.930
+06-12 17:32:42.153   629   629 I Layer   : id=15271 removeFromCurrentState Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1 (136)
+06-12 17:32:42.153   629   629 I SurfaceFlinger: id=15271 Removed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1 (136)
+06-12 17:32:42.154   629   629 I Layer   : id=15271 Destroyed Surface(name=6c2cdc StatusBar)/@0xde31fa8 - animation-leash of insets_animation#1
+06-12 17:32:42.169   629   629 I SurfaceFlinger: SFWD update time=240558950993707
+06-12 17:32:42.169   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.210   976  1325 I Pageboost: Launcher App Execution
+06-12 17:32:42.236   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.253   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.286   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.299   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:42.336   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.339   515   515 E audit   : type=1400 audit(1781278362.337:56549): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:42.339   515   515 E audit   : type=1300 audit(1781278362.337:56549): arch=c00000b7 syscall=44 success=no exit=-13 a0=99 a1=7216448db0 a2=7216448f04 a3=1026671 items=0 ppid=535 pid=27705 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-12 17:32:42.339   515   515 E audit   : type=1327 audit(1781278362.337:56549): proctitle="com.amaia23.hydracam"
+06-12 17:32:42.353   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.423   515   515 E audit   : type=1400 audit(1781278362.421:56550): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:42.436   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.453   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.543 22892 23599 D Volley  : [318] ajmw.a: HTTP response for request=<[ ] https://play-fe.googleapis.com/fdfe/apps/contentSync?nocache_qos=lt 0x4be64f9b NORMAL 14> [lifetime=6939], [size=46], [rc=200], [retryCount=0]
+06-12 17:32:42.554   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.571   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.587   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.607   976  1070 W PackageSettings: Skipping PackageSetting{c66c68e com.samsung.android.messaging.de/10281} due to missing metadata
+06-12 17:32:42.608   976  1070 W PackageSettings: Skipping PackageSetting{815feaf com.samsung.android.aware.service.de/10261} due to missing metadata
+06-12 17:32:42.612   556   580 D BatteryDump: wait_for_battery_event : occurred : change@/devices/platform/battery/power_supply/battery 
+06-12 17:32:42.628   556   556 I android.hardware.health@2.1-service-samsung: updateLrpSysfs: write: 359
+06-12 17:32:42.629   976  2480 D BatteryService: Sending ACTION_BATTERY_CHANGED. scale:100, info:{.chargerAcOnline = false, .chargerUsbOnline = true, .chargerWirelessOnline = false, .maxChargingCurrent = 0, .maxChargingVoltage = 0, .batteryStatus = CHARGING, .batteryHealth = GOOD, .batteryPresent = true, .batteryLevel = 63, .batteryVoltage = 3931, .batteryTemperature = 338, .batteryCurrent = -133, .batteryCycleCount = 0, .batteryFullCharge = 3000000, .batteryChargeCounter = 1914000, .batteryTechnology = Li-ion}
+06-12 17:32:42.629   976  2480 D BatteryService: online:5, current avg:-322, charge type:1, POGO powered:false, power sharing:false, high voltage charger:false, charger_type:0, capacity:280000, misc_event:0x10000, current_event:0x8000, current_now:-133
+06-12 17:32:42.631   976  1164 D MotionRecognitionService: [SAR]  onReceive : ACTION_BATTERY_CHANGED, Plugged: 2
+06-12 17:32:42.631   976   976 D SemWifiApBroadcastReceiver: Received : android.intent.action.BATTERY_CHANGED
+06-12 17:32:42.631   976  1164 I MotionRecognitionService: [TA] In/out: true, curr state: 1
+06-12 17:32:42.631   976  1164 I MotionRecognitionService: [TA] Allow main grip with USB(0x400). Nothing to do.
+06-12 17:32:42.631   976   976 D AdaptiveBrightnessLongtermModelBuilder: Received android.intent.action.BATTERY_CHANGED
+06-12 17:32:42.632  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-12 17:32:42.633  1353  1353 I PowerUI : mBootCompleted = true |  mFullyConnected = true
+06-12 17:32:42.633  1353  1353 I PowerUI : BATTERY_HEALTH_CHECK extraHealth=2 mBatteryMiscEvent=65536
+06-12 17:32:42.633  1353  1353 D PowerUI : priorPlugType = 2 mPlugType = 2 priorBatteryStatus = 2 mBatteryStatus = 2
+06-12 17:32:42.633  1353  1353 I PowerUI : oldMisalign : false, curMisalign : false
+06-12 17:32:42.635  1353  1353 D PowerUI.Notification: showChargingNotice oldChargingType : 1 currentChargingType : 1 oldChargingTime : 4967000 mChargingTime : 4982000
+06-12 17:32:42.635  1353  1353 D PowerUI.Notification: showChargingNotification()
+06-12 17:32:42.637  1324  1324 D SemBigDataInfoController: Intent : android.intent.action.BATTERY_CHANGED
+06-12 17:32:42.637  1353  3393 D PowerUI.Notification: 1. restoreScreenTimeOut - saved_value : :
+06-12 17:32:42.637  1353  3393 E PowerUI.Notification: no saved value, so we do nothing !!
+06-12 17:32:42.637   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.641   976  5544 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = 0
+06-12 17:32:42.641   976  5544 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = -1
+06-12 17:32:42.641   976  5544 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: converting userId from USER_ALLto 0
+06-12 17:32:42.641 22892 23597 D Volley  : [317] ajmw.a: HTTP response for request=<[ ] https://play-fe.googleapis.com/fdfe/apps/contentSync?nocache_qos=lt 0x4be64f9b NORMAL 13> [lifetime=7042], [size=45], [rc=200], [retryCount=0]
+06-12 17:32:42.642  1353  1353 D PowerUI : Battery swelling mode - priorBatterySwellingMode = 0 mBatterySwellingMode = 0 mBatteryStatus = 2
+06-12 17:32:42.642  1353  1353 I PowerUI : mBatteryMiscEvent = 65536
+06-12 17:32:42.642  1353  1353 W Looper  : Slow dispatch took 10ms main h=android.os.Handler c=com.android.systemui.broadcast.ActionReceiver$onReceive$1$1$1@59458a2 m=0
+06-12 17:32:42.643  1353  1353 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+06-12 17:32:42.646  1353  1353 I AODBatteryManager: updateBatteryData: ACTION_BATTERY_CHANGED
+06-12 17:32:42.646 22892 27435 I Finsky  : [460] Completed 2 account content syncs with 2 successful.
+06-12 17:32:42.647  1353  1353 I AODBatteryManager: saveBatteryData : AOD BatteryData [mBatteryLevel=63, mBatteryStatus=CHARGING, mBatteryPlugType=USB, mBatteryPlugged=true, mRemainingChargeTime=4982000, mBatteryChargingType=1, mBatteryChargerType=NORMAL, mBatteryOnline=NOT_DEFINED, mBatterySwellingMode=NONE, mBatteryProtectMode=false]
+06-12 17:32:42.647  1353  1353 I ChargingInfoManager: updateChargingInfo: newState = AOD ChargingInfo [mState=BATTERY_AND_REMAIN_TIME, mIsCharging=true, mIsFullyCharged=false, mIsBatteryProtectMode=false], oldState = AOD ChargingInfo [mState=BATTERY_AND_REMAIN_TIME, mIsCharging=true, mIsFullyCharged=false, mIsBatteryProtectMode=false]
+06-12 17:32:42.648 22892 22892 I Finsky  : [2] [ContentSync] Installation state replication succeeded.
+06-12 17:32:42.648 22892 22892 I Finsky  : [2] SCH: jobFinished: 12-1. TimeElapsed: 9661ms.
+06-12 17:32:42.649  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:42.652 22892 22892 I Finsky  : [2] WM::SCH: Logging work end for 12-1
+06-12 17:32:42.653  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:42.653  1353  1353 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+06-12 17:32:42.653  1353  1353 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+06-12 17:32:42.653  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:42.654   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.661  1353  1353 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:0
+06-12 17:32:42.661  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 58
+06-12 17:32:42.661  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 30
+06-12 17:32:42.661  1353  1353 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 480 deviceDensity = 480 initialDisplaySizeFactor = 1080 currentDisplaySizeFactor = 1080 initialDisplayDensity = 480 proportionalDensity = 480 proportionalPixel = 25
+06-12 17:32:42.661  1353  1353 E IndicatorGardenAlgorithmBasicCutout: NOT MATCH !!!! resourceHeight:117, cutoutHeight:116 ([IndicatorGardenInputProperty]  Rotation(0-0,90-1,180-2,270-3)0, Density:3.0, ScreenWidthSize:1080, CoverSidePadding:0, mIndicatorGardenCenterOffset:13, mCameraCutoutCropSize:0, mGardenPaddingStart:24, mIndicatorCornerPadding:58, mCameraSidePadding:30, mCameraTopMargin:25, DpCutout:DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}) 
+06-12 17:32:42.661  1353  1353 E IndicatorGardenAlgorithmBasicCutout: NOT MATCH !!!! resourceHeight:117, cutoutHeight:116 ([IndicatorGardenInputProperty]  Rotation(0-0,90-1,180-2,270-3)0, Density:3.0, ScreenWidthSize:1080, CoverSidePadding:0, mIndicatorGardenCenterOffset:13, mCameraCutoutCropSize:0, mGardenPaddingStart:24, mIndicatorCornerPadding:58, mCameraSidePadding:30, mCameraTopMargin:25, DpCutout:DisplayCutout{insets=Rect(0, 116 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(931, 0 - 1080, 116), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2280 density={3.0} cutoutSpec={M 0,0 H -49.66666666666667 V 38.66666666666667 H 0 V 0 Z @dp @right} rotation={0} scale={1.0}}}}) 
+06-12 17:32:42.663  1353  1353 W Looper  : Slow dispatch took 16ms main h=android.view.Choreographer$FrameHandler c=android.view.Choreographer$FrameDisplayEventReceiver@d8bd973 m=0
+06-12 17:32:42.664  1353  1353 D KeyguardUpdateMonitor: handleBatteryUpdate
+06-12 17:32:42.667  1353  1353 D KeyguardSecIndicationController: addIndicationTimeout() returned - unlocking
+06-12 17:32:42.667  1353  1353 D KeyguardSecIndicationController: addIndication() returned - unlocking
+06-12 17:32:42.667  1353  1353 D KeyguardSecIndicationController: addBatteryIndication() status = BatteryStatus{status=2,level=63,plugged=2,health=2,maxChargingWattage=-1,remaining=4982000ultraFastCharger=0}
+06-12 17:32:42.667  1353  1353 W Looper  : Slow delivery took 21ms main h=com.android.keyguard.KeyguardUpdateMonitor$17 c=null m=302
+06-12 17:32:42.667  1353  1353 W Looper  : Drained
+06-12 17:32:42.680 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 1-1337, CT: 1781278235262, Constraints: [{ L: 43131380, D: 86331380, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.680 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 10-4, CT: 1781278233896, Constraints: [{ L: 1200000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.680 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 10-11, CT: 1781278233897, Constraints: [{ L: 600000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.680 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 10-26, CT: 1781278233898, Constraints: [{ L: 600000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.680 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 10-93, CT: 1781278233906, Constraints: [{ L: 300000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.680 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 10-123, CT: 1781278233907, Constraints: [{ L: 600000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.681 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 34-1474, CT: 1781278242940, Constraints: [{ L: 604800000, D: 2478827780, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.681 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 34-1486, CT: 1781278242943, Constraints: [{ L: 604800000, D: 2562353210, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.681 22892 23056 I Finsky  : [280] SCH: Scheduling phonesky job Id: 34-1489, CT: 1781278242944, Constraints: [{ L: 49552076, D: 1345552076, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+06-12 17:32:42.690 22892 23031 I Finsky  : [277] SCH: Scheduling 1 system job(s)
+06-12 17:32:42.692 22892 23031 I Finsky  : [277] SCH: Scheduling system job Id: 9549, L: 171215, D: 86203951, C: false, I: false, N: 1
+06-12 17:32:42.694   976  1942 V SamsungAlarmManager: setLocked to kernel - W:600951881 / NW:600905337, now=600896095
+06-12 17:32:42.695   976  1942 D SamsungAlarmManager: setInexact (T:3/F:0/AC:false) 20260612T173533 now=600896096 - CU:1000/CP:976/L:931d005:*job.delay*
+06-12 17:32:42.695   976  1942 V SamsungAlarmManager: setLocked to kernel - W:600951881 / NW:600905337, now=600896096
+06-12 17:32:42.704 22892 27056 I Finsky  : [446] SCH: job service finished with id 9538.
+06-12 17:32:42.717   976  1942 I ActivityManager: Killing 26059:com.google.android.apps.walletnfcrel/u0a285 (adj 925): empty #31
+06-12 17:32:42.720   976  1038 I libprocessgroup: Successfully killed process cgroup uid 10285 pid 26059 in 0ms
+06-12 17:32:42.730   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:42.737   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.754   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.794   535   535 I Zygote  : Process 26059 exited due to signal 9 (Killed)
+06-12 17:32:42.795 19560 19560 D HidDeviceService: handleMessage(): msg.what=8
+06-12 17:32:42.824   976  1068 D PackageSettings: ++ writeStateForUserSyncLPr(0)
+06-12 17:32:42.854   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.871   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.887   976  1068 W PackageSettings: -- writeStateForUserSyncLPr(0)
+06-12 17:32:42.887   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.889   976   976 W NotificationHistory: Attempted to add notif for locked/gone/disabled user 0
+06-12 17:32:42.894  4810  4810 I NotificationListener: [Service]v6.1.9-eap02 Received new notification
+06-12 17:32:42.895  1884  1884 I Launcher.NotificationListener: onNotificationPosted : com.android.systemui number : 0
+06-12 17:32:42.899  4810  5360 I NotificationPipeline: Processing new notification: -1|com.android.systemui|2131428820|charging_state|10036
+06-12 17:32:42.901  4810  5360 W BridgeModeModel: Not started, default to bridging
+06-12 17:32:42.901  4810  5360 E Notification4Water_NB: WatchFactory.getWatch-lastConnectedNodeId is null
+06-12 17:32:42.902  4810  5360 W Notification4Water_NB: NotificationBridgeCallback.onNotificationPosted-never connected before
+06-12 17:32:42.902  4810  5360 I NotificationPipeline: Discarding notification: -1|com.android.systemui|2131428820|charging_state|10036
+06-12 17:32:42.903  1353  1353 D InterruptionStateProvider: No bubble up: not allowed to bubble: -1|com.android.systemui|2131428820|charging_state|10036
+06-12 17:32:42.903  8288  8288 I Edge.badge: updateBadge item = com.android.systemui:-1 1
+06-12 17:32:42.905  1353  1353 D InterruptionStateProvider:  no Heads up : edgelighting enabled app. -1|com.android.systemui|2131428820|charging_state|10036
+06-12 17:32:42.910  1353  1353 W Looper  : Slow dispatch took 12ms main h=android.os.Handler c=com.android.systemui.statusbar.NotificationListener$$ExternalSyntheticLambda1@117ca69 m=0
+06-12 17:32:42.910  1353  1595 D PeopleSpaceWidgetMgr: Sbn doesn't contain valid PeopleTileKey: null/-1/com.android.systemui
+06-12 17:32:42.923  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:42.923  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:42.938   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.955   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:42.957  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:42.957  1353  1353 D QS      : setQSExpansion 0.0 -172.02501
+06-12 17:32:43.015   576   656 I Unihal  : GlobalMonitor.cpp: PrintInfo: 303: S(4) FWK L(  5)    45/M(T)/R(0)/B(0/1),    46/M(F)/R(0)/B(0/1),    47/M(F)/R(0)/B(0/1),    48/M(F)/R(0)/B(0/1),    49/M(F)/R(0)/B(0/1), 
+06-12 17:32:43.015   576   656 I Unihal  : GlobalMonitor.cpp: PrintInfo: 310:      HAL L(  5)    45/M(T)/R(0)/B(0/1),    46/M(F)/R(0)/B(0/1),    47/M(F)/R(0)/B(0/1),    48/M(F)/R(0)/B(0/1),    49/M(F)/R(0)/B(0/1), 
+06-12 17:32:43.038   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.065 19560 19593 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x1b, addressType=1, address=7551FF_E, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-67, periodicAdvInt=0x0
+06-12 17:32:43.071   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.097   976  1942 I EDMNativeHelperService: isCameraEnabled
+06-12 17:32:43.107   976  1942 D EDMNativeHelper: isCameraEnabled
+06-12 17:32:43.109   976  1942 D EDMNativeHelper: checking for camera in EnterpriseDeviceManagerService
+06-12 17:32:43.111   976  1942 D EnterpriseDeviceManagerService: isCameraEnabledNative
+06-12 17:32:43.111   976  1942 D EnterpriseDeviceManagerService: checking for camera in restriction policy
+06-12 17:32:43.113   976  1942 D RestrictionPolicy: isCameraEnabled ret(true) userId(0) cxtInfo.mCallerUid(10367) cxtInfo.mContainerId(0)
+06-12 17:32:43.115   739 27848 D CameraDeviceClient: vr service found
+06-12 17:32:43.117   739 27848 I CameraDeviceClient: isCameraBlockedByHMT: usbpd_ids: 0000:0000, is camera blocking device: false
+06-12 17:32:43.138   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.155   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.158   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:43.168  3763  4785 I SDHMS:C : SIOP:: AP:323(494,110) BAT:338(338,0) USB:363(363,0) CHG:390(390,0) PA:431(431,0) WIFI:338(338,0) LRP:364(364,0) LRF:364(364) LRB:359(359) 
+06-12 17:32:43.177   976   976 D SemWifiP2pService: GopsReceiver : received : com.samsung.intent.action.CHECK_SIOP_LEVEL
+06-12 17:32:43.177   976   976 I SemWifiP2pService: siop_level = -2
+06-12 17:32:43.177   976  1377 D SensorService: Calling batch handle==41 flags=0 rate=200000000 timeout== 0
+06-12 17:32:43.178   562   562 I Sensors : batch(6) - uncal_light_sensor try to batching with 200000000
+06-12 17:32:43.178   976   976 D SemWifiP2pService: GopsReceiver : received : com.samsung.intent.action.CHECK_SIOP_LEVEL time : 1ms
+06-12 17:32:43.179   562   562 I Sensors : UncalLightSensor old sensor_state 16387, new sensor_state : 1410690598322179 en : 1
+06-12 17:32:43.179 21279 21317 I SystemBroadcastReceiver: [#CMH#] onReceive completed :  0
+06-12 17:32:43.182   562   562 I Sensors : enable:: uncal_light_sensor(6)
+06-12 17:32:43.182 21279 21279 I a       : [#CMH#] onReceive action = EVENT_SIOP
+06-12 17:32:43.183   976  1377 D SensorService: Calling batch handle==16777217 flags=0 rate=10000000 timeout== 0
+06-12 17:32:43.185   976  1377 D SemContextService: lock : registerCallback
+06-12 17:32:43.188   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.189   976  1377 W CAE     : registerCallback(ContextAwareService.java:192) - [regi 01] Mutex is locked for TEST_FLAT_MOTION
+06-12 17:32:43.190   976  1377 W CAE     : registerCallback(ContextAwareService.java:199) - [regi 04]  com.samsung.android.contextaware.ContextAwareManager$CaListenerDelegate@61d79c0
+06-12 17:32:43.190   976  1377 W CAE     : getListener(ListenerListManager.java:127) - [getListener1]  com.samsung.android.contextaware.ContextAwareManager$CaListenerDelegate@61d79c0
+06-12 17:32:43.190   976  1377 W CAE     : getListener(ListenerListManager.java:128) - [getListener2]  com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43
+06-12 17:32:43.192   976  1377 V CAE     : start(ContextProvider.java:128)
+06-12 17:32:43.192   976  1377 V CAE     : clear(TestFlatMotionRunner.java:126)
+06-12 17:32:43.193   976  1377 V CAE     : enable(TestFlatMotionRunner.java:102)
+06-12 17:32:43.193   976  1377 I CAE     : sendCmdToSensorHub(SensorHubCommManager.java:156) - -79, 23, 0, 0,
+06-12 17:32:43.194   976  1157 D SensorService: setSContextDataLocked ints length 2 , byte length 4
+06-12 17:32:43.194   976  1157 D SensorService: setSContextDataLocked 17b1
+06-12 17:32:43.195   562   562 D Sensors : b1 17 00 00  
+06-12 17:32:43.195   562   562 E Sensors : inject_scontext_data: New ssp_data_injection_fd(39)
+06-12 17:32:43.197   562   562 D Sensors : SContext Data Injection return 4
+06-12 17:32:43.198   976  1377 D CAE     : getFaultDetectionResult(TestFlatMotionRunner.java:139) - true
+06-12 17:32:43.199   976  1377 I CAE     : notifyCmdProcessResultObserver(ContextProvider.java:627) - CheckResult = 0, Cause = Success
+06-12 17:32:43.201   976  1377 D CAE     : doCommendProcess(ContextAwareService.java:400) - complete notify the operation result.
+06-12 17:32:43.201   976  1377 I CAE     : displayUsedCountForService(ContextAwareService.java:464) - totalCnt = 1, serviceCount = 1, subCollectionCount = 0
+06-12 17:32:43.201   976  1377 D CAE     : showListenerList(ContextAwareService.java:329) - ===== Context Aware Service List =====
+06-12 17:32:43.201   976  1377 I CAE     : showListenerList(ContextAwareService.java:338) - Listener : com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43, Service : SLOCATION_RUNNER(1)
+06-12 17:32:43.201   976  1377 I CAE     : showListenerList(ContextAwareService.java:338) - Listener : com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43, Service : FREE_FALL_DETECTION(1)
+06-12 17:32:43.201   976  1377 I CAE     : showListenerList(ContextAwareService.java:338) - Listener : com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43, Service : TEST_FLAT_MOTION(1)
+06-12 17:32:43.201   976  1377 W CAE     : registerCallback(ContextAwareService.java:213) - [regi 02] Mutex is unlocked for TEST_FLAT_MOTION
+06-12 17:32:43.201   976  1377 E SemContext.CaeProvider: setAttribute() : attribute is null!
+06-12 17:32:43.202   976  1377 W Binder  : Outgoing transactions from this process must be FLAG_ONEWAY
+06-12 17:32:43.202   976  1377 W Binder  : java.lang.Throwable
+06-12 17:32:43.202   976  1377 W Binder  : 	at android.os.BinderProxy.transact(BinderProxy.java:545)
+06-12 17:32:43.202   976  1377 W Binder  : 	at com.samsung.android.hardware.context.ISemContextCallback$Stub$Proxy.getListenerInfo(ISemContextCallback.java:166)
+06-12 17:32:43.202   976  1377 W Binder  : 	at com.samsung.android.hardware.context.SemContextService$ListenerManager.notifyListeners(SemContextService.java:1351)
+06-12 17:32:43.202   976  1377 W Binder  : 	at com.samsung.android.hardware.context.SemContextService.registerCallback(SemContextService.java:278)
+06-12 17:32:43.202   976  1377 W Binder  : 	at com.samsung.android.hardware.context.ISemContextService$Stub.onTransact(ISemContextService.java:158)
+06-12 17:32:43.202   976  1377 W Binder  : 	at android.os.Binder.execTransactInternal(Binder.java:1220)
+06-12 17:32:43.202   976  1377 W Binder  : 	at android.os.Binder.execTransact(Binder.java:1179)
+06-12 17:32:43.202   976  1377 D SemContextService: 	.registerCallback : 3, client=com.sec.android.sdhms.thermal.overheatcontrol.OverheatSensorChecker$TypeSemContext$1@c2faffd
+06-12 17:32:43.202   976  1377 D SemContextConnectionList: client packageName : com.sec.android.sdhms.thermal.overheatcontrol.OverheatSensorChecker$TypeSemContext$1@c2faffd
+06-12 17:32:43.202   976  1377 D SemContextService: unlock : registerCallback
+06-12 17:32:43.203   976  1377 D SensorService: Calling batch handle==41 flags=0 rate=200000000 timeout== 0
+06-12 17:32:43.203   976  1377 E SensorService: BigData:Pakage) 5 already enabled. 
+06-12 17:32:43.204   976  1377 D SensorService: Calling batch handle==16777217 flags=0 rate=10000000 timeout== 0
+06-12 17:32:43.209   976  1377 D SensorService: Calling activate off 16777217
+06-12 17:32:43.209   562   562 D android.hardware.sensors@2.0-service.multihal: Als_common::setDelay, handle : 1 time : 10000000ns
+06-12 17:32:43.210   976  1942 D SensorService: Calling activate off 16777217
+06-12 17:32:43.211   562   562 D android.hardware.sensors@2.0-service.multihal: Als_common::setDelay, handle : 1 time : 10000000ns
+06-12 17:32:43.238   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.255   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.273   562  1117 I Sensors : Uncalibrated lux = 257, CCT = 2079, r = 333, g = 86, b = 117, c = 31, atime = 690, again = 0, time = 600896664243110
+06-12 17:32:43.273   562  1117 I Sensors : luminance 158
+06-12 17:32:43.303   565 27925 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 501526
+06-12 17:32:43.337   565 27924 I HYPER-HAL: [RequestManager.cpp]releaseLocked(): Released ID : 7146107
+06-12 17:32:43.339   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.359   515   515 E audit   : type=1400 audit(1781278363.357:56566): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:43.359   515   515 E audit   : type=1300 audit(1781278363.357:56566): arch=c00000b7 syscall=44 success=no exit=-13 a0=90 a1=7216448db0 a2=7216448f04 a3=1026671 items=0 ppid=535 pid=27705 auid=4294967295 uid=10367 gid=10367 euid=10367 suid=10367 fsuid=10367 egid=10367 sgid=10367 fsgid=10367 tty=(none) ses=4294967295 comm="1.raster" exe="/system/bin/app_process64" subj=u:r:untrusted_app:s0:c111,c257,c512,c768 key=(null)
+06-12 17:32:43.359   515   515 E audit   : type=1327 audit(1781278363.357:56566): proctitle="com.amaia23.hydracam"
+06-12 17:32:43.372   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.377   576 27907 W ExynosCameraSec: [CAM(0)][Back_0]-(m_getSensorListenerData[31519]):skip the Rotation data. ret -11
+06-12 17:32:43.411 19560 19560 D HidDeviceService: handleMessage(): msg.what=8
+06-12 17:32:43.439   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.442   515   515 E audit   : type=1400 audit(1781278363.437:56567): avc:  denied  { getattr } for  pid=27705 comm="1.raster" name="anon_inode:" dev="anon_inodefs" ino=1 scontext=u:r:untrusted_app:s0:c111,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 SEPF_SM-G970F_12_0001 audit_filtered
+06-12 17:32:43.454   976  1154 D SensorHubManager: onGetSensorHubDataLocked: library(4) = 1, 1, 23, 1
+06-12 17:32:43.455   976  1155 D CAE     : onGetSensorHubData(SensorHubParserProvider.java:89) - onGetSensorHubData Event [event buffer len :4], AP_WAKEUP
+06-12 17:32:43.455   976  1155 I CAE     : parse(SensorHubParserProvider.java:190) - buffer size = 4
+06-12 17:32:43.455   976  1155 I CAE     : parse(SensorHubParserProvider.java:201) - 1, 1, 23, 1,
+06-12 17:32:43.456   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.456   976  1155 D CAE     : display(ContextProvider.java:375) - ================= TEST_FLAT_MOTION =================
+06-12 17:32:43.457   976  1155 I CAE     : display(ContextProvider.java:391) - Action=[1]
+06-12 17:32:43.459   976  1152 D SemContextService: Service.updateContext() : service = Device Position
+06-12 17:32:43.464   976  1377 D SemContextService: lock : unregisterCallback
+06-12 17:32:43.464   976  1377 D SemContextService: Service.removeListenerLocked() : listener = com.samsung.android.hardware.context.SemContextService$Listener@a3ad655, service = Device Position, used = 0
+06-12 17:32:43.465   976  1377 W CAE     : unregisterCallback(ContextAwareService.java:234) - [unregi 01] Mutex is locked for TEST_FLAT_MOTION
+06-12 17:32:43.466   976  1377 W CAE     : getListener(ListenerListManager.java:127) - [getListener1]  com.samsung.android.contextaware.ContextAwareManager$CaListenerDelegate@61d79c0
+06-12 17:32:43.466   976  1377 W CAE     : getListener(ListenerListManager.java:128) - [getListener2]  com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43
+06-12 17:32:43.467   976  1377 V CAE     : stop(ContextProvider.java:155)
+06-12 17:32:43.467   976  1377 V CAE     : clear(TestFlatMotionRunner.java:126)
+06-12 17:32:43.467   976  1377 V CAE     : disable(TestFlatMotionRunner.java:115)
+06-12 17:32:43.468   976  1377 I CAE     : sendCmdToSensorHub(SensorHubCommManager.java:156) - -78, 23, 0, 0,
+06-12 17:32:43.468   976  1157 D SensorService: setSContextDataLocked ints length 2 , byte length 4
+06-12 17:32:43.468   976  1157 D SensorService: setSContextDataLocked 17b2
+06-12 17:32:43.468   562   562 D Sensors : b2 17 00 00  
+06-12 17:32:43.468   562   562 E Sensors : inject_scontext_data: New ssp_data_injection_fd(39)
+06-12 17:32:43.469   562   562 D Sensors : SContext Data Injection return 4
+06-12 17:32:43.470   976  1377 D CAE     : getFaultDetectionResult(TestFlatMotionRunner.java:139) - true
+06-12 17:32:43.470   976  1377 I CAE     : notifyCmdProcessResultObserver(ContextProvider.java:627) - CheckResult = 0, Cause = Success
+06-12 17:32:43.470   976  1377 D CAE     : doCommendProcess(ContextAwareService.java:400) - complete notify the operation result.
+06-12 17:32:43.471   976  1377 I CAE     : displayUsedCountForService(ContextAwareService.java:464) - totalCnt = 0, serviceCount = 0, subCollectionCount = 0
+06-12 17:32:43.471   976  1377 D CAE     : showListenerList(ContextAwareService.java:329) - ===== Context Aware Service List =====
+06-12 17:32:43.471   976  1377 I CAE     : showListenerList(ContextAwareService.java:338) - Listener : com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43, Service : SLOCATION_RUNNER(1)
+06-12 17:32:43.471   976  1377 I CAE     : showListenerList(ContextAwareService.java:338) - Listener : com.samsung.android.contextaware.manager.ContextAwareService$Listener@9bef43, Service : FREE_FALL_DETECTION(1)
+06-12 17:32:43.471   976  1377 W CAE     : unregisterCallback(ContextAwareService.java:255) - [unregi 02] Mutex is unlocked for TEST_FLAT_MOTION
+06-12 17:32:43.472   976  1377 D SemContextService: 	.unregisterCallback : 2, client=com.sec.android.sdhms.thermal.overheatcontrol.OverheatSensorChecker$TypeSemContext$1@c2faffd
+06-12 17:32:43.472   976  1377 D SemContextService: unlock : unregisterCallback
+06-12 17:32:43.472   562  1117 I Sensors : Uncalibrated lux = 257, CCT = 2079, r = 333, g = 86, b = 118, c = 31, atime = 690, again = 0, time = 600896864243110
+06-12 17:32:43.472   562  1117 I Sensors : luminance 158
+06-12 17:32:43.474   976  1377 D SensorService: Calling activate off 41
+06-12 17:32:43.474   562   562 I Sensors : batch(6) - uncal_light_sensor try to batching with 200000000
+06-12 17:32:43.476   976  1942 E SensorService: BigData:Pakage) 5 already disabled. 
+06-12 17:32:43.476   976  1942 D SensorService: Calling activate off 41
+06-12 17:32:43.476   562   562 I Sensors : UncalLightSensor old sensor_state 16387, new sensor_state : 1409591086694403 en : 0
+06-12 17:32:43.479   562   562 I Sensors : disable:: uncal_light_sensor(6)
+06-12 17:32:43.524   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.556   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.612   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:43.639   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.673   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.735   976  1122 I ActivityManager: Killing 26471:com.google.android.partnersetup/u0a65 (adj 999): empty #31
+06-12 17:32:43.740   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.740   976  1038 I libprocessgroup: Successfully killed process cgroup uid 10065 pid 26471 in 0ms
+06-12 17:32:43.757   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.788 19560 19560 D HidDeviceService: handleMessage(): msg.what=8
+06-12 17:32:43.792   535   535 I Zygote  : Process 26471 exited due to signal 9 (Killed)
+06-12 17:32:43.823   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.857   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.957   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:43.974   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.018   562   924 D android.hardware.sensors@2.0-service.multihal: Als_common::readEvents, enabled : 1, data : -1.000000, 0.000000, 0.000000, 0.000000, 0.000000, 50000.000000, 64000.000000
+06-12 17:32:44.057   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.074   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.124   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.141   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.151   458   458 D io_stats: !@   8,0 r 10273429 364011468 w 3568136 145418864 d 0 0 f 0 0 iot 3466616 0 th 0 0 0 pt 0 inp 0 0 240560.932
+06-12 17:32:44.241   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.274 26729 26742 I elpq    : (REDACTED) HDM. appOpsListener %s %s
+06-12 17:32:44.274 26729 26742 I elpq    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+06-12 17:32:44.274   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.279  2479  2521 I RequestManager_FLP: onOpChanged, op=0 / packageName=com.whatsapp
+06-12 17:32:44.342   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+06-12 17:32:44.358   629   629 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER

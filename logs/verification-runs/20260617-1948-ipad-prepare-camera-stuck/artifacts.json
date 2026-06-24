@@ -1,0 +1,293 @@
+{
+  "acceptanceChecks": [
+    "Physical iPad can leave or bypass Prepare Camera into the normal app flow",
+    "Root cause is identified from repo/device evidence before code changes",
+    "Focused tests and static checks pass for touched files"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:49:04.780552+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:49:04.879863+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/camera_setup_preview_screen_test.dart"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T17:53:29.391030+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--no-pub",
+        "test/widgets/camera_setup_preview_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:54:28.824227+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze",
+        "--no-pub"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:54:31.360787+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "lib/main.dart",
+        "lib/screens/camera_setup_preview_screen.dart",
+        "test/widgets/camera_setup_preview_screen_test.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:55:05.263686+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "--dart-define=HYDRACAM_AUTOMATION_PORT=4762",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:55:34.820930+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--device",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "build/ios/iphoneos/Runner.app"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:58:53.853034+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"setup\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:59:07.994785+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "1",
+        "--max-time",
+        "5",
+        "-sS",
+        "-X",
+        "POST",
+        "http://192.168.178.104:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-setup-open-hydracam\",\"pixelRatio\":1.0}"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:59:25.963885+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--source",
+        "Documents/automation-screenshots/ipad-setup-open-hydracam-2026-06-17T19-59-26-164828.png",
+        "--destination",
+        "logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/screenshots/ipad-setup-open-hydracam.png",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.keepeyeonball",
+        "--timeout",
+        "30",
+        "--json-output",
+        "logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-open-hydracam.json",
+        "--log-output",
+        "logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-open-hydracam.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:59:49.626991+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "1",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T18:00:21.074420+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--device",
+        "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"setup\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T18:00:46.376603+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "1",
+        "--max-time",
+        "5",
+        "-sS",
+        "-X",
+        "POST",
+        "http://192.168.178.104:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"name\":\"ipad-setup-route-with-open-button\",\"pixelRatio\":1.0}"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T18:00:59.157549+00:00"
+    },
+    {
+      "command": [
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619",
+        "--source",
+        "Documents/automation-screenshots/ipad-setup-route-with-open-button-2026-06-17T20-00-59-382969.png",
+        "--destination",
+        "logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/screenshots/ipad-setup-route-with-open-button.png",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.keepeyeonball",
+        "--timeout",
+        "30",
+        "--json-output",
+        "logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-route-with-open-button.json",
+        "--log-output",
+        "logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-route-with-open-button.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T18:01:15.210744+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--connect-timeout",
+        "1",
+        "--max-time",
+        "5",
+        "-sS",
+        "http://192.168.178.104:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T18:01:26.269325+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "physical iOS device",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS",
+      "role": "manual launch setup route repro"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "physical iOS device",
+      "name": "iPad (5)",
+      "notes": [],
+      "os": "iOS 17.7.11",
+      "role": "automation setup route hardware proof"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-setup-open-hydracam.png",
+    "screenshots/ipad-setup-route-with-open-button.png",
+    "video/ipad-post-exit-master-route-derived-from-screenshot.mp4",
+    "device-logs/ipad-copy-setup-open-hydracam.json",
+    "device-logs/ipad-copy-setup-open-hydracam.log",
+    "device-logs/ipad-copy-setup-route-with-open-button.json",
+    "device-logs/ipad-copy-setup-route-with-open-button.log"
+  ],
+  "item": {
+    "slug": "ipad-prepare-camera-stuck",
+    "source": "user report 2026-06-17: last iPad install opens Prepare Camera and cannot navigate",
+    "title": "Fix iPad stuck on Prepare Camera after install"
+  },
+  "notes": [
+    "Added an Open HydraCam escape to the standalone setup route, wired it to clear automation launch state and open the normal app. Physical iPad Profile build installed and launched with setup role; iOS logs show CameraSetupStandaloneScreen, camera preview init, Open HydraCam transition, then normal Master Control route at 192.168.178.104.",
+    "Added an Open HydraCam escape to the standalone setup route, wired it to clear automation launch state and open the normal app. Physical iPad Profile build installed and launched with setup role; iOS logs show CameraSetupStandaloneScreen, camera preview init, Open HydraCam transition, then normal Master Control route at 192.168.178.104. Video artifact is derived from copied real-iPad screenshot because devicectl has no physical screen recording subcommand here."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

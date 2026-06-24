@@ -1,0 +1,105 @@
+{
+  "acceptanceChecks": [
+    "MBA13 published checkout is at pushed commit 9b099044; Android APK is rebuilt from that checkout; all three Android and both iOS physical devices are installed and launched concurrently; device logs are captured"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy/run_published_redeploy.py",
+        "logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:00:40.251802+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy/capture_android_foreground_media.py",
+        "logs/verification-runs/20260622-1859-20260622-1902-mba13-published-source-all-connected-redeploy"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-22T17:02:37.234151+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "android",
+      "name": "Samsung S7 edge",
+      "notes": [],
+      "os": "Android 8 API 26",
+      "role": "physical"
+    },
+    {
+      "identifier": "RF8M21J8XRT",
+      "kind": "android",
+      "name": "Samsung S10e",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "physical"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "android",
+      "name": "Samsung S10e",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "physical"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "ios",
+      "name": "Jose Ramon iPhone",
+      "notes": [],
+      "os": "iOS 26.5",
+      "role": "physical"
+    },
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "ios",
+      "name": "iPad 5",
+      "notes": [],
+      "os": "iPadOS 17.7.11",
+      "role": "physical"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/9885e6503930304946-published-foreground.png",
+    "screenshots/RF8M21J8XRT-published-foreground.png",
+    "screenshots/RF8M90QE7LX-published-foreground.png",
+    "video/9885e6503930304946-published-foreground.mp4",
+    "video/RF8M21J8XRT-published-foreground.mp4",
+    "video/RF8M90QE7LX-published-foreground.mp4",
+    "device-logs/published-source-redeploy/0A947DBD-A462-5BAA-AB84-17F143D41619-launch-xcode.log",
+    "device-logs/published-source-redeploy/0A947DBD-A462-5BAA-AB84-17F143D41619-launch.json",
+    "device-logs/published-source-redeploy/0A947DBD-A462-5BAA-AB84-17F143D41619.log",
+    "device-logs/published-source-redeploy/9885e6503930304946-logcat.txt",
+    "device-logs/published-source-redeploy/9885e6503930304946.log",
+    "device-logs/published-source-redeploy/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A-launch-xcode.log",
+    "device-logs/published-source-redeploy/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A-launch.json",
+    "device-logs/published-source-redeploy/AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A.log",
+    "device-logs/published-source-redeploy/RF8M21J8XRT-logcat.txt",
+    "device-logs/published-source-redeploy/RF8M21J8XRT.log",
+    "device-logs/published-source-redeploy/RF8M90QE7LX-logcat.txt",
+    "device-logs/published-source-redeploy/RF8M90QE7LX.log",
+    "device-logs/published-source-redeploy/batch.txt",
+    "device-logs/published-source-redeploy/source-and-host.txt"
+  ],
+  "item": {
+    "slug": "20260622-1902-mba13-published-source-all-connected-redeploy",
+    "source": "goal: deploy HydraCam on all devices attached to MBA13 from published checkout",
+    "title": "MBA13 published-source all-connected redeploy"
+  },
+  "notes": [
+    "MBA13 published checkout was reset to pushed commit 9b09904442e44a59c7f66a5e8d8612860aeba5a1, built Android APK 4857305bf517f4e3e3c829ff6cc5d6386666e2405029f1c44607c50f92696b09 from that checkout, and concurrently installed/launched all five attached physical devices. Remote still has 0 valid Apple codesigning identities, so iOS signing remains the native-dev setup gap.",
+    "MBA13 published checkout was reset to pushed commit 9b09904442e44a59c7f66a5e8d8612860aeba5a1, built Android APK 4857305bf517f4e3e3c829ff6cc5d6386666e2405029f1c44607c50f92696b09 from that checkout, and concurrently installed/launched all five attached physical devices. Remote still has 0 valid Apple codesigning identities, so iOS signing remains the native-dev setup gap."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

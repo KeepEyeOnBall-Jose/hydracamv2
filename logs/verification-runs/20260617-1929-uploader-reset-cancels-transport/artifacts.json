@@ -1,0 +1,107 @@
+{
+  "acceptanceChecks": [
+    "UploaderService.reset closes the active API client while an upload request is in flight",
+    "Stale upload completion remains ignored after reset"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:29:50.606528+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/uploader_service_test.dart",
+        "--name",
+        "reset closes the active HTTP client",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-06-17T17:30:18.134170+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/uploader_service_test.dart",
+        "--name",
+        "reset closes the active HTTP client",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:30:37.058502+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "test/services/uploader_service_test.dart",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:31:01.166778+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:31:11.231229+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "analyze"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:31:15.094861+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "test",
+        "--reporter",
+        "compact"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:31:24.735227+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T17:32:01.482462+00:00"
+    }
+  ],
+  "devices": [],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "uploader-reset-cancels-transport",
+    "source": "docs/control/backlog-import.md#3-prevent-stale-uploads-from-crossing-sessions",
+    "title": "Abort in-flight upload transport when uploader resets for session isolation"
+  },
+  "notes": [
+    "Tier D service proof: red regression showed reset did not close the active upload client; green run closes the client, keeps stale completion ignored, and focused/full Flutter gates pass."
+  ],
+  "requiresDeviceLogs": false,
+  "requiresScreenshots": false,
+  "requiresVideo": false,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "D",
+  "verificationTierName": "integration-unit-tests"
+}

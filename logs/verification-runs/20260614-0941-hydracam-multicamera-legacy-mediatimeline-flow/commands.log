@@ -1,0 +1,556 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover
+ M .vscode/launch.json
+ M .vscode/tasks.json
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/hydracam-mobo-media-timeline-merge-plan.md
+ M lib/app_theme.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/master/master_screen.dart
+ M lib/screens/camera_selection_screen.dart
+ M lib/screens/camera_setup_preview_screen.dart
+ M lib/screens/courts_screen.dart
+ M lib/screens/log_screen.dart
+ M lib/screens/login_screen.dart
+ M lib/screens/master_video_recording_screen.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/previous_sessions_screen.dart
+ M lib/screens/role_selection_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/sports_centers_screen.dart
+ M lib/services/alert_utils.dart
+ M lib/services/battery_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/storage_service.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/animated_countdown_timer.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M logs/android_emulator_inventory.json
+ M logs/android_sdk_state.json
+ M scripts/android_wifi_preflight.py
+ M scripts/run_rotating_master_slave_matrix.py
+ M test/automation/automation_standby_screen_test.dart
+ M test/slave/slave_screen_sync_chip_test.dart
+ M test/widgets/camera_setup_preview_screen_test.dart
+ M test/widgets/hydra_cam_app_bar_test.dart
+?? .vscode/extensions.json
+?? docs/control/cross-project-api-data-map.md
+?? docs/control/hydracam-visual-makeover-plan.md
+?? docs/control/local-ide-emulator-deploy-playbook.md
+?? docs/control/regular-evaluation-plan.md
+?? docs/control/user-flow-fsm-diagrams.md
+?? docs/control/user-flow-tracker.md
+?? lib/widgets/hydracam_surface.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? scripts/run_hardware_ui_e2e.py
+?? scripts/test_android_wifi_preflight.py
+?? test/screens/role_selection_screen_test.dart
+?? test/services/gallery_persistence_service_test.dart
+?? test/theme/
+?? test/widgets/hydracam_surface_test.dart
+[exit-code] 0
+
+$ bash -lc timeout 10 curl -f -sS -X POST http://localhost:3009/api/services/start-all
+{"results":{"ontology":{"success":true,"message":"ontology is already running"},"file-server":{"success":true,"message":"file-server is already running"},"label-store":{"success":true,"message":"label-store is already running"},"patch-store":{"success":true,"message":"patch-store is already running"},"cv-compute":{"success":true,"message":"cv-compute is already running"},"pipeline-evolution":{"success":true,"message":"pipeline-evolution is already running"},"job-queue":{"success":true,"message":"job-queue is already running"},"job-queue-workers":{"success":true,"message":"job-queue-workers is already running"},"backend":{"success":true,"message":"backend is already running"},"truth-loop":{"success":true,"message":"truth-loop is already running"},"yamnet-sidecar":{"success":true,"message":"yamnet-sidecar started successfully"},"audio-service":{"success":true,"message":"audio-service started successfully"},"frontend":{"success":true,"message":"frontend started successfully"},"live-test":{"success":true,"message":"live-test started successfully"}}}
+[exit-code] 0
+
+$ bash -lc timeout 5 curl -f -sS http://localhost:3009/api/services
+{"services":[{"name":"ontology","port":3002,"status":"running","pid":30702,"description":"Squash Ontology GraphQL API","color":"#9C27B0","startedAt":"2026-06-14T07:41:26.711Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:53.930Z","lastHealthyAt":"2026-06-14T07:41:53.934Z","lastDurationMs":4,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"file-server","port":3102,"status":"running","pid":30896,"description":"File registry + media cache/streaming","color":"#607D8B","startedAt":"2026-06-14T07:41:28.296Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.016Z","lastHealthyAt":"2026-06-14T07:41:54.017Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"label-store","port":3004,"status":"running","pid":31223,"description":"Unified label storage service","color":"#2196F3","startedAt":"2026-06-14T07:41:29.780Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":20000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.098Z","lastHealthyAt":"2026-06-14T07:41:54.099Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"patch-store","port":3005,"status":"running","pid":31453,"description":"Calibration patch image service","color":"#4CAF50","startedAt":"2026-06-14T07:41:31.265Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.178Z","lastHealthyAt":"2026-06-14T07:41:54.182Z","lastDurationMs":4,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"cv-compute","port":3020,"status":"running","pid":32616,"description":"Unified CV processing (court, pose, racket, ball)","color":"#673AB7","startedAt":"2026-06-14T07:41:41.353Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":120000,"healthCheckIntervalMs":15000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.263Z","lastHealthyAt":"2026-06-14T07:41:54.264Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"pipeline-evolution","port":3021,"status":"running","pid":34129,"description":"Pipeline evolution API + WebSocket stream","color":"#8BC34A","startedAt":"2026-06-14T07:41:42.851Z","lastError":null,"dependencies":["cv-compute","label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.344Z","lastHealthyAt":"2026-06-14T07:41:54.346Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"job-queue","port":3006,"status":"running","pid":34437,"description":"Distributed job queue for CV processing","color":"#FF5722","startedAt":"2026-06-14T07:41:44.340Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.427Z","lastHealthyAt":"2026-06-14T07:41:54.428Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"job-queue-workers","port":null,"status":"running","pid":34596,"description":"Job queue worker pool (auto-scaling)","color":"#FF7043","startedAt":"2026-06-14T07:41:44.342Z","lastError":null,"dependencies":["job-queue","cv-compute","label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.428Z","lastHealthyAt":"2026-06-14T07:41:54.428Z","lastDurationMs":0,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"backend","port":3001,"status":"running","pid":34682,"description":"Main API backend","color":"#FF9800","startedAt":"2026-06-14T07:41:46.297Z","lastError":null,"dependencies":["label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":45000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.515Z","lastHealthyAt":"2026-06-14T07:41:54.516Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"truth-loop","port":3011,"status":"running","pid":34807,"description":"Autonomous hypothesis refinement engine","color":"#3F51B5","startedAt":"2026-06-14T07:41:47.779Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.609Z","lastHealthyAt":"2026-06-14T07:41:54.610Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"yamnet-sidecar","port":3030,"status":"running","pid":34830,"description":"YAMNet sidecar scoring for squash shot candidates","color":"#5D4037","startedAt":"2026-06-14T07:41:49.275Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":90000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.694Z","lastHealthyAt":"2026-06-14T07:41:54.696Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"audio-service","port":3003,"status":"running","pid":35278,"description":"Audio processing - transcription & analysis","color":"#795548","startedAt":"2026-06-14T07:41:50.834Z","lastError":null,"dependencies":["backend","yamnet-sidecar"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.777Z","lastHealthyAt":"2026-06-14T07:41:54.778Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"frontend","port":5173,"status":"running","pid":35629,"description":"Vite React frontend","color":"#E91E63","startedAt":"2026-06-14T07:41:52.339Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:54.856Z","lastHealthyAt":"2026-06-14T07:41:54.859Z","lastDurationMs":3,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"live-test","port":3007,"status":"running","pid":36341,"description":"Continuous validation and fitness scoring","color":"#00BCD4","startedAt":"2026-06-14T07:41:53.829Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:41:53.824Z","lastHealthyAt":"2026-06-14T07:41:53.829Z","lastDurationMs":5,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null}]}
+[exit-code] 0
+
+$ ffmpeg -hide_banner -y -ss 10 -t 3 -i /Users/jose/src/work/media-timeline/test-data/integration_test_data/20251220_171028_segment.mp4 -vf scale=640:-2,fps=30,format=yuv420p -c:v libx264 -preset veryfast -crf 30 -c:a aac -b:a 64k -movflags +faststart logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4
+
+[stderr]
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/jose/src/work/media-timeline/test-data/integration_test_data/20251220_171028_segment.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2mp41
+    encoder         : Lavf62.3.100
+    location-eng    : +00.0000+000.0000/
+    location        : +00.0000+000.0000/
+  Duration: 00:01:00.01, start: 0.004000, bitrate: 27585 kb/s
+  Stream #0:0[0x1](eng): Video: hevc (Main) (hvc1 / 0x31637668), yuv420p(tv, bt709), 3840x2160, 27767 kb/s, 30.01 fps, 30 tbr, 90k tbn, start 0.958000 (default)
+    Metadata:
+      handler_name    : VideoHandle
+  Stream #0:1[0x2](eng): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 255 kb/s, start 0.004000 (default)
+    Metadata:
+      handler_name    : SoundHandle
+Stream mapping:
+  Stream #0:0 -> #0:0 (hevc (native) -> h264 (libx264))
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+[libx264 @ 0x9a6c1d880] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0x9a6c1d880] profile High, level 3.0, 4:2:0, 8-bit
+[libx264 @ 0x9a6c1d880] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=11 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=crf mbtree=1 crf=30.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2mp41
+    location        : +00.0000+000.0000/
+    location-eng    : +00.0000+000.0000/
+    encoder         : Lavf62.12.100
+  Stream #0:0(eng): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 640x360, q=2-31, 30 fps, 15360 tbn (default)
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+      handler_name    : VideoHandle
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(eng): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 64 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.28.100 aac
+      handler_name    : SoundHandle
+frame=   52 fps=0.0 q=36.0 size=       0KiB time=00:00:01.70 bitrate=   0.2kbits/s speed=3.36x elapsed=0:00:00.50    
+[mp4 @ 0x9a701f700] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x9a7020b40] video:35KiB audio:24KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 7.999074%
+frame=   90 fps=0.0 q=-1.0 Lsize=      64KiB time=00:00:02.96 bitrate= 176.2kbits/s speed=4.19x elapsed=0:00:00.70    
+[libx264 @ 0x9a6c1d880] frame I:1     Avg QP:29.05  size:  4860
+[libx264 @ 0x9a6c1d880] frame P:23    Avg QP:32.98  size:   703
+[libx264 @ 0x9a6c1d880] frame B:66    Avg QP:38.30  size:   221
+[libx264 @ 0x9a6c1d880] consecutive B-frames:  2.2%  0.0%  0.0% 97.8%
+[libx264 @ 0x9a6c1d880] mb I  I16..4: 37.7% 52.4%  9.9%
+[libx264 @ 0x9a6c1d880] mb P  I16..4:  2.1%  4.7%  0.7%  P16..4:  3.4%  1.9%  0.7%  0.0%  0.0%    skip:86.5%
+[libx264 @ 0x9a6c1d880] mb B  I16..4:  0.1%  0.2%  0.0%  B16..8:  3.9%  1.9%  0.1%  direct: 0.3%  skip:93.5%  L0:42.0% L1:46.6% BI:11.5%
+[libx264 @ 0x9a6c1d880] 8x8 transform intra:59.6% inter:14.0%
+[libx264 @ 0x9a6c1d880] coded y,uvDC,uvAC intra: 42.0% 28.4% 5.4% inter: 0.7% 0.3% 0.0%
+[libx264 @ 0x9a6c1d880] i16 v,h,dc,p: 27% 25% 24% 25%
+[libx264 @ 0x9a6c1d880] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 18% 17% 35%  4%  5%  5%  5%  5%  7%
+[libx264 @ 0x9a6c1d880] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 22% 24% 28%  2%  7%  6%  6%  3%  3%
+[libx264 @ 0x9a6c1d880] i8c dc,h,v,p: 68% 20% 11%  1%
+[libx264 @ 0x9a6c1d880] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x9a6c1d880] kb/s:94.95
+[aac @ 0x9a6cd1500] Qavg: 146.748
+[exit-code] 0
+
+$ ffmpeg -hide_banner -y -ss 10 -t 3 -i /Users/jose/src/work/media-timeline/test-data/integration_test_data/IMG_2927_segment.MOV -vf scale=640:-2,fps=30,format=yuv420p -c:v libx264 -preset veryfast -crf 30 -c:a aac -b:a 64k -movflags +faststart logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4
+
+[stderr]
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/jose/src/work/media-timeline/test-data/integration_test_data/IMG_2927_segment.MOV':
+  Metadata:
+    major_brand     : qt  
+    minor_version   : 512
+    compatible_brands: qt  
+    encoder         : Lavf62.3.100
+  Duration: 00:01:00.00, start: 0.021995, bitrate: 15308 kb/s
+  Stream #0:0[0x1]: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x1080, 15326 kb/s, 29.99 fps, 30 tbr, 19200 tbn, start 0.888021 (default)
+    Metadata:
+      handler_name    : Core Media Video
+      vendor_id       : FFMP
+      encoder         : H.264
+  Stream #0:1[0x2]: Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 197 kb/s, start 0.021995 (default)
+    Metadata:
+      handler_name    : Core Media Audio
+      vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+[libx264 @ 0x9ca810a80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0x9ca810a80] profile High, level 3.0, 4:2:0, 8-bit
+[libx264 @ 0x9ca810a80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=11 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=crf mbtree=1 crf=30.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4':
+  Metadata:
+    major_brand     : qt  
+    minor_version   : 512
+    compatible_brands: qt  
+    encoder         : Lavf62.12.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 640x360, q=2-31, 30 fps, 15360 tbn (default)
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+      handler_name    : Core Media Video
+      vendor_id       : FFMP
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 64 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.28.100 aac
+      handler_name    : Core Media Audio
+      vendor_id       : [0][0][0][0]
+[mp4 @ 0x9cb40fc00] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x9cb4103c0] video:57KiB audio:24KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 5.729846%
+frame=   90 fps=0.0 q=-1.0 Lsize=      85KiB time=00:00:02.93 bitrate= 236.7kbits/s speed=9.28x elapsed=0:00:00.31    
+[libx264 @ 0x9ca810a80] frame I:1     Avg QP:31.90  size:  5542
+[libx264 @ 0x9ca810a80] frame P:23    Avg QP:32.04  size:  1218
+[libx264 @ 0x9ca810a80] frame B:66    Avg QP:37.16  size:   359
+[libx264 @ 0x9ca810a80] consecutive B-frames:  2.2%  0.0%  0.0% 97.8%
+[libx264 @ 0x9ca810a80] mb I  I16..4: 24.0% 60.3% 15.7%
+[libx264 @ 0x9ca810a80] mb P  I16..4:  3.4%  8.5%  1.3%  P16..4:  6.0%  3.2%  1.3%  0.0%  0.0%    skip:76.2%
+[libx264 @ 0x9ca810a80] mb B  I16..4:  0.2%  0.5%  0.0%  B16..8:  4.8%  3.0%  0.2%  direct: 0.6%  skip:90.7%  L0:40.4% L1:47.2% BI:12.4%
+[libx264 @ 0x9ca810a80] 8x8 transform intra:63.4% inter:17.5%
+[libx264 @ 0x9ca810a80] coded y,uvDC,uvAC intra: 42.5% 28.4% 6.2% inter: 1.3% 0.7% 0.0%
+[libx264 @ 0x9ca810a80] i16 v,h,dc,p: 27% 30% 25% 18%
+[libx264 @ 0x9ca810a80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 17% 30%  4%  8%  5%  6%  5%  5%
+[libx264 @ 0x9ca810a80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 25% 20% 23%  2%  9%  7%  6%  4%  4%
+[libx264 @ 0x9ca810a80] i8c dc,h,v,p: 67% 18% 14%  1%
+[libx264 @ 0x9ca810a80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x9ca810a80] kb/s:152.63
+[aac @ 0x9cac0d500] Qavg: 640.501
+[exit-code] 0
+
+$ ffmpeg -hide_banner -y -ss 10 -t 3 -i /Users/jose/src/work/media-timeline/test-data/integration_test_data/20251220_171059_segment.mp4 -vf scale=640:-2,fps=30,format=yuv420p -c:v libx264 -preset veryfast -crf 30 -c:a aac -b:a 64k -movflags +faststart logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4
+
+[stderr]
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/jose/src/work/media-timeline/test-data/integration_test_data/20251220_171059_segment.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf62.3.100
+    location-eng    : +00.0000+000.0000/
+    location        : +00.0000+000.0000/
+  Duration: 00:01:00.01, start: 0.006000, bitrate: 13918 kb/s
+  Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x1080, 13877 kb/s, 30.01 fps, 30 tbr, 90k tbn, start 0.968000 (default)
+    Metadata:
+      handler_name    : VideoHandle
+  Stream #0:1[0x2](eng): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 256 kb/s, start 0.006000 (default)
+    Metadata:
+      handler_name    : SoundHandle
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+[libx264 @ 0xa7c802d80] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0xa7c802d80] profile High, level 3.0, 4:2:0, 8-bit
+[libx264 @ 0xa7c802d80] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=11 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=crf mbtree=1 crf=30.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    location        : +00.0000+000.0000/
+    location-eng    : +00.0000+000.0000/
+    encoder         : Lavf62.12.100
+  Stream #0:0(eng): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 640x360, q=2-31, 30 fps, 15360 tbn (default)
+    Metadata:
+      encoder         : Lavc62.28.100 libx264
+      handler_name    : VideoHandle
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(eng): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 64 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.28.100 aac
+      handler_name    : SoundHandle
+[mp4 @ 0xa7d01f700] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0xa7d0203c0] video:77KiB audio:24KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 4.692071%
+frame=   91 fps=0.0 q=-1.0 Lsize=     106KiB time=00:00:03.00 bitrate= 288.2kbits/s speed=  13x elapsed=0:00:00.23    
+[libx264 @ 0xa7c802d80] frame I:1     Avg QP:30.39  size:  5344
+[libx264 @ 0xa7c802d80] frame P:23    Avg QP:32.76  size:  1632
+[libx264 @ 0xa7c802d80] frame B:67    Avg QP:36.71  size:   530
+[libx264 @ 0xa7c802d80] consecutive B-frames:  1.1%  2.2%  0.0% 96.7%
+[libx264 @ 0xa7c802d80] mb I  I16..4: 30.9% 58.8% 10.3%
+[libx264 @ 0xa7c802d80] mb P  I16..4:  5.6% 14.9%  1.1%  P16..4:  7.2%  3.6%  1.2%  0.0%  0.0%    skip:66.4%
+[libx264 @ 0xa7c802d80] mb B  I16..4:  0.8%  1.7%  0.0%  B16..8:  8.9%  4.0%  0.2%  direct: 1.0%  skip:83.5%  L0:42.8% L1:48.4% BI: 8.9%
+[libx264 @ 0xa7c802d80] 8x8 transform intra:67.3% inter:21.7%
+[libx264 @ 0xa7c802d80] coded y,uvDC,uvAC intra: 40.2% 30.6% 5.1% inter: 1.5% 1.0% 0.0%
+[libx264 @ 0xa7c802d80] i16 v,h,dc,p: 28% 26% 24% 22%
+[libx264 @ 0xa7c802d80] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 14% 28%  4%  8%  7%  7%  5%  5%
+[libx264 @ 0xa7c802d80] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 24% 22% 25%  3%  7%  6%  5%  4%  4%
+[libx264 @ 0xa7c802d80] i8c dc,h,v,p: 65% 18% 14%  3%
+[libx264 @ 0xa7c802d80] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0xa7c802d80] kb/s:206.75
+[aac @ 0xa7c8d9500] Qavg: 135.577
+[exit-code] 0
+
+$ bash -lc timeout 5 curl -f -sS http://localhost:3009/api/services
+{"services":[{"name":"ontology","port":3002,"status":"running","pid":30702,"description":"Squash Ontology GraphQL API","color":"#9C27B0","startedAt":"2026-06-14T07:41:26.711Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:28.677Z","lastHealthyAt":"2026-06-14T07:42:28.678Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"file-server","port":3102,"status":"running","pid":30896,"description":"File registry + media cache/streaming","color":"#607D8B","startedAt":"2026-06-14T07:41:28.296Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:28.774Z","lastHealthyAt":"2026-06-14T07:42:28.775Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"label-store","port":3004,"status":"running","pid":31223,"description":"Unified label storage service","color":"#2196F3","startedAt":"2026-06-14T07:41:29.780Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":20000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:28.867Z","lastHealthyAt":"2026-06-14T07:42:28.869Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"patch-store","port":3005,"status":"running","pid":31453,"description":"Calibration patch image service","color":"#4CAF50","startedAt":"2026-06-14T07:41:31.265Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:28.977Z","lastHealthyAt":"2026-06-14T07:42:28.979Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"cv-compute","port":3020,"status":"running","pid":32616,"description":"Unified CV processing (court, pose, racket, ball)","color":"#673AB7","startedAt":"2026-06-14T07:41:41.353Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":120000,"healthCheckIntervalMs":15000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.077Z","lastHealthyAt":"2026-06-14T07:42:29.078Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"pipeline-evolution","port":3021,"status":"running","pid":34129,"description":"Pipeline evolution API + WebSocket stream","color":"#8BC34A","startedAt":"2026-06-14T07:41:42.851Z","lastError":null,"dependencies":["cv-compute","label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.171Z","lastHealthyAt":"2026-06-14T07:42:29.172Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"job-queue","port":3006,"status":"running","pid":34437,"description":"Distributed job queue for CV processing","color":"#FF5722","startedAt":"2026-06-14T07:41:44.340Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.257Z","lastHealthyAt":"2026-06-14T07:42:29.258Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"job-queue-workers","port":null,"status":"running","pid":34596,"description":"Job queue worker pool (auto-scaling)","color":"#FF7043","startedAt":"2026-06-14T07:41:44.342Z","lastError":null,"dependencies":["job-queue","cv-compute","label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.258Z","lastHealthyAt":"2026-06-14T07:42:29.258Z","lastDurationMs":0,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"backend","port":3001,"status":"running","pid":34682,"description":"Main API backend","color":"#FF9800","startedAt":"2026-06-14T07:41:46.297Z","lastError":null,"dependencies":["label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":45000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.356Z","lastHealthyAt":"2026-06-14T07:42:29.357Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"truth-loop","port":3011,"status":"running","pid":34807,"description":"Autonomous hypothesis refinement engine","color":"#3F51B5","startedAt":"2026-06-14T07:41:47.779Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.447Z","lastHealthyAt":"2026-06-14T07:42:29.449Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"yamnet-sidecar","port":3030,"status":"running","pid":34830,"description":"YAMNet sidecar scoring for squash shot candidates","color":"#5D4037","startedAt":"2026-06-14T07:41:49.275Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":90000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.544Z","lastHealthyAt":"2026-06-14T07:42:29.545Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"audio-service","port":3003,"status":"running","pid":35278,"description":"Audio processing - transcription & analysis","color":"#795548","startedAt":"2026-06-14T07:41:50.834Z","lastError":null,"dependencies":["backend","yamnet-sidecar"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.642Z","lastHealthyAt":"2026-06-14T07:42:29.643Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"frontend","port":5173,"status":"running","pid":35629,"description":"Vite React frontend","color":"#E91E63","startedAt":"2026-06-14T07:41:52.339Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.737Z","lastHealthyAt":"2026-06-14T07:42:29.740Z","lastDurationMs":3,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"live-test","port":3007,"status":"running","pid":36341,"description":"Continuous validation and fitness scoring","color":"#00BCD4","startedAt":"2026-06-14T07:41:53.829Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:29.837Z","lastHealthyAt":"2026-06-14T07:42:29.839Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null}]}
+[exit-code] 0
+
+$ bash -lc for f in logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/*.mp4; do echo ""; ffprobe -v error -show_entries format=duration,size -show_entries stream=index,codec_type,codec_name,width,height,avg_frame_rate -of json ""; done
+
+{
+
+}
+
+{
+
+}
+
+{
+
+}
+
+[stderr]
+: No such file or directory
+: No such file or directory
+: No such file or directory
+[exit-code] 1
+
+$ bash -lc timeout 20 curl -f -sS http://localhost:3009/api/services
+{"services":[{"name":"ontology","port":3002,"status":"running","pid":30702,"description":"Squash Ontology GraphQL API","color":"#9C27B0","startedAt":"2026-06-14T07:41:26.711Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:51.431Z","lastHealthyAt":"2026-06-14T07:42:51.433Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"file-server","port":3102,"status":"running","pid":30896,"description":"File registry + media cache/streaming","color":"#607D8B","startedAt":"2026-06-14T07:41:28.296Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:51.520Z","lastHealthyAt":"2026-06-14T07:42:51.521Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"label-store","port":3004,"status":"running","pid":31223,"description":"Unified label storage service","color":"#2196F3","startedAt":"2026-06-14T07:41:29.780Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":20000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:51.608Z","lastHealthyAt":"2026-06-14T07:42:51.609Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"patch-store","port":3005,"status":"running","pid":31453,"description":"Calibration patch image service","color":"#4CAF50","startedAt":"2026-06-14T07:41:31.265Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:51.700Z","lastHealthyAt":"2026-06-14T07:42:51.702Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"cv-compute","port":3020,"status":"running","pid":32616,"description":"Unified CV processing (court, pose, racket, ball)","color":"#673AB7","startedAt":"2026-06-14T07:41:41.353Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":120000,"healthCheckIntervalMs":15000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:51.799Z","lastHealthyAt":"2026-06-14T07:42:51.800Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"pipeline-evolution","port":3021,"status":"running","pid":34129,"description":"Pipeline evolution API + WebSocket stream","color":"#8BC34A","startedAt":"2026-06-14T07:41:42.851Z","lastError":null,"dependencies":["cv-compute","label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:51.912Z","lastHealthyAt":"2026-06-14T07:42:51.915Z","lastDurationMs":3,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"job-queue","port":3006,"status":"running","pid":34437,"description":"Distributed job queue for CV processing","color":"#FF5722","startedAt":"2026-06-14T07:41:44.340Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.033Z","lastHealthyAt":"2026-06-14T07:42:52.034Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"job-queue-workers","port":null,"status":"running","pid":34596,"description":"Job queue worker pool (auto-scaling)","color":"#FF7043","startedAt":"2026-06-14T07:41:44.342Z","lastError":null,"dependencies":["job-queue","cv-compute","label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.034Z","lastHealthyAt":"2026-06-14T07:42:52.034Z","lastDurationMs":0,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"backend","port":3001,"status":"running","pid":34682,"description":"Main API backend","color":"#FF9800","startedAt":"2026-06-14T07:41:46.297Z","lastError":null,"dependencies":["label-store"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":45000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.167Z","lastHealthyAt":"2026-06-14T07:42:52.169Z","lastDurationMs":2,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"truth-loop","port":3011,"status":"running","pid":34807,"description":"Autonomous hypothesis refinement engine","color":"#3F51B5","startedAt":"2026-06-14T07:41:47.779Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.303Z","lastHealthyAt":"2026-06-14T07:42:52.304Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"yamnet-sidecar","port":3030,"status":"running","pid":34830,"description":"YAMNet sidecar scoring for squash shot candidates","color":"#5D4037","startedAt":"2026-06-14T07:41:49.275Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":30000,"startupTimeoutMs":90000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.424Z","lastHealthyAt":"2026-06-14T07:42:52.427Z","lastDurationMs":3,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"audio-service","port":3003,"status":"running","pid":35278,"description":"Audio processing - transcription & analysis","color":"#795548","startedAt":"2026-06-14T07:41:50.834Z","lastError":null,"dependencies":["backend","yamnet-sidecar"],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.547Z","lastHealthyAt":"2026-06-14T07:42:52.548Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"frontend","port":5173,"status":"running","pid":35629,"description":"Vite React frontend","color":"#E91E63","startedAt":"2026-06-14T07:41:52.339Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.651Z","lastHealthyAt":"2026-06-14T07:42:52.654Z","lastDurationMs":3,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null},{"name":"live-test","port":3007,"status":"running","pid":36341,"description":"Continuous validation and fitness scoring","color":"#00BCD4","startedAt":"2026-06-14T07:41:53.829Z","lastError":null,"dependencies":[],"autoRestart":true,"restartCount":0,"adoptedProcess":false,"stoppedIntentionally":false,"startupProfile":{"healthTimeoutMs":10000,"startupTimeoutMs":30000,"healthCheckIntervalMs":1000},"healthMetrics":{"lastCheckAt":"2026-06-14T07:42:52.758Z","lastHealthyAt":"2026-06-14T07:42:52.759Z","lastDurationMs":1,"lastFailure":null,"consecutiveFailures":0},"watchdog":{"restartCount":0,"backoffMs":null,"nextRestartAt":null,"lastRestartAt":null,"lastFailureAt":null,"restartPending":false},"lastExitSignal":null}]}
+[exit-code] 0
+
+$ bash -lc timeout 10 curl -f -sS http://localhost:3001/health
+{"status":"ok","service":"backend","timestamp":"2026-06-14T07:42:52.785Z","uptime":68.022901708}
+[exit-code] 0
+
+$ ffprobe -v error -show_entries format=duration,size -show_entries stream=index,codec_type,codec_name,width,height,avg_frame_rate -of json logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4
+{
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "avg_frame_rate": "30/1"
+        },
+        {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "avg_frame_rate": "0/0"
+        }
+    ],
+    "format": {
+        "duration": "3.033008",
+        "size": "65347"
+    }
+}
+[exit-code] 0
+
+$ ffprobe -v error -show_entries format=duration,size -show_entries stream=index,codec_type,codec_name,width,height,avg_frame_rate -of json logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4
+{
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "avg_frame_rate": "30/1"
+        },
+        {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "avg_frame_rate": "0/0"
+        }
+    ],
+    "format": {
+        "duration": "3.066341",
+        "size": "108082"
+    }
+}
+[exit-code] 0
+
+$ ffprobe -v error -show_entries format=duration,size -show_entries stream=index,codec_type,codec_name,width,height,avg_frame_rate -of json logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4
+{
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "avg_frame_rate": "30/1"
+        },
+        {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "avg_frame_rate": "0/0"
+        }
+    ],
+    "format": {
+        "duration": "3.000000",
+        "size": "86782"
+    }
+}
+[exit-code] 0
+
+$ python3 logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/tools/legacy_upload_test_media.py --session-id codex-multicamera-flow-20260614-0941 --court-guid c36f8207-ca83-46e6-bdc9-f8aecdd7ce80 --output logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/legacy-upload-result.json logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-1-right-corner-20251220_171028-3s.mp4 logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-2-left-corner-20251220_171059-3s.mp4 logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/video/test-set/camera-3-center-IMG_2927-3s.mp4
+{
+  "numericSessionId": 489,
+  "output": "logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/legacy-upload-result.json",
+  "sessionGuid": "3714fab8-b2de-44cb-a5cd-16df61baec44",
+  "uploadCount": 3
+}
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS https://hydracam.azurewebsites.net/HydraCam/Details/489 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/legacy-session-489-details.html
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/hydra/import/489 -d '{"runAnalyses":false}'
+{"session":{"sessionId":489,"sessionGuid":"3714fab8-b2de-44cb-a5cd-16df61baec44","court":{"name":"Court 4","guid":"c36f8207-ca83-46e6-bdc9-f8aecdd7ce80","url":"https://hydracam.azurewebsites.net/HydraCam/DetailsCourt?guid=c36f8207-ca83-46e6-bdc9-f8aecdd7ce80"},"participants":[],"photos":[],"videos":[{"id":"450","name":"3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-1_20260614_07.44.34","blobUrl":"https://keob2.blob.core.windows.net/hydracam/3714fab8-b2de-44cb-a5cd-16df61baec44/videos/3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-1_20260614_07.44.34.mp4","format":"mp4","width":1080,"height":720,"fileSizeMb":0.06231975555419922,"fps":30},{"id":"451","name":"3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-2_20260614_07.44.35","blobUrl":"https://keob2.blob.core.windows.net/hydracam/3714fab8-b2de-44cb-a5cd-16df61baec44/videos/3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-2_20260614_07.44.35.mp4","format":"mp4","width":1080,"height":720,"fileSizeMb":0.10307502746582031,"fps":30},{"id":"452","name":"3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-3_20260614_07.44.36","blobUrl":"https://keob2.blob.core.windows.net/hydracam/3714fab8-b2de-44cb-a5cd-16df61baec44/videos/3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-3_20260614_07.44.36.mp4","format":"mp4","width":1080,"height":720,"fileSizeMb":0.08276176452636719,"fps":30}]},"status":{"sessionId":"489","sessionGuid":"3714fab8-b2de-44cb-a5cd-16df61baec44","lastImportAt":1781423122982,"photosDownloaded":0,"videosDownloaded":0,"localSizeMb":0.25,"videoIds":{"photos":{},"videos":{"3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-1_20260614_07.44.34.mp4":"37cf07f2-52a6-4caa-8b00-8cef22eea330","3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-2_20260614_07.44.35.mp4":"ca043f52-a9ec-4b90-b154-2412a25a7e72","3714fab8-b2de-44cb-a5cd-16df61baec44_codex-test-camera-3_20260614_07.44.36.mp4":"afbed374-715a-4bcd-84e1-3cd137793b41"}}}}
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/hydracam/sessions/local-status -d '{"sessionIds":[489]}'
+[{"id":489,"eventExists":true,"eventId":"hydracam-489","registeredVideos":3,"registeredPhotos":0,"totalRegisteredMedia":3,"computedStatus":"ingested"}]
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS http://localhost:3001/api/hydra/489/manifest -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydra-489-manifest.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/hydracam/sessions/local-status -d '{"sessionIds":[489]}' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-local-status.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status?eventId=hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-processing-status-before.json
+[exit-code] 0
+
+$ bash -lc timeout 60 curl -f -sS -H 'Content-Type: application/json' -X POST http://localhost:3001/api/system/processing-status/enqueue-missing -d '{"eventId":"hydracam-489","pipelines":["pose_estimation","racket_tracking","audio_graph"],"includePartial":true}' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-enqueue-missing.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=staged' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-staged-0.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-0.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status?eventId=hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-processing-status-after-enqueue.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3006/api/jobs?limit=20' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-after-enqueue.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-1.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/system/processing-status?eventId=hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-processing-status-poll-1.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/events/hydracam-489' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-event-hydracam-489.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3001/api/media/events/hydracam-489/videos' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-event-hydracam-489-videos.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3006/api/jobs?status=pending&limit=100' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/job-queue-pending-100.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3006/api/jobs?videoId=37cf07f2-52a6-4caa-8b00-8cef22eea330&limit=50' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/job-queue-37cf07f2.json
+[exit-code] 0
+
+$ bash -lc timeout 30 curl -f -sS 'http://localhost:3006/health' -o /Users/jose/src/work/hydracamv2/logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/job-queue-health.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3006/api/workers -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-workers.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3006/api/workers/metrics -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-workers-metrics.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3006/api/jobs/stats -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-stats.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3006/api/jobs?video_id=37cf07f2-52a6-4caa-8b00-8cef22eea330&limit=20 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-video-37cf07f2.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3006/api/jobs?video_id=ca043f52-a9ec-4b90-b154-2412a25a7e72&limit=20 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-video-ca043f52.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3006/api/jobs?video_id=afbed374-715a-4bcd-84e1-3cd137793b41&limit=20 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-job-queue-video-afbed374.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3020/api/unified/process-video -d {"video_id":"37cf07f2-52a6-4caa-8b00-8cef22eea330","frame_skip":15,"max_frames":15,"batch_size":1,"description":"HydraCam 489 camera 1 tiny unified pose+racket proof"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-start.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3020/api/unified/process-video -d {"video_id":"ca043f52-a9ec-4b90-b154-2412a25a7e72","frame_skip":15,"max_frames":15,"batch_size":1,"description":"HydraCam 489 camera 2 tiny unified pose+racket proof"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-start.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3020/api/unified/process-video -d {"video_id":"afbed374-715a-4bcd-84e1-3cd137793b41","frame_skip":15,"max_frames":15,"batch_size":1,"description":"HydraCam 489 camera 3 tiny unified pose+racket proof"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-start.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/c53e138a -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-status-0.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/980f855d -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-status-0.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/fbb5501e -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-status-0.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3004/api/labels/coverage/37cf07f2-52a6-4caa-8b00-8cef22eea330?summary=1 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-1-after-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3004/api/labels/coverage/ca043f52-a9ec-4b90-b154-2412a25a7e72?summary=1 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-2-after-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3004/api/labels/coverage/afbed374-715a-4bcd-84e1-3cd137793b41?summary=1 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-3-after-unified.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3001/api/system/processing-coverage/refresh -d {"eventId":"hydracam-489"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-processing-coverage-refresh-after-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-after-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=staged -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-staged-after-unified.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3020/api/unified/process-video -d {"video_id":"37cf07f2-52a6-4caa-8b00-8cef22eea330","frame_skip":1,"batch_size":1,"description":"HydraCam 489 camera 1 full tiny clip unified pose+racket proof"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-full-start.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3020/api/unified/process-video -d {"video_id":"ca043f52-a9ec-4b90-b154-2412a25a7e72","frame_skip":1,"batch_size":1,"description":"HydraCam 489 camera 2 full tiny clip unified pose+racket proof"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-full-start.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3020/api/unified/process-video -d {"video_id":"afbed374-715a-4bcd-84e1-3cd137793b41","frame_skip":1,"batch_size":1,"description":"HydraCam 489 camera 3 full tiny clip unified pose+racket proof"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-full-start.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/ea76313b -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-full-status-0.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/b064de73 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-full-status-0.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/0c82b540 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-full-status-0.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/ea76313b -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-1-full-status-1.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/b064de73 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-2-full-status-1.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3020/api/jobs/0c82b540 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/cv-unified-camera-3-full-status-1.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3004/api/labels/coverage/37cf07f2-52a6-4caa-8b00-8cef22eea330?summary=1 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-1-after-full-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3004/api/labels/coverage/ca043f52-a9ec-4b90-b154-2412a25a7e72?summary=1 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-2-after-full-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3004/api/labels/coverage/afbed374-715a-4bcd-84e1-3cd137793b41?summary=1 -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/label-store-coverage-camera-3-after-full-unified.json
+[exit-code] 0
+
+$ curl -f -sS -H Content-Type: application/json -X POST http://localhost:3001/api/system/processing-coverage/refresh -d {"eventId":"hydracam-489"} -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-processing-coverage-refresh-after-full-unified.json
+[exit-code] 0
+
+$ curl -f -sS http://localhost:3001/api/system/processing-status/readiness?eventId=hydracam-489&mode=full -o logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/device-logs/media-timeline-hydracam-489-readiness-full-after-full-unified.json
+[exit-code] 0

@@ -1,0 +1,92 @@
+# HydraCam evidence run command log
+
+$ env PATH=/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/.codex/tmp/arg0/codex-arg0Ybw4AT:/Users/jose/Library/Android/sdk/platform-tools:/Users/jose/Library/Android/sdk/emulator:/Users/jose/Library/Android/sdk/cmdline-tools/latest/bin:/Users/jose/.antigravity-ide/antigravity-ide/bin:/Users/jose/.opencode/bin:/Users/jose/.antigravity/antigravity/bin:/Users/jose/.antigravity/antigravity/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby/bin:/Library/Frameworks/Python.framework/Versions/3.13/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/jose/.local/bin:/Users/jose/.local/bin:/Users/jose/.lmstudio/bin:/Users/jose/.local/bin:/Applications/Codex.app/Contents/Resources /usr/bin/python3 scripts/run_hardware_ui_e2e.py --device 29d816ac550b7ece --route setup --route standby --run-dir logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked --skip-build --timeout 45
++ adb devices -l
++ adb -s 29d816ac550b7ece forward --remove-all
++ adb -s 29d816ac550b7ece install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s 29d816ac550b7ece shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
++ adb -s 29d816ac550b7ece forward tcp:6700 tcp:4762
+6700
++ adb -s 29d816ac550b7ece logcat -c
++ adb -s 29d816ac550b7ece shell am force-stop com.amaia23.hydracam
++ adb -s 29d816ac550b7ece shell am start -n com.amaia23.hydracam/.MainActivity --es role setup --es automationTargetId 29d816ac550b7ece
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s 29d816ac550b7ece exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/29d816ac550b7ece-setup-2026-06-17T12-33-48-446618.png > logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/screenshots/29d816ac550b7ece-setup.png
++ adb -s 29d816ac550b7ece shell wm size
++ adb -s 29d816ac550b7ece shell input swipe 360 1154 360 325 450
++ adb -s 29d816ac550b7ece exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/29d816ac550b7ece-setup-after-scroll-2026-06-17T12-33-52-614295.png > logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/screenshots/29d816ac550b7ece-setup-after-scroll.png
++ adb -s 29d816ac550b7ece logcat -d -t 800
++ adb -s 29d816ac550b7ece logcat -c
++ adb -s 29d816ac550b7ece shell am force-stop com.amaia23.hydracam
++ adb -s 29d816ac550b7ece shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId 29d816ac550b7ece
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s 29d816ac550b7ece exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/29d816ac550b7ece-standby-2026-06-17T12-34-03-695990.png > logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/screenshots/29d816ac550b7ece-standby.png
++ adb -s 29d816ac550b7ece logcat -d -t 800
+logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked
+
+[stderr]
+Security exception: Package com.amaia23.hydracam has not requested permission android.permission.WRITE_EXTERNAL_STORAGE
+
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.WRITE_EXTERNAL_STORAGE
+	at com.android.server.pm.permission.BasePermission.enforceDeclaredUsedAndRuntimeOrDevelopment(BasePermission.java:452)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:3059)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:3023)
+	at com.android.server.pm.permission.PermissionManagerService.access$1400(PermissionManagerService.java:157)
+	at com.android.server.pm.permission.PermissionManagerService$PermissionManagerServiceInternalImpl.grantRuntimePermission(PermissionManagerService.java:4132)
+	at com.android.server.pm.PackageManagerService.grantRuntimePermission(PackageManagerService.java:7005)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:1955)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:230)
+	at android.os.ShellCommand.exec(ShellCommand.java:104)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:27151)
+	at android.os.Binder.shellCommand(Binder.java:916)
+	at android.os.Binder.onTransact(Binder.java:790)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5452)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:5158)
+	at android.os.Binder.execTransactInternal(Binder.java:1056)
+	at android.os.Binder.execTransact(Binder.java:1029)
+
+Exception occurred while executing:
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_IMAGES
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:3053)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:3023)
+	at com.android.server.pm.permission.PermissionManagerService.access$1400(PermissionManagerService.java:157)
+	at com.android.server.pm.permission.PermissionManagerService$PermissionManagerServiceInternalImpl.grantRuntimePermission(PermissionManagerService.java:4132)
+	at com.android.server.pm.PackageManagerService.grantRuntimePermission(PackageManagerService.java:7005)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:1955)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:230)
+	at android.os.ShellCommand.exec(ShellCommand.java:104)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:27151)
+	at android.os.Binder.shellCommand(Binder.java:916)
+	at android.os.Binder.onTransact(Binder.java:790)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5452)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:5158)
+	at android.os.Binder.execTransactInternal(Binder.java:1056)
+	at android.os.Binder.execTransact(Binder.java:1029)
+
+Exception occurred while executing:
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_VIDEO
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:3053)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:3023)
+	at com.android.server.pm.permission.PermissionManagerService.access$1400(PermissionManagerService.java:157)
+	at com.android.server.pm.permission.PermissionManagerService$PermissionManagerServiceInternalImpl.grantRuntimePermission(PermissionManagerService.java:4132)
+	at com.android.server.pm.PackageManagerService.grantRuntimePermission(PackageManagerService.java:7005)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:1955)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:230)
+	at android.os.ShellCommand.exec(ShellCommand.java:104)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:27151)
+	at android.os.Binder.shellCommand(Binder.java:916)
+	at android.os.Binder.onTransact(Binder.java:790)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5452)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:5158)
+	at android.os.Binder.execTransactInternal(Binder.java:1056)
+	at android.os.Binder.execTransact(Binder.java:1029)
+[exit-code] 0

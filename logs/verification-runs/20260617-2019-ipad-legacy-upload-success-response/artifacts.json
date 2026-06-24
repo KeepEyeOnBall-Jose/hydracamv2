@@ -1,0 +1,52 @@
+{
+  "acceptanceChecks": [
+    "Current iPad build accepts legacy plaintext upload success and marks video uploaded"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "-sb"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-06-17T18:19:39.601453+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63",
+      "kind": "ios",
+      "name": "iPad (5)",
+      "notes": [
+        "Physical iPad, CoreDevice 0A947DBD-A462-5BAA-AB84-17F143D41619, bridge previously observed at 169.254.193.202:4762"
+      ],
+      "os": "iOS 17.7.11",
+      "role": "master-upload"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/ipad-video-upload-after-success.png",
+    "video/ipad-session-492-uploaded-video.mp4",
+    "device-logs/hydracam-session-492-details.html",
+    "device-logs/ipad-logs-after-session-492-video-upload.json",
+    "device-logs/ipad-screenshot-copy.json",
+    "device-logs/ipad-session-492-after-video-upload.json",
+    "device-logs/ipad-uploaded-video-copy.json"
+  ],
+  "item": {
+    "slug": "ipad-legacy-upload-success-response",
+    "source": "user request 2026-06-17",
+    "title": "iPad legacy upload success response"
+  },
+  "notes": [
+    "Current checkout Profile build installed on physical iPad; manual session 492 uploaded REC_3A1472AD-4EE5-4378-910D-3C42D3E20AD8.mp4 without malformed-response or failed-upload log entries."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

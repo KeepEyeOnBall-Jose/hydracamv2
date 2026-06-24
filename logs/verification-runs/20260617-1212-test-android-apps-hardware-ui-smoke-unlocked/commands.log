@@ -1,0 +1,114 @@
+# HydraCam evidence run command log
+
+$ adb -s RF8M90QE7LX shell dumpsys window
+
+[stderr]
+adb: device 'RF8M90QE7LX' not found
+[exit-code] 1
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:0-1.2 product:starltexx model:SM_G960F device:starlte transport_id:3
+
+[exit-code] 0
+
+$ /usr/bin/python3 scripts/run_hardware_ui_e2e.py --device RF8M90QE7LX --route setup --route standby --run-dir logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked --skip-build --timeout 45
++ adb devices -l
+
+[stderr]
+hardware ui e2e failed: Requested ADB device(s) not connected: RF8M90QE7LX
+[exit-code] 1
+
+$ adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:0-1.2 product:starltexx model:SM_G960F device:starlte transport_id:1
+RF8M90QE7LX            device usb:2-1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:2
+
+[exit-code] 0
+
+$ /usr/bin/python3 scripts/run_hardware_ui_e2e.py --device RF8M90QE7LX --route setup --route standby --run-dir logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked --skip-build --timeout 45
++ adb devices -l
++ adb -s RF8M90QE7LX forward --remove-all
++ adb -s RF8M90QE7LX install -r /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_IMAGES
++ adb -s RF8M90QE7LX shell pm grant com.amaia23.hydracam android.permission.READ_MEDIA_VIDEO
++ adb -s RF8M90QE7LX forward tcp:6700 tcp:4762
+6700
++ adb -s RF8M90QE7LX logcat -c
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role setup --es automationTargetId RF8M90QE7LX
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M90QE7LX exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M90QE7LX-setup-2026-06-17T12-15-46-377513.png > logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/screenshots/RF8M90QE7LX-setup.png
++ adb -s RF8M90QE7LX shell wm size
++ adb -s RF8M90QE7LX shell input swipe 540 1778 540 501 450
++ adb -s RF8M90QE7LX exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M90QE7LX-setup-after-scroll-2026-06-17T12-15-49-310036.png > logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/screenshots/RF8M90QE7LX-setup-after-scroll.png
++ adb -s RF8M90QE7LX logcat -d -t 800
++ adb -s RF8M90QE7LX logcat -c
++ adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam
++ adb -s RF8M90QE7LX shell am start -n com.amaia23.hydracam/.MainActivity --es role standby --es automationTargetId RF8M90QE7LX
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ adb -s RF8M90QE7LX exec-out run-as com.amaia23.hydracam cat /data/user/0/com.amaia23.hydracam/app_flutter/automation-screenshots/RF8M90QE7LX-standby-2026-06-17T12-15-54-962340.png > logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/screenshots/RF8M90QE7LX-standby.png
++ adb -s RF8M90QE7LX logcat -d -t 800
+logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked
+
+[stderr]
+
+Exception occurred while executing 'grant':
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.WRITE_EXTERNAL_STORAGE
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1577)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_IMAGES
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1535)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission: android.permission.READ_MEDIA_VIDEO
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermissionInternal(PermissionManagerService.java:1535)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:1493)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:378)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2457)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:274)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:29818)
+	at android.os.Binder.shellCommand(Binder.java:986)
+	at android.os.Binder.onTransact(Binder.java:860)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:5411)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:9923)
+	at android.os.Binder.execTransactInternal(Binder.java:1220)
+	at android.os.Binder.execTransact(Binder.java:1179)
+[exit-code] 0

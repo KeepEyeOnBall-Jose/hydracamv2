@@ -1,0 +1,379 @@
+# HydraCam evidence run command log
+
+$ git status -sb
+## codex/hydracam-visual-makeover
+ M .vscode/launch.json
+ M .vscode/tasks.json
+ M AGENTS.md
+ M docs/control/README.md
+ M docs/control/backlog-import.md
+ M docs/control/hydracam-mobo-media-timeline-merge-plan.md
+ M docs/control/status-and-roadmap.md
+ M docs/control/store-privacy-and-metadata.md
+ M ios/fastlane/Fastfile
+ M lib/app_theme.dart
+ M lib/automation/automation_standby_screen.dart
+ M lib/master/connected_client_automation_payload.dart
+ M lib/master/master_screen.dart
+ M lib/master/master_server.dart
+ M lib/models/captured_photo.dart
+ M lib/models/captured_video.dart
+ M lib/screens/camera_selection_screen.dart
+ M lib/screens/camera_setup_preview_screen.dart
+ M lib/screens/courts_screen.dart
+ M lib/screens/log_screen.dart
+ M lib/screens/login_screen.dart
+ M lib/screens/master_video_recording_screen.dart
+ M lib/screens/media_selection_screen.dart
+ M lib/screens/previous_sessions_screen.dart
+ M lib/screens/role_selection_screen.dart
+ M lib/screens/session_details_screen.dart
+ M lib/screens/sessions_screen.dart
+ M lib/screens/settings_screen.dart
+ M lib/screens/sports_centers_screen.dart
+ M lib/screens/uploader_info_screen.dart
+ M lib/services/alert_utils.dart
+ M lib/services/auth0_m2m_service.dart
+ M lib/services/auth0_service.dart
+ M lib/services/battery_service.dart
+ M lib/services/gallery_persistence_service.dart
+ M lib/services/hydracam_api_service.dart
+ M lib/services/log_service.dart
+ M lib/services/session_manager.dart
+ M lib/services/storage_service.dart
+ M lib/services/uploader_service.dart
+ M lib/services/user_service.dart
+ M lib/slave/slave_client.dart
+ M lib/slave/slave_screen.dart
+ M lib/widgets/add_gallery_media_button.dart
+ M lib/widgets/animated_countdown_timer.dart
+ M lib/widgets/hydra_cam_app_bar.dart
+ M lib/widgets/media_list_widget.dart
+ M lib/widgets/session_info_widget.dart
+ M lib/widgets/settings_option.dart
+ M logs/android_emulator_inventory.json
+ M logs/android_sdk_state.json
+ M scripts/android_wifi_preflight.py
+ M scripts/build_store_artifacts.sh
+ M scripts/check_store_readiness.sh
+ M scripts/run_rotating_master_slave_matrix.py
+ M test/automation/automation_standby_screen_test.dart
+ M test/master/connected_client_automation_payload_test.dart
+ M test/master/master_network_snapshot_cache_test.dart
+ M test/master/master_screen_test.dart
+ M test/screens/login_screen_test.dart
+ M test/screens/media_selection_screen_test.dart
+ M test/screens/previous_sessions_screen_test.dart
+ M test/screens/session_details_screen_test.dart
+ M test/screens/uploader_info_screen_test.dart
+ M test/services/auth0_service_test.dart
+ M test/services/hydracam_api_service_test.dart
+ M test/services/log_service_test.dart
+ M test/services/session_manager_test.dart
+ M test/services/storage_service_test.dart
+ M test/services/uploader_service_test.dart
+ M test/services/user_service_test.dart
+ M test/slave/slave_client_registration_test.dart
+ M test/slave/slave_screen_fast_connect_test.dart
+ M test/slave/slave_screen_sync_chip_test.dart
+ M test/widgets/add_gallery_media_button_test.dart
+ M test/widgets/camera_setup_preview_screen_test.dart
+ M test/widgets/hydra_cam_app_bar_test.dart
+ M test/widgets/media_list_widget_test.dart
+?? .vscode/extensions.json
+?? docs/control/android-auth-sign-in-decision.md
+?? docs/control/baseline-functionality-and-support.md
+?? docs/control/cross-project-api-data-map.md
+?? docs/control/fleet-operations-plan.md
+?? docs/control/hydracam-visual-makeover-plan.md
+?? docs/control/local-ide-emulator-deploy-playbook.md
+?? docs/control/regular-evaluation-plan.md
+?? docs/control/user-flow-fsm-diagrams.md
+?? docs/control/user-flow-tracker.md
+?? lib/services/fleet_heartbeat_service.dart
+?? lib/services/gallery_session_attachment_service.dart
+?? lib/widgets/hydracam_surface.dart
+?? logs/verification-runs/20260611-0237-eight-target-random-master-role-switch/
+?? logs/verification-runs/20260611-s7-s10e-hardware-ui-overflow-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-oriented-scroll-e2e/
+?? logs/verification-runs/20260611-s7-two-s10e-hardware-ui-scroll-e2e/
+?? logs/verification-runs/20260612-0649-visual-makeover-cross-platform-smoke/
+?? logs/verification-runs/20260612-0657-regular-evaluation-tier-b-simulator-baseline/
+?? logs/verification-runs/20260612-0703-regular-evaluation-tier-a-ipad-hardware-baseline/
+?? logs/verification-runs/20260612-0706-local-ide-emulator-deploy-setup/
+?? logs/verification-runs/20260612-1723-cleanup-attached-phone-validation/
+?? logs/verification-runs/20260614-0941-hydracam-multicamera-legacy-mediatimeline-flow/
+?? logs/verification-runs/20260615-1935-store-distribution-readiness/
+?? logs/verification-runs/20260617-1033-test-android-apps-hardware-ui-smoke/
+?? logs/verification-runs/20260617-1212-test-android-apps-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1232-test-android-apps-s9-hardware-ui-smoke-unlocked/
+?? logs/verification-runs/20260617-1435-auth0-cross-platform-evaluation/
+?? logs/verification-runs/20260617-1929-uploader-reset-cancels-transport/
+?? logs/verification-runs/20260617-1933-auth0-malformed-id-token-restore-cleanup/
+?? logs/verification-runs/20260617-1938-user-restore-blank-email-guard/
+?? logs/verification-runs/20260617-1941-user-login-blank-email-guard/
+?? logs/verification-runs/20260617-1944-auth0-email-claim-normalization/
+?? logs/verification-runs/20260617-1947-auth0-login-failure-clears-stale-session/
+?? logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/
+?? scripts/google_play_internal_release.sh
+?? scripts/run_android_always_on_lab_soak.py
+?? scripts/run_hardware_ui_e2e.py
+?? scripts/test_android_wifi_preflight.py
+?? scripts/test_run_android_always_on_lab_soak.py
+?? scripts/testflight_release_and_invite.sh
+?? store-site/
+?? test/screens/navigation_list_screens_test.dart
+?? test/screens/role_selection_screen_test.dart
+?? test/services/fleet_heartbeat_service_test.dart
+?? test/services/gallery_persistence_service_test.dart
+?? test/services/gallery_session_attachment_service_test.dart
+?? test/theme/
+?? test/widgets/hydracam_surface_test.dart
+[exit-code] 0
+
+$ xcrun devicectl list devices
+Name                  Hostname                              Identifier                             State                Model                                        
+-------------------   -----------------------------------   ------------------------------------   ------------------   ---------------------------------------------
+José Ramón’s iPhone   Jose-Ramons-iPhone.coredevice.local   AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A   available (paired)   iPhone 12 Pro (iPhone13,3)                   
+iPad (5)              iPad-5.coredevice.local               0A947DBD-A462-5BAA-AB84-17F143D41619   available (paired)   iPad (6th generation) (Model A1893) (iPad7,5)
+[exit-code] 0
+
+$ flutter test --no-pub test/widgets/camera_setup_preview_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart
+00:00 +0: renders perspective selector and level overlay
+00:00 +1: warn-only flow allows recording while red tilted
+00:00 +2: fits short phone viewports without overflow
+00:00 +3: standalone setup route can return to normal app
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following _Exception was thrown building Builder:
+Exception: CameraServiceSingleton not initialized
+
+The relevant error-causing widget was:
+  MaterialApp
+  MaterialApp:file:///Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart:113:7
+
+When the exception was thrown, this was the stack:
+#0      CameraServiceSingleton.instance (package:hydracam/services/camera_service_singleton.dart:12:7)
+#1      _CameraSetupStandaloneScreenState.initState (package:hydracam/screens/camera_setup_preview_screen.dart:177:45)
+#2      StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5950:55)
+#3      ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+...     Normal element mounting (260 frames)
+#263    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#264    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7264:36)
+#265    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7279:32)
+...     Normal element mounting (467 frames)
+#732    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#733    Element.updateChild (package:flutter/src/widgets/framework.dart:4053:20)
+#734    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#735    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#736    ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
+#737    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#738    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#739    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#740    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#741    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#742    StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
+#743    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#744    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#745    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#746    ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
+#747    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#748    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#749    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#750    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#751    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#752    StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
+#753    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#754    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#755    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#756    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#757    StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
+#758    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#759    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#760    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#761    ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
+#762    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#763    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#764    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#765    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#766    StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
+#767    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#768    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#769    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#770    ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
+#771    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#772    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#773    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#774    ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
+#775    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#776    _RawViewElement._updateChild (package:flutter/src/widgets/view.dart:481:16)
+#777    _RawViewElement.update (package:flutter/src/widgets/view.dart:568:5)
+#778    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#779    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#780    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#781    StatelessElement.update (package:flutter/src/widgets/framework.dart:5895:5)
+#782    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#783    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
+#784    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
+#785    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#786    StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
+#787    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#788    RootElement._rebuild (package:flutter/src/widgets/binding.dart:2091:16)
+#789    RootElement.update (package:flutter/src/widgets/binding.dart:2069:5)
+#790    RootElement.performRebuild (package:flutter/src/widgets/binding.dart:2083:7)
+#791    Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
+#792    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2750:15)
+#793    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2807:11)
+#794    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3111:18)
+#795    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2431:19)
+#796    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:509:5)
+#797    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#798    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#799    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2260:9)
+#802    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#803    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2249:27)
+#804    WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)
+#807    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#808    WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)
+#809    main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart:112:18)
+#810    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#811    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Prepare Camera": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart:123:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1952:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart line 123
+The test description was:
+  standalone setup route can return to normal app
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (2) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +3 -1: standalone setup route can return to normal app [E]
+  Test failed. See exception logs above.
+  The test description was: standalone setup route can return to normal app
+  
+00:00 +3 -1: Some tests failed.
+
+Failing tests:
+  /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart: standalone setup route can return to normal app
+[exit-code] 1
+
+$ flutter test --no-pub test/widgets/camera_setup_preview_screen_test.dart
+00:00 +0: loading /Users/jose/src/work/hydracamv2/test/widgets/camera_setup_preview_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: renders perspective selector and level overlay
+00:00 +1: warn-only flow allows recording while red tilted
+00:00 +2: fits short phone viewports without overflow
+00:00 +3: standalone setup route can return to normal app
+Log registered: {message: Mock camera ready for native controller mode on macOS., timestamp: 2026-06-17 19:54:30.941011, function: null, file: null}
+Log registered: {message: Mock camera stopped, timestamp: 2026-06-17 19:54:31.001569, function: null, file: null}
+00:00 +4: (tearDownAll)
+00:00 +4: All tests passed!
+[exit-code] 0
+
+$ flutter analyze --no-pub
+Analyzing hydracamv2...                                         
+No issues found! (ran in 5.9s)
+[exit-code] 0
+
+$ git diff --check -- lib/main.dart lib/screens/camera_setup_preview_screen.dart test/widgets/camera_setup_preview_screen_test.dart
+[exit-code] 0
+
+$ flutter build ios --profile --dart-define=HYDRACAM_AUTOMATION=true --dart-define=HYDRACAM_AUTOMATION_PORT=4762 -t lib/main.dart
+Building com.keepeyeonball for device (ios-profile)...
+Automatically signing iOS for device deployment using specified development team in Xcode project: 4RRY2QT7H8
+Running Xcode build...                                          
+Xcode build done.                                           174.2s
+✓ Built build/ios/iphoneos/Runner.app (31.3MB)
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - photo_manager
+  - permission_handler_apple
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+The following plugins do not support Swift Package Manager for macos:
+  - photo_manager
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ xcrun devicectl device install app --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 build/ios/iphoneos/Runner.app
+19:58:54  Acquired tunnel connection to device.
+19:58:54  Enabling developer disk image services.
+19:58:54  Acquired usage assertion.
+App installed:
+• bundleID: com.keepeyeonball
+• installationURL: file:///private/var/containers/Bundle/Application/A1C8283B-A5EA-426B-9CED-7BC1C70885C4/Runner.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 9ADA0F66-995B-42B5-8E57-8660D13257F2
+• databaseSequenceNumber: 1584
+• options: 
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"setup","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
+19:59:08  Acquired tunnel connection to device.
+19:59:08  Enabling developer disk image services.
+19:59:08  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 -sS -X POST http://192.168.178.104:4762/commands/capture_screenshot -H Content-Type: application/json -d {"name":"ipad-setup-open-hydracam","pixelRatio":1.0}
+{"status":"ok","command":"capture_screenshot","result":{"filePath":"/var/mobile/Containers/Data/Application/D223AF87-2BE7-406D-932A-51AD291621BF/Documents/automation-screenshots/ipad-setup-open-hydracam-2026-06-17T19-59-26-164828.png","appDataContainerSource":"Documents/automation-screenshots/ipad-setup-open-hydracam-2026-06-17T19-59-26-164828.png","width":1024,"height":768,"pixelRatio":1.0,"byteLength":49253}}
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents/automation-screenshots/ipad-setup-open-hydracam-2026-06-17T19-59-26-164828.png --destination logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/screenshots/ipad-setup-open-hydracam.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-open-hydracam.json --log-output logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-open-hydracam.log
+19:59:50  Acquired tunnel connection to device.
+19:59:50  Enabling developer disk image services.
+19:59:50  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/screenshots/ipad-setup-open-hydracam.png
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 -sS http://192.168.178.104:4762/logs
+{"traceFilePath":"/var/mobile/Containers/Data/Application/D223AF87-2BE7-406D-932A-51AD291621BF/Documents/logs/hydracam-trace-2026-06-17T19-59-09-605412.ndjson","persistedLogLines":["{\"message\":\"Launch config from intent: role=setup, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null, manualLaunch=null\",\"timestamp\":\"2026-06-17T19:59:09.587402\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (startup)\",\"timestamp\":\"2026-06-17T19:59:09.590602\",\"function\":null,\"file\":null}","{\"message\":\"Automation bridge listening on port 4762\",\"timestamp\":\"2026-06-17T19:59:09.591549\",\"function\":null,\"file\":null}","{\"message\":\"Permission request completed.\\nGranted: [Permission.camera, Permission.microphone]\\nDenied: []\",\"timestamp\":\"2026-06-17T19:59:09.606873\",\"function\":\"requestAllPermissions\",\"file\":\"PermissionService\"}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:09.607325\",\"function\":null,\"file\":null}","{\"message\":\"Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:09.607335\",\"function\":null,\"file\":null}","{\"message\":\"Location access will be requested on demand when the user opens the location view.\",\"timestamp\":\"2026-06-17T19:59:09.607337\",\"function\":null,\"file\":null}","{\"message\":\"CameraServiceSingleton initialized; mockCamera=false\",\"timestamp\":\"2026-06-17T19:59:09.615550\",\"function\":null,\"file\":null}","{\"message\":\"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=false, automationSetupPreview=true, forceSlave=false\",\"timestamp\":\"2026-06-17T19:59:09.619715\",\"function\":null,\"file\":null}","{\"message\":\"Navigating to CameraSetupStandaloneScreen\",\"timestamp\":\"2026-06-17T19:59:09.619720\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app init)\",\"timestamp\":\"2026-06-17T19:59:09.704036\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:09.704189\",\"function\":null,\"file\":null}","{\"message\":\"Initializing camera preview...\",\"timestamp\":\"2026-06-17T19:59:09.704204\",\"function\":null,\"file\":null}","{\"message\":\"Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities)\",\"timestamp\":\"2026-06-17T19:59:10.469164\",\"function\":null,\"file\":null}","{\"message\":\"Camera preview successfully initialized without explicit fps.\",\"timestamp\":\"2026-06-17T19:59:10.469171\",\"function\":null,\"file\":null}","{\"message\":\"Opening normal HydraCam app from automation standby.\",\"timestamp\":\"2026-06-17T19:59:15.121402\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:15.255240\",\"function\":null,\"file\":null}","{\"message\":\"Listening for master broadcast on port 4041...\",\"timestamp\":\"2026-06-17T19:59:15.263839\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:15.269708\",\"function\":null,\"file\":null}","{\"message\":\"Camera stopped\",\"timestamp\":\"2026-06-17T19:59:15.683532\",\"function\":null,\"file\":null}","{\"message\":\"No master found, switching to Master mode.\",\"timestamp\":\"2026-06-17T19:59:18.224961\",\"function\":null,\"file\":null}","{\"message\":\"Stopped listening for master broadcast.\",\"timestamp\":\"2026-06-17T19:59:18.225054\",\"function\":null,\"file\":null}","{\"message\":\"Cleaned up Slave mode.\",\"timestamp\":\"2026-06-17T19:59:18.225057\",\"function\":null,\"file\":null}","{\"message\":\"WebSocket Server successfully started on port 4040\",\"timestamp\":\"2026-06-17T19:59:18.247531\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:18.311319\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T19:59:18.313073\",\"function\":null,\"file\":null}","{\"message\":\"Get token\",\"timestamp\":\"2026-06-17T19:59:38.467047\",\"function\":null,\"file\":null}","{\"message\":\"Fetch token\",\"timestamp\":\"2026-06-17T19:59:38.467054\",\"function\":null,\"file\":null}","{\"message\":\"M2M token obtained successfully\",\"timestamp\":\"2026-06-17T19:59:38.797618\",\"function\":null,\"file\":null}"],"logs":[{"message":"Launch config from intent: role=setup, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null, manualLaunch=null","timestamp":"2026-06-17T19:59:09.587402","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (startup)","timestamp":"2026-06-17T19:59:09.590602","function":null,"file":null},{"message":"Automation bridge listening on port 4762","timestamp":"2026-06-17T19:59:09.591549","function":null,"file":null},{"message":"Permission request completed.\nGranted: [Permission.camera, Permission.microphone]\nDenied: []","timestamp":"2026-06-17T19:59:09.606873","function":"requestAllPermissions","file":"PermissionService"},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:09.607325","function":null,"file":null},{"message":"Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:09.607335","function":null,"file":null},{"message":"Location access will be requested on demand when the user opens the location view.","timestamp":"2026-06-17T19:59:09.607337","function":null,"file":null},{"message":"CameraServiceSingleton initialized; mockCamera=false","timestamp":"2026-06-17T19:59:09.615550","function":null,"file":null},{"message":"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=false, automationSetupPreview=true, forceSlave=false","timestamp":"2026-06-17T19:59:09.619715","function":null,"file":null},{"message":"Navigating to CameraSetupStandaloneScreen","timestamp":"2026-06-17T19:59:09.619720","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app init)","timestamp":"2026-06-17T19:59:09.704036","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:09.704189","function":null,"file":null},{"message":"Initializing camera preview...","timestamp":"2026-06-17T19:59:09.704204","function":null,"file":null},{"message":"Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities)","timestamp":"2026-06-17T19:59:10.469164","function":null,"file":null},{"message":"Camera preview successfully initialized without explicit fps.","timestamp":"2026-06-17T19:59:10.469171","function":null,"file":null},{"message":"Opening normal HydraCam app from automation standby.","timestamp":"2026-06-17T19:59:15.121402","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:15.255240","function":null,"file":null},{"message":"Listening for master broadcast on port 4041...","timestamp":"2026-06-17T19:59:15.263839","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:15.269708","function":null,"file":null},{"message":"Camera stopped","timestamp":"2026-06-17T19:59:15.683532","function":null,"file":null},{"message":"No master found, switching to Master mode.","timestamp":"2026-06-17T19:59:18.224961","function":null,"file":null},{"message":"Stopped listening for master broadcast.","timestamp":"2026-06-17T19:59:18.225054","function":null,"file":null},{"message":"Cleaned up Slave mode.","timestamp":"2026-06-17T19:59:18.225057","function":null,"file":null},{"message":"WebSocket Server successfully started on port 4040","timestamp":"2026-06-17T19:59:18.247531","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:18.311319","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T19:59:18.313073","function":null,"file":null},{"message":"Get token","timestamp":"2026-06-17T19:59:38.467047","function":null,"file":null},{"message":"Fetch token","timestamp":"2026-06-17T19:59:38.467054","function":null,"file":null},{"message":"M2M token obtained successfully","timestamp":"2026-06-17T19:59:38.797618","function":null,"file":null}]}
+[exit-code] 0
+
+$ xcrun devicectl device process launch --device 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 --terminate-existing --environment-variables {"HYDRACAM_AUTOMATION_ROLE":"setup","HYDRACAM_AUTOMATION_TARGET_ID":"8b406aa5c597eab4c4dfd9908f4a09b10a89ec63"} com.keepeyeonball
+20:00:47  Acquired tunnel connection to device.
+20:00:47  Enabling developer disk image services.
+20:00:48  Acquired usage assertion.
+Launched application with com.keepeyeonball bundle identifier.
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 -sS -X POST http://192.168.178.104:4762/commands/capture_screenshot -H Content-Type: application/json -d {"name":"ipad-setup-route-with-open-button","pixelRatio":1.0}
+{"status":"ok","command":"capture_screenshot","result":{"filePath":"/var/mobile/Containers/Data/Application/D223AF87-2BE7-406D-932A-51AD291621BF/Documents/automation-screenshots/ipad-setup-route-with-open-button-2026-06-17T20-00-59-382969.png","appDataContainerSource":"Documents/automation-screenshots/ipad-setup-route-with-open-button-2026-06-17T20-00-59-382969.png","width":1024,"height":768,"pixelRatio":1.0,"byteLength":49253}}
+[exit-code] 0
+
+$ xcrun devicectl device copy from --device 0A947DBD-A462-5BAA-AB84-17F143D41619 --source Documents/automation-screenshots/ipad-setup-route-with-open-button-2026-06-17T20-00-59-382969.png --destination logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/screenshots/ipad-setup-route-with-open-button.png --domain-type appDataContainer --domain-identifier com.keepeyeonball --timeout 30 --json-output logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-route-with-open-button.json --log-output logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/device-logs/ipad-copy-setup-route-with-open-button.log
+20:01:16  Acquired tunnel connection to device.
+20:01:16  Enabling developer disk image services.
+20:01:16  Acquired usage assertion.
+File received from Device
+/Users/jose/src/work/hydracamv2/logs/verification-runs/20260617-1948-ipad-prepare-camera-stuck/screenshots/ipad-setup-route-with-open-button.png
+[exit-code] 0
+
+$ curl --connect-timeout 1 --max-time 5 -sS http://192.168.178.104:4762/logs
+{"traceFilePath":"/var/mobile/Containers/Data/Application/D223AF87-2BE7-406D-932A-51AD291621BF/Documents/logs/hydracam-trace-2026-06-17T20-00-49-390001.ndjson","persistedLogLines":["{\"message\":\"Launch config from intent: role=setup, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null, manualLaunch=null\",\"timestamp\":\"2026-06-17T20:00:49.387296\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (startup)\",\"timestamp\":\"2026-06-17T20:00:49.390299\",\"function\":null,\"file\":null}","{\"message\":\"Automation bridge listening on port 4762\",\"timestamp\":\"2026-06-17T20:00:49.390636\",\"function\":null,\"file\":null}","{\"message\":\"Permission request completed.\\nGranted: [Permission.camera, Permission.microphone]\\nDenied: []\",\"timestamp\":\"2026-06-17T20:00:49.412082\",\"function\":\"requestAllPermissions\",\"file\":\"PermissionService\"}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:49.412455\",\"function\":null,\"file\":null}","{\"message\":\"Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:49.412463\",\"function\":null,\"file\":null}","{\"message\":\"Location access will be requested on demand when the user opens the location view.\",\"timestamp\":\"2026-06-17T20:00:49.412464\",\"function\":null,\"file\":null}","{\"message\":\"CameraServiceSingleton initialized; mockCamera=false\",\"timestamp\":\"2026-06-17T20:00:49.421502\",\"function\":null,\"file\":null}","{\"message\":\"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=false, automationSetupPreview=true, forceSlave=false\",\"timestamp\":\"2026-06-17T20:00:49.423253\",\"function\":null,\"file\":null}","{\"message\":\"Navigating to CameraSetupStandaloneScreen\",\"timestamp\":\"2026-06-17T20:00:49.423258\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app init)\",\"timestamp\":\"2026-06-17T20:00:49.471773\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:49.471899\",\"function\":null,\"file\":null}","{\"message\":\"Initializing camera preview...\",\"timestamp\":\"2026-06-17T20:00:49.471914\",\"function\":null,\"file\":null}","{\"message\":\"Prevent screen from turning off: wakelock enabled (app resumed)\",\"timestamp\":\"2026-06-17T20:00:49.521144\",\"function\":null,\"file\":null}","{\"message\":\"Launch config from intent: role=setup, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null, manualLaunch=null\",\"timestamp\":\"2026-06-17T20:00:49.521200\",\"function\":null,\"file\":null}","{\"message\":\"Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities)\",\"timestamp\":\"2026-06-17T20:00:50.403423\",\"function\":null,\"file\":null}","{\"message\":\"Camera preview successfully initialized without explicit fps.\",\"timestamp\":\"2026-06-17T20:00:50.403434\",\"function\":null,\"file\":null}","{\"message\":\"Opening normal HydraCam app from automation standby.\",\"timestamp\":\"2026-06-17T20:00:53.319658\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:53.400442\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:53.423737\",\"function\":null,\"file\":null}","{\"message\":\"Listening for master broadcast on port 4041...\",\"timestamp\":\"2026-06-17T20:00:53.424758\",\"function\":null,\"file\":null}","{\"message\":\"Camera stopped\",\"timestamp\":\"2026-06-17T20:00:53.927860\",\"function\":null,\"file\":null}","{\"message\":\"No master found, switching to Master mode.\",\"timestamp\":\"2026-06-17T20:00:56.429138\",\"function\":null,\"file\":null}","{\"message\":\"Stopped listening for master broadcast.\",\"timestamp\":\"2026-06-17T20:00:56.429324\",\"function\":null,\"file\":null}","{\"message\":\"Cleaned up Slave mode.\",\"timestamp\":\"2026-06-17T20:00:56.429327\",\"function\":null,\"file\":null}","{\"message\":\"WebSocket Server successfully started on port 4040\",\"timestamp\":\"2026-06-17T20:00:56.455019\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:56.514795\",\"function\":null,\"file\":null}","{\"message\":\"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a\",\"timestamp\":\"2026-06-17T20:00:56.516900\",\"function\":null,\"file\":null}","{\"message\":\"Get token\",\"timestamp\":\"2026-06-17T20:01:18.708063\",\"function\":null,\"file\":null}","{\"message\":\"Fetch token\",\"timestamp\":\"2026-06-17T20:01:18.708075\",\"function\":null,\"file\":null}","{\"message\":\"M2M token obtained successfully\",\"timestamp\":\"2026-06-17T20:01:19.192650\",\"function\":null,\"file\":null}","{\"message\":\"Session created successfully: HydraCamBackendSession(guid: e8e9fa66-c46d-48d8-b686-71644a9eb57c, sessionId: 2026-06-17T20:01:18.705830, numericId: 490)\",\"timestamp\":\"2026-06-17T20:01:22.857389\",\"function\":null,\"file\":null}","{\"message\":\"Response to create session: HydraCamBackendSession(guid: e8e9fa66-c46d-48d8-b686-71644a9eb57c, sessionId: 2026-06-17T20:01:18.705830, numericId: 490)\",\"timestamp\":\"2026-06-17T20:01:22.857408\",\"function\":null,\"file\":null}","{\"message\":\"UploaderService: Resetting upload queue and state.\",\"timestamp\":\"2026-06-17T20:01:22.857413\",\"function\":null,\"file\":null}","{\"message\":\"UploaderService: Reset completed.\",\"timestamp\":\"2026-06-17T20:01:22.857423\",\"function\":null,\"file\":null}","{\"message\":\"Session started with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c on device type: Master\",\"timestamp\":\"2026-06-17T20:01:22.857425\",\"function\":null,\"file\":null}","{\"message\":\"Session already active with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c. Preserving existing media on rejoin as Master.\",\"timestamp\":\"2026-06-17T20:01:22.857427\",\"function\":null,\"file\":null}","{\"message\":\"New capture session started with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c\",\"timestamp\":\"2026-06-17T20:01:22.857428\",\"function\":null,\"file\":null}","{\"message\":\"Command sent to 0 eligible connected slave(s): {\\\"command\\\":\\\"sessionStarted\\\",\\\"sessionGuid\\\":\\\"e8e9fa66-c46d-48d8-b686-71644a9eb57c\\\"}\",\"timestamp\":\"2026-06-17T20:01:22.857442\",\"function\":null,\"file\":null}","{\"message\":\"Session created with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c\",\"timestamp\":\"2026-06-17T20:01:22.857443\",\"function\":null,\"file\":null}"],"logs":[{"message":"Launch config from intent: role=setup, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null, manualLaunch=null","timestamp":"2026-06-17T20:00:49.387296","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (startup)","timestamp":"2026-06-17T20:00:49.390299","function":null,"file":null},{"message":"Automation bridge listening on port 4762","timestamp":"2026-06-17T20:00:49.390636","function":null,"file":null},{"message":"Permission request completed.\nGranted: [Permission.camera, Permission.microphone]\nDenied: []","timestamp":"2026-06-17T20:00:49.412082","function":"requestAllPermissions","file":"PermissionService"},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:49.412455","function":null,"file":null},{"message":"Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:49.412463","function":null,"file":null},{"message":"Location access will be requested on demand when the user opens the location view.","timestamp":"2026-06-17T20:00:49.412464","function":null,"file":null},{"message":"CameraServiceSingleton initialized; mockCamera=false","timestamp":"2026-06-17T20:00:49.421502","function":null,"file":null},{"message":"Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=false, automationSetupPreview=true, forceSlave=false","timestamp":"2026-06-17T20:00:49.423253","function":null,"file":null},{"message":"Navigating to CameraSetupStandaloneScreen","timestamp":"2026-06-17T20:00:49.423258","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app init)","timestamp":"2026-06-17T20:00:49.471773","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:49.471899","function":null,"file":null},{"message":"Initializing camera preview...","timestamp":"2026-06-17T20:00:49.471914","function":null,"file":null},{"message":"Prevent screen from turning off: wakelock enabled (app resumed)","timestamp":"2026-06-17T20:00:49.521144","function":null,"file":null},{"message":"Launch config from intent: role=setup, preferredMasterIp=null, targetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, forceSlaveMode=null, manualLaunch=null","timestamp":"2026-06-17T20:00:49.521200","function":null,"file":null},{"message":"Flash is unavailable for camera readiness initialization; continuing without flash: CameraException(setFlashModeFailed, Device does not have flash capabilities)","timestamp":"2026-06-17T20:00:50.403423","function":null,"file":null},{"message":"Camera preview successfully initialized without explicit fps.","timestamp":"2026-06-17T20:00:50.403434","function":null,"file":null},{"message":"Opening normal HydraCam app from automation standby.","timestamp":"2026-06-17T20:00:53.319658","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:53.400442","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:53.423737","function":null,"file":null},{"message":"Listening for master broadcast on port 4041...","timestamp":"2026-06-17T20:00:53.424758","function":null,"file":null},{"message":"Camera stopped","timestamp":"2026-06-17T20:00:53.927860","function":null,"file":null},{"message":"No master found, switching to Master mode.","timestamp":"2026-06-17T20:00:56.429138","function":null,"file":null},{"message":"Stopped listening for master broadcast.","timestamp":"2026-06-17T20:00:56.429324","function":null,"file":null},{"message":"Cleaned up Slave mode.","timestamp":"2026-06-17T20:00:56.429327","function":null,"file":null},{"message":"WebSocket Server successfully started on port 4040","timestamp":"2026-06-17T20:00:56.455019","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:56.514795","function":null,"file":null},{"message":"Retrieved existing Device ID: 1b1fd43a-2d15-4cc5-95fa-6780aba3e04a","timestamp":"2026-06-17T20:00:56.516900","function":null,"file":null},{"message":"Get token","timestamp":"2026-06-17T20:01:18.708063","function":null,"file":null},{"message":"Fetch token","timestamp":"2026-06-17T20:01:18.708075","function":null,"file":null},{"message":"M2M token obtained successfully","timestamp":"2026-06-17T20:01:19.192650","function":null,"file":null},{"message":"Session created successfully: HydraCamBackendSession(guid: e8e9fa66-c46d-48d8-b686-71644a9eb57c, sessionId: 2026-06-17T20:01:18.705830, numericId: 490)","timestamp":"2026-06-17T20:01:22.857389","function":null,"file":null},{"message":"Response to create session: HydraCamBackendSession(guid: e8e9fa66-c46d-48d8-b686-71644a9eb57c, sessionId: 2026-06-17T20:01:18.705830, numericId: 490)","timestamp":"2026-06-17T20:01:22.857408","function":null,"file":null},{"message":"UploaderService: Resetting upload queue and state.","timestamp":"2026-06-17T20:01:22.857413","function":null,"file":null},{"message":"UploaderService: Reset completed.","timestamp":"2026-06-17T20:01:22.857423","function":null,"file":null},{"message":"Session started with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c on device type: Master","timestamp":"2026-06-17T20:01:22.857425","function":null,"file":null},{"message":"Session already active with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c. Preserving existing media on rejoin as Master.","timestamp":"2026-06-17T20:01:22.857427","function":null,"file":null},{"message":"New capture session started with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c","timestamp":"2026-06-17T20:01:22.857428","function":null,"file":null},{"message":"Command sent to 0 eligible connected slave(s): {\"command\":\"sessionStarted\",\"sessionGuid\":\"e8e9fa66-c46d-48d8-b686-71644a9eb57c\"}","timestamp":"2026-06-17T20:01:22.857442","function":null,"file":null},{"message":"Session created with GUID: e8e9fa66-c46d-48d8-b686-71644a9eb57c","timestamp":"2026-06-17T20:01:22.857443","function":null,"file":null}]}
+[exit-code] 0

@@ -1,0 +1,705 @@
+--------- beginning of system
+06-22 19:25:21.187   540   596 I ActivityManager: Force stopping com.amaia23.hydracam appid=10191 user=0: from pid 6224
+06-22 19:25:21.188   540   557 D DisplayManagerService: Drop pending events for gone uid 10191
+06-22 19:25:21.188   540   596 I ActivityManager: Killing 6000:com.amaia23.hydracam/u0a191 (adj 0): stop com.amaia23.hydracam due to from pid 6224
+06-22 19:25:21.190   540   596 W ActivityTaskManager: Force removing ActivityRecord{c26942e u0 com.amaia23.hydracam/.MainActivity t37 f}}: app died, no saved state
+06-22 19:25:21.190   749   824 V WindowManagerShell: Transition requested: android.os.BinderProxy@ecb51e1 TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=37 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=0 lastActiveTime=66545 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@48a9b06} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 128, 0) topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+--------- beginning of main
+06-22 19:25:21.192   540   596 W InputManager-JNI: Input channel object 'Letterbox_fullWindow_ActivityRecord{c26942e u0 com.amaia23.hydracam/.MainActivity t37} (client)' was disposed without first being removed with the input manager!
+06-22 19:25:21.200   749   824 D WindowManagerShell: onFixedRotationStarted: null, state=PipTransitionState(mState=undefined, mInSwipePipToHomeTransition=false)
+06-22 19:25:21.202   540  1422 W AppSearchIcing: icing-search-engine.cc:283: Error: 5, Message: Document (com.google.android.googlequicksearchbox$OneSearchZeroStateGoogleSuggestions/default, zp) not found.
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: Failed to fetch suggestions from AppSearch, fallback to AGA
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: java.util.concurrent.CompletionException: java.util.NoSuchElementException: No value present
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:308)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:323)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:684)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:486)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2138)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at com.google.android.apps.nexuslauncher.allapps.H0.onResult(Unknown Source:59)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1.lambda$onResult$0(SearchSessionUtil.java:129)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1.$r8$lambda$_nlk9WiPjSfaAsqKYmp0aPvSRC0(SearchSessionUtil.java:1)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:13)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.os.Handler.handleCallback(Handler.java:958)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.os.Looper.loopOnce(Looper.java:205)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.os.Looper.loop(Looper.java:294)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: Caused by: java.util.NoSuchElementException: No value present
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at java.util.Optional.get(Optional.java:144)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	at com.google.android.apps.nexuslauncher.allapps.H0.onResult(Unknown Source:16)
+06-22 19:25:21.203  1036  1806 E OneSearchSuggestProvider: 	... 8 more
+06-22 19:25:21.203  1036  1806 D OneSearchSuggestProvider: Established or reuse existing binder channel authority=com.google.android.googlequicksearchbox
+06-22 19:25:21.205   901   901 D CarrierSvcBindHelper: onHandleForceStop: [com.amaia23.hydracam]
+06-22 19:25:21.205   901   901 D CarrierSvcBindHelper: No carrier app for: 0
+06-22 19:25:21.205   393   393 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+06-22 19:25:21.209   540   560 E IPCThreadState: Binder transaction failure: 349442/29189/-3
+06-22 19:25:21.216  1362  1790 I AiAiEcho: Predicting[0]: 
+06-22 19:25:21.216  1362  1790 I AiAiEcho: EchoTargets: 
+06-22 19:25:21.216  1362  1790 I AiAiEcho: Filtered by AiAi flag check: 
+06-22 19:25:21.216  1362  1790 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+06-22 19:25:21.217  1362  1790 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+06-22 19:25:21.223   540  2448 I ImeTracker: com.amaia23.hydracam:669d4e: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_REMOVE_CLIENT
+06-22 19:25:21.223   540  1033 V ActivityManager: Got obituary of 6000:com.amaia23.hydracam
+06-22 19:25:21.223   540  2448 I ImeTracker: com.amaia23.hydracam:669d4e: onCancelled at PHASE_SERVER_SHOULD_HIDE
+06-22 19:25:21.224   353   353 I Zygote  : Process 6000 exited due to signal 9 (Killed)
+06-22 19:25:21.224   540   560 W WindowManager: Failed to deliver inset control state change to w=Window{6e26eb4 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+06-22 19:25:21.224   540   560 W WindowManager: android.os.DeadObjectException
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsControlChanged(IWindow.java:479)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsControlChanged(WindowState.java:3802)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$notifyPendingInsetsControlChanged$3(InsetsStateController.java:343)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.InsetsStateController.$r8$lambda$8yykPRG1GyNq_J17QvL9d5xANMc(InsetsStateController.java:0)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.InsetsStateController$$ExternalSyntheticLambda2.run(R8$$SyntheticClass:0)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.WindowAnimator.executeAfterPrepareSurfacesRunnables(WindowAnimator.java:294)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.WindowAnimator.animate(WindowAnimator.java:202)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.WindowAnimator.lambda$new$1(WindowAnimator.java:99)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.WindowAnimator.$r8$lambda$aHNu1uhcqxihX5NZc4McDDQPAyw(WindowAnimator.java:0)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.wm.WindowAnimator$$ExternalSyntheticLambda1.doFrame(R8$$SyntheticClass:0)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1337)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1348)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.view.Choreographer.doCallbacks(Choreographer.java:952)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.view.Choreographer.doFrame(Choreographer.java:878)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:1322)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.Handler.handleCallback(Handler.java:958)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.Looper.loopOnce(Looper.java:205)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.Looper.loop(Looper.java:294)
+06-22 19:25:21.224   540   560 W WindowManager: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+06-22 19:25:21.224   540   560 W WindowManager: 	at com.android.server.ServiceThread.run(ServiceThread.java:46)
+06-22 19:25:21.225   540  1496 I WindowManager: WIN DEATH: Window{6e26eb4 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+06-22 19:25:21.225   540  1496 W InputManager-JNI: Input channel object '6e26eb4 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity (client)' was disposed without first being removed with the input manager!
+06-22 19:25:21.226   540   559 V WindowManager: Unknown focus tokens, dropping reportFocusChanged
+06-22 19:25:21.229  1950  2529 E OpenGLRenderer: Unable to match the desired swap behavior.
+06-22 19:25:21.236  1036  1567 E OpenGLRenderer: Unable to match the desired swap behavior.
+06-22 19:25:21.236  1950  1950 I ContentCaptureHelper: Setting logging level to OFF
+06-22 19:25:21.239  1950  1950 W TextView: onProvideContentCaptureStructure(): calling assumeLayout()
+06-22 19:25:21.239  1950  1950 I brrm    : onStart
+06-22 19:25:21.247  1950  4714 I dwwm    : (REDACTED) AppFlow %s is about to be transmitted
+06-22 19:25:21.267  1950  1950 I brup    : (REDACTED) shouldShowEomConsentUi: %s
+06-22 19:25:21.267  1950  1950 I brrm    : onResume
+06-22 19:25:21.269  1950  2416 I duep    : (REDACTED) Eligibility is %d
+06-22 19:25:21.269   540   596 W ActivityTaskManager: callingPackage for (uid=2000, pid=6233) has no WPC
+06-22 19:25:21.270   540   596 D CompatibilityChangeReporter: Compat change id reported: 265464455; UID 10191; state: DISABLED
+06-22 19:25:21.270   540   596 D CompatibilityChangeReporter: Compat change id reported: 265452344; UID 10191; state: DISABLED
+06-22 19:25:21.270   540   596 D CompatibilityChangeReporter: Compat change id reported: 266124927; UID 10191; state: DISABLED
+06-22 19:25:21.270   540   596 D CompatibilityChangeReporter: Compat change id reported: 265451093; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 265456536; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 255940284; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 236283604; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 263959004; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 264304459; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 264301586; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 254631730; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 273509367; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 263259275; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 174042980; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 174042936; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 181136395; UID 10191; state: DISABLED
+06-22 19:25:21.271   540   596 D CompatibilityChangeReporter: Compat change id reported: 194480991; UID 10191; state: ENABLED
+06-22 19:25:21.272  1036  1036 D SearchTargetUtil:  query= size=0
+06-22 19:25:21.278   540   596 D CompatibilityChangeReporter: Compat change id reported: 205907456; UID 10191; state: ENABLED
+06-22 19:25:21.278   540   596 I ActivityTaskManager: Add Task{7274bcf #37 type=standard A=10191:com.amaia23.hydracam} to hidden list because adding Task{a3b7bc #38 type=standard A=10191:com.amaia23.hydracam}
+06-22 19:25:21.280   540   596 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity (has extras)} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+06-22 19:25:21.282   540   596 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10191; state: DISABLED
+06-22 19:25:21.282   540   596 D CompatibilityChangeReporter: Compat change id reported: 273564678; UID 10191; state: DISABLED
+06-22 19:25:21.285   540   559 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10191; state: DISABLED
+06-22 19:25:21.285   540   559 D CompatibilityChangeReporter: Compat change id reported: 177438394; UID 10191; state: DISABLED
+06-22 19:25:21.285   540   559 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 10191; state: DISABLED
+06-22 19:25:21.285   540   559 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 10191; state: ENABLED
+06-22 19:25:21.286   540   567 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10191; state: ENABLED
+06-22 19:25:21.290   353   353 D Zygote  : Forked child process 6236
+06-22 19:25:21.290   540   567 I ActivityManager: Start proc 6236:com.amaia23.hydracam/u0a191 for next-top-activity {com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+06-22 19:25:21.291   540  1506 D CoreBackPreview: Window{c7f1fcb u0 Splash Screen com.amaia23.hydracam}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@45deda7, mPriority=0, mIsAnimationCallback=false}
+06-22 19:25:21.296  1950  1950 I edie    : Constructor was called
+06-22 19:25:21.297   749   891 E OpenGLRenderer: Unable to match the desired swap behavior.
+06-22 19:25:21.297   540   612 D CompatibilityChangeReporter: Compat change id reported: 265195908; UID 10191; state: ENABLED
+06-22 19:25:21.303   540   560 W WindowManager: Failed to deliver inset control state change to w=Window{6e26eb4 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity EXITING}
+06-22 19:25:21.303   540   560 W WindowManager: android.os.DeadObjectException
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsControlChanged(IWindow.java:479)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsControlChanged(WindowState.java:3802)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$notifyPendingInsetsControlChanged$3(InsetsStateController.java:343)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.InsetsStateController.$r8$lambda$8yykPRG1GyNq_J17QvL9d5xANMc(InsetsStateController.java:0)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.InsetsStateController$$ExternalSyntheticLambda2.run(R8$$SyntheticClass:0)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.WindowAnimator.executeAfterPrepareSurfacesRunnables(WindowAnimator.java:294)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:811)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:756)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:115)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer$Traverser.run(WindowSurfacePlacer.java:57)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.Handler.handleCallback(Handler.java:958)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.Looper.loopOnce(Looper.java:205)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.Looper.loop(Looper.java:294)
+06-22 19:25:21.303   540   560 W WindowManager: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+06-22 19:25:21.303   540   560 W WindowManager: 	at com.android.server.ServiceThread.run(ServiceThread.java:46)
+06-22 19:25:21.305  1950  1950 I edfd    : (REDACTED) init, initialized: %s
+06-22 19:25:21.306  1950  1950 I bppi    : No savedInstanceState.
+06-22 19:25:21.307  1950  1950 I bppi    : makeRequest: subscribing to new source
+06-22 19:25:21.307  1950  1950 I edie    : OnCreate Was Called
+06-22 19:25:21.309  1950  1950 I PromoManagerDataService: PromoManagerDataServiceImpl.getTabTypePromotion[MINUS_ONE]
+06-22 19:25:21.311   540   619 D ActivityManager: freezing 1808 com.android.keychain
+06-22 19:25:21.319   422   422 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-22 19:25:21.319   540   619 D ActivityManager: freezing 3258 com.android.settings
+06-22 19:25:21.319   540   619 D ActivityManager: freezing 1620 com.google.android.settings.intelligence
+06-22 19:25:21.319   540   619 D ActivityManager: freezing 3867 com.android.dynsystem:dynsystem
+06-22 19:25:21.319   540   619 D ActivityManager: freezing 3821 com.android.dynsystem
+06-22 19:25:21.319   540   619 D ActivityManager: freezing 3126 com.android.localtransport
+06-22 19:25:21.321  6236  6236 I maia23.hydracam: Late-enabling -Xcheck:jni
+06-22 19:25:21.326  1950  1950 I blkn    : Account disc initialised
+06-22 19:25:21.326  1950  1950 I PromoManagerDataService: PromoManagerDataServiceImpl.getAccountMenuPromotion
+06-22 19:25:21.328  1950  2418 I bpxa    : (REDACTED) #enqueuePeriodicJob: running = %b
+06-22 19:25:21.328  1950  2418 I bpwk    : (REDACTED) #watchdogConfig, scheduledOffset %s
+06-22 19:25:21.330  1950  2342 I WM-GreedyScheduler: Ignoring schedule request in a secondary process
+06-22 19:25:21.330  1950  1950 I bppi    : (REDACTED) [%s] onStart()
+06-22 19:25:21.331  1950  2416 I bpfr    : (REDACTED) loading data on surface %s.
+06-22 19:25:21.331  1950  2418 I botb    : #getLastSuccessfulTime
+06-22 19:25:21.332  1950  1950 I A       : (REDACTED) #loadData (initialFeedReceivedTimePerClient=%s, lastFeedUpdateTimePerClient=%s, eventTimePerClient=%s)
+06-22 19:25:21.333  1950  1950 I bppi    : (REDACTED) feed_age onNewData data=%s
+06-22 19:25:21.335  1950  1950 I brlh    : (REDACTED) onApplyWindowInsets: systemWindowInsets=%s
+06-22 19:25:21.335  1950  1950 I brlh    : (REDACTED) onApplyWindowInsets: systemWindowInsets=%s
+06-22 19:25:21.336  1950  2416 W bpyd    : Stream Root not defined, empty StreamStructure list provided
+06-22 19:25:21.336  1950  2416 I bpyr    : (REDACTED) Created StreamSubTree successfully, items %s
+06-22 19:25:21.336  1950  2416 I bpfr    : (REDACTED) RenderableStreamDataSource#loadData - sessionStatus(%s)
+06-22 19:25:21.336  1950  2416 I bpeb    : CacheManager#shouldBeCacheMiss - cache miss, EMPTY_SESSION
+06-22 19:25:21.336  1950  2416 I bpfr    : (REDACTED) RenderableStreamDataSource#loadData - succeed, cache status: %s
+06-22 19:25:21.337  6236  6236 I maia23.hydracam: Using CollectorTypeCC GC.
+06-22 19:25:21.346   422   440 I adbd    : jdwp connection from 6236
+06-22 19:25:21.359   540   597 D ConnectivityService: requestNetwork for uid/pid:10132/1950 activeRequest: null callbackRequest: 210 [NetworkRequest [ REQUEST id=211, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10132 RequestorUid: 10132 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+06-22 19:25:21.361   540   664 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=211, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10132 RequestorUid: 10132 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+06-22 19:25:21.361   540   671 D ConnectivityService: NetReassign [211 : null → 101] [c 0] [a 1] [i 0]
+06-22 19:25:21.361   540   664 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=211, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10132 RequestorUid: 10132 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+06-22 19:25:21.361   540   664 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=211, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10132 RequestorUid: 10132 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+06-22 19:25:21.361   540   664 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=211, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10132 RequestorUid: 10132 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+06-22 19:25:21.362  1950  1950 I bllp    : #accountsLoaded
+06-22 19:25:21.362  1950  1950 I bppi    : StreamFragmentPeer#onPending
+06-22 19:25:21.362  1950  1950 I bpfr    : (REDACTED) #fetchAndStoreData() on surface %s.
+06-22 19:25:21.364  1950  1950 I ViewTarget: Glide treats LayoutParams.WRAP_CONTENT as a request for an image the size of this device's screen dimensions. If you want to load the original image and are ok with the corresponding memory cost and OOMs (depending on the input size), use override(Target.SIZE_ORIGINAL). Otherwise, use LayoutParams.MATCH_PARENT, set layout_width and layout_height to fixed dimension, or use .override() with fixed dimensions.
+06-22 19:25:21.364  1950  2416 I botb    : #getLastSuccessfulTime
+06-22 19:25:21.365  1950  2334 D AdvertisingIdClient: AdvertisingIdClient already created.
+06-22 19:25:21.365  1950  2334 D AdvertisingIdClient: AdvertisingIdClient is not bounded. Starting to bind it...
+06-22 19:25:21.365  1950  2416 D MeasurementManager: AdServicesInfo.version=7
+06-22 19:25:21.367  1950  2418 W boqu    : (REDACTED) Invalid int value while parsing string version: %s
+06-22 19:25:21.367  1950  2418 W boqu    : java.text.ParseException: Unparseable number: "ve"
+06-22 19:25:21.367  1950  2418 W boqu    : 	at java.text.NumberFormat.parse(NumberFormat.java:428)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqx.a(PG:253)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at botp.l(PG:130)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqp.invokeSuspend(PG:440)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqp.invoke(PG:13)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at fmzh.a(PG:15)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at fmlt.w(PG:53)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqu.f(PG:9)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqm.invokeSuspend(PG:274)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqm.invoke(PG:13)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at fmzh.a(PG:15)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at fmlt.w(PG:53)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boqu.b(PG:9)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at boql.invokeSuspend(PG:273)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at fmcb.resumeWith(PG:11)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at fmmf.run(PG:115)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at eksy.run(PG:3)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at emgo.run(PG:17)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at cpzx.run(PG:5)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at eums.run(PG:46)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at cpzj.run(PG:81)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:21.367  1950  2418 W boqu    : 	at cqbb.run(PG:63)
+06-22 19:25:21.367  1950  1950 I brup    : (REDACTED) SearchBoxEligibility: %s
+06-22 19:25:21.368  1950  2418 W boqu    : Can't attach Client Instance Id
+06-22 19:25:21.373  1950  2334 D AdvertisingIdClient: AdvertisingIdClient is bounded
+06-22 19:25:21.375  1950  2334 I AdvertisingIdClient: shouldSendLog 14999
+06-22 19:25:21.375  1950  2334 I AdvertisingIdClient: GetInfoInternal elapse 10ms
+06-22 19:25:21.378  1950  2342 D AdvertisingIdClient: AdvertisingIdClient already created.
+06-22 19:25:21.378  1950  2418 D MeasurementManager: AdServicesInfo.version=7
+06-22 19:25:21.378  1950  2416 W boqu    : (REDACTED) Invalid int value while parsing string version: %s
+06-22 19:25:21.378  1950  2416 W boqu    : java.text.ParseException: Unparseable number: "ve"
+06-22 19:25:21.378  1950  2416 W boqu    : 	at java.text.NumberFormat.parse(NumberFormat.java:428)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqx.a(PG:253)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at botp.l(PG:130)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqp.invokeSuspend(PG:440)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqp.invoke(PG:13)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmzh.a(PG:15)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmlt.w(PG:53)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqu.f(PG:9)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqm.invokeSuspend(PG:274)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqm.invoke(PG:13)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmzh.a(PG:15)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmlt.w(PG:53)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at boqu.b(PG:9)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at botr.invokeSuspend(PG:277)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at botr.invoke(PG:13)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmzh.a(PG:15)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmlt.w(PG:53)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at bott.c(PG:9)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at bosx.invokeSuspend(PG:87)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmcb.resumeWith(PG:11)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at fmmf.run(PG:115)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at eksy.run(PG:3)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at emgo.run(PG:17)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at cpzx.run(PG:5)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at eums.run(PG:46)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at cpzj.run(PG:81)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:21.378  1950  2416 W boqu    : 	at cqbb.run(PG:63)
+06-22 19:25:21.379  1950  2342 I AdvertisingIdClient: shouldSendLog 14999
+06-22 19:25:21.379  1950  2342 I AdvertisingIdClient: GetInfoInternal elapse 1ms
+06-22 19:25:21.379  1950  2416 W boqu    : Can't attach Client Instance Id
+06-22 19:25:21.385  5688  5761 W GLSUser : [DeviceKeyStore] Cannot load key: Device key file not found.
+06-22 19:25:21.396  6236  6236 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10191; state: ENABLED
+06-22 19:25:21.396  6236  6236 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10191; state: ENABLED
+06-22 19:25:21.397   540   556 V WindowManager: Sent Transition #8 createdAt=06-22 19:25:21.190 via request=TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=37 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=0 lastActiveTime=66545 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{e998edb Task{7274bcf #37 type=standard A=10191:com.amaia23.hydracam}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 128, 0) topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+06-22 19:25:21.398   540   556 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+06-22 19:25:21.398   749   824 V WindowManagerShell: onTransitionReady android.os.BinderProxy@ecb51e1: {id=8 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@713eeb7} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=38)/@0xb0c2fdb sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@ec29624} m=CLOSE f=NONE leash=Surface(name=Task=37)/@0x9274a78 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=Surface(name=WallpaperWindowToken{2fd3222 token=android.os.Binder@df3a3ed})/@0xf7ad245 - rotation-leash)/@0xf3b7551 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 1080, 2400) d=0 r=3->0:-1}]}
+06-22 19:25:21.398   540   556 V WindowManager:     info={id=8 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{da47ab4 Task{a3b7bc #38 type=standard A=10191:com.amaia23.hydracam}}} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=38)/@0xbf85fc6 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{WCT{RemoteToken{e998edb Task{7274bcf #37 type=standard A=10191:com.amaia23.hydracam}}} m=CLOSE f=NONE leash=Surface(name=Task=37)/@0x6527bdf sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=Surface(name=WallpaperWindowToken{2fd3222 token=android.os.Binder@df3a3ed})/@0xf7ad245 - rotation-leash)/@0xf7631a1 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 1080, 2400) d=0 r=3->0:-1}]}
+06-22 19:25:21.398   749   824 V WindowManagerShell: Playing animation for (#8)android.os.BinderProxy@ecb51e1@0
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@e23a8d3
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@8d15c10
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@f914309
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@53c790e
+06-22 19:25:21.398   749   824 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@675ff2f
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@158293c
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@f8206c5
+06-22 19:25:21.398   749   824 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=8 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@713eeb7} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=38)/@0xb0c2fdb sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@ec29624} m=CLOSE f=NONE leash=Surface(name=Task=37)/@0x9274a78 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=Surface(name=WallpaperWindowToken{2fd3222 token=android.os.Binder@df3a3ed})/@0xf7ad245 - rotation-leash)/@0xf3b7551 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 1080, 2400) d=0 r=3->0:-1}]}
+06-22 19:25:21.398   749   824 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@b717ad1, appThread = android.app.IApplicationThread$Stub$Proxy@1632936, debugName = LauncherToDream }}
+06-22 19:25:21.398   749   824 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@38b3037, appThread = android.app.IApplicationThread$Stub$Proxy@c7e79a4, debugName = QuickstepLaunchHome }}
+06-22 19:25:21.398   749   824 V WindowManagerShell:  Delegate animation for #8 to null
+06-22 19:25:21.398   749   824 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@a729be6
+06-22 19:25:21.398   749   824 V WindowManagerShell: start default transition animation, info = {id=8 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@713eeb7} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=38)/@0xb0c2fdb sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@ec29624} m=CLOSE f=NONE leash=Surface(name=Task=37)/@0x9274a78 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 2400, 1080) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=Surface(name=WallpaperWindowToken{2fd3222 token=android.os.Binder@df3a3ed})/@0xf7ad245 - rotation-leash)/@0xf3b7551 sb=Rect(0, 0 - 2400, 1080) eb=Rect(0, 0 - 1080, 2400) d=0 r=3->0:-1}]}
+06-22 19:25:21.399   737   737 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+06-22 19:25:21.399   749   824 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@c6ebf53 animAttr=0xb type=CLOSE isEntrance=false
+06-22 19:25:21.400   540  2434 D CompatibilityChangeReporter: Compat change id reported: 170503758; UID 10191; state: ENABLED
+06-22 19:25:21.401   749   824 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@e1085bc animAttr=0xa type=CLOSE isEntrance=true
+06-22 19:25:21.402   749   824 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@a729be6
+06-22 19:25:21.402  5688  5688 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-22 19:25:21.403  6236  6236 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+06-22 19:25:21.403  6236  6236 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+06-22 19:25:21.408  6236  6236 W ziparchive: Unable to open '/data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/base.dm': No such file or directory
+06-22 19:25:21.408  6236  6236 W ziparchive: Unable to open '/data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/base.dm': No such file or directory
+06-22 19:25:21.431   540  2434 D ActivityManager: sync unfroze 2594 com.google.android.gms.unstable for 6
+06-22 19:25:21.453  2594  3964 D TrafficStats: tagSocket(107) with statsTag=0x1809, statsUid=-1
+06-22 19:25:21.461  2594  3964 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+06-22 19:25:21.461  2594  3964 W libc    : Access denied finding property "service.adb.tls.port"
+06-22 19:25:21.456  2594  2594 W binder:2594_6: type=1400 audit(0.0:75): avc:  denied  { read } for  name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=282 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+06-22 19:25:21.456  2594  2594 W binder:2594_6: type=1400 audit(0.0:76): avc:  denied  { read } for  name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=50 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+06-22 19:25:21.473  1950  1950 I brrm    : onPause
+06-22 19:25:21.475  5688  5761 W GmsUrlRequestImpl: [https://android.googleapis.com/auth/devicekey] Content-Type header is overwritten.
+06-22 19:25:21.477  1950  4489 V ClearcutMetricXmitter: Transmission is done.
+06-22 19:25:21.484  5688  5865 D TrafficStats: tagSocket(180) with statsTag=0x4000401, statsUid=10129
+06-22 19:25:21.557   749   891 D EGL_emulation: app_time_stats: avg=1622.36ms min=50.02ms max=9216.80ms count=6
+06-22 19:25:21.601  6236  6236 D nativeloader: Configuring clns-6 for other apk /data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/lib/arm64:/data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.amaia23.hydracam
+06-22 19:25:21.610  6236  6236 V GraphicsEnvironment: Currently set values for:
+06-22 19:25:21.610  6236  6236 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+06-22 19:25:21.610  6236  6236 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+06-22 19:25:21.610  6236  6236 V GraphicsEnvironment: ANGLE GameManagerService for com.amaia23.hydracam: false
+06-22 19:25:21.610  6236  6236 V GraphicsEnvironment: com.amaia23.hydracam is not listed in per-application setting
+06-22 19:25:21.610  6236  6236 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+06-22 19:25:21.618   540   596 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10191. pid: 6236
+06-22 19:25:21.626  6236  6267 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+06-22 19:25:21.627  6236  6267 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+06-22 19:25:21.628  6236  6267 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+06-22 19:25:21.634  6236  6269 I ResourceExtractor: Found extracted resources res_timestamp-18-1782149081173
+06-22 19:25:21.634  6236  6268 D FlutterJNI: Beginning load of flutter...
+06-22 19:25:21.648  6236  6268 D FlutterJNI: flutter (null) was loaded normally!
+06-22 19:25:21.650   540   619 D ActivityManager: freezing 4042 com.google.android.configupdater
+06-22 19:25:21.653  6236  6270 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+06-22 19:25:21.660  6236  6236 W maia23.hydracam: type=1400 audit(0.0:77): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=55274 scontext=u:r:untrusted_app:s0:c191,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=com.amaia23.hydracam
+06-22 19:25:21.681  6236  6271 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+06-22 19:25:21.710  6236  6277 I flutter : The Dart VM service is listening on http://127.0.0.1:37381/mFoy8C3rTN0=/
+06-22 19:25:21.793  5688  5865 D TrafficStats: tagSocket(169) with statsTag=0x4000401, statsUid=10129
+06-22 19:25:21.794  5688  5865 D TrafficStats: tagSocket(169) with statsTag=0x4000401, statsUid=10129
+06-22 19:25:21.795  5688  5865 D TrafficStats: tagSocket(169) with statsTag=0x4000401, statsUid=10129
+06-22 19:25:21.796  5688  5865 D TrafficStats: tagSocket(169) with statsTag=0x4000401, statsUid=10129
+06-22 19:25:21.797  5688  5865 D TrafficStats: tagSocket(169) with statsTag=0x4000401, statsUid=10129
+06-22 19:25:21.870  6236  6236 D FlutterGeolocator: Attaching Geolocator to activity
+06-22 19:25:21.879  5688  5761 W GLSUser : [AppCertManager] Exception while requesting key: 
+06-22 19:25:21.879  5688  5761 W GLSUser : java.util.concurrent.ExecutionException: ctng: Parsing Exception
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at habb.j(:com.google.android.gms@260834029@26.08.34 (190400-876566425):21)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at habk.u(:com.google.android.gms@260834029@26.08.34 (190400-876566425):71)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at alcc.b(:com.google.android.gms@260834029@26.08.34 (190400-876566425):439)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at alca.a(:com.google.android.gms@260834029@26.08.34 (190400-876566425):67)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at alca.dispatchTransaction(:com.google.android.gms@260834029@26.08.34 (190400-876566425):16)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at bxqv.a(:com.google.android.gms@260834029@26.08.34 (190400-876566425):72)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at ywr.onTransact(:com.google.android.gms@260834029@26.08.34 (190400-876566425):23)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at android.os.Binder.transact(Binder.java:1183)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at cjjm.onTransact(:com.google.android.gms@260834029@26.08.34 (190400-876566425):10)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at android.os.Binder.transact(Binder.java:1183)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at bxrj.onTransact(:com.google.android.gms@260834029@26.08.34 (190400-876566425):161)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at android.os.Binder.execTransactInternal(Binder.java:1339)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at android.os.Binder.execTransact(Binder.java:1275)
+06-22 19:25:21.879  5688  5761 W GLSUser : Caused by: ctng: Parsing Exception
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at ctol.a(:com.google.android.gms@260834029@26.08.34 (190400-876566425):15)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at hadt.run(:com.google.android.gms@260834029@26.08.34 (190400-876566425):47)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at bgtp.c(:com.google.android.gms@260834029@26.08.34 (190400-876566425):50)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at bgtp.run(:com.google.android.gms@260834029@26.08.34 (190400-876566425):73)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at bgzh.run(:com.google.android.gms@260834029@26.08.34 (190400-876566425):8)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:21.879  5688  5761 W GLSUser : Caused by: iikm: Protocol message end-group tag did not match expected tag.
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at iimn.a(:com.google.android.gms@260834029@26.08.34 (190400-876566425):62)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at iilk.l(:com.google.android.gms@260834029@26.08.34 (190400-876566425):424)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at iijl.s(:com.google.android.gms@260834029@26.08.34 (190400-876566425):19)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at iihf.f(:com.google.android.gms@260834029@26.08.34 (190400-876566425):5)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at iihf.c(:com.google.android.gms@260834029@26.08.34 (190400-876566425):1)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at iihf.o(:com.google.android.gms@260834029@26.08.34 (190400-876566425):1)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at ctok.a(:com.google.android.gms@260834029@26.08.34 (190400-876566425):15)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at ctop.call(:com.google.android.gms@260834029@26.08.34 (190400-876566425):8)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+06-22 19:25:21.879  5688  5761 W GLSUser : 	... 6 more
+06-22 19:25:21.879  5688  5761 W GLSUser : [DeviceKeyStore] Cannot load key: Device key file not found.
+06-22 19:25:21.900  6236  6236 W maia23.hydracam: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+06-22 19:25:21.900  6236  6236 W maia23.hydracam: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+06-22 19:25:21.900  6236  6236 W maia23.hydracam: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+06-22 19:25:21.900  6236  6236 W maia23.hydracam: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+06-22 19:25:21.905  6236  6236 D FlutterRenderer: Width is zero. 0,0
+06-22 19:25:21.906   749   824 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#8)android.os.BinderProxy@ecb51e1@0
+06-22 19:25:21.907   540   556 V WindowManager: Finish Transition #8: created at 06-22 19:25:21.190 collect-started=0.017ms request-sent=0.06ms started=9.726ms ready=200.972ms sent=207.013ms finished=716.647ms
+06-22 19:25:21.908   540   597 W WindowManager: Exception thrown during dispatchAppVisibility Window{6e26eb4 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity EXITING}
+06-22 19:25:21.908   540   597 W WindowManager: android.os.DeadObjectException
+06-22 19:25:21.908   540   597 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+06-22 19:25:21.908   540   597 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+06-22 19:25:21.908   540   597 W WindowManager: 	at android.view.IWindow$Stub$Proxy.dispatchAppVisibility(IWindow.java:546)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.WindowState.sendAppVisibilityToClients(WindowState.java:3271)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.sendAppVisibilityToClients(WindowContainer.java:1221)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.WindowToken.setClientVisible(WindowToken.java:409)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.ActivityRecord.setClientVisible(ActivityRecord.java:6946)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.ActivityRecord.postApplyAnimation(ActivityRecord.java:5637)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.ActivityRecord.commitVisibility(ActivityRecord.java:5580)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.Transition.finishTransition(Transition.java:1151)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.TransitionController.finishTransition(TransitionController.java:868)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.WindowOrganizerController.finishTransition(WindowOrganizerController.java:396)
+06-22 19:25:21.908   540   597 W WindowManager: 	at android.window.IWindowOrganizerController$Stub.onTransact(IWindowOrganizerController.java:286)
+06-22 19:25:21.908   540   597 W WindowManager: 	at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:181)
+06-22 19:25:21.908   540   597 W WindowManager: 	at android.os.Binder.execTransactInternal(Binder.java:1339)
+06-22 19:25:21.908   540   597 W WindowManager: 	at android.os.Binder.execTransact(Binder.java:1275)
+06-22 19:25:21.908   540   597 I Process : Sending signal. PID: 6000 SIG: 9
+06-22 19:25:21.911   540   597 W WindowManager: Failed to deliver inset control state change to w=Window{6e26eb4 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity EXITING}
+06-22 19:25:21.911   540   597 W WindowManager: android.os.DeadObjectException
+06-22 19:25:21.911   540   597 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+06-22 19:25:21.911   540   597 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+06-22 19:25:21.911   540   597 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsControlChanged(IWindow.java:479)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsControlChanged(WindowState.java:3802)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$notifyPendingInsetsControlChanged$3(InsetsStateController.java:343)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.InsetsStateController.$r8$lambda$8yykPRG1GyNq_J17QvL9d5xANMc(InsetsStateController.java:0)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.InsetsStateController$$ExternalSyntheticLambda2.run(R8$$SyntheticClass:0)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowAnimator.executeAfterPrepareSurfacesRunnables(WindowAnimator.java:294)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:811)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:756)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:115)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowState.setupWindowForRemoveOnExit(WindowState.java:2538)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowState.removeIfPossible(WindowState.java:2498)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowToken.removeAllWindowsIfPossible(WindowToken.java:249)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.ActivityRecord.removeIfPossible(ActivityRecord.java:4259)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.ActivityRecord.handleCompleteDeferredRemoval(ActivityRecord.java:4266)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.TaskFragment.handleCompleteDeferredRemoval(TaskFragment.java:2844)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval(WindowContainer.java:1396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.DisplayContent.handleCompleteDeferredRemoval(DisplayContent.java:3382)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.Transition.finishTransition(Transition.java:1322)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.TransitionController.finishTransition(TransitionController.java:868)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowOrganizerController.finishTransition(WindowOrganizerController.java:396)
+06-22 19:25:21.911   540   597 W WindowManager: 	at android.window.IWindowOrganizerController$Stub.onTransact(IWindowOrganizerController.java:286)
+06-22 19:25:21.911   540   597 W WindowManager: 	at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:181)
+06-22 19:25:21.911   540   597 W WindowManager: 	at android.os.Binder.execTransactInternal(Binder.java:1339)
+06-22 19:25:21.911   540   597 W WindowManager: 	at android.os.Binder.execTransact(Binder.java:1275)
+06-22 19:25:21.912   540   559 W ActivityManager: setHasOverlayUi called on unknown pid: 6000
+06-22 19:25:21.913   749   824 V WindowManagerShell: Track 0 became idle
+06-22 19:25:21.913   749   824 V WindowManagerShell: All active transition animations finished
+06-22 19:25:21.913   749   824 D WindowManagerShell: onFixedRotationFinished: null, state=PipTransitionState(mState=undefined, mInSwipePipToHomeTransition=false)
+06-22 19:25:21.917  6236  6236 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10191; state: DISABLED
+06-22 19:25:21.917  6236  6236 W OpenGLRenderer: Unknown dataspace 0
+06-22 19:25:21.929   749   891 D EGL_emulation: app_time_stats: avg=616.91ms min=2.08ms max=10739.41ms count=18
+06-22 19:25:21.939   393   393 E BpTransactionCompletedListener: Failed to transact (-32)
+06-22 19:25:21.939   393   393 E BpTransactionCompletedListener: Failed to transact (-32)
+06-22 19:25:21.961  6236  6236 I flutter : Log registered: {message: Get token, timestamp: 2026-06-22 19:25:21.956059, function: null, file: null}
+06-22 19:25:21.961  6236  6236 I flutter : Log registered: {message: Fetch token, timestamp: 2026-06-22 19:25:21.961391, function: null, file: null}
+06-22 19:25:22.020   540  6290 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+06-22 19:25:22.020   540  6290 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+06-22 19:25:22.021   540  6290 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+06-22 19:25:22.032   540  6290 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+06-22 19:25:22.032   540  6290 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+06-22 19:25:22.032  6236  6236 D FlutterRenderer: Width is zero. 0,0
+06-22 19:25:22.033   540   596 D CoreBackPreview: Window{7390d4f u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@52dfb74, mPriority=0, mIsAnimationCallback=false}
+06-22 19:25:22.037  6236  6236 D FlutterJNI: Sending viewport metrics to the engine.
+06-22 19:25:22.040  6236  6265 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+06-22 19:25:22.040  6236  6265 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+06-22 19:25:22.054   154   154 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+06-22 19:25:22.055  6236  6271 I Gralloc4: mapper 4.x is not supported
+06-22 19:25:22.062  6236  6265 E OpenGLRenderer: Unable to match the desired swap behavior.
+06-22 19:25:22.147  1950  2734 I cn_CronetUrlRequestContext: destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@8a49ac
+06-22 19:25:22.148  1950  2416 W bniq    : Error processing gRPC request
+06-22 19:25:22.148  1950  2416 W bniq    : fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.148  1950  2416 W bniq    : 	at flds.b(PG:41)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at fkig.b(PG:3)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at excb.j(PG:97)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at excb.s(PG:23)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at excb.b(PG:8)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exco.run(PG:9)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at excq.h(PG:28)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at excq.b(PG:6)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbq.run(PG:14)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbn.run(PG:37)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evss.run(PG:3)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evst.run(PG:64)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evqs.execute(PG:1)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbv.execute(PG:3)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evsu.execute(PG:34)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbk.execute(PG:11)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbt.b(PG:10)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at elug.b(PG:4)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbz.run(PG:180)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at emgt.run(PG:28)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbn.run(PG:37)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evss.run(PG:3)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evst.run(PG:64)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evqs.execute(PG:1)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbv.execute(PG:3)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evsu.execute(PG:34)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at exbk.execute(PG:11)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evow.d(PG:1)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evow.j(PG:95)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evow.p(PG:29)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evpb.d(PG:3)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at evpd.run(PG:53)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at cpzx.run(PG:5)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at eums.run(PG:46)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at cpzj.run(PG:81)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:22.148  1950  2416 W bniq    : 	at cqbb.run(PG:63)
+06-22 19:25:22.148  1950  2416 W bplq    : Discover get refresh session failed.
+06-22 19:25:22.148  1950  2416 W bplq    : fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.148  1950  2416 W bplq    : 	at flds.b(PG:41)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at fkig.b(PG:3)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at excb.j(PG:97)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at excb.s(PG:23)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at excb.b(PG:8)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exco.run(PG:9)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at excq.h(PG:28)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at excq.b(PG:6)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbq.run(PG:14)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbn.run(PG:37)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evss.run(PG:3)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evst.run(PG:64)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evqs.execute(PG:1)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbv.execute(PG:3)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evsu.execute(PG:34)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbk.execute(PG:11)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbt.b(PG:10)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at elug.b(PG:4)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbz.run(PG:180)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at emgt.run(PG:28)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbn.run(PG:37)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evss.run(PG:3)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evst.run(PG:64)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evqs.execute(PG:1)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbv.execute(PG:3)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evsu.execute(PG:34)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at exbk.execute(PG:11)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evow.d(PG:1)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evow.j(PG:95)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evow.p(PG:29)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evpb.d(PG:3)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at evpd.run(PG:53)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at cpzx.run(PG:5)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at eums.run(PG:46)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at cpzj.run(PG:81)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:22.148  1950  2416 W bplq    : 	at cqbb.run(PG:63)
+06-22 19:25:22.154  1950  2416 W bpfr    : (REDACTED) Fetch failed. Renderable stream failure reason: %s
+06-22 19:25:22.154  1950  2416 W bpfr    : bpmp: fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at bplp.invokeSuspend(PG:978)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmcb.resumeWith(PG:11)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fmmf.run(PG:107)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at eksy.run(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at emgo.run(PG:17)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at cpzx.run(PG:5)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at eums.run(PG:46)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at cpzj.run(PG:81)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at cqbb.run(PG:63)
+06-22 19:25:22.154  1950  2416 W bpfr    : Caused by: fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at flds.b(PG:41)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at fkig.b(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at excb.j(PG:97)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at excb.s(PG:23)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at excb.b(PG:8)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exco.run(PG:9)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at excq.h(PG:28)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at excq.b(PG:6)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbq.run(PG:14)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbn.run(PG:37)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evss.run(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evst.run(PG:64)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evqs.execute(PG:1)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbv.execute(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evsu.execute(PG:34)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbk.execute(PG:11)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbt.b(PG:10)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at elug.b(PG:4)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbz.run(PG:180)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at emgt.run(PG:28)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbn.run(PG:37)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evss.run(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evst.run(PG:64)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evqs.execute(PG:1)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbv.execute(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evsu.execute(PG:34)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at exbk.execute(PG:11)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evow.d(PG:1)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evow.j(PG:95)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evow.p(PG:29)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evpb.d(PG:3)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	at evpd.run(PG:53)
+06-22 19:25:22.154  1950  2416 W bpfr    : 	... 5 more
+06-22 19:25:22.154  1950  1950 W bppi    : Failed RenderableStream callback; SubscriptionCallbacks#onError(Throwable) called.
+06-22 19:25:22.154  1950  1950 W bppi    : bpeh: bpmp: fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.154  1950  1950 W bppi    : 	at bpft.c(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at bpfr.e(PG:294)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at bpfm.invokeSuspend(PG:13)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:11)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmmf.run(PG:115)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at eksy.run(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at cpzx.run(PG:5)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at eums.run(PG:46)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at cpzj.run(PG:81)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at java.lang.Thread.run(Thread.java:1012)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at cqbb.run(PG:63)
+06-22 19:25:22.154  1950  1950 W bppi    : Caused by: bpmp: fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.154  1950  1950 W bppi    : 	at bplp.invokeSuspend(PG:978)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:11)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmol.w(PG:27)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmkn.resumeWith(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmcb.resumeWith(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fmmf.run(PG:107)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at eksy.run(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at emgo.run(PG:17)
+06-22 19:25:22.154  1950  1950 W bppi    : 	... 5 more
+06-22 19:25:22.154  1950  1950 W bppi    : Caused by: fkjg: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+06-22 19:25:22.154  1950  1950 W bppi    : 	at flds.b(PG:41)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at fkig.b(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at excb.j(PG:97)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at excb.s(PG:23)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at excb.b(PG:8)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exco.run(PG:9)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at excq.h(PG:28)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at excq.b(PG:6)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbq.run(PG:14)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbn.run(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evss.run(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evst.run(PG:64)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evqs.execute(PG:1)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbv.execute(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evsu.execute(PG:34)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbk.execute(PG:11)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbt.b(PG:10)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at elug.b(PG:4)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbz.run(PG:180)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at emgt.run(PG:28)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbn.run(PG:37)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evss.run(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evst.run(PG:64)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evqs.execute(PG:1)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbv.execute(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evsu.execute(PG:34)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at exbk.execute(PG:11)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evow.d(PG:1)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evow.j(PG:95)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evow.p(PG:29)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evpb.d(PG:3)
+06-22 19:25:22.154  1950  1950 W bppi    : 	at evpd.run(PG:53)
+06-22 19:25:22.154  1950  1950 W bppi    : 	... 5 more
+06-22 19:25:22.155  1950  1950 I bpqy    : (REDACTED) Clearing batch update data for stream %s
+06-22 19:25:22.155  1950  1950 I bpqy    : (REDACTED) Removed set %s for stream %s
+06-22 19:25:22.177  1950  1950 W View    : requestLayout() improperly called by android.widget.FrameLayout{2c620a0 V.E...... ......ID 0,0-1080,294} during layout: running second layout pass
+06-22 19:25:22.332   422   422 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+06-22 19:25:22.419  6236  6236 D FlutterGeolocator: Creating service.
+06-22 19:25:22.419  6236  6236 D FlutterGeolocator: Binding to location service.
+06-22 19:25:22.424  6236  6236 I flutter : Log registered: {message: Launch config from intent: role=standby, preferredMasterIp=null, targetId=emulator-5554, forceSlaveMode=null, manualLaunch=null, timestamp: 2026-06-22 19:25:22.424053, function: null, file: null}
+06-22 19:25:22.437  6236  6236 D FlutterGeolocator: Geolocator foreground service connected
+06-22 19:25:22.437  6236  6236 D FlutterGeolocator: Initializing Geolocator services
+06-22 19:25:22.437  6236  6236 D FlutterGeolocator: Flutter engine connected. Connected engine count 1
+06-22 19:25:22.461  6236  6236 D FlutterJNI: Sending viewport metrics to the engine.
+06-22 19:25:22.462  6236  6236 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-06-22 19:25:22.462082, function: null, file: null}
+06-22 19:25:22.466  6236  6236 I flutter : Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-06-22 19:25:22.466091, function: null, file: null}
+06-22 19:25:22.471  6236  6236 I flutter : Log registered: {message: Permission request completed.
+06-22 19:25:22.471  6236  6236 I flutter : Granted: [Permission.camera, Permission.locationWhenInUse, Permission.microphone]
+06-22 19:25:22.471  6236  6236 I flutter : Denied: [], timestamp: 2026-06-22 19:25:22.470993, function: requestAllPermissions, file: PermissionService}
+06-22 19:25:22.471  6236  6236 I flutter : Log registered: {message: Retrieved existing Device ID: 3c566b37-0ae9-4dcb-8992-64be302ef398, timestamp: 2026-06-22 19:25:22.471430, function: null, file: null}
+06-22 19:25:22.471  6236  6236 I flutter : Log registered: {message: Device ID: 3c566b37-0ae9-4dcb-8992-64be302ef398, timestamp: 2026-06-22 19:25:22.471511, function: null, file: null}
+06-22 19:25:22.471  6236  6236 I flutter : Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-06-22 19:25:22.471552, function: null, file: null}
+06-22 19:25:22.557  6236  6236 I flutter : Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-06-22 19:25:22.557358, function: null, file: null}
+06-22 19:25:22.559   749   891 D EGL_emulation: app_time_stats: avg=5.44ms min=0.49ms max=33.77ms count=57
+06-22 19:25:22.608  6236  6236 I flutter : Log registered: {message: Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=true, automationSetupPreview=false, forceSlave=false, timestamp: 2026-06-22 19:25:22.608576, function: null, file: null}
+06-22 19:25:22.608  6236  6236 I flutter : Log registered: {message: Navigating to AutomationStandbyScreen, timestamp: 2026-06-22 19:25:22.608722, function: null, file: null}
+06-22 19:25:22.965  6236  6236 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-06-22 19:25:22.965412, function: null, file: null}
+06-22 19:25:22.981  6236  6236 I flutter : Log registered: {message: M2M token obtained successfully, timestamp: 2026-06-22 19:25:22.981456, function: null, file: null}
+06-22 19:25:22.994   540   596 D CompatibilityChangeReporter: Compat change id reported: 161145287; UID 10191; state: ENABLED
+06-22 19:25:23.038   540   556 W ziparchive: Unable to open '/data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/base.dm': No such file or directory
+06-22 19:25:23.039   540   556 I ActivityTaskManager: Displayed com.amaia23.hydracam/.MainActivity for user 0: +1s770ms
+06-22 19:25:23.039   540   556 I ActivityTaskManager: Fully drawn com.amaia23.hydracam/.MainActivity: +1s770ms
+06-22 19:25:23.039   540   556 W ziparchive: Unable to open '/data/app/~~XjwB2PtyzurE7FqLrSyBwQ==/com.amaia23.hydracam-QLjlRfGO8COiY7ZtqfqtlA==/base.dm': No such file or directory
+06-22 19:25:23.054   540   596 D CompatibilityChangeReporter: Compat change id reported: 214016041; UID 10191; state: ENABLED
+06-22 19:25:23.054   540   596 I ImeTracker: com.amaia23.hydracam:f69527c4: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+06-22 19:25:23.054   540   596 I ImeTracker: com.amaia23.hydracam:f69527c4: onCancelled at PHASE_SERVER_SHOULD_HIDE
+06-22 19:25:23.059  1294  1294 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2113 
+06-22 19:25:23.060  1950  1950 I brrm    : onStop
+06-22 19:25:23.060  1036  1099 I ImeTracker: com.google.android.apps.nexuslauncher:b1078e8e: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT
+06-22 19:25:23.060  1036  1099 I ImeTracker: com.google.android.apps.nexuslauncher:b1078e8e: onFailed at PHASE_CLIENT_VIEW_SERVED
+06-22 19:25:23.060  1036  1806 D OneSearchSuggestProvider: Shut down the binder channel
+06-22 19:25:23.061  1294  1294 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+06-22 19:25:23.061  1036  1644 I IPCThreadState: oneway function results for code 2 on binder at 0xb40000750df12440 will be dropped but finished with status UNKNOWN_TRANSACTION
+06-22 19:25:23.061  1294  1294 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1384 onStartInput(EditorInfo{EditorInfo{packageName=com.amaia23.hydracam, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+06-22 19:25:23.061  1294  1294 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():319 Null input view, cannot update padding!
+06-22 19:25:23.062  1294  1294 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+06-22 19:25:23.066   540   596 W PackageConfigPersister: App-specific configuration not found for packageName: com.amaia23.hydracam and userId: 0
+06-22 19:25:23.082   749   891 D EGL_emulation: app_time_stats: avg=118.12ms min=0.98ms max=1006.11ms count=9
+06-22 19:25:23.278   749   749 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+06-22 19:25:23.332   749   860 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@e3404de
+06-22 19:25:23.332   540   726 D CoreBackPreview: Window{c7f1fcb u0 Splash Screen com.amaia23.hydracam EXITING}: Setting back callback null
+06-22 19:25:23.332   540   726 W InputManager-JNI: Input channel object 'c7f1fcb Splash Screen com.amaia23.hydracam (client)' was disposed without first being removed with the input manager!
+06-22 19:25:23.559   749   891 D EGL_emulation: app_time_stats: avg=5.91ms min=0.44ms max=50.95ms count=55
+06-22 19:25:24.185  6236  6236 I flutter : Log registered: {message: Backend warm-up completed., timestamp: 2026-06-22 19:25:24.185075, function: null, file: null}
+06-22 19:25:24.589   749   891 D EGL_emulation: app_time_stats: avg=5.15ms min=0.45ms max=47.51ms count=55
+06-22 19:25:25.282   540  1436 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+06-22 19:25:25.375  6236  6271 D EGL_emulation: app_time_stats: avg=1202.97ms min=22.00ms max=2383.93ms count=2
