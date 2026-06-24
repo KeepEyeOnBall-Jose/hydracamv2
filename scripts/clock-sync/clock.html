@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>HydraCam Clock-Sync Target</title>
+<!--
+  Machine-readable millisecond clock for the multi-camera clock-sync drift test.
+
+  Point every camera straight down at a screen showing this page (fullscreen).
+  Each painted frame encodes the wall-clock epoch milliseconds (Date.now(), so
+  keep this machine NTP-synced) in two redundant ways:
+
+    1. Human-readable: big UTC HH:MM:SS.mmm digits + the raw epoch ms.
+    2. Machine-readable BINARY STRIP (the source of truth for the reader):
+
+       [RED]" [ b43 b42 ... b1 b0 ] [PARITY] [GREEN]
+
+       - RED fiducial cell (leftmost): solid red, always on. Marks strip start.
+       - GREEN fiducial cell (rightmost): solid green, always on. Marks strip end.
+       - 44 DATA cells between them: white = 1, black = 0, MSB (b43) adjacent to
+         the RED cell, LSB (b0) adjacent to the PARITY cell. They encode
+         floor(Date.now()) as a 44-bit unsigned big-endian integer
+         (44 bits covers epoch ms well past year 2527).
+       - 1 PARITY cell (just left of GREEN): white if the number of 1-bits in the
+         44 data cells is ODD (even parity makes the total count of 1s across
+         data+parity even). The reader rejects frames whose parity fails — this
+         discards frames that caught a mid-refresh torn value.
+
+  All cells in the strip are equal width and share one row, so a reader can find
+  the RED and GREEN blobs and sample 46 equally spaced cell centers between
+  their outer edges (RED, 44 data, PARITY, GREEN = 47 cells total).
+
+  Reader/analyzer: scripts/clock-sync/clock_drift_from_frames.py
+-->
+<style>
+  :root { --cell: #000; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+  body { font-family: "Courier New", monospace; color: #fff; }
+  #wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+  #digits {
+    flex: 0 0 38%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; letter-spacing: 0.02em;
+    font-size: 12vw; line-height: 1;
+  }
+  #epoch {
+    flex: 0 0 12%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5vw; color: #aaa;
+  }
+  /* The strip: one row of equal-width cells spanning 90% of the width. */
+  #strip {
+    flex: 0 0 34%;
+    display: flex;
+    margin: 0 5%;
+    border: 2px solid #222;
+  }
+  .cell { flex: 1 1 0; height: 100%; background: var(--cell); }
+  .one { background: #fff; }
+  .zero { background: #000; }
+  .fid-start { background: #ff0000; }
+  .fid-end { background: #00ff00; }
+  .fid-parity-on { background: #fff; }
+  .fid-parity-off { background: #000; }
+  #foot {
+    flex: 1 1 auto;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5vw; color: #555; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="digits">--:--:--.---</div>
+  <div id="epoch">epoch --</div>
+  <div id="strip"></div>
+  <div id="foot">HydraCam clock-sync target &mdash; 44-bit epoch ms, MSB left, red=start green=end, parity left of green</div>
+</div>
+<script>
+  "use strict";
+  var DATA_BITS = 44;
+  var strip = document.getElementById("strip");
+  var digitsEl = document.getElementById("digits");
+  var epochEl = document.getElementById("epoch");
+
+  // Build cells once: RED + 44 data + PARITY + GREEN = 47 cells.
+  var redCell = document.createElement("div");
+  redCell.className = "cell fid-start";
+  strip.appendChild(redCell);
+
+  var dataCells = [];
+  for (var i = 0; i < DATA_BITS; i++) {
+    var c = document.createElement("div");
+    c.className = "cell zero";
+    strip.appendChild(c);
+    dataCells.push(c);
+  }
+  var parityCell = document.createElement("div");
+  parityCell.className = "cell fid-parity-off";
+  strip.appendChild(parityCell);
+
+  var greenCell = document.createElement("div");
+  greenCell.className = "cell fid-end";
+  strip.appendChild(greenCell);
+
+  function two(n) { return (n < 10 ? "0" : "") + n; }
+  function three(n) { return (n < 100 ? "0" : "") + (n < 10 ? "0" : "") + n; }
+
+  function render() {
+    var ms = Date.now();
+    // Human-readable UTC.
+    var d = new Date(ms);
+    digitsEl.textContent =
+      two(d.getUTCHours()) + ":" + two(d.getUTCMinutes()) + ":" +
+      two(d.getUTCSeconds()) + "." + three(d.getUTCMilliseconds());
+    epochEl.textContent = "epoch " + ms;
+
+    // Binary strip: 44-bit big-endian, MSB (b43) adjacent to RED.
+    // JS bitwise is 32-bit, so split into high (bits 43..32) and low (31..0).
+    var high = Math.floor(ms / 4294967296); // ms >> 32
+    var low = ms % 4294967296;              // ms & 0xFFFFFFFF
+    var ones = 0;
+    for (var i = 0; i < DATA_BITS; i++) {
+      // bit index from MSB: dataCells[0] = bit 43, dataCells[43] = bit 0.
+      var bitFromLsb = DATA_BITS - 1 - i; // 43..0
+      var bit;
+      if (bitFromLsb >= 32) {
+        bit = (high >> (bitFromLsb - 32)) & 1;
+      } else {
+        bit = (low / Math.pow(2, bitFromLsb)) & 1;
+        bit = Math.floor(low / Math.pow(2, bitFromLsb)) % 2;
+      }
+      if (bit) ones++;
+      dataCells[i].className = "cell " + (bit ? "one" : "zero");
+    }
+    // Even parity: parity bit set so total number of 1s (data + parity) is even.
+    var parity = ones % 2; // 1 if data has odd count -> set parity to make it even
+    parityCell.className = "cell " + (parity ? "fid-parity-on" : "fid-parity-off");
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+</script>
+</body>
+</html>
