@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Start N Android emulators and verify they appear in `adb devices`.
+"""Start N Android emulators and verify they finish Android boot.
 
 Dry-run by default; pass `--start` to actually launch emulators.
 """
@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import argparse
+import subprocess
 import time
 from typing import List
 
@@ -66,7 +67,7 @@ def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         "--timeout",
         type=int,
         default=120,
-        help="Seconds to wait for emulators to appear in adb",
+        help="Seconds to wait for emulators to finish Android boot",
     )
     p.add_argument(
         "--interval",
@@ -78,6 +79,39 @@ def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         "--start",
         action="store_true",
         help="Actually start emulators (otherwise dry-run)",
+    )
+    p.add_argument(
+        "--terminal-app",
+        action="store_true",
+        help=(
+            "Launch emulators through Terminal.app instead of detached nohup. "
+            "This is more reliable in Codex/background automation contexts."
+        ),
+    )
+    p.add_argument(
+        "--no-window",
+        action="store_true",
+        help="Pass -no-window to the emulator.",
+    )
+    p.add_argument(
+        "--no-audio",
+        action="store_true",
+        help="Pass -no-audio to the emulator.",
+    )
+    p.add_argument(
+        "--no-boot-anim",
+        action="store_true",
+        help="Pass -no-boot-anim to the emulator.",
+    )
+    p.add_argument(
+        "--wipe-data",
+        action="store_true",
+        help="Pass -wipe-data to start from a clean AVD data image.",
+    )
+    p.add_argument(
+        "--adb-visible-only",
+        action="store_true",
+        help="Only require ADB visibility, preserving the old weaker check.",
     )
     return p.parse_args(argv)
 
@@ -106,16 +140,54 @@ def resolve_launch_specs(
     )
 
 
+def _adb_shell_value(device_id: str, *command: str, timeout: float = 5) -> str:
+    try:
+        result = subprocess.run(
+            ["adb", "-s", device_id, "shell", *command],
+            check=False,
+            capture_output=True,
+            encoding="utf-8",
+            timeout=timeout,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip()
+
+
+def _boot_completed(device_id: str) -> bool:
+    return _adb_shell_value(device_id, "getprop", "sys.boot_completed") == "1"
+
+
 def wait_for_emulators(
-    manager: EmulatorManager, want: int, timeout: int, interval: float
+    manager: EmulatorManager,
+    specs: List[EmulatorLaunchSpec],
+    timeout: int,
+    interval: float,
+    *,
+    adb_visible_only: bool = False,
 ) -> List[str]:
     deadline = time.time() + timeout
+    expected_ids = [f"emulator-{spec.port}" for spec in specs]
     while time.time() < deadline:
-        ids = manager.list_android_emulators()
-        if len(ids) >= want:
-            return ids
+        visible_ids = set(manager.list_android_emulators())
+        ready = []
+        for device_id in expected_ids:
+            if device_id not in visible_ids:
+                continue
+            if adb_visible_only or _boot_completed(device_id):
+                ready.append(device_id)
+        if len(ready) == len(expected_ids):
+            return ready
         time.sleep(interval)
-    return manager.list_android_emulators()
+    visible_ids = set(manager.list_android_emulators())
+    return [
+        device_id
+        for device_id in expected_ids
+        if device_id in visible_ids
+        and (adb_visible_only or _boot_completed(device_id))
+    ]
 
 
 def main(argv: List[str] | None = None) -> int:
@@ -140,15 +212,42 @@ def main(argv: List[str] | None = None) -> int:
         return 0
 
     print(f"[boot] Starting {len(specs)} emulator(s)")
-    manager.start_emulator_specs(specs)
-    print("[boot] Start requests issued — waiting for devices to appear in adb")
+    manager.start_emulator_specs(
+        specs,
+        terminal_app=args.terminal_app,
+        no_window=args.no_window,
+        no_audio=args.no_audio,
+        no_boot_anim=args.no_boot_anim,
+        wipe_data=args.wipe_data,
+    )
+    if args.adb_visible_only:
+        print("[boot] Start requests issued — waiting for ADB visibility")
+    else:
+        print("[boot] Start requests issued — waiting for Android boot completion")
 
-    found = wait_for_emulators(manager, len(specs), args.timeout, args.interval)
+    found = wait_for_emulators(
+        manager,
+        specs,
+        args.timeout,
+        args.interval,
+        adb_visible_only=args.adb_visible_only,
+    )
     if len(found) >= len(specs):
-        print(f"[boot] Success: found {len(found)} emulator(s): {found}")
+        if args.adb_visible_only:
+            print(f"[boot] Success: found {len(found)} emulator(s): {found}")
+        else:
+            print(
+                f"[boot] Success: boot completed for {len(found)} emulator(s): {found}"
+            )
         return 0
     else:
-        print(f"[boot] Timeout: only found {len(found)} emulator(s): {found}")
+        if args.adb_visible_only:
+            print(f"[boot] Timeout: only found {len(found)} emulator(s): {found}")
+        else:
+            print(
+                "[boot] Timeout: boot completed for "
+                f"{len(found)} emulator(s): {found}"
+            )
         return 1
 
 

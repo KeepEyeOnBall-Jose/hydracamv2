@@ -2,6 +2,8 @@ import os
 import subprocess
 import logging
 import time
+import json
+import shlex
 from dataclasses import dataclass
 from typing import List
 
@@ -84,14 +86,18 @@ class EmulatorManager:
         port,
         read_only: bool = False,
         shared_net_id: int | None = None,
+        terminal_app: bool = False,
+        no_window: bool = False,
+        no_audio: bool = False,
+        no_boot_anim: bool = False,
+        wipe_data: bool = False,
     ):
         """
         Starts an Android emulator with the specified AVD name and port.
         Logs output to a project-specific log file instead of /tmp.
         """
         log_file = os.path.join(self.log_dir, f"emulator_{port}.log")
-        command = [
-            "nohup",
+        emulator_command = [
             os.path.expanduser("~/Library/Android/sdk/emulator/emulator"),
             "-avd",
             avd_name,
@@ -101,22 +107,49 @@ class EmulatorManager:
         ]
 
         if read_only:
-            command.append("-read-only")
+            emulator_command.append("-read-only")
+        if wipe_data:
+            emulator_command.append("-wipe-data")
 
         if shared_net_id is not None:
-            command += ["-shared-net-id", str(shared_net_id)]
+            emulator_command += ["-shared-net-id", str(shared_net_id)]
 
         # continue with GPU selection
-        command += [
+        emulator_command += [
             "-gpu",
             "swiftshader_indirect",
         ]
 
-        # Redirect stdout and stderr to the log file
-        with open(log_file, "w", encoding="utf-8") as logfile:
-            process = subprocess.Popen(
-                command, stdout=logfile, stderr=subprocess.STDOUT
+        if no_window:
+            emulator_command.append("-no-window")
+        if no_audio:
+            emulator_command.append("-no-audio")
+        if no_boot_anim:
+            emulator_command.append("-no-boot-anim")
+
+        if terminal_app:
+            shell_command = (
+                f"cd {shlex.quote(os.getcwd())}; "
+                f"{' '.join(shlex.quote(part) for part in emulator_command)} "
+                f"> {shlex.quote(log_file)} 2>&1"
             )
+            process = subprocess.Popen(
+                [
+                    "osascript",
+                    "-e",
+                    "tell application \"Terminal\" to do script "
+                    f"{json.dumps(shell_command)}",
+                ],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        else:
+            command = ["nohup", *emulator_command]
+            # Redirect stdout and stderr to the log file
+            with open(log_file, "w", encoding="utf-8") as logfile:
+                process = subprocess.Popen(
+                    command, stdout=logfile, stderr=subprocess.STDOUT
+                )
 
         if shared_net_id is None:
             logging.info(
@@ -204,6 +237,11 @@ class EmulatorManager:
         wait_per_instance: bool = True,
         per_instance_timeout: int = 90,
         per_instance_interval: float = 2.0,
+        terminal_app: bool = False,
+        no_window: bool = False,
+        no_audio: bool = False,
+        no_boot_anim: bool = False,
+        wipe_data: bool = False,
     ) -> List[subprocess.Popen]:
         """Start emulators from explicit launch specs."""
         procs: List[subprocess.Popen] = []
@@ -213,6 +251,11 @@ class EmulatorManager:
                 spec.port,
                 read_only=spec.read_only,
                 shared_net_id=spec.shared_net_id,
+                terminal_app=terminal_app,
+                no_window=no_window,
+                no_audio=no_audio,
+                no_boot_anim=no_boot_anim,
+                wipe_data=wipe_data,
             )
             procs.append(proc)
 

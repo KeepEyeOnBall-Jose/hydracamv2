@@ -450,6 +450,31 @@ def run_route_check(
         "failures": [],
     }
 
+    logcat = ""
+    bridge_logs: dict[str, Any] | None = None
+
+    def collect_route_evidence() -> None:
+        nonlocal logcat, bridge_logs
+        if bridge_logs is None:
+            try:
+                bridge_logs = request_json(bridge_url, "GET", "/logs", timeout=timeout)
+                write_json(device_dir / f"{route}-bridge-logs.json", bridge_logs)
+            except Exception as error:
+                result.setdefault("evidenceFailures", []).append(
+                    f"GET /logs failed: {error}"
+                )
+        if not logcat:
+            try:
+                logcat = collect_logcat(
+                    serial,
+                    device_dir / f"{route}-logcat.txt",
+                    tail_lines=logcat_tail_lines,
+                )
+            except Exception as error:
+                result.setdefault("evidenceFailures", []).append(
+                    f"logcat collection failed: {error}"
+                )
+
     try:
         launch_route(serial, route)
         health = wait_for_bridge(serial, bridge_url, timeout=timeout)
@@ -522,14 +547,8 @@ def run_route_check(
             )
             result["scrollCheck"] = scroll_check
 
-        logs = request_json(bridge_url, "GET", "/logs", timeout=timeout)
-        write_json(device_dir / f"{route}-bridge-logs.json", logs)
-        logcat = collect_logcat(
-            serial,
-            device_dir / f"{route}-logcat.txt",
-            tail_lines=logcat_tail_lines,
-        )
-        persisted_logs = json.dumps(logs)
+        collect_route_evidence()
+        persisted_logs = json.dumps(bridge_logs or {})
         markers = sorted(
             set(overflow_markers_found(logcat) + overflow_markers_found(persisted_logs))
         )
@@ -539,6 +558,7 @@ def run_route_check(
             )
     except Exception as error:
         result["failures"].append(str(error))
+        collect_route_evidence()
 
     result["status"] = "passed" if not result["failures"] else "failed"
     write_json(device_dir / f"{route}-result.json", result)
