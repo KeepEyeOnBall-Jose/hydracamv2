@@ -1,0 +1,36 @@
+macOS native build diagnosis — 2026-06-25 (6 attempts, all failed)
+
+flutter build macos --debug [+/- HYDRACAM_AUTOMATION/dev-auto-login defines]
+=> ** BUILD FAILED ** "Build operation failed without specifying any errors."
+
+Key facts:
+- Reproduces regardless of system load (failed at load avg 16 AND at 4.4 with
+  zero xcodebuildmcp processes resident). NOT a transient OOM/zombie issue.
+- macOS-target-SPECIFIC: the SAME Dart source built fresh and ran this session
+  for Chrome web (exit 0), Android emulator (APK exit 0), and iOS Simulator
+  (xcodebuild iphonesimulator exit 0). Only the macosx target fails.
+- Verbose build (-v) shows the build progresses through late phases:
+  ProcessInfoPlistFile and CopySwiftLibs (builtin-swiftStdLibTool), then
+  "Verify final result code for completed build operation" -> failed, with NO
+  task-level error (no clang/swift/ld/codesign error text, no "Killed").
+- Notable build settings: _DEVELOPMENT_TEAM_IS_EMPTY=YES, CODE_SIGNING_REQUIRED=YES,
+  CODE_SIGNING_ALLOWED=YES, AD_HOC_CODE_SIGNING_ALLOWED=YES, arch=undefined_arch.
+- Xcode 26.0 (XCODE_VERSION_MAJOR=2600) on macOS 26.4.1, Apple M1.
+- A pre-existing macOS HydraCam .app DID launch and run on the M1 this session,
+  so the app itself is runnable on macOS native.
+
+Most likely: a macOS-target Xcode 26 signing / swift-stdlib-copy toolchain issue
+on this host (e.g. CopySwiftLibs / final CodeSign failing silently under the new
+build system), NOT a HydraCam code defect.
+
+Suggested local fix (not done here to avoid disrupting concurrent Xcode work):
+  flutter clean
+  rm -rf ~/Library/Developer/Xcode/DerivedData/Runner-*
+  (reopen macos/Runner.xcworkspace once so Xcode resolves signing)
+  flutter build macos --debug
+For a headless in-app screenshot afterward:
+  flutter build macos --debug --dart-define=HYDRACAM_AUTOMATION=true
+  HYDRACAM_AUTOMATION_ROLE=standby HYDRACAM_AUTOMATION_TARGET_ID=macos \
+    build/macos/Build/Products/Debug/HydraCam.app/Contents/MacOS/HydraCam &
+  curl -s -X POST http://127.0.0.1:4762/commands/capture_screenshot \
+    -H 'content-type: application/json' --data '{"name":"macos-standby"}'
