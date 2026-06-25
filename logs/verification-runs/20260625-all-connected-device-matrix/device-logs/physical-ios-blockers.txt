@@ -1,0 +1,28 @@
+Physical iOS deploy blockers — 2026-06-25 (devices present but not operable headless)
+
+== iPhone 12 Pro "José Ramón's iPhone" — id 00008101-000A68811E43001E, iOS 26.5 ==
+State (devicectl): connected
+App installed: YES (com.keepeyeonball)
+Launch attempt: xcrun devicectl device process launch --device 00008101-000A68811E43001E --terminate-existing com.keepeyeonball
+Result: FAILED — CoreDeviceError 10002 / FBSOpenApplicationServiceErrorDomain 1
+  Reason: "The request was denied by service delegate (SBMainWorkspace) for reason: Locked
+           (Unable to launch com.keepeyeonball because the device was not, or could not be, unlocked)."
+  Tunnel connection acquired; developer disk image services enabled; only the LOCK blocked the launch.
+BLOCKER: device is LOCKED. iOS forbids launching apps on a locked device. Requires a human to unlock the iPhone.
+NOT an app defect. App is installed and the developer toolchain reached the workspace.
+
+== iPad (5) — id 8b406aa5c597eab4c4dfd9908f4a09b10a89ec63, iOS 17.7.11 ==
+State (devicectl): available (paired)   [not "connected"]
+State (xctrace list): OFFLINE
+BLOCKER: device asleep / not actively connected over wireless. Requires a human to wake + unlock the iPad
+(and ideally reconnect; wireless devicectl launch on this iPad has historically timed out).
+
+RESOLUTION (one human action, then I can finish both):
+  1. Unlock the iPhone (and keep it unlocked).
+  2. Wake + unlock the iPad until `xcrun xctrace list devices` shows it under "== Devices ==" (not Offline).
+Then rerun:
+  python3 scripts/run_rotating_master_slave_matrix.py --warm-prime-only \
+    --target-id 00008101-000A68811E43001E --expect-target-id 00008101-000A68811E43001E \
+    --fast-ios-launch --auto-ios-bridge-hosts --ios-bridge-scan-subnet 192.168.178.0/24 \
+    --run-dir <run>/iphone-warm-prime
+  followed by POST /commands/capture_screenshot + `xcrun devicectl device copy from`.

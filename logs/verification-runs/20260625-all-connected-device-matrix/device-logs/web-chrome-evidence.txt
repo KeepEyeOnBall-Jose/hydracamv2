@@ -1,0 +1,14 @@
+HydraCam Web (Chrome) deploy evidence — 2026-06-25
+Target: Chrome (web-javascript), Google Chrome 149, macOS (M1)
+Build: `flutter build web --debug` => exit 0 (compiles clean)
+Served: build/web via `python3 -m http.server 8080` => HTTP 200
+Browser: claude-in-chrome MCP, Browser 1 (local macOS), tab "HydraCam" @ http://127.0.0.1:8080/
+Rendered UI: "HydraCam - Slave Device" screen
+  - Session: No active session
+  - Network: Wi-Fi (enable location for SSID) | IP: Unknown IP
+  - Device: 3c142617 | App: 1.4.0+19
+  - Hardware: Hardware unavailable
+  - Controls: "Searching", "Clock sync: calibrating...", "Add Media from Gallery"
+  - Gallery panel: "No media available"
+Console: read_console_messages(onlyErrors=true) => "No console errors or exceptions found"
+Result: PASS (launch/UI render proof; web is a controller/monitor surface, not a camera-capture target)
