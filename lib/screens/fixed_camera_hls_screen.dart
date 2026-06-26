@@ -69,8 +69,7 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
       _useCamera2 =
           capabilities.canRecordCameraHls && capabilities.cameraIds.isNotEmpty;
       if (_useCamera2) {
-        _selectedMode =
-            capabilities.highestModeForCamera(capabilities.cameraIds.first);
+        _selectedMode = _highestMode(capabilities);
       }
       _status = capabilities.channelAvailable
           ? "Ready (${capabilities.recorderMode ?? "unknown"} default)."
@@ -83,10 +82,13 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
     if (capabilities == null || _busy) {
       return;
     }
-    final cameraId = _useCamera2 && capabilities.cameraIds.isNotEmpty
-        ? capabilities.cameraIds.first
-        : null;
-    final mode = cameraId == null ? null : _selectedMode;
+    final mode = _useCamera2 ? _selectedMode : null;
+    final cameraId = !_useCamera2
+        ? null
+        : (mode?.cameraId ??
+            (capabilities.cameraIds.isNotEmpty
+                ? capabilities.cameraIds.first
+                : null));
     final recordingId = "rec-${DateTime.now().millisecondsSinceEpoch}";
     setState(() {
       _busy = true;
@@ -105,21 +107,28 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
           targetDurationSeconds: 4,
           width: mode?.width ?? 1920,
           height: mode?.height ?? 1080,
-          frameRate: (mode?.maxFps ?? 30).clamp(1, 30),
+          frameRate: (mode?.maxFps ?? 30).clamp(1, 60),
           includeAudio: true,
         ),
       );
       LogService.instance.registerLog(
         "Fixed-camera HLS recording started: ${result.recordingId}",
       );
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _activeRecordingId = recordingId;
         _status = "Recording ${result.recordingId}…";
       });
     } catch (error) {
-      setState(() => _status = "Start failed: $error");
+      if (mounted) {
+        setState(() => _status = "Start failed: $error");
+      }
     } finally {
-      setState(() => _busy = false);
+      if (mounted) {
+        setState(() => _busy = false);
+      }
     }
   }
 
@@ -138,6 +147,9 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
         "Fixed-camera HLS recording finalized: ${result.recordingId} "
         "(${result.chunkPaths.length} chunks)",
       );
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _activeRecordingId = null;
         _finalized = result;
@@ -146,12 +158,16 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
             "${result.chunkPaths.length} chunks).";
       });
     } catch (error) {
-      setState(() {
-        _activeRecordingId = null;
-        _status = "Stop failed: $error";
-      });
+      if (mounted) {
+        setState(() {
+          _activeRecordingId = null;
+          _status = "Stop failed: $error";
+        });
+      }
     } finally {
-      setState(() => _busy = false);
+      if (mounted) {
+        setState(() => _busy = false);
+      }
     }
   }
 
@@ -177,6 +193,9 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
       );
       await queue.startUploadingManually();
       final result = entry.result;
+      if (!mounted) {
+        return;
+      }
       setState(() {
         if (entry.status == HlsStreamUploadQueueStatus.uploaded &&
             result != null) {
@@ -189,12 +208,16 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
         }
       });
     } catch (error) {
-      setState(() {
-        _uploadSummary = "Upload error: $error";
-        _status = "Upload failed.";
-      });
+      if (mounted) {
+        setState(() {
+          _uploadSummary = "Upload error: $error";
+          _status = "Upload failed.";
+        });
+      }
     } finally {
-      setState(() => _busy = false);
+      if (mounted) {
+        setState(() => _busy = false);
+      }
     }
   }
 
@@ -292,14 +315,21 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
     );
   }
 
+  /// Highest-resolution mode across every camera the device exposes.
+  FixedCameraHlsCameraMode? _highestMode(
+    FixedCameraHlsCapabilities capabilities,
+  ) {
+    final modes = [...capabilities.cameraModes]
+      ..sort((a, b) => b.pixelCount.compareTo(a.pixelCount));
+    return modes.isEmpty ? null : modes.first;
+  }
+
   Widget _buildModeSelector(FixedCameraHlsCapabilities capabilities) {
-    final cameraId = capabilities.cameraIds.isNotEmpty
-        ? capabilities.cameraIds.first
-        : null;
-    if (cameraId == null) {
-      return const SizedBox.shrink();
-    }
-    final modes = capabilities.modesForCamera(cameraId);
+    // List every recordable mode across all cameras; the label carries the
+    // camera id + lens facing, and the selected mode drives which camera
+    // records (see _startRecording).
+    final modes = [...capabilities.cameraModes]
+      ..sort((a, b) => b.pixelCount.compareTo(a.pixelCount));
     if (modes.isEmpty) {
       return const SizedBox.shrink();
     }

@@ -140,10 +140,17 @@ class FixedCameraCamera2HlsRecorder(
                     }
                     .sortedByDescending { it.width.toLong() * it.height.toLong() }
                     .forEach { size ->
-                        val encoderFps = videoCaps
-                            ?.getSupportedFrameRatesFor(size.width, size.height)
-                            ?.upper
-                            ?.toInt()
+                        val encoderFps = try {
+                            videoCaps
+                                ?.getSupportedFrameRatesFor(size.width, size.height)
+                                ?.upper
+                                ?.toInt()
+                        } catch (error: Exception) {
+                            // Some OEM encoders throw for specific sizes; treat
+                            // as "no encoder fps hint" rather than dropping the
+                            // whole camera.
+                            null
+                        }
                         val maxFps = minOf(cameraMaxFps, encoderFps ?: cameraMaxFps)
                         modes += mapOf(
                             "cameraId" to cameraId,
@@ -424,10 +431,11 @@ class FixedCameraCamera2HlsRecorder(
                             }
                         }
                     }
-                } catch (error: IllegalStateException) {
+                } catch (error: Exception) {
                     // The encoder was released or faulted (e.g. camera open
-                    // failed and the session is being torn down). Exit quietly
-                    // instead of crashing this background thread.
+                    // failed and the session is being torn down, or an OEM
+                    // CodecException). Exit quietly instead of crashing this
+                    // background thread.
                     return
                 }
             }
@@ -551,8 +559,9 @@ class FixedCameraCamera2HlsRecorder(
                         }
                     }
                 }
-                } catch (error: IllegalStateException) {
-                    // Audio encoder torn down during teardown; exit quietly.
+                } catch (error: Exception) {
+                    // Audio encoder torn down or faulted during teardown
+                    // (e.g. CodecException); exit quietly instead of crashing.
                     return
                 }
             }
