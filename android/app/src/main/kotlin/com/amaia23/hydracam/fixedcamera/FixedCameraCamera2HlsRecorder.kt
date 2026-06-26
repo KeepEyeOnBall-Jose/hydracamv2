@@ -107,6 +107,7 @@ class FixedCameraCamera2HlsRecorder(
         val startedAt: String,
     ) {
         private val stopRequested = AtomicBoolean(false)
+        private val aborted = AtomicBoolean(false)
         private val cameraStarted = CountDownLatch(1)
         private val videoSamples = Collections.synchronizedList(
             mutableListOf<FixedCameraEncodedHlsWriter.VideoSample>(),
@@ -193,7 +194,16 @@ class FixedCameraCamera2HlsRecorder(
         }
 
         fun release() {
+            // Signal the drain/audio loops to exit and join them BEFORE the
+            // codecs are released. Otherwise a still-running drain thread can
+            // call MediaCodec.dequeueOutputBuffer on a released encoder, which
+            // throws IllegalStateException on that thread and crashes the whole
+            // process (observed when the camera fails to open on first try).
+            aborted.set(true)
+            stopRequested.set(true)
             closeCamera()
+            videoDrainThread?.join(ENCODER_STOP_TIMEOUT_MILLIS)
+            audioThread?.join(ENCODER_STOP_TIMEOUT_MILLIS)
             runCatching { encoderInputSurface?.release() }
             runCatching { videoEncoder.stop() }
             runCatching { videoEncoder.release() }
@@ -299,37 +309,48 @@ class FixedCameraCamera2HlsRecorder(
             val bufferInfo = MediaCodec.BufferInfo()
             var outputDone = false
             while (!outputDone) {
-                when (val outputIndex = videoEncoder.dequeueOutputBuffer(bufferInfo, CODEC_TIMEOUT_US)) {
-                    MediaCodec.INFO_TRY_AGAIN_LATER -> {
-                        if (stopRequested.get()) {
-                            Thread.yield()
-                        }
-                    }
-                    MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {
-                        videoOutputFormat = videoEncoder.outputFormat
-                    }
-                    else -> {
-                        if (outputIndex >= 0) {
-                            val outputBuffer = videoEncoder.getOutputBuffer(outputIndex)
-                            if (
-                                outputBuffer != null &&
-                                bufferInfo.size > 0 &&
-                                bufferInfo.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0
-                            ) {
-                                val sample = outputBuffer.copyBytes(bufferInfo)
-                                videoSamples += FixedCameraEncodedHlsWriter.VideoSample(
-                                    presentationTimeUs = max(0, bufferInfo.presentationTimeUs),
-                                    data = FixedCameraH264SampleFormatter
-                                        .toLengthPrefixedSample(sample),
-                                    isSyncSample = bufferInfo.flags and
-                                        MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
-                                )
+                if (aborted.get()) {
+                    return
+                }
+                try {
+                    when (val outputIndex =
+                        videoEncoder.dequeueOutputBuffer(bufferInfo, CODEC_TIMEOUT_US)) {
+                        MediaCodec.INFO_TRY_AGAIN_LATER -> {
+                            if (stopRequested.get()) {
+                                Thread.yield()
                             }
-                            outputDone = bufferInfo.flags and
-                                MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0
-                            videoEncoder.releaseOutputBuffer(outputIndex, false)
+                        }
+                        MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {
+                            videoOutputFormat = videoEncoder.outputFormat
+                        }
+                        else -> {
+                            if (outputIndex >= 0) {
+                                val outputBuffer = videoEncoder.getOutputBuffer(outputIndex)
+                                if (
+                                    outputBuffer != null &&
+                                    bufferInfo.size > 0 &&
+                                    bufferInfo.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0
+                                ) {
+                                    val sample = outputBuffer.copyBytes(bufferInfo)
+                                    videoSamples += FixedCameraEncodedHlsWriter.VideoSample(
+                                        presentationTimeUs = max(0, bufferInfo.presentationTimeUs),
+                                        data = FixedCameraH264SampleFormatter
+                                            .toLengthPrefixedSample(sample),
+                                        isSyncSample = bufferInfo.flags and
+                                            MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
+                                    )
+                                }
+                                outputDone = bufferInfo.flags and
+                                    MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0
+                                videoEncoder.releaseOutputBuffer(outputIndex, false)
+                            }
                         }
                     }
+                } catch (error: IllegalStateException) {
+                    // The encoder was released or faulted (e.g. camera open
+                    // failed and the session is being torn down). Exit quietly
+                    // instead of crashing this background thread.
+                    return
                 }
             }
         }
@@ -384,6 +405,10 @@ class FixedCameraCamera2HlsRecorder(
             record.startRecording()
 
             while (!outputDone) {
+                if (aborted.get()) {
+                    return
+                }
+                try {
                 if (!inputDone) {
                     val inputIndex = encoder.dequeueInputBuffer(CODEC_TIMEOUT_US)
                     if (inputIndex >= 0) {
@@ -447,6 +472,10 @@ class FixedCameraCamera2HlsRecorder(
                             }
                         }
                     }
+                }
+                } catch (error: IllegalStateException) {
+                    // Audio encoder torn down during teardown; exit quietly.
+                    return
                 }
             }
         }
