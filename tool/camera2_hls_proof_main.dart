@@ -51,12 +51,18 @@ class _ProofAppState extends State<_ProofApp> {
         return;
       }
       final cameraId = capabilities.cameraIds.first;
+      final mode = capabilities.highestModeForCamera(cameraId);
+      final width = mode?.width ?? 1920;
+      final height = mode?.height ?? 1080;
+      final frameRate = (mode?.maxFps ?? 30).clamp(1, 30);
+      _log("CAMERA2_PROOF_MODE ${mode?.label ?? "default 1920x1080"} "
+          "(${capabilities.cameraModes.length} modes advertised)");
       final recordingId =
           "camera2-run-proof-${DateTime.now().millisecondsSinceEpoch}";
 
       FixedCameraHlsRecordingResult? started;
       Object? lastError;
-      for (var attempt = 0; attempt < 20; attempt++) {
+      for (var attempt = 0; attempt < 75; attempt++) {
         try {
           started = await service.startRecording(
             FixedCameraHlsRecordingRequest(
@@ -64,11 +70,11 @@ class _ProofAppState extends State<_ProofApp> {
               deviceId: "fixed-court-a",
               recordingId: recordingId,
               cameraId: cameraId,
-              targetDurationSeconds: 3,
-              width: 1280,
-              height: 720,
-              frameRate: 30,
-              includeAudio: false,
+              targetDurationSeconds: 4,
+              width: width,
+              height: height,
+              frameRate: frameRate,
+              includeAudio: true,
             ),
           );
           break;

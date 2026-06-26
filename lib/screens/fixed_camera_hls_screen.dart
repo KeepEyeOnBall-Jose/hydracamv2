@@ -34,6 +34,7 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
   FixedCameraHlsCapabilities? _capabilities;
   String _deviceId = "fixed-court-a";
   bool _useCamera2 = false;
+  FixedCameraHlsCameraMode? _selectedMode;
   bool _busy = false;
 
   String? _activeRecordingId;
@@ -67,6 +68,10 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
       _deviceId = deviceId;
       _useCamera2 =
           capabilities.canRecordCameraHls && capabilities.cameraIds.isNotEmpty;
+      if (_useCamera2) {
+        _selectedMode =
+            capabilities.highestModeForCamera(capabilities.cameraIds.first);
+      }
       _status = capabilities.channelAvailable
           ? "Ready (${capabilities.recorderMode ?? "unknown"} default)."
           : "Fixed-camera HLS channel unavailable on this platform.";
@@ -81,12 +86,14 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
     final cameraId = _useCamera2 && capabilities.cameraIds.isNotEmpty
         ? capabilities.cameraIds.first
         : null;
+    final mode = cameraId == null ? null : _selectedMode;
     final recordingId = "rec-${DateTime.now().millisecondsSinceEpoch}";
     setState(() {
       _busy = true;
       _finalized = null;
       _uploadSummary = null;
-      _status = "Starting recording (${cameraId == null ? "synthetic" : "camera2"})…";
+      _status = "Starting recording "
+          "(${cameraId == null ? "synthetic" : "camera2 ${mode?.label ?? "default"}"})…";
     });
     try {
       final result = await _service.startRecording(
@@ -96,10 +103,10 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
           recordingId: recordingId,
           cameraId: cameraId,
           targetDurationSeconds: 4,
-          width: 1280,
-          height: 720,
-          frameRate: 30,
-          includeAudio: cameraId == null,
+          width: mode?.width ?? 1920,
+          height: mode?.height ?? 1080,
+          frameRate: (mode?.maxFps ?? 30).clamp(1, 30),
+          includeAudio: true,
         ),
       );
       LogService.instance.registerLog(
@@ -236,6 +243,7 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
                     ? null
                     : (value) => setState(() => _useCamera2 = value),
               ),
+            if (_useCamera2 && capabilities != null) _buildModeSelector(capabilities),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -280,6 +288,42 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildModeSelector(FixedCameraHlsCapabilities capabilities) {
+    final cameraId = capabilities.cameraIds.isNotEmpty
+        ? capabilities.cameraIds.first
+        : null;
+    if (cameraId == null) {
+      return const SizedBox.shrink();
+    }
+    final modes = capabilities.modesForCamera(cameraId);
+    if (modes.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: DropdownButtonFormField<FixedCameraHlsCameraMode>(
+        key: const Key("cameraModeDropdown"),
+        initialValue: _selectedMode ?? modes.first,
+        isExpanded: true,
+        decoration: const InputDecoration(
+          labelText: "Capture mode",
+          border: OutlineInputBorder(),
+        ),
+        items: modes
+            .map(
+              (mode) => DropdownMenuItem<FixedCameraHlsCameraMode>(
+                value: mode,
+                child: Text(mode.label, overflow: TextOverflow.ellipsis),
+              ),
+            )
+            .toList(),
+        onChanged: _isRecording || _busy
+            ? null
+            : (mode) => setState(() => _selectedMode = mode),
       ),
     );
   }

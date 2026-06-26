@@ -75,6 +75,29 @@ claiming production readiness."
 - Upload: `dart run scripts/upload_hls_bundle.dart --directory <dir>
   --session-guid <guid> --device-id fixed-court-a --recording-id <id>`
 
+## Follow-up: all camera modes + high-res + audio (same run)
+
+- **Camera-mode enumeration:** `getCapabilities` now returns `cameraModes` —
+  every video size the device exposes, intersected with the H.264 encoder's
+  `VideoCapabilities` so only encoder-recordable sizes are advertised (with the
+  per-size max fps). On the S10e this yields 75 modes; the top recordable mode
+  is `4032x2268 @30fps` (back). Without the encoder filter the raw list offered
+  `4032x3024` (4:3 still size) which the AVC encoder rejects. The screen lets
+  the user pick any mode (default highest); the recorder accepts any size.
+- **High-res + audio capture (`hires-amstart-logcat.log`):** recorded
+  `4032x2268` with audio on the S10e: `CAMERA2_PROOF_FINALIZED chunks=4`,
+  decoded by `MediaMetadataRetriever` (4032x2268). ffprobe of the bundle
+  playlist: `format=hls`, `h264 4032x2268` + **`aac 48000 Hz mono`**,
+  `duration=9.929`. This proves both the all-modes support and the audio path
+  (the earlier audio failure was the now-fixed camera-open crash, not audio).
+- **Upload + backend playback (hi-res+audio):** uploaded to event
+  `hydracam-hydracam-20260626-android-hls-full-camera2-4k-audio`
+  (`hires-audio-upload.txt`); backend playback plays end-to-end over HTTP with
+  both tracks (`hires-audio-playback-ffprobe.txt`:
+  `format=hls h264 4032x2268 + aac`).
+- Note: the multi-MB 4K `.m4s` segments are pruned from this pack (decode is
+  ffprobe-proven); `camera2-hires-audio-bundle/` keeps the playlist + init.
+
 ## Known constraint
 Camera2 capture requires the device foreground + unlocked (Android camera
 policy). `flutter test` integration mode cannot satisfy this on this Samsung, so

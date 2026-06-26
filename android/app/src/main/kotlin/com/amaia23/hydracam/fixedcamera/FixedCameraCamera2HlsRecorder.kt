@@ -13,6 +13,7 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
+import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.media.MediaRecorder
 import android.os.Handler
@@ -96,6 +97,83 @@ class FixedCameraCamera2HlsRecorder(
             cameraManager().cameraIdList.toList()
         } catch (error: Exception) {
             emptyList()
+        }
+
+    /// Every recordable video mode the device exposes: one entry per
+    /// (camera, output size), with the camera's max advertised frame rate and
+    /// lens facing. Sizes come from the Camera2 stream-configuration map for the
+    /// MediaCodec surface path the recorder actually uses, largest first.
+    fun cameraModes(): List<Map<String, Any?>> {
+        val manager = cameraManager()
+        val modes = mutableListOf<Map<String, Any?>>()
+        val videoCaps = avcEncoderVideoCapabilities()
+        val ids = try {
+            manager.cameraIdList
+        } catch (error: Exception) {
+            return emptyList()
+        }
+        for (cameraId in ids) {
+            try {
+                val characteristics = manager.getCameraCharacteristics(cameraId)
+                val configMap = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP,
+                ) ?: continue
+                val sizes = configMap.getOutputSizes(MediaCodec::class.java)
+                    ?: continue
+                val cameraMaxFps = characteristics
+                    .get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)
+                    ?.maxOfOrNull { it.upper }
+                    ?: 30
+                val facing = when (
+                    characteristics.get(CameraCharacteristics.LENS_FACING)
+                ) {
+                    CameraCharacteristics.LENS_FACING_BACK -> "back"
+                    CameraCharacteristics.LENS_FACING_FRONT -> "front"
+                    CameraCharacteristics.LENS_FACING_EXTERNAL -> "external"
+                    else -> "unknown"
+                }
+                sizes
+                    // Only advertise sizes the H.264 encoder can actually record.
+                    .filter { size ->
+                        videoCaps == null ||
+                            videoCaps.isSizeSupported(size.width, size.height)
+                    }
+                    .sortedByDescending { it.width.toLong() * it.height.toLong() }
+                    .forEach { size ->
+                        val encoderFps = videoCaps
+                            ?.getSupportedFrameRatesFor(size.width, size.height)
+                            ?.upper
+                            ?.toInt()
+                        val maxFps = minOf(cameraMaxFps, encoderFps ?: cameraMaxFps)
+                        modes += mapOf(
+                            "cameraId" to cameraId,
+                            "width" to size.width,
+                            "height" to size.height,
+                            "maxFps" to maxFps,
+                            "lensFacing" to facing,
+                        )
+                    }
+            } catch (error: Exception) {
+                // Skip cameras that cannot be queried.
+            }
+        }
+        return modes
+    }
+
+    private fun avcEncoderVideoCapabilities(): MediaCodecInfo.VideoCapabilities? =
+        try {
+            MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos
+                .asSequence()
+                .filter { it.isEncoder }
+                .firstOrNull { info ->
+                    info.supportedTypes.any {
+                        it.equals(MediaFormat.MIMETYPE_VIDEO_AVC, ignoreCase = true)
+                    }
+                }
+                ?.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC)
+                ?.videoCapabilities
+        } catch (error: Exception) {
+            null
         }
 
     private inner class CameraRecordingSession(
