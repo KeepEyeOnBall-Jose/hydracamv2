@@ -121,6 +121,65 @@ void main() {
     ]);
   });
 
+  test("upload ignores blank and non-string manifest sidecar entries",
+      () async {
+    final trackFile = File("${tempDir.path}/watch-track.json")
+      ..writeAsStringSync("{}");
+    final manifestFile = File("${tempDir.path}/wearable-upload-manifest.json")
+      ..writeAsStringSync(jsonEncode({
+        "manifestVersion": 1,
+        "sessionGuid": "session-1",
+        "generatedAt": "2026-06-22T12:00:00.000Z",
+        "trackFiles": [
+          "",
+          "   ",
+          123,
+          null,
+          trackFile.path,
+        ],
+        "sampleFiles": "not-a-list",
+        "calibrationFiles": <String>[],
+        "markerFiles": <String>[],
+        "povRecordingFiles": <String>[],
+        "povMediaFiles": <String>[],
+        "feedbackFiles": <String>[],
+      }));
+
+    List<String>? capturedFileFields;
+
+    final service = WearableReplayUploadService(
+      baseApiUrl: "http://127.0.0.1:3010/api",
+      httpClient: MockClient.streaming((request, bodyStream) async {
+        final multipart = request as http.MultipartRequest;
+        capturedFileFields = multipart.files
+            .map((file) =>
+                "${file.field}:${file.filename}:${file.contentType.mimeType}")
+            .toList();
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([
+            """{"eventId":"hydracam-session-1","sessionGuid":"session-1"}"""
+                .codeUnits,
+          ]),
+          200,
+          headers: {"content-type": "application/json"},
+        );
+      }),
+    );
+
+    final result = await service.uploadManifest(
+      sessionGuid: "session-1",
+      manifestFile: manifestFile,
+      pairedHydraCamDeviceId: "phone-1",
+      participantId: "player-1",
+    );
+
+    expect(result.eventId, "hydracam-session-1");
+    expect(capturedFileFields, [
+      "trackFiles:watch-track.json:application/json",
+    ]);
+  });
+
   test("upload surfaces non-2xx media-timeline bridge failures", () async {
     final manifestFile = File("${tempDir.path}/wearable-upload-manifest.json")
       ..writeAsStringSync(jsonEncode({
@@ -154,6 +213,44 @@ void main() {
         participantId: "player-1",
       ),
       throwsA(isA<HttpException>()),
+    );
+  });
+
+  test("upload rejects successful bridge responses without identity fields",
+      () async {
+    final manifestFile = File("${tempDir.path}/wearable-upload-manifest.json")
+      ..writeAsStringSync(jsonEncode({
+        "manifestVersion": 1,
+        "sessionGuid": "session-1",
+        "generatedAt": "2026-06-22T12:00:00.000Z",
+        "trackFiles": <String>[],
+        "sampleFiles": <String>[],
+        "calibrationFiles": <String>[],
+        "markerFiles": <String>[],
+        "povRecordingFiles": <String>[],
+        "povMediaFiles": <String>[],
+        "feedbackFiles": <String>[],
+      }));
+    final service = WearableReplayUploadService(
+      baseApiUrl: "http://127.0.0.1:3010/api",
+      httpClient: MockClient.streaming((request, bodyStream) async {
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable(["""{"trackCount":1}""".codeUnits]),
+          200,
+          headers: {"content-type": "application/json"},
+        );
+      }),
+    );
+
+    await expectLater(
+      service.uploadManifest(
+        sessionGuid: "session-1",
+        manifestFile: manifestFile,
+        pairedHydraCamDeviceId: "phone-1",
+        participantId: "player-1",
+      ),
+      throwsA(isA<FormatException>()),
     );
   });
 }
