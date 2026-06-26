@@ -1,5 +1,14 @@
 macOS native build diagnosis — 2026-06-25 (6 attempts, all failed)
 
+*** RESOLVED 2026-06-26: `flutter clean` + `rm -rf ~/Library/Developer/Xcode/
+DerivedData/Runner-*` + rebuild SUCCEEDED. The macOS app built, launched on the
+M1, warmed its automation bridge on 127.0.0.1:4762, and a screenshot was captured
+(screenshots/macos-all-connected.png, 1600x1200). Root cause was a corrupt
+DerivedData / Swift Package Manager cache left by the earlier killed builds — NOT
+a HydraCam code defect and NOT the xcodebuildmcp/load contention first suspected.
+The detail below is retained as the original (pre-fix) diagnosis. ***
+
+
 flutter build macos --debug [+/- HYDRACAM_AUTOMATION/dev-auto-login defines]
 => ** BUILD FAILED ** "Build operation failed without specifying any errors."
 
