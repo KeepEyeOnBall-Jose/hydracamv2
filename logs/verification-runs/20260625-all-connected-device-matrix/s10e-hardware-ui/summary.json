@@ -1,0 +1,67 @@
+{
+  "apk": "build/app/outputs/flutter-apk/app-debug.apk",
+  "devAutoLogin": {
+    "email": "",
+    "enabled": false,
+    "hasGuid": false,
+    "hasProfilePicture": false
+  },
+  "devices": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6700",
+      "descriptor": "usb:0-1 product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:93",
+      "localPort": 6700,
+      "serial": "RF8M21J8XRT"
+    }
+  ],
+  "finishedAt": "2026-06-26T14:36:53.698342",
+  "routeResults": [
+    {
+      "bridgeUrl": "http://127.0.0.1:6700",
+      "failures": [
+        "POST /commands/capture_screenshot failed: HTTP 500: {\"error\":\"bridge_failure\",\"details\":\"TimeoutException after 0:00:05.000000: Automation screenshot frame wait timed out.\"}"
+      ],
+      "health": {
+        "automation": true,
+        "automationTargetId": "RF8M21J8XRT",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "label": "Prepare Camera",
+      "route": "setup",
+      "serial": "RF8M21J8XRT",
+      "status": "failed"
+    },
+    {
+      "bridgeUrl": "http://127.0.0.1:6700",
+      "failures": [
+        "POST /commands/capture_screenshot failed: HTTP 500: {\"error\":\"bridge_failure\",\"details\":\"TimeoutException after 0:00:05.000000: Automation screenshot frame wait timed out.\"}"
+      ],
+      "health": {
+        "automation": true,
+        "automationTargetId": "RF8M21J8XRT",
+        "commands": [
+          "capture_screenshot",
+          "set_role"
+        ],
+        "status": "ok"
+      },
+      "label": "Waiting for role assignment",
+      "route": "standby",
+      "serial": "RF8M21J8XRT",
+      "status": "failed"
+    }
+  ],
+  "routes": [
+    "setup",
+    "standby"
+  ],
+  "scrollCheckRoutes": [
+    "setup"
+  ],
+  "startedAt": "2026-06-26T14:35:58.102347",
+  "status": "failed"
+}
