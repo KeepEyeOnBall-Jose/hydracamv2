@@ -13,6 +13,7 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
+import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.media.MediaRecorder
 import android.os.Handler
@@ -98,6 +99,90 @@ class FixedCameraCamera2HlsRecorder(
             emptyList()
         }
 
+    /// Every recordable video mode the device exposes: one entry per
+    /// (camera, output size), with the camera's max advertised frame rate and
+    /// lens facing. Sizes come from the Camera2 stream-configuration map for the
+    /// MediaCodec surface path the recorder actually uses, largest first.
+    fun cameraModes(): List<Map<String, Any?>> {
+        val manager = cameraManager()
+        val modes = mutableListOf<Map<String, Any?>>()
+        val videoCaps = avcEncoderVideoCapabilities()
+        val ids = try {
+            manager.cameraIdList
+        } catch (error: Exception) {
+            return emptyList()
+        }
+        for (cameraId in ids) {
+            try {
+                val characteristics = manager.getCameraCharacteristics(cameraId)
+                val configMap = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP,
+                ) ?: continue
+                val sizes = configMap.getOutputSizes(MediaCodec::class.java)
+                    ?: continue
+                val cameraMaxFps = characteristics
+                    .get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)
+                    ?.maxOfOrNull { it.upper }
+                    ?: 30
+                val facing = when (
+                    characteristics.get(CameraCharacteristics.LENS_FACING)
+                ) {
+                    CameraCharacteristics.LENS_FACING_BACK -> "back"
+                    CameraCharacteristics.LENS_FACING_FRONT -> "front"
+                    CameraCharacteristics.LENS_FACING_EXTERNAL -> "external"
+                    else -> "unknown"
+                }
+                sizes
+                    // Only advertise sizes the H.264 encoder can actually record.
+                    .filter { size ->
+                        videoCaps == null ||
+                            videoCaps.isSizeSupported(size.width, size.height)
+                    }
+                    .sortedByDescending { it.width.toLong() * it.height.toLong() }
+                    .forEach { size ->
+                        val encoderFps = try {
+                            videoCaps
+                                ?.getSupportedFrameRatesFor(size.width, size.height)
+                                ?.upper
+                                ?.toInt()
+                        } catch (error: Exception) {
+                            // Some OEM encoders throw for specific sizes; treat
+                            // as "no encoder fps hint" rather than dropping the
+                            // whole camera.
+                            null
+                        }
+                        val maxFps = minOf(cameraMaxFps, encoderFps ?: cameraMaxFps)
+                        modes += mapOf(
+                            "cameraId" to cameraId,
+                            "width" to size.width,
+                            "height" to size.height,
+                            "maxFps" to maxFps,
+                            "lensFacing" to facing,
+                        )
+                    }
+            } catch (error: Exception) {
+                // Skip cameras that cannot be queried.
+            }
+        }
+        return modes
+    }
+
+    private fun avcEncoderVideoCapabilities(): MediaCodecInfo.VideoCapabilities? =
+        try {
+            MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos
+                .asSequence()
+                .filter { it.isEncoder }
+                .firstOrNull { info ->
+                    info.supportedTypes.any {
+                        it.equals(MediaFormat.MIMETYPE_VIDEO_AVC, ignoreCase = true)
+                    }
+                }
+                ?.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC)
+                ?.videoCapabilities
+        } catch (error: Exception) {
+            null
+        }
+
     private inner class CameraRecordingSession(
         val context: Context,
         val cameraId: String,
@@ -107,6 +192,7 @@ class FixedCameraCamera2HlsRecorder(
         val startedAt: String,
     ) {
         private val stopRequested = AtomicBoolean(false)
+        private val aborted = AtomicBoolean(false)
         private val cameraStarted = CountDownLatch(1)
         private val videoSamples = Collections.synchronizedList(
             mutableListOf<FixedCameraEncodedHlsWriter.VideoSample>(),
@@ -193,7 +279,16 @@ class FixedCameraCamera2HlsRecorder(
         }
 
         fun release() {
+            // Signal the drain/audio loops to exit and join them BEFORE the
+            // codecs are released. Otherwise a still-running drain thread can
+            // call MediaCodec.dequeueOutputBuffer on a released encoder, which
+            // throws IllegalStateException on that thread and crashes the whole
+            // process (observed when the camera fails to open on first try).
+            aborted.set(true)
+            stopRequested.set(true)
             closeCamera()
+            videoDrainThread?.join(ENCODER_STOP_TIMEOUT_MILLIS)
+            audioThread?.join(ENCODER_STOP_TIMEOUT_MILLIS)
             runCatching { encoderInputSurface?.release() }
             runCatching { videoEncoder.stop() }
             runCatching { videoEncoder.release() }
@@ -299,37 +394,49 @@ class FixedCameraCamera2HlsRecorder(
             val bufferInfo = MediaCodec.BufferInfo()
             var outputDone = false
             while (!outputDone) {
-                when (val outputIndex = videoEncoder.dequeueOutputBuffer(bufferInfo, CODEC_TIMEOUT_US)) {
-                    MediaCodec.INFO_TRY_AGAIN_LATER -> {
-                        if (stopRequested.get()) {
-                            Thread.yield()
-                        }
-                    }
-                    MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {
-                        videoOutputFormat = videoEncoder.outputFormat
-                    }
-                    else -> {
-                        if (outputIndex >= 0) {
-                            val outputBuffer = videoEncoder.getOutputBuffer(outputIndex)
-                            if (
-                                outputBuffer != null &&
-                                bufferInfo.size > 0 &&
-                                bufferInfo.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0
-                            ) {
-                                val sample = outputBuffer.copyBytes(bufferInfo)
-                                videoSamples += FixedCameraEncodedHlsWriter.VideoSample(
-                                    presentationTimeUs = max(0, bufferInfo.presentationTimeUs),
-                                    data = FixedCameraH264SampleFormatter
-                                        .toLengthPrefixedSample(sample),
-                                    isSyncSample = bufferInfo.flags and
-                                        MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
-                                )
+                if (aborted.get()) {
+                    return
+                }
+                try {
+                    when (val outputIndex =
+                        videoEncoder.dequeueOutputBuffer(bufferInfo, CODEC_TIMEOUT_US)) {
+                        MediaCodec.INFO_TRY_AGAIN_LATER -> {
+                            if (stopRequested.get()) {
+                                Thread.yield()
                             }
-                            outputDone = bufferInfo.flags and
-                                MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0
-                            videoEncoder.releaseOutputBuffer(outputIndex, false)
+                        }
+                        MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {
+                            videoOutputFormat = videoEncoder.outputFormat
+                        }
+                        else -> {
+                            if (outputIndex >= 0) {
+                                val outputBuffer = videoEncoder.getOutputBuffer(outputIndex)
+                                if (
+                                    outputBuffer != null &&
+                                    bufferInfo.size > 0 &&
+                                    bufferInfo.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0
+                                ) {
+                                    val sample = outputBuffer.copyBytes(bufferInfo)
+                                    videoSamples += FixedCameraEncodedHlsWriter.VideoSample(
+                                        presentationTimeUs = max(0, bufferInfo.presentationTimeUs),
+                                        data = FixedCameraH264SampleFormatter
+                                            .toLengthPrefixedSample(sample),
+                                        isSyncSample = bufferInfo.flags and
+                                            MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
+                                    )
+                                }
+                                outputDone = bufferInfo.flags and
+                                    MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0
+                                videoEncoder.releaseOutputBuffer(outputIndex, false)
+                            }
                         }
                     }
+                } catch (error: Exception) {
+                    // The encoder was released or faulted (e.g. camera open
+                    // failed and the session is being torn down, or an OEM
+                    // CodecException). Exit quietly instead of crashing this
+                    // background thread.
+                    return
                 }
             }
         }
@@ -384,6 +491,10 @@ class FixedCameraCamera2HlsRecorder(
             record.startRecording()
 
             while (!outputDone) {
+                if (aborted.get()) {
+                    return
+                }
+                try {
                 if (!inputDone) {
                     val inputIndex = encoder.dequeueInputBuffer(CODEC_TIMEOUT_US)
                     if (inputIndex >= 0) {
@@ -447,6 +558,11 @@ class FixedCameraCamera2HlsRecorder(
                             }
                         }
                     }
+                }
+                } catch (error: Exception) {
+                    // Audio encoder torn down or faulted during teardown
+                    // (e.g. CodecException); exit quietly instead of crashing.
+                    return
                 }
             }
         }

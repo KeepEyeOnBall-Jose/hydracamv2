@@ -4,6 +4,60 @@ import "package:flutter/services.dart";
 
 import "../models/hls_stream_bundle.dart";
 
+/// A single recordable video mode the device camera exposes.
+class FixedCameraHlsCameraMode {
+  const FixedCameraHlsCameraMode({
+    required this.cameraId,
+    required this.width,
+    required this.height,
+    required this.maxFps,
+    required this.lensFacing,
+  });
+
+  final String cameraId;
+  final int width;
+  final int height;
+  final int maxFps;
+  final String lensFacing;
+
+  int get pixelCount => width * height;
+
+  String get label =>
+      "${width}x$height @${maxFps}fps · $lensFacing (cam $cameraId)";
+
+  @override
+  bool operator ==(Object other) =>
+      other is FixedCameraHlsCameraMode &&
+      other.cameraId == cameraId &&
+      other.width == width &&
+      other.height == height &&
+      other.maxFps == maxFps &&
+      other.lensFacing == lensFacing;
+
+  @override
+  int get hashCode => Object.hash(cameraId, width, height, maxFps, lensFacing);
+
+  static FixedCameraHlsCameraMode? fromMap(Object? value) {
+    if (value is! Map) {
+      return null;
+    }
+    final cameraId = value["cameraId"];
+    final width = value["width"];
+    final height = value["height"];
+    if (cameraId is! String || width is! int || height is! int) {
+      return null;
+    }
+    return FixedCameraHlsCameraMode(
+      cameraId: cameraId,
+      width: width,
+      height: height,
+      maxFps: value["maxFps"] is int ? value["maxFps"] as int : 30,
+      lensFacing:
+          value["lensFacing"] is String ? value["lensFacing"] as String : "unknown",
+    );
+  }
+}
+
 class FixedCameraHlsCapabilities {
   const FixedCameraHlsCapabilities({
     required this.platform,
@@ -16,6 +70,7 @@ class FixedCameraHlsCapabilities {
     this.recorderMode,
     this.supportedRecorderModes = const [],
     this.cameraIds = const [],
+    this.cameraModes = const [],
     this.androidSdk,
     this.outputDirectoryPath,
     this.reason,
@@ -31,12 +86,27 @@ class FixedCameraHlsCapabilities {
   final String? recorderMode;
   final List<String> supportedRecorderModes;
   final List<String> cameraIds;
+  final List<FixedCameraHlsCameraMode> cameraModes;
   final int? androidSdk;
   final String? outputDirectoryPath;
   final String? reason;
 
   bool get canRecordNativeHls => channelAvailable && nativeRecorderImplemented;
   bool get canRecordCameraHls => channelAvailable && cameraRecorderImplemented;
+
+  /// Modes for [cameraId], largest pixel count first.
+  List<FixedCameraHlsCameraMode> modesForCamera(String cameraId) {
+    final modes =
+        cameraModes.where((mode) => mode.cameraId == cameraId).toList()
+          ..sort((a, b) => b.pixelCount.compareTo(a.pixelCount));
+    return modes;
+  }
+
+  /// The highest-resolution mode for [cameraId], or null if none are known.
+  FixedCameraHlsCameraMode? highestModeForCamera(String cameraId) {
+    final modes = modesForCamera(cameraId);
+    return modes.isEmpty ? null : modes.first;
+  }
 
   factory FixedCameraHlsCapabilities.fromMap(Map<dynamic, dynamic>? map) {
     if (map == null) {
@@ -60,6 +130,7 @@ class FixedCameraHlsCapabilities {
           map["recorderMode"] is String ? map["recorderMode"] as String : null,
       supportedRecorderModes: _stringListValue(map["supportedRecorderModes"]),
       cameraIds: _stringListValue(map["cameraIds"]),
+      cameraModes: _cameraModesValue(map["cameraModes"]),
       androidSdk: _intValue(map["androidSdk"]),
       outputDirectoryPath: map["outputDirectoryPath"] is String
           ? map["outputDirectoryPath"] as String
@@ -90,6 +161,16 @@ class FixedCameraHlsCapabilities {
       return const [];
     }
     return value.whereType<String>().toList(growable: false);
+  }
+
+  static List<FixedCameraHlsCameraMode> _cameraModesValue(Object? value) {
+    if (value is! Iterable) {
+      return const [];
+    }
+    return value
+        .map(FixedCameraHlsCameraMode.fromMap)
+        .whereType<FixedCameraHlsCameraMode>()
+        .toList(growable: false);
   }
 }
 

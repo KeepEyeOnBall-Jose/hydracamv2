@@ -186,6 +186,11 @@ class MainActivity: FlutterActivity() {
 		val outputDirectory = getFixedCameraHlsOutputDirectory()
 		val cameraIds = fixedCameraCamera2HlsRecorder.cameraIds()
 		val cameraRecorderAvailable = cameraIds.isNotEmpty()
+		val cameraModes = if (cameraRecorderAvailable) {
+			fixedCameraCamera2HlsRecorder.cameraModes()
+		} else {
+			emptyList()
+		}
 		return mapOf(
 			"platform" to "android",
 			"channelAvailable" to true,
@@ -194,6 +199,7 @@ class MainActivity: FlutterActivity() {
 			"recorderMode" to "synthetic_local",
 			"supportedRecorderModes" to listOf("synthetic_local", "camera2_hls"),
 			"cameraIds" to cameraIds,
+			"cameraModes" to cameraModes,
 			"requiresCameraHardware" to false,
 			"supportsHlsUpload" to true,
 			"androidSdk" to Build.VERSION.SDK_INT,
