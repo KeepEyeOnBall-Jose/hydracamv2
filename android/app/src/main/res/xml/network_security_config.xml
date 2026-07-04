@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Permit cleartext HTTP to loopback only. HydraCam serves a finalized HLS bundle
+  from an in-process LocalHlsServer on 127.0.0.1 so the native media3/ExoPlayer
+  (used by video_player) can replay it on-device. ExoPlayer's HTTP stack honours
+  this config; without a loopback exception it is blocked by the API 28+ default
+  (cleartextTrafficPermitted=false) and HLS playback fails with a source error.
+  Dart (dart:io) networking does not consult this config, so app uploads and
+  WebSocket traffic are unaffected.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>

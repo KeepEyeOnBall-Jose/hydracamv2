@@ -4,6 +4,7 @@ import "../app_theme.dart";
 import "../l10n/app_localizations.dart";
 import "../l10n/app_localizations_en.dart";
 import "../screens/camera_selection_screen.dart";
+import "../screens/fixed_camera_hls_screen.dart";
 import "../screens/login_screen.dart";
 import "../screens/settings_screen.dart";
 import "../screens/log_screen.dart";
@@ -19,6 +20,7 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const String _deviceInfoMenuValue = "deviceInfo";
   static const String _settingsMenuValue = "settings";
   static const String _cameraSelectionMenuValue = "cameraSelection";
+  static const String _fixedCameraHlsMenuValue = "fixedCameraHls";
   static const String _locationInfoMenuValue = "locationInfo";
   static const String _logsMenuValue = "logs";
   static const String _uploaderInfoMenuValue = "uploaderInfo";
@@ -141,6 +143,12 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                       MaterialPageRoute(
                           builder: (context) => const CameraSelectionScreen()),
                     );
+                  } else if (value == _fixedCameraHlsMenuValue) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FixedCameraHlsScreen()),
+                    );
                   }
                 },
                 itemBuilder: (context) => [
@@ -185,6 +193,21 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Expanded(
                           child: Text(
                             l10n.appShellCameraSelection,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: _fixedCameraHlsMenuValue,
+                    child: Row(
+                      children: [
+                        const Icon(Icons.live_tv, color: AppTheme.accentColor),
+                        const SizedBox(width: 8),
+                        const Expanded(
+                          child: Text(
+                            "Fixed-camera HLS",
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

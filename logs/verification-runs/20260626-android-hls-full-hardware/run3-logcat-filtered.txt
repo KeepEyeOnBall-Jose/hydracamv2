@@ -1,0 +1,40 @@
+06-26 16:10:48.814 21615 22229 D MediaCodec: flushMediametrics
+06-26 16:10:48.876 21615 22229 I MediaCodec: setCodecState state(0), called in 6
+06-26 16:10:48.890   730 23132 I CameraService: CameraService::connect call (PID -1 "com.amaia23.hydracam", camera ID 0) and Camera API version 2
+06-26 16:10:48.891   730 23132 I CameraService: isUidActiveLocked E: uid 10373, callingPackage com.amaia23.hydracam, isRegistered true
+06-26 16:10:48.891   730 23132 I CameraService: isUidActiveLocked: start to wait until com.amaia23.hydracam gets into active.
+06-26 16:10:49.192   730 23132 I CameraService: isUidActiveLocked X: uid 10373, callingPackage com.amaia23.hydracam, isActive false.
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: FATAL EXCEPTION: HydraCamFixedCameraVideoDrain
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: Process: com.amaia23.hydracam, PID: 21615
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: java.lang.IllegalStateException
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: 	at android.media.MediaCodec.native_dequeueOutputBuffer(Native Method)
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: 	at android.media.MediaCodec.dequeueOutputBuffer(MediaCodec.java:3535)
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: 	at com.amaia23.hydracam.fixedcamera.FixedCameraCamera2HlsRecorder$CameraRecordingSession.drainVideoEncoder(FixedCameraCamera2HlsRecorder.kt:302)
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: 	at com.amaia23.hydracam.fixedcamera.FixedCameraCamera2HlsRecorder$CameraRecordingSession.$r8$lambda$TbLpqM-hqBnw6FQaOhCJtyn5GXQ(Unknown Source:0)
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: 	at com.amaia23.hydracam.fixedcamera.FixedCameraCamera2HlsRecorder$CameraRecordingSession$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+06-26 16:10:49.205 21615 22241 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:920)
+06-26 16:10:49.207 21615 22229 I MediaCodec: Codec shutdown complete
+06-26 16:10:49.209 21615 22229 D MediaCodec: flushMediametrics
+06-26 16:10:49.210 21615 22229 D MediaCodec: flushMediametrics
+06-26 16:10:49.223   983  3562 W ActivityManager: crash : com.amaia23.hydracam,10373
+06-26 16:10:49.225   983  3562 W ActivityTaskManager:   Force finishing activity com.amaia23.hydracam/.MainActivity
+06-26 16:10:49.278  3524  3524 I SDHMS:BarTender:Gatherer:AppError: update AppError : uid=10373, pkg=com.amaia23.hydracam, errorType=crash
+06-26 16:10:49.279  3456  3456 W DMASA[D]: [c]This app does not allow 3rd-party FC detection: com.amaia23.hydracam
+06-26 16:10:49.288  3524  3524 I SDHMS:BarTender:Analyzer:AppError: analyze app error : uid=10373, pkg=com.amaia23.hydracam, appErrorCount=1
+06-26 16:10:49.400   983  3562 I WindowManager: WIN DEATH: Window{4954829 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+06-26 16:10:49.400   983  3562 W InputManager-JNI: Input channel object '4954829 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity (client)' was disposed without first being removed with the input manager!
+06-26 16:10:49.401   983  1894 I ActivityManager: Process com.amaia23.hydracam (pid 21615) has died: cch CRE (256,1877)
+06-26 16:10:49.413   983  1894 I ActivityTaskManager: Removing activity ActivityRecord{c94c83d u0 com.amaia23.hydracam/.MainActivity t2211 f}}(appDied)  from stack callers=com.android.server.wm.ActivityRecord.handleAppDied:4286 com.android.server.wm.WindowProcessController.handleAppDied:1287 com.android.server.wm.ActivityTaskManagerService$LocalService.handleAppDied:7108 com.android.server.am.ActivityManagerService.handleAppDiedLocked:3649 com.android.server.am.ActivityManagerService.appDiedLocked:3839 
+06-26 16:10:49.417   630   630 I Layer   : id=4779 removeFromCurrentState 4954829 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0 (118)
+06-26 16:10:49.417   630   630 I Layer   : id=4778 removeFromCurrentState ActivityRecord{c94c83d u0 com.amaia23.hydracam/.MainActivity t2211}#0 (118)
+06-26 16:10:49.418   630   630 I SurfaceFlinger: id=4778 Removed ActivityRecord{c94c83d u0 com.amaia23.hydracam/.MainActivity t2211}#0 (118)
+06-26 16:10:49.418   630   630 I SurfaceFlinger: id=4779 Removed 4954829 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0 (118)
+06-26 16:10:49.418   630   630 I Layer   : id=4778 Destroyed ActivityRecord{c94c83d u0 com.amaia23.hydracam/.MainActivity t2211}#0
+06-26 16:10:49.418   630   630 I Layer   : id=4779 Destroyed 4954829 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity#0
+06-26 16:10:49.429   983  1045 W UsageStatsService: Unexpected activity event reported! (com.amaia23.hydracam/com.amaia23.hydracam.MainActivity event : 23 instanceId : 127753755)
+06-26 16:10:49.508   983  4243 I ActivityManager: Force stopping com.amaia23.hydracam appid=10373 user=0: from pid 22279
+06-26 16:10:49.524   983  1046 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_RESTARTED dat=package:com.amaia23.hydracam flg=0x10 (has extras) } to android/com.kddi.android.CpaNotiReceiver
+06-26 16:10:49.525   983   983 D SamsungAlarmManager: Remove alarm for next reason : android.intent.action.PACKAGE_RESTARTED : package: com.amaia23.hydracam
+06-26 16:10:49.597   983  3562 I PackageManager: pkg{com.amaia23.hydracam}, user{0}, caller{2000} flags{2}
+06-26 16:10:49.601   983  1046 I ActivityManager: Force stopping com.amaia23.hydracam appid=10373 user=-1: deletePackageX
+06-26 16:10:49.689   983  1080 I PackageManager: Removing permission com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION that used to be declared by com.amaia23.hydracam
