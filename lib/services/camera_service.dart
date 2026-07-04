@@ -2,7 +2,6 @@ import "dart:async";
 import "dart:io";
 import "package:camera/camera.dart";
 import "package:flutter/cupertino.dart";
-// import "package:gallery_saver/gallery_saver.dart";  // Temporarily disabled - use photo_manager alternative
 import "session_manager.dart";
 import "settings_service.dart";
 import "storage_service.dart";
@@ -487,7 +486,6 @@ class CameraService {
       // Announce with flash after stopping (if setting is enabled)
       await announceRecordingWithFlash();
 
-      // TODO: ISOLATE FROM MAIN THREAD IF THAT INCREASES PERFORMANCE?
       LogService.instance.registerLog("Video recorded at path: $newPath");
 
       await GalleryPersistenceService.saveVideo(newPath);
@@ -683,8 +681,6 @@ class CameraService {
     }
   }
 
-  /// Returns the current camera quality.
-  CameraQuality get currentQuality => _currentQuality;
   VideoCaptureProfile get currentProfile => _currentProfile;
 
   Future<CameraDescription> _resolveCameraDescription(

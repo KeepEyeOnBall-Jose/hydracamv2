@@ -146,6 +146,7 @@ class MediaFilterDialogState extends State<MediaFilterDialog> {
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
+    if (!mounted) return;
     if (picked != null) {
       setState(() {
         startDate = picked;
@@ -160,6 +161,7 @@ class MediaFilterDialogState extends State<MediaFilterDialog> {
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
+    if (!mounted) return;
     if (picked != null) {
       setState(() {
         endDate = picked;

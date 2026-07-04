@@ -8,6 +8,8 @@ library;
 import "package:camera/camera.dart";
 import "package:flutter/material.dart";
 import "../app_theme.dart";
+import "../l10n/app_localizations.dart";
+import "../l10n/app_localizations_en.dart";
 import "../models/camera_capture_settings.dart";
 import "../services/camera_hardware_metadata_service.dart";
 import "../services/camera_service_singleton.dart";
@@ -175,6 +177,7 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     );
 
     // 4. Switch back to the old index so the user's original camera remains active
+    if (!mounted) return;
     setState(() => _isLoading = true);
     try {
       await cameraService.switchCamera(oldIndex);
@@ -232,12 +235,22 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     );
   }
 
+  AppLocalizations _localizationsFor(BuildContext context) {
+    return Localizations.of<AppLocalizations>(
+          context,
+          AppLocalizations,
+        ) ??
+        AppLocalizationsEn();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = _localizationsFor(context);
+
     /// If still loading cameras (and we have none yet), just show a spinner.
     if (_isLoading && _cameras.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Camera Selection")),
+        appBar: AppBar(title: Text(l10n.appShellCameraSelection)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -245,7 +258,7 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
     /// If we loaded cameras but `_cameras.isEmpty`, no cameras found.
     if (_cameras.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Camera Selection")),
+        appBar: AppBar(title: Text(l10n.appShellCameraSelection)),
         body: Center(
           child: Text(_errorMessage ?? "No cameras found on this device."),
         ),
@@ -258,7 +271,7 @@ class CameraSelectionScreenState extends State<CameraSelectionScreen> {
         // 1) The main UI
         Scaffold(
           appBar: AppBar(
-            title: const Text("Camera Selection"),
+            title: Text(l10n.appShellCameraSelection),
             actions: [
               IconButton(
                 icon: const Icon(Icons.help_outline),

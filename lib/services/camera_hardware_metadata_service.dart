@@ -1,5 +1,7 @@
 import "package:flutter/services.dart";
 
+import "../models/json_value_parsers.dart";
+
 class CameraHardwareMetadata {
   const CameraHardwareMetadata({
     required this.cameraId,
@@ -41,7 +43,7 @@ class CameraHardwareMetadata {
     return CameraHardwareMetadata(
       cameraId: cameraId,
       focalLengths: _toDoubleList(map["focalLengths"]),
-      maxDigitalZoom: _toDouble(map["maxDigitalZoom"]),
+      maxDigitalZoom: toDoubleOrNull(map["maxDigitalZoom"]),
     );
   }
 
@@ -50,23 +52,10 @@ class CameraHardwareMetadata {
       return const [];
     }
     return value
-        .map(_toDouble)
+        .map(toDoubleOrNull)
         .whereType<double>()
         .where((length) => length > 0)
         .toList(growable: false);
-  }
-
-  static double? _toDouble(Object? value) {
-    if (value is double) {
-      return value;
-    }
-    if (value is num) {
-      return value.toDouble();
-    }
-    if (value is String) {
-      return double.tryParse(value);
-    }
-    return null;
   }
 }
 

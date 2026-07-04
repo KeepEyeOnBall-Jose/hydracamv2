@@ -1,5 +1,6 @@
 import "package:flutter/services.dart";
 
+import "../models/json_value_parsers.dart";
 import "../models/wearable_replay.dart";
 
 class WearableReplayBridgeCapabilities {
@@ -44,23 +45,23 @@ class WearableReplayBridgeCapabilities {
       );
     }
     return WearableReplayBridgeCapabilities(
-      platform: _stringValue(map["platform"], fallback: "unknown"),
-      channelAvailable: _boolValue(map["channelAvailable"]),
-      metaDatAvailable: _boolValue(map["metaDatAvailable"]),
-      metaMockAvailable: _boolValue(map["metaMockAvailable"]),
-      watchCompanionAvailable: _boolValue(map["watchCompanionAvailable"]),
-      watchMockAvailable: _boolValue(map["watchMockAvailable"]),
-      supportsWatchHaptics: _boolValue(map["supportsWatchHaptics"]),
-      supportsGlassesAudio: _boolValue(map["supportsGlassesAudio"]),
-      supportsRollingPovFallback: _boolValue(
+      platform: stringOrFallback(map["platform"], fallback: "unknown"),
+      channelAvailable: boolOrFallback(map["channelAvailable"]),
+      metaDatAvailable: boolOrFallback(map["metaDatAvailable"]),
+      metaMockAvailable: boolOrFallback(map["metaMockAvailable"]),
+      watchCompanionAvailable: boolOrFallback(map["watchCompanionAvailable"]),
+      watchMockAvailable: boolOrFallback(map["watchMockAvailable"]),
+      supportsWatchHaptics: boolOrFallback(map["supportsWatchHaptics"]),
+      supportsGlassesAudio: boolOrFallback(map["supportsGlassesAudio"]),
+      supportsRollingPovFallback: boolOrFallback(
         map["supportsRollingPovFallback"],
-        fallback: _boolValue(map["metaMockAvailable"]),
+        fallback: boolOrFallback(map["metaMockAvailable"]),
       ),
-      requiresPhysicalMetaHardware: _boolValue(
+      requiresPhysicalMetaHardware: boolOrFallback(
         map["requiresPhysicalMetaHardware"],
         fallback: true,
       ),
-      requiresPhysicalWatchHardware: _boolValue(
+      requiresPhysicalWatchHardware: boolOrFallback(
         map["requiresPhysicalWatchHardware"],
         fallback: true,
       ),
@@ -152,13 +153,13 @@ class MetaPovCaptureResult {
       throw const FormatException("Meta POV capture result was empty.");
     }
     return MetaPovCaptureResult(
-      recordingId: _requiredString(map["recordingId"], "recordingId"),
-      mediaPath: _requiredString(map["mediaPath"], "mediaPath"),
-      startedAt: _requiredDateTime(map["startedAt"], "startedAt"),
-      endedAt: _requiredDateTime(map["endedAt"], "endedAt"),
+      recordingId: requiredString(map["recordingId"], "recordingId"),
+      mediaPath: requiredString(map["mediaPath"], "mediaPath"),
+      startedAt: requiredDateTime(map["startedAt"], "startedAt"),
+      endedAt: requiredDateTime(map["endedAt"], "endedAt"),
       captureMode: _povCaptureModeFromName(map["captureMode"]?.toString()),
-      hasAudio: _boolValue(map["hasAudio"]),
-      mockCapture: _boolValue(map["mockCapture"]),
+      hasAudio: boolOrFallback(map["hasAudio"]),
+      mockCapture: boolOrFallback(map["mockCapture"]),
     );
   }
 }
@@ -197,21 +198,21 @@ class WatchTelemetryReading {
       throw const FormatException("Watch telemetry reading was empty.");
     }
     return WatchTelemetryReading(
-      sourceDeviceId: _requiredString(map["sourceDeviceId"], "sourceDeviceId"),
-      localTimestamp: _requiredDateTime(
+      sourceDeviceId: requiredString(map["sourceDeviceId"], "sourceDeviceId"),
+      localTimestamp: requiredDateTime(
         map["localTimestamp"],
         "localTimestamp",
       ),
-      heartRateBpm: _optionalInt(map["heartRateBpm"]),
-      interBeatIntervalMs: _optionalInt(map["interBeatIntervalMs"]),
-      accelerometerX: _optionalDouble(map["accelerometerX"]),
-      accelerometerY: _optionalDouble(map["accelerometerY"]),
-      accelerometerZ: _optionalDouble(map["accelerometerZ"]),
-      gyroscopeX: _optionalDouble(map["gyroscopeX"]),
-      gyroscopeY: _optionalDouble(map["gyroscopeY"]),
-      gyroscopeZ: _optionalDouble(map["gyroscopeZ"]),
-      motionIntensity: _optionalDouble(map["motionIntensity"]),
-      mockReading: _boolValue(map["mockReading"]),
+      heartRateBpm: roundedIntOrNull(map["heartRateBpm"]),
+      interBeatIntervalMs: roundedIntOrNull(map["interBeatIntervalMs"]),
+      accelerometerX: toDoubleOrNull(map["accelerometerX"]),
+      accelerometerY: toDoubleOrNull(map["accelerometerY"]),
+      accelerometerZ: toDoubleOrNull(map["accelerometerZ"]),
+      gyroscopeX: toDoubleOrNull(map["gyroscopeX"]),
+      gyroscopeY: toDoubleOrNull(map["gyroscopeY"]),
+      gyroscopeZ: toDoubleOrNull(map["gyroscopeZ"]),
+      motionIntensity: toDoubleOrNull(map["motionIntensity"]),
+      mockReading: boolOrFallback(map["mockReading"]),
     );
   }
 }
@@ -273,61 +274,6 @@ class WearableReplayBridgeService {
     );
     return result == true;
   }
-}
-
-String _stringValue(Object? value, {required String fallback}) {
-  return value is String && value.isNotEmpty ? value : fallback;
-}
-
-bool _boolValue(Object? value, {bool fallback = false}) {
-  return value is bool ? value : fallback;
-}
-
-String _requiredString(Object? value, String field) {
-  final text = value?.toString().trim();
-  if (text == null || text.isEmpty) {
-    throw FormatException("missing required field $field");
-  }
-  return text;
-}
-
-DateTime _requiredDateTime(Object? value, String field) {
-  if (value is DateTime) {
-    return value;
-  }
-  if (value is String) {
-    final parsed = DateTime.tryParse(value);
-    if (parsed != null) {
-      return parsed;
-    }
-  }
-  throw FormatException("missing required field $field");
-}
-
-int? _optionalInt(Object? value) {
-  if (value is int) {
-    return value;
-  }
-  if (value is num) {
-    return value.round();
-  }
-  if (value is String) {
-    return int.tryParse(value);
-  }
-  return null;
-}
-
-double? _optionalDouble(Object? value) {
-  if (value is double) {
-    return value;
-  }
-  if (value is num) {
-    return value.toDouble();
-  }
-  if (value is String) {
-    return double.tryParse(value);
-  }
-  return null;
 }
 
 PovCaptureMode _povCaptureModeFromName(String? name) {

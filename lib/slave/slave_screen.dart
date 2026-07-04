@@ -8,7 +8,6 @@ import "../constants.dart" as constants;
 import "../screens/camera_setup_preview_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../screens/uploader_info_screen.dart";
-import "../globals.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
 import "../models/sync_metadata.dart";
@@ -296,7 +295,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       return;
     }
 
-    autoModeTimer = Timer(Duration(seconds: timeToStopSearching), () {
+    autoModeTimer = Timer(Duration(seconds: constants.timeToStopSearching), () {
       if (!_isConnected && _networkReadiness?.canUseLocalControl == true) {
         LogService.instance
             .registerLog("No master found, switching to Master mode.");
@@ -401,7 +400,7 @@ class SlaveScreenState extends State<SlaveScreen> {
               slaveDeviceId: deviceId,
             ),
             isAutoCloseEnabled: true,
-            autoCloseSeconds: secondsToClosePhoto);
+            autoCloseSeconds: constants.secondsToClosePhoto);
       },
       onRecordingStarted: _handleRecordingStarted,
       onRecordingStopped: _handleRecordingStopped,
@@ -1043,7 +1042,7 @@ class SlaveScreenState extends State<SlaveScreen> {
         context: context,
         media: photo,
         isAutoCloseEnabled: false, // Auto-close is disabled for slave screens
-        autoCloseSeconds: secondsToClosePhoto);
+        autoCloseSeconds: constants.secondsToClosePhoto);
   }
 
   void _showVideoDialog(CapturedVideo video) {

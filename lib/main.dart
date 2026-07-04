@@ -2,7 +2,6 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:provider/provider.dart";
 import "package:wakelock_plus/wakelock_plus.dart";
 
 import "app_theme.dart";
@@ -17,7 +16,6 @@ import "screens/camera_setup_preview_screen.dart";
 import "services/app_locale_service.dart";
 import "services/battery_service.dart";
 import "services/camera_service_singleton.dart";
-import "services/device_id_provider.dart";
 import "services/device_service.dart";
 import "services/hydracam_api_service.dart";
 import "services/launch_config_service.dart";
@@ -106,12 +104,9 @@ void main() {
         "CameraServiceSingleton initialized; mockCamera=$mockCameraEnabled");
 
     runApp(
-      ChangeNotifierProvider(
-        create: (_) => DeviceIdProvider(deviceId),
-        child: HydraCamApp(
-          launchConfig: launchConfig,
-          localeService: localeService,
-        ),
+      HydraCamApp(
+        launchConfig: launchConfig,
+        localeService: localeService,
       ),
     );
   }, (error, stackTrace) {

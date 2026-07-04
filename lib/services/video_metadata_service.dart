@@ -1,5 +1,7 @@
 import "package:flutter/services.dart";
 
+import "../models/json_value_parsers.dart";
+
 class RecordedVideoMetadata {
   const RecordedVideoMetadata({
     required this.width,
@@ -25,43 +27,17 @@ class RecordedVideoMetadata {
     if (map == null) {
       return null;
     }
-    final width = _toInt(map["width"]);
-    final height = _toInt(map["height"]);
+    final width = toIntOrNull(map["width"]);
+    final height = toIntOrNull(map["height"]);
     if (width == null || height == null) {
       return null;
     }
     return RecordedVideoMetadata(
       width: width,
       height: height,
-      framesPerSecond: _toDouble(map["framesPerSecond"]),
-      durationMs: _toInt(map["durationMs"]),
+      framesPerSecond: toDoubleOrNull(map["framesPerSecond"]),
+      durationMs: toIntOrNull(map["durationMs"]),
     );
-  }
-
-  static int? _toInt(Object? value) {
-    if (value is int) {
-      return value;
-    }
-    if (value is num) {
-      return value.toInt();
-    }
-    if (value is String) {
-      return int.tryParse(value);
-    }
-    return null;
-  }
-
-  static double? _toDouble(Object? value) {
-    if (value is double) {
-      return value;
-    }
-    if (value is num) {
-      return value.toDouble();
-    }
-    if (value is String) {
-      return double.tryParse(value);
-    }
-    return null;
   }
 }
 

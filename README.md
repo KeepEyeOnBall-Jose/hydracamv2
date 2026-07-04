@@ -127,7 +127,6 @@ lib/
 │   ├── auth0_service.dart          # Handles authentication with Auth0 using OAuth2.
 │   ├── battery_service.dart        # Monitors device battery level and shows alerts for low battery.
 │   ├── camera_service.dart         # Manages camera operations on the devices.
-│   ├── device_id_provider.dart     # Provides device identification.
 │   ├── device_service.dart         # Retrieves or generates unique device IDs.
 │   ├── hydracam_api_service.dart   # Handles API requests to upload media.
 │   ├── location_service.dart       # Handles location tracking with geolocator.
@@ -152,7 +151,6 @@ lib/
 │
 ├── app_theme.dart                  # Centralized theme system for colors, fonts, and styles.
 ├── constants.dart                  # Application-wide constants.
-├── globals.dart                    # Global variables accessible across the app.
 └── main.dart                       # Main entry point of the application.
 
 

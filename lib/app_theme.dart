@@ -8,8 +8,6 @@ class AppTheme {
   static const Color squashRed = Color(0xFFD32F2F);
 
   static const Color neutral900 = Color(0xFF212121);
-  static const Color neutral800 = Color(0xFF424242);
-  static const Color neutral700 = Color(0xFF616161);
   static const Color neutral600 = Color(0xFF757575);
   static const Color neutral500 = Color(0xFF9E9E9E);
   static const Color neutral400 = Color(0xFFBDBDBD);
@@ -37,16 +35,13 @@ class AppTheme {
   static const Color accent = squashYellow;
   static const Color accentSurface = Color(0x1FFFC107);
   static const Color danger = squashRed;
-  static const Color dangerDark = Color(0xFFB71C1C);
   static const Color dangerSurface = Color(0x1FD32F2F);
   static const Color critical = danger;
 
   static const Color disabledButtonColor = neutral500;
   static const Color disabledSurface = neutral200;
-  static const Color buttonTextColor = textOnAccent;
 
   static const Color primaryColor = accent;
-  static const Color secondaryColor = pageBackground;
   static const Color accentColor = accent;
   static const Color lightAccentColor = accentSurface;
 

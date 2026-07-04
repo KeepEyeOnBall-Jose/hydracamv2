@@ -1,3 +1,5 @@
+import "json_value_parsers.dart";
+
 class CameraPerspectiveMetadata {
   const CameraPerspectiveMetadata({
     required this.cameraPerspectiveId,
@@ -135,12 +137,12 @@ class DeviceLevelMetadata {
       return unavailable();
     }
     return DeviceLevelMetadata(
-      rollDegrees: _toDouble(json["rollDegrees"]),
-      pitchDegrees: _toDouble(json["pitchDegrees"]),
-      toleranceDegrees: _toDouble(json["toleranceDegrees"]) ?? 5,
+      rollDegrees: toDoubleOrNull(json["rollDegrees"]),
+      pitchDegrees: toDoubleOrNull(json["pitchDegrees"]),
+      toleranceDegrees: toDoubleOrNull(json["toleranceDegrees"]) ?? 5,
       isLevel: json["isLevel"] == true,
       sensorAvailable: json["sensorAvailable"] == true,
-      capturedAt: _toDateTime(json["capturedAt"]) ?? DateTime.now(),
+      capturedAt: optionalDateTime(json["capturedAt"]) ?? DateTime.now(),
     );
   }
 
@@ -182,10 +184,10 @@ class MediaCaptureContext {
     final perspective = CameraPerspectiveMetadata.fromJson(json);
     return MediaCaptureContext(
       perspective: perspective,
-      level: DeviceLevelMetadata.fromJson(_mapValue(json["deviceLevel"])),
+      level: DeviceLevelMetadata.fromJson(toStringKeyedMap(json["deviceLevel"])),
       cameraName: _nonEmpty(json["cameraName"]?.toString()),
       cameraLensDirection: _nonEmpty(json["cameraLensDirection"]?.toString()),
-      cameraSensorOrientation: _toInt(json["cameraSensorOrientation"]),
+      cameraSensorOrientation: toIntOrNull(json["cameraSensorOrientation"]),
       videoCaptureProfile: _nonEmpty(json["videoCaptureProfile"]?.toString()),
       deviceId: _nonEmpty(json["deviceId"]?.toString()) ?? "Unknown",
     );
@@ -212,56 +214,10 @@ class MediaCaptureContext {
   }
 }
 
-Map<String, dynamic>? _mapValue(Object? value) {
-  if (value is Map<String, dynamic>) {
-    return value;
-  }
-  if (value is Map) {
-    return value.map((key, value) => MapEntry(key.toString(), value));
-  }
-  return null;
-}
-
 String? _nonEmpty(String? value) {
   final trimmed = value?.trim();
   if (trimmed == null || trimmed.isEmpty) {
     return null;
   }
   return trimmed;
-}
-
-double? _toDouble(Object? value) {
-  if (value is double) {
-    return value;
-  }
-  if (value is num) {
-    return value.toDouble();
-  }
-  if (value is String) {
-    return double.tryParse(value);
-  }
-  return null;
-}
-
-int? _toInt(Object? value) {
-  if (value is int) {
-    return value;
-  }
-  if (value is num) {
-    return value.toInt();
-  }
-  if (value is String) {
-    return int.tryParse(value);
-  }
-  return null;
-}
-
-DateTime? _toDateTime(Object? value) {
-  if (value is DateTime) {
-    return value;
-  }
-  if (value is String) {
-    return DateTime.tryParse(value);
-  }
-  return null;
 }

@@ -638,11 +638,6 @@ class SlaveClient implements SlaveConnectionClient {
 
         // Update the UI
         _statusStreamController.add("Photo taken and saved locally.");
-
-        // Commented out: Sending to master
-        // final file = File(photoPath);
-        // final Uint8List photoData = await file.readAsBytes();
-        // _channel?.sink.add(jsonEncode({...}));
       } catch (error, stackTrace) {
         LogService.instance
             .registerLog("Slave photo capture failed: $error\n$stackTrace");
@@ -707,11 +702,6 @@ class SlaveClient implements SlaveConnectionClient {
 
         isRecordingVideo = false;
         onRecordingStopped?.call();
-
-        // Commented out: Sending to master
-        // final file = File(videoPath);
-        // final Uint8List videoData = await file.readAsBytes();
-        // _channel?.sink.add(jsonEncode({...}));
       } catch (error, stackTrace) {
         LogService.instance.registerLog(
             "Slave video recording stop failed: $error\n$stackTrace");
@@ -810,7 +800,6 @@ class SlaveClient implements SlaveConnectionClient {
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
       if (_isConnected) {
         await _sendNetworkHeartbeat();
-        //LogService.instance.registerLog("Sent heartbeat to master.");
       }
     });
   }

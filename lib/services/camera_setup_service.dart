@@ -19,7 +19,6 @@ class CameraSetupService {
       ValueNotifier(DeviceLevelReading.unavailable());
 
   CameraPerspectiveMetadata get perspective => _perspective;
-  DeviceLevelReading get latestReading => _latestReading;
 
   void setPerspective(CameraPerspectiveMetadata perspective) {
     _perspective = perspective;

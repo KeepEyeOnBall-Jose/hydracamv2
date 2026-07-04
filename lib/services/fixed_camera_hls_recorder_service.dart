@@ -3,6 +3,7 @@ import "dart:io";
 import "package:flutter/services.dart";
 
 import "../models/hls_stream_bundle.dart";
+import "../models/json_value_parsers.dart";
 
 class FixedCameraHlsCapabilities {
   const FixedCameraHlsCapabilities({
@@ -46,15 +47,15 @@ class FixedCameraHlsCapabilities {
     }
 
     return FixedCameraHlsCapabilities(
-      platform: _stringValue(map["platform"], fallback: "unknown"),
-      channelAvailable: _boolValue(map["channelAvailable"]),
-      nativeRecorderImplemented: _boolValue(map["nativeRecorderImplemented"]),
-      cameraRecorderImplemented: _boolValue(
+      platform: stringOrFallback(map["platform"], fallback: "unknown"),
+      channelAvailable: boolOrFallback(map["channelAvailable"]),
+      nativeRecorderImplemented: boolOrFallback(map["nativeRecorderImplemented"]),
+      cameraRecorderImplemented: boolOrFallback(
         map["cameraRecorderImplemented"],
       ),
       requiresCameraHardware:
-          _boolValue(map["requiresCameraHardware"], fallback: true),
-      supportsHlsUpload: _boolValue(map["supportsHlsUpload"]),
+          boolOrFallback(map["requiresCameraHardware"], fallback: true),
+      supportsHlsUpload: boolOrFallback(map["supportsHlsUpload"]),
       supportedMimeTypes: _stringListValue(map["supportedMimeTypes"]),
       recorderMode:
           map["recorderMode"] is String ? map["recorderMode"] as String : null,
@@ -72,25 +73,6 @@ class FixedCameraHlsCapabilities {
     String platform,
     String? reason,
   }) = _UnsupportedFixedCameraHlsCapabilities;
-
-  static String _stringValue(Object? value, {required String fallback}) {
-    return value is String && value.isNotEmpty ? value : fallback;
-  }
-
-  static bool _boolValue(Object? value, {bool fallback = false}) {
-    return value is bool ? value : fallback;
-  }
-
-  static int? _intValue(Object? value) {
-    return value is int ? value : null;
-  }
-
-  static List<String> _stringListValue(Object? value) {
-    if (value is! Iterable) {
-      return const [];
-    }
-    return value.whereType<String>().toList(growable: false);
-  }
 }
 
 class _UnsupportedFixedCameraHlsCapabilities
@@ -244,10 +226,6 @@ class FixedCameraHlsRecordingResult {
     return value is String && value.isNotEmpty ? value : null;
   }
 
-  static int? _intValue(Object? value) {
-    return value is int ? value : null;
-  }
-
   static double? _doubleValue(Object? value) {
     if (value is int) {
       return value.toDouble();
@@ -257,13 +235,6 @@ class FixedCameraHlsRecordingResult {
 
   static DateTime? _dateTimeValue(Object? value) {
     return value is String ? DateTime.tryParse(value) : null;
-  }
-
-  static List<String> _stringListValue(Object? value) {
-    if (value is! Iterable) {
-      return const [];
-    }
-    return value.whereType<String>().toList(growable: false);
   }
 }
 
@@ -307,4 +278,15 @@ class FixedCameraHlsRecorderService {
     );
     return FixedCameraHlsRecordingResult.fromMap(response);
   }
+}
+
+int? _intValue(Object? value) {
+  return value is int ? value : null;
+}
+
+List<String> _stringListValue(Object? value) {
+  if (value is! Iterable) {
+    return const [];
+  }
+  return value.whereType<String>().toList(growable: false);
 }

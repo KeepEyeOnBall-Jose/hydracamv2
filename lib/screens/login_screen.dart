@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:url_launcher/url_launcher.dart";
 import "../app_theme.dart";
+import "../l10n/app_localizations.dart";
+import "../l10n/app_localizations_en.dart";
 import "../services/log_service.dart";
 import "../services/user_service.dart";
 import "../widgets/hydracam_surface.dart";
@@ -40,6 +42,14 @@ class LoginScreenState extends State<LoginScreen> {
       _userDetails; // To store user details fetched from the API
 
   final UserService _userService = UserService();
+
+  AppLocalizations _localizationsFor(BuildContext context) {
+    return Localizations.of<AppLocalizations>(
+          context,
+          AppLocalizations,
+        ) ??
+        AppLocalizationsEn();
+  }
 
   Uri? _configuredUri(String configuredUrl) {
     final value = configuredUrl.trim();
@@ -236,17 +246,23 @@ class LoginScreenState extends State<LoginScreen> {
       await _userService.login();
       await _fetchUserDetails(); // Fetch user details after login
     } on UnsupportedError catch (e) {
-      setState(() {
-        _errorMessage = e.message;
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.message;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _errorMessage = "Failed to log in. Please try again.";
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = "Failed to log in. Please try again.";
+        });
+      }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -259,19 +275,26 @@ class LoginScreenState extends State<LoginScreen> {
     try {
       await _userService.logout();
     } catch (e) {
-      setState(() {
-        _errorMessage = "Failed to log out. Please try again.";
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = "Failed to log out. Please try again.";
+        });
+      }
     } finally {
-      setState(() {
-        _isLoading = false;
-        _userDetails = null; // Clear user details on logout
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _userDetails = null; // Clear user details on logout
+        });
+      }
     }
   }
 
   Future<void> _fetchUserDetails() async {
     if (_userService.guid != null) {
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _isUserDetailsLoading = true; // Start loading user details
       });
@@ -281,17 +304,23 @@ class LoginScreenState extends State<LoginScreen> {
             function: "_loadUserDetails", file: "login_screen.dart");
         final userDetails =
             await _userService.fetchUserDetails(_userService.guid!);
-        setState(() {
-          _userDetails = userDetails;
-        });
+        if (mounted) {
+          setState(() {
+            _userDetails = userDetails;
+          });
+        }
       } catch (e) {
-        setState(() {
-          _errorMessage = "Failed to fetch user details. Please try again.";
-        });
+        if (mounted) {
+          setState(() {
+            _errorMessage = "Failed to fetch user details. Please try again.";
+          });
+        }
       } finally {
-        setState(() {
-          _isUserDetailsLoading = false; // Stop loading user details
-        });
+        if (mounted) {
+          setState(() {
+            _isUserDetailsLoading = false; // Stop loading user details
+          });
+        }
       }
     }
   }
@@ -344,7 +373,7 @@ class LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: const Text("Login"),
+              child: Text(_localizationsFor(context).appShellLogin),
             ),
             const SizedBox(height: 12),
             _buildStorePolicyActions(),

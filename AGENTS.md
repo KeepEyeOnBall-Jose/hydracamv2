@@ -466,7 +466,7 @@ The app uses several singleton services for centralized state management:
 **main.dart:**
 - Initializes permissions, device ID, location service
 - Enables wakelock (prevents screen timeout)
-- Sets up Provider dependencies (DeviceIdProvider, StorageService, BatteryService, CameraService)
+- Initializes the CameraServiceSingleton (with a StorageService) before running the app
 - Applies centralized theme from `app_theme.dart`
 - Default screen: `SlaveScreen(isAutoMode: true)`
 
@@ -490,7 +490,6 @@ lib/
 ├── widgets/         # Reusable UI components
 ├── app_theme.dart   # Centralized theme (colors, typography, widget styles)
 ├── constants.dart   # App-wide constants (courts, timeouts, thresholds)
-├── globals.dart     # Global variables
 └── main.dart        # Application entry point
 ```
 

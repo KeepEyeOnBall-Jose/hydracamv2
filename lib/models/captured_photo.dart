@@ -1,7 +1,7 @@
-import "dart:io";
 import "dart:typed_data";
 
 import "capture_context_metadata.dart";
+import "media_file_utils.dart";
 import "sync_metadata.dart";
 
 /// CapturedPhoto - Represents a photo captured by a slave device.
@@ -63,18 +63,8 @@ class CapturedPhoto {
     this.uploadStartTime,
     this.uploadFailureReason,
     int? fileSizeInBytes,
-  }) : fileSizeInBytes = fileSizeInBytes ?? _safeFileSize(photoPath);
+  }) : fileSizeInBytes = fileSizeInBytes ?? safeFileSizeOf(photoPath);
 
   /// Getter for media path (used by UploaderService)
   String get mediaPath => photoPath;
-
-  static int _safeFileSize(String path) {
-    try {
-      final file = File(path);
-      if (file.existsSync()) {
-        return file.lengthSync();
-      }
-    } catch (_) {}
-    return 0;
-  }
 }

@@ -82,10 +82,4 @@ class CaptureSession {
   void endSession() {
     endTime = DateTime.now();
   }
-
-  /// Updates the `sessionGuid` for the session.
-  /// This can be useful when the GUID is obtained asynchronously or needs to be modified.
-  void updateGuid(String? newGuid) {
-    sessionGuid = newGuid;
-  }
 }

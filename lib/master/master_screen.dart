@@ -504,9 +504,11 @@ class MasterScreenState extends State<MasterScreen> {
 
     await SessionManager.instance.addVideo(capturedVideo);
 
-    setState(() {
-      isRecording = false; // Update recording state
-    });
+    if (mounted) {
+      setState(() {
+        isRecording = false; // Update recording state
+      });
+    }
 
     // Do not show the dialog here
     // Return the captured video
@@ -600,6 +602,7 @@ class MasterScreenState extends State<MasterScreen> {
           );
 
           await SessionManager.instance.addPhoto(capturedPhoto);
+          if (!mounted) return;
           setState(() {});
 
           if (!suppressSnackbars) {
@@ -1500,6 +1503,9 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
     _controller = VideoPlayerController.file(File(widget.videoPath))
       ..initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
         setState(() {}); // Refresh to show the video
         _controller.play();
       });
@@ -1517,6 +1523,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
+    SessionManager.instance.removeListener(_onSessionChanged);
     _controller.dispose();
     super.dispose();
   }

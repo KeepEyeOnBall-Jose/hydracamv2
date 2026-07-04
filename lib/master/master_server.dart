@@ -2,11 +2,11 @@ import "dart:async";
 import "dart:convert"; // Import for jsonDecode
 import "dart:io";
 import "package:flutter/foundation.dart";
-import "../globals.dart";
-// import "package:gallery_saver/gallery_saver.dart";  // Temporarily disabled - incompatible plugin
+import "../constants.dart";
 import "../models/capture_context_metadata.dart";
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
+import "../models/json_value_parsers.dart";
 import "../models/sync_metadata.dart";
 import "../services/camera_service.dart";
 import "../services/log_service.dart";
@@ -319,8 +319,8 @@ class ConnectedDeviceSetupStatus {
       cameraPerspectiveLabel: label,
       isLevel: map["isLevel"] == true,
       sensorAvailable: map["sensorAvailable"] == true,
-      rollDegrees: _toDouble(map["rollDegrees"]),
-      pitchDegrees: _toDouble(map["pitchDegrees"]),
+      rollDegrees: toDoubleOrNull(map["rollDegrees"]),
+      pitchDegrees: toDoubleOrNull(map["pitchDegrees"]),
     );
   }
 
@@ -334,33 +334,10 @@ class ConnectedDeviceSetupStatus {
       if (pitchDegrees != null) "pitchDegrees": pitchDegrees,
     };
   }
-
-  static double? _toDouble(Object? value) {
-    if (value is double) {
-      return value;
-    }
-    if (value is num) {
-      return value.toDouble();
-    }
-    if (value is String) {
-      return double.tryParse(value);
-    }
-    return null;
-  }
-}
-
-Map<String, dynamic>? _mapValue(Object? value) {
-  if (value is Map<String, dynamic>) {
-    return value;
-  }
-  if (value is Map) {
-    return value.map((key, value) => MapEntry(key.toString(), value));
-  }
-  return null;
 }
 
 Map<String, int>? _intMapValue(Object? value) {
-  final map = _mapValue(value);
+  final map = toStringKeyedMap(value);
   if (map == null) {
     return null;
   }
@@ -682,7 +659,7 @@ class MasterServer {
         receivedDate: receivedDate,
         slaveDeviceId: deviceId,
         captureContext: MediaCaptureContext.fromJson(
-          _mapValue(decodedData["captureContext"]),
+          toStringKeyedMap(decodedData["captureContext"]),
         ),
         syncMetadata: SyncMetadata.fromJson(decodedData["syncMetadata"]),
       );
@@ -702,7 +679,7 @@ class MasterServer {
       endRecordingDate: endRecordingDate!,
       receivedDate: receivedDate,
       captureContext: MediaCaptureContext.fromJson(
-        _mapValue(decodedData["captureContext"]),
+        toStringKeyedMap(decodedData["captureContext"]),
       ),
       syncMetadata: SyncMetadata.fromJson(decodedData["syncMetadata"]),
     );
@@ -1022,19 +999,6 @@ class MasterServer {
     );
   }
 
-  @visibleForTesting
-  void recordIdentifyAckForTest({
-    required String deviceId,
-    required String? requestId,
-    required DateTime acknowledgedAt,
-  }) {
-    _recordIdentifyAck(
-      deviceId: deviceId,
-      requestId: requestId,
-      acknowledgedAt: acknowledgedAt,
-    );
-  }
-
   Future<NetworkSnapshot> _getMasterNetworkSnapshot() async {
     try {
       _masterNetworkSnapshot = await _masterNetworkSnapshotCache.current();
@@ -1137,13 +1101,6 @@ class MasterServer {
       sessionStartedCommand,
       commandLabel: "sessionStarted",
     );
-  }
-
-  /// Sends a command to all connected slave devices.
-  void sendCommandToAll(String message) {
-    final sentCount = _sendCommandToEligibleClients(message);
-    LogService.instance.registerLog(
-        "Command sent to $sentCount eligible connected slave(s): $message");
   }
 
   Future<void> endCurrentSession() async {

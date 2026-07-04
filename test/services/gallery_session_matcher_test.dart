@@ -150,4 +150,77 @@ void main() {
     expect(candidates.single.session.sessionId, "court-range");
     expect(candidates.single.timeGap, const Duration(minutes: 4));
   });
+
+  test("rejects a negative margin", () {
+    final playedSession = session(
+      id: "court-1",
+      start: DateTime.utc(2026, 6, 8, 10),
+      end: DateTime.utc(2026, 6, 8, 10, 30),
+    );
+
+    expect(
+      () => matcher.findVideoRangeCandidates(
+        videoStart: DateTime.utc(2026, 6, 8, 10, 10),
+        videoEnd: DateTime.utc(2026, 6, 8, 10, 11),
+        sessions: [playedSession],
+        margin: const Duration(minutes: -1),
+      ),
+      throwsArgumentError,
+    );
+  });
+
+  test("breaks an equal time gap by preferring the later starting session", () {
+    final earlierSession = session(
+      id: "earlier",
+      start: DateTime.utc(2026, 6, 8, 10),
+      end: DateTime.utc(2026, 6, 8, 10, 10),
+    );
+    final laterSession = session(
+      id: "later",
+      start: DateTime.utc(2026, 6, 8, 10, 50),
+      end: DateTime.utc(2026, 6, 8, 11),
+    );
+    // A video centered between both sessions sits five minutes from each end.
+    final centeredVideo = video(
+      name: "centered",
+      start: DateTime.utc(2026, 6, 8, 10, 15),
+      end: DateTime.utc(2026, 6, 8, 10, 45),
+    );
+
+    final candidates = matcher.findVideoCandidates(
+      video: centeredVideo,
+      sessions: [earlierSession, laterSession],
+      margin: const Duration(minutes: 20),
+    );
+
+    expect(candidates, hasLength(2));
+    expect(candidates.first.timeGap, candidates.last.timeGap);
+    expect(candidates.first.session.sessionId, "later");
+    expect(candidates.last.session.sessionId, "earlier");
+  });
+
+  test("falls back to startTime when a session has no endTime", () {
+    final openEndedSession = CaptureSession(
+      sessionId: "open-ended",
+      sessionGuid: "guid-open-ended",
+      startTime: DateTime.utc(2026, 6, 8, 12),
+      endTime: null,
+    );
+
+    final candidates = matcher.findVideoRangeCandidates(
+      videoStart: DateTime.utc(2026, 6, 8, 12, 4),
+      videoEnd: DateTime.utc(2026, 6, 8, 12, 5),
+      sessions: [openEndedSession],
+      margin: const Duration(minutes: 10),
+    );
+
+    expect(candidates, hasLength(1));
+    // Window end is startTime + margin because endTime is null.
+    expect(
+      candidates.single.matchingWindowEnd,
+      DateTime.utc(2026, 6, 8, 12, 10),
+    );
+    // Gap is measured from the startTime fallback as the session end.
+    expect(candidates.single.timeGap, const Duration(minutes: 4));
+  });
 }

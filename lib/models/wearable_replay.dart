@@ -1,3 +1,4 @@
+import "json_value_parsers.dart";
 import "sync_metadata.dart";
 
 enum WearableSourceKind { galaxyWatch, rayBanMeta, phone, unknown }
@@ -86,18 +87,18 @@ class WearableRecordContext {
       throw const FormatException("wearable context missing syncMetadata");
     }
     return WearableRecordContext(
-      sessionGuid: _requiredString(json["sessionGuid"], "sessionGuid"),
-      participantId: _requiredString(json["participantId"], "participantId"),
-      sourceDeviceId: _requiredString(json["sourceDeviceId"], "sourceDeviceId"),
-      pairedHydraCamDeviceId: _requiredString(
+      sessionGuid: requiredString(json["sessionGuid"], "sessionGuid"),
+      participantId: requiredString(json["participantId"], "participantId"),
+      sourceDeviceId: requiredString(json["sourceDeviceId"], "sourceDeviceId"),
+      pairedHydraCamDeviceId: requiredString(
         json["pairedHydraCamDeviceId"],
         "pairedHydraCamDeviceId",
       ),
-      localTimestamp: _requiredDateTime(
+      localTimestamp: requiredDateTime(
         json["localTimestamp"],
         "localTimestamp",
       ),
-      sharedClockTimestamp: _requiredDateTime(
+      sharedClockTimestamp: requiredDateTime(
         json["sharedClockTimestamp"],
         "sharedClockTimestamp",
       ),
@@ -168,19 +169,19 @@ class WearableTrack {
       throw const FormatException("wearable track missing syncMetadata");
     }
     return WearableTrack(
-      trackId: _requiredString(json["trackId"], "trackId"),
-      sessionGuid: _requiredString(json["sessionGuid"], "sessionGuid"),
-      participantId: _requiredString(json["participantId"], "participantId"),
-      sourceDeviceId: _requiredString(json["sourceDeviceId"], "sourceDeviceId"),
-      pairedHydraCamDeviceId: _requiredString(
+      trackId: requiredString(json["trackId"], "trackId"),
+      sessionGuid: requiredString(json["sessionGuid"], "sessionGuid"),
+      participantId: requiredString(json["participantId"], "participantId"),
+      sourceDeviceId: requiredString(json["sourceDeviceId"], "sourceDeviceId"),
+      pairedHydraCamDeviceId: requiredString(
         json["pairedHydraCamDeviceId"],
         "pairedHydraCamDeviceId",
       ),
       sourceKind: _sourceKindFromName(json["sourceKind"]?.toString()),
       trackKind: _trackKindFromName(json["trackKind"]?.toString()),
-      displayName: _requiredString(json["displayName"], "displayName"),
-      startedAt: _requiredDateTime(json["startedAt"], "startedAt"),
-      endedAt: _optionalDateTime(json["endedAt"]),
+      displayName: requiredString(json["displayName"], "displayName"),
+      startedAt: requiredDateTime(json["startedAt"], "startedAt"),
+      endedAt: optionalDateTime(json["endedAt"]),
       syncMetadata: syncMetadata,
       publishConsent: _boolValue(json["publishConsent"], defaultValue: true),
       shareReady: _boolValue(json["shareReady"], defaultValue: true),
@@ -243,18 +244,18 @@ class WearableSample {
   static WearableSample fromJson(Object? value) {
     final json = _asMap(value);
     return WearableSample(
-      sampleId: _requiredString(json["sampleId"], "sampleId"),
-      trackId: _requiredString(json["trackId"], "trackId"),
+      sampleId: requiredString(json["sampleId"], "sampleId"),
+      trackId: requiredString(json["trackId"], "trackId"),
       context: WearableRecordContext.fromJson(json),
-      heartRateBpm: _optionalInt(json["heartRateBpm"]),
-      interBeatIntervalMs: _optionalInt(json["interBeatIntervalMs"]),
-      accelerometerX: _optionalDouble(json["accelerometerX"]),
-      accelerometerY: _optionalDouble(json["accelerometerY"]),
-      accelerometerZ: _optionalDouble(json["accelerometerZ"]),
-      gyroscopeX: _optionalDouble(json["gyroscopeX"]),
-      gyroscopeY: _optionalDouble(json["gyroscopeY"]),
-      gyroscopeZ: _optionalDouble(json["gyroscopeZ"]),
-      motionIntensity: _optionalDouble(json["motionIntensity"]),
+      heartRateBpm: roundedIntOrNull(json["heartRateBpm"]),
+      interBeatIntervalMs: roundedIntOrNull(json["interBeatIntervalMs"]),
+      accelerometerX: toDoubleOrNull(json["accelerometerX"]),
+      accelerometerY: toDoubleOrNull(json["accelerometerY"]),
+      accelerometerZ: toDoubleOrNull(json["accelerometerZ"]),
+      gyroscopeX: toDoubleOrNull(json["gyroscopeX"]),
+      gyroscopeY: toDoubleOrNull(json["gyroscopeY"]),
+      gyroscopeZ: toDoubleOrNull(json["gyroscopeZ"]),
+      motionIntensity: toDoubleOrNull(json["motionIntensity"]),
       metadata: _objectMap(json["metadata"]),
     );
   }
@@ -292,11 +293,11 @@ class WearableMarker {
   static WearableMarker fromJson(Object? value) {
     final json = _asMap(value);
     return WearableMarker(
-      markerId: _requiredString(json["markerId"], "markerId"),
-      trackId: _requiredString(json["trackId"], "trackId"),
+      markerId: requiredString(json["markerId"], "markerId"),
+      trackId: requiredString(json["trackId"], "trackId"),
       context: WearableRecordContext.fromJson(json),
-      markerType: _requiredString(json["markerType"], "markerType"),
-      label: _requiredString(json["label"], "label"),
+      markerType: requiredString(json["markerType"], "markerType"),
+      label: requiredString(json["label"], "label"),
       metadata: _objectMap(json["metadata"]),
     );
   }
@@ -349,13 +350,13 @@ class PovRecording {
   static PovRecording fromJson(Object? value) {
     final json = _asMap(value);
     return PovRecording(
-      recordingId: _requiredString(json["recordingId"], "recordingId"),
-      trackId: _requiredString(json["trackId"], "trackId"),
+      recordingId: requiredString(json["recordingId"], "recordingId"),
+      trackId: requiredString(json["trackId"], "trackId"),
       context: WearableRecordContext.fromJson(json),
-      mediaPath: _requiredString(json["mediaPath"], "mediaPath"),
+      mediaPath: requiredString(json["mediaPath"], "mediaPath"),
       captureMode: _povCaptureModeFromName(json["captureMode"]?.toString()),
-      startedAt: _requiredDateTime(json["startedAt"], "startedAt"),
-      endedAt: _requiredDateTime(json["endedAt"], "endedAt"),
+      startedAt: requiredDateTime(json["startedAt"], "startedAt"),
+      endedAt: requiredDateTime(json["endedAt"], "endedAt"),
       hasAudio: _boolValue(json["hasAudio"], defaultValue: false),
       audioPublishDefault:
           _boolValue(json["audioPublishDefault"], defaultValue: true),
@@ -400,12 +401,12 @@ class FeedbackEvent {
   static FeedbackEvent fromJson(Object? value) {
     final json = _asMap(value);
     return FeedbackEvent(
-      feedbackId: _requiredString(json["feedbackId"], "feedbackId"),
-      trackId: _requiredString(json["trackId"], "trackId"),
+      feedbackId: requiredString(json["feedbackId"], "feedbackId"),
+      trackId: requiredString(json["trackId"], "trackId"),
       context: WearableRecordContext.fromJson(json),
       channel: _feedbackChannelFromName(json["channel"]?.toString()),
-      trigger: _requiredString(json["trigger"], "trigger"),
-      message: _requiredString(json["message"], "message"),
+      trigger: requiredString(json["trigger"], "trigger"),
+      message: requiredString(json["message"], "message"),
       metadata: _objectMap(json["metadata"]),
     );
   }
@@ -452,14 +453,14 @@ class WearableSyncCalibration {
   static WearableSyncCalibration fromJson(Object? value) {
     final json = _asMap(value);
     return WearableSyncCalibration(
-      calibrationId: _requiredString(json["calibrationId"], "calibrationId"),
+      calibrationId: requiredString(json["calibrationId"], "calibrationId"),
       context: WearableRecordContext.fromJson(json),
-      ritual: _requiredString(json["ritual"], "ritual"),
+      ritual: requiredString(json["ritual"], "ritual"),
       observedSourceDeviceIds: _stringList(json["observedSourceDeviceIds"]),
-      targetAlignmentMs: _optionalInt(json["targetAlignmentMs"]) ?? 50,
+      targetAlignmentMs: roundedIntOrNull(json["targetAlignmentMs"]) ?? 50,
       measuredAlignmentErrorMs:
-          _optionalInt(json["measuredAlignmentErrorMs"]) ?? 0,
-      performedAt: _requiredDateTime(json["performedAt"], "performedAt"),
+          roundedIntOrNull(json["measuredAlignmentErrorMs"]) ?? 0,
+      performedAt: requiredDateTime(json["performedAt"], "performedAt"),
       metadata: _objectMap(json["metadata"]),
     );
   }
@@ -528,60 +529,8 @@ Map<String, Object?> _objectMap(Object? value) {
   return _asMap(value).cast<String, Object?>();
 }
 
-String _requiredString(Object? value, String field) {
-  final stringValue = value?.toString().trim();
-  if (stringValue == null || stringValue.isEmpty) {
-    throw FormatException("missing required field $field");
-  }
-  return stringValue;
-}
-
-DateTime _requiredDateTime(Object? value, String field) {
-  final parsed = _optionalDateTime(value);
-  if (parsed == null) {
-    throw FormatException("missing required field $field");
-  }
-  return parsed;
-}
-
-DateTime? _optionalDateTime(Object? value) {
-  if (value is DateTime) {
-    return value;
-  }
-  if (value is String) {
-    return DateTime.tryParse(value);
-  }
-  return null;
-}
-
 bool _boolValue(Object? value, {required bool defaultValue}) {
   return value is bool ? value : defaultValue;
-}
-
-int? _optionalInt(Object? value) {
-  if (value is int) {
-    return value;
-  }
-  if (value is num) {
-    return value.round();
-  }
-  if (value is String) {
-    return int.tryParse(value);
-  }
-  return null;
-}
-
-double? _optionalDouble(Object? value) {
-  if (value is double) {
-    return value;
-  }
-  if (value is num) {
-    return value.toDouble();
-  }
-  if (value is String) {
-    return double.tryParse(value);
-  }
-  return null;
 }
 
 List<String> _stringList(Object? value) {

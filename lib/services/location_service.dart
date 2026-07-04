@@ -1,6 +1,6 @@
 import "dart:async";
 import "package:geolocator/geolocator.dart";
-import "../globals.dart";
+import "../constants.dart";
 import "log_service.dart";
 
 /// LocationService - Manages location-related functionality in the app.
@@ -111,15 +111,4 @@ class LocationService {
 
   /// Gets the current position. Returns the last known position, or `null` if no location is available.
   Position? get currentPosition => _currentPosition;
-
-  /// Provides a formatted string representation of the current GPS position.
-  ///
-  /// - Returns a human-readable string of latitude and longitude if the location is available.
-  /// - Returns "Location not available" if the location is not set.
-  String get formattedPosition {
-    if (_currentPosition == null) {
-      return "Location not available";
-    }
-    return "Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}";
-  }
 }

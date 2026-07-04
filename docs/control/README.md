@@ -118,19 +118,38 @@ spreadsheet sprint rows.
 
 ## Historical Status Files
 
-These files are retained as dated evidence only. They now carry historical
-warnings and must not override `status-and-roadmap.md`:
+These dated snapshots and one-off debugging notes were moved out of the repo
+root into `history/` (2026-06-28) to keep the root onboarding surface limited to
+canonical docs. They are retained as dated evidence only, carry historical
+warnings, and must not override `status-and-roadmap.md`:
 
-- `RECOVERY_PLAN.md`
-- `TESTING_SUMMARY.md`
-- `READY_TO_DEPLOY.md`
-- `BUILD_COMPLETE.md`
-- `SUCCESS_SUMMARY.md`
-- `DEPLOYMENT_STATUS.md`
-- `DEPLOYMENT_GUIDE.md`
-- `QUICKSTART.md`
-- `MIGRATION_NOTES.md`
-- `FINAL_STATUS.md`
+- `history/RECOVERY_PLAN.md`
+- `history/TESTING_SUMMARY.md`
+- `history/READY_TO_DEPLOY.md`
+- `history/BUILD_COMPLETE.md`
+- `history/SUCCESS_SUMMARY.md`
+- `history/DEPLOYMENT_STATUS.md`
+- `history/DEPLOYMENT_GUIDE.md`
+- `history/QUICKSTART.md`
+- `history/MIGRATION_NOTES.md`
+- `history/FINAL_STATUS.md`
+- `history/VIDEO_UPLOAD_FAILURE_ANALYSIS.md` — the documented video-upload race is
+  already resolved in `lib/master/master_screen.dart`
+  (`_ensureRecordingState`/`_isRecordingTransitioning`); kept as a record only.
+- `history/iOS_BUILD_IMPOSSIBLE.md`, `history/iOS_BUILD_FIX.md`,
+  `history/iOS_FINAL_FIX.md`, `history/CORRECTION_iOS_SANDBOX.md`,
+  `history/RESTART_VSCODE.md`, `history/XCODE_SOLUTION.md` — superseded
+  iOS-sandbox debugging notes. Physical iOS builds work; see
+  `status-and-roadmap.md`.
+- `history/PACKAGE_ALTERNATIVES_PLAN.md` — stale dependency status; superseded by
+  `../superpowers/plans/2026-06-05-dependency-toolchain-upgrade.md` and the
+  current `pubspec.yaml`.
+- `history/TEST_PLAN_MULTI_DEVICE.md` — superseded by
+  `architecture-and-testing.md` and `regular-evaluation-plan.md` (its launch
+  command also used a stale applicationId).
+- `history/MULTI_DEVICE_AUTOMATION.md` — early automation plan; the bridge and
+  orchestrator it proposed now exist (`lib/automation/`, `scripts/`). See
+  `../../AUTOMATION_RUNBOOK.md` for current automation guidance.
 
 ## Update Rules
 
