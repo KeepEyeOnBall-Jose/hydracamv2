@@ -253,4 +253,42 @@ void main() {
       throwsA(isA<FormatException>()),
     );
   });
+
+  test("upload rejects successful bridge responses that are not JSON objects",
+      () async {
+    final manifestFile = File("${tempDir.path}/wearable-upload-manifest.json")
+      ..writeAsStringSync(jsonEncode({
+        "manifestVersion": 1,
+        "sessionGuid": "session-1",
+        "generatedAt": "2026-06-22T12:00:00.000Z",
+        "trackFiles": <String>[],
+        "sampleFiles": <String>[],
+        "calibrationFiles": <String>[],
+        "markerFiles": <String>[],
+        "povRecordingFiles": <String>[],
+        "povMediaFiles": <String>[],
+        "feedbackFiles": <String>[],
+      }));
+    final service = WearableReplayUploadService(
+      baseApiUrl: "http://127.0.0.1:3010/api",
+      httpClient: MockClient.streaming((request, bodyStream) async {
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable(["""[]""".codeUnits]),
+          200,
+          headers: {"content-type": "application/json"},
+        );
+      }),
+    );
+
+    await expectLater(
+      service.uploadManifest(
+        sessionGuid: "session-1",
+        manifestFile: manifestFile,
+        pairedHydraCamDeviceId: "phone-1",
+        participantId: "player-1",
+      ),
+      throwsA(isA<FormatException>()),
+    );
+  });
 }
