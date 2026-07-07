@@ -286,6 +286,8 @@ class UploaderService {
     String slaveDeviceId;
     DateTime captureDate;
     DateTime receivedDate;
+    final mediaTimelineUploadToken =
+        SessionManager.instance.currentSession?.mediaTimelineUploadToken;
 
     if (media is CapturedPhoto) {
       slaveDeviceId = media.slaveDeviceId;
@@ -305,6 +307,7 @@ class UploaderService {
         onFailureReason: (reason) {
           uploadFailureReason = reason;
         },
+        mediaTimelineUploadToken: mediaTimelineUploadToken,
         onUploadResult: (result) {
           bridgeUploadResult = result;
         },
@@ -329,6 +332,7 @@ class UploaderService {
         onFailureReason: (reason) {
           uploadFailureReason = reason;
         },
+        mediaTimelineUploadToken: mediaTimelineUploadToken,
         onUploadResult: (result) {
           bridgeUploadResult = result;
         },
