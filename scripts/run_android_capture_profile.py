@@ -29,14 +29,54 @@ DEFAULT_PERMISSIONS = (
 )
 
 
-def run(command: Sequence[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+def run(
+    command: Sequence[str],
+    *,
+    check: bool = True,
+    timeout: float | None = None,
+) -> subprocess.CompletedProcess[str]:
     print("+ " + " ".join(command), flush=True)
     return subprocess.run(
         list(command),
         cwd=REPO_ROOT,
         check=check,
         text=True,
+        timeout=timeout,
     )
+
+
+def validated_dart_defines(args: argparse.Namespace) -> list[str]:
+    defines = list(getattr(args, "dart_define", []) or [])
+    invalid = [
+        define for define in defines if "=" not in define or define.startswith("=")
+    ]
+    if invalid:
+        raise ValueError(
+            "--dart-define values must use KEY=VALUE: " + ", ".join(invalid)
+        )
+    return defines
+
+
+def build_apk(args: argparse.Namespace) -> Path:
+    apk = Path(args.apk)
+    if not args.build:
+        if not apk.exists():
+            raise FileNotFoundError(f"APK not found: {apk}")
+        return apk
+    command = [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+    ]
+    command.extend(
+        f"--dart-define={define}" for define in validated_dart_defines(args)
+    )
+    run(command, timeout=args.build_timeout)
+    if not apk.exists():
+        raise FileNotFoundError(f"Flutter build did not produce APK: {apk}")
+    return apk
 
 
 def grant_permissions(serial: str) -> None:
@@ -67,10 +107,9 @@ def launch_app(serial: str) -> None:
 
 
 def run_capture(args: argparse.Namespace) -> int:
+    apk = build_apk(args)
     if not args.skip_install:
-        if not args.apk.exists():
-            raise FileNotFoundError(f"APK not found: {args.apk}")
-        run(["adb", "-s", args.serial, "install", "-r", str(args.apk)])
+        run(["adb", "-s", args.serial, "install", "-r", str(apk)])
 
     grant_permissions(args.serial)
     launch_app(args.serial)
@@ -107,6 +146,22 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--profile", default="standard1080p30")
     parser.add_argument("--scenario")
     parser.add_argument("--apk", type=Path, default=DEFAULT_APK)
+    parser.add_argument(
+        "--build",
+        action="store_true",
+        help="Build the debug APK before installing.",
+    )
+    parser.add_argument("--build-timeout", type=float, default=300)
+    parser.add_argument(
+        "--dart-define",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help=(
+            "Additional Flutter dart define for --build. Repeat for "
+            "bridge-mode flags such as HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true."
+        ),
+    )
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument(
         "--output-dir",
