@@ -49,6 +49,27 @@ class IosCaptureReproTests(unittest.TestCase):
             command,
         )
 
+    def test_flutter_launch_command_passes_extra_dart_defines(self) -> None:
+        module = load_module()
+
+        command = module.build_flutter_launch_command(
+            "macos",
+            4762,
+            dart_defines=[
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ],
+        )
+
+        self.assertIn(
+            "--dart-define=HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+            command,
+        )
+        self.assertIn(
+            "--dart-define=HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            command,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
