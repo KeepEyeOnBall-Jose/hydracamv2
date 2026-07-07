@@ -105,12 +105,14 @@ void main() {
     final mediaFile = File("${tempDir.path}/video.mp4")
       ..writeAsBytesSync(_validMp4Bytes);
     Map<String, String>? capturedFields;
+    List<http.MultipartFile>? capturedFiles;
 
     HydraCamApiService.configureHttpClient(
       MockClient.streaming((request, bodyStream) async {
         expect(request.method, "POST");
         expect(request, isA<http.MultipartRequest>());
         capturedFields = (request as http.MultipartRequest).fields;
+        capturedFiles = request.files;
         await bodyStream.drain<void>();
         return http.StreamedResponse(
           Stream<List<int>>.fromIterable([<int>[]]),
@@ -140,6 +142,7 @@ void main() {
       containsPair("recordingEndDate", recordingEnd.toIso8601String()),
     );
     expect(capturedFields, containsPair("durationMs", "42000"));
+    expect(capturedFiles?.single.contentType.mimeType, "video/mp4");
   });
 
   test("uploadMedia derives duration from recording timestamps when mismatched",
@@ -629,6 +632,7 @@ void main() {
     Uri? capturedUri;
     Map<String, String>? capturedHeaders;
     Map<String, String>? capturedFields;
+    List<http.MultipartFile>? capturedFiles;
     HydraCamUploadResult? uploadResult;
 
     HydraCamApiService.configureBackendForTests(
@@ -640,6 +644,7 @@ void main() {
         capturedUri = request.url;
         capturedHeaders = request.headers;
         capturedFields = (request as http.MultipartRequest).fields;
+        capturedFiles = request.files;
         await bodyStream.drain<void>();
         return http.StreamedResponse(
           Stream<List<int>>.fromIterable([
@@ -689,6 +694,7 @@ void main() {
     expect(capturedHeaders?.containsKey("Authorization"), isFalse);
     expect(capturedFields, containsPair("slaveDeviceId", "slave-device"));
     expect(capturedFields, containsPair("appVersion", "2.3.4"));
+    expect(capturedFiles?.single.contentType.mimeType, "image/jpeg");
     expect(uploadResult?.eventId, "hydracam-bridge-session-guid");
     expect(uploadResult?.sessionGuid, "bridge-session-guid");
     expect(uploadResult?.files.single.fileId, "file-photo-1");

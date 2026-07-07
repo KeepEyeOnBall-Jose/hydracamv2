@@ -3,6 +3,7 @@ import "dart:convert";
 import "dart:io";
 import "package:flutter/foundation.dart";
 import "package:http/http.dart" as http;
+import "package:http_parser/http_parser.dart";
 import "package:package_info_plus/package_info_plus.dart";
 import "log_service.dart";
 import "auth0_m2m_service.dart";
@@ -874,6 +875,7 @@ class HydraCamApiService {
           ),
           fileLength,
           filename: file.path.split("/").last,
+          contentType: _uploadMediaContentType(file, isPhoto: isPhoto),
         ),
       );
 
@@ -953,6 +955,21 @@ class HydraCamApiService {
 
     final mediaType = isPhoto ? "photo" : "video";
     return "Upload file is not valid $mediaType media: ${file.path}";
+  }
+
+  MediaType _uploadMediaContentType(File file, {required bool isPhoto}) {
+    if (!isPhoto) {
+      return MediaType("video", "mp4");
+    }
+
+    final extension = file.path.split(".").last.toLowerCase();
+    if (extension == "png") {
+      return MediaType("image", "png");
+    }
+    if (extension == "heic" || extension == "heif") {
+      return MediaType("image", "heic");
+    }
+    return MediaType("image", "jpeg");
   }
 
   Future<List<int>> _readFileHeader(File file, int byteCount) async {
