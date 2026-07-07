@@ -352,6 +352,26 @@ def dart_define_keys(defines: Sequence[str]) -> list[str]:
     return [define.split("=", 1)[0] for define in defines]
 
 
+def resolved_dart_defines(args: argparse.Namespace) -> list[str]:
+    defines = validated_dart_defines(args)
+    media_timeline_base = getattr(args, "media_timeline_bridge_api_base", None)
+    if not media_timeline_base:
+        return defines
+
+    existing_keys = set(dart_define_keys(defines))
+    bridge_defines = [
+        "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+        f"HYDRACAM_MEDIA_TIMELINE_API_BASE_URL={media_timeline_base}",
+    ]
+    duplicate_keys = sorted(set(dart_define_keys(bridge_defines)) & existing_keys)
+    if duplicate_keys:
+        raise MatrixConfigError(
+            "media-timeline bridge Dart define already configured: "
+            + ", ".join(duplicate_keys)
+        )
+    return [*defines, *bridge_defines]
+
+
 def build_dry_run_summary(
     targets: Sequence[MatrixTarget],
     rotations: Sequence[MatrixRotation],
@@ -3356,7 +3376,7 @@ def terminate_flutter_app_targets(targets: Sequence[MatrixTarget]) -> None:
 def run_matrix(args: argparse.Namespace) -> int:
     apply_immediate_role_switch_defaults(args)
     apply_warm_prime_defaults(args)
-    dart_defines = validated_dart_defines(args)
+    dart_defines = resolved_dart_defines(args)
     warm_master_hosts: dict[str, str] | None = None
     run_dir = args.run_dir or REPO_ROOT / "logs" / "verification-runs" / now_slug()
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -3961,6 +3981,14 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
             "Additional Flutter dart define for matrix builds and flutter-run "
             "launches. Repeat for bridge-mode flags such as "
             "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true."
+        ),
+    )
+    parser.add_argument(
+        "--media-timeline-bridge-api-base",
+        help=(
+            "Shortcut for media-timeline bridge matrix runs. Adds "
+            "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true and "
+            "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=<value> Dart defines."
         ),
     )
     parser.add_argument("--android-port-base", type=int, default=DEFAULT_ANDROID_PORT_BASE)

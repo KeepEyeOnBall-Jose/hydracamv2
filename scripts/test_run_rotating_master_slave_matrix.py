@@ -2647,6 +2647,42 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
         ):
             module.validated_dart_defines(args)
 
+    def test_media_timeline_bridge_flag_resolves_required_dart_defines(self) -> None:
+        module = load_module()
+
+        args = module.parse_args(
+            [
+                "--media-timeline-bridge-api-base",
+                "http://127.0.0.1:3001/api",
+            ]
+        )
+
+        self.assertEqual(
+            module.resolved_dart_defines(args),
+            [
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ],
+        )
+
+    def test_media_timeline_bridge_flag_rejects_duplicate_bridge_defines(self) -> None:
+        module = load_module()
+
+        args = module.parse_args(
+            [
+                "--media-timeline-bridge-api-base",
+                "http://127.0.0.1:3001/api",
+                "--dart-define",
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=false",
+            ]
+        )
+
+        with self.assertRaisesRegex(
+            module.MatrixConfigError,
+            "already configured",
+        ):
+            module.resolved_dart_defines(args)
+
     def test_flutter_target_launch_detaches_after_bridge_is_healthy(self) -> None:
         module = load_module()
         target = matrix_target(module, "iphone", "ios_physical")

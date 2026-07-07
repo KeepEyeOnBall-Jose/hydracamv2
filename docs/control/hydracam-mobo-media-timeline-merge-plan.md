@@ -326,12 +326,11 @@ Actions:
 - Run one physical-device app session through the media-timeline bridge:
   create session, capture one photo, capture one video, upload both, end
   session.
-- Use the rotating matrix runner's repeated `--dart-define` support for bridge
-  mode, for example
-  `--dart-define HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true` plus
-  `--dart-define HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api`.
+- Use the rotating matrix runner's bridge shortcut:
+  `--media-timeline-bridge-api-base http://127.0.0.1:3001/api`. It resolves the
+  required bridge-mode Dart defines and records only define keys in summaries.
   Current dry-run evidence:
-  `logs/verification-runs/20260707-rotating-matrix-bridge-dart-defines-dry-run/`.
+  `logs/verification-runs/20260707-rotating-matrix-media-timeline-bridge-flag-dry-run/`.
 - Verify media-timeline:
   - event exists
   - File Registry resolves both assets
