@@ -27,15 +27,22 @@ The current stacked PR path moves HydraCam new-capture uploads toward
 media-timeline without physically merging repositories. PR #7 adds bridge
 request retry resilience, PR #8 carries media-timeline upload tokens as
 runtime-only session state, and PR #9 adds the direct object-storage upload
-sequence with a compatibility fallback. The bridge is not ready for a fresh
-live direct-object claim on this host yet:
-`logs/verification-runs/20260707-135458-media-timeline-bridge-preflight/`
-shows `GET /health?deep=1` healthy and the bridge upload-start route mounted
-behind auth, but `GET /api/media-storage/status` reports object storage
-disabled (`enabled: false`, `provider: local`, no bucket). Use
-`scripts/check_media_timeline_bridge.py` before physical bridge-mode capture
-runs; when that preflight fails, treat the direct-object path as unit-tested
-only and keep the fallback upload path active.
+sequence with a compatibility fallback. Follow-up PRs add
+`scripts/check_media_timeline_bridge.py` and
+`scripts/probe_media_timeline_direct_upload.py` so the bridge can be preflighted
+and object-storage-probed before physical hardware runs. Local proof
+`logs/verification-runs/20260707-141146-media-timeline-bridge-preflight-storage-enabled/`
+shows backend health, media-storage readiness (`enabled: true`, provider `s3`,
+bucket `media-timeline`), and the upload-start route mounted behind auth.
+Local proof
+`logs/verification-runs/20260707-141602-media-timeline-direct-upload-probe/`
+then creates media-timeline event
+`hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5`, uploads one probe photo
+through object storage, registers File Registry id
+`b55694dc-dd18-45ed-b1fd-fa7d9d68c01f`, completes the bridge upload, and reads
+session status with `photos: 1`, `total: 1`, `syncStatus: bridge-uploaded`.
+This is backend/direct-object proof, not yet a physical HydraCam device capture
+proof.
 
 Latest all-connected-device deploy + smoke matrix (2026-06-25):
 `logs/verification-runs/20260625-all-connected-device-matrix/` deployed and

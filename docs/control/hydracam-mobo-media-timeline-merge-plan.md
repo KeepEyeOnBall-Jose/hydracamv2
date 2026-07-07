@@ -123,13 +123,22 @@ object-storage proof:
 - `scripts/check_media_timeline_bridge.py` is the app-side preflight for this
   cutover. It verifies `GET /health?deep=1`,
   `GET /api/media-storage/status`, and unauthenticated route mounting for
-  `POST /api/hydracam-bridge/sessions/<guid>/uploads/start`. Current local
-  evidence in
+  `POST /api/hydracam-bridge/sessions/<guid>/uploads/start`. Initial local
+  evidence
   `logs/verification-runs/20260707-135458-media-timeline-bridge-preflight/`
-  shows the backend healthy and the bridge upload-start route mounted, but
-  `media-storage/status` reports `enabled: false`, `provider: local`, and no
-  bucket. Until object storage is configured, direct-object upload remains a
-  tested client path plus fallback, not a live end-to-end claim.
+  showed the bridge route mounted but object storage disabled. After local
+  MinIO adoption, current local evidence
+  `logs/verification-runs/20260707-141146-media-timeline-bridge-preflight-storage-enabled/`
+  passes with backend health, `media-storage/status` enabled, provider `s3`,
+  and bucket `media-timeline`.
+- `scripts/probe_media_timeline_direct_upload.py` now proves the backend-only
+  direct object path before hardware is involved. Evidence
+  `logs/verification-runs/20260707-141602-media-timeline-direct-upload-probe/`
+  created event `hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5`, uploaded one
+  probe photo through object storage, registered File Registry id
+  `b55694dc-dd18-45ed-b1fd-fa7d9d68c01f`, completed the bridge upload, and
+  read bridge status with one photo. This proves bridge/object-storage plumbing,
+  not physical HydraCam capture yet.
 - MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is currently
   detached at `HEAD`, has no media-timeline bridge or video-store references,
   and still exposes the legacy `api/hydracam` controller methods such as
@@ -346,8 +355,10 @@ Actions:
   start, part upload, complete/register, and bridge-complete/link sequence.
 - Keep compatibility upload for small photos and migration fallback.
 - On upload completion, write the same canonical records as Phase 1. Status:
-  client-side response handling and tests are present; live backend proof is
-  blocked until media-timeline object storage is enabled.
+  client-side response handling and tests are present; backend-only live proof
+  passed in
+  `logs/verification-runs/20260707-141602-media-timeline-direct-upload-probe/`.
+  Physical-device capture proof remains open.
 - Add upload resume/cancel/requeue behavior to the mobile app only after the
   bridge completion semantics are stable.
 
@@ -393,10 +404,10 @@ The first slice should be media-timeline only:
 
 Progress note as of 2026-07-07: the original media-timeline-first slice guided
 the app work correctly. HydraCam now has the app-side cutover, token handling,
-direct object upload, and fallback path in stacked PRs. The remaining cutover
-gate is live environment readiness: media-timeline must report object storage
-enabled before the direct-object route can be claimed with physical capture
-evidence.
+direct object upload, fallback path, preflight, and backend-only direct-object
+probe in stacked PRs. The remaining cutover gate is physical capture proof:
+run a real HydraCam device session through the bridge, then repeat with a
+two-device master/slave flow.
 
 ## Open Decisions
 
