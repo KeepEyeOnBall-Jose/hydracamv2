@@ -700,6 +700,72 @@ void main() {
     expect(uploadResult?.files.single.fileId, "file-photo-1");
   });
 
+  test("uploadMedia retries a transient media-timeline bridge connection failure",
+      () async {
+    final mediaFile = File("${tempDir.path}/bridge-retry-video.mp4")
+      ..writeAsBytesSync(_validMp4Bytes);
+    var attempts = 0;
+
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureBridgeRetryForTests(
+      initialDelay: Duration.zero,
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        attempts += 1;
+        await bodyStream.drain<void>();
+        if (attempts == 1) {
+          throw const SocketException("Connection refused");
+        }
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([
+            utf8.encode(
+              jsonEncode({
+                "eventId": "hydracam-bridge-session-guid",
+                "sessionGuid": "bridge-session-guid",
+                "files": [
+                  {
+                    "eventId": "hydracam-bridge-session-guid",
+                    "sessionGuid": "bridge-session-guid",
+                    "fileId": "file-video-1",
+                    "kind": "video",
+                    "filename": "bridge-retry-video.mp4",
+                    "storage": "file-registry",
+                  },
+                ],
+              }),
+            ),
+          ]),
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().uploadMedia(
+      "bridge-session-guid",
+      mediaFile,
+      false,
+      "slave-device",
+      DateTime.utc(2026, 7, 7, 13, 13, 30),
+      DateTime.utc(2026, 7, 7, 13, 13, 43),
+      null,
+      recordingEndDate: DateTime.utc(2026, 7, 7, 13, 13, 42),
+    );
+
+    expect(result, isTrue);
+    expect(attempts, 2);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        "Retrying media-timeline bridge upload after transient failure "
+        "(attempt 1/7): SocketException: Connection refused",
+      ),
+    );
+  });
+
   test("uploadMedia rejects sentinel session GUID before HTTP send", () async {
     var requestSent = false;
     HydraCamApiService.configureHttpClient(
@@ -1277,6 +1343,42 @@ void main() {
       containsPair("sessionGuid", "session-guid"),
     );
     expect(requestedHeaders?.containsKey("Authorization"), isFalse);
+  });
+
+  test("endSession retries a transient media-timeline bridge connection failure",
+      () async {
+    var attempts = 0;
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureBridgeRetryForTests(
+      initialDelay: Duration.zero,
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        attempts += 1;
+        if (attempts == 1) {
+          throw const SocketException("Connection refused");
+        }
+        return http.Response(
+          '{"eventId":"hydracam-session-guid","sessionGuid":"session-guid","endedAt":123}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().endSession("session-guid");
+
+    expect(result, isTrue);
+    expect(attempts, 2);
+    expect(
+      LogService.instance.logs.map((entry) => entry["message"]),
+      contains(
+        "Retrying media-timeline bridge POST after transient failure "
+        "(attempt 1/7): SocketException: Connection refused",
+      ),
+    );
   });
 
   test("endSession accepts empty successful POST responses", () async {
