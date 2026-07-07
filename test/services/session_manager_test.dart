@@ -102,6 +102,41 @@ void main() {
         expect(sessionManager.canUploadCurrentSession, isTrue);
       });
 
+      test("startCreatedSession keeps bridge upload token in memory only",
+          () async {
+        sessionManager.startCreatedSession(
+          const HydraCamBackendSession(
+            guid: "backend-guid",
+            sessionId: "backend-session",
+            mediaTimelineEventId: "hydracam-backend-guid",
+            uploadToken: "bridge-upload-token",
+            uploadTokenExpiresAt: 123456789,
+          ),
+          deviceType: "Master",
+        );
+
+        expect(
+          sessionManager.currentSession?.mediaTimelineUploadToken,
+          "bridge-upload-token",
+        );
+        expect(
+          sessionManager.currentSession?.mediaTimelineUploadTokenExpiresAt,
+          123456789,
+        );
+
+        await sessionManager.updateMetadata();
+
+        final metadataFile = File(
+          "${testPathProvider.documentsDir.path}/session_backend-guid/metadata.json",
+        );
+        final metadata = jsonDecode(await metadataFile.readAsString())
+            as Map<String, dynamic>;
+        expect(metadata["mediaTimelineEventId"], "hydracam-backend-guid");
+        expect(metadata.containsKey("mediaTimelineUploadToken"), isFalse);
+        expect(metadata.containsKey("uploadToken"), isFalse);
+        expect(metadata.containsKey("uploadTokenExpiresAt"), isFalse);
+      });
+
       test("persists and restores a human-readable display name", () async {
         sessionManager.startSession(
           "backend-guid",

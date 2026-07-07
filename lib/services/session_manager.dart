@@ -74,6 +74,8 @@ class SessionManager extends ChangeNotifier {
       debugSession: debugSession,
       serviceNumericId: session.numericId,
       mediaTimelineEventId: session.mediaTimelineEventId,
+      mediaTimelineUploadToken: session.uploadToken,
+      mediaTimelineUploadTokenExpiresAt: session.uploadTokenExpiresAt,
       displayName: displayName,
     );
   }
@@ -85,6 +87,8 @@ class SessionManager extends ChangeNotifier {
     bool debugSession = false,
     int? serviceNumericId,
     String? mediaTimelineEventId,
+    String? mediaTimelineUploadToken,
+    int? mediaTimelineUploadTokenExpiresAt,
     String? displayName,
   }) {
     startSession(
@@ -94,6 +98,8 @@ class SessionManager extends ChangeNotifier {
       debugSession: debugSession,
       serviceNumericId: serviceNumericId,
       mediaTimelineEventId: mediaTimelineEventId,
+      mediaTimelineUploadToken: mediaTimelineUploadToken,
+      mediaTimelineUploadTokenExpiresAt: mediaTimelineUploadTokenExpiresAt,
       displayName: displayName,
     );
   }
@@ -107,11 +113,17 @@ class SessionManager extends ChangeNotifier {
     bool debugSession = false,
     int? serviceNumericId,
     String? mediaTimelineEventId,
+    String? mediaTimelineUploadToken,
+    int? mediaTimelineUploadTokenExpiresAt,
     String? displayName,
   }) {
     final normalizedSessionGuid = _validateServiceSessionGuid(sessionGuid);
     if (_currentSession != null && _sessionGuid == normalizedSessionGuid) {
       _deviceType = deviceType;
+      _applyBridgeUploadToken(
+        mediaTimelineUploadToken,
+        mediaTimelineUploadTokenExpiresAt,
+      );
       LogService.instance.registerLog(
           "Session already active with GUID: $_sessionGuid. Preserving existing media on rejoin as $_deviceType.");
       notifyListeners();
@@ -132,12 +144,24 @@ class SessionManager extends ChangeNotifier {
       debugSession: debugSession,
       serviceNumericId: serviceNumericId,
       mediaTimelineEventId: _optionalTrimmedString(mediaTimelineEventId),
+      mediaTimelineUploadToken:
+          _optionalTrimmedString(mediaTimelineUploadToken),
+      mediaTimelineUploadTokenExpiresAt: mediaTimelineUploadTokenExpiresAt,
     );
 
     // Log session start and notify listeners
     LogService.instance.registerLog(
         "Session started with GUID: $_sessionGuid on device type: $_deviceType");
     notifyListeners();
+  }
+
+  void _applyBridgeUploadToken(String? uploadToken, int? uploadTokenExpiresAt) {
+    final token = _optionalTrimmedString(uploadToken);
+    if (token == null) {
+      return;
+    }
+    _currentSession?.mediaTimelineUploadToken = token;
+    _currentSession?.mediaTimelineUploadTokenExpiresAt = uploadTokenExpiresAt;
   }
 
   /// Ends the current session, clearing data.

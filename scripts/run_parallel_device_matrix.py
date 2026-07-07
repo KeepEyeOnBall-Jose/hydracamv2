@@ -442,22 +442,25 @@ def ensure_local_ports_free(targets: Sequence[MatrixTarget]) -> None:
         raise MatrixRunError(f"Local automation port(s) already occupied: {ports}")
 
 
-def build_android_apk(*, ndk_version: str | None = None) -> None:
+def build_android_apk(
+    *,
+    ndk_version: str | None = None,
+    dart_defines: Sequence[str] | None = None,
+) -> None:
     env_overrides = None
     if ndk_version:
         env_overrides = {
             "ORG_GRADLE_PROJECT_hydracamNdkVersion": ndk_version,
         }
-    run_command(
-        [
-            "flutter",
-            "build",
-            "apk",
-            "--debug",
-            "--dart-define=HYDRACAM_AUTOMATION=true",
-        ],
-        env_overrides=env_overrides,
-    )
+    command = [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+    ]
+    command.extend(f"--dart-define={define}" for define in dart_defines or [])
+    run_command(command, env_overrides=env_overrides)
 
 
 def remove_android_forwards(targets: Sequence[MatrixTarget]) -> None:
