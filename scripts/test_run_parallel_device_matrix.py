@@ -260,6 +260,32 @@ class ParallelDeviceMatrixTests(unittest.TestCase):
             {"ORG_GRADLE_PROJECT_hydracamNdkVersion": "27.0.12077973"},
         )
 
+    def test_build_android_apk_passes_extra_dart_defines(self) -> None:
+        module = load_module()
+        calls: list[tuple[list[str], dict]] = []
+
+        def fake_run_command(command, **kwargs):
+            calls.append((list(command), dict(kwargs)))
+
+        module.run_command = fake_run_command
+
+        module.build_android_apk(
+            dart_defines=[
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ],
+        )
+
+        self.assertIn("--dart-define=HYDRACAM_AUTOMATION=true", calls[0][0])
+        self.assertIn(
+            "--dart-define=HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+            calls[0][0],
+        )
+        self.assertIn(
+            "--dart-define=HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            calls[0][0],
+        )
+
     def test_android_permissions_match_target_api_level(self) -> None:
         module = load_module()
         api_26 = module.MatrixTarget(

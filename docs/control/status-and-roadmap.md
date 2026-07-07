@@ -41,8 +41,16 @@ then creates media-timeline event
 through object storage, registers File Registry id
 `b55694dc-dd18-45ed-b1fd-fa7d9d68c01f`, completes the bridge upload, and reads
 session status with `photos: 1`, `total: 1`, `syncStatus: bridge-uploaded`.
-This is backend/direct-object proof, not yet a physical HydraCam device capture
-proof.
+The rotating master/slave matrix runner now accepts repeated `--dart-define`
+flags and a safer `--media-timeline-bridge-api-base <url>` shortcut, passes the
+resolved bridge defines through Android APK builds, iOS Profile builds, and
+Flutter-run launches, and records only `dartDefineKeys` in matrix summaries.
+Dry-run proof
+`logs/verification-runs/20260707-rotating-matrix-media-timeline-bridge-flag-dry-run/`
+shows the shortcut resolving `HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE` and
+`HYDRACAM_MEDIA_TIMELINE_API_BASE_URL` without recording values. This is
+backend/direct-object plus runner-readiness proof, not yet a physical HydraCam
+device capture proof.
 
 Latest all-connected-device deploy + smoke matrix (2026-06-25):
 `logs/verification-runs/20260625-all-connected-device-matrix/` deployed and
