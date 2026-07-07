@@ -73,6 +73,7 @@ void main() {
     UploaderService.resetNowForTests();
     uploaderService.reset();
     HydraCamApiService.resetHttpClient();
+    HydraCamApiService.resetBackendForTests();
     LogService.instance.clearLogs();
     if (tempDir.existsSync()) {
       tempDir.deleteSync(recursive: true);
@@ -267,6 +268,78 @@ void main() {
 
     expect(photo.isUploaded, isTrue);
     expect(photoFile.existsSync(), isFalse);
+  });
+
+  test("successful bridge upload persists media-timeline file identity",
+      () async {
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([
+            utf8.encode(
+              jsonEncode({
+                "eventId": "hydracam-bridge-service-session-guid",
+                "sessionGuid": "bridge-service-session-guid",
+                "files": [
+                  {
+                    "eventId": "hydracam-bridge-service-session-guid",
+                    "sessionGuid": "bridge-service-session-guid",
+                    "fileId": "file-photo-identity",
+                    "kind": "photo",
+                    "filename": "bridge-identity-photo.jpg",
+                    "storage": "file-registry",
+                  },
+                ],
+              }),
+            ),
+          ]),
+          200,
+        );
+      }),
+    );
+    SessionManager.instance.startSession(
+      "bridge-service-session-guid",
+      "bridge-identity-session",
+      deviceType: "Master",
+    );
+    final photoFile = File("${tempDir.path}/bridge-identity-photo.jpg")
+      ..writeAsBytesSync(_validJpegBytes());
+    final photo = CapturedPhoto(
+      photoPath: photoFile.path,
+      slaveDeviceId: "bridge-device",
+      captureDate: DateTime.utc(2026, 7, 7, 12),
+      receivedDate: DateTime.utc(2026, 7, 7, 12, 0, 1),
+    );
+
+    await SessionManager.instance.addPhoto(photo);
+    await uploaderService.startUploadingManually();
+
+    expect(photo.isUploaded, isTrue);
+    final metadataFile = File(
+      "${pathProvider.documentsDir.path}/session_bridge-service-session-guid/metadata.json",
+    );
+    final metadata =
+        jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
+    expect(
+      metadata,
+      containsPair(
+          "mediaTimelineEventId", "hydracam-bridge-service-session-guid"),
+    );
+    final photos = metadata["photos"] as List<dynamic>;
+    expect(
+      photos.single,
+      containsPair("fileRegistryFileId", "file-photo-identity"),
+    );
+    expect(
+      photos.single,
+      containsPair(
+          "mediaTimelineEventId", "hydracam-bridge-service-session-guid"),
+    );
   });
 
   test("failed backend upload stores backend response detail on media",

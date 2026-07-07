@@ -31,6 +31,9 @@ class CaptureSession {
   /// Numeric service id returned by the current MoBo API when available.
   final int? serviceNumericId;
 
+  /// media-timeline event id returned by the bridge when available.
+  String? mediaTimelineEventId;
+
   /// Constructor to initialize a CaptureSession with a unique ID, start time,
   /// and optional lists of captured photos and videos.
   ///
@@ -45,6 +48,7 @@ class CaptureSession {
     List<CapturedVideo>? capturedVideos,
     this.debugSession = false,
     this.serviceNumericId,
+    this.mediaTimelineEventId,
   })  : capturedPhotos = capturedPhotos ?? [],
         capturedVideos = capturedVideos ?? [];
 

@@ -23,6 +23,88 @@ class HydraCamUploadMediaContract {
   static const String fileField = "files";
 }
 
+class HydraCamBridgeSessionContract {
+  static const String createSessionEndpoint =
+      "hydracam-bridge/compat/sessions/create";
+  static const String endSessionEndpoint =
+      "hydracam-bridge/compat/sessions/end";
+  static const String uploadMediaEndpoint =
+      "hydracam-bridge/compat/sessions/upload-media";
+}
+
+enum HydraCamApiBackendMode {
+  legacyMobo,
+  mediaTimelineBridge,
+}
+
+@immutable
+class HydraCamUploadFileResult {
+  const HydraCamUploadFileResult({
+    required this.fileId,
+    required this.filename,
+    required this.kind,
+    this.eventId,
+    this.sessionGuid,
+    this.sourceId,
+    this.storage,
+  });
+
+  final String fileId;
+  final String filename;
+  final String kind;
+  final String? eventId;
+  final String? sessionGuid;
+  final String? sourceId;
+  final String? storage;
+
+  factory HydraCamUploadFileResult.fromJson(Map<String, dynamic> json) {
+    return HydraCamUploadFileResult(
+      fileId: _requiredString(json["fileId"], "fileId"),
+      filename: _requiredString(json["filename"], "filename"),
+      kind: _requiredString(json["kind"], "kind"),
+      eventId: _optionalString(json["eventId"]),
+      sessionGuid: _optionalString(json["sessionGuid"]),
+      sourceId: _optionalString(json["sourceId"]),
+      storage: _optionalString(json["storage"]),
+    );
+  }
+}
+
+@immutable
+class HydraCamUploadResult {
+  const HydraCamUploadResult({
+    required this.eventId,
+    required this.sessionGuid,
+    required this.files,
+  });
+
+  final String eventId;
+  final String sessionGuid;
+  final List<HydraCamUploadFileResult> files;
+
+  factory HydraCamUploadResult.fromJson(Map<String, dynamic> json) {
+    final rawFiles = json["files"];
+    if (rawFiles is! List) {
+      throw const FormatException(
+          "Upload response is missing File Registry files.");
+    }
+    final files = rawFiles
+        .map((rawFile) => HydraCamUploadFileResult.fromJson(
+              _asStringKeyedMap(rawFile),
+            ))
+        .toList(growable: false);
+    if (files.isEmpty) {
+      throw const FormatException(
+          "Upload response did not include File Registry files.");
+    }
+    return HydraCamUploadResult(
+      eventId: _requiredString(json["eventId"], "eventId"),
+      sessionGuid: _requiredString(json["sessionGuid"], "sessionGuid"),
+      files: files,
+    );
+  }
+}
+
 class HydraCamUserContract {
   static const String getByEmailEndpoint = "users/get-by-email";
   static const String queryEmail = "email";
@@ -54,11 +136,17 @@ class HydraCamBackendSession {
     required this.guid,
     required this.sessionId,
     this.numericId,
+    this.mediaTimelineEventId,
+    this.uploadToken,
+    this.uploadTokenExpiresAt,
   });
 
   final String guid;
   final String sessionId;
   final int? numericId;
+  final String? mediaTimelineEventId;
+  final String? uploadToken;
+  final int? uploadTokenExpiresAt;
 
   factory HydraCamBackendSession.fromCreateResponse(
     Map<String, dynamic> response, {
@@ -72,10 +160,19 @@ class HydraCamBackendSession {
         rawId is int ? rawId : int.tryParse(rawId?.toString() ?? "");
     final rawSessionId =
         response["sessionId"] ?? response["SessionId"] ?? requestedSessionId;
+    final rawUploadTokenExpiresAt =
+        response["uploadTokenExpiresAt"] ?? response["UploadTokenExpiresAt"];
     return HydraCamBackendSession(
       guid: guid,
       sessionId: rawSessionId.toString(),
       numericId: numericId,
+      mediaTimelineEventId:
+          _optionalString(response["eventId"] ?? response["EventId"]),
+      uploadToken:
+          _optionalString(response["uploadToken"] ?? response["UploadToken"]),
+      uploadTokenExpiresAt: rawUploadTokenExpiresAt is int
+          ? rawUploadTokenExpiresAt
+          : int.tryParse(rawUploadTokenExpiresAt?.toString() ?? ""),
     );
   }
 
@@ -109,6 +206,32 @@ class HydraCamBackendSession {
   String toString() {
     return "HydraCamBackendSession(guid: $guid, sessionId: $sessionId, numericId: $numericId)";
   }
+}
+
+Map<String, dynamic> _asStringKeyedMap(Object? value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  if (value is Map) {
+    return value.map((key, value) => MapEntry(key.toString(), value));
+  }
+  throw const FormatException("Expected a JSON object.");
+}
+
+String _requiredString(Object? value, String fieldName) {
+  final text = _optionalString(value);
+  if (text == null) {
+    throw FormatException("Upload response is missing $fieldName.");
+  }
+  return text;
+}
+
+String? _optionalString(Object? value) {
+  final text = value?.toString().trim();
+  if (text == null || text.isEmpty) {
+    return null;
+  }
+  return text;
 }
 
 String hydracamUserDetailsEndpoint(String guid) {
@@ -165,8 +288,24 @@ class HydraCamApiService {
     "qt  ",
   };
 
-  // Base URL for the API
-  final String _baseUrl = "https://hydracam.azurewebsites.net/api";
+  static const String _defaultLegacyBaseUrl = String.fromEnvironment(
+    "HYDRACAM_API_BASE_URL",
+    defaultValue: "https://hydracam.azurewebsites.net/api",
+  );
+  static const String _defaultMediaTimelineBaseUrl = String.fromEnvironment(
+    "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL",
+    defaultValue: "http://127.0.0.1:3001/api",
+  );
+  static const bool _defaultUseMediaTimelineBridge = bool.fromEnvironment(
+    "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE",
+    defaultValue: false,
+  );
+
+  String _legacyBaseUrl = _defaultLegacyBaseUrl;
+  String _mediaTimelineBaseUrl = _defaultMediaTimelineBaseUrl;
+  HydraCamApiBackendMode _backendMode = _defaultUseMediaTimelineBridge
+      ? HydraCamApiBackendMode.mediaTimelineBridge
+      : HydraCamApiBackendMode.legacyMobo;
 
   http.Client _httpClient = http.Client();
 
@@ -180,14 +319,43 @@ class HydraCamApiService {
     _instance._httpClient = http.Client();
   }
 
+  @visibleForTesting
+  static void configureBackendForTests({
+    required HydraCamApiBackendMode mode,
+    String? baseApiUrl,
+  }) {
+    _instance._backendMode = mode;
+    if (baseApiUrl == null) {
+      return;
+    }
+    switch (mode) {
+      case HydraCamApiBackendMode.legacyMobo:
+        _instance._legacyBaseUrl = baseApiUrl;
+      case HydraCamApiBackendMode.mediaTimelineBridge:
+        _instance._mediaTimelineBaseUrl = baseApiUrl;
+    }
+  }
+
+  @visibleForTesting
+  static void resetBackendForTests() {
+    _instance._backendMode = _defaultUseMediaTimelineBridge
+        ? HydraCamApiBackendMode.mediaTimelineBridge
+        : HydraCamApiBackendMode.legacyMobo;
+    _instance._legacyBaseUrl = _defaultLegacyBaseUrl;
+    _instance._mediaTimelineBaseUrl = _defaultMediaTimelineBaseUrl;
+  }
+
   void cancelInFlightRequests() {
     _httpClient.close();
     _httpClient = http.Client();
     LogService.instance.registerLog("Cancelled in-flight API requests.");
   }
 
-  Uri _apiUri(String endpoint) {
-    final baseUri = Uri.parse(_baseUrl);
+  Uri _apiUri(
+    String endpoint, {
+    HydraCamApiBackendMode? backendMode,
+  }) {
+    final baseUri = Uri.parse(_baseUrlForMode(backendMode));
     final endpointUri = Uri.parse(endpoint);
     final basePath = baseUri.path.endsWith("/")
         ? baseUri.path.substring(0, baseUri.path.length - 1)
@@ -203,8 +371,35 @@ class HydraCamApiService {
     );
   }
 
+  String _baseUrlForMode(HydraCamApiBackendMode? backendMode) {
+    switch (backendMode ?? HydraCamApiBackendMode.legacyMobo) {
+      case HydraCamApiBackendMode.legacyMobo:
+        return _legacyBaseUrl;
+      case HydraCamApiBackendMode.mediaTimelineBridge:
+        return _mediaTimelineBaseUrl;
+    }
+  }
+
+  bool get _usesMediaTimelineBridge =>
+      _backendMode == HydraCamApiBackendMode.mediaTimelineBridge;
+
+  String get _createSessionEndpoint => _usesMediaTimelineBridge
+      ? HydraCamBridgeSessionContract.createSessionEndpoint
+      : HydraCamSessionContract.createSessionEndpoint;
+
+  String get _endSessionEndpoint => _usesMediaTimelineBridge
+      ? HydraCamBridgeSessionContract.endSessionEndpoint
+      : HydraCamSessionContract.endSessionEndpoint;
+
+  String get _uploadMediaEndpoint => _usesMediaTimelineBridge
+      ? HydraCamBridgeSessionContract.uploadMediaEndpoint
+      : HydraCamUploadMediaContract.endpoint;
+
   /// Obtiene las cabeceras comunes, incluyendo `Authorization: Bearer <token>`.
-  Future<Map<String, String>> _getHeaders() async {
+  Future<Map<String, String>> _getHeaders({bool authenticated = true}) async {
+    if (!authenticated) {
+      return {"Content-Type": "application/json"};
+    }
     final token = await M2MAuthService().getToken();
     if (token == null) {
       throw Exception("Failed to retrieve M2M token");
@@ -252,10 +447,14 @@ class HydraCamApiService {
 
   /// Realiza un POST genérico con headers y parsing
   Future<Map<String, dynamic>?> _post(
-      String endpoint, Map<String, dynamic> body) async {
+    String endpoint,
+    Map<String, dynamic> body, {
+    HydraCamApiBackendMode? backendMode,
+    bool authenticated = true,
+  }) async {
     try {
-      final headers = await _getHeaders();
-      final uri = _apiUri(endpoint);
+      final headers = await _getHeaders(authenticated: authenticated);
+      final uri = _apiUri(endpoint, backendMode: backendMode);
       final response =
           await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
@@ -434,7 +633,7 @@ class HydraCamApiService {
     try {
       // Construct the endpoint with optional query parameters
       final endpoint = hydracamApiEndpoint(
-        HydraCamSessionContract.createSessionEndpoint,
+        _createSessionEndpoint,
         queryParameters: {
           HydraCamSessionContract.queryCourtGuid: courtGuid,
           HydraCamSessionContract.queryUserGuid: userGuid,
@@ -447,10 +646,12 @@ class HydraCamApiService {
         "StartTime": DateTime.now().toIso8601String(),
       };
 
-      final headers = await _getHeaders();
+      final backendMode = _backendMode;
+      final headers =
+          await _getHeaders(authenticated: !_usesMediaTimelineBridge);
 
       // Make the POST request
-      final uri = _apiUri(endpoint);
+      final uri = _apiUri(endpoint, backendMode: backendMode);
       final response =
           await _httpClient.post(uri, headers: headers, body: jsonEncode(body));
 
@@ -489,14 +690,17 @@ class HydraCamApiService {
   /// End a session
   Future<bool> endSession(String sessionGuid) async {
     try {
+      final backendMode = _backendMode;
       final response = await _post(
         hydracamApiEndpoint(
-          HydraCamSessionContract.endSessionEndpoint,
+          _endSessionEndpoint,
           queryParameters: {
             HydraCamSessionContract.querySessionGuid: sessionGuid,
           },
         ),
         {},
+        backendMode: backendMode,
+        authenticated: backendMode == HydraCamApiBackendMode.legacyMobo,
       );
       if (response != null) {
         LogService.instance.registerLog("Session ended successfully");
@@ -553,6 +757,7 @@ class HydraCamApiService {
     DateTime? recordingEndDate,
     Duration? recordingDuration,
     Function(String)? onFailureReason,
+    Function(HydraCamUploadResult)? onUploadResult,
   }) async {
     try {
       final normalizedSessionGuid = _normalizedUploadSessionGuid(sessionGuid);
@@ -614,16 +819,20 @@ class HydraCamApiService {
         }
       }
 
-      final headers = await _getHeaders();
+      final backendMode = _backendMode;
+      final headers = backendMode == HydraCamApiBackendMode.legacyMobo
+          ? await _getHeaders()
+          : <String, String>{};
       final appMetadata = await _getUploadAppMetadata();
       final uri = _apiUri(
         hydracamApiEndpoint(
-          HydraCamUploadMediaContract.endpoint,
+          _uploadMediaEndpoint,
           queryParameters: {
             HydraCamUploadMediaContract.querySessionGuid: normalizedSessionGuid,
             HydraCamUploadMediaContract.queryIsPhoto: isPhoto.toString(),
           },
         ),
+        backendMode: backendMode,
       );
 
       final request = http.MultipartRequest(
@@ -682,6 +891,7 @@ class HydraCamApiService {
             mediaFailureReason: "Upload failed: $failureReason",
           );
         }
+        _notifyUploadResult(response.body, onUploadResult);
         LogService.instance.registerLog("Media uploaded successfully");
         return true;
       } else {
@@ -819,6 +1029,32 @@ class HydraCamApiService {
       LogService.instance
           .registerLog("Malformed upload response body: $trimmedBody ($e)");
       return true;
+    }
+  }
+
+  void _notifyUploadResult(
+    String responseBody,
+    Function(HydraCamUploadResult)? onUploadResult,
+  ) {
+    if (onUploadResult == null) {
+      return;
+    }
+
+    final trimmedBody = responseBody.trim();
+    if (trimmedBody.isEmpty || trimmedBody == _legacyUploadSuccessBody) {
+      return;
+    }
+
+    try {
+      final decoded = jsonDecode(trimmedBody);
+      if (decoded is Map) {
+        onUploadResult(
+          HydraCamUploadResult.fromJson(_asStringKeyedMap(decoded)),
+        );
+      }
+    } catch (e) {
+      LogService.instance
+          .registerLog("Upload identity metadata unavailable: $e");
     }
   }
 

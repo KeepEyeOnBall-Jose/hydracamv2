@@ -59,6 +59,7 @@ void main() {
 
   tearDown(() {
     HydraCamApiService.resetHttpClient();
+    HydraCamApiService.resetBackendForTests();
     LogService.instance.clearLogs();
     if (tempDir.existsSync()) {
       tempDir.deleteSync(recursive: true);
@@ -383,6 +384,58 @@ void main() {
     expect(requestBody, containsPair("SessionId", "friendly-session"));
   });
 
+  test("createSession can target media-timeline bridge compatibility API",
+      () async {
+    Uri? requestedUri;
+    Map<String, String>? requestedHeaders;
+    Map<String, dynamic>? requestBody;
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        requestedUri = request.url;
+        requestedHeaders = request.headers;
+        requestBody = jsonDecode(request.body) as Map<String, dynamic>;
+        return http.Response(
+          jsonEncode({
+            "guid": "bridge-session-guid",
+            "id": 99999,
+            "sessionId": "friendly-session",
+            "uploadToken": "bridge-upload-token",
+            "uploadTokenExpiresAt": 123456789,
+          }),
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().createSession(
+      "friendly-session",
+      courtGuid: "court-guid",
+      userGuid: "user-guid",
+    );
+
+    expect(result, isNotNull);
+    expect(result?.guid, "bridge-session-guid");
+    expect(result?.sessionId, "friendly-session");
+    expect(result?.numericId, 99999);
+    expect(result?.uploadToken, "bridge-upload-token");
+    expect(result?.uploadTokenExpiresAt, 123456789);
+    expect(requestedUri?.path, "/api/hydracam-bridge/compat/sessions/create");
+    expect(
+      requestedUri?.queryParameters,
+      containsPair("courtGuid", "court-guid"),
+    );
+    expect(
+      requestedUri?.queryParameters,
+      containsPair("userGuid", "user-guid"),
+    );
+    expect(requestedHeaders?.containsKey("Authorization"), isFalse);
+    expect(requestBody, containsPair("SessionId", "friendly-session"));
+  });
+
   test("createSession keeps current backend request body contract", () async {
     Map<String, dynamic>? requestBody;
     HydraCamApiService.configureHttpClient(
@@ -567,6 +620,78 @@ void main() {
       LogService.instance.logs.map((entry) => entry["message"]),
       contains("Upload session GUID is invalid: <blank>"),
     );
+  });
+
+  test("uploadMedia can target media-timeline bridge compatibility API",
+      () async {
+    final mediaFile = File("${tempDir.path}/bridge-photo.jpg")
+      ..writeAsBytesSync(_validJpegBytes);
+    Uri? capturedUri;
+    Map<String, String>? capturedHeaders;
+    Map<String, String>? capturedFields;
+    HydraCamUploadResult? uploadResult;
+
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        capturedUri = request.url;
+        capturedHeaders = request.headers;
+        capturedFields = (request as http.MultipartRequest).fields;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([
+            utf8.encode(
+              jsonEncode({
+                "eventId": "hydracam-bridge-session-guid",
+                "sessionGuid": "bridge-session-guid",
+                "files": [
+                  {
+                    "eventId": "hydracam-bridge-session-guid",
+                    "sessionGuid": "bridge-session-guid",
+                    "fileId": "file-photo-1",
+                    "kind": "photo",
+                    "filename": "bridge-photo.jpg",
+                    "storage": "file-registry",
+                  },
+                ],
+              }),
+            ),
+          ]),
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().uploadMedia(
+      "bridge-session-guid",
+      mediaFile,
+      true,
+      "slave-device",
+      DateTime.utc(2026, 7, 7, 10),
+      DateTime.utc(2026, 7, 7, 10, 0, 1),
+      null,
+      onUploadResult: (result) {
+        uploadResult = result;
+      },
+    );
+
+    expect(result, isTrue);
+    expect(
+        capturedUri?.path, "/api/hydracam-bridge/compat/sessions/upload-media");
+    expect(
+      capturedUri?.queryParameters,
+      containsPair("sessionGuid", "bridge-session-guid"),
+    );
+    expect(capturedUri?.queryParameters, containsPair("isPhoto", "true"));
+    expect(capturedHeaders?.containsKey("Authorization"), isFalse);
+    expect(capturedFields, containsPair("slaveDeviceId", "slave-device"));
+    expect(capturedFields, containsPair("appVersion", "2.3.4"));
+    expect(uploadResult?.eventId, "hydracam-bridge-session-guid");
+    expect(uploadResult?.sessionGuid, "bridge-session-guid");
+    expect(uploadResult?.files.single.fileId, "file-photo-1");
   });
 
   test("uploadMedia rejects sentinel session GUID before HTTP send", () async {
@@ -1113,6 +1238,39 @@ void main() {
       requestedUri?.queryParameters,
       containsPair("sessionGuid", "session guid/one+two"),
     );
+  });
+
+  test("endSession can target media-timeline bridge compatibility API",
+      () async {
+    Uri? requestedUri;
+    Map<String, String>? requestedHeaders;
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        requestedUri = request.url;
+        requestedHeaders = request.headers;
+        return http.Response(
+          '{"eventId":"hydracam-session-guid","sessionGuid":"session-guid","endedAt":123}',
+          200,
+        );
+      }),
+    );
+
+    final result = await HydraCamApiService().endSession("session-guid");
+
+    expect(result, isTrue);
+    expect(
+      requestedUri?.path,
+      "/api/hydracam-bridge/compat/sessions/end",
+    );
+    expect(
+      requestedUri?.queryParameters,
+      containsPair("sessionGuid", "session-guid"),
+    );
+    expect(requestedHeaders?.containsKey("Authorization"), isFalse);
   });
 
   test("endSession accepts empty successful POST responses", () async {

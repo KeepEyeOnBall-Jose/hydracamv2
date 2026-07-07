@@ -233,6 +233,7 @@ class UploaderService {
 
     bool success = false;
     String? uploadFailureReason;
+    HydraCamUploadResult? bridgeUploadResult;
 
     // Get session GUID
     final String? sessionGuid = SessionManager.instance.sessionGuid;
@@ -304,6 +305,9 @@ class UploaderService {
         onFailureReason: (reason) {
           uploadFailureReason = reason;
         },
+        onUploadResult: (result) {
+          bridgeUploadResult = result;
+        },
       );
     } else if (media is CapturedVideo) {
       slaveDeviceId = media.slaveDeviceId;
@@ -325,6 +329,9 @@ class UploaderService {
         onFailureReason: (reason) {
           uploadFailureReason = reason;
         },
+        onUploadResult: (result) {
+          bridgeUploadResult = result;
+        },
       );
     }
 
@@ -341,6 +348,7 @@ class UploaderService {
     }
 
     if (success) {
+      _applyBridgeUploadIdentity(media, bridgeUploadResult);
       // Update metadata and register log
       media.isUploaded = true;
       media.uploadFailureReason = null;
@@ -392,6 +400,33 @@ class UploaderService {
     _completedUploadSamples.add(media);
     while (_completedUploadSamples.length > 10) {
       _completedUploadSamples.removeFirst();
+    }
+  }
+
+  void _applyBridgeUploadIdentity(
+    dynamic media,
+    HydraCamUploadResult? uploadResult,
+  ) {
+    if (uploadResult == null) {
+      return;
+    }
+    SessionManager.instance.currentSession?.mediaTimelineEventId =
+        uploadResult.eventId;
+    final fileResult = uploadResult.files.isEmpty
+        ? null
+        : uploadResult.files.firstWhere(
+            (file) => file.kind == (media is CapturedPhoto ? "photo" : "video"),
+            orElse: () => uploadResult.files.first,
+          );
+    if (fileResult == null) {
+      return;
+    }
+    if (media is CapturedPhoto) {
+      media.mediaTimelineEventId = uploadResult.eventId;
+      media.fileRegistryFileId = fileResult.fileId;
+    } else if (media is CapturedVideo) {
+      media.mediaTimelineEventId = uploadResult.eventId;
+      media.fileRegistryFileId = fileResult.fileId;
     }
   }
 
