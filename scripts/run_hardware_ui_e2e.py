@@ -143,6 +143,22 @@ def dev_auto_login_config(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
+def validated_dart_defines(args: argparse.Namespace) -> list[str]:
+    defines = list(getattr(args, "dart_define", []) or [])
+    invalid = [
+        define for define in defines if "=" not in define or define.startswith("=")
+    ]
+    if invalid:
+        raise HardwareUiE2EError(
+            "--dart-define values must use KEY=VALUE: " + ", ".join(invalid)
+        )
+    return defines
+
+
+def dart_define_keys(defines: Sequence[str]) -> list[str]:
+    return [define.split("=", 1)[0] for define in defines]
+
+
 def discover_adb_devices(*, include_emulators: bool) -> list[dict[str, str]]:
     result = run_command(
         ["adb", "devices", "-l"],
@@ -191,6 +207,9 @@ def build_apk(args: argparse.Namespace) -> Path:
         "--debug",
         "--dart-define=HYDRACAM_AUTOMATION=true",
     ]
+    command.extend(
+        f"--dart-define={define}" for define in validated_dart_defines(args)
+    )
     if dev_login["enabled"]:
         command.extend(
             [
@@ -657,6 +676,7 @@ def run_hardware_ui_e2e(args: argparse.Namespace) -> int:
         "startedAt": started_at,
         "finishedAt": dt.datetime.now().isoformat(),
         "apk": str(apk),
+        "dartDefineKeys": dart_define_keys(validated_dart_defines(args)),
         "devAutoLogin": {
             "enabled": dev_login["enabled"],
             "email": dev_login["email"] if dev_login["enabled"] else "",
@@ -716,6 +736,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--skip-install", action="store_true")
     parser.add_argument("--include-emulators", action="store_true")
+    parser.add_argument(
+        "--dart-define",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help=(
+            "Additional Flutter dart define for the APK build. Repeat for "
+            "bridge-mode flags such as HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true."
+        ),
+    )
     parser.add_argument(
         "--dev-auto-login",
         action="store_true",
