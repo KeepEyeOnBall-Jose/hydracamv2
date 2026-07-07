@@ -39,6 +39,14 @@ const List<int> _validHeicBytes = [
   0x63,
 ];
 
+Future<Map<String, dynamic>> _readJsonBody(Stream<List<int>> bodyStream) async {
+  final bytes = await bodyStream.fold<List<int>>(
+    <int>[],
+    (previous, chunk) => previous..addAll(chunk),
+  );
+  return jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -773,6 +781,319 @@ void main() {
     expect(uploadResult?.eventId, "hydracam-bridge-session-guid");
     expect(uploadResult?.sessionGuid, "bridge-session-guid");
     expect(uploadResult?.files.single.fileId, "file-photo-1");
+  });
+
+  test("uploadMedia uses bridge direct object storage when token is supplied",
+      () async {
+    final mediaFile = File("${tempDir.path}/bridge-direct-video.mp4")
+      ..writeAsBytesSync(_validMp4Bytes);
+    final requests = <String>[];
+    List<int>? uploadedBytes;
+    HydraCamUploadResult? uploadResult;
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requests.add("${request.method} ${request.url.path}");
+
+        if (request.method == "POST" &&
+            request.url.path ==
+                "/api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/start") {
+          expect(
+            request.headers,
+            containsPair("Authorization", "Bearer bridge-upload-token"),
+          );
+          final requestBody = await _readJsonBody(bodyStream);
+          expect(requestBody,
+              containsPair("filename", mediaFile.uri.pathSegments.last));
+          expect(requestBody, containsPair("kind", "video"));
+          expect(requestBody, containsPair("deviceId", "phone-a"));
+          expect(requestBody, containsPair("size", mediaFile.lengthSync()));
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "eventId": "hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "sessionGuid": "8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "objectKey":
+                    "events/hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285/clip.mp4",
+                "preferredStorage": "object-storage",
+                "mediaStorage": {
+                  "startPath": "/api/media-storage/multipart/start",
+                  "signPartPath": "/api/media-storage/multipart/sign-part",
+                  "uploadPartPath": "/api/media-storage/multipart/upload-part",
+                  "completeObjectPath": "/api/media-storage/multipart/complete",
+                  "completeBridgePath":
+                      "/api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/complete",
+                },
+              })),
+            ]),
+            200,
+          );
+        }
+
+        if (request.method == "POST" &&
+            request.url.path == "/api/media-storage/multipart/start") {
+          final requestBody = await _readJsonBody(bodyStream);
+          expect(requestBody,
+              containsPair("filename", mediaFile.uri.pathSegments.last));
+          expect(requestBody, containsPair("contentType", "video/mp4"));
+          expect(
+            requestBody,
+            containsPair(
+              "eventId",
+              "hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+            ),
+          );
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "bucket": "media-bucket",
+                "key": "events/hydracam-8ad3de37/clip.mp4",
+                "locator":
+                    "s3://media-bucket/events/hydracam-8ad3de37/clip.mp4",
+                "uploadId": "upload-1",
+              })),
+            ]),
+            200,
+          );
+        }
+
+        if (request.method == "PUT" &&
+            request.url.path == "/api/media-storage/multipart/upload-part") {
+          expect(
+            request.url.queryParameters,
+            containsPair("key", "events/hydracam-8ad3de37/clip.mp4"),
+          );
+          expect(request.url.queryParameters,
+              containsPair("uploadId", "upload-1"));
+          expect(request.url.queryParameters, containsPair("partNumber", "1"));
+          uploadedBytes = await bodyStream.fold<List<int>>(
+            <int>[],
+            (previous, chunk) => previous..addAll(chunk),
+          );
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "ETag": "\"part-one\"",
+                "PartNumber": 1,
+              })),
+            ]),
+            200,
+          );
+        }
+
+        if (request.method == "POST" &&
+            request.url.path == "/api/media-storage/multipart/complete") {
+          final requestBody = await _readJsonBody(bodyStream);
+          expect(requestBody,
+              containsPair("key", "events/hydracam-8ad3de37/clip.mp4"));
+          expect(requestBody, containsPair("uploadId", "upload-1"));
+          expect(requestBody,
+              containsPair("filename", mediaFile.uri.pathSegments.last));
+          expect(requestBody, containsPair("kind", "video"));
+          expect(requestBody["parts"], [
+            {"PartNumber": 1, "ETag": "\"part-one\""},
+          ]);
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "locator":
+                    "s3://media-bucket/events/hydracam-8ad3de37/clip.mp4",
+                "registered": {
+                  "fileId": "00000000-0000-0000-0000-000000000001",
+                  "created": true,
+                },
+              })),
+            ]),
+            200,
+          );
+        }
+
+        if (request.method == "POST" &&
+            request.url.path ==
+                "/api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/complete") {
+          expect(
+            request.headers,
+            containsPair("Authorization", "Bearer bridge-upload-token"),
+          );
+          final requestBody = await _readJsonBody(bodyStream);
+          expect(
+            requestBody,
+            containsPair("fileId", "00000000-0000-0000-0000-000000000001"),
+          );
+          final metadata = requestBody["metadata"] as Map<String, dynamic>;
+          expect(
+            metadata,
+            containsPair("sessionGuid", "8ad3de37-ff9b-4fbb-b621-43cc6163c285"),
+          );
+          expect(metadata, containsPair("deviceId", "phone-a"));
+          expect(metadata, containsPair("kind", "video"));
+          expect(metadata, containsPair("sourceBytes", mediaFile.lengthSync()));
+          expect(metadata, containsPair("durationSeconds", 5.0));
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "eventId": "hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "fileId": "00000000-0000-0000-0000-000000000001",
+                "created": true,
+              })),
+            ]),
+            200,
+          );
+        }
+
+        fail("Unexpected request ${request.method} ${request.url}");
+      }),
+    );
+
+    final result = await HydraCamApiService().uploadMedia(
+      "8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+      mediaFile,
+      false,
+      "phone-a",
+      DateTime.utc(2026, 7, 7, 12, 30),
+      DateTime.utc(2026, 7, 7, 12, 30, 2),
+      null,
+      recordingEndDate: DateTime.utc(2026, 7, 7, 12, 30, 5),
+      mediaTimelineUploadToken: "bridge-upload-token",
+      onUploadResult: (result) {
+        uploadResult = result;
+      },
+    );
+
+    expect(result, isTrue);
+    expect(uploadedBytes, _validMp4Bytes);
+    expect(requests, [
+      "POST /api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/start",
+      "POST /api/media-storage/multipart/start",
+      "PUT /api/media-storage/multipart/upload-part",
+      "POST /api/media-storage/multipart/complete",
+      "POST /api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/complete",
+    ]);
+    expect(uploadResult?.files.single.fileId,
+        "00000000-0000-0000-0000-000000000001");
+    expect(uploadResult?.files.single.storage, "object-storage");
+  });
+
+  test(
+      "uploadMedia falls back to bridge compatibility upload when storage fails",
+      () async {
+    final mediaFile = File("${tempDir.path}/bridge-fallback-photo.jpg")
+      ..writeAsBytesSync(_validJpegBytes);
+    final requests = <String>[];
+    HydraCamUploadResult? uploadResult;
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.mediaTimelineBridge,
+      baseApiUrl: "http://127.0.0.1:3010/api",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        requests.add("${request.method} ${request.url.path}");
+
+        if (request.method == "POST" &&
+            request.url.path ==
+                "/api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/start") {
+          await bodyStream.drain<void>();
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "eventId": "hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "sessionGuid": "8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "objectKey":
+                    "events/hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285/photo.jpg",
+                "preferredStorage": "object-storage",
+                "mediaStorage": {
+                  "startPath": "/api/media-storage/multipart/start",
+                  "signPartPath": "/api/media-storage/multipart/sign-part",
+                  "uploadPartPath": "/api/media-storage/multipart/upload-part",
+                  "completeObjectPath": "/api/media-storage/multipart/complete",
+                  "completeBridgePath":
+                      "/api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/complete",
+                },
+              })),
+            ]),
+            200,
+          );
+        }
+
+        if (request.method == "POST" &&
+            request.url.path == "/api/media-storage/multipart/start") {
+          await bodyStream.drain<void>();
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "error": "S3-compatible object storage is not configured",
+              })),
+            ]),
+            503,
+          );
+        }
+
+        if (request.method == "POST" &&
+            request.url.path ==
+                "/api/hydracam-bridge/compat/sessions/upload-media") {
+          expect(request, isA<http.MultipartRequest>());
+          final multipartRequest = request as http.MultipartRequest;
+          expect(
+            request.url.queryParameters,
+            containsPair(
+              "sessionGuid",
+              "8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+            ),
+          );
+          expect(request.url.queryParameters, containsPair("isPhoto", "true"));
+          expect(
+            multipartRequest.fields,
+            containsPair("slaveDeviceId", "phone-a"),
+          );
+          await bodyStream.drain<void>();
+          return http.StreamedResponse(
+            Stream<List<int>>.fromIterable([
+              utf8.encode(jsonEncode({
+                "eventId": "hydracam-8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "sessionGuid": "8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+                "files": [
+                  {
+                    "fileId": "file-fallback-photo",
+                    "filename": "bridge-fallback-photo.jpg",
+                    "kind": "photo",
+                    "storage": "file-registry",
+                  }
+                ],
+              })),
+            ]),
+            200,
+          );
+        }
+
+        fail("Unexpected request ${request.method} ${request.url}");
+      }),
+    );
+
+    final result = await HydraCamApiService().uploadMedia(
+      "8ad3de37-ff9b-4fbb-b621-43cc6163c285",
+      mediaFile,
+      true,
+      "phone-a",
+      DateTime.utc(2026, 7, 7, 12, 30),
+      DateTime.utc(2026, 7, 7, 12, 30, 2),
+      null,
+      mediaTimelineUploadToken: "bridge-upload-token",
+      onUploadResult: (result) {
+        uploadResult = result;
+      },
+    );
+
+    expect(result, isTrue);
+    expect(requests, [
+      "POST /api/hydracam-bridge/sessions/8ad3de37-ff9b-4fbb-b621-43cc6163c285/uploads/start",
+      "POST /api/media-storage/multipart/start",
+      "POST /api/hydracam-bridge/compat/sessions/upload-media",
+    ]);
+    expect(uploadResult?.files.single.fileId, "file-fallback-photo");
+    expect(uploadResult?.files.single.storage, "file-registry");
   });
 
   test(
