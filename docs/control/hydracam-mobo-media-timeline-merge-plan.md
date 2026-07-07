@@ -1,6 +1,6 @@
 # HydraCam, MoBo, And Media Timeline Merge Plan
 
-Last reviewed: 2026-06-12.
+Last reviewed: 2026-07-07.
 
 This plan covers three active codebases:
 
@@ -108,12 +108,28 @@ media-timeline.
 
 ## Current Recovery Snapshot
 
-As of 2026-06-12, the actual source trees show this state:
+As of 2026-07-07, the app-side bridge stack has moved from plan to reviewed
+PRs, but the live local media-timeline service is not yet ready for a direct
+object-storage proof:
 
-- HydraCam mobile remains on the legacy Azure app-service API path. The current
-  app code still has `lib/services/hydracam_api_service.dart` pointing at
-  `https://hydracam.azurewebsites.net/api`, and repo flow `UF-13` is still
-  marked `future` in `docs/control/user-flow-tracker.md`.
+- HydraCam mobile now has a stacked bridge cutover path in review. PR #4 added
+  normal bridge mode with a live compatibility proof session
+  `f7c3f1b5-7a07-4ab2-9d52-202607071459` and File Registry photo ID
+  `885c1b3f-df7d-4baa-9e68-713b1e45d678`. PR #5 wired hardware-runner
+  Dart defines, PR #6 fixed bridge content types and the capture runner, PR #7
+  added retry resilience, PR #8 captured runtime upload tokens from bridge
+  session creation, and PR #9 added direct object-storage upload with a legacy
+  multipart fallback.
+- `scripts/check_media_timeline_bridge.py` is the app-side preflight for this
+  cutover. It verifies `GET /health?deep=1`,
+  `GET /api/media-storage/status`, and unauthenticated route mounting for
+  `POST /api/hydracam-bridge/sessions/<guid>/uploads/start`. Current local
+  evidence in
+  `logs/verification-runs/20260707-135458-media-timeline-bridge-preflight/`
+  shows the backend healthy and the bridge upload-start route mounted, but
+  `media-storage/status` reports `enabled: false`, `provider: local`, and no
+  bucket. Until object storage is configured, direct-object upload remains a
+  tested client path plus fallback, not a live end-to-end claim.
 - MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is currently
   detached at `HEAD`, has no media-timeline bridge or video-store references,
   and still exposes the legacy `api/hydracam` controller methods such as
@@ -123,11 +139,6 @@ As of 2026-06-12, the actual source trees show this state:
   `codex/video-store-api`, commits `735367d65`, `5b3854fb1`, and merge commit
   `f41f99338` added portable bridge storage, bridge service/routes/tests, and
   route mounting under `/api/hydracam-bridge`.
-- media-timeline is still not clean. Bridge-related uncommitted state includes
-  a modified `backend/src/services/hydraCamBridgeService.ts` plus untracked
-  `frontend/src/services/hydraCamBridgeApi.ts`,
-  `frontend/src/services/hydraCamBridgeApi.test.ts`, and
-  `e2e/hydracam-bridge-upload.spec.ts`.
 - The recovered video-store API is still a saved plan, not source code. The
   plan remains at
   `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-video-store-api.md`.
@@ -256,17 +267,24 @@ media-timeline while preserving capture reliability.
 Actions:
 
 - Make `HydraCamApiService` backend target configurable instead of hardcoded.
+  Status: implemented in the July 7 bridge stack via Dart defines and service
+  tests.
 - Add bridge compatibility methods or a mode switch that maps app calls to
-  media-timeline bridge endpoints.
+  media-timeline bridge endpoints. Status: implemented for session creation,
+  compatibility multipart upload, end session, and direct upload-start.
 - Keep `UploaderService` queue semantics unchanged: local files must remain
-  durable until upload success is confirmed.
+  durable until upload success is confirmed. Status: preserved, with fallback
+  coverage when direct upload fails.
 - Persist bridge metadata in `SessionManager` metadata:
   - `bridgeEventId`
   - `sessionGuid`
   - upload token metadata, without storing long-lived credentials
   - per-file File Registry ID after upload completion
+  Status: bridge event IDs are persisted; upload tokens are intentionally
+  runtime-only and are not written to session metadata.
 - Keep a controlled legacy-MoBo fallback only as a setting or build-time
-  configuration during migration.
+  configuration during migration. Status: implemented as the service fallback
+  path while media-timeline storage is not live-ready.
 
 ### Debug Session Cleanup Contract
 
@@ -287,6 +305,8 @@ Exit gate:
 - Flutter tests cover target selection, bridge create-session response parsing,
   upload success/failure, and metadata persistence.
 - No production Flutter code gains ad hoc `print()` logging.
+- Before physical bridge-mode capture proof, run:
+  `python3 scripts/check_media_timeline_bridge.py --api-base-url http://127.0.0.1:3001/api --run-dir logs/verification-runs/<run>`.
 
 ### Phase 4: Prove On Real Devices
 
@@ -321,9 +341,13 @@ path.
 
 Actions:
 
-- Add signed multipart/object upload start/sign/complete endpoints.
+- Add signed multipart/object upload start/sign/complete endpoints. Status:
+  media-timeline exposes the route family; HydraCam PR #9 exercises the
+  start, part upload, complete/register, and bridge-complete/link sequence.
 - Keep compatibility upload for small photos and migration fallback.
-- On upload completion, write the same canonical records as Phase 1.
+- On upload completion, write the same canonical records as Phase 1. Status:
+  client-side response handling and tests are present; live backend proof is
+  blocked until media-timeline object storage is enabled.
 - Add upload resume/cancel/requeue behavior to the mobile app only after the
   bridge completion semantics are stable.
 
@@ -367,13 +391,12 @@ The first slice should be media-timeline only:
 6. A small route-level test proving a fake current-app upload appears in the
    event umbrella/timeline inputs.
 
-Progress note as of 2026-06-12: this first slice is partially implemented in
-media-timeline, not in HydraCam mobile. The bridge has backend service, storage,
-identity, auth, route, and reference-doc coverage, but the current branch still
-has uncommitted/untracked bridge work and the Flutter app has not been cut over.
-
-Do not touch the Flutter app until this slice passes. That prevents a mobile
-cutover from depending on unproven backend behavior.
+Progress note as of 2026-07-07: the original media-timeline-first slice guided
+the app work correctly. HydraCam now has the app-side cutover, token handling,
+direct object upload, and fallback path in stacked PRs. The remaining cutover
+gate is live environment readiness: media-timeline must report object storage
+enabled before the direct-object route can be claimed with physical capture
+evidence.
 
 ## Open Decisions
 
