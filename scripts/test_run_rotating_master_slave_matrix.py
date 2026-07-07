@@ -1948,7 +1948,9 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
             ipad_warm = False
 
             module.adopt_running_bridge_ports = lambda targets, **_kwargs: list(targets)
-            module.build_ios_profile_app = lambda: events.append("build")
+            module.build_ios_profile_app = (
+                lambda **_kwargs: events.append("build")
+            )
             module.install_ios_profile_app = (
                 lambda *_args, **_kwargs: events.append("install")
             )
@@ -2608,6 +2610,79 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
             "s7_exynos_camera_timeout",
         )
 
+    def test_parse_args_accepts_media_timeline_bridge_dart_defines(self) -> None:
+        module = load_module()
+
+        args = module.parse_args(
+            [
+                "--dart-define",
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "--dart-define",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ]
+        )
+
+        self.assertEqual(
+            module.validated_dart_defines(args),
+            [
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ],
+        )
+        self.assertEqual(
+            module.dart_define_keys(module.validated_dart_defines(args)),
+            [
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL",
+            ],
+        )
+
+    def test_invalid_dart_define_is_rejected(self) -> None:
+        module = load_module()
+        args = module.argparse.Namespace(dart_define=["HYDRACAM_BRIDGE"])
+
+        with self.assertRaisesRegex(
+            module.MatrixConfigError,
+            "--dart-define values must use KEY=VALUE",
+        ):
+            module.validated_dart_defines(args)
+
+    def test_media_timeline_bridge_flag_resolves_required_dart_defines(self) -> None:
+        module = load_module()
+
+        args = module.parse_args(
+            [
+                "--media-timeline-bridge-api-base",
+                "http://127.0.0.1:3001/api",
+            ]
+        )
+
+        self.assertEqual(
+            module.resolved_dart_defines(args),
+            [
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ],
+        )
+
+    def test_media_timeline_bridge_flag_rejects_duplicate_bridge_defines(self) -> None:
+        module = load_module()
+
+        args = module.parse_args(
+            [
+                "--media-timeline-bridge-api-base",
+                "http://127.0.0.1:3001/api",
+                "--dart-define",
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=false",
+            ]
+        )
+
+        with self.assertRaisesRegex(
+            module.MatrixConfigError,
+            "already configured",
+        ):
+            module.resolved_dart_defines(args)
+
     def test_flutter_target_launch_detaches_after_bridge_is_healthy(self) -> None:
         module = load_module()
         target = matrix_target(module, "iphone", "ios_physical")
@@ -2621,8 +2696,21 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
         class FakeProcess:
             pass
 
-        def fake_launch_flutter(device_id, _log_path, *, port, role, master_ip):
-            events.append(("launch", f"{device_id}:{port}:{role}:{master_ip}"))
+        def fake_launch_flutter(
+            device_id,
+            _log_path,
+            *,
+            port,
+            role,
+            master_ip,
+            dart_defines,
+        ):
+            events.append(
+                (
+                    "launch",
+                    f"{device_id}:{port}:{role}:{master_ip}:{','.join(dart_defines)}",
+                )
+            )
             return FakeProcess()
 
         def fake_wait_for_flutter_bridge(target, _process, _deadline):
@@ -2644,13 +2732,18 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
                 role="slave",
                 master_ip="192.168.178.153",
                 timeout=30,
+                dart_defines=["HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true"],
             )
 
         self.assertIsNone(process)
         self.assertEqual(
             events,
             [
-                ("launch", "iphone:4762:slave:192.168.178.153"),
+                (
+                    "launch",
+                    "iphone:4762:slave:192.168.178.153:"
+                    "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                ),
                 ("wait", "http://192.168.178.141:4762"),
                 ("detach", "process"),
             ],
@@ -2794,6 +2887,34 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
         )
         self.assertIn("HYDRACAM_AUTOMATION_FORCE_SLAVE=true", command)
         self.assertEqual(command[-2:], ["--", module.IOS_BUNDLE_ID])
+
+    def test_ios_profile_build_passes_extra_dart_defines(self) -> None:
+        module = load_module()
+        calls: list[tuple[list[str], dict]] = []
+
+        def fake_run_command(command, **kwargs):
+            calls.append((list(command), dict(kwargs)))
+
+        module.run_command = fake_run_command
+
+        module.build_ios_profile_app(
+            dart_defines=[
+                "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+                "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            ]
+        )
+
+        self.assertEqual(calls[0][0][:3], ["flutter", "build", "ios"])
+        self.assertIn("--dart-define=HYDRACAM_AUTOMATION=true", calls[0][0])
+        self.assertIn(
+            "--dart-define=HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+            calls[0][0],
+        )
+        self.assertIn(
+            "--dart-define=HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=http://127.0.0.1:3001/api",
+            calls[0][0],
+        )
+        self.assertEqual(calls[0][1]["timeout"], 1800)
 
     def test_xctrace_launch_error_classifies_untrusted_profile(self) -> None:
         module = load_module()
@@ -4092,7 +4213,9 @@ class RotatingMasterSlaveMatrixTests(unittest.TestCase):
             module.build_rotations = lambda targets: [
                 module.MatrixRotation(master=targets[0], clients=[])
             ]
-            module.build_ios_profile_app = lambda: events.append(("build", "ios"))
+            module.build_ios_profile_app = (
+                lambda **_kwargs: events.append(("build", "ios"))
+            )
             module.install_ios_profile_app = (
                 lambda target, _app_path, _run_dir: events.append(
                     ("install", target.device_id)

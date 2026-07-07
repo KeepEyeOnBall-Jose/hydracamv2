@@ -22,34 +22,35 @@ or informs the mobile app.
 | Multi-device capture | Runtime role switching works; six-device iOS/Android current-build proof passed; fastest five-device hot loop remains separate | Master/slave WebSocket flow exists. `logs/verification-runs/20260607-runtime-role-switch-visible-physical-set/summary.json` proves Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, physical iPad 5, and macOS can launch once, rotate which device is master, and connect the other four devices as slaves without relaunching. Current split-ack cold proof `logs/verification-runs/20260607-runtime-role-switch-async-ack-cold-four-local-fixed/summary.json` passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, and macOS across two cycles / 8 rotations, but build/install/launch made it take `63.919s`. The fastest four-local proof is `logs/verification-runs/20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local/summary.json`: the same four targets passed explicit `--expect-target-id` selection across five hot cycles / 20 master rotations in `8.118s` runner elapsed, with no build/install/standby launch after warm preflight, `--stage-slaves-after-master-ready`, synchronous master acknowledgement, async accepted acknowledgement for slaves, 25 ms connected-client polling, and `--max-set-role-request-start-skew-ms 10` enforced. `logs/verification-runs/20260608-warm-summary-prime-five-repeat/summary.json` is the current fastest cold-iPhone repeat proof: using `--warm-summary` skipped `flutter devices`, `adb devices`, and master-host probing, launched only the missing iPhone Profile bridge, then passed Samsung G960F, Samsung S7 edge, Samsung S10e `RF8M90QE7LX`, iPhone 12 Pro `00008101-000A68811E43001E`, and macOS across five cycles / 25 rotations in `9.167s`. Parallel request-start skew stayed below `0.686 ms`, `set_role` averaged `162.803 ms`, and connected-client verification averaged `201.572 ms`. A separate pure-immediate warm-summary rerun, `logs/verification-runs/20260608-warm-summary-hot-five-repeat/summary.json`, passed the same 25 rotations in `8.806s` with no discovery, build, install, or launch; warm preflight had no missing bridges. Current physical iPhone+iPad recovery evidence `logs/verification-runs/20260609-0852-ios-iphone-ipad-recovery-continuation/device-logs/ios-two-device-immediate-role-switch-explicit-lan/summary.md` passed the selected pair across two master rotations in `0.45s` with both bridges on `4762` and explicit LAN hosts. Current six-device iOS/Android proof is recorded below. |
 | Store distribution | Android signed AAB ready locally; current-source iOS App Store IPA export blocked by local signing; store upload credentials still unverified | Android recovery evidence `logs/verification-runs/20260609-0405-amaia23-android-developer-profile-recovery/summary.md` recreated an AMAIA23/HydraCam upload keystore and exported public certificate `android/amaia23-hydracam-upload-certificate-20260609.pem`; the current `1.4.0+18` Android release artifact built on 2026-06-21 with public store URL Dart defines is `build/app/outputs/bundle/release/app-release.aab` with SHA-256 `d570e6ebe507ad2a6f2de5c499cf5bd2cd2f162932bde63e47a728b51c75c8d9` and a matching store metadata sidecar. The Android release build no longer falls back to debug signing; the readiness preflight verifies preserved app IDs across platform manifests, Gradle, and fastlane, Android minSdk `24`, Android target/compile SDK at or above `35`, the Login screen privacy/support/account-deletion paths, `android/key.properties`, the referenced upload keystore, and the AAB signer SHA-256 fingerprint `51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3` against the exported certificate. The current Android sidecar `build/app/outputs/bundle/release/app-release.aab.store-metadata.tsv` records the same artifact hash, builder, build override environment, and compiled store URL values; upload preflight now fails if an AAB/IPA sidecar is missing or mismatched. Launcher icons have been regenerated from `lib/assets/images/icon.png`; the readiness preflight now verifies referenced iOS app icons and Android launcher icon densities are real PNG assets. A prior default iOS IPA export produced SHA-256 `385e08c05b7213b0b5c199a4621198b0d2b0f356034c69f5fa89ebe85ab0dc08`, but that IPA predates the bundled court-fallback and launcher-icon cleanups and has been removed from `build/ios/ipa/` so it cannot be mistaken for an upload candidate. The latest current-source iOS archive succeeded, then App Store IPA export failed with `No Accounts` and no `iOS Distribution` signing certificate; `security find-identity -v -p codesigning` shows Apple Development identities only. `ios/Runner/PrivacyInfo.xcprivacy` is bundled in the Runner app and `ios/Runner/Info.plist` declares `ITSAppUsesNonExemptEncryption=false`; both are validated by `scripts/check_store_readiness.sh local`, which now fails truthfully on the missing local Distribution signing identity and warns that no current IPA exists plus missing external values. `scripts/check_store_readiness.sh upload` fails until a current IPA exists, upload credentials are provided, public non-placeholder HTTPS privacy/support/account-deletion URLs are configured, and artifact metadata sidecars match. `upload-ios` and `upload-android` now provide narrower TestFlight-only and Google-Play-only gates so one store credential does not block preflighting the other store; Android upload aliases now also cover `play-internal`, `play-closed`, and `play-production`. `scripts/google_play_release.sh` wraps the Android gate plus fastlane upload for `internal`, `closed_beta`, and `production_draft`; `scripts/google_play_internal_release.sh` remains a compatibility wrapper. Upload-certificate SHA-256 remains `51:7E:10:AD:DC:7B:EA:CA:0B:FF:90:DD:10:C8:42:95:97:BE:B3:37:F1:A4:91:81:C5:B7:46:E1:D4:7C:5B:C3`. `vectorblanco@gmail.com` is signed into Chrome but lands on Play Console developer-account signup, so it has no visible existing Play developer profile there. `jose@keepeyeonball.com` is a recognized Google account and reaches the password challenge, but Play Console developer/app ownership remains unverified until that sign-in completes. Read-only Gmail and historical `HydraCam Dev Process` sheet checks found no Play Console ownership/invite/package-registration evidence. iOS targets Apple ID `jose@keepeyeonball.com`, team `4RRY2QT7H8`, and bundle `com.keepeyeonball`; `scripts/ios_fastlane.sh --version` now verifies the locked Homebrew Ruby/Bundler lane, and `scripts/android_fastlane.sh --version` verifies the locked Android fastlane lane. TestFlight upload remains blocked on local Distribution signing plus App Store Connect upload authentication: no local `APP_STORE_CONNECT_API_KEY_PATH`, no discovered `AuthKey_*.p8`, and no `FASTLANE_SESSION`. Google Play upload remains blocked on `GOOGLE_PLAY_JSON_KEY` and Play Console ownership. Real submission also depends on publishing the privacy/support/deletion drafts, privacy review, and release-lane device smoke tests. |
 
-## 2026-07-07 Execution Snapshot
-
-Current source state:
-
-- Active checkout: `master-jose-2025` at `7fa51aac`, now worked from branch
-  `codex/hydracam-status-refresh-20260707` for the status-refresh slice.
-- App version in `pubspec.yaml`: `1.4.0+19`.
-- Live `flutter devices` inventory: Samsung S10e `RF8M21J8XRT`, iPhone 12 Pro
-  `00008101-000A68811E43001E`, macOS, Chrome, and wireless iPad 5
-  `8b406aa5c597eab4c4dfd9908f4a09b10a89ec63`.
-- The full historical seven-target proof from 2026-06-25/26 remains valid as
-  archived evidence, but it is not the current live inventory unless the
-  Android emulator and iOS simulator are started and the same targets are
-  rechecked in the same run.
-- Focused parser coverage for shared JSON integer coercion now explicitly
-  rejects decimal numeric strings for `toIntOrNull()` and
-  `roundedIntOrNull()` while preserving numeric `double` handling.
-
-Current integration posture:
-
-- Normal app session creation and photo/video upload still use the legacy MoBo
-  Azure API base in `HydraCamApiService`.
-- Fixed-camera HLS upload and wearable replay upload already target the
-  media-timeline bridge through `HYDRACAM_MEDIA_TIMELINE_API_BASE_URL`.
-- The next highest-value mobile/backend unification slice is to make the
-  ordinary `HydraCamApiService` session and media upload path configurable for
-  legacy MoBo versus media-timeline bridge compatibility mode, without changing
-  local capture durability or `UploaderService` queue semantics.
+Latest media-timeline bridge unification work (2026-07-07):
+The current stacked PR path moves HydraCam new-capture uploads toward
+media-timeline without physically merging repositories. PR #7 adds bridge
+request retry resilience, PR #8 carries media-timeline upload tokens as
+runtime-only session state, and PR #9 adds the direct object-storage upload
+sequence with a compatibility fallback. Follow-up PRs add
+`scripts/check_media_timeline_bridge.py` and
+`scripts/probe_media_timeline_direct_upload.py` so the bridge can be preflighted
+and object-storage-probed before physical hardware runs. Local proof
+`logs/verification-runs/20260707-141146-media-timeline-bridge-preflight-storage-enabled/`
+shows backend health, media-storage readiness (`enabled: true`, provider `s3`,
+bucket `media-timeline`), and the upload-start route mounted behind auth.
+Local proof
+`logs/verification-runs/20260707-141602-media-timeline-direct-upload-probe/`
+then creates media-timeline event
+`hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5`, uploads one probe photo
+through object storage, registers File Registry id
+`b55694dc-dd18-45ed-b1fd-fa7d9d68c01f`, completes the bridge upload, and reads
+session status with `photos: 1`, `total: 1`, `syncStatus: bridge-uploaded`.
+The rotating master/slave matrix runner now accepts repeated `--dart-define`
+flags and a safer `--media-timeline-bridge-api-base <url>` shortcut, passes the
+resolved bridge defines through Android APK builds, iOS Profile builds, and
+Flutter-run launches, and records only `dartDefineKeys` in matrix summaries.
+Dry-run proof
+`logs/verification-runs/20260707-rotating-matrix-media-timeline-bridge-flag-dry-run/`
+shows the shortcut resolving `HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE` and
+`HYDRACAM_MEDIA_TIMELINE_API_BASE_URL` without recording values. This is
+backend/direct-object plus runner-readiness proof, not yet a physical HydraCam
+device capture proof.
 
 Latest all-connected-device deploy + smoke matrix (2026-06-25):
 `logs/verification-runs/20260625-all-connected-device-matrix/` deployed and

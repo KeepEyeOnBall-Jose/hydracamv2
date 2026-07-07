@@ -73,6 +73,9 @@ class SessionManager extends ChangeNotifier {
       deviceType: deviceType,
       debugSession: debugSession,
       serviceNumericId: session.numericId,
+      mediaTimelineEventId: session.mediaTimelineEventId,
+      mediaTimelineUploadToken: session.uploadToken,
+      mediaTimelineUploadTokenExpiresAt: session.uploadTokenExpiresAt,
       displayName: displayName,
     );
   }
@@ -83,6 +86,9 @@ class SessionManager extends ChangeNotifier {
     required String deviceType,
     bool debugSession = false,
     int? serviceNumericId,
+    String? mediaTimelineEventId,
+    String? mediaTimelineUploadToken,
+    int? mediaTimelineUploadTokenExpiresAt,
     String? displayName,
   }) {
     startSession(
@@ -91,6 +97,9 @@ class SessionManager extends ChangeNotifier {
       deviceType: deviceType,
       debugSession: debugSession,
       serviceNumericId: serviceNumericId,
+      mediaTimelineEventId: mediaTimelineEventId,
+      mediaTimelineUploadToken: mediaTimelineUploadToken,
+      mediaTimelineUploadTokenExpiresAt: mediaTimelineUploadTokenExpiresAt,
       displayName: displayName,
     );
   }
@@ -103,11 +112,18 @@ class SessionManager extends ChangeNotifier {
     required String deviceType,
     bool debugSession = false,
     int? serviceNumericId,
+    String? mediaTimelineEventId,
+    String? mediaTimelineUploadToken,
+    int? mediaTimelineUploadTokenExpiresAt,
     String? displayName,
   }) {
     final normalizedSessionGuid = _validateServiceSessionGuid(sessionGuid);
     if (_currentSession != null && _sessionGuid == normalizedSessionGuid) {
       _deviceType = deviceType;
+      _applyBridgeUploadToken(
+        mediaTimelineUploadToken,
+        mediaTimelineUploadTokenExpiresAt,
+      );
       LogService.instance.registerLog(
           "Session already active with GUID: $_sessionGuid. Preserving existing media on rejoin as $_deviceType.");
       notifyListeners();
@@ -127,12 +143,25 @@ class SessionManager extends ChangeNotifier {
       startTime: DateTime.now(),
       debugSession: debugSession,
       serviceNumericId: serviceNumericId,
+      mediaTimelineEventId: _optionalTrimmedString(mediaTimelineEventId),
+      mediaTimelineUploadToken:
+          _optionalTrimmedString(mediaTimelineUploadToken),
+      mediaTimelineUploadTokenExpiresAt: mediaTimelineUploadTokenExpiresAt,
     );
 
     // Log session start and notify listeners
     LogService.instance.registerLog(
         "Session started with GUID: $_sessionGuid on device type: $_deviceType");
     notifyListeners();
+  }
+
+  void _applyBridgeUploadToken(String? uploadToken, int? uploadTokenExpiresAt) {
+    final token = _optionalTrimmedString(uploadToken);
+    if (token == null) {
+      return;
+    }
+    _currentSession?.mediaTimelineUploadToken = token;
+    _currentSession?.mediaTimelineUploadTokenExpiresAt = uploadTokenExpiresAt;
   }
 
   /// Ends the current session, clearing data.
@@ -305,6 +334,8 @@ class SessionManager extends ChangeNotifier {
             metadata["videos"], deviceId, restoredSessionGuid),
         debugSession: metadata["debugSession"] == true,
         serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
+        mediaTimelineEventId:
+            _optionalTrimmedString(metadata["mediaTimelineEventId"]),
       );
 
       LogService.instance
@@ -346,6 +377,8 @@ class SessionManager extends ChangeNotifier {
             metadata["videos"], deviceId, restoredSessionGuid),
         debugSession: metadata["debugSession"] == true,
         serviceNumericId: _asNullableInt(metadata["serviceNumericId"]),
+        mediaTimelineEventId:
+            _optionalTrimmedString(metadata["mediaTimelineEventId"]),
       );
 
       LogService.instance
@@ -382,6 +415,7 @@ class SessionManager extends ChangeNotifier {
       deviceType: deviceType,
       debugSession: loadedSession.debugSession,
       serviceNumericId: loadedSession.serviceNumericId,
+      mediaTimelineEventId: loadedSession.mediaTimelineEventId,
       displayName: loadedSession.displayName,
     );
 
@@ -620,6 +654,7 @@ class SessionManager extends ChangeNotifier {
       "displayName": _currentSession!.displayName,
       "debugSession": _currentSession!.debugSession,
       "serviceNumericId": _currentSession!.serviceNumericId,
+      "mediaTimelineEventId": _currentSession!.mediaTimelineEventId,
       "startTime": _currentSession!.startTime.toIso8601String(),
       "endTime": _currentSession!.endTime?.toIso8601String(),
       "deviceType": _deviceType,
@@ -638,6 +673,10 @@ class SessionManager extends ChangeNotifier {
       "fileSizeInBytes": photo.fileSizeInBytes,
       if (photo.uploadFailureReason != null)
         "uploadFailureReason": photo.uploadFailureReason,
+      if (photo.mediaTimelineEventId != null)
+        "mediaTimelineEventId": photo.mediaTimelineEventId,
+      if (photo.fileRegistryFileId != null)
+        "fileRegistryFileId": photo.fileRegistryFileId,
       if (photo.captureContext != null)
         "captureContext": photo.captureContext!.toJson(),
       if (photo.syncMetadata != null)
@@ -656,6 +695,10 @@ class SessionManager extends ChangeNotifier {
       "fileSizeInBytes": video.fileSizeInBytes,
       if (video.uploadFailureReason != null)
         "uploadFailureReason": video.uploadFailureReason,
+      if (video.mediaTimelineEventId != null)
+        "mediaTimelineEventId": video.mediaTimelineEventId,
+      if (video.fileRegistryFileId != null)
+        "fileRegistryFileId": video.fileRegistryFileId,
       if (video.captureContext != null)
         "captureContext": video.captureContext!.toJson(),
       if (video.syncMetadata != null)
@@ -675,6 +718,9 @@ class SessionManager extends ChangeNotifier {
       receivedDate: DateTime.parse(photo["receivedDate"].toString()),
       isUploaded: photo["isUploaded"] == true,
       uploadFailureReason: photo["uploadFailureReason"]?.toString(),
+      mediaTimelineEventId:
+          _optionalTrimmedString(photo["mediaTimelineEventId"]),
+      fileRegistryFileId: _optionalTrimmedString(photo["fileRegistryFileId"]),
       fileSizeInBytes: _asNullableInt(photo["fileSizeInBytes"]),
       captureContext:
           MediaCaptureContext.fromJson(_asNullableMap(photo["captureContext"])),
@@ -720,6 +766,9 @@ class SessionManager extends ChangeNotifier {
       receivedDate: DateTime.parse(video["receivedDate"].toString()),
       isUploaded: video["isUploaded"] == true,
       uploadFailureReason: video["uploadFailureReason"]?.toString(),
+      mediaTimelineEventId:
+          _optionalTrimmedString(video["mediaTimelineEventId"]),
+      fileRegistryFileId: _optionalTrimmedString(video["fileRegistryFileId"]),
       fileSizeInBytes: _asNullableInt(video["fileSizeInBytes"]),
       captureContext:
           MediaCaptureContext.fromJson(_asNullableMap(video["captureContext"])),

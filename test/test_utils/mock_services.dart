@@ -61,6 +61,9 @@ class FakeSessionManager extends Fake implements SessionManager {
     required String deviceType,
     bool debugSession = false,
     int? serviceNumericId,
+    String? mediaTimelineEventId,
+    String? mediaTimelineUploadToken,
+    int? mediaTimelineUploadTokenExpiresAt,
     String? displayName,
   }) {
     _sessionGuid = guid;

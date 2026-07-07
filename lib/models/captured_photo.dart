@@ -43,6 +43,10 @@ class CapturedPhoto {
   /// File size metadata
   final int fileSizeInBytes;
 
+  /// media-timeline/File Registry identity returned after bridge upload.
+  String? mediaTimelineEventId;
+  String? fileRegistryFileId;
+
   /// Constructor for creating a new CapturedPhoto.
   ///
   /// - `photoData`: The binary data of the photo (can be null once saved).
@@ -62,6 +66,8 @@ class CapturedPhoto {
     this.uploadDuration,
     this.uploadStartTime,
     this.uploadFailureReason,
+    this.mediaTimelineEventId,
+    this.fileRegistryFileId,
     int? fileSizeInBytes,
   }) : fileSizeInBytes = fileSizeInBytes ?? safeFileSizeOf(photoPath);
 

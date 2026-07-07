@@ -108,37 +108,49 @@ media-timeline.
 
 ## Current Recovery Snapshot
 
-As of 2026-07-07, the actual source trees show this state:
+As of 2026-07-07, the app-side bridge stack has moved from plan to reviewed
+PRs, but the live local media-timeline service is not yet ready for a direct
+object-storage proof:
 
-- HydraCam mobile remains on the legacy Azure app-service API path. The current
-  app code still has `lib/services/hydracam_api_service.dart` pointing at
-  `https://hydracam.azurewebsites.net/api` for ordinary session creation,
-  photo/video upload, session end, courts, sports centers, and user lookup.
-- HydraCam mobile now also contains media-timeline bridge clients for specialized
-  paths: fixed-camera HLS upload posts to
-  `hydracam-bridge/compat/sessions/upload-hls`, and wearable replay upload posts
-  to `hydracam-bridge/compat/sessions/upload-wearables`; both are configured
-  with `HYDRACAM_MEDIA_TIMELINE_API_BASE_URL`.
-- MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is detached at
-  `HEAD`, has no media-timeline bridge or video-store references, and still
-  exposes the legacy `api/hydracam` controller methods such as `CreateSession`,
-  `UploadMedia`, `EndSession`, `device/ReadyToTransmit`, `GetUserByEmail`,
+- HydraCam mobile now has a stacked bridge cutover path in review. PR #4 added
+  normal bridge mode with a live compatibility proof session
+  `f7c3f1b5-7a07-4ab2-9d52-202607071459` and File Registry photo ID
+  `885c1b3f-df7d-4baa-9e68-713b1e45d678`. PR #5 wired hardware-runner
+  Dart defines, PR #6 fixed bridge content types and the capture runner, PR #7
+  added retry resilience, PR #8 captured runtime upload tokens from bridge
+  session creation, and PR #9 added direct object-storage upload with a legacy
+  multipart fallback.
+- `scripts/check_media_timeline_bridge.py` is the app-side preflight for this
+  cutover. It verifies `GET /health?deep=1`,
+  `GET /api/media-storage/status`, and unauthenticated route mounting for
+  `POST /api/hydracam-bridge/sessions/<guid>/uploads/start`. Initial local
+  evidence
+  `logs/verification-runs/20260707-135458-media-timeline-bridge-preflight/`
+  showed the bridge route mounted but object storage disabled. After local
+  MinIO adoption, current local evidence
+  `logs/verification-runs/20260707-141146-media-timeline-bridge-preflight-storage-enabled/`
+  passes with backend health, `media-storage/status` enabled, provider `s3`,
+  and bucket `media-timeline`.
+- `scripts/probe_media_timeline_direct_upload.py` now proves the backend-only
+  direct object path before hardware is involved. Evidence
+  `logs/verification-runs/20260707-141602-media-timeline-direct-upload-probe/`
+  created event `hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5`, uploaded one
+  probe photo through object storage, registered File Registry id
+  `b55694dc-dd18-45ed-b1fd-fa7d9d68c01f`, completed the bridge upload, and
+  read bridge status with one photo. This proves bridge/object-storage plumbing,
+  not physical HydraCam capture yet.
+- MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is currently
+  detached at `HEAD`, has no media-timeline bridge or video-store references,
+  and still exposes the legacy `api/hydracam` controller methods such as
+  `CreateSession`, `UploadMedia`, `EndSession`, `device/ReadyToTransmit`,
   `courts`, and `sportscenters`.
-- media-timeline is the only repo with active bridge implementation code. Its
-  current checkout is on `codex/frame-index-standardization-20260707` with a
-  large dirty worktree, so broad repo unification or branch swallowing is not a
-  safe next move. Inventory and classify active media-timeline edits before
-  landing additional bridge work there.
-- media-timeline has implemented useful bridge pieces since the original June
-  snapshot: `/api/hydracam-admin/access` for upload-user/device inventory,
-  `/api/hydracam-bridge/compat/sessions/upload-hls` for finalized HLS bundles,
-  and `/api/hydracam-bridge/compat/sessions/upload-wearables` for mock-first
-  wearable replay bundles. The ordinary app create-session/photo/video/end
-  compatibility path is still the gap to close before cutting the normal mobile
-  upload lane over.
-- The recovered video-store API is still not the mobile recording path. Treat it
-  as a retrieval/download API concept unless a separate product decision revives
-  it.
+- media-timeline is the only repo with bridge implementation code. On branch
+  `codex/video-store-api`, commits `735367d65`, `5b3854fb1`, and merge commit
+  `f41f99338` added portable bridge storage, bridge service/routes/tests, and
+  route mounting under `/api/hydracam-bridge`.
+- The recovered video-store API is still a saved plan, not source code. The
+  plan remains at
+  `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-video-store-api.md`.
 
 ## Overlap Map
 
@@ -264,21 +276,24 @@ media-timeline while preserving capture reliability.
 Actions:
 
 - Make `HydraCamApiService` backend target configurable instead of hardcoded.
-- Add a legacy-MoBo versus media-timeline bridge mode switch for ordinary app
-  session creation, photo/video upload, session end, ready-to-transmit, courts,
-  sports centers, and user lookup.
-- Reuse the existing bridge configuration pattern from HLS and wearable replay
-  (`HYDRACAM_MEDIA_TIMELINE_API_BASE_URL`) unless a stronger auth-bound upload
-  token contract has already landed in media-timeline.
+  Status: implemented in the July 7 bridge stack via Dart defines and service
+  tests.
+- Add bridge compatibility methods or a mode switch that maps app calls to
+  media-timeline bridge endpoints. Status: implemented for session creation,
+  compatibility multipart upload, end session, and direct upload-start.
 - Keep `UploaderService` queue semantics unchanged: local files must remain
-  durable until upload success is confirmed.
+  durable until upload success is confirmed. Status: preserved, with fallback
+  coverage when direct upload fails.
 - Persist bridge metadata in `SessionManager` metadata:
   - `bridgeEventId`
   - `sessionGuid`
   - upload token metadata, without storing long-lived credentials
   - per-file File Registry ID after upload completion
+  Status: bridge event IDs are persisted; upload tokens are intentionally
+  runtime-only and are not written to session metadata.
 - Keep a controlled legacy-MoBo fallback only as a setting or build-time
-  configuration during migration.
+  configuration during migration. Status: implemented as the service fallback
+  path while media-timeline storage is not live-ready.
 
 ### Debug Session Cleanup Contract
 
@@ -299,6 +314,8 @@ Exit gate:
 - Flutter tests cover target selection, bridge create-session response parsing,
   upload success/failure, and metadata persistence.
 - No production Flutter code gains ad hoc `print()` logging.
+- Before physical bridge-mode capture proof, run:
+  `python3 scripts/check_media_timeline_bridge.py --api-base-url http://127.0.0.1:3001/api --run-dir logs/verification-runs/<run>`.
 
 ### Phase 4: Prove On Real Devices
 
@@ -309,6 +326,11 @@ Actions:
 - Run one physical-device app session through the media-timeline bridge:
   create session, capture one photo, capture one video, upload both, end
   session.
+- Use the rotating matrix runner's bridge shortcut:
+  `--media-timeline-bridge-api-base http://127.0.0.1:3001/api`. It resolves the
+  required bridge-mode Dart defines and records only define keys in summaries.
+  Current dry-run evidence:
+  `logs/verification-runs/20260707-rotating-matrix-media-timeline-bridge-flag-dry-run/`.
 - Verify media-timeline:
   - event exists
   - File Registry resolves both assets
@@ -333,9 +355,15 @@ path.
 
 Actions:
 
-- Add signed multipart/object upload start/sign/complete endpoints.
+- Add signed multipart/object upload start/sign/complete endpoints. Status:
+  media-timeline exposes the route family; HydraCam PR #9 exercises the
+  start, part upload, complete/register, and bridge-complete/link sequence.
 - Keep compatibility upload for small photos and migration fallback.
-- On upload completion, write the same canonical records as Phase 1.
+- On upload completion, write the same canonical records as Phase 1. Status:
+  client-side response handling and tests are present; backend-only live proof
+  passed in
+  `logs/verification-runs/20260707-141602-media-timeline-direct-upload-probe/`.
+  Physical-device capture proof remains open.
 - Add upload resume/cancel/requeue behavior to the mobile app only after the
   bridge completion semantics are stable.
 
@@ -368,7 +396,7 @@ Exit gate:
 
 ## First Implementation Slice
 
-The first slice was originally media-timeline only:
+The first slice should be media-timeline only:
 
 1. Bridge request/response schemas.
 2. Stable identity and alias helpers.
@@ -379,18 +407,12 @@ The first slice was originally media-timeline only:
 6. A small route-level test proving a fake current-app upload appears in the
    event umbrella/timeline inputs.
 
-Progress note as of 2026-06-12: this first slice is partially implemented in
-media-timeline, not in HydraCam mobile. The bridge has backend service, storage,
-identity, auth, route, and reference-doc coverage, but the current branch still
-has uncommitted/untracked bridge work and the Flutter app has not been cut over.
-
-Progress note as of 2026-07-07: media-timeline now has proven bridge endpoints
-for HLS and wearable replay, and HydraCam mobile contains clients for both. The
-remaining first production-relevant slice is the ordinary app contract:
-create-session, upload photo/video, end-session, ready-to-transmit, lookup user,
-courts, and sports centers. Do not broadly rewrite the Flutter app; add a
-configuration seam and prove the compatibility path against media-timeline
-before switching default behavior.
+Progress note as of 2026-07-07: the original media-timeline-first slice guided
+the app work correctly. HydraCam now has the app-side cutover, token handling,
+direct object upload, fallback path, preflight, and backend-only direct-object
+probe in stacked PRs. The remaining cutover gate is physical capture proof:
+run a real HydraCam device session through the bridge, then repeat with a
+two-device master/slave flow.
 
 ## Open Decisions
 
