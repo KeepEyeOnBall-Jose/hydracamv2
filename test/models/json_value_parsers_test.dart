@@ -41,6 +41,10 @@ void main() {
       expect(toIntOrNull("42"), 42);
     });
 
+    test("returns null for a decimal numeric string", () {
+      expect(toIntOrNull("3.9"), isNull);
+    });
+
     test("returns null for a non-numeric string", () {
       expect(toIntOrNull("x"), isNull);
     });
@@ -65,6 +69,10 @@ void main() {
 
     test("parses a numeric string", () {
       expect(roundedIntOrNull("42"), 42);
+    });
+
+    test("returns null for a decimal numeric string", () {
+      expect(roundedIntOrNull("3.9"), isNull);
     });
 
     test("returns null for a non-numeric string", () {

@@ -1,6 +1,6 @@
 # HydraCam, MoBo, And Media Timeline Merge Plan
 
-Last reviewed: 2026-06-12.
+Last reviewed: 2026-07-07.
 
 This plan covers three active codebases:
 
@@ -108,29 +108,37 @@ media-timeline.
 
 ## Current Recovery Snapshot
 
-As of 2026-06-12, the actual source trees show this state:
+As of 2026-07-07, the actual source trees show this state:
 
 - HydraCam mobile remains on the legacy Azure app-service API path. The current
   app code still has `lib/services/hydracam_api_service.dart` pointing at
-  `https://hydracam.azurewebsites.net/api`, and repo flow `UF-13` is still
-  marked `future` in `docs/control/user-flow-tracker.md`.
-- MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is currently
-  detached at `HEAD`, has no media-timeline bridge or video-store references,
-  and still exposes the legacy `api/hydracam` controller methods such as
-  `CreateSession`, `UploadMedia`, `EndSession`, `device/ReadyToTransmit`,
+  `https://hydracam.azurewebsites.net/api` for ordinary session creation,
+  photo/video upload, session end, courts, sports centers, and user lookup.
+- HydraCam mobile now also contains media-timeline bridge clients for specialized
+  paths: fixed-camera HLS upload posts to
+  `hydracam-bridge/compat/sessions/upload-hls`, and wearable replay upload posts
+  to `hydracam-bridge/compat/sessions/upload-wearables`; both are configured
+  with `HYDRACAM_MEDIA_TIMELINE_API_BASE_URL`.
+- MoBo remains the legacy webservice. `/Users/jose/src/work/mobo` is detached at
+  `HEAD`, has no media-timeline bridge or video-store references, and still
+  exposes the legacy `api/hydracam` controller methods such as `CreateSession`,
+  `UploadMedia`, `EndSession`, `device/ReadyToTransmit`, `GetUserByEmail`,
   `courts`, and `sportscenters`.
-- media-timeline is the only repo with bridge implementation code. On branch
-  `codex/video-store-api`, commits `735367d65`, `5b3854fb1`, and merge commit
-  `f41f99338` added portable bridge storage, bridge service/routes/tests, and
-  route mounting under `/api/hydracam-bridge`.
-- media-timeline is still not clean. Bridge-related uncommitted state includes
-  a modified `backend/src/services/hydraCamBridgeService.ts` plus untracked
-  `frontend/src/services/hydraCamBridgeApi.ts`,
-  `frontend/src/services/hydraCamBridgeApi.test.ts`, and
-  `e2e/hydracam-bridge-upload.spec.ts`.
-- The recovered video-store API is still a saved plan, not source code. The
-  plan remains at
-  `/Users/jose/src/work/media-timeline/docs/superpowers/plans/2026-06-05-video-store-api.md`.
+- media-timeline is the only repo with active bridge implementation code. Its
+  current checkout is on `codex/frame-index-standardization-20260707` with a
+  large dirty worktree, so broad repo unification or branch swallowing is not a
+  safe next move. Inventory and classify active media-timeline edits before
+  landing additional bridge work there.
+- media-timeline has implemented useful bridge pieces since the original June
+  snapshot: `/api/hydracam-admin/access` for upload-user/device inventory,
+  `/api/hydracam-bridge/compat/sessions/upload-hls` for finalized HLS bundles,
+  and `/api/hydracam-bridge/compat/sessions/upload-wearables` for mock-first
+  wearable replay bundles. The ordinary app create-session/photo/video/end
+  compatibility path is still the gap to close before cutting the normal mobile
+  upload lane over.
+- The recovered video-store API is still not the mobile recording path. Treat it
+  as a retrieval/download API concept unless a separate product decision revives
+  it.
 
 ## Overlap Map
 
@@ -256,8 +264,12 @@ media-timeline while preserving capture reliability.
 Actions:
 
 - Make `HydraCamApiService` backend target configurable instead of hardcoded.
-- Add bridge compatibility methods or a mode switch that maps app calls to
-  media-timeline bridge endpoints.
+- Add a legacy-MoBo versus media-timeline bridge mode switch for ordinary app
+  session creation, photo/video upload, session end, ready-to-transmit, courts,
+  sports centers, and user lookup.
+- Reuse the existing bridge configuration pattern from HLS and wearable replay
+  (`HYDRACAM_MEDIA_TIMELINE_API_BASE_URL`) unless a stronger auth-bound upload
+  token contract has already landed in media-timeline.
 - Keep `UploaderService` queue semantics unchanged: local files must remain
   durable until upload success is confirmed.
 - Persist bridge metadata in `SessionManager` metadata:
@@ -356,7 +368,7 @@ Exit gate:
 
 ## First Implementation Slice
 
-The first slice should be media-timeline only:
+The first slice was originally media-timeline only:
 
 1. Bridge request/response schemas.
 2. Stable identity and alias helpers.
@@ -372,8 +384,13 @@ media-timeline, not in HydraCam mobile. The bridge has backend service, storage,
 identity, auth, route, and reference-doc coverage, but the current branch still
 has uncommitted/untracked bridge work and the Flutter app has not been cut over.
 
-Do not touch the Flutter app until this slice passes. That prevents a mobile
-cutover from depending on unproven backend behavior.
+Progress note as of 2026-07-07: media-timeline now has proven bridge endpoints
+for HLS and wearable replay, and HydraCam mobile contains clients for both. The
+remaining first production-relevant slice is the ordinary app contract:
+create-session, upload photo/video, end-session, ready-to-transmit, lookup user,
+courts, and sports centers. Do not broadly rewrite the Flutter app; add a
+configuration seam and prove the compatibility path against media-timeline
+before switching default behavior.
 
 ## Open Decisions
 
