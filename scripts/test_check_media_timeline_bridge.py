@@ -89,6 +89,47 @@ class MediaTimelineBridgePreflightTest(unittest.TestCase):
         self.assertEqual("blocked", report["checks"]["mediaStorage"]["status"])
         self.assertIn("object storage disabled", report["checks"]["mediaStorage"]["message"])
 
+    def test_preflight_reports_missing_storage_requirements(self) -> None:
+        def fake_fetch(url: str, *, method: str = "GET", timeout_seconds: float) -> object:
+            if url.endswith("/health?deep=1"):
+                return {"service": "backend"}
+            if url.endswith("/media-storage/status"):
+                return {
+                    "enabled": False,
+                    "configured": False,
+                    "provider": "local",
+                    "bucket": None,
+                    "missingRequirements": [
+                        "OBJECT_STORAGE_ENABLED=true",
+                        "OBJECT_STORAGE_PROVIDER=s3",
+                        "S3_BUCKET",
+                    ],
+                }
+            if method == "POST":
+                raise bridge_check.HttpStatusError(
+                    status=401,
+                    payload={"error": "Missing or malformed Authorization header"},
+                )
+            raise AssertionError(f"unexpected request {method} {url}")
+
+        report = bridge_check.build_preflight_report(
+            "http://media.test/api",
+            fetch_json=fake_fetch,
+            timeout_seconds=0.1,
+        )
+
+        media_storage = report["checks"]["mediaStorage"]
+        self.assertFalse(report["ok"])
+        self.assertEqual(
+            [
+                "OBJECT_STORAGE_ENABLED=true",
+                "OBJECT_STORAGE_PROVIDER=s3",
+                "S3_BUCKET",
+            ],
+            media_storage["missingRequirements"],
+        )
+        self.assertIn("OBJECT_STORAGE_ENABLED=true", media_storage["message"])
+
     def test_write_report_creates_json_and_markdown_summary(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             run_dir = Path(tmp)

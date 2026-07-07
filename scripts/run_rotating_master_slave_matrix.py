@@ -334,6 +334,44 @@ def build_android_start_command(
     return command
 
 
+def validated_dart_defines(args: argparse.Namespace) -> list[str]:
+    defines = list(getattr(args, "dart_define", []) or [])
+    invalid = [
+        define
+        for define in defines
+        if "=" not in define or define.startswith("=")
+    ]
+    if invalid:
+        raise MatrixConfigError(
+            "--dart-define values must use KEY=VALUE: " + ", ".join(invalid)
+        )
+    return defines
+
+
+def dart_define_keys(defines: Sequence[str]) -> list[str]:
+    return [define.split("=", 1)[0] for define in defines]
+
+
+def resolved_dart_defines(args: argparse.Namespace) -> list[str]:
+    defines = validated_dart_defines(args)
+    media_timeline_base = getattr(args, "media_timeline_bridge_api_base", None)
+    if not media_timeline_base:
+        return defines
+
+    existing_keys = set(dart_define_keys(defines))
+    bridge_defines = [
+        "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true",
+        f"HYDRACAM_MEDIA_TIMELINE_API_BASE_URL={media_timeline_base}",
+    ]
+    duplicate_keys = sorted(set(dart_define_keys(bridge_defines)) & existing_keys)
+    if duplicate_keys:
+        raise MatrixConfigError(
+            "media-timeline bridge Dart define already configured: "
+            + ", ".join(duplicate_keys)
+        )
+    return [*defines, *bridge_defines]
+
+
 def build_dry_run_summary(
     targets: Sequence[MatrixTarget],
     rotations: Sequence[MatrixRotation],
@@ -341,6 +379,7 @@ def build_dry_run_summary(
     runtime_role_switch: bool = False,
     role_switch_only: bool = False,
     repeat_role_switch_cycles: int = 1,
+    dart_defines: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     return {
         "status": "dry_run",
@@ -348,6 +387,7 @@ def build_dry_run_summary(
         "runtimeRoleSwitch": runtime_role_switch,
         "roleSwitchOnly": role_switch_only,
         "repeatRoleSwitchCycles": repeat_role_switch_cycles,
+        "dartDefineKeys": dart_define_keys(dart_defines or []),
         "targetCount": len(targets),
         "captureTargetCount": sum(1 for target in targets if target.capture_enabled),
         "rotationCount": len(rotations) * repeat_role_switch_cycles,
@@ -1548,6 +1588,7 @@ def launch_flutter_target(
     role: str,
     master_ip: str | None,
     timeout: float,
+    dart_defines: Sequence[str] | None = None,
 ) -> None:
     target_dir = rotation_dir / target.slug
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -1557,6 +1598,7 @@ def launch_flutter_target(
         port=target.bridge_port,
         role=role,
         master_ip=master_ip,
+        dart_defines=list(dart_defines or []),
     )
     try:
         wait_for_flutter_bridge(target, process, time.time() + timeout)
@@ -1853,6 +1895,7 @@ def launch_target(
     fast_ios_launch: bool = False,
     xctrace_ios_launch: bool = False,
     xctrace_time_limit_seconds: int = 3600,
+    dart_defines: Sequence[str] | None = None,
 ) -> subprocess.Popen[str] | None:
     if target.platform == "android":
         launch_android_target(target, role=role, master_ip=master_ip)
@@ -1899,6 +1942,7 @@ def launch_target(
             role=role,
             master_ip=master_ip,
             timeout=timeout,
+            dart_defines=dart_defines,
         )
     raise MatrixConfigError(f"Unsupported target platform: {target.platform}")
 
@@ -2337,6 +2381,7 @@ def warm_prime_runtime_bridges(
     xctrace_time_limit_seconds: int,
     ios_profile_trust_retry_timeout: float = 0,
     ios_profile_trust_retry_interval: float = 5,
+    dart_defines: Sequence[str] | None = None,
 ) -> int:
     before_missing = missing_warm_runtime_bridges(targets)
     summary: dict[str, Any] = {
@@ -2372,6 +2417,7 @@ def warm_prime_runtime_bridges(
                 xctrace_ios_launch=xctrace_ios_launch,
                 xctrace_time_limit_seconds=xctrace_time_limit_seconds,
                 reuse_running_bridges=True,
+                dart_defines=dart_defines,
             )
         except Exception as error:
             summary["launchError"] = str(error)
@@ -2414,6 +2460,7 @@ def warm_prime_runtime_bridges(
                     xctrace_ios_launch=xctrace_ios_launch,
                     xctrace_time_limit_seconds=xctrace_time_limit_seconds,
                     reuse_running_bridges=True,
+                    dart_defines=dart_defines,
                 )
             except Exception as error:
                 attempt["launchError"] = str(error)
@@ -2454,6 +2501,7 @@ def launch_standby_targets(
     xctrace_ios_launch: bool = False,
     xctrace_time_limit_seconds: int = 28800,
     reuse_running_bridges: bool = False,
+    dart_defines: Sequence[str] | None = None,
 ) -> dict[str, subprocess.Popen[str]]:
     processes: dict[str, subprocess.Popen[str]] = {}
     targets_to_launch = [
@@ -2482,6 +2530,7 @@ def launch_standby_targets(
             fast_ios_launch=fast_ios_launch,
             xctrace_ios_launch=xctrace_ios_launch,
             xctrace_time_limit_seconds=xctrace_time_limit_seconds,
+            dart_defines=dart_defines,
         )
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, len(android_targets))) as executor:
@@ -2502,6 +2551,7 @@ def launch_standby_targets(
             fast_ios_launch=fast_ios_launch,
             xctrace_ios_launch=xctrace_ios_launch,
             xctrace_time_limit_seconds=xctrace_time_limit_seconds,
+            dart_defines=dart_defines,
         )
         if process is not None:
             processes[target.device_id] = process
@@ -2988,6 +3038,7 @@ def launch_rotation(
     *,
     timeout: float,
     fast_ios_launch: bool,
+    dart_defines: Sequence[str] | None = None,
 ) -> dict[str, subprocess.Popen[str]]:
     processes: dict[str, subprocess.Popen[str]] = {}
     master_host = master_hosts.get(rotation.master.device_id)
@@ -3001,6 +3052,7 @@ def launch_rotation(
         master_ip=None,
         timeout=timeout,
         fast_ios_launch=fast_ios_launch,
+        dart_defines=dart_defines,
     )
     if master_process is not None:
         processes[rotation.master.device_id] = master_process
@@ -3022,6 +3074,7 @@ def launch_rotation(
             master_ip=master_host,
             timeout=timeout,
             fast_ios_launch=fast_ios_launch,
+            dart_defines=dart_defines,
         )
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, len(android_clients))) as executor:
@@ -3040,6 +3093,7 @@ def launch_rotation(
             master_ip=master_host,
             timeout=timeout,
             fast_ios_launch=fast_ios_launch,
+            dart_defines=dart_defines,
         )
         return client.device_id, process
 
@@ -3109,20 +3163,21 @@ def parse_devicectl_process_ids(payload: Mapping[str, Any]) -> list[int]:
     return process_ids
 
 
-def build_ios_profile_app() -> None:
-    run_command(
-        [
-            "flutter",
-            "build",
-            "ios",
-            "--profile",
-            "--dart-define=HYDRACAM_AUTOMATION=true",
-            f"--dart-define=HYDRACAM_AUTOMATION_PORT={DEFAULT_PORT}",
-            "-t",
-            "lib/main.dart",
-        ],
-        timeout=1800,
-    )
+def build_ios_profile_app(
+    *,
+    dart_defines: Sequence[str] | None = None,
+) -> None:
+    command = [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        f"--dart-define=HYDRACAM_AUTOMATION_PORT={DEFAULT_PORT}",
+    ]
+    command.extend(f"--dart-define={define}" for define in dart_defines or [])
+    command.extend(["-t", "lib/main.dart"])
+    run_command(command, timeout=1800)
 
 
 def resolve_ios_profile_app_path(app_path: Path) -> Path:
@@ -3321,6 +3376,7 @@ def terminate_flutter_app_targets(targets: Sequence[MatrixTarget]) -> None:
 def run_matrix(args: argparse.Namespace) -> int:
     apply_immediate_role_switch_defaults(args)
     apply_warm_prime_defaults(args)
+    dart_defines = resolved_dart_defines(args)
     warm_master_hosts: dict[str, str] | None = None
     run_dir = args.run_dir or REPO_ROOT / "logs" / "verification-runs" / now_slug()
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -3386,6 +3442,7 @@ def run_matrix(args: argparse.Namespace) -> int:
             runtime_role_switch=args.runtime_role_switch,
             role_switch_only=args.role_switch_only,
             repeat_role_switch_cycles=repeat_role_switch_cycles,
+            dart_defines=dart_defines,
         )
         write_json(run_dir / "summary.json", summary)
         write_summary_markdown(run_dir, summary)
@@ -3396,7 +3453,7 @@ def run_matrix(args: argparse.Namespace) -> int:
         target for target in targets if target.platform == "ios_physical"
     ]
     if ios_physical_targets and should_build_ios_profile_app(args):
-        build_ios_profile_app()
+        build_ios_profile_app(dart_defines=dart_defines)
     if ios_physical_targets and should_install_ios_profile_app(args):
         for target in ios_physical_targets:
             install_ios_profile_app(target, args.ios_profile_app, run_dir)
@@ -3428,6 +3485,7 @@ def run_matrix(args: argparse.Namespace) -> int:
                 "ios_profile_trust_retry_interval",
                 5,
             ),
+            dart_defines=dart_defines,
         )
         if exit_code == 0:
             write_latest_warm_summary_cache(
@@ -3469,6 +3527,7 @@ def run_matrix(args: argparse.Namespace) -> int:
                 "ios_profile_trust_retry_interval",
                 5,
             ),
+            dart_defines=dart_defines,
         )
         if prime_exit_code != 0:
             print(run_dir)
@@ -3492,7 +3551,10 @@ def run_matrix(args: argparse.Namespace) -> int:
         require_warm_runtime_bridges(targets)
     needs_android_apk = requires_android_apk(targets)
     if needs_android_apk and not args.skip_build:
-        build_android_apk(ndk_version=args.android_ndk_version)
+        build_android_apk(
+            ndk_version=args.android_ndk_version,
+            dart_defines=dart_defines,
+        )
     if needs_android_apk and not args.skip_install and not args.apk.exists():
         raise MatrixRunError(f"APK not found: {args.apk}")
 
@@ -3572,6 +3634,7 @@ def run_matrix(args: argparse.Namespace) -> int:
                             28800,
                         ),
                         reuse_running_bridges=args.reuse_running_bridges,
+                        dart_defines=dart_defines,
                     )
 
             for cycle_index in range(repeat_role_switch_cycles):
@@ -3672,6 +3735,7 @@ def run_matrix(args: argparse.Namespace) -> int:
                                 rotation_dir,
                                 timeout=args.timeout,
                                 fast_ios_launch=args.fast_ios_launch,
+                                dart_defines=dart_defines,
                             )
                         if args.role_switch_only:
                             rotation_result = run_role_switch_only_flow(
@@ -3766,6 +3830,7 @@ def run_matrix(args: argparse.Namespace) -> int:
             "repeatRoleSwitchCycles": repeat_role_switch_cycles,
             "runtimeRoleSwitch": args.runtime_role_switch,
             "roleSwitchOnly": args.role_switch_only,
+            "dartDefineKeys": dart_define_keys(dart_defines),
             "stageSlavesAfterMasterReady": getattr(
                 args,
                 "stage_slaves_after_master_ready",
@@ -3905,6 +3970,25 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
         help=(
             "Override the Gradle hydracamNdkVersion property for this build. "
             "Useful when the default repo NDK is not installed locally."
+        ),
+    )
+    parser.add_argument(
+        "--dart-define",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help=(
+            "Additional Flutter dart define for matrix builds and flutter-run "
+            "launches. Repeat for bridge-mode flags such as "
+            "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true."
+        ),
+    )
+    parser.add_argument(
+        "--media-timeline-bridge-api-base",
+        help=(
+            "Shortcut for media-timeline bridge matrix runs. Adds "
+            "HYDRACAM_USE_MEDIA_TIMELINE_BRIDGE=true and "
+            "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL=<value> Dart defines."
         ),
     )
     parser.add_argument("--android-port-base", type=int, default=DEFAULT_ANDROID_PORT_BASE)

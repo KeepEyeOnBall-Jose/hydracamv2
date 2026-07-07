@@ -1,0 +1,102 @@
+{
+  "apiBaseUrl": "http://127.0.0.1:3001/api",
+  "checkedAt": "2026-07-07T14:16:02Z",
+  "eventId": "hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5",
+  "fileId": "b55694dc-dd18-45ed-b1fd-fa7d9d68c01f",
+  "locator": "s3://media-timeline/events/hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5/2026-07-07T14-16-02-245Z-hydracam-direct-upload-probe-5888e5e7-b684-4887-a971-4ab9ba1db57f.jpg",
+  "ok": true,
+  "sessionGuid": "8737f611-011f-4b3b-9e76-8b165dc023a5",
+  "status": {
+    "eventId": "hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5",
+    "media": {
+      "photos": 1,
+      "total": 1,
+      "videos": 0
+    },
+    "sessionGuid": "8737f611-011f-4b3b-9e76-8b165dc023a5",
+    "syncStatus": "bridge-uploaded"
+  },
+  "steps": [
+    {
+      "name": "createBridgeSession",
+      "payload": {
+        "guid": "8737f611-011f-4b3b-9e76-8b165dc023a5",
+        "id": 99999,
+        "sessionId": "codex-direct-upload-a1b481d2-8d3d-4ff2-b599-047db3ac0cbf",
+        "uploadToken": "[redacted]",
+        "uploadTokenExpiresAt": 1783520162237
+      },
+      "status": "ok"
+    },
+    {
+      "name": "startBridgeDirectUpload",
+      "payload": {
+        "eventId": "hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5",
+        "mediaStorage": {
+          "completeBridgePath": "/api/hydracam-bridge/sessions/8737f611-011f-4b3b-9e76-8b165dc023a5/uploads/complete",
+          "completeObjectPath": "/api/media-storage/multipart/complete",
+          "signPartPath": "/api/media-storage/multipart/sign-part",
+          "startPath": "/api/media-storage/multipart/start",
+          "uploadPartPath": "/api/media-storage/multipart/upload-part"
+        },
+        "objectKey": "events/hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5/hydracam/photos/1783433762000-hydracam-direct-upload-probe-5888e5e7-b684-4887-a971-4ab9ba1db57f.jpg",
+        "preferredStorage": "object-storage",
+        "sessionGuid": "8737f611-011f-4b3b-9e76-8b165dc023a5"
+      },
+      "status": "ok"
+    },
+    {
+      "name": "startMediaStorageMultipartUpload",
+      "payload": {
+        "bucket": "media-timeline",
+        "key": "events/hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5/2026-07-07T14-16-02-245Z-hydracam-direct-upload-probe-5888e5e7-b684-4887-a971-4ab9ba1db57f.jpg",
+        "locator": "s3://media-timeline/events/hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5/2026-07-07T14-16-02-245Z-hydracam-direct-upload-probe-5888e5e7-b684-4887-a971-4ab9ba1db57f.jpg",
+        "uploadId": "MmJlNmVjY2YtZDRmOC00ZDI1LThlOTItNDBmNmUyY2IyYWU0LjUzNTQwZDE2LTBiYzItNDIzMy1iZDA4LWU2YzYzZWFkOGFlNngxNzgzNDMzNzYyMjUxNjg3MzAz"
+      },
+      "status": "ok"
+    },
+    {
+      "name": "uploadMediaStorageMultipartPart",
+      "payload": {
+        "ETag": "\"409e7524864d014efa061a35f1491eb6\"",
+        "PartNumber": 1
+      },
+      "status": "ok"
+    },
+    {
+      "name": "completeMediaStorageMultipartUpload",
+      "payload": {
+        "locator": "s3://media-timeline/events/hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5/2026-07-07T14-16-02-245Z-hydracam-direct-upload-probe-5888e5e7-b684-4887-a971-4ab9ba1db57f.jpg",
+        "registered": {
+          "created": true,
+          "fileId": "b55694dc-dd18-45ed-b1fd-fa7d9d68c01f",
+          "videoId": "b55694dc-dd18-45ed-b1fd-fa7d9d68c01f"
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "name": "completeBridgeUpload",
+      "payload": {
+        "created": true,
+        "eventId": "hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5",
+        "fileId": "b55694dc-dd18-45ed-b1fd-fa7d9d68c01f"
+      },
+      "status": "ok"
+    },
+    {
+      "name": "readBridgeSessionStatus",
+      "payload": {
+        "eventId": "hydracam-8737f611-011f-4b3b-9e76-8b165dc023a5",
+        "media": {
+          "photos": 1,
+          "total": 1,
+          "videos": 0
+        },
+        "sessionGuid": "8737f611-011f-4b3b-9e76-8b165dc023a5",
+        "syncStatus": "bridge-uploaded"
+      },
+      "status": "ok"
+    }
+  ]
+}
