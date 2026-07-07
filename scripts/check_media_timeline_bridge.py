@@ -146,13 +146,21 @@ def _check_media_storage(
                 "message": "media-storage status returned a non-object payload",
                 "payload": payload,
             }
+        missing_requirements = _extract_missing_requirements(payload)
         if payload.get("enabled") is not True:
+            message = "object storage disabled"
+            if missing_requirements:
+                message = (
+                    "object storage disabled: "
+                    + ", ".join(missing_requirements)
+                )
             return {
                 "status": "blocked",
                 "url": url,
-                "message": "object storage disabled",
+                "message": message,
                 "provider": payload.get("provider"),
                 "bucket": payload.get("bucket"),
+                "missingRequirements": missing_requirements,
                 "payload": payload,
             }
         return {
@@ -169,6 +177,13 @@ def _check_media_storage(
             "url": url,
             "message": str(error),
         }
+
+
+def _extract_missing_requirements(payload: dict[str, object]) -> list[str]:
+    value = payload.get("missingRequirements")
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, str) and item]
 
 
 def _check_direct_upload_route(
