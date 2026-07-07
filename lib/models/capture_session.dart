@@ -31,6 +31,16 @@ class CaptureSession {
   /// Numeric service id returned by the current MoBo API when available.
   final int? serviceNumericId;
 
+  /// media-timeline event id returned by the bridge when available.
+  String? mediaTimelineEventId;
+
+  /// Bearer token returned by the media-timeline bridge for direct uploads.
+  /// Runtime-only: do not write this secret into durable metadata files.
+  String? mediaTimelineUploadToken;
+
+  /// Unix epoch milliseconds when [mediaTimelineUploadToken] expires.
+  int? mediaTimelineUploadTokenExpiresAt;
+
   /// Constructor to initialize a CaptureSession with a unique ID, start time,
   /// and optional lists of captured photos and videos.
   ///
@@ -45,6 +55,9 @@ class CaptureSession {
     List<CapturedVideo>? capturedVideos,
     this.debugSession = false,
     this.serviceNumericId,
+    this.mediaTimelineEventId,
+    this.mediaTimelineUploadToken,
+    this.mediaTimelineUploadTokenExpiresAt,
   })  : capturedPhotos = capturedPhotos ?? [],
         capturedVideos = capturedVideos ?? [];
 
