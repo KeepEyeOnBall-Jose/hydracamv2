@@ -1,0 +1,75 @@
+{
+  "apiBaseUrl": "http://127.0.0.1:3001/api",
+  "checkedAt": "2026-07-07T14:27:20Z",
+  "checks": {
+    "backendHealth": {
+      "payload": {
+        "checks": [
+          {
+            "latencyMs": 0,
+            "message": "sqlite connect",
+            "name": "backend:local-db",
+            "status": "ok",
+            "type": "database"
+          },
+          {
+            "latencyMs": 0,
+            "message": "/Users/jose/src/work/media-timeline/media-store/backend-cache",
+            "name": "backend:cache-dir",
+            "status": "ok",
+            "type": "filesystem"
+          },
+          {
+            "latencyMs": 1,
+            "message": "status 200",
+            "name": "dependency:label-store",
+            "status": "ok",
+            "type": "dependency"
+          },
+          {
+            "latencyMs": 117,
+            "message": "status 200",
+            "name": "dependency:file-server",
+            "status": "ok",
+            "type": "dependency"
+          },
+          {
+            "latencyMs": 1,
+            "message": "status 200",
+            "name": "dependency:job-queue",
+            "status": "ok",
+            "type": "dependency"
+          }
+        ],
+        "service": "backend",
+        "status": "ready",
+        "timestamp": "2026-07-07T14:27:20.164Z",
+        "uptime": 742.752574583
+      },
+      "status": "ok",
+      "url": "http://127.0.0.1:3001/health?deep=1"
+    },
+    "directUploadRoute": {
+      "httpStatus": 401,
+      "payload": {
+        "error": "Missing or malformed Authorization header"
+      },
+      "status": "ok",
+      "url": "http://127.0.0.1:3001/api/hydracam-bridge/sessions/00000000-0000-4000-8000-000000000000/uploads/start"
+    },
+    "mediaStorage": {
+      "bucket": "media-timeline",
+      "payload": {
+        "bucket": "media-timeline",
+        "enabled": true,
+        "provider": "s3",
+        "signedUrlTtlSeconds": 900
+      },
+      "provider": "s3",
+      "signedUrlTtlSeconds": 900,
+      "status": "ok",
+      "url": "http://127.0.0.1:3001/api/media-storage/status"
+    }
+  },
+  "ok": true
+}

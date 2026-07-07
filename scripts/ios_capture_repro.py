@@ -147,6 +147,7 @@ def build_flutter_launch_command(
     *,
     role: str = "master",
     master_ip: str | None = None,
+    dart_defines: list[str] | None = None,
 ) -> list[str]:
     command = [
         "flutter",
@@ -162,6 +163,8 @@ def build_flutter_launch_command(
         "-t",
         "lib/main.dart",
     ]
+    for define in dart_defines or []:
+        command.insert(-2, f"--dart-define={define}")
     if master_ip:
         command.insert(
             -2,
@@ -177,12 +180,14 @@ def launch_flutter(
     port: int = DEFAULT_PORT,
     role: str = "master",
     master_ip: str | None = None,
+    dart_defines: list[str] | None = None,
 ) -> subprocess.Popen[str]:
     command = build_flutter_launch_command(
         device_id,
         port,
         role=role,
         master_ip=master_ip,
+        dart_defines=dart_defines,
     )
     log_handle = log_path.open("w", encoding="utf-8")
     process = subprocess.Popen(
