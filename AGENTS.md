@@ -101,6 +101,14 @@ durable project context and working agreements.
   minimum validation.
 - If a check cannot run because a device, SDK, signing identity, backend, or
   credential is unavailable, report the blocker and the command that was skipped.
+- `scripts/agent_gate.sh` mechanically runs the change-scoped static subset of
+  this policy (`git diff --check`, plus `dart format`/`flutter analyze` for
+  changed `.dart` files, plus `markdownlint-cli2` for changed `.md` files) and
+  is wired into Claude Code's `Stop` hook via `.claude/settings.json`, so it
+  runs automatically at the end of every turn. If the hook proves too chatty
+  or slow, the fallback is to remove the `hooks.Stop` entry from
+  `.claude/settings.json`; the script remains runnable manually
+  (`bash scripts/agent_gate.sh`).
 
 ## Shell and Automation Safety
 

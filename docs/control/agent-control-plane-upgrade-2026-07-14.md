@@ -50,7 +50,7 @@ Run `flutter test` additionally when a task changes anything under `lib/`,
 | HCP-1 | Untrack stale `automation_runs/` artifacts | Complete | Low | — |
 | HCP-2 | Root noise pruning (stub files, `script/`, `qr.png`) | Complete | Low | — |
 | HCP-3 | Markdownlint config + docs quality CI | Complete | Low | — |
-| HCP-4 | Change-scoped agent gate script + `.claude/settings.json` | Planned | Low | HCP-3 |
+| HCP-4 | Change-scoped agent gate script + `.claude/settings.json` | Complete | Low | HCP-3 |
 | HCP-5 | Flutter quality CI (analyze + test) | Planned | Medium | — |
 | HCP-6 | Slim `AGENTS.md` to invariants + pointers | Planned | Medium | HCP-4 |
 | HCP-7 | Refresh `docs/control/README.md` index | Planned | Low | HCP-6 |
@@ -244,6 +244,25 @@ run automatically at end of turn in Claude Code sessions.
 - With a deliberate trailing-whitespace edit in a scratch `.md` file, the
   gate fails; after revert it passes.
 - Settings JSON parses.
+
+### Implementation record (deviation from verified facts)
+
+- The dev host's default `/bin/bash` is 3.2 (macOS stock), which has no
+  associative arrays. The gate script's de-duplication logic was written with
+  `awk '!seen[$0]++'` instead of a bash-4-style `declare -A`, after an initial
+  version failed with `declare: -A: invalid option`. Confirmed with
+  `bash --version` → `GNU bash, version 3.2.57(1)-release`.
+- Verified all three acceptance criteria directly:
+  - Clean tree: `bash scripts/agent_gate.sh` printed the change-scoped output
+    (no changes other than this task's own new/modified files) and exited 0.
+  - Scratch failure: added a trailing-whitespace line to a scratch
+    `docs/control/scratch-gate-test.md`, staged it; the gate's `git diff
+    --check` and `markdownlint-cli2` (MD009) both flagged it and the script
+    exited 1. Reverting (`git reset` + delete) restored an exit-0 pass.
+  - `node -e "JSON.parse(...)"` on `.claude/settings.json` printed
+    `settings.json OK`.
+- Per HCP-4 step 2, documented the Stop-hook removal fallback in `AGENTS.md`'s
+  Validation Policy section (new bullet after the "docs-only" line).
 
 ---
 
