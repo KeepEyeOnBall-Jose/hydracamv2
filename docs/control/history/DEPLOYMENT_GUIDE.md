@@ -253,8 +253,9 @@ flutter test     # Tests should pass
 
 - **Test Documentation**: `test/README.md`
 - **Code Quality Summary**: `TESTING_SUMMARY.md`
-- **Goals**: `GOALS.txt`
-- **Current Status**: `Current_dev_status.txt`
+- **Goals**: `GOALS.txt` (files removed 2026-07-14, see `docs/control/`)
+- **Current Status**: `Current_dev_status.txt` (files removed 2026-07-14, see
+  `docs/control/`)
 
 ---
 

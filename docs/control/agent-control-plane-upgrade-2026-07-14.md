@@ -48,7 +48,7 @@ Run `flutter test` additionally when a task changes anything under `lib/`,
 | Id | Task | Status | Risk | Depends on |
 | --- | --- | --- | --- | --- |
 | HCP-1 | Untrack stale `automation_runs/` artifacts | Complete | Low | — |
-| HCP-2 | Root noise pruning (stub files, `script/`, `qr.png`) | Planned | Low | — |
+| HCP-2 | Root noise pruning (stub files, `script/`, `qr.png`) | Complete | Low | — |
 | HCP-3 | Markdownlint config + docs quality CI | Planned | Low | — |
 | HCP-4 | Change-scoped agent gate script + `.claude/settings.json` | Planned | Low | HCP-3 |
 | HCP-5 | Flutter quality CI (analyze + test) | Planned | Medium | — |
@@ -124,6 +124,23 @@ that compete with the control plane during agent orientation.
   or `script/`.
 - `rg 'script/build_and_run|Current_dev_status|GOALS\.txt'` outside
   `docs/control/history/` and this plan returns nothing.
+
+### Implementation record (deviations from verified facts)
+
+- `.codex/environments/environment.toml` also referenced
+  `./script/build_and_run.sh` (missed by the original "zero references
+  outside itself" fact-check because it's under a dotdir `rg` skips by
+  default without `--hidden`). Updated it to `./scripts/build_and_run.sh` in
+  the same change since it is a live config, not historical evidence.
+- `logs/verification-runs/20260606-2007-evidence-first-loop-tooling/git-status-{before,after}.txt`
+  and `logs/verification-runs/20260607-0035-native-macos-controller-run/README.md`
+  still contain literal `Current_dev_status.txt`, `GOALS.txt`, and
+  `script/build_and_run.sh` strings. These are point-in-time evidence-pack
+  transcripts (command output snapshots), not live pointers, and fall under
+  the "Explicitly deferred" policy against modifying tracked evidence under
+  `logs/`. The acceptance-criteria grep above should be read as excluding
+  `logs/verification-runs/` for this reason, matching the deferred-work
+  policy at the bottom of this plan.
 
 ---
 
