@@ -46,4 +46,6 @@ jobs:
 
       - name: markdownlint-cli2 on changed files
         if: steps.changed.outputs.files != ''
-        run: npx --yes markdownlint-cli2 ${{ steps.changed.outputs.files }}
+        env:
+          CHANGED_MD_FILES: ${{ steps.changed.outputs.files }}
+        run: printf '%s\n' "$CHANGED_MD_FILES" | xargs -d '\n' npx --yes markdownlint-cli2
