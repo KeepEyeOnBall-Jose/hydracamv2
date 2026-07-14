@@ -316,6 +316,15 @@ or harness.
   `subosito/flutter-action@v2` (stable channel, cache enabled). No scoping
   or descoping was needed.
 - Workflow YAML validated: `ruby -ryaml -e "YAML.load_file(...)"` → `YAML OK`.
+- 2026-07-14 (post-PR): the first CI run on PR #15 exposed two issues fixed
+  in follow-up commits. (1) `docs-quality.yml` interpolated the
+  newline-separated changed-file list directly into the `run:` script, so
+  the second file was executed as a shell command; fixed with an env var +
+  `xargs`. (2) `test/widgets/add_gallery_media_button_test.dart` fails on
+  Linux runners because `photo_manager`'s `AssetEntity.getFile` asserts the
+  host OS is Android/iOS/macOS ("linux does not support obtain file"); the
+  file is now marked `@TestOn("!linux")` and still runs fully on macOS dev
+  hosts (7 tests pass locally; ubuntu CI host-skips them).
 
 ---
 
