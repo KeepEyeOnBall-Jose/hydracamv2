@@ -1,0 +1,149 @@
+{
+  "acceptanceChecks": [
+    "A project-local cleartext credential file contains JuJo and Astral Express without printing passwords into evidence logs",
+    "Every authorized attached Android phone stores both Wi-Fi profiles and associates to Astral Express",
+    "Every reachable Apple device is either associated to Astral Express or has an exact platform blocker recorded"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/android_wifi_preflight.py",
+        "--expected-subnet",
+        "192.168.178.0/24",
+        "--device",
+        "9885e6503930304946",
+        "--device",
+        "RF8M2125DAJ",
+        "--device",
+        "RF8M40MT6AW",
+        "--check-only"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T12:16:44.304048+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/test_android_wifi_preflight.py"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T12:16:45.821326+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/android_wifi_preflight.py",
+        "--expected-subnet",
+        "192.168.178.0/24",
+        "--device",
+        "29d816ac550b7ece",
+        "--device",
+        "9885e6503930304946",
+        "--device",
+        "RF8M2125DAJ",
+        "--device",
+        "RF8M40MT6AW",
+        "--device",
+        "RF8M90QE7LX",
+        "--check-only"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T12:24:53.062036+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S7 edge",
+      "notes": [],
+      "os": "Android 8.0.0 API 26",
+      "role": "Wi-Fi client"
+    },
+    {
+      "identifier": "RF8M2125DAJ",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e RF8M2125DAJ",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "Wi-Fi client"
+    },
+    {
+      "identifier": "RF8M40MT6AW",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e RF8M40MT6AW",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "Wi-Fi client"
+    },
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S9",
+      "notes": [],
+      "os": "Android 10",
+      "role": "Wi-Fi client"
+    },
+    {
+      "identifier": "AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS hardware",
+      "name": "iPhone 12 Pro",
+      "notes": [],
+      "os": "iOS 26.5.2",
+      "role": "Wi-Fi profile delivered; installation awaiting user confirmation"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e RF8M90QE7LX",
+      "notes": [],
+      "os": "Android 12 API 31",
+      "role": "Wi-Fi client"
+    },
+    {
+      "identifier": "0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS hardware",
+      "name": "iPad (6th generation)",
+      "notes": [
+        "Added by user on 2026-07-14; profile delivery requires on-device approval."
+      ],
+      "os": "iPadOS (CoreDevice paired)",
+      "role": "Wi-Fi profile delivered; installation awaiting user confirmation"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/29d816ac550b7ece-astral-express.png",
+    "screenshots/9885e6503930304946-astral-express.png",
+    "screenshots/RF8M2125DAJ-astral-express.png",
+    "screenshots/RF8M40MT6AW-astral-express.png",
+    "screenshots/RF8M90QE7LX-astral-express.png",
+    "video/29d816ac550b7ece-astral-express.mp4",
+    "device-logs/29d816ac550b7ece-wifi-status.txt",
+    "device-logs/9885e6503930304946-wifi-status.txt",
+    "device-logs/RF8M2125DAJ-saved-networks.txt",
+    "device-logs/RF8M2125DAJ-wifi-status.txt",
+    "device-logs/RF8M40MT6AW-saved-networks.txt",
+    "device-logs/RF8M40MT6AW-wifi-status.txt",
+    "device-logs/RF8M90QE7LX-saved-networks.txt",
+    "device-logs/RF8M90QE7LX-wifi-status.txt",
+    "device-logs/apple-profile-delivery.txt",
+    "device-logs/fleet-ssid-summary.txt",
+    "device-logs/s7-s9-saved-networks.txt"
+  ],
+  "item": {
+    "slug": "astral-express-fleet-wifi",
+    "source": "docs/control/status-and-roadmap.md#current-mobile-status",
+    "title": "Verify and provision the reachable HydraCam fleet onto one LAN"
+  },
+  "notes": [
+    "Five ADB-visible Android phones store both requested SSIDs and are connected to Astral Express on 192.168.178.0/24. The iPhone 12 Pro and iPad downloaded the two-network Apple profile but installation still needs user confirmation. POCO and iPhone 11 were not data-visible; the user main S10e was intentionally excluded."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

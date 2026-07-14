@@ -1,13 +1,25 @@
 # HydraCam Status and Roadmap
 
 Last control-plane migration: 2026-06-05.
-Last status refresh: 2026-07-07.
+Last status refresh: 2026-07-14.
 
 This document is scoped to `/Users/jose/src/work/hydracamv2`, the Flutter mobile
 repo. Backend, web, Azure, and AI/product work is recorded only when it blocks
 or informs the mobile app.
 
 ## Current Mobile Status
+
+2026-07-14 fleet Wi-Fi refresh: the five ADB-visible Android devices (Samsung
+S9, S7 edge, and three S10e devices) now store both requested lab networks and
+are connected to `Astral Express` on `192.168.178.0/24`. The local cleartext
+credential JSON and Apple configuration profile are deliberately gitignored;
+the evidence pack at
+`logs/verification-runs/20260714-1407-astral-express-fleet-wifi/` records only
+redacted commands and non-secret connection state. The iPhone 12 Pro and iPad
+6th generation downloaded the Apple profile and still require confirmation of
+the on-device Install approval. The POCO and iPhone 11 were not visible over
+ADB, CoreDevice, or USB during this refresh, while the user's main S10e remained
+intentionally out of scope.
 
 | Area | Status | Notes |
 | --- | --- | --- |

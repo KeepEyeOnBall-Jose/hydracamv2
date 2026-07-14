@@ -1,0 +1,65 @@
+# HydraCam evidence run command log
+
+$ python3 scripts/android_wifi_preflight.py --expected-subnet 192.168.178.0/24 --device 9885e6503930304946 --device RF8M2125DAJ --device RF8M40MT6AW --check-only
+Expected subnet: 192.168.178.0/24
+[OK] 9885e6503930304946 SM-G935F Android 8.0.0 wlan0=192.168.178.131 wifi_on=1
+  wifi: No shell command implementation.
+  routes:
+    192.168.178.0/24 dev wlan0  proto kernel  scope link  src 192.168.178.131
+[OK] RF8M2125DAJ SM-G970F Android 12 wlan0=192.168.178.129 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.129
+[OK] RF8M40MT6AW SM-G970F Android 12 wlan0=192.168.178.130 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.130
+
+All selected Android devices have wlan0 on the expected subnet.
+[exit-code] 0
+
+$ adb -s 9885e6503930304946 shell dumpsys wifi | awk '/Configured networks Begin/,/Configured networks End/' | rg -n -i 'ID: .*SSID: "(JuJo|Astral Express)"|NetworkSelectionStatus|hasEverConnected'
+ID: 3 SSID: "JuJo"; NETWORK_SELECTION_ENABLED; hasEverConnected: true
+ID: 4 SSID: "Astral Express"; NETWORK_SELECTION_ENABLED; hasEverConnected: true; current network
+[exit-code] 0
+
+$ adb -s 29d816ac550b7ece shell dumpsys wifi | awk '/Configured networks Begin/,/Configured networks End/' | rg -n -i 'ID: .*SSID: "(JuJo|Astral Express)"|NetworkSelectionStatus|hasEverConnected'
+ID: 159 SSID: "Astral Express"; NETWORK_SELECTION_ENABLED; hasEverConnected: true; current network
+ID: 160 SSID: "JuJo"; NETWORK_SELECTION_ENABLED; hasEverConnected: true
+[exit-code] 0
+
+$ python3 scripts/test_android_wifi_preflight.py
+
+[stderr]
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+[exit-code] 0
+
+$ python3 scripts/android_wifi_preflight.py --expected-subnet 192.168.178.0/24 --device 29d816ac550b7ece --device 9885e6503930304946 --device RF8M2125DAJ --device RF8M40MT6AW --device RF8M90QE7LX --check-only
+Expected subnet: 192.168.178.0/24
+[OK] 29d816ac550b7ece SM-G960F Android 10 wlan0=192.168.178.134 wifi_on=2
+  wifi: Security exception: Uid 2000 does not have access to wifi commands
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.134
+[OK] 9885e6503930304946 SM-G935F Android 8.0.0 wlan0=192.168.178.131 wifi_on=1
+  wifi: No shell command implementation.
+  routes:
+    192.168.178.0/24 dev wlan0  proto kernel  scope link  src 192.168.178.131
+[OK] RF8M2125DAJ SM-G970F Android 12 wlan0=192.168.178.129 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.129
+[OK] RF8M40MT6AW SM-G970F Android 12 wlan0=192.168.178.130 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.130
+[OK] RF8M90QE7LX SM-G970F Android 12 wlan0=192.168.178.132 wifi_on=1
+  wifi: Wifi is enabled
+  routes:
+    192.168.178.0/24 dev wlan0 proto kernel scope link src 192.168.178.132
+
+All selected Android devices have wlan0 on the expected subnet.
+[exit-code] 0
