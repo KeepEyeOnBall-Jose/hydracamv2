@@ -1,0 +1,51 @@
+name: Docs Quality
+
+on:
+  pull_request:
+  push:
+    branches: [master-jose-2025]
+
+jobs:
+  docs-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine diff base
+        id: base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "range=${{ github.event.pull_request.base.sha }}...${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "range=${{ github.event.before }}...${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: git diff --check
+        run: git diff --check ${{ steps.base.outputs.range }}
+
+      - name: Find changed markdown files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only --diff-filter=ACMR ${{ steps.base.outputs.range }} -- '*.md' | grep -v '^docs/control/history/' | grep -v '^logs/' || true)
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node.js
+        if: steps.changed.outputs.files != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: markdownlint-cli2 on changed files
+        if: steps.changed.outputs.files != ''
+        env:
+          CHANGED_MD_FILES: ${{ steps.changed.outputs.files }}
+        run: printf '%s\n' "$CHANGED_MD_FILES" | xargs -d '\n' npx --yes markdownlint-cli2

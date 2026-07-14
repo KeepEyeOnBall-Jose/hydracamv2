@@ -101,6 +101,33 @@ durable project context and working agreements.
   minimum validation.
 - If a check cannot run because a device, SDK, signing identity, backend, or
   credential is unavailable, report the blocker and the command that was skipped.
+- `scripts/agent_gate.sh` mechanically runs the change-scoped static subset of
+  this policy on every turn, and `.github/workflows/` CI backstops
+  `flutter analyze`/`flutter test` on every PR; see "Mechanical Enforcement"
+  below for how these are wired and what to do if they misbehave.
+- For the rotating master/slave matrix runner's mode flags, target-selection
+  behavior, and iOS/macOS bridge caveats, see
+  `docs/control/rotating-matrix-runner.md`.
+
+## Mechanical Enforcement
+
+- `scripts/agent_gate.sh` computes changed files (staged + unstaged +
+  untracked vs `HEAD`, or explicit path arguments) and always runs
+  `git diff --check`; it also runs `dart format --set-exit-if-changed` plus
+  `flutter analyze --no-pub` for changed `.dart` files, and
+  `markdownlint-cli2` for changed `.md` files (excluding
+  `docs/control/history/` and `logs/`).
+- `.claude/settings.json` wires this script into Claude Code's `Stop` hook, so
+  it runs automatically at the end of every turn. If the hook proves too
+  chatty or slow, the fallback is to remove the `hooks.Stop` entry; the script
+  remains runnable manually (`bash scripts/agent_gate.sh`).
+- `.github/workflows/docs-quality.yml` backstops `git diff --check` and
+  changed-markdown linting on every PR and push to `master-jose-2025`.
+  `.github/workflows/flutter-quality.yml` backstops `flutter analyze` and
+  `flutter test` the same way.
+- Once a check is mechanically enforced here (gate script or CI workflow), do
+  not re-expand it into prose elsewhere in this file — update the script or
+  workflow and this section's pointer instead.
 
 ## Shell and Automation Safety
 
@@ -115,221 +142,34 @@ durable project context and working agreements.
 
 HydraCam is a Flutter mobile application for multi-device camera synchronization, designed for sports events (squash, padel). It uses a master-slave architecture where one device (master) controls multiple slave devices' cameras via WebSocket communication over a local network/hotspot.
 
-**Current Platform Status:**
-- iOS simulator: Working
-- iOS physical devices: Working in recent debug/capture evidence. A 2026-06-06
-  iPhone 12 Pro debug run launched, created a session, captured/uploaded a
-  photo, and started video recording; a 2026-06-06 physical iPad run captured
-  one photo and one video after the no-flash camera fix. A 2026-06-07 iPhone
-  12 Pro / iOS 26.5 automation rerun passed `ultraWide` capture at
-  `sport1080p60` and `detail4k30`; saved-video metadata still reported
-  unavailable. A later 2026-06-07 iPhone Profile automation build installed and
-  launched without Flutter tooling, exposing an identity-matched bridge at
-  `192.168.178.168:4762` for hot role-switch runs. The latest 2026-06-08 iPad
-  iOS 17.7.11 Profile deployment rerun
-  `20260608-0309-ipad-ios17711-profile-compile-deploy-rerun` compiled the
-  automation Profile app, installed `com.vectorblanco.hydracam.dev` through
-  `devicectl install app`, restored Flutter/xctrace/CoreDevice visibility with
-  the iPad paired and online, and confirmed the iPad automation bridge at
-  `192.168.178.104:4762` with the expected
-  `automationTargetId=8b406aa5c597eab4c4dfd9908f4a09b10a89ec63`. The follow-up
-  warm-prime confirmation `20260608-ipad-ios17711-warm-bridge-confirmed`
-  passed with zero missing warm bridges. The 2026-06-09 connected-iPad Profile
-  smoke `20260609-0021-ipad-physical-release-profile-smoke` passed no-tooling
-  Profile launch, identity-matched bridge warmup at `169.254.193.202:4762`, and
-  one-device photo/video capture with copied iPad JPEG/MP4 evidence. The
-  follow-up `20260609-0120-ipad-runtime-screenshot-boundary-route-replacement`
-  fixed and proved runtime `capture_screenshot` after `set_role` by keeping the
-  automation `RepaintBoundary` around the `MaterialApp` navigator. The
-  2026-06-09 Keepeyeonball signing follow-up
-  `20260609-0414-signing-jose-keepeyeonball-ios-redeploy-after-account`
-  confirmed the Xcode account/certificate update for team `4RRY2QT7H8`, built
-  and installed `com.keepeyeonball` Profile on iPad and iPhone, launched both
-  through `devicectl`, proved the iPhone automation bridge and screenshot copy
-  path at `192.168.178.168:4762`, and exported App Store IPA
-  `build/ios/ipa/HydraCam.ipa` with a cloud-managed Apple Distribution
-  certificate. The iPad install/launch succeeded, but its automation bridge did
-  not answer on `169.254.193.202`, `192.168.178.104`, or scanned LAN/link-local
-  subnets in that run. Follow-up
-  `20260609-0557-ios-iphone-ipad-not-working` reproduced the user's failure:
-  both physical iOS devices were visible and unlocked, the iPhone
-  `com.keepeyeonball` bridge passed `/healthz` and copied an automation
-  screenshot, but the iPhone also still had the old
-  `com.vectorblanco.hydracam.dev` HydraCam bundle installed with the same
-  visible app name. The iPad `devicectl` launch timed out; `xctrace` reached
-  Dart, and copied iPad traces showed `SocketException: Failed to create server
-  socket ... port = 4762`, meaning a stale process/socket held the automation
-  port. The continuation
-  `20260609-0852-ios-iphone-ipad-recovery-continuation` removed the stale iPhone
-  duplicate, made automation bridge bind failure non-fatal, fixed the real iPad
-  startup stall by timing out stuck startup permission requests after 8 seconds,
-  rebuilt and installed Profile automation apps on iPhone and iPad, restored
-  both identity-matched bridges on the standard port `4762`, copied current
-  standby screenshots from both devices, and passed a selected physical
-  iPhone+iPad immediate role-switch proof with explicit LAN hosts in `0.45s`.
-  The previous iPad recovery blocker is superseded; for selected iPhone+iPad
-  role-switch checks, keep `--no-auto-ios-bridge-hosts` when explicit LAN hosts
-  are supplied so iPhone link-local bridge adoption cannot poison expected
-  remote-client IP checks. The follow-up all-hardware run
-  `20260609-0930-all-hardware-ios-android-update-role-test` kept the physical
-  iPhone and iPad on identity-matched `4762` bridges and included both in the
-  current six-device iOS/Android role-switch proof.
-  TestFlight upload still requires App Store Connect upload
-  credentials, for example `APP_STORE_CONNECT_API_KEY_PATH` or Transporter/altool
-  API key and issuer. Rerun the full
-  selected-set loop before claiming a new six-target role-switch benchmark. The
-  prior broad "white screen" blocker is superseded; keep validating the
-  foreground release/user lane, signing, two-device capture flows, and native
-  metadata before production claims.
-- Android: In development. Active Android support starts at API 24; Android
-  6.0/API 23 and older devices are deprecated for this repo unless the user
-  explicitly reopens legacy-device support. 2026-06-07 post-label evidence
-  shows Samsung S10e / Android 12 and SM-G960F / Android 10 baseline 1080p30
-  capture passing. A later 2026-06-07 parallel independent-capture matrix
-  confirmed S10e and G960F under a shared command barrier. The Samsung S7 edge
-  requires a device-specific compatibility mode: current code detects SM-G935F,
-  preserves the requested capture profile, uses preset-default FPS, and retries
-  timed-out still capture after controller reinitialization. The 2026-06-09 S7
-  higher-resolution compatibility run
-  `20260609-1405-s7-higher-resolution-compat` proved a direct S7
-  automation-master `standard1080p30` photo save plus a direct video
-  start/stop/save with copied JPEG/MP4 artifacts at 1920x1080. The earlier
-  `20260609-1012-s7-camera-compat-automation-exit` 720x480 workaround is
-  superseded for camera resolution. A standard backend-session matrix in that
-  earlier run still timed out on `start_session`, so keep S7 camera
-  compatibility separate from backend/session automation health. The 2026-06-09
-  all-hardware update run
-  `20260609-0930-all-hardware-ios-android-update-role-test` built the current
-  automation-enabled Android APK (`1.4.0+16`, minSdk 24), updated Samsung
-  G960F, Samsung S7 edge, and both Samsung S10e devices, and confirmed all five
-  visible Androids were on `192.168.178.0/24`. Xiaomi 2201116PG remained
-  blocked by device-side `INSTALL_FAILED_USER_RESTRICTED`.
-- Multi-device synchronization evidence: the 2026-06-07 parallel matrix was an
-  independent local-capture matrix and intentionally launched every
-  capture-capable device as a local master. It is not a master/slave discovery
-  or broadcast-synchronization proof. Later 2026-06-07 runtime role-switch
-  evidence proves one-master/many-slaves role rotation without relaunching on
-  the visible physical set, and warm-only mode passes repeated master rotations
-  across Samsung G960F, Samsung S7 edge, Samsung S10e, iPhone 12 Pro, and macOS.
-  The four-local 2026-06-07 stress proof
-  `20260607-runtime-role-switch-slave-ack-poll25ms-staged-skew10-stress5-four-local`
-  passes five hot cycles / 20 master rotations in `8.118s` after bridges are
-  warm when using `--stage-slaves-after-master-ready`, synchronous
-  acknowledgement for the promoted master, async accepted acknowledgement for
-  the parallel slave batch, and 25 ms connected-client polling. The current
-  iPhone-inclusive repeat proof
-  `20260608-warm-summary-prime-five-repeat` uses `--warm-summary` to skip
-  Flutter/ADB discovery and master-host probing, launches only the cold iPhone
-  Profile bridge, and passes five hot cycles / 25 master rotations in `9.167s`
-  across Samsung G960F, Samsung S7 edge, Samsung S10e, iPhone 12 Pro, and macOS.
-  Parallel request-start skew was capped below `0.686 ms`, `set_role` averaged
-  `162.803 ms`, connected-client verification averaged `201.572 ms`, and every
-  selected device became master five times. A separate pure-immediate
-  warm-summary rerun `20260608-warm-summary-hot-five-repeat` passes the same
-  25 rotations in `8.806s` when every selected bridge is already warm, with no
-  discovery, build, install, or launch. The current six-device physical
-  iOS/Android proof
-  `20260609-0930-all-hardware-ios-android-update-role-test/device-logs/six-device-current-build-role-switch`
-  passed six role rotations in `43.435s` across Samsung G960F, Samsung S7 edge,
-  two Samsung S10e devices, iPhone 12 Pro, and iPad 5 after updating the four
-  included Android APK installs. Xiaomi was excluded from the rotations only
-  because the Android package update was blocked on-device. The current fastest
-  repeat proof is
-  `20260608-latest-cache-shortest-default-staged-five-hot`, which uses the
-  automatically persisted latest warm-summary cache with no manual
-  `--warm-summary`, no target list, no explicit staged-slave flag, no
-  Flutter/ADB discovery, no master-host probing, no build/install/launch, and
-  passes the full cached five-device set across five cycles / 25 rotations in
-  `7.844s`; warm preflight found no missing bridges and parallel slave
-  request-start skew stayed below `1.349 ms`. A fully parallel diagnostic probe
-  `20260608-latest-cache-short-command-five-hot-fully-parallel-probe` also
-  passed, but took `22.344s` because clients raced the promoted master's server
-  startup. The same current code path also has a cold proof, but
-  build/install/launch made two cycles / 8 rotations take `63.919s`; do not use
-  cold proof as a speed benchmark. Successful warm role-switch runs now update
-  `logs/verification-runs/latest-rotating-master-slave-warm-summary.json`.
-  Only parsed CLI args with a configured latest-cache path should update that
-  durable cache; manually constructed test namespaces must skip cache writes so
-  unit tests cannot poison the hot-run target set.
-  For the fastest normal repeat loop, run
-  `scripts/run_rotating_master_slave_matrix.py` with `--immediate-role-switch`;
-  if the latest cache exists, the
-  immediate shortcut uses the full cached target set automatically and skips
-  Flutter/ADB discovery plus master-host probing. It stages the promoted master
-  first, then dispatches all slave role changes in parallel because current
-  evidence shows that is faster end-to-end than sending all devices at once.
-  Use `--fully-parallel-role-switch` only as a diagnostic comparison. Use
-  selected `--target-id` filters only when intentionally narrowing the run.
-  Cached immediate reruns
-  also skip the default physical-iOS LAN host scan unless
-  `--auto-ios-bridge-hosts` is passed explicitly; stale cached iOS hosts are
-  caught by the identity-matched warm-bridge preflight. To pin a specific prior
-  run instead, pass `--warm-summary
-  logs/verification-runs/<last-good-run>/summary.json`. Add repeated
-  `--expect-target-id` flags for every device intended to be in the run before
-  claiming an all-device or complete selected-set result. That writes
-  `expected-targets.json` and fails before build/install/launch when a warm
-  summary or filter omits an expected device. This mode must also fail before
-  build/install/standby-launch if any selected automation bridge is missing or
-  stale. Physical iPhone no-tooling fast launch requires a Profile automation
-  build; debug `Runner.app` launched with `devicectl` exits before Dart with
-  "Cannot create a FlutterEngine instance in debug mode without Flutter tooling
-  or Xcode." Use the runner's `--ios-profile-build-install` path; on older
-  physical iOS devices where `devicectl install` cannot see the device, the
-  runner falls back to IPA packaging plus `flutter install --use-application-binary`.
-  If xctrace reports `ios_profile_not_trusted`, the remaining step is on the
-  device: Settings > General > VPN & Device Management, trust the developer
-  profile, keep the device unlocked, and rerun the warm-prime/immediate command.
-  The current iPad iOS 17.7.11 evidence is past that blocker; if `/healthz`
-  still reports the expected iPad `automationTargetId`, prefer an immediate
-  selected-set rerun over another scoped trust-retry run.
-  To avoid restarting the command while doing that device-side step, add
-  `--ios-profile-trust-retry-timeout <seconds>` to a warm-prime or
-  prime-then-immediate run; the runner will retry the missing physical iOS
-  bridge and record `iosProfileTrustRetryAttempts` in `warm-bridge-prime.json`.
-  Keep the identity-based auto host scan enabled for immediate loops, and do not
-  hard-code the prior stale `192.168.178.141` host. If the iPhone Profile
-  bridge may be cold, use `--prime-then-immediate-role-switch --fast-ios-launch`
-  as the one-command path; pure `--immediate-role-switch` is intentionally a
-  no-launch fast path and should be used only after `/healthz` proves the iPhone
-  bridge is currently warm.
-  Use `--warm-prime-only` first when selected bridges are cold; it reuses
-  running bridges, skips build/install, attempts only missing standby launches,
-  writes `warm-bridge-prime.json`, and does not run rotations. Current combined
-  runs should prefer `--prime-then-immediate-role-switch`, which primes missing
-  bridges and then runs the immediate role-switch proof only when every selected
-  bridge is warm. Failed warm-prime artifacts should include `deviceActions`
-  with the concrete operator step for each still-missing bridge. Current
-  role-switch artifacts should include `requestStartSkewMs` in each
-  `runtime-role-switch.json`, per-rotation `phase-timings.json`, and connected
-  client `registeredAt` / `masterServerStartedAt` timestamps so parallel
-  dispatch, master-command readiness, and connected-client verification are
-  measured directly, not inferred from elapsed time. Current timing evidence
-  shows dispatch is already sub-millisecond; remaining latency is promoted
-  master server startup and client registration after server start. In current
-  evidence, staging the master before the slave batch reduces that tail enough
-  to beat fully parallel role switching. For macOS standby, prefer the direct
-  detached debug-app launcher, but remember that `HYDRACAM_AUTOMATION_PORT` is
-  a compile-time Dart define; the direct debug app normally listens on the
-  compiled default port `4762`, and the runner normalizes cold direct-macOS
-  targets to that port unless an already-running identity-matched bridge is
-  adopted. Flutter-launched macOS standby processes have not been reliable warm
-  bridges across runner exits. Runtime role switching should keep zero-duration
-  automation routes and identity-safe client/socket cleanup; otherwise rapid
-  back-to-back rotations can leave stale slave screens or stale sockets that
-  dispose or hide the newly promoted master. Use
-  `docs/control/status-and-roadmap.md` for the current evidence paths and keep
-  capture-enabled master/slave proof separate from role-only proof.
-- Desktop (Windows/macOS) and web: Planned for future support. The 2026-06-09
-  Win11 Windows/Linux/Android emulator proof attempt is documented in
-  `docs/control/win11-triple-platform-proof-wrapup-2026-06-09.md`: native
-  Windows real-webcam capture/upload passed, WSL Linux and Android emulator
-  only passed with fallback media, and the all-combinations role matrix was
-  aborted before completion.
+**Current Platform Status** (durable summary; see `docs/control/status-and-roadmap.md`
+for dated evidence, run IDs, IPs, and timings, and
+`docs/control/rotating-matrix-runner.md` for multi-device runner how-to):
+
+- iOS: Simulator launches but exposes no camera (launch/UI checks only).
+  Physical iPhone/iPad work for capture, session, upload, and role-switch on
+  Profile automation builds; known caveats are debug builds cannot fast-launch
+  without Flutter tooling, an untrusted developer profile blocks the
+  automation bridge until approved on-device, and TestFlight/App Store upload
+  is blocked on local Distribution signing plus App Store Connect credentials.
+- Android: Active support starts at API 24 (older devices deprecated unless
+  reopened). Role-switch/capture evidence is good on Samsung S10e/G960F. The
+  Samsung S7 edge (SM-G935F) needs an implemented device-specific
+  compatibility mode (preset-default FPS, capture retry) with current
+  1080p30 photo/video proof. Xiaomi 2201116PG install remains blocked by
+  device-side `INSTALL_FAILED_USER_RESTRICTED`.
+- Desktop (Windows/macOS) and web: Partial. macOS controller debug path works.
+  A Windows/Linux/Android-emulator proof passed native Windows real-webcam
+  capture/upload but did not complete the full role matrix; see
+  `docs/control/win11-triple-platform-proof-wrapup-2026-06-09.md`.
+- Multi-device role-switch synchronization across mixed iOS/Android/macOS sets
+  (including six-device rotations) is implemented and proven; see the two
+  pointers above for how to run it and the latest timings.
 
 ## Development Commands
 
 ### Build and Run
+
 ```bash
 # Get dependencies
 flutter pub get
@@ -345,6 +185,7 @@ flutter build windows          # Windows
 ```
 
 ### Testing and Quality
+
 ```bash
 # Run tests
 flutter test
@@ -360,6 +201,7 @@ flutter format .
 ```
 
 ### Utilities
+
 ```bash
 # Clean build artifacts
 flutter clean
@@ -373,6 +215,7 @@ flutter pub run flutter_launcher_icons:main
 ### Master-Slave Communication Model
 
 **Master Device:**
+
 - Runs WebSocket server on port 4040 (0.0.0.0)
 - Broadcasts presence via `MasterAnnouncer`
 - Sends commands to all connected slaves (or specific slaves)
@@ -380,6 +223,7 @@ flutter pub run flutter_launcher_icons:main
 - Tracks client connections via heartbeat mechanism
 
 **Slave Device:**
+
 - Discovers master via `MasterDiscovery`
 - Connects to master's WebSocket server
 - Sends periodic heartbeats to maintain connection
@@ -387,6 +231,7 @@ flutter pub run flutter_launcher_icons:main
 - Auto-reconnects on disconnection
 
 **Communication Protocol:**
+
 - All communication uses JSON over WebSocket
 - Messages include `type`, `command`, and `deviceId` fields
 - Supports scheduled commands with countdown timers
@@ -397,12 +242,14 @@ flutter pub run flutter_launcher_icons:main
 The app uses several singleton services for centralized state management:
 
 **CameraServiceSingleton** (`lib/services/camera_service_singleton.dart`):
+
 - Provides single shared camera instance across master/slave roles
 - Prevents redundant camera initializations
 - Supports dynamic callback assignment for role switching
 - Handles forced recording stops (low storage/battery)
 
 **SessionManager** (`lib/services/session_manager.dart`):
+
 - Manages current session state (GUID, metadata)
 - Tracks captured photos and videos in `CaptureSession` objects
 - Automatically queues media for upload via `UploaderService`
@@ -410,6 +257,7 @@ The app uses several singleton services for centralized state management:
 - Supports session reconstruction from filesystem
 
 **UploaderService** (`lib/services/uploader_service.dart`):
+
 - Queue-based upload system with retry logic
 - Configurable auto-upload via settings
 - Uploads directly from each device (no master-slave transfer)
@@ -419,26 +267,31 @@ The app uses several singleton services for centralized state management:
 ### Key Data Models
 
 **CaptureSession** (`lib/models/CaptureSession.dart`):
+
 - Groups photos and videos for a recording session
 - Tracks session GUID, start/end times, device type
 - Maintains lists of `CapturedPhoto` and `CapturedVideo` objects
 
 **CapturedPhoto** (`lib/models/CapturedPhoto.dart`):
+
 - Stores photo path, device ID, capture/received timestamps
 - Tracks upload status and duration
 
 **CapturedVideo** (`lib/models/CapturedVideo.dart`):
+
 - Stores video path, device ID, start/end recording timestamps
 - Tracks upload status and duration
 
 ### Authentication and API
 
 **Auth0 Integration:**
+
 - OAuth2 authentication via `flutter_appauth` package
 - Handled by `Auth0Service` (`lib/services/auth0_service.dart`)
 - M2M (machine-to-machine) support in `Auth0M2MService`
 
 **API Communication:**
+
 - `HydraCamApiService` manages all backend API calls
 - Creates sessions, uploads media (photos/videos)
 - Associates uploads with session GUID and device ID
@@ -447,23 +300,27 @@ The app uses several singleton services for centralized state management:
 ### Resource Management
 
 **BatteryService** (`lib/services/battery_service.dart`):
+
 - Monitors battery level continuously
 - Shows alerts for low battery
 - Can trigger forced recording stop
 
 **StorageService** (`lib/services/storage_service.dart`):
+
 - Monitors available disk space
 - Configured thresholds: 1.5GB (low), 0.5GB (critical)
 - Forces recording stop on critical storage
 - Shows snackbar notifications
 
 **PermissionService** (`lib/services/permission_service.dart`):
+
 - Requests camera, microphone, storage, location permissions
 - Called in `main()` before app initialization
 
 ### Application Entry Point
 
 **main.dart:**
+
 - Initializes permissions, device ID, location service
 - Enables wakelock (prevents screen timeout)
 - Initializes the CameraServiceSingleton (with a StorageService) before running the app
@@ -473,6 +330,7 @@ The app uses several singleton services for centralized state management:
 ## Code Style and Conventions
 
 ### Dart/Flutter Guidelines
+
 - **Imports:** Use relative imports (enforced by `prefer_relative_imports` lint)
 - **Strings:** Use double quotes (enforced by `prefer_double_quotes` lint)
 - **Variables:** Prefer `final` for local variables (enforced by `prefer_final_locals` lint)
@@ -480,7 +338,8 @@ The app uses several singleton services for centralized state management:
 - **Logging:** Use `LogService.instance.registerLog()` for all logging
 
 ### File Organization
-```
+
+```text
 lib/
 ├── master/          # Master device WebSocket server, announcer, UI
 ├── slave/           # Slave device WebSocket client, discovery, UI
@@ -527,52 +386,38 @@ lib/
 ## Settings and Configuration
 
 **Available Settings** (stored via `SettingsService` using `shared_preferences`):
+
 - `masterShouldRecord`: Whether master device also captures when commanding slaves
 - `autoUploadMaterials`: Enable automatic upload after capture
 - `deleteLocalAfterUpload`: Delete local files after successful upload
 - Camera quality presets (high/medium/low) - see `CameraQuality` enum in `constants.dart`
 
 **Hardcoded Configuration** (in `constants.dart`):
+
 - `secondsToClosePhoto = 3`: Auto-close photo preview popup
 - `timeToStopSearching = 3`: Slave auto-becomes master if no master found
 - `inactivityThreshold = 10`: Disconnect inactive slave clients (seconds)
 - `locationTimeout = 5`: Max time for location service to get position
 - Court/sports center GUIDs: Hardcoded list in `groupedCourts` map
 
-## iOS Physical-Device Verification
-
-Current status lives in `docs/control/status-and-roadmap.md`. Latest physical
-iOS evidence:
-- `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` launched
-  Debug on iPhone 12 Pro / iOS 26.4.2 through `flutter run`, received camera
-  and microphone permissions, reached master mode, created a session, captured
-  and uploaded a photo, and started video recording.
-- `logs/verification-runs/20260606-2310-ipad-capture-failure-trace-and-repro/`
-  fixed the iPad no-flash camera path and passed a physical iPad repro with one
-  photo and one video captured.
-- User follow-up on 2026-06-07 reports iPad and iPhone 12 testing is working
-  OK.
-
-The old "installs but only shows white screen" status is no longer current.
-Future iOS debugging should focus on reproducible failing flows only: release
-or profile icon launch, signing/team differences, two-device capture, local
-network discovery, upload, and session lifecycle.
-
 ## Common Patterns
 
 ### Adding a New Screen
+
 1. Create file in `lib/screens/`
 2. Import `app_theme.dart` for consistent styling
 3. Use `HydraCamAppBar` widget for consistent header
 4. Register logging for user actions via `LogService`
 
 ### Adding a New WebSocket Command
+
 1. Define command in master's send method (`MasterServer`)
 2. Add handler in slave's message listener (`SlaveClient`)
 3. Include `deviceId` in all messages
 4. Support scheduled commands with `scheduledTime` field for countdown
 
 ### Working with Sessions
+
 ```dart
 // Start session
 SessionManager.instance.startSession(guid, sessionId, deviceType: "Master");
@@ -591,6 +436,7 @@ SessionManager.instance.endSession();
 ```
 
 ### Camera Operations
+
 ```dart
 // Access singleton
 final cameraService = CameraServiceSingleton.instance;
@@ -628,6 +474,7 @@ await cameraService.stopRecordingVideo();
 
 Current goals and roadmap live in `docs/control/status-and-roadmap.md`. Durable
 priority themes:
+
 1. Complete release-grade Android and iOS distribution readiness
 2. Validate repeated two-device iOS/Android master-slave capture flows
 3. Add Windows/macOS/web platform support

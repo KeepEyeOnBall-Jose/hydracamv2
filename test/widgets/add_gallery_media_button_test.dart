@@ -1,3 +1,8 @@
+// photo_manager's AssetEntity.getFile asserts the HOST OS is
+// Android/iOS/macOS, so these tests cannot run on Linux CI runners.
+@TestOn("!linux")
+library;
+
 import "dart:io";
 
 import "package:flutter/material.dart";
