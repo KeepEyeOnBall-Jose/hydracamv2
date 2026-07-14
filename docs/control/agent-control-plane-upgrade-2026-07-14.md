@@ -52,8 +52,8 @@ Run `flutter test` additionally when a task changes anything under `lib/`,
 | HCP-3 | Markdownlint config + docs quality CI | Complete | Low | — |
 | HCP-4 | Change-scoped agent gate script + `.claude/settings.json` | Complete | Low | HCP-3 |
 | HCP-5 | Flutter quality CI (analyze + test) | Complete | Medium | — |
-| HCP-6 | Slim `AGENTS.md` to invariants + pointers | Planned | Medium | HCP-4 |
-| HCP-7 | Refresh `docs/control/README.md` index | Planned | Low | HCP-6 |
+| HCP-6 | Slim `AGENTS.md` to invariants + pointers | Complete | Medium | HCP-4 |
+| HCP-7 | Refresh `docs/control/README.md` index | Complete | Low | HCP-6 |
 
 ---
 
@@ -386,6 +386,79 @@ prohibits.
 - Every run ID removed from `AGENTS.md` is findable under `docs/control/`
   or was already there.
 - `npx --yes markdownlint-cli2 AGENTS.md` passes; gate passes.
+
+### Implementation record (deviation from verified facts and from the acceptance target)
+
+- Re-verified "Current state" at implementation time: `AGENTS.md` was actually
+  **675 lines**, not the 638 this task's fact-check recorded (HCP-3/HCP-4
+  landed after that count was taken). Located every section by heading, per
+  the parent instruction, not by the quoted line ranges.
+- Applied the disposition table as written: replaced the ~212-line dated
+  "Current Platform Status" journal (platform tiers, S7/Xiaomi caveats,
+  pointer to `status-and-roadmap.md` and to the new
+  `docs/control/rotating-matrix-runner.md`) with a 15-line durable-only
+  summary; deleted the 19-line "iOS Physical-Device Verification" section
+  outright (its two run IDs were already present in
+  `docs/control/status-and-roadmap.md` and `docs/control/backlog-import.md`);
+  trimmed the Validation Policy's `agent_gate.sh` bullet to one line plus a
+  pointer; added a new ~20-line "Mechanical Enforcement" section that absorbs
+  the HCP-4 Stop-hook fallback note (gate script contents, `.claude/settings.json`
+  wiring, CI workflow backstop, and the no-re-expansion-into-prose rule) so it
+  is not duplicated between Validation Policy and Mechanical Enforcement.
+- Extracted the durable `scripts/run_rotating_master_slave_matrix.py` how-to
+  (modes, `--expect-target-id`/latest-cache behavior,
+  `--no-auto-ios-bridge-hosts`, iOS profile build/install and trust-retry,
+  macOS `HYDRACAM_AUTOMATION_PORT` port caveat, staged-slaves rationale,
+  role-switch artifact fields) into new `docs/control/rotating-matrix-runner.md`,
+  deduplicated against `docs/control/status-and-roadmap.md` and
+  `docs/control/regular-evaluation-plan.md` (command examples stayed in
+  `regular-evaluation-plan.md`; evidence/timings stayed in
+  `status-and-roadmap.md`); pointered from both the Validation Policy section
+  and the platform-status summary in `AGENTS.md`.
+- **Zero-information-loss verification (automated):** extracted every
+  backtick-quoted run ID and evidence path from the removed text (18 distinct
+  identifiers, e.g. `20260609-0852-ios-iphone-ipad-recovery-continuation`,
+  `20260608-warm-summary-prime-five-repeat`,
+  `logs/verification-runs/2026-06-06-iphone-personal-team-debug/`) and
+  confirmed every one is findable under `docs/control/` outside `history/`
+  with `rg -l -F "<id>" docs/control/ | grep -v /history/` — all 18 hit
+  (mostly already in `status-and-roadmap.md`; the three iOS-runner-only facts
+  `iosProfileTrustRetryAttempts`, `--ios-profile-trust-retry-timeout`, and
+  `requestStartSkewMs` now live in the new `rotating-matrix-runner.md`).
+- **Acceptance criteria results:**
+  - `wc -l AGENTS.md` → **485**, not ≤ 320. See deviation note below — this
+    criterion was not met.
+  - `rg '2026-06-0[6-9]' AGENTS.md` → one hit, a filename reference to
+    `docs/control/win11-triple-platform-proof-wrapup-2026-06-09.md` (a
+    pointer, not journal narrative; ≤ 1 line, matches the acceptance
+    criterion's own carve-out).
+  - `npx --yes markdownlint-cli2 AGENTS.md` → `0 error(s)`.
+  - `bash scripts/agent_gate.sh` → `pass`.
+  - `git diff --check` → clean.
+  - `flutter analyze --no-pub` → `No issues found!` (unaffected, docs-only
+    change; run per the plan's global gate).
+- **Deviation: the ≤ 320-line acceptance criterion was not met, and is not
+  reachable under this task's own disposition table.** Measuring the sections
+  the disposition table marks "Keep" (Agent Control Plane, Operating Rules,
+  Worktrees, Shell Safety, Project Overview's first paragraph, Development
+  Commands, Architecture, Code Style, Session and Media Workflow, Settings,
+  Common Patterns, Testing Notes, Dependencies of Note, Future Development
+  Priorities, plus the non-`agent_gate.sh` portion of Validation Policy) totals
+  **~434 lines by itself** (`Architecture` alone is 117 lines, `Common
+  Patterns` 49, `Development Commands` 44) — before adding back a single line
+  of platform summary or the mandated new Mechanical Enforcement section.
+  Reaching 320 total would require cutting roughly 115+ lines out of sections
+  this same disposition table designates "Keep" and describes as durable,
+  code-anchored reference material, which this task's Steps do not authorize
+  and which risks real information loss for actively-useful project reference
+  content (as opposed to the dated journal prose this task targets). Rather
+  than silently rewrite or delete "Keep" sections to force the number down,
+  this task applied every cut and addition the disposition table specifies —
+  cutting `AGENTS.md` from 675 to 485 lines (28%), removing 100% of the dated
+  run-journal narrative, and verifying zero information loss automatically —
+  and reports the shortfall against the numeric target honestly here for the
+  owner to decide whether the "Keep" sections should be revisited in a
+  follow-up task.
 
 ---
 
