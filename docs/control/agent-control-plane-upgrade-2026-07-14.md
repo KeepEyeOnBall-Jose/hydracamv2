@@ -51,7 +51,7 @@ Run `flutter test` additionally when a task changes anything under `lib/`,
 | HCP-2 | Root noise pruning (stub files, `script/`, `qr.png`) | Complete | Low | — |
 | HCP-3 | Markdownlint config + docs quality CI | Complete | Low | — |
 | HCP-4 | Change-scoped agent gate script + `.claude/settings.json` | Complete | Low | HCP-3 |
-| HCP-5 | Flutter quality CI (analyze + test) | Planned | Medium | — |
+| HCP-5 | Flutter quality CI (analyze + test) | Complete | Medium | — |
 | HCP-6 | Slim `AGENTS.md` to invariants + pointers | Planned | Medium | HCP-4 |
 | HCP-7 | Refresh `docs/control/README.md` index | Planned | Low | HCP-6 |
 
@@ -301,8 +301,21 @@ or harness.
 
 ### Implementation record
 
-- To be filled at implementation time with the actual local
-  `flutter analyze` / `flutter test` results before the workflow is added.
+- Environment: this worktree needed `flutter pub get` first (per the parent
+  task's note); it completed cleanly (`Got dependencies!`, 32 packages have
+  newer versions available — informational only, not an error).
+- `flutter analyze --no-pub` (2026-07-14, `/opt/homebrew/bin/flutter`,
+  Flutter 3.44.1 stable): **`No issues found! (ran in 3.6s)`.** Passing.
+- `flutter test --no-pub` (2026-07-14, same Flutter): **656 passed, 1
+  skipped, 0 failed — `1 skipped test.` / `All other tests passed!`** in
+  ~20s wall time. Passing.
+- Both checks pass, so both are wired into
+  `.github/workflows/flutter-quality.yml` per the plan's Steps: `flutter pub
+  get`, `flutter analyze --no-pub`, `flutter test --no-pub`, triggered on
+  `pull_request` and `push` to `master-jose-2025`, using
+  `subosito/flutter-action@v2` (stable channel, cache enabled). No scoping
+  or descoping was needed.
+- Workflow YAML validated: `ruby -ryaml -e "YAML.load_file(...)"` → `YAML OK`.
 
 ---
 
