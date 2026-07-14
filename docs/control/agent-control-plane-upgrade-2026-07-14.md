@@ -49,7 +49,7 @@ Run `flutter test` additionally when a task changes anything under `lib/`,
 | --- | --- | --- | --- | --- |
 | HCP-1 | Untrack stale `automation_runs/` artifacts | Complete | Low | — |
 | HCP-2 | Root noise pruning (stub files, `script/`, `qr.png`) | Complete | Low | — |
-| HCP-3 | Markdownlint config + docs quality CI | Planned | Low | — |
+| HCP-3 | Markdownlint config + docs quality CI | Complete | Low | — |
 | HCP-4 | Change-scoped agent gate script + `.claude/settings.json` | Planned | Low | HCP-3 |
 | HCP-5 | Flutter quality CI (analyze + test) | Planned | Medium | — |
 | HCP-6 | Slim `AGENTS.md` to invariants + pointers | Planned | Medium | HCP-4 |
@@ -177,6 +177,27 @@ so the control docs stay lintable without prose reminders.
 
 - `npx --yes markdownlint-cli2 AGENTS.md docs/control/README.md docs/control/agent-control-plane-upgrade-2026-07-14.md` passes locally.
 - The workflow YAML parses (`ruby -ryaml -e ...` or any YAML parser).
+
+### Implementation record
+
+- `AGENTS.md` had 39 pre-existing markdownlint violations (MD022/MD031/MD032
+  blank-line-around-heading/fence/list issues, plus one MD040 missing fenced
+  code language) once `.markdownlint.json` existed. Per the parent task's
+  instruction that "AGENTS.md and the plan doc must pass," these were fixed:
+  `npx --yes markdownlint-cli2 --fix` resolved all but the MD040 case, and the
+  `### File Organization` fenced block (a directory tree) was manually tagged
+  ` ```text `. Diffed with `--ignore-blank-lines --ignore-all-space` to confirm
+  the fix only inserted blank lines and one language tag — no prose changed.
+  This is treated as within HCP-3 scope, not a "mass-fix legacy markdown"
+  violation, because the acceptance criteria for this task explicitly names
+  `AGENTS.md`.
+- `docs/control/README.md` and this plan doc had zero violations before the
+  config existed.
+- No workflow reference implementation was reused verbatim: the
+  media-timeline `quality-check.yml` is a multi-service monorepo workflow
+  (TypeScript/ESLint/Playwright/self-hosted runner) with no directly portable
+  docs-only lane, so `docs-quality.yml` was written fresh for this repo's
+  git-diff-check + changed-markdown-only shape, per the plan's own Steps.
 
 ---
 

@@ -116,6 +116,7 @@ durable project context and working agreements.
 HydraCam is a Flutter mobile application for multi-device camera synchronization, designed for sports events (squash, padel). It uses a master-slave architecture where one device (master) controls multiple slave devices' cameras via WebSocket communication over a local network/hotspot.
 
 **Current Platform Status:**
+
 - iOS simulator: Working
 - iOS physical devices: Working in recent debug/capture evidence. A 2026-06-06
   iPhone 12 Pro debug run launched, created a session, captured/uploaded a
@@ -330,6 +331,7 @@ HydraCam is a Flutter mobile application for multi-device camera synchronization
 ## Development Commands
 
 ### Build and Run
+
 ```bash
 # Get dependencies
 flutter pub get
@@ -345,6 +347,7 @@ flutter build windows          # Windows
 ```
 
 ### Testing and Quality
+
 ```bash
 # Run tests
 flutter test
@@ -360,6 +363,7 @@ flutter format .
 ```
 
 ### Utilities
+
 ```bash
 # Clean build artifacts
 flutter clean
@@ -373,6 +377,7 @@ flutter pub run flutter_launcher_icons:main
 ### Master-Slave Communication Model
 
 **Master Device:**
+
 - Runs WebSocket server on port 4040 (0.0.0.0)
 - Broadcasts presence via `MasterAnnouncer`
 - Sends commands to all connected slaves (or specific slaves)
@@ -380,6 +385,7 @@ flutter pub run flutter_launcher_icons:main
 - Tracks client connections via heartbeat mechanism
 
 **Slave Device:**
+
 - Discovers master via `MasterDiscovery`
 - Connects to master's WebSocket server
 - Sends periodic heartbeats to maintain connection
@@ -387,6 +393,7 @@ flutter pub run flutter_launcher_icons:main
 - Auto-reconnects on disconnection
 
 **Communication Protocol:**
+
 - All communication uses JSON over WebSocket
 - Messages include `type`, `command`, and `deviceId` fields
 - Supports scheduled commands with countdown timers
@@ -397,12 +404,14 @@ flutter pub run flutter_launcher_icons:main
 The app uses several singleton services for centralized state management:
 
 **CameraServiceSingleton** (`lib/services/camera_service_singleton.dart`):
+
 - Provides single shared camera instance across master/slave roles
 - Prevents redundant camera initializations
 - Supports dynamic callback assignment for role switching
 - Handles forced recording stops (low storage/battery)
 
 **SessionManager** (`lib/services/session_manager.dart`):
+
 - Manages current session state (GUID, metadata)
 - Tracks captured photos and videos in `CaptureSession` objects
 - Automatically queues media for upload via `UploaderService`
@@ -410,6 +419,7 @@ The app uses several singleton services for centralized state management:
 - Supports session reconstruction from filesystem
 
 **UploaderService** (`lib/services/uploader_service.dart`):
+
 - Queue-based upload system with retry logic
 - Configurable auto-upload via settings
 - Uploads directly from each device (no master-slave transfer)
@@ -419,26 +429,31 @@ The app uses several singleton services for centralized state management:
 ### Key Data Models
 
 **CaptureSession** (`lib/models/CaptureSession.dart`):
+
 - Groups photos and videos for a recording session
 - Tracks session GUID, start/end times, device type
 - Maintains lists of `CapturedPhoto` and `CapturedVideo` objects
 
 **CapturedPhoto** (`lib/models/CapturedPhoto.dart`):
+
 - Stores photo path, device ID, capture/received timestamps
 - Tracks upload status and duration
 
 **CapturedVideo** (`lib/models/CapturedVideo.dart`):
+
 - Stores video path, device ID, start/end recording timestamps
 - Tracks upload status and duration
 
 ### Authentication and API
 
 **Auth0 Integration:**
+
 - OAuth2 authentication via `flutter_appauth` package
 - Handled by `Auth0Service` (`lib/services/auth0_service.dart`)
 - M2M (machine-to-machine) support in `Auth0M2MService`
 
 **API Communication:**
+
 - `HydraCamApiService` manages all backend API calls
 - Creates sessions, uploads media (photos/videos)
 - Associates uploads with session GUID and device ID
@@ -447,23 +462,27 @@ The app uses several singleton services for centralized state management:
 ### Resource Management
 
 **BatteryService** (`lib/services/battery_service.dart`):
+
 - Monitors battery level continuously
 - Shows alerts for low battery
 - Can trigger forced recording stop
 
 **StorageService** (`lib/services/storage_service.dart`):
+
 - Monitors available disk space
 - Configured thresholds: 1.5GB (low), 0.5GB (critical)
 - Forces recording stop on critical storage
 - Shows snackbar notifications
 
 **PermissionService** (`lib/services/permission_service.dart`):
+
 - Requests camera, microphone, storage, location permissions
 - Called in `main()` before app initialization
 
 ### Application Entry Point
 
 **main.dart:**
+
 - Initializes permissions, device ID, location service
 - Enables wakelock (prevents screen timeout)
 - Initializes the CameraServiceSingleton (with a StorageService) before running the app
@@ -473,6 +492,7 @@ The app uses several singleton services for centralized state management:
 ## Code Style and Conventions
 
 ### Dart/Flutter Guidelines
+
 - **Imports:** Use relative imports (enforced by `prefer_relative_imports` lint)
 - **Strings:** Use double quotes (enforced by `prefer_double_quotes` lint)
 - **Variables:** Prefer `final` for local variables (enforced by `prefer_final_locals` lint)
@@ -480,7 +500,8 @@ The app uses several singleton services for centralized state management:
 - **Logging:** Use `LogService.instance.registerLog()` for all logging
 
 ### File Organization
-```
+
+```text
 lib/
 ├── master/          # Master device WebSocket server, announcer, UI
 ├── slave/           # Slave device WebSocket client, discovery, UI
@@ -527,12 +548,14 @@ lib/
 ## Settings and Configuration
 
 **Available Settings** (stored via `SettingsService` using `shared_preferences`):
+
 - `masterShouldRecord`: Whether master device also captures when commanding slaves
 - `autoUploadMaterials`: Enable automatic upload after capture
 - `deleteLocalAfterUpload`: Delete local files after successful upload
 - Camera quality presets (high/medium/low) - see `CameraQuality` enum in `constants.dart`
 
 **Hardcoded Configuration** (in `constants.dart`):
+
 - `secondsToClosePhoto = 3`: Auto-close photo preview popup
 - `timeToStopSearching = 3`: Slave auto-becomes master if no master found
 - `inactivityThreshold = 10`: Disconnect inactive slave clients (seconds)
@@ -543,6 +566,7 @@ lib/
 
 Current status lives in `docs/control/status-and-roadmap.md`. Latest physical
 iOS evidence:
+
 - `logs/verification-runs/2026-06-06-iphone-personal-team-debug/` launched
   Debug on iPhone 12 Pro / iOS 26.4.2 through `flutter run`, received camera
   and microphone permissions, reached master mode, created a session, captured
@@ -561,18 +585,21 @@ network discovery, upload, and session lifecycle.
 ## Common Patterns
 
 ### Adding a New Screen
+
 1. Create file in `lib/screens/`
 2. Import `app_theme.dart` for consistent styling
 3. Use `HydraCamAppBar` widget for consistent header
 4. Register logging for user actions via `LogService`
 
 ### Adding a New WebSocket Command
+
 1. Define command in master's send method (`MasterServer`)
 2. Add handler in slave's message listener (`SlaveClient`)
 3. Include `deviceId` in all messages
 4. Support scheduled commands with `scheduledTime` field for countdown
 
 ### Working with Sessions
+
 ```dart
 // Start session
 SessionManager.instance.startSession(guid, sessionId, deviceType: "Master");
@@ -591,6 +618,7 @@ SessionManager.instance.endSession();
 ```
 
 ### Camera Operations
+
 ```dart
 // Access singleton
 final cameraService = CameraServiceSingleton.instance;
@@ -628,6 +656,7 @@ await cameraService.stopRecordingVideo();
 
 Current goals and roadmap live in `docs/control/status-and-roadmap.md`. Durable
 priority themes:
+
 1. Complete release-grade Android and iOS distribution readiness
 2. Validate repeated two-device iOS/Android master-slave capture flows
 3. Add Windows/macOS/web platform support
