@@ -1367,6 +1367,81 @@ and asset standards are decided.
   session-player backend. Player names should be included automatically only
   when a reliable player source is available.
 
+### 17. Dim or turn off the display during long recordings (power saving)
+
+- Source: user request, 2026-07-14. Native camera-app parity gap.
+- Labels: `hydracam`, `mobile`, `camera`, `ux`, `power`, `recording`.
+- Priority: Medium.
+- Disposition: Planned only.
+- Body: Stock camera apps reduce screen power draw during long captures;
+  HydraCam currently does the opposite: `lib/main.dart` enables a permanent
+  `wakelock_plus` wakelock so the screen never turns off, which drains battery
+  during long fixed-camera sessions. After a configurable idle period while
+  recording, the app should dim and then black out the display. The reference
+  implementation is Samsung's camera: a near-black screen showing only the
+  elapsed recording time, with a tap restoring the full UI. Recording,
+  master/slave WebSocket connectivity, and uploads must continue unaffected
+  while the display is dark.
+- Acceptance checks: recording continues while the screen is dark (verified by
+  saved artifact duration); dark overlay shows elapsed recording time; any tap
+  restores the full preview UI without interrupting capture; timeout is
+  configurable or at least documented; slave devices honor the same behavior;
+  wakelock stays active underneath so the OS does not kill capture; measured
+  battery drain over a fixed-duration recording improves versus current
+  behavior on at least one physical Android device and one iOS device.
+- Non-goals: do not release the wakelock or let the OS lock the device; do not
+  change capture, upload, or role-switch behavior.
+
+### 18. Show alignment grid overlays during camera placement/calibration
+
+- Source: user request, 2026-07-14. Native camera-app parity gap.
+- Labels: `hydracam`, `mobile`, `camera`, `ux`, `setup`.
+- Priority: Medium.
+- Disposition: Planned only.
+- Body: The camera setup/leveling flow (`lib/services/camera_setup_service.dart`
+  and the placement preview proven in the 2026-06-08 camera-leveling evidence
+  packs) already provides warn-only tilt guidance and a perspective selector,
+  but no composition grid. Add native-camera-style grid overlays (at minimum
+  rule-of-thirds 3x3; optionally square/center-cross variants) on the setup and
+  placement preview so operators can align the camera with court lines and
+  boundaries while mounting it.
+- Acceptance checks: grid overlay renders over the live setup preview without
+  blocking the tilt guidance; grid can be toggled (and choice persists);
+  overlay scales correctly across preview aspect ratios on phone and tablet
+  viewports without overflow; focused widget tests and `flutter analyze` pass;
+  real-device screenshots show the grid on at least one Android and one iOS
+  target.
+- Non-goals: do not change leveling math, capture-context metadata, or the
+  perspective selector; the grid is a visual aid only and must not appear in
+  recorded media.
+
+### 19. Add an intuitive, instant camera/lens selector defaulting to the widest lens
+
+- Source: user request, 2026-07-14. Native camera-app parity gap.
+- Labels: `hydracam`, `mobile`, `camera`, `ux`, `settings`.
+- Priority: Medium.
+- Disposition: Planned only.
+- Body: Lens selection exists today as a settings-level `LensPreference`
+  (default `autoBack`) plus a list-based `CameraSelectionScreen`, which is
+  slower and less discoverable than native camera apps' one-tap zoom/lens
+  chips (0.5x / 1x / 3x). Add an instant, in-preview lens selector on the
+  capture and setup screens that switches cameras with a single tap, and
+  change the default lens to the widest available camera on the device
+  (ultra-wide when present), since court coverage is the dominant HydraCam
+  use case. Reuse `CameraHardwareMetadataService` focal-length metadata to
+  order and label the chips.
+- Acceptance checks: lens chips render over the preview with clear labels
+  (e.g. `0.5x`, `1x`) on devices with multiple back cameras; one tap switches
+  lenses without leaving the screen and without a session reset; fresh installs
+  default to the widest back lens and existing explicit preferences are
+  preserved; selection stays consistent with `LensPreference` settings and the
+  existing `CameraSelectionScreen`; changing profile still does not reset the
+  selected lens (per issue 0); devices with a single back camera hide the
+  selector gracefully; focused widget tests and `flutter analyze` pass;
+  real-device proof on at least one multi-lens device (e.g. iPhone 12 Pro).
+- Non-goals: do not implement continuous pinch zoom or digital zoom ramping;
+  do not alter master/slave capture commands or video profile handling.
+
 ## Open Bug/Improvement Rows From `FALLOS Y MEJORAS`
 
 These are de-duplicated open rows from the Spanish and English tabs. Create
