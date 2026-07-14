@@ -115,6 +115,37 @@ spreadsheet sprint rows.
 - `../superpowers/plans/2026-06-07-win11-dev-host-storage-cleanup.md`: executable
   Win11 C: cleanup and dev-environment moveout plan backed by SSH disk
   inventory.
+- `agent-control-plane-upgrade-2026-07-14.md`: control-plane cleanup plan
+  (HCP-1..7) covering git/root hygiene, markdownlint and Flutter quality CI,
+  the change-scoped agent gate, and this `AGENTS.md` slim-down.
+- `rotating-matrix-runner.md`: how-to guidance for
+  `scripts/run_rotating_master_slave_matrix.py` — modes, target
+  selection/latest-cache behavior, iOS bridge host handling, and macOS port
+  caveats.
+- `clock-sync-drift-test-plan.md`: hardware ground-truth test plan for
+  multi-camera time synchronization using a shared machine-readable clock
+  filmed by every camera.
+- `time-sync-ground-truth-protocol.md`: operator protocol for empirically
+  validating cross-device clock-sync accuracy against the `< 50 ms`
+  cross-device alignment target.
+- `time-sync-two-device-runbook.md`: step-by-step two-device capture runbook
+  (operator template) for exercising clock-sync end to end and collecting the
+  sync artifacts.
+- `device-relationship-fsm.md`: derived device-relationship finite-state-machine
+  analysis documenting current master-loss behavior and the recommended
+  explicit fleet FSM.
+- `localization-inventory.md`: tracks the current HydraCam localization slice
+  (`en`/`es`/`de`/`pl`) and the remaining user-facing strings still needing
+  extraction.
+- `native-android-client-feature-comparison.md`: feature-parity matrix
+  comparing a native Android camera client against the current HydraCam
+  Flutter implementation.
+- `fixed-camera-hls-implementation-plan.md`: plan and evidence for the
+  fixed-camera HLS upload path (local bundles, native Camera2 recorder, and
+  media-timeline HLS storage).
+- `hybrid-deploy-plan.md`: durable plan for building and deploying HydraCam
+  across a two-Mac device fleet split between a local host and a remote host
+  over SSH/Tailscale.
 
 ## Historical Status Files
 

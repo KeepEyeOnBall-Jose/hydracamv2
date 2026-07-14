@@ -493,6 +493,30 @@ including this plan, so discovery does not require `ls`.
   in the README index.
 - Markdownlint passes on the README.
 
+### Implementation record
+
+- Diffed `ls docs/control/*.md` against the existing "Control Documents" list
+  and found 10 missing entries (one more than this task's own fact-check
+  anticipated, because it did not yet account for HCP-6's new
+  `rotating-matrix-runner.md`): `agent-control-plane-upgrade-2026-07-14.md`,
+  `clock-sync-drift-test-plan.md`, `device-relationship-fsm.md`,
+  `fixed-camera-hls-implementation-plan.md`, `hybrid-deploy-plan.md`,
+  `localization-inventory.md`, `native-android-client-feature-comparison.md`,
+  `rotating-matrix-runner.md`, `time-sync-ground-truth-protocol.md`, and
+  `time-sync-two-device-runbook.md`.
+- Read each missing doc's opening lines and appended one factual one-line
+  description per doc to the end of the existing "Control Documents" list,
+  without reordering or rewording any pre-existing entry.
+- **Acceptance criteria results:**
+  - Coverage check: for every `docs/control/*.md` (excluding `history/`), a
+    fixed-string count of its backtick-quoted basename within just the
+    "Control Documents" section (isolated with `awk` between the
+    `## Control Documents` and `## Historical Status Files` headings)
+    returned exactly `1` for all 31 files — no misses, no duplicates.
+  - `npx --yes markdownlint-cli2 docs/control/README.md` → `0 error(s)`.
+  - `git diff --check` → clean; `bash scripts/agent_gate.sh` → `pass`.
+- No deviations beyond the one extra doc noted above.
+
 ---
 
 ## Explicitly deferred (owner decisions — do not implement)
