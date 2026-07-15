@@ -156,8 +156,10 @@ for dated evidence, run IDs, IPs, and timings, and
   reopened). Role-switch/capture evidence is good on Samsung S10e/G960F. The
   Samsung S7 edge (SM-G935F) needs an implemented device-specific
   compatibility mode (preset-default FPS, capture retry) with current
-  1080p30 photo/video proof. Xiaomi 2201116PG install remains blocked by
-  device-side `INSTALL_FAILED_USER_RESTRICTED`.
+  1080p30 photo/video proof. The user cleared Xiaomi 2201116PG's account/SIM
+  authorization gate on 2026-07-14; current-build `1.4.0+19` now installs,
+  updates unattended after MIUI remembers the approval, and launches on the
+  physical POCO. Camera/session proof remains pending on the fleet LAN.
 - Desktop (Windows/macOS) and web: Partial. macOS controller debug path works.
   A Windows/Linux/Android-emulator proof passed native Windows real-webcam
   capture/upload but did not complete the full role matrix; see

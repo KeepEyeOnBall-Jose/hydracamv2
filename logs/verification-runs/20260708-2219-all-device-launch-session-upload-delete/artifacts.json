@@ -1,0 +1,588 @@
+{
+  "acceptanceChecks": [
+    "Every required device is either launched into HydraCam automation or has a concrete blocker recorded",
+    "Every selected device passes same-LAN readiness or has a concrete network blocker recorded",
+    "Tiny photo and short-clip session flow runs with upload/delete cleanup proof or a concrete app/backend blocker"
+  ],
+  "commands": [
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:19:54.604763+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:20:00.989485+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:20:21.061103+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "cd /Users/jose/src/work/hydracamv2 && python3 scripts/android_wifi_preflight.py --check-only --expected-subnet 192.168.178.0/24 --device 29d816ac550b7ece --device 575ecf2cbd24 --device 9885e6503930304946 --device RF8M2125DAJ --device RF8M40MT6AW --device RF8M90QE7LX"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T20:21:35.996840+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "cd /Users/jose/src/work/hydracamv2 && python3 scripts/android_wifi_preflight.py --check-only --expected-subnet 192.168.178.0/24 --device 29d816ac550b7ece --device 575ecf2cbd24 --device 9885e6503930304946 --device RF8M40MT6AW --device RF8M90QE7LX"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-07-08T20:22:07.575786+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "APK=/Users/jose/src/work/hydracamv2-published/build/app/outputs/flutter-apk/app-debug.apk; for s in 575ecf2cbd24 RF8M2125DAJ RF8M40MT6AW; do printf \"\\n--- installing %s ---\\n\" \"$s\"; adb -s \"$s\" install -r \"$APK\"; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:24:32.262224+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "cd /Users/jose/src/work/hydracamv2 && APK=/Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk; for s in 29d816ac550b7ece 575ecf2cbd24 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW RF8M90QE7LX; do printf \"\\n=== %s ===\\n\" \"$s\"; adb -s \"$s\" install -r \"$APK\"; done"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T20:40:27.760517+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "APK=/Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk; for s in 29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW RF8M90QE7LX; do printf \"\\n=== %s downgrade-install ===\\n\" \"$s\"; adb -s \"$s\" install -r -d \"$APK\"; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:41:52.539675+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "serials=(29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW RF8M90QE7LX); port=49300; for s in \"${serials[@]}\"; do printf \"\\n=== launch %s port %s ===\\n\" \"$s\" \"$port\"; adb -s \"$s\" forward --remove \"tcp:$port\"; adb -s \"$s\" forward \"tcp:$port\" tcp:4762; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity --es role standby --es automationTargetId \"$s\"; port=$((port + 1)); done; sleep 18; port=49300; for s in \"${serials[@]}\"; do printf \"\\n=== health %s port %s ===\\n\" \"$s\" \"$port\"; curl --max-time 4 --silent --show-error \"http://127.0.0.1:$port/healthz\"; printf \"\\n\"; port=$((port + 1)); done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:43:19.213588+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "serials=(RF8M2125DAJ RF8M40MT6AW); perms=(android.permission.CAMERA android.permission.RECORD_AUDIO android.permission.ACCESS_FINE_LOCATION android.permission.ACCESS_COARSE_LOCATION android.permission.READ_EXTERNAL_STORAGE); for s in \"${serials[@]}\"; do printf \"\\n=== grant runtime permissions %s ===\\n\" \"$s\"; for p in \"${perms[@]}\"; do adb -s \"$s\" shell pm grant com.amaia23.hydracam \"$p\"; done; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:44:08.154701+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "serials=(29d816ac550b7ece RF8M2125DAJ RF8M40MT6AW); ports=(49310 49311 49312); i=1; for s in \"${serials[@]}\"; do port=${ports[$i]}; printf \"\\n=== relaunch %s port %s ===\\n\" \"$s\" \"$port\"; adb -s \"$s\" forward --remove \"tcp:$port\"; adb -s \"$s\" forward \"tcp:$port\" tcp:4762; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell am start -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity --es role standby --es automationTargetId \"$s\"; i=$((i + 1)); done; sleep 18; i=1; for s in \"${serials[@]}\"; do port=${ports[$i]}; printf \"\\n=== health %s port %s ===\\n\" \"$s\" \"$port\"; curl --max-time 4 --silent --show-error \"http://127.0.0.1:$port/healthz\"; printf \"\\n\"; i=$((i + 1)); done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:44:20.559258+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "serials=(RF8M2125DAJ RF8M40MT6AW); ports=(49321 49322); i=1; for s in \"${serials[@]}\"; do port=${ports[$i]}; printf \"\\n=== wake-unlock-launch %s port %s ===\\n\" \"$s\" \"$port\"; adb -s \"$s\" shell input keyevent 224; adb -s \"$s\" shell wm dismiss-keyguard; adb -s \"$s\" shell input keyevent 82; adb -s \"$s\" forward --remove \"tcp:$port\"; adb -s \"$s\" forward \"tcp:$port\" tcp:4762; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell am start -S -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity --es role standby --es automationTargetId \"$s\"; i=$((i + 1)); done; sleep 18; i=1; for s in \"${serials[@]}\"; do port=${ports[$i]}; printf \"\\n=== lockstate %s ===\\n\" \"$s\"; adb -s \"$s\" shell dumpsys window policy | grep -E \"mShowingLockscreen|mDreamingLockscreen|mAwake|mScreenOnEarly|screenState\"; printf \"\\n=== health %s port %s ===\\n\" \"$s\" \"$port\"; curl --max-time 4 --silent --show-error \"http://127.0.0.1:$port/healthz\"; printf \"\\n\"; i=$((i + 1)); done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:45:42.396844+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "serials=(29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW RF8M90QE7LX); ports=(49330 49331 49332 49333 49334); i=1; for s in \"${serials[@]}\"; do port=${ports[$i]}; printf \"\\n=== launch-master %s port %s ===\\n\" \"$s\" \"$port\"; adb -s \"$s\" shell input keyevent 224; adb -s \"$s\" shell wm dismiss-keyguard; adb -s \"$s\" forward --remove \"tcp:$port\"; adb -s \"$s\" forward \"tcp:$port\" tcp:4762; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell am start -S -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity --es role master --es automationTargetId \"$s\"; i=$((i + 1)); done; sleep 22; i=1; for s in \"${serials[@]}\"; do port=${ports[$i]}; printf \"\\n=== master-health %s port %s ===\\n\" \"$s\" \"$port\"; curl --max-time 5 --silent --show-error \"http://127.0.0.1:$port/healthz\"; printf \"\\n\"; i=$((i + 1)); done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:47:51.885821+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "cd /Users/jose/src/work/hydracamv2 && python3 scripts/android_wifi_preflight.py --check-only --expected-subnet 192.168.178.0/24 --device 29d816ac550b7ece --device 575ecf2cbd24 --device 9885e6503930304946 --device RF8M2125DAJ --device RF8M40MT6AW --device RF8M90QE7LX"
+      ],
+      "returnCode": 2,
+      "startedAt": "2026-07-08T20:48:42.252186+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "for s in RF8M2125DAJ RF8M40MT6AW; do printf \"\\n=== open wifi settings %s ===\\n\" \"$s\"; adb -s \"$s\" shell input keyevent 224; adb -s \"$s\" shell wm dismiss-keyguard; adb -s \"$s\" shell am start -a android.settings.WIFI_SETTINGS; done; printf \"\\n=== retry POCO install ===\\n\"; adb -s 575ecf2cbd24 install -r -d /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T20:49:02.596033+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "printf \"\\n=== iPhone 12 health 192.168.178.150 ===\\n\"; curl --max-time 4 --silent --show-error http://192.168.178.150:4762/healthz; printf \"\\n\\n=== iPad launch com.keepeyeonball ===\\n\"; xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 com.keepeyeonball --terminate-existing --console; printf \"\\n=== scan known iPad/iOS hosts ===\\n\"; for h in 192.168.178.104 192.168.178.150 169.254.193.202; do printf \"\\n--- %s ---\\n\" \"$h\"; curl --max-time 3 --silent --show-error \"http://$h:4762/healthz\"; printf \"\\n\"; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:50:49.882851+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "python3 - <<\"PY\"\nimport urllib.request, concurrent.futures\nhosts=[f\"192.168.178.{i}\" for i in range(1,255)]\ndef probe(h):\n    try:\n        with urllib.request.urlopen(f\"http://{h}:4762/healthz\", timeout=0.4) as r:\n            return h, r.read(500).decode(\"utf-8\", \"replace\")\n    except Exception:\n        return None\nwith concurrent.futures.ThreadPoolExecutor(max_workers=64) as ex:\n    for res in ex.map(probe, hosts):\n        if res:\n            print(res[0], res[1])\nPY"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:51:13.210610+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "xcrun devicectl device install app --device 0A947DBD-A462-5BAA-AB84-17F143D41619 /Users/jose/src/work/hydracamv2-published/build/ios/Profile-iphoneos/Runner.app"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T20:51:54.157119+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 com.keepeyeonball --terminate-existing --console; sleep 4; xcrun devicectl device info processes --device 0A947DBD-A462-5BAA-AB84-17F143D41619 | grep -E \"Runner|keepeyeonball|PID\""
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T20:52:25.280768+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "printf \"\\n=== iPhone set_role master ===\\n\"; curl --max-time 8 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{\\\"role\\\":\\\"master\\\"}\" http://192.168.178.150:4762/commands/set_role; printf \"\\n\"; sleep 5; printf \"\\n=== iPhone master health ===\\n\"; curl --max-time 5 --silent --show-error http://192.168.178.150:4762/healthz; printf \"\\n\"; printf \"\\n=== iPhone session snapshot ===\\n\"; curl --max-time 5 --silent --show-error http://192.168.178.150:4762/session; printf \"\\n\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:54:04.585729+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "BASE=http://127.0.0.1:49334; SESSION=automation-smoke-RF8M90QE7LX-$(date +%Y%m%d%H%M%S); printf \"\\n=== RF8M90 local session %s ===\\n\" \"$SESSION\"; curl --max-time 10 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{\\\"sessionId\\\":\\\"$SESSION\\\"}\" \"$BASE/commands/start_local_session\"; printf \"\\n=== take photo ===\\n\"; curl --max-time 30 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/take_photo\"; printf \"\\n=== start recording ===\\n\"; curl --max-time 30 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/start_recording\"; sleep 2; printf \"\\n=== stop recording ===\\n\"; curl --max-time 45 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/stop_recording\"; printf \"\\n=== session ===\\n\"; curl --max-time 10 --silent --show-error \"$BASE/session\"; printf \"\\n=== end session ===\\n\"; curl --max-time 20 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/end_session\"; printf \"\\n\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:54:51.667264+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "for s in 29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW RF8M90QE7LX; do printf \"\\n=== set upload-delete prefs %s ===\\n\" \"$s\"; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell run-as com.amaia23.hydracam sh -c \"cd /data/data/com.amaia23.hydracam/shared_prefs && cp FlutterSharedPreferences.xml FlutterSharedPreferences.xml.bak && sed -i \\\"s/name=\\\\\\\"flutter.autoUploadMaterials\\\\\\\" value=\\\\\\\"false\\\\\\\"/name=\\\\\\\"flutter.autoUploadMaterials\\\\\\\" value=\\\\\\\"true\\\\\\\"/\\\" FlutterSharedPreferences.xml && if grep -q \\\"flutter.deleteLocalAfterUpload\\\" FlutterSharedPreferences.xml; then sed -i \\\"s/name=\\\\\\\"flutter.deleteLocalAfterUpload\\\\\\\" value=\\\\\\\"false\\\\\\\"/name=\\\\\\\"flutter.deleteLocalAfterUpload\\\\\\\" value=\\\\\\\"true\\\\\\\"/\\\" FlutterSharedPreferences.xml; else sed -i \\\"/<\\\\\\/map>/i\\\\    <boolean name=\\\\\\\"flutter.deleteLocalAfterUpload\\\\\\\" value=\\\\\\\"true\\\\\\\" />\\\" FlutterSharedPreferences.xml; fi && grep -E \\\"autoUploadMaterials|deleteLocalAfterUpload\\\" FlutterSharedPreferences.xml\"; done"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T20:56:43.140208+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "for s in 29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW RF8M90QE7LX; do printf \"\\n=== set upload-delete prefs %s ===\\n\" \"$s\"; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell \"run-as com.amaia23.hydracam sh -c 'cd /data/data/com.amaia23.hydracam/shared_prefs && cp FlutterSharedPreferences.xml FlutterSharedPreferences.xml.bak2 && sed -i \\\"s/name=\\\\\\\"flutter.autoUploadMaterials\\\\\\\" value=\\\\\\\"false\\\\\\\"/name=\\\\\\\"flutter.autoUploadMaterials\\\\\\\" value=\\\\\\\"true\\\\\\\"/\\\" FlutterSharedPreferences.xml && if grep -q flutter.deleteLocalAfterUpload FlutterSharedPreferences.xml; then sed -i \\\"s/name=\\\\\\\"flutter.deleteLocalAfterUpload\\\\\\\" value=\\\\\\\"false\\\\\\\"/name=\\\\\\\"flutter.deleteLocalAfterUpload\\\\\\\" value=\\\\\\\"true\\\\\\\"/\\\" FlutterSharedPreferences.xml; else sed -i \\\"/<\\\\\\/map>/i\\\\    <boolean name=\\\\\\\"flutter.deleteLocalAfterUpload\\\\\\\" value=\\\\\\\"true\\\\\\\" />\\\" FlutterSharedPreferences.xml; fi && grep -E \\\"autoUploadMaterials|deleteLocalAfterUpload\\\" FlutterSharedPreferences.xml'\"; done"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:57:12.217971+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "MASTER_IP=192.168.178.160; printf \"\\n=== launch RF8M90 master ===\\n\"; adb -s RF8M90QE7LX shell input keyevent 224; adb -s RF8M90QE7LX shell wm dismiss-keyguard; adb -s RF8M90QE7LX forward --remove tcp:49334; adb -s RF8M90QE7LX forward tcp:49334 tcp:4762; adb -s RF8M90QE7LX shell am force-stop com.amaia23.hydracam; adb -s RF8M90QE7LX shell am start -S -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity --es role master --es automationTargetId RF8M90QE7LX; sleep 10; printf \"\\n=== launch Android slaves ===\\n\"; for s in 29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW; do printf \"\\n--- slave %s ---\\n\" \"$s\"; adb -s \"$s\" shell input keyevent 224; adb -s \"$s\" shell wm dismiss-keyguard; adb -s \"$s\" shell am force-stop com.amaia23.hydracam; adb -s \"$s\" shell am start -S -n com.amaia23.hydracam/com.amaia23.hydracam.MainActivity --es role slave --es preferredMasterIp \"$MASTER_IP\" --ez forceSlaveMode true --es automationTargetId \"$s\"; done; printf \"\\n=== iPhone slave ===\\n\"; curl --max-time 8 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{\\\"role\\\":\\\"slave\\\",\\\"preferredMasterIp\\\":\\\"$MASTER_IP\\\",\\\"forceSlaveMode\\\":true}\" http://192.168.178.150:4762/commands/set_role; printf \"\\n=== iPad launch ===\\n\"; xcrun devicectl device process launch --device 0A947DBD-A462-5BAA-AB84-17F143D41619 com.keepeyeonball --terminate-existing --console; sleep 18; printf \"\\n=== master health ===\\n\"; curl --max-time 5 --silent --show-error http://127.0.0.1:49334/healthz; printf \"\\n=== connected clients ===\\n\"; curl --max-time 10 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" http://127.0.0.1:49334/commands/connected_clients; printf \"\\n\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:57:45.764958+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "SESSION=backend-smoke-$(date +%Y%m%d%H%M%S); printf \"\\n=== backend start_session %s ===\\n\" \"$SESSION\"; curl --max-time 35 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{\\\"sessionId\\\":\\\"$SESSION\\\"}\" http://127.0.0.1:49334/commands/start_session; printf \"\\n=== master session after backend start ===\\n\"; curl --max-time 8 --silent --show-error http://127.0.0.1:49334/session; printf \"\\n\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:58:51.981083+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "BASE=http://127.0.0.1:49334; printf \"\\n=== connected clients before capture ===\\n\"; curl --max-time 10 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/connected_clients\"; printf \"\\n=== take photo backend session ===\\n\"; curl --max-time 35 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/take_photo\"; printf \"\\n=== start recording backend session ===\\n\"; curl --max-time 35 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/start_recording\"; sleep 2; printf \"\\n=== stop recording backend session ===\\n\"; curl --max-time 60 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/stop_recording\"; printf \"\\n=== poll session/upload ===\\n\"; for i in 1 2 3 4 5 6 7 8; do printf \"\\n--- poll %s ---\\n\" \"$i\"; curl --max-time 10 --silent --show-error \"$BASE/session\"; sleep 4; done; printf \"\\n=== connected clients after capture ===\\n\"; curl --max-time 10 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" \"$BASE/commands/connected_clients\"; printf \"\\n\""
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:59:15.895088+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "GUID=da093c7c-f802-4512-952a-b6b38c9cde53; for s in RF8M90QE7LX 29d816ac550b7ece 9885e6503930304946 RF8M2125DAJ RF8M40MT6AW; do printf \"\\n=== %s session files ===\\n\" \"$s\"; adb -s \"$s\" shell run-as com.amaia23.hydracam sh -c \"BASE=/data/data/com.amaia23.hydracam/app_flutter/session_$GUID; if [ -d \\\"$BASE\\\" ]; then find \\\"$BASE\\\" -maxdepth 1 -type f -printf \\\"%f %s bytes\\\\n\\\"; else echo no-session-dir; fi\"; done; printf \"\\n=== RF8M90 logs upload/delete ===\\n\"; curl --max-time 8 --silent --show-error http://127.0.0.1:49334/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:00:27.400714+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "printf \"\\n=== end backend session ===\\n\"; curl --max-time 25 --silent --show-error -X POST -H \"Content-Type: application/json\" -d \"{}\" http://127.0.0.1:49334/commands/end_session; printf \"\\n=== master session after end ===\\n\"; curl --max-time 8 --silent --show-error http://127.0.0.1:49334/session; printf \"\\n=== iPhone logs upload/delete ===\\n\"; curl --max-time 8 --silent --show-error http://192.168.178.150:4762/logs"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:01:44.097742+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "printf \"\\n=== final adb inventory ===\\n\"; adb devices -l; printf \"\\n=== final wifi preflight ===\\n\"; cd /Users/jose/src/work/hydracamv2 && python3 scripts/android_wifi_preflight.py --check-only --expected-subnet 192.168.178.0/24 --device 29d816ac550b7ece --device 575ecf2cbd24 --device 9885e6503930304946 --device RF8M2125DAJ --device RF8M40MT6AW --device RF8M90QE7LX; printf \"\\n=== final POCO install retry ===\\n\"; adb -s 575ecf2cbd24 install -r -d /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-08T21:02:23.538857+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "/bin/zsh -s"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:04:30.837212+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "/bin/zsh -s"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:04:45.881963+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "/bin/zsh -s"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:05:47.530686+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb -s 575ecf2cbd24 install -r -d /Users/jose/src/work/hydracamv2/build/app/outputs/flutter-apk/app-debug.apk || true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:06:34.749842+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "/bin/zsh -s"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:07:21.887350+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "/bin/bash",
+        "-s"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T21:14:13.796035+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S9",
+      "notes": [
+        "ADB/Flutter controlled on MBA13 as SM_G960F."
+      ],
+      "os": "Android 10 API 29",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "575ecf2cbd24",
+      "kind": "Android hardware",
+      "name": "POCO X4 5G",
+      "notes": [
+        "ADB/Flutter controlled on MBA13 as 2201116PG."
+      ],
+      "os": "Android 13 API 33",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S7 edge",
+      "notes": [
+        "ADB/Flutter controlled on MBA13 as SM_G935F."
+      ],
+      "os": "Android 8.0 API 26",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "RF8M2125DAJ",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e",
+      "notes": [
+        "ADB controlled on MBA13 as SM_G970F; previously unstable but currently present."
+      ],
+      "os": "Android 12 API 31",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "RF8M40MT6AW",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e",
+      "notes": [
+        "ADB/Flutter controlled on MBA13 as SM_G970F."
+      ],
+      "os": "Android 12 API 31",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e",
+      "notes": [
+        "ADB/Flutter controlled on MBA13 as SM_G970F."
+      ],
+      "os": "Android 12 API 31",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E / AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS hardware",
+      "name": "iPhone 12 Pro",
+      "notes": [
+        "CoreDevice/Flutter controlled from MBA13; Developer Mode enabled."
+      ],
+      "os": "iOS 26.5",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 / 0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS hardware",
+      "name": "iPad (5)",
+      "notes": [
+        "CoreDevice/Flutter controlled from MBA13; tunnel connected and unlocked since boot."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "required fleet target"
+    },
+    {
+      "identifier": "00008030-000D05302190402E / 7931E735-717E-5B88-A283-11343FEB0795",
+      "kind": "iOS hardware",
+      "name": "iPhone 11 broken screen",
+      "notes": [
+        "CoreDevice sees device, but Developer Mode disabled; cannot enable purely from CLI."
+      ],
+      "os": "iOS 26.2",
+      "role": "extra visible device; developer-mode blocker"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/29d816ac550b7ece-hydra-current.png",
+    "screenshots/RF8M2125DAJ-hydra-current.png",
+    "screenshots/RF8M40MT6AW-hydra-current.png",
+    "device-logs/android-bridge-logs.jsonl",
+    "device-logs/rf8m90-focused-logs.json",
+    "device-logs/rf8m90-post-capture-logs.json"
+  ],
+  "item": {
+    "slug": "all-device-launch-session-upload-delete",
+    "source": "user-request-2026-07-08-all-devices-test-sessions",
+    "title": "Run all controlled HydraCam devices through launch and tiny upload-delete test sessions"
+  },
+  "notes": [
+    "Partial proof: RF8M90QE7LX master plus S9, S7, iPhone 12, and iPad joined backend session da093c7c-f802-4512-952a-b6b38c9cde53 and produced upload/delete evidence where directly observable. Remaining blockers: POCO 575ecf2cbd24 rejects APK install with INSTALL_FAILED_USER_RESTRICTED, and RF8M2125DAJ/RF8M40MT6AW have Wi-Fi enabled but no wlan0 IP on 192.168.178.0/24."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "partial",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}

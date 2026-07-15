@@ -1,0 +1,4 @@
+NAME                                       IMAGE                                    COMMAND                  SERVICE      CREATED          STATUS                    PORTS
+przemek-alicia-web-20260710-alicia-web-1   przemek-alicia-web-20260710-alicia-web   "./scripts/docker-en…"   alicia-web   18 minutes ago   Up 18 minutes (healthy)   0.0.0.0:15050->5050/tcp, [::]:15050->5050/tcp
+przemek-alicia-web-20260710-memcached-1    memcached:1.6-alpine                     "docker-entrypoint.s…"   memcached    34 minutes ago   Up 34 minutes             11211/tcp
+przemek-alicia-web-20260710-mosquitto-1    eclipse-mosquitto:2                      "/docker-entrypoint.…"   mosquitto    34 minutes ago   Up 34 minutes             0.0.0.0:11883->1883/tcp, [::]:11883->1883/tcp

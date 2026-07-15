@@ -1,0 +1,256 @@
+--------- beginning of main
+07-14 14:14:34.463  4978  5202 I WifiScanController: scan requested by com.android.settings
+07-14 14:14:34.463  4978  5202 D WifiScanningService: updateScanSettings: ScanSettings {  packageName:com.android.settings band:7 period:0 reportEvents:3 numBssidsPerScan:0 maxScansToCache:0 channels:[  ]  } 
+--------- beginning of system
+07-14 14:14:34.491  4978  5202 D SamsungAlarmManager: setInexact Listener (T:2/F:8/AC:false) 20260714T141449 - CU:1000/CP:4978
+07-14 14:14:34.492  4978  5202 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141449, SetElapsed=2915295027, nowELAPSED=2915280034
+07-14 14:14:36.647  4719  5020 D Netd    : Iface wlan0 link up
+07-14 14:14:36.649  4978 11669 D WificondControl: Scan result ready event
+07-14 14:14:36.655  4978  5202 D SamsungAlarmManager: Cancel Alarm calling from uid:1000 pid :4978 / listener:android.app.AlarmManager$ListenerWrapper@7375b64
+07-14 14:14:36.656  4978  5041 D Tethering: interfaceLinkStateChanged wlan0, true
+07-14 14:14:36.656  4978  5041 D Tethering: interfaceStatusChanged wlan0, true
+07-14 14:14:36.660  4978  5202 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141822, SetElapsed=2915508356, nowELAPSED=2915282202
+07-14 14:14:36.680  4978  5202 D WifiScanningService: onFullScanResult received, previous scan count:24
+07-14 14:14:36.681  4978  5202 D WifiScanningService: onScanStatus event received, event=0
+07-14 14:14:36.684  4978  5202 D WifiScanningService: singleScanResults: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=2018,results=22
+07-14 14:14:36.685  4978  5202 D WifiScanningService: singleScanResults: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=1,results=22
+07-14 14:14:36.689  4978  4978 I WifiService: Securities matching
+07-14 14:14:36.691  5623  5658 D EventHandler_FLP: WIFI_SCAN_RESULTS
+07-14 14:14:36.692  4965 16329 D WifiTracker: WorkHandler - handleMessage : 0
+07-14 14:14:36.692  4978 11669 D WifiPermissionsUtil: canAccessScanResults: pkgName = com.google.android.gms, uid = 10020
+07-14 14:14:36.695  4965 16329 D WifiTracker: getConfiguredNetworks size:5
+07-14 14:14:36.696  4978  5437 D WifiPermissionsUtil: canAccessScanResults: pkgName = com.android.settings, uid = 1000
+07-14 14:14:36.706  4965 16329 D WifiTracker: updateAccessPoints clearConfig:false configSize:5 scanSize:22
+07-14 14:14:36.709  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(FRITZ!Box 5530 JX:50:e6:36:98:47:3a,connectable,WPA2,level=3(unchanged),metered=false,2412,-71)
+07-14 14:14:36.710  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(Yoyogi Babe:66:7f:f0:73:20:e0,connectable,WPA2,level=1(unchanged),metered=false,5180,-83)
+07-14 14:14:36.711  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(Vodafone-D5BE:f0:4b:8a:f3:ca:cb,connectable,WPA2,level=1(unchanged),metered=false,2462,-83)
+07-14 14:14:36.713  4965 16329 D SettingsLib.AccessPoint: Astral ExpresscompareTo netid4
+07-14 14:14:36.714  4965  4965 D WifiTracker: MainHandler - handleMessage : 2
+07-14 14:14:36.714  4965  4965 D WifiSettings: addDeviceCategory Verfügbare Netze
+07-14 14:14:36.719  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:36.720  4965  4965 D WifiSettings: updateAccessPointPreferences size:9 connected:1 scan:true
+07-14 14:14:36.768  4965  4965 E WifiSettings.VI: updateWithAnimation size:8, updatedScanResult :true
+07-14 14:14:36.768  4965  4965 E WifiSettings.VI: animation is not start,
+07-14 14:14:36.769  4965  4965 D WifiSettings.VI: updateEmptyView - list item AvailableAPCount : 8, ConnectedAPCount:1, restriction:false
+07-14 14:14:36.781  4965  4965 D WifiSettings.AccessPointExpListAdapter: getGroupView :: groupPosition = 0,  getPreferenceCount = 1 , isExpanded = true
+07-14 14:14:36.790  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:36.798  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:36.799  4965  4965 D WifiSettings.AccessPointExpListAdapter: getGroupView :: groupPosition = 1,  getPreferenceCount = 8 , isExpanded = true
+07-14 14:14:37.721  4978  8231 D SSRM:t  : SIOP:: AP = 350, PST = 355 (W:14), BAT = 325, CHG = 352, CP = 303
+07-14 14:14:39.337  6066  6066 D io_stats: !@   8,0 r 7899275 398425352 w 4180926 101083560 d 479561 73291924 f 1193416 1191361 iot 8580270 7972348 th 430268 0 0 pt 0 inp 0 0 1000472.193
+07-14 14:14:39.927  4978  5437 D BatteryService: !@BatteryListener : batteryPropertiesChanged!
+07-14 14:14:39.928  4978  5437 D BatteryService: level:55, scale:100, status:2, health:2, present:true, voltage: 4080, temperature: 325, technology: Li-ion, AC powered:false, USB powered:true, POGO powered:false, Wireless powered:false, icon:17303851, invalid charger:0, maxChargingCurrent:0, maxChargingVoltage:0, chargeCounter:0
+07-14 14:14:39.928  4978  5437 D BatteryService: online:6, current avg:753, charge type:1, power sharing:false, high voltage charger:false, capacity:280000, batterySWSelfDischarging:false, misc_event:131072, current_event:0, current_now:815
+07-14 14:14:39.929  4978  4978 D BatteryService: Sending ACTION_BATTERY_CHANGED.
+07-14 14:14:39.933  4978  4978 I MotionRecognitionService: Plugged
+07-14 14:14:39.933  4978  4978 D MotionRecognitionService:   mCableConnection= 1
+07-14 14:14:39.933  4978  4978 D MotionRecognitionService: setPowerConnected : mGripEnabled = false
+07-14 14:14:39.934  4978  4978 D SamsungPhoneWindowManager: ACTION_BATTERY_CHANGED - Level :: 55, battStatus :: 2
+07-14 14:14:39.937  4978  5041 D UsbDeviceManager: handleMessage -> MSG_UPDATE_CHARGING_STATE = 1
+07-14 14:14:39.938  5415  5415 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+07-14 14:14:39.947  5415  5415 D BatteryController: onReceive-ACTION_BATTERY_CHANGED : mLevel=55, mBatteryStatus=2
+07-14 14:14:39.961  5415  5415 D PowerUI : priorPlugType = 2 mPlugType =  2
+07-14 14:14:39.963  5415  5415 D PowerUI.Notification: showChargingNotice oldChargingType : 1 currentChargingType : 1 oldChargingTime : 5696000 mChargingTime : 5685000
+07-14 14:14:39.963  5415  5415 D PowerUI.Notification: showChargingNotification()
+07-14 14:14:39.966  5415  5415 D Notification: allPendingIntents
+07-14 14:14:39.970  4978  5437 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = -1
+07-14 14:14:39.970  4978  5437 D API test: getContainerInfo: value is 
+07-14 14:14:39.970  4978  5437 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = 0
+07-14 14:14:39.971  4978  5437 D API test: getContainerInfo: value is 
+07-14 14:14:39.976  4978  4978 D EdgeLightingManager: isCallingUserSupported : callingUserId=-1, mUserId=0, isDualAppId=false
+07-14 14:14:39.979  4978  4978 D AudioService: getStreamVolume 5 index 110
+07-14 14:14:39.985  4978  5437 D Notification: allPendingIntents
+07-14 14:14:39.988  4978  5437 D Notification: allPendingIntents
+07-14 14:14:39.990  6329  6329 D CatchNotificationsService: onNotificationPosted
+07-14 14:14:39.992  4978 11669 D Notification: allPendingIntents
+07-14 14:14:39.994  4978  4978 D SmartAlertController: SmartAlert - Found Missed Event
+07-14 14:14:39.995  4978 11669 D Notification: allPendingIntents
+07-14 14:14:40.012  7588  7600 D BadgeProvider: query, [selection] : null
+07-14 14:14:40.022  6329  6329 E CatchNotificationsService: Invalid notification data
+07-14 14:14:44.184  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [CONTACT contacts(3971) data(22629) accounts({vnd.sec.contact.phone (1)=1, com.google (9)=3992, vnd.sec.contact.sim (2)=2}) accounts deleted({}) calls([logtype:100 cnt:46, logtype:300 cnt:33, logtype:1000 cnt:1]) countryIso(DE) userId(0)  ]
+07-14 14:14:44.184  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [ agr({[8]=14, [9 ,8]=8, [9 ,9]=14, [1]=1, [9 ,2]=2, [9]=3932})  ]
+07-14 14:14:44.184  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [ actCnt({android.process.acore(6484)=1})  ]
+07-14 14:14:44.184  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [PROFILE contacts(0) data(0) accounts({})  ]
+07-14 14:14:44.184  6484  6596 D ContactsProvider_EventLog: contents_sample_state: [SAPROFILE contacts(1) data(3) accounts({vnd.sec.contact.phone (1)=1})  ]
+07-14 14:14:44.185  6484  6596 E ContactsProvider_EventLog: Flush buffer to file cnt : 1 size : 1Kb duration : 1ms lastUpdatedAfter : 60221 ms mFlush_time_threasold : 2000 mCurrentSize : 631
+07-14 14:14:44.343  6066  6066 D io_stats: !@   8,0 r 7899275 398425352 w 4180942 101083724 d 479562 73291928 f 1193423 1191368 iot 8580300 7972383 th 430116 0 0 pt 0 inp 0 0 1000477.199
+07-14 14:14:44.465  4978  5202 D WifiScanningService: addSingleScanRequest: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=2019,WorkSource{1000}, ScanSettings {  packageName:com.android.settings band:7 period:0 reportEvents:3 numBssidsPerScan:0 maxScansToCache:0 channels:[  ]  } 
+07-14 14:14:44.466  4978  5202 I WifiScanController: scan requested by com.android.settings
+07-14 14:14:44.469  4978  5202 D WifiScanningService: updateScanSettings: ScanSettings {  packageName:com.android.settings band:7 period:0 reportEvents:3 numBssidsPerScan:0 maxScansToCache:0 channels:[  ]  } 
+07-14 14:14:44.498  4978  5202 D SamsungAlarmManager: setInexact Listener (T:2/F:8/AC:false) 20260714T141459 - CU:1000/CP:4978
+07-14 14:14:44.499  4978  5202 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141459, SetElapsed=2915305031, nowELAPSED=2915290041
+07-14 14:14:46.660  4719  5020 D Netd    : Iface wlan0 link up
+07-14 14:14:46.661  4978  5437 D WificondControl: Scan result ready event
+07-14 14:14:46.663  4978  5202 D SamsungAlarmManager: Cancel Alarm calling from uid:1000 pid :4978 / listener:android.app.AlarmManager$ListenerWrapper@3c291cd
+07-14 14:14:46.665  4978  5041 D Tethering: interfaceLinkStateChanged wlan0, true
+07-14 14:14:46.666  4978  5041 D Tethering: interfaceStatusChanged wlan0, true
+07-14 14:14:46.677  4978  5202 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141822, SetElapsed=2915508356, nowELAPSED=2915292219
+07-14 14:14:46.700  4978  5202 D WifiScanningService: onFullScanResult received, previous scan count:21
+07-14 14:14:46.701  4978  5202 D WifiScanningService: onScanStatus event received, event=0
+07-14 14:14:46.703  4978  5202 D WifiScanningService: singleScanResults: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=2019,results=23
+07-14 14:14:46.704  4978  5202 D WifiScanningService: singleScanResults: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=1,results=23
+07-14 14:14:46.709  5623  5658 D EventHandler_FLP: WIFI_SCAN_RESULTS
+07-14 14:14:46.710  4978  5437 D WifiPermissionsUtil: canAccessScanResults: pkgName = com.google.android.gms, uid = 10020
+07-14 14:14:46.710  4965 16329 D WifiTracker: WorkHandler - handleMessage : 0
+07-14 14:14:46.712  4978  4978 I WifiService: Securities matching
+07-14 14:14:46.715  4965 16329 D WifiTracker: getConfiguredNetworks size:5
+07-14 14:14:46.716  4978 11669 D WifiPermissionsUtil: canAccessScanResults: pkgName = com.android.settings, uid = 1000
+07-14 14:14:46.727  4965 16329 D WifiTracker: updateAccessPoints clearConfig:false configSize:5 scanSize:23
+07-14 14:14:46.733  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(Yoyogi Babe:66:7f:f0:73:20:e0,connectable,WPA2,level=2(unchanged),metered=false,2422,-82)
+07-14 14:14:46.734  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(Vodafone-D5BE:f0:4b:8a:f3:ca:cb,connectable,WPA2,level=2(unchanged),metered=false,2462,-82)
+07-14 14:14:46.735  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(FRITZ!Box 6670 DK:00:7a:a4:28:c8:f0,connectable,WPA2,level=2(unchanged),metered=false,5640,-81)
+07-14 14:14:46.736  4965 16329 D SettingsLib.AccessPoint: Astral ExpresscompareTo netid4
+07-14 14:14:46.736  4965  4965 D WifiTracker: MainHandler - handleMessage : 2
+07-14 14:14:46.737  4965  4965 D WifiSettings: addDeviceCategory Verfügbare Netze
+07-14 14:14:46.744  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:46.745  4965  4965 D WifiSettings: updateAccessPointPreferences size:10 connected:1 scan:true
+07-14 14:14:46.752  4965  4965 E WifiSettings.VI: updateWithAnimation size:9, updatedScanResult :true
+07-14 14:14:46.779  4965  4965 D WifiSettings.VI: onAddDelete
+07-14 14:14:46.780  4965  4965 D WifiSettings.VI: updateEmptyView - list item AvailableAPCount : 9, ConnectedAPCount:1, restriction:false
+07-14 14:14:46.790  4965  4965 D WifiSettings.AccessPointExpListAdapter: getGroupView :: groupPosition = 0,  getPreferenceCount = 1 , isExpanded = true
+07-14 14:14:46.798  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:46.801  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:46.803  4965  4965 D WifiSettings.AccessPointExpListAdapter: getGroupView :: groupPosition = 1,  getPreferenceCount = 9 , isExpanded = true
+07-14 14:14:46.820  4965  4965 D WifiSettings.VI: onAnimationStart
+07-14 14:14:47.458  4965  4965 D WifiSettings.VI: onAnimationEnd  AvailableAPCount : 9, ConnectedAPCount:1
+07-14 14:14:47.753  4978  8231 D SSRM:t  : SIOP:: AP = 350, PST = 354 (W:14), BAT = 325, CHG = 351, CP = 302
+07-14 14:14:49.348  6066  6066 D io_stats: !@   8,0 r 7899275 398425352 w 4180944 101083740 d 479562 73291928 f 1193423 1191368 iot 8580300 7972386 th 428728 0 0 pt 0 inp 0 0 1000482.204
+07-14 14:14:49.982  4978 11669 D BatteryService: !@BatteryListener : batteryPropertiesChanged!
+07-14 14:14:49.984  4978 11669 D BatteryService: level:56, scale:100, status:2, health:2, present:true, voltage: 4073, temperature: 325, technology: Li-ion, AC powered:false, USB powered:true, POGO powered:false, Wireless powered:false, icon:17303851, invalid charger:0, maxChargingCurrent:0, maxChargingVoltage:0, chargeCounter:0
+07-14 14:14:49.984  4978 11669 D BatteryService: online:6, current avg:749, charge type:1, power sharing:false, high voltage charger:false, capacity:280000, batterySWSelfDischarging:false, misc_event:131072, current_event:0, current_now:732
+07-14 14:14:49.984  4978  4978 D BatteryService: Sending ACTION_BATTERY_CHANGED.
+07-14 14:14:49.988  4978  5045 D PowerManagerService: [PSM] lowPowerModeEnabled: false (mLowPowerModeSetting: false, mIsPowered: true, mAutoLowPowerModeConfigured: false, mBatteryLevel: 56, mLowBatteryTriggerLevel: 0, mUltraPowerSavingModeEnabled: false, mEmergencyModeEnabled: false)
+07-14 14:14:49.988  4978  5045 D PowerManagerService: mDisplayReady: false
+07-14 14:14:49.988  4978  5045 D DisplayPowerController: animateScreenStateChange: target2
+07-14 14:14:49.988  4978  5045 D DisplayPowerController: getFinalBrightness : Summary is 57 -> 57
+07-14 14:14:49.989  4978  5045 D DisplayPowerController: Animating brightness: target=57, rate=2000 (PSM:false, AB limit:(-1 ~ -1) MB Limit:(-1 ~ -1))
+07-14 14:14:49.989  4978  5045 D PowerManagerService: [s] DisplayPowerCallbacks : onStateChanged()
+07-14 14:14:49.989  4978  5045 D PowerManagerService: mDisplayReady: true
+07-14 14:14:49.993  4978  4978 I MotionRecognitionService: Plugged
+07-14 14:14:49.993  4978  4978 D MotionRecognitionService:   mCableConnection= 1
+07-14 14:14:49.993  4978  4978 D MotionRecognitionService: setPowerConnected : mGripEnabled = false
+07-14 14:14:49.994  4978  4978 D SamsungPhoneWindowManager: ACTION_BATTERY_CHANGED - Level :: 56, battStatus :: 2
+07-14 14:14:49.995  4978  4978 D GameManagerService: new battery level: 56
+07-14 14:14:49.996  4978  5041 D UsbDeviceManager: handleMessage -> MSG_UPDATE_CHARGING_STATE = 1
+07-14 14:14:49.997  5415  5415 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+07-14 14:14:50.008  5415  5415 D BatteryController: onReceive-ACTION_BATTERY_CHANGED : mLevel=56, mBatteryStatus=2
+07-14 14:14:50.010  4978  5035 E BatteryStatsService: no controller energy info supplied
+07-14 14:14:50.010  4978  5035 E BatteryStatsService: no controller energy info supplied
+07-14 14:14:50.060  5415  5415 D PowerUI : priorPlugType = 2 mPlugType =  2
+07-14 14:14:50.073  5415  5415 D PowerUI.Notification: showChargingNotice oldChargingType : 1 currentChargingType : 1 oldChargingTime : 5685000 mChargingTime : 5671000
+07-14 14:14:50.074  5415  5415 D PowerUI.Notification: showChargingNotification()
+07-14 14:14:50.076  5415  5415 D Notification: allPendingIntents
+07-14 14:14:50.078  4978 11669 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = -1
+07-14 14:14:50.078  4978 11669 D API test: getContainerInfo: value is 
+07-14 14:14:50.079  4978 11669 D ApplicationPolicy: isStatusBarNotificationAllowedAsUser: packageName = com.android.systemui,userId = 0
+07-14 14:14:50.079  4978 11669 D API test: getContainerInfo: value is 
+07-14 14:14:50.083  4978  4978 D EdgeLightingManager: isCallingUserSupported : callingUserId=-1, mUserId=0, isDualAppId=false
+07-14 14:14:50.085  4978  4978 D AudioService: getStreamVolume 5 index 110
+07-14 14:14:50.090  4978 11669 D Notification: allPendingIntents
+07-14 14:14:50.096  4978  5437 D Notification: allPendingIntents
+07-14 14:14:50.097  6329  6329 D CatchNotificationsService: onNotificationPosted
+07-14 14:14:50.098  4978  4978 D SmartAlertController: SmartAlert - Found Missed Event
+07-14 14:14:50.099  4978 11669 D Notification: allPendingIntents
+07-14 14:14:50.100  4978  5437 D Notification: allPendingIntents
+07-14 14:14:50.106  7588  7600 D BadgeProvider: query, [selection] : null
+07-14 14:14:50.113  6329  6329 E CatchNotificationsService: Invalid notification data
+07-14 14:14:50.117  4978  5031 E memtrack: Couldn't load memtrack module
+07-14 14:14:50.117  4978  5031 W android.os.Debug: failed to get memory consumption info: -1
+07-14 14:14:50.122  4978 11669 D SamsungAlarmManager: Cancel Alarm calling from uid:10020 pid :25005 / op:PendingIntent{3d2ba82: PendingIntentRecord{f6a6df2 com.google.android.gms broadcastIntent}}
+07-14 14:14:50.124 25005 16987 I AlarmManager: setExactAndAllowWhileIdle [name: GCM_HB_ALARM type: 2 triggerAtMillis: 2915895666]
+07-14 14:14:50.127  4978 11669 D SamsungAlarmManager: setExact Intent (T:2/F:5/AC:false) 20260714T142450 - CU:10020/CP:25005
+07-14 14:14:50.153 25005 16986 I AlarmManager: setExactAndAllowWhileIdle [name: FcmRetry type: 2 triggerAtMillis: 2915415692]
+07-14 14:14:50.156  4978 11669 D SamsungAlarmManager: setExact Intent (T:2/F:5/AC:false) 20260714T141650 - CU:10020/CP:25005
+07-14 14:14:50.157  4978 11669 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141650, SetElapsed=2915415692, nowELAPSED=2915295699
+07-14 14:14:50.192  4978  5437 D SamsungAlarmManager: Cancel Alarm calling from uid:10020 pid :25005 / op:PendingIntent{bf917da: PendingIntentRecord{8193593 com.google.android.gms broadcastIntent}}
+07-14 14:14:50.194  4978  5437 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141822, SetElapsed=2915508356, nowELAPSED=2915295736
+07-14 14:14:50.219  4978 11669 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "Astral Express", failover: false, available: true, roaming: false, metered: false]
+07-14 14:14:50.223  4978 11669 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T142450, SetElapsed=2915895666, nowELAPSED=2915295765
+07-14 14:14:50.224  4978 11669 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260714T141516 - CU:1000/CP:4978
+07-14 14:14:50.224  4978 11669 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141516, SetElapsed=2915321727, nowELAPSED=2915295766
+07-14 14:14:50.261  4978  5437 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T142450, SetElapsed=2915895666, nowELAPSED=2915295803
+07-14 14:14:50.262  4978  5437 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260714T141822 - CU:1000/CP:4978
+07-14 14:14:50.262  4978  5437 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141822, SetElapsed=2915508356, nowELAPSED=2915295804
+07-14 14:14:50.266  4978  5437 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260714T143809 - CU:1000/CP:4978
+07-14 14:14:53.807 14915 14915 E adbd    : recv: OPEN 000000b5 00000000 0042:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 2C 72 61 77 3A 61 6D 20 73 74 61 72 74 20 2D 61 20 61 6E 64 72 6F 69 64 2E 73 65 74 74 69 6E 67 73 2E 57 49 46 49 5F 53 45 54 54 49 4E 47 53 00 
+07-14 14:14:53.808 14915 14915 E adbd    : service_to_fd: shell,v2,TERM=dumb,raw:am start -a android.settings.WIFI_SETTINGS
+07-14 14:14:53.898  4978  6460 D RestrictionPolicy: isSettingsChangesAllowedAsUser, userId 0 : true
+07-14 14:14:53.904  4978  6460 I ActivityManager: START u0 {act=android.settings.WIFI_SETTINGS typ=null flg=0x10000000 cmp=ComponentInfo{com.android.settings/com.android.settings.Settings$WifiSettingsActivity}} from uid 2000
+07-14 14:14:53.904  4978  6460 E ActivityManager: getPackageFromAppProcesses, return null :17023
+07-14 14:14:53.917  4978  6460 D CustomFrequencyManagerService: acquireDVFSLockLocked : type : DVFS_MIN_LIMIT  frequency : 1976000  uid : 1000  pid : 4978  pkgName : AMS_ACT_START@CPU_MIN@15
+07-14 14:14:53.924  4978  6460 D ActivityManagerPerformance: AMP_acquire() ACT_START
+07-14 14:14:54.001  4978  5175 D SecContentProvider2: query(), uri = 20 selection = getPromptCredentialsEnabled
+07-14 14:14:54.004 10686 10686 I wpa_supplicant: WPA: Group rekeying completed with 08.B8.CB [GTK=CCMP]
+07-14 14:14:54.004  4978  5437 D ConnectivityService: filterNetworkStateForUid() uid: 1000 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "Astral Express", failover: false, available: true, roaming: false, metered: false]
+07-14 14:14:54.005  4978  5175 D SecContentProvider2: query(), uri = 20 selection = getPromptCredentialsEnabled
+07-14 14:14:54.008  4978  5437 D ConnectivityService: filterNetworkStateForUid() uid: 1000 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "Astral Express", failover: false, available: true, roaming: false, metered: false]
+07-14 14:14:54.350  6066  6066 D io_stats: !@   8,0 r 7899275 398425352 w 4180995 101084476 d 479569 73292200 f 1193436 1191381 iot 8580360 7972436 th 427660 0 0 pt 0 inp 0 0 1000487.208
+07-14 14:14:54.465  4978  5202 D WifiScanningService: addSingleScanRequest: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=2020,WorkSource{1000}, ScanSettings {  packageName:com.android.settings band:7 period:0 reportEvents:3 numBssidsPerScan:0 maxScansToCache:0 channels:[  ]  } 
+07-14 14:14:54.465  4978  5202 I WifiScanController: scan requested by com.android.settings
+07-14 14:14:54.465  4978  5202 D WifiScanningService: updateScanSettings: ScanSettings {  packageName:com.android.settings band:7 period:0 reportEvents:3 numBssidsPerScan:0 maxScansToCache:0 channels:[  ]  } 
+07-14 14:14:54.486  4978  5202 D SamsungAlarmManager: setInexact Listener (T:2/F:8/AC:false) 20260714T141509 - CU:1000/CP:4978
+07-14 14:14:54.486  4978  5202 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141509, SetElapsed=2915315027, nowELAPSED=2915300028
+07-14 14:14:55.926  4978  6125 D ActivityManagerPerformance: Received MSG_DISABLE_ACT_START, r: ActivityRecord{bda6594 u0 com.android.settings/.Settings$WifiSettingsActivity t498}
+07-14 14:14:55.927  4978  6125 D CustomFrequencyManagerService: acquireDVFSLockLocked : type : DVFS_MIN_LIMIT  frequency : 1768000  uid : 1000  pid : 4978  pkgName : AMS_RESUME_TAIL@CPU_MIN@21
+07-14 14:14:55.927  4978  6125 D ActivityManagerPerformance: AMP_acquire() TAIL
+07-14 14:14:55.927  4978  6125 D CustomFrequencyManagerService: FrequencyrequestList.getNextMaxCPUCoreRequest, index: 2
+07-14 14:14:55.927  4978  6125 D CustomFrequencyManagerService: releaseDVFSLockLocked : Getting Lock type frm List : DVFS_MIN_LIMIT  frequency : 1976000  uid : 1000  pid : 4978  tag : AMS_ACT_START@CPU_MIN@15
+07-14 14:14:55.927  4978  6125 D ActivityManagerPerformance: AMP_release() ACT_START
+07-14 14:14:56.232  4978  4978 D CustomFrequencyManagerService: releaseDVFSLockLocked : Getting Lock type frm List : DVFS_MIN_LIMIT  frequency : 1768000  uid : 1000  pid : 4978  tag : AMS_RESUME_TAIL@CPU_MIN@21
+07-14 14:14:56.428 14915 14915 E adbd    : recv: OPEN 000000bd 00000000 0014:65 78 65 63 3A 73 63 72 65 65 6E 63 61 70 20 27 2D 70 27 00 
+07-14 14:14:56.428 14915 14915 E adbd    : service_to_fd: exec:screencap '-p'
+07-14 14:14:56.503  4978  5437 D SamsungAlarmManager: Cancel Alarm calling from uid:10020 pid :25005 / op:PendingIntent{b68883d: PendingIntentRecord{f6a6df2 com.google.android.gms broadcastIntent}}
+07-14 14:14:56.506 25005 17007 I AlarmManager: setExactAndAllowWhileIdle [name: GCM_HB_ALARM type: 2 triggerAtMillis: 2915902048]
+07-14 14:14:56.510  4978  5437 D SamsungAlarmManager: setExact Intent (T:2/F:5/AC:false) 20260714T142456 - CU:10020/CP:25005
+07-14 14:14:56.530 25005 16987 I AlarmManager: setExactAndAllowWhileIdle [name: FcmRetry type: 2 triggerAtMillis: 2915422069]
+07-14 14:14:56.538  4978  6460 D SamsungAlarmManager: Cancel Alarm calling from uid:10020 pid :25005 / op:PendingIntent{132c832: PendingIntentRecord{f6a6df2 com.google.android.gms broadcastIntent}}
+07-14 14:14:56.539  4978  5437 D SamsungAlarmManager: setExact Intent (T:2/F:5/AC:false) 20260714T141656 - CU:10020/CP:25005
+07-14 14:14:56.542 25005 17007 I AlarmManager: setExactAndAllowWhileIdle [name: GCM_HB_ALARM type: 2 triggerAtMillis: 2915902084]
+07-14 14:14:56.548  4978  6460 D SamsungAlarmManager: setExact Intent (T:2/F:5/AC:false) 20260714T142456 - CU:10020/CP:25005
+07-14 14:14:56.580  4978 11669 I EDMNativeHelperService: isScreenCaptureEnabled
+07-14 14:14:56.584  4978 11669 D RestrictionPolicy: isScreenCaptureEnabled : ret=true userId=0
+07-14 14:14:56.589  3211  3211 V Surface : sf_framedrop debug : 0x4f4c, game : false, logging : 0
+07-14 14:14:56.596  4978  6467 D SamsungAlarmManager: Cancel Alarm calling from uid:10020 pid :25005 / op:PendingIntent{c845adf: PendingIntentRecord{8193593 com.google.android.gms broadcastIntent}}
+07-14 14:14:56.599  4719  5020 D Netd    : Iface wlan0 link up
+07-14 14:14:56.600  4978  5041 D Tethering: interfaceLinkStateChanged wlan0, true
+07-14 14:14:56.600  4978  5041 D Tethering: interfaceStatusChanged wlan0, true
+07-14 14:14:56.605  4978  6467 D WificondControl: Scan result ready event
+07-14 14:14:56.605  4978  5202 D SamsungAlarmManager: Cancel Alarm calling from uid:1000 pid :4978 / listener:android.app.AlarmManager$ListenerWrapper@4d495e7
+07-14 14:14:56.607  4978  5202 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141822, SetElapsed=2915508356, nowELAPSED=2915302149
+07-14 14:14:56.635  4978 11669 D ConnectivityService: filterNetworkStateForUid() uid: 10129 networkInfo: [type: WIFI[] - WIFI, state: CONNECTED/CONNECTED, reason: (unspecified), extra: "Astral Express", failover: false, available: true, roaming: false, metered: false]
+07-14 14:14:56.642  4978 11669 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T142456, SetElapsed=2915902084, nowELAPSED=2915302184
+07-14 14:14:56.642  4978 11669 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260714T141522 - CU:1000/CP:4978
+07-14 14:14:56.643  4978 11669 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141522, SetElapsed=2915328123, nowELAPSED=2915302185
+07-14 14:14:56.645  4978  5202 D WifiScanningService: onFullScanResult received, previous scan count:22
+07-14 14:14:56.645  4978  5202 D WifiScanningService: onScanStatus event received, event=0
+07-14 14:14:56.647  4978  5202 D WifiScanningService: singleScanResults: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=2020,results=27
+07-14 14:14:56.648  4978  5202 D WifiScanningService: singleScanResults: ClientInfo[uid=1000,android.os.Messenger@58dd8f2],Id=1,results=27
+07-14 14:14:56.652  4978  4978 I WifiService: Securities matching
+07-14 14:14:56.657  5623  5658 D EventHandler_FLP: WIFI_SCAN_RESULTS
+07-14 14:14:56.659  4965 16329 D WifiTracker: WorkHandler - handleMessage : 0
+07-14 14:14:56.660  4978 11669 D WifiPermissionsUtil: canAccessScanResults: pkgName = com.google.android.gms, uid = 10020
+07-14 14:14:56.661  4965 16329 D WifiTracker: getConfiguredNetworks size:5
+07-14 14:14:56.661  4978  6467 D WifiPermissionsUtil: canAccessScanResults: pkgName = com.android.settings, uid = 1000
+07-14 14:14:56.681  4965 16329 D WifiTracker: updateAccessPoints clearConfig:false configSize:5 scanSize:27
+07-14 14:14:56.692  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(FRITZ!Box 6670 DK:00:7a:a4:28:c8:f0,connectable,WPA2,level=1(unchanged),metered=false,2412,-85)
+07-14 14:14:56.692  4965 16329 D SettingsLib.AccessPoint: update - mIsLevelChanged true - AccessPoint(Vodafone-2807:bc:5b:d5:b9:f8:59,connectable,WPA2,level=2(unchanged),metered=false,5680,-80)
+07-14 14:14:56.693  4965 16329 D SettingsLib.AccessPoint: Astral ExpresscompareTo netid4
+07-14 14:14:56.694  4965  4965 D WifiTracker: MainHandler - handleMessage : 2
+07-14 14:14:56.695  4965  4965 D WifiSettings: addDeviceCategory Verfügbare Netze
+07-14 14:14:56.703  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:56.704  4965  4965 D WifiSettings: updateAccessPointPreferences size:10 connected:1 scan:true
+07-14 14:14:56.708  4978  6460 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T142456, SetElapsed=2915902084, nowELAPSED=2915302250
+07-14 14:14:56.709  4978  6460 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260714T141822 - CU:1000/CP:4978
+07-14 14:14:56.709  4978  6460 I SamsungAlarmManager: setLocked to kernel - T:2 / 20260714T141822, SetElapsed=2915508356, nowELAPSED=2915302251
+07-14 14:14:56.711  4965  4965 E WifiSettings.VI: updateWithAnimation size:9, updatedScanResult :true
+07-14 14:14:56.713  4978  6460 D SamsungAlarmManager: setInexact Listener (T:2/F:0/AC:false) 20260714T143809 - CU:1000/CP:4978
+07-14 14:14:56.737  4965  4965 D WifiSettings.VI: onAddDelete
+07-14 14:14:56.737  4965  4965 D WifiSettings.VI: updateEmptyView - list item AvailableAPCount : 9, ConnectedAPCount:1, restriction:false
+07-14 14:14:56.749  4965  4965 D WifiSettings.AccessPointExpListAdapter: getGroupView :: groupPosition = 0,  getPreferenceCount = 1 , isExpanded = true
+07-14 14:14:56.754  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:56.761  4965  4965 D SettingsLib.AccessPoint: getSummary - index:5
+07-14 14:14:56.761  4965  4965 D WifiSettings.AccessPointExpListAdapter: getGroupView :: groupPosition = 1,  getPreferenceCount = 9 , isExpanded = true
+07-14 14:14:56.766  4965  4965 D WifiSettings.VI: onAnimationStart
+07-14 14:14:57.036 17027 17027 D skia    : Encode PNG Singlethread processname=screencap :     394696 us, width=1080, height=1920
+07-14 14:14:57.061 14915 14915 E adbd    : recv: OPEN 000000c0 00000000 004b:73 68 65 6C 6C 2C 76 32 2C 54 45 52 4D 3D 64 75 6D 62 3A 65 78 70 6F 72 74 20 41 4E 44 52 4F 49 44 5F 4C 4F 47 5F 54 41 47 53 3D 27 27 3B 20 65 78 65 63 20 6C 6F 67 63 61 74 20 27 2D 64 27 20 27 2D 74 27 20 27 32 35 30 27 00 
+07-14 14:14:57.061 14915 14915 E adbd    : service_to_fd: shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '250'

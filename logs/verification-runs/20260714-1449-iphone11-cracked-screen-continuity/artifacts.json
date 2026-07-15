@@ -1,0 +1,240 @@
+{
+  "acceptanceChecks": [
+    "iPhone 11 stores JuJo and Astral Express and auto-joins Astral Express",
+    "iPhone 11 remains paired with Developer Mode enabled and is discoverable over the LAN without USB",
+    "Current HydraCam Profile automation build launches and exposes a verified bridge",
+    "Power, Auto-Lock, and post-reboot access boundaries are recorded"
+  ],
+  "commands": [
+    {
+      "command": [
+        "flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--dart-define=HYDRACAM_AUTOMATION=true",
+        "-t",
+        "lib/main.dart"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T12:50:21.805698+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "120",
+        "xcrun",
+        "devicectl",
+        "device",
+        "install",
+        "app",
+        "--timeout",
+        "90",
+        "--device",
+        "00008030-000D05302190402E",
+        "build/ios/iphoneos/Runner.app"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-14T13:44:29.253352+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "300",
+        "xcodebuild",
+        "-workspace",
+        "ios/Runner.xcworkspace",
+        "-scheme",
+        "Runner",
+        "-configuration",
+        "Profile",
+        "-destination",
+        "platform=iOS,id=00008030-000D05302190402E",
+        "-allowProvisioningUpdates",
+        "-allowProvisioningDeviceRegistration",
+        "-derivedDataPath",
+        "build/iphone11-provision",
+        "COMPILER_INDEX_STORE_ENABLE=NO",
+        "build"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:47:47.810409+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "50",
+        "xcrun",
+        "devicectl",
+        "device",
+        "process",
+        "launch",
+        "--timeout",
+        "30",
+        "--device",
+        "00008030-000D05302190402E",
+        "--terminate-existing",
+        "--environment-variables",
+        "{\"HYDRACAM_AUTOMATION_ROLE\":\"standby\",\"HYDRACAM_AUTOMATION_TARGET_ID\":\"iphone11-cracked\"}",
+        "com.keepeyeonball"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:43:07.895058+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "192.168.178.0/24",
+        "--port",
+        "4762",
+        "--timeout",
+        "2",
+        "--required-command",
+        "capture_screenshot",
+        "--all"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-14T18:43:16.874245+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/discover_automation_bridge.py",
+        "--scan-subnet",
+        "169.254.206.0/24",
+        "--port",
+        "4762",
+        "--timeout",
+        "2",
+        "--required-command",
+        "capture_screenshot",
+        "--all"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:43:25.484268+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "35",
+        "curl",
+        "--max-time",
+        "30",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "-X",
+        "POST",
+        "http://169.254.206.159:4762/commands/capture_screenshot",
+        "-H",
+        "Content-Type: application/json",
+        "--data",
+        "{\"name\":\"iphone11-cracked-standby-wired\",\"pixelRatio\":1}",
+        "--output",
+        "logs/verification-runs/20260714-1449-iphone11-cracked-screen-continuity/device-logs/iphone11-capture-screenshot-command.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:43:58.583733+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "50",
+        "xcrun",
+        "devicectl",
+        "device",
+        "copy",
+        "from",
+        "--device",
+        "7931E735-717E-5B88-A283-11343FEB0795",
+        "--source",
+        "Documents/automation-screenshots/iphone11-cracked-standby-wired-2026-07-14T20-43-58-462666.png",
+        "--destination",
+        "logs/verification-runs/20260714-1449-iphone11-cracked-screen-continuity/screenshots/iphone11-cracked-standby-wired.png",
+        "--domain-type",
+        "appDataContainer",
+        "--domain-identifier",
+        "com.keepeyeonball",
+        "--timeout",
+        "30",
+        "--json-output",
+        "logs/verification-runs/20260714-1449-iphone11-cracked-screen-continuity/device-logs/iphone11-copy-screenshot.json",
+        "--log-output",
+        "logs/verification-runs/20260714-1449-iphone11-cracked-screen-continuity/device-logs/iphone11-copy-screenshot.log"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:44:07.494101+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "15",
+        "curl",
+        "--max-time",
+        "10",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "http://169.254.206.159:4762/logs",
+        "--output",
+        "logs/verification-runs/20260714-1449-iphone11-cracked-screen-continuity/device-logs/iphone11-bridge-logs-wired.json"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:44:16.233056+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices",
+        "--timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:45:15.792697+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "20",
+        "xcrun",
+        "xctrace",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T18:45:15.912839+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "00008030-000D05302190402E",
+      "kind": "iOS hardware",
+      "name": "iPhone 11",
+      "notes": [
+        "CoreDevice paired; Developer Mode enabled; initial access is wired and device is locked."
+      ],
+      "os": "iOS 26.2",
+      "role": "Cracked-screen persistent HydraCam client"
+    }
+  ],
+  "evidenceFiles": [],
+  "item": {
+    "slug": "iphone11-cracked-screen-continuity",
+    "source": "docs/control/status-and-roadmap.md#current-mobile-status",
+    "title": "Preserve iPhone 11 access despite cracked screen"
+  },
+  "notes": [],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "prepared",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

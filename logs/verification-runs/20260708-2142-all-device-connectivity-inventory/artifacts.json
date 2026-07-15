@@ -1,0 +1,344 @@
+{
+  "acceptanceChecks": [
+    "Every named target is either reachable by Flutter/ADB/CoreDevice or has a specific operator action recorded",
+    "Android phones are inventoried by serial, model, Android API, and authorization state",
+    "iPhone and iPad are inventoried by CoreDevice and Flutter target IDs"
+  ],
+  "commands": [
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:46:09.520299+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:46:15.190440+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:46:34.255630+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "ioreg",
+        "-p",
+        "IOUSB"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:46:42.840792+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:52:00.497259+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:52:05.189414+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "ioreg -p IOUSB -l -w 0 | egrep 'SAMSUNG_Android|USB Serial Number|kUSBSerialNumberString|UsbExclusiveOwner|locationID'"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T19:52:23.964575+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:04:11.329901+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:13:28.244742+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "flutter",
+        "devices",
+        "--device-timeout",
+        "10"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:13:46.735408+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "details",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:14:11.604549+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:16:37.134503+00:00"
+    },
+    {
+      "command": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "xcrun",
+        "devicectl",
+        "device",
+        "info",
+        "lockState",
+        "--device",
+        "0A947DBD-A462-5BAA-AB84-17F143D41619"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-08T20:16:43.616767+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "9885e6503930304946",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S7 edge",
+      "notes": [
+        "MBA13 adb and Flutter currently see this as SM_G935F."
+      ],
+      "os": "Android 8.0.0 API 26",
+      "role": "reachable ADB/Flutter target"
+    },
+    {
+      "identifier": "RF8M40MT6AW",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e",
+      "notes": [
+        "MBA13 adb and Flutter currently see this as SM_G970F."
+      ],
+      "os": "Android 12 API 31",
+      "role": "reachable ADB/Flutter target"
+    },
+    {
+      "identifier": "RF8M90QE7LX",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e",
+      "notes": [
+        "MBA13 adb and Flutter currently see this as SM_G970F; prior memory identifies this as one of the two known S10e serials."
+      ],
+      "os": "Android 12 API 31",
+      "role": "reachable ADB/Flutter target"
+    },
+    {
+      "identifier": "29d816ac550b7ece",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S9",
+      "notes": [
+        "MBA13 adb reports unauthorized; user must accept USB debugging RSA prompt before control."
+      ],
+      "os": "unknown current; prior inventory SM_G960F API 29",
+      "role": "USB present, ADB unauthorized"
+    },
+    {
+      "identifier": "00008101-000A68811E43001E / AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A",
+      "kind": "iOS hardware",
+      "name": "iPhone 12 Pro",
+      "notes": [
+        "MBA13 CoreDevice reports wired, paired, booted, Developer Mode enabled, tunnel connected."
+      ],
+      "os": "iOS 26.5",
+      "role": "reachable CoreDevice/Flutter target"
+    },
+    {
+      "identifier": "8b406aa5c597eab4c4dfd9908f4a09b10a89ec63 / 0A947DBD-A462-5BAA-AB84-17F143D41619",
+      "kind": "iOS hardware",
+      "name": "iPad (5)",
+      "notes": [
+        "Unlock and preferably plug in by USB before using for app launch/capture proof."
+      ],
+      "os": "iOS 17.7.11",
+      "role": "Flutter wireless visible; CoreDevice locked/tunnel connecting"
+    },
+    {
+      "identifier": "not visible yet",
+      "kind": "Android hardware",
+      "name": "POCO X4 5G",
+      "notes": [
+        "Plug with a data cable, unlock, enable USB debugging, and accept RSA prompt."
+      ],
+      "os": "unknown current",
+      "role": "not visible on MBA13 USB/ADB/Flutter"
+    },
+    {
+      "identifier": "RF8M21J8XRT not visible",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e broken-screen candidate",
+      "notes": [
+        "Previously known S10e serial; plug into MBA13 hub or restore ADB visibility before control."
+      ],
+      "os": "unknown current; prior inventory SM_G970F Android 12 API 31",
+      "role": "expected device not currently visible"
+    },
+    {
+      "identifier": "RF8M2125DAJ",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e candidate",
+      "notes": [
+        "MBA13 adb reports unauthorized; likely one of the required S10e units after user plug-in. Needs RSA prompt accepted before control."
+      ],
+      "os": "unknown current",
+      "role": "USB present, ADB unauthorized"
+    },
+    {
+      "identifier": "RF8M40MT6AW",
+      "kind": "Android hardware",
+      "name": "Samsung Galaxy S10e candidate",
+      "notes": [
+        "Current ioreg sees USB serial, but adb/flutter do not. Enable USB debugging or change USB mode/replug."
+      ],
+      "os": "unknown current; earlier same run briefly exposed as Android 12 API 31",
+      "role": "USB present, not currently exposed to ADB"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/poco-x4-575ecf2cbd24-update.png",
+    "screenshots/s10e-RF8M2125DAJ-update.png",
+    "screenshots/s10e-RF8M2125DAJ-update2.png",
+    "screenshots/s10e-RF8M40MT6AW-update.png",
+    "screenshots/s10e-RF8M90QE7LX.png",
+    "screenshots/s7-9885e6503930304946.png",
+    "screenshots/s9-29d816ac550b7ece-update.png",
+    "video/s7-9885e6503930304946.mp4",
+    "device-logs/s10e-RF8M90QE7LX-logcat.txt",
+    "device-logs/s7-9885e6503930304946-logcat.txt"
+  ],
+  "item": {
+    "slug": "all-device-connectivity-inventory",
+    "source": "user-request-2026-07-08-all-device-control",
+    "title": "Inventory and enable all attached HydraCam devices"
+  },
+  "notes": [
+    "MBA13 controls S7, one S10e, and iPhone 12 Pro; iPad is visible but locked/tunnel-limited; S9 and one S10e candidate require ADB RSA authorization; another S10e candidate is USB-only; POCO X4 5G is not visible.",
+    "Original requested fleet is reachable/controlled at host inventory layer: S9, POCO X4 5G, S7, three S10e targets, iPhone 12 Pro, and iPad. Extra iPhone 11 remains blocked on Developer Mode because of broken screen."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "C",
+  "verificationTierName": "multi-device-emulated-cluster"
+}

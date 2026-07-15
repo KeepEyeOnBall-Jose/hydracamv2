@@ -1,0 +1,205 @@
+{
+  "acceptanceChecks": [
+    "POCO 2201116PG is visible to ADB as an authorized device",
+    "Current signed HydraCam APK installs successfully",
+    "HydraCam launches and its installed package/version is recorded"
+  ],
+  "commands": [
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:02:27.506366+00:00"
+    },
+    {
+      "command": [
+        "timeout",
+        "8",
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "mba13",
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 255,
+      "startedAt": "2026-07-14T13:02:32.771211+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "devices",
+        "-l"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:06:37.833494+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "getprop",
+        "ro.build.version.release"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:06:37.886100+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:06:37.954631+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "pm",
+        "list",
+        "packages",
+        "hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:06:38.021698+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "pub",
+        "get"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:07:01.939784+00:00"
+    },
+    {
+      "command": [
+        "flutter",
+        "build",
+        "apk",
+        "--debug",
+        "--dart-define=HYDRACAM_AUTOMATION=true"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:07:03.733941+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-14T13:08:58.344087+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "install",
+        "-r",
+        "build/app/outputs/flutter-apk/app-debug.apk"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:12:07.594011+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.amaia23.hydracam/.MainActivity"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:12:17.254418+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "pidof",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:12:25.603471+00:00"
+    },
+    {
+      "command": [
+        "/Users/jose/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "575ecf2cbd24",
+        "shell",
+        "dumpsys",
+        "package",
+        "com.amaia23.hydracam"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-14T13:12:25.755260+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "575ecf2cbd24",
+      "kind": "physical Android",
+      "name": "POCO X4 Pro 5G",
+      "notes": [
+        "User completed Xiaomi account and SIM authorization for Install via USB; device was previously controlled on MBA13."
+      ],
+      "os": "Android 13 / API 33",
+      "role": "single-device install and launch target"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/poco-after-install-rejection.png",
+    "screenshots/poco-hydracam-launched.png",
+    "screenshots/poco-install-button-enabled.png",
+    "screenshots/poco-live-install-prompt.png",
+    "screenshots/unavailable.txt",
+    "video/poco-hydracam-launched.mp4",
+    "video/unavailable.txt",
+    "device-logs/poco-hydracam-launch-logcat.txt",
+    "device-logs/unavailable.txt"
+  ],
+  "item": {
+    "slug": "poco-x4-install-after-xiaomi-account",
+    "source": "docs/control/status-and-roadmap.md#current-mobile-status",
+    "title": "Re-admit POCO X4 Pro 5G to current-build Android deployment"
+  },
+  "notes": [
+    "Xiaomi account and SIM authorization is user-confirmed, but POCO 575ecf2cbd24 is absent from this Mac's ADB inventory and MBA13 times out over SSH, so no APK install or launch was attempted.",
+    "Evidence placeholders record why screenshots, video, and device logs are unavailable for this unreachable target.",
+    "POCO X4 Pro accepted the current HydraCam debug APK, remembered USB install approval, passed a subsequent unattended adb install -r, and launched com.amaia23.hydracam 1.4.0+19. Camera/session validation remains pending until the device joins the fleet LAN."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "A",
+  "verificationTierName": "real-hardware"
+}

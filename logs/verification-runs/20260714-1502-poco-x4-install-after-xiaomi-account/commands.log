@@ -1,0 +1,373 @@
+# HydraCam evidence run command log
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:34668544X product:starltexx model:SM_G960F device:starlte transport_id:20
+9885e6503930304946     device usb:34865152X product:hero2ltexx model:SM_G935F device:hero2lte transport_id:39
+RF8M2125DAJ            device usb:17973248X product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:36
+RF8M40MT6AW            device usb:17960960X product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:38
+RF8M90QE7LX            device usb:17969152X product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:37
+
+[exit-code] 0
+
+$ timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 mba13 /Users/jose/Library/Android/sdk/platform-tools/adb devices -l
+
+[stderr]
+ssh: connect to host joss-macbook-air.tail6ce139.ts.net port 22: Operation timed out
+[exit-code] 255
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb devices -l
+List of devices attached
+29d816ac550b7ece       device usb:34668544X product:starltexx model:SM_G960F device:starlte transport_id:20
+575ecf2cbd24           device usb:34734080X product:veux_p_eea model:2201116PG device:veux transport_id:40
+9885e6503930304946     device usb:34865152X product:hero2ltexx model:SM_G935F device:hero2lte transport_id:39
+RF8M2125DAJ            device usb:17973248X product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:36
+RF8M40MT6AW            device usb:17960960X product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:38
+RF8M90QE7LX            device usb:17969152X product:beyond0lteeea model:SM_G970F device:beyond0 transport_id:37
+
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 shell getprop ro.build.version.release
+13
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 shell getprop ro.build.version.sdk
+33
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 shell pm list packages hydracam
+[exit-code] 0
+
+$ flutter pub get
+Resolving dependencies...
+Downloading packages...
+  battery_plus 7.0.0 (7.1.0 available)
+  camera 0.12.0+1 (0.12.0+2 available)
+  camera_android_camerax 0.7.2+1 (0.7.4+1 available)
+  camera_avfoundation 0.10.1 (0.10.2 available)
+  camera_platform_interface 2.13.0 (2.13.1 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.1.1 (7.2.0 available)
+  cross_file 0.3.5+2 (0.3.5+4 available)
+  device_info_plus 13.1.0 (13.2.0 available)
+  flutter_appauth 12.0.1 (12.0.2 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  hooks 2.0.2 (2.1.0 available)
+  image 4.8.0 (4.9.1 available)
+  intl 0.20.2 (0.20.3 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.19.0 available)
+  network_info_plus 8.1.0 (8.2.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  package_info_plus 10.1.0 (10.2.0 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  photo_manager 3.9.0 (3.10.0 available)
+  record_use 0.6.0 (1.0.0 available)
+  sensors_plus 7.0.0 (7.1.0 available)
+  sensors_plus_platform_interface 2.0.1 (2.0.2 available)
+  shared_preferences_android 2.4.26 (2.4.27 available)
+  test_api 0.7.11 (0.7.13 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.11.1 (2.13.0 available)
+  video_player_android 2.9.6 (2.11.0 available)
+  video_player_avfoundation 2.9.7 (2.11.0 available)
+  video_player_platform_interface 6.7.0 (6.9.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+32 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+[exit-code] 0
+
+$ flutter build apk --debug --dart-define=HYDRACAM_AUTOMATION=true
+Resolving dependencies...
+Downloading packages...
+  battery_plus 7.0.0 (7.1.0 available)
+  camera 0.12.0+1 (0.12.0+2 available)
+  camera_android_camerax 0.7.2+1 (0.7.4+1 available)
+  camera_avfoundation 0.10.1 (0.10.2 available)
+  camera_platform_interface 2.13.0 (2.13.1 available)
+  cli_util 0.4.2 (0.5.1 available)
+  connectivity_plus 7.1.1 (7.2.0 available)
+  cross_file 0.3.5+2 (0.3.5+4 available)
+  device_info_plus 13.1.0 (13.2.0 available)
+  flutter_appauth 12.0.1 (12.0.2 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.0 available)
+  hooks 2.0.2 (2.1.0 available)
+  image 4.8.0 (4.9.1 available)
+  intl 0.20.2 (0.20.3 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.19.0 available)
+  network_info_plus 8.1.0 (8.2.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  package_info_plus 10.1.0 (10.2.0 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  photo_manager 3.9.0 (3.10.0 available)
+  record_use 0.6.0 (1.0.0 available)
+  sensors_plus 7.0.0 (7.1.0 available)
+  sensors_plus_platform_interface 2.0.1 (2.0.2 available)
+  shared_preferences_android 2.4.26 (2.4.27 available)
+  test_api 0.7.11 (0.7.13 available)
+  vector_math 2.2.0 (2.4.0 available)
+  video_player 2.11.1 (2.13.0 available)
+  video_player_android 2.9.6 (2.11.0 available)
+  video_player_avfoundation 2.9.7 (2.11.0 available)
+  video_player_platform_interface 6.7.0 (6.9.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+32 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleDebug'...                          
+Running Gradle task 'assembleDebug'...                             32.8s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+
+[stderr]
+The following plugins do not support Swift Package Manager for ios:
+  - disk_space_plus
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+WARNING: Your Android app project: app located at: /Users/jose/src/work/hydracamv2/android/app/build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): battery_plus, device_info_plus, disk_space_plus, network_info_plus, package_info_plus, photo_manager, sensors_plus, wakelock_plus
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+
+[stderr]
+adb: failed to install build/app/outputs/flutter-apk/app-debug.apk: Failure [INSTALL_FAILED_USER_RESTRICTED: Install canceled by user]
+
+[exit-code] 1
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 install -r build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 shell am start -n com.amaia23.hydracam/.MainActivity
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity }
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 shell pidof com.amaia23.hydracam
+5892
+[exit-code] 0
+
+$ /Users/jose/Library/Android/sdk/platform-tools/adb -s 575ecf2cbd24 shell dumpsys package com.amaia23.hydracam
+Activity Resolver Table:
+  Schemes:
+      com.amaia23.hydracam:
+        e89931e com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 29af7ff
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.amaia23.hydracam"
+          Authority: "login-callback": -1
+        e89931e com.amaia23.hydracam/net.openid.appauth.RedirectUriReceiverActivity filter 1c579cc
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.amaia23.hydracam"
+      com.amaia23.hydracam.mwdat:
+        70bb4a3 com.amaia23.hydracam/.MainActivity filter 7793b59
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "com.amaia23.hydracam.mwdat"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        70bb4a3 com.amaia23.hydracam/.MainActivity filter a17c3a0
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        bf93415 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter eb666b8
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        bf93415 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 437c32a
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        bf93415 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 5b1151b
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        bf93415 com.amaia23.hydracam/androidx.profileinstaller.ProfileInstallReceiver filter 145fc91
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (c715d88):
+    sourcePackage=com.amaia23.hydracam
+    uid=10275 gids=[] type=0 prot=signature
+    perm=PermissionInfo{5f47321 com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.amaia23.hydracam/androidx.startup.InitializationProvider:
+    Provider{af4346 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.amaia23.hydracam.androidx-startup]:
+    Provider{af4346 com.amaia23.hydracam/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{f432907 com.amaia23.hydracam}
+
+Key Set Manager:
+  [com.amaia23.hydracam]
+      Signing KeySets: 427
+
+Packages:
+  Package [com.amaia23.hydracam] (8daf114):
+    userId=10275
+    pkg=Package{882ca34 com.amaia23.hydracam}
+    codePath=/data/app/~~qquV0qFmaefFCBwRfIEolA==/com.amaia23.hydracam-DumBk-1PYD4DewovqDqgQg==
+    resourcePath=/data/app/~~qquV0qFmaefFCBwRfIEolA==/com.amaia23.hydracam-DumBk-1PYD4DewovqDqgQg==
+    legacyNativeLibraryDir=/data/app/~~qquV0qFmaefFCBwRfIEolA==/com.amaia23.hydracam-DumBk-1PYD4DewovqDqgQg==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=19 minSdk=24 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.4.0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesIntents=[Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:/... }]
+    dataDir=/data/user/0/com.amaia23.hydracam
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2026-07-14 15:12:14
+    lastUpdateTime=2026-07-14 15:12:16
+    packageSource=0
+    signatures=PackageSignatures{35f4ea3 version:2, signatures:[1d1013c1], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.READ_MEDIA_IMAGES
+      android.permission.READ_MEDIA_VIDEO
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_WIFI_STATE
+      android.permission.BLUETOOTH_CONNECT
+      android.permission.WAKE_LOCK
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      android.permission.WAKE_LOCK: granted=true
+      com.amaia23.hydracam.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+    User 0: ceDataInode=769183 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-07-14 15:11:47
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-cjRi.frro
+        /data/resource-cache/com.android.systemui-accent-Hwhr.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.BLUETOOTH_CONNECT: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.ACCESS_COARSE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_MEDIA_IMAGES: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_MEDIA_VIDEO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.android.thememanager:
+      com.amaia23.hydracam
+    [app id 10122 not installed]:
+      com.amaia23.hydracam
+    com.miui.gallery:
+      com.amaia23.hydracam
+    com.xiaomi.account:
+      com.amaia23.hydracam
+    [app id 10183 not installed]:
+      com.amaia23.hydracam
+    com.mi.globalminusscreen:
+      com.amaia23.hydracam
+    com.android.settings.intelligence:
+      com.amaia23.hydracam
+    com.google.android.apps.messaging:
+      com.amaia23.hydracam
+    ai.perplexity.app.android:
+      com.amaia23.hydracam
+    com.radioopt.widget:
+      com.amaia23.hydracam
+    com.amaia23.hydracam:
+      org.videolan.vlc
+      com.google.android.googlequicksearchbox
+      com.android.chrome
+      com.google.android.setupwizard
+      com.google.android.apps.docs
+      firmar.dni.electronico
+      cn.wps.moffice_eng
+    com.miui.android.fashiongallery:
+      com.amaia23.hydracam
+    com.whatsapp:
+      com.amaia23.hydracam
+    [app id 10378 not installed]:
+      com.amaia23.hydracam
+    com.facebook.orca:
+      com.amaia23.hydracam
+    com.nordvpn.android:
+      com.amaia23.hydracam
+    com.freevpnplanet:
+      com.amaia23.hydracam
+    com.ryanair.cheapflights:
+      com.amaia23.hydracam
+    com.facebook.katana:
+      com.amaia23.hydracam
+    com.app.tgtg:
+      com.amaia23.hydracam
+    com.amazon.dee.app:
+      com.amaia23.hydracam
+    com.instagram.android:
+      com.amaia23.hydracam
+  queryable via interaction:
+    User 0:
+      [com.silead.fingerprint,com.miui.audiomonitor,com.android.btlogger,com.xiaomi.barrage,com.miui.securitycenter,com.xiaomi.joyose,com.wt.secret_code_manager,com.miui.aod,com.qualcomm.qti.xrcb,android,com.android.location.fused,com.miui.touchassistant,com.miui.face,com.xiaomi.trustservice,com.android.localtransport,com.android.keychain,com.modemdebug,com.android.provision,com.factory.mmigroup,com.xiaomi.misettings,com.xiaomi.mtb,com.miui.notification,com.goodix.fingerprint,com.android.inputdevices,com.android.settings,com.android.systemui,com.android.wallpaperbackup,com.factory.cit,com.miui.bugreport,com.miui.miinput,com.miui.powerkeeper,miui.systemui.plugin,com.android.dynsystem,com.miui.qr,com.mi.android.globalminusscreen,com.android.providers.settings,com.miui.daemon,com.bsp.catchlog,com.miui.securitycore,com.android.server.telecom,com.mi.AutoTest,com.silead.factorytest,com.miui.screenrecorder,com.miui.freeform,com.wingtech.sartest]:
+        com.amaia23.hydracam
+      com.android.chrome:
+        com.amaia23.hydracam
+  queryable via uses-library:
+
+Dexopt state:
+  [com.amaia23.hydracam]
+    path: /data/app/~~qquV0qFmaefFCBwRfIEolA==/com.amaia23.hydracam-DumBk-1PYD4DewovqDqgQg==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+      odex file size: null
+
+Compiler stats:
+  [com.amaia23.hydracam]
+     base.apk - 2079
+[exit-code] 0
