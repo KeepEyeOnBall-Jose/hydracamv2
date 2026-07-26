@@ -1,0 +1,368 @@
+{
+  "acceptanceChecks": [
+    "Latest Alicia Web session features merge without losing local Docker and event automation",
+    "The complete Alicia Web test suite and local Compose smoke pass",
+    "The Przemek Android client records and uploads a finalized playable HLS stream through the merged server"
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-C",
+        ".worktrees/przemek-alicia-web-20260710",
+        "merge",
+        "--no-ff",
+        "origin/main",
+        "-m",
+        "Merge latest Alicia Web upstream"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-26T21:03:12.287945+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "PYTHONPATH=.worktrees/przemek-alicia-web-20260710",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        ".worktrees/przemek-alicia-web-20260710/tests",
+        "-p",
+        "test_events.py"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-26T21:04:04.998052+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "PYTHONPATH=.worktrees/przemek-alicia-web-20260710",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        ".worktrees/przemek-alicia-web-20260710/tests",
+        "-p",
+        "test_recording_sessions.py"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-26T21:04:05.124175+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "docker",
+        "compose",
+        "--project-directory",
+        ".worktrees/przemek-alicia-web-20260710",
+        "build",
+        "alicia-web"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-26T21:04:21.760800+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "docker",
+        "compose",
+        "--project-directory",
+        ".worktrees/przemek-alicia-web-20260710",
+        "build",
+        "alicia-web"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:04:54.355087+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "docker",
+        "compose",
+        "--project-directory",
+        ".worktrees/przemek-alicia-web-20260710",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "python",
+        "alicia-web",
+        "-m",
+        "unittest",
+        "tests.test_events",
+        "tests.test_recording_sessions"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:07:06.762806+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "docker",
+        "compose",
+        "--project-directory",
+        ".worktrees/przemek-alicia-web-20260710",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "python",
+        "alicia-web",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:07:47.080510+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        ".worktrees/przemek-alicia-web-20260710/scripts/local-up.sh",
+        "--build"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:08:07.765664+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        ".worktrees/przemek-alicia-web-20260710/scripts/local-smoke.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:08:20.923353+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        "ALICIA_API_BASE_URL=http://10.0.2.2:15050",
+        "ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050",
+        "ALICIA_MQTT_PORT=11883",
+        ".worktrees/przemek-hydracam-client-20260710/scripts/local-system-e2e.sh",
+        "emulator-5554",
+        "Hydra_Master_API34"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-26T21:08:57.474980+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        "ALICIA_API_BASE_URL=http://10.0.2.2:15050",
+        "ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050",
+        "ALICIA_MQTT_PORT=11883",
+        "scripts/local-system-e2e.sh",
+        "emulator-5554",
+        "Hydra_Master_API34"
+      ],
+      "returnCode": 127,
+      "startedAt": "2026-07-26T21:09:58.183315+00:00"
+    },
+    {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "cd /Users/jose/src/work/hydracamv2/.worktrees/przemek-hydracam-client-20260710 && exec env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34"
+      ],
+      "returnCode": 1,
+      "startedAt": "2026-07-26T21:10:23.475613+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        "docker",
+        "compose",
+        "--project-directory",
+        ".worktrees/przemek-alicia-web-20260710",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "python",
+        "alicia-web",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:22:09.782502+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        ".worktrees/przemek-alicia-web-20260710/scripts/local-smoke.sh"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:22:18.893858+00:00"
+    },
+    {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "cd /Users/jose/src/work/hydracamv2/.worktrees/przemek-hydracam-client-20260710 && exec env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:22:25.292884+00:00"
+    },
+    {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "cd /Users/jose/src/work/hydracamv2/.worktrees/przemek-hydracam-client-20260710 && exec env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:31:07.729392+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "ALICIA_WEB_PORT=15050",
+        "MQTT_HOST_PORT=11883",
+        "docker",
+        "compose",
+        "--project-directory",
+        ".worktrees/przemek-alicia-web-20260710",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "python",
+        "alicia-web",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:32:33.019204+00:00"
+    },
+    {
+      "command": [
+        "docker",
+        "run",
+        "--detach",
+        "--name",
+        "alicia-web-fresh-evidence-20260726",
+        "--publish",
+        "127.0.0.1:15051:5050",
+        "--env",
+        "API_TOKEN=local-test-token",
+        "--env",
+        "STREAMS_ROOT_DIRECTORY=/data",
+        "przemek-alicia-web-20260710-alicia-web:latest"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:32:45.870287+00:00"
+    },
+    {
+      "command": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--retry",
+        "20",
+        "--retry-connrefused",
+        "--retry-delay",
+        "1",
+        "--max-time",
+        "30",
+        "http://127.0.0.1:15051/"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:32:54.138811+00:00"
+    },
+    {
+      "command": [
+        "env",
+        "API_TOKEN=local-test-token",
+        "python3",
+        ".worktrees/przemek-alicia-web-20260710/scripts/verify_local_event.py",
+        "5f39d52a32673806",
+        "--base-url",
+        "http://127.0.0.1:15051"
+      ],
+      "returnCode": 0,
+      "startedAt": "2026-07-26T21:32:59.339376+00:00"
+    }
+  ],
+  "devices": [
+    {
+      "identifier": "emulator-5554",
+      "kind": "android-emulator",
+      "name": "Hydra_Master_API34",
+      "notes": [
+        "sdk_gphone64_arm64; client 794d0477730abc7c; Alicia Web via 10.0.2.2:15050"
+      ],
+      "os": "Android 14 (API 34)",
+      "role": "HydraCam client"
+    }
+  ],
+  "evidenceFiles": [
+    "screenshots/emulator-5554-final.png",
+    "screenshots/failed-health-state.png",
+    "video/emulator-5554-final.mp4",
+    "device-logs/alicia-web-compose.log",
+    "device-logs/emulator-5554-final-logcat.txt",
+    "device-logs/emulator-5554-final-ui.xml",
+    "device-logs/emulator-5554-health-failure-logcat.txt",
+    "device-logs/stream-25f7acd854534284a6db68b35a26c8e1-ffprobe.json",
+    "device-logs/stream-25f7acd854534284a6db68b35a26c8e1-metadata.json",
+    "device-logs/stream-25f7acd854534284a6db68b35a26c8e1-playlist.m3u8",
+    "device-logs/stream-39f3425846de43169bc227701c1e8c2c-ffprobe.json",
+    "device-logs/stream-39f3425846de43169bc227701c1e8c2c-metadata.json",
+    "device-logs/stream-39f3425846de43169bc227701c1e8c2c-playlist.m3u8",
+    "device-logs/stream-5bc0d98527f04107b6a6069fb31c7292-ffprobe.json",
+    "device-logs/stream-5bc0d98527f04107b6a6069fb31c7292-metadata.json",
+    "device-logs/stream-5bc0d98527f04107b6a6069fb31c7292-playlist.m3u8"
+  ],
+  "item": {
+    "slug": "przemek-server-client-emulator-e2e",
+    "source": "docs/control/architecture-and-testing.md#test-strategy",
+    "title": "Recording, upload queue, and session regression coverage"
+  },
+  "notes": [
+    "Alicia Web merge 8b93f33 plus migration fix d755b32 passed 107 unit tests and Compose event smoke; Android 14 emulator-5554 created event 25 and uploaded finalized stream 5bc0d98527f04107b6a6069fb31c7292 with five chunks, H.264/AAC 1280x720 at 30 fps, duration 8.68 s.",
+    "Final server image includes merge 8b93f33, migration fix d755b32, and restored clean-seed smoke device. It passed 108 unit tests, persistent and first-run event smokes, and Android 14 E2E event 27 with finalized stream 39f3425846de43169bc227701c1e8c2c (five chunks, H.264/AAC 1280x720 at 30 fps, 8.67 s).",
+    "Final server commits: merge 8b93f33, migration d755b32, fresh-seed compatibility 22a1e48. Passed 108 unit tests, persistent and first-run event smokes, and Android 14 E2E event 27 with finalized stream 39f3425846de43169bc227701c1e8c2c (five chunks, H.264/AAC 1280x720 at 30 fps, 8.67 s)."
+  ],
+  "requiresDeviceLogs": true,
+  "requiresScreenshots": true,
+  "requiresVideo": true,
+  "schemaVersion": 1,
+  "status": "passed",
+  "verificationTier": "B",
+  "verificationTierName": "emulator-simulator-e2e"
+}

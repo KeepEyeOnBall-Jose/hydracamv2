@@ -1,0 +1,2551 @@
+# HydraCam evidence run command log
+
+$ git -C .worktrees/przemek-alicia-web-20260710 merge --no-ff origin/main -m Merge latest Alicia Web upstream
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Auto-merging app/schema.sql
+Auto-merging tests/test_events.py
+Automatic merge failed; fix conflicts and then commit the result.
+[exit-code] 1
+
+$ env PYTHONPATH=.worktrees/przemek-alicia-web-20260710 python3 -m unittest discover -s .worktrees/przemek-alicia-web-20260710/tests -p test_events.py
+
+[stderr]
+E
+======================================================================
+ERROR: test_events (unittest.loader._FailedTest.test_events)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_events
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710/tests/test_events.py", line 9, in <module>
+    from app import create_app
+  File "/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710/app/__init__.py", line 5, in <module>
+    from flask import Flask, send_from_directory
+ModuleNotFoundError: No module named 'flask'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+[exit-code] 1
+
+$ env PYTHONPATH=.worktrees/przemek-alicia-web-20260710 python3 -m unittest discover -s .worktrees/przemek-alicia-web-20260710/tests -p test_recording_sessions.py
+
+[stderr]
+E
+======================================================================
+ERROR: test_recording_sessions (unittest.loader._FailedTest.test_recording_sessions)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_recording_sessions
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710/tests/test_recording_sessions.py", line 7, in <module>
+    from app import create_app
+  File "/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710/app/__init__.py", line 5, in <module>
+    from flask import Flask, send_from_directory
+ModuleNotFoundError: No module named 'flask'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+[exit-code] 1
+
+$ env API_TOKEN=local-test-token docker compose --project-directory .worktrees/przemek-alicia-web-20260710 build alicia-web
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+Cannot connect to the Docker daemon at unix:///Users/jose/.docker/run/docker.sock. Is the docker daemon running?
+
+[exit-code] 1
+
+$ env API_TOKEN=local-test-token docker compose --project-directory .worktrees/przemek-alicia-web-20260710 build alicia-web
+#1 [internal] load local bake definitions
+#1 reading from stdin 648B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.13-slim
+#3 DONE 2.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 118B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 1.47MB 0.0s done
+#5 DONE 0.0s
+
+#6 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#6 resolve docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 done
+#6 sha256:a4e661f6acc9325be2ba4aca42562dafbe7b908d5c0a65b623122b7cccd40b97 0B / 248B 0.2s
+#6 sha256:a4e661f6acc9325be2ba4aca42562dafbe7b908d5c0a65b623122b7cccd40b97 248B / 248B 0.2s done
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 0B / 11.82MB 0.3s
+#6 sha256:54458c5d39fe10ab627182fc619da4afd8893ae2c64ea1a703dbacaa14b63a3e 0B / 1.27MB 0.2s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 0B / 30.14MB 0.2s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 2.10MB / 11.82MB 0.6s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 3.15MB / 11.82MB 0.8s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 4.19MB / 11.82MB 0.9s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 5.24MB / 11.82MB 1.4s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 6.29MB / 11.82MB 2.0s
+#6 sha256:54458c5d39fe10ab627182fc619da4afd8893ae2c64ea1a703dbacaa14b63a3e 1.05MB / 1.27MB 2.0s
+#6 sha256:54458c5d39fe10ab627182fc619da4afd8893ae2c64ea1a703dbacaa14b63a3e 1.27MB / 1.27MB 2.2s done
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 7.34MB / 11.82MB 2.6s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 8.39MB / 11.82MB 3.2s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 9.44MB / 11.82MB 3.6s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 10.49MB / 11.82MB 4.1s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 2.10MB / 30.14MB 4.1s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 11.53MB / 11.82MB 4.5s
+#6 sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 11.82MB / 11.82MB 4.6s done
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 4.19MB / 30.14MB 7.4s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 6.29MB / 30.14MB 8.4s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 8.39MB / 30.14MB 8.9s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 11.53MB / 30.14MB 9.3s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 13.63MB / 30.14MB 9.8s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 15.73MB / 30.14MB 10.5s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 17.83MB / 30.14MB 11.3s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 19.92MB / 30.14MB 12.0s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 22.02MB / 30.14MB 12.9s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 24.12MB / 30.14MB 13.5s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 26.21MB / 30.14MB 14.3s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 28.31MB / 30.14MB 15.2s
+#6 sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 30.14MB / 30.14MB 15.8s done
+#6 extracting sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075
+#6 extracting sha256:59f54fbcd984beca03fd8b78569fa57268ecf78d291c0b6fe1623c2467f5a075 0.4s done
+#6 DONE 16.3s
+
+#6 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#6 extracting sha256:54458c5d39fe10ab627182fc619da4afd8893ae2c64ea1a703dbacaa14b63a3e 0.0s done
+#6 extracting sha256:84b4dbf55b0b563c44b2193cf97ed4415419257eac70a6ab129b09d9d740918a 0.1s done
+#6 DONE 16.4s
+
+#6 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#6 extracting sha256:a4e661f6acc9325be2ba4aca42562dafbe7b908d5c0a65b623122b7cccd40b97 done
+#6 DONE 16.4s
+
+#7 [2/7] WORKDIR /app
+#7 DONE 0.2s
+
+#8 [3/7] RUN apt-get update     && apt-get install --yes --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+#8 0.398 Hit:1 http://deb.debian.org/debian trixie InRelease
+#8 0.411 Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+#8 0.474 Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+#8 0.507 Get:4 http://deb.debian.org/debian trixie/main arm64 Packages [9607 kB]
+#8 2.732 Get:5 http://deb.debian.org/debian trixie-updates/main arm64 Packages [4424 B]
+#8 2.759 Get:6 http://deb.debian.org/debian-security trixie-security/main arm64 Packages [228 kB]
+#8 3.381 Fetched 9931 kB in 3s (3040 kB/s)
+#8 3.381 Reading package lists...
+#8 3.713 Reading package lists...
+#8 4.031 Building dependency tree...
+#8 4.119 Reading state information...
+#8 4.246 The following additional packages will be installed:
+#8 4.246   fontconfig fontconfig-config fonts-dejavu-core fonts-dejavu-mono libaom3
+#8 4.246   libasound2-data libasound2t64 libass9 libasyncns0 libatomic1 libavc1394-0
+#8 4.246   libavcodec61 libavdevice61 libavfilter10 libavformat61 libavutil59 libblas3
+#8 4.246   libbluray2 libbrotli1 libbs2b0 libcaca0 libcairo-gobject2 libcairo2
+#8 4.246   libcdio-cdda2t64 libcdio-paranoia2t64 libcdio19t64 libchromaprint1 libcjson1
+#8 4.246   libcodec2-1.2 libcom-err2 libdatrie1 libdav1d7 libdbus-1-3 libdc1394-25
+#8 4.246   libdecor-0-0 libdeflate0 libdrm-amdgpu1 libdrm-common libdrm2 libdvdnav4
+#8 4.246   libdvdread8t64 libedit2 libelf1t64 libexpat1 libfftw3-double3 libflac14
+#8 4.246   libflite1 libfontconfig1 libfreetype6 libfribidi0 libgbm1
+#8 4.246   libgdk-pixbuf-2.0-0 libgdk-pixbuf2.0-common libgfortran5 libgl1
+#8 4.246   libgl1-mesa-dri libglib2.0-0t64 libglvnd0 libglx-mesa0 libglx0 libgme0
+#8 4.246   libgnutls30t64 libgomp1 libgraphite2-3 libgsm1 libgssapi-krb5-2
+#8 4.246   libharfbuzz0b libhwy1t64 libidn2-0 libiec61883-0 libjack-jackd2-0 libjbig0
+#8 4.246   libjpeg62-turbo libjxl0.11 libk5crypto3 libkeyutils1 libkrb5-3
+#8 4.246   libkrb5support0 liblapack3 liblcms2-2 liblerc4 liblilv-0-0 libllvm19
+#8 4.246   libmbedcrypto16 libmp3lame0 libmpg123-0t64 libmysofa1 libnorm1t64 libnuma1
+#8 4.246   libogg0 libopenal-data libopenal1 libopenjp2-7 libopenmpt0t64 libopus0
+#8 4.246   libp11-kit0 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0
+#8 4.246   libpgm-5.3-0t64 libpixman-1-0 libplacebo349 libpng16-16t64 libpocketsphinx3
+#8 4.246   libpostproc58 libpulse0 librabbitmq4 librav1e0.7 libraw1394-11 librist4
+#8 4.246   librsvg2-2 librubberband2 libsamplerate0 libsdl2-2.0-0 libsensors-config
+#8 4.246   libsensors5 libserd-0-0 libsharpyuv0 libshine3 libslang2 libsnappy1v5
+#8 4.246   libsndfile1 libsodium23 libsord-0-0 libsoxr0 libspeex1 libsphinxbase3t64
+#8 4.246   libsratom-0-0 libsrt1.5-gnutls libssh-4 libsvtav1enc2 libswresample5
+#8 4.246   libswscale8 libtasn1-6 libthai-data libthai0 libtheoradec1 libtheoraenc1
+#8 4.246   libtiff6 libtwolame0 libudfread0 libunibreak6 libunistring5 libusb-1.0-0
+#8 4.246   libva-drm2 libva-x11-2 libva2 libvdpau1 libvidstab1.1 libvorbis0a
+#8 4.246   libvorbisenc2 libvorbisfile3 libvpx9 libvulkan1 libwayland-client0
+#8 4.246   libwayland-cursor0 libwayland-egl1 libwayland-server0 libwebp7 libwebpmux3
+#8 4.246   libx11-6 libx11-data libx11-xcb1 libx264-164 libx265-215 libxau6
+#8 4.246   libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-render0
+#8 4.246   libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcb1 libxcursor1
+#8 4.246   libxdmcp6 libxext6 libxfixes3 libxi6 libxkbcommon0 libxml2 libxrandr2
+#8 4.246   libxrender1 libxshmfence1 libxss1 libxv1 libxvidcore4 libxxf86vm1 libz3-4
+#8 4.246   libzimg2 libzix-0-0 libzmq5 libzvbi-common libzvbi0t64 mesa-libgallium
+#8 4.246   ocl-icd-libopencl1 shared-mime-info x11-common xkb-data
+#8 4.247 Suggested packages:
+#8 4.247   ffmpeg-doc alsa-utils libasound2-plugins libcuda1 libnvcuvid1
+#8 4.247   libnvidia-encode1 libbluray-bdj libdvdcss2 libfftw3-bin libfftw3-dev
+#8 4.247   low-memory-monitor gnutls-bin krb5-doc krb5-user jackd2 liblcms2-utils
+#8 4.247   libportaudio2 libsndio7.0 opus-tools pulseaudio libraw1394-doc librsvg2-bin
+#8 4.247   xdg-utils lm-sensors serdi sordi speex opencl-icd
+#8 4.247 Recommended packages:
+#8 4.247   alsa-ucm-conf alsa-topology-conf libaacs0 dbus default-libdecor-0-plugin-1
+#8 4.247   | libdecor-0-plugin-1 libgdk-pixbuf2.0-bin libglib2.0-data xdg-user-dirs
+#8 4.247   krb5-locales pocketsphinx-en-us librsvg2-common va-driver-all | va-driver
+#8 4.247   vdpau-driver-all | vdpau-driver mesa-vulkan-drivers | vulkan-icd
+#8 4.902 The following NEW packages will be installed:
+#8 4.902   ffmpeg fontconfig fontconfig-config fonts-dejavu-core fonts-dejavu-mono
+#8 4.902   libaom3 libasound2-data libasound2t64 libass9 libasyncns0 libatomic1
+#8 4.902   libavc1394-0 libavcodec61 libavdevice61 libavfilter10 libavformat61
+#8 4.902   libavutil59 libblas3 libbluray2 libbrotli1 libbs2b0 libcaca0
+#8 4.902   libcairo-gobject2 libcairo2 libcdio-cdda2t64 libcdio-paranoia2t64
+#8 4.902   libcdio19t64 libchromaprint1 libcjson1 libcodec2-1.2 libcom-err2 libdatrie1
+#8 4.902   libdav1d7 libdbus-1-3 libdc1394-25 libdecor-0-0 libdeflate0 libdrm-amdgpu1
+#8 4.902   libdrm-common libdrm2 libdvdnav4 libdvdread8t64 libedit2 libelf1t64
+#8 4.902   libexpat1 libfftw3-double3 libflac14 libflite1 libfontconfig1 libfreetype6
+#8 4.903   libfribidi0 libgbm1 libgdk-pixbuf-2.0-0 libgdk-pixbuf2.0-common libgfortran5
+#8 4.903   libgl1 libgl1-mesa-dri libglib2.0-0t64 libglvnd0 libglx-mesa0 libglx0
+#8 4.903   libgme0 libgnutls30t64 libgomp1 libgraphite2-3 libgsm1 libgssapi-krb5-2
+#8 4.903   libharfbuzz0b libhwy1t64 libidn2-0 libiec61883-0 libjack-jackd2-0 libjbig0
+#8 4.903   libjpeg62-turbo libjxl0.11 libk5crypto3 libkeyutils1 libkrb5-3
+#8 4.903   libkrb5support0 liblapack3 liblcms2-2 liblerc4 liblilv-0-0 libllvm19
+#8 4.903   libmbedcrypto16 libmp3lame0 libmpg123-0t64 libmysofa1 libnorm1t64 libnuma1
+#8 4.903   libogg0 libopenal-data libopenal1 libopenjp2-7 libopenmpt0t64 libopus0
+#8 4.903   libp11-kit0 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0
+#8 4.903   libpgm-5.3-0t64 libpixman-1-0 libplacebo349 libpng16-16t64 libpocketsphinx3
+#8 4.903   libpostproc58 libpulse0 librabbitmq4 librav1e0.7 libraw1394-11 librist4
+#8 4.903   librsvg2-2 librubberband2 libsamplerate0 libsdl2-2.0-0 libsensors-config
+#8 4.903   libsensors5 libserd-0-0 libsharpyuv0 libshine3 libslang2 libsnappy1v5
+#8 4.903   libsndfile1 libsodium23 libsord-0-0 libsoxr0 libspeex1 libsphinxbase3t64
+#8 4.903   libsratom-0-0 libsrt1.5-gnutls libssh-4 libsvtav1enc2 libswresample5
+#8 4.903   libswscale8 libtasn1-6 libthai-data libthai0 libtheoradec1 libtheoraenc1
+#8 4.903   libtiff6 libtwolame0 libudfread0 libunibreak6 libunistring5 libusb-1.0-0
+#8 4.903   libva-drm2 libva-x11-2 libva2 libvdpau1 libvidstab1.1 libvorbis0a
+#8 4.903   libvorbisenc2 libvorbisfile3 libvpx9 libvulkan1 libwayland-client0
+#8 4.903   libwayland-cursor0 libwayland-egl1 libwayland-server0 libwebp7 libwebpmux3
+#8 4.903   libx11-6 libx11-data libx11-xcb1 libx264-164 libx265-215 libxau6
+#8 4.903   libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-render0
+#8 4.903   libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcb1 libxcursor1
+#8 4.903   libxdmcp6 libxext6 libxfixes3 libxi6 libxkbcommon0 libxml2 libxrandr2
+#8 4.903   libxrender1 libxshmfence1 libxss1 libxv1 libxvidcore4 libxxf86vm1 libz3-4
+#8 4.903   libzimg2 libzix-0-0 libzmq5 libzvbi-common libzvbi0t64 mesa-libgallium
+#8 4.903   ocl-icd-libopencl1 shared-mime-info x11-common xkb-data
+#8 4.970 0 upgraded, 202 newly installed, 0 to remove and 0 not upgraded.
+#8 4.970 Need to get 121 MB of archives.
+#8 4.970 After this operation, 429 MB of additional disk space will be used.
+#8 4.970 Get:1 http://deb.debian.org/debian trixie/main arm64 libexpat1 arm64 2.7.1-2 [93.3 kB]
+#8 5.150 Get:2 http://deb.debian.org/debian trixie/main arm64 libaom3 arm64 3.12.1-1 [1670 kB]
+#8 5.320 Get:3 http://deb.debian.org/debian trixie/main arm64 libdrm-common all 2.4.124-2 [8288 B]
+#8 5.323 Get:4 http://deb.debian.org/debian trixie/main arm64 libdrm2 arm64 2.4.124-2 [38.3 kB]
+#8 5.323 Get:5 http://deb.debian.org/debian trixie/main arm64 libva2 arm64 2.22.0-3 [74.2 kB]
+#8 5.333 Get:6 http://deb.debian.org/debian trixie/main arm64 libva-drm2 arm64 2.22.0-3 [18.5 kB]
+#8 5.333 Get:7 http://deb.debian.org/debian trixie/main arm64 libxau6 arm64 1:1.0.11-1 [20.6 kB]
+#8 5.334 Get:8 http://deb.debian.org/debian trixie/main arm64 libxdmcp6 arm64 1:1.1.5-1 [27.8 kB]
+#8 5.335 Get:9 http://deb.debian.org/debian trixie/main arm64 libxcb1 arm64 1.17.0-2+b1 [143 kB]
+#8 5.347 Get:10 http://deb.debian.org/debian trixie/main arm64 libx11-data all 2:1.8.12-1 [343 kB]
+#8 5.402 Get:11 http://deb.debian.org/debian trixie/main arm64 libx11-6 arm64 2:1.8.12-1 [795 kB]
+#8 5.468 Get:12 http://deb.debian.org/debian trixie/main arm64 libx11-xcb1 arm64 2:1.8.12-1 [247 kB]
+#8 5.583 Get:13 http://deb.debian.org/debian trixie/main arm64 libxcb-dri3-0 arm64 1.17.0-2+b1 [107 kB]
+#8 5.585 Get:14 http://deb.debian.org/debian trixie/main arm64 libxext6 arm64 2:1.3.4-1+b3 [49.2 kB]
+#8 5.585 Get:15 http://deb.debian.org/debian trixie/main arm64 libxfixes3 arm64 1:6.0.0-2+b4 [20.5 kB]
+#8 5.588 Get:16 http://deb.debian.org/debian trixie/main arm64 libva-x11-2 arm64 2.22.0-3 [23.0 kB]
+#8 5.588 Get:17 http://deb.debian.org/debian trixie/main arm64 libvdpau1 arm64 1.5-3+b1 [24.4 kB]
+#8 5.594 Get:18 http://deb.debian.org/debian trixie/main arm64 ocl-icd-libopencl1 arm64 2.3.3-1 [42.7 kB]
+#8 5.594 Get:19 http://deb.debian.org/debian trixie/main arm64 libavutil59 arm64 7:7.1.5-0+deb13u1 [392 kB]
+#8 5.597 Get:20 http://deb.debian.org/debian trixie/main arm64 libbrotli1 arm64 1.1.0-2+b7 [308 kB]
+#8 5.707 Get:21 http://deb.debian.org/debian trixie/main arm64 libpng16-16t64 arm64 1.6.48-1+deb13u5 [275 kB]
+#8 5.817 Get:22 http://deb.debian.org/debian trixie/main arm64 libfreetype6 arm64 2.13.3+dfsg-1+deb13u1 [422 kB]
+#8 5.820 Get:23 http://deb.debian.org/debian trixie/main arm64 fonts-dejavu-mono all 2.37-8 [489 kB]
+#8 5.824 Get:24 http://deb.debian.org/debian trixie/main arm64 fonts-dejavu-core all 2.37-8 [840 kB]
+#8 6.180 Get:25 http://deb.debian.org/debian trixie/main arm64 fontconfig-config arm64 2.15.0-2.3 [318 kB]
+#8 6.227 Get:26 http://deb.debian.org/debian trixie/main arm64 libfontconfig1 arm64 2.15.0-2.3 [387 kB]
+#8 6.366 Get:27 http://deb.debian.org/debian trixie/main arm64 libpixman-1-0 arm64 0.44.0-3 [168 kB]
+#8 6.426 Get:28 http://deb.debian.org/debian trixie/main arm64 libxcb-render0 arm64 1.17.0-2+b1 [115 kB]
+#8 6.451 Get:29 http://deb.debian.org/debian trixie/main arm64 libxcb-shm0 arm64 1.17.0-2+b1 [105 kB]
+#8 6.497 Get:30 http://deb.debian.org/debian trixie/main arm64 libxrender1 arm64 1:0.9.12-1 [27.0 kB]
+#8 6.538 Get:31 http://deb.debian.org/debian trixie/main arm64 libcairo2 arm64 1.18.4-1+b1 [483 kB]
+#8 6.767 Get:32 http://deb.debian.org/debian trixie/main arm64 libcodec2-1.2 arm64 1.2.0-3 [8163 kB]
+#8 9.870 Get:33 http://deb.debian.org/debian trixie/main arm64 libdav1d7 arm64 1.5.1-1 [252 kB]
+#8 9.941 Get:34 http://deb.debian.org/debian trixie/main arm64 libatomic1 arm64 14.2.0-19 [10.1 kB]
+#8 9.973 Get:35 http://deb.debian.org/debian trixie/main arm64 libglib2.0-0t64 arm64 2.84.4-3~deb13u3 [1428 kB]
+#8 10.39 Get:36 http://deb.debian.org/debian trixie/main arm64 libgsm1 arm64 1.0.22-1+b2 [27.3 kB]
+#8 10.40 Get:37 http://deb.debian.org/debian trixie/main arm64 libhwy1t64 arm64 1.2.0-2+b2 [499 kB]
+#8 10.55 Get:38 http://deb.debian.org/debian trixie/main arm64 liblcms2-2 arm64 2.16-2+deb13u2 [152 kB]
+#8 10.59 Get:39 http://deb.debian.org/debian trixie/main arm64 libjxl0.11 arm64 0.11.2-0.1~deb13u2 [887 kB]
+#8 11.06 Get:40 http://deb.debian.org/debian trixie/main arm64 libmp3lame0 arm64 3.100-6+b3 [355 kB]
+#8 11.26 Get:41 http://deb.debian.org/debian trixie/main arm64 libopenjp2-7 arm64 2.5.3-2.1~deb13u2 [189 kB]
+#8 11.43 Get:42 http://deb.debian.org/debian trixie/main arm64 libopus0 arm64 1.5.2-2 [2813 kB]
+#8 12.23 Get:43 http://deb.debian.org/debian trixie/main arm64 librav1e0.7 arm64 0.7.1-9+b2 [662 kB]
+#8 12.46 Get:44 http://deb.debian.org/debian trixie/main arm64 libcairo-gobject2 arm64 1.18.4-1+b1 [130 kB]
+#8 12.50 Get:45 http://deb.debian.org/debian trixie/main arm64 libgdk-pixbuf2.0-common all 2.42.12+dfsg-4+deb13u1 [312 kB]
+#8 12.56 Get:46 http://deb.debian.org/debian trixie/main arm64 libxml2 arm64 2.12.7+dfsg+really2.9.14-2.1+deb13u3 [631 kB]
+#8 12.78 Get:47 http://deb.debian.org/debian trixie/main arm64 shared-mime-info arm64 2.4-5+b2 [756 kB]
+#8 13.28 Get:48 http://deb.debian.org/debian trixie/main arm64 libjpeg62-turbo arm64 1:2.1.5-4 [173 kB]
+#8 13.35 Get:49 http://deb.debian.org/debian trixie/main arm64 libdeflate0 arm64 1.23-2 [42.4 kB]
+#8 13.45 Get:50 http://deb.debian.org/debian trixie/main arm64 libjbig0 arm64 2.1-6.1+b2 [30.4 kB]
+#8 13.45 Get:51 http://deb.debian.org/debian trixie/main arm64 liblerc4 arm64 4.0.0+ds-5 [146 kB]
+#8 13.53 Get:52 http://deb.debian.org/debian trixie/main arm64 libsharpyuv0 arm64 1.5.0-0.1 [114 kB]
+#8 13.57 Get:53 http://deb.debian.org/debian trixie/main arm64 libwebp7 arm64 1.5.0-0.1 [271 kB]
+#8 13.66 Get:54 http://deb.debian.org/debian-security trixie-security/main arm64 libtiff6 arm64 4.7.0-3+deb13u3 [325 kB]
+#8 13.75 Get:55 http://deb.debian.org/debian trixie/main arm64 libgdk-pixbuf-2.0-0 arm64 2.42.12+dfsg-4+deb13u1 [131 kB]
+#8 13.78 Get:56 http://deb.debian.org/debian trixie/main arm64 fontconfig arm64 2.15.0-2.3 [463 kB]
+#8 13.88 Get:57 http://deb.debian.org/debian trixie/main arm64 libfribidi0 arm64 1.0.16-1 [26.5 kB]
+#8 13.88 Get:58 http://deb.debian.org/debian trixie/main arm64 libgraphite2-3 arm64 1.3.14-2+deb13u1 [70.3 kB]
+#8 13.97 Get:59 http://deb.debian.org/debian trixie/main arm64 libharfbuzz0b arm64 10.2.0-1+deb13u1 [442 kB]
+#8 14.08 Get:60 http://deb.debian.org/debian trixie/main arm64 libthai-data all 0.1.29-2 [168 kB]
+#8 14.10 Get:61 http://deb.debian.org/debian trixie/main arm64 libdatrie1 arm64 0.2.13-3+b1 [37.6 kB]
+#8 14.11 Get:62 http://deb.debian.org/debian trixie/main arm64 libthai0 arm64 0.1.29-2+b1 [48.4 kB]
+#8 14.14 Get:63 http://deb.debian.org/debian trixie/main arm64 libpango-1.0-0 arm64 1.56.3-1 [213 kB]
+#8 14.17 Get:64 http://deb.debian.org/debian trixie/main arm64 libpangoft2-1.0-0 arm64 1.56.3-1 [52.9 kB]
+#8 14.19 Get:65 http://deb.debian.org/debian trixie/main arm64 libpangocairo-1.0-0 arm64 1.56.3-1 [33.7 kB]
+#8 14.19 Get:66 http://deb.debian.org/debian trixie/main arm64 librsvg2-2 arm64 2.60.0+dfsg-1 [1588 kB]
+#8 14.74 Get:67 http://deb.debian.org/debian trixie/main arm64 libshine3 arm64 3.1.1-2+b2 [24.6 kB]
+#8 14.75 Get:68 http://deb.debian.org/debian trixie/main arm64 libsnappy1v5 arm64 1.2.2-1 [28.3 kB]
+#8 14.76 Get:69 http://deb.debian.org/debian trixie/main arm64 libspeex1 arm64 1.2.1-3 [50.4 kB]
+#8 14.80 Get:70 http://deb.debian.org/debian trixie/main arm64 libsvtav1enc2 arm64 2.3.0+dfsg-1 [1558 kB]
+#8 15.32 Get:71 http://deb.debian.org/debian trixie/main arm64 libgomp1 arm64 14.2.0-19 [124 kB]
+#8 15.38 Get:72 http://deb.debian.org/debian trixie/main arm64 libsoxr0 arm64 0.1.3-4+b2 [54.9 kB]
+#8 15.38 Get:73 http://deb.debian.org/debian trixie/main arm64 libswresample5 arm64 7:7.1.5-0+deb13u1 [102 kB]
+#8 15.40 Get:74 http://deb.debian.org/debian trixie/main arm64 libtheoradec1 arm64 1.2.0~alpha1+dfsg-6 [52.6 kB]
+#8 15.42 Get:75 http://deb.debian.org/debian trixie/main arm64 libogg0 arm64 1.3.5-3+b2 [23.6 kB]
+#8 15.42 Get:76 http://deb.debian.org/debian trixie/main arm64 libtheoraenc1 arm64 1.2.0~alpha1+dfsg-6 [99.1 kB]
+#8 15.55 Get:77 http://deb.debian.org/debian trixie/main arm64 libtwolame0 arm64 0.4.0-2+b2 [49.3 kB]
+#8 15.55 Get:78 http://deb.debian.org/debian trixie/main arm64 libvorbis0a arm64 1.3.7-3 [83.8 kB]
+#8 15.60 Get:79 http://deb.debian.org/debian trixie/main arm64 libvorbisenc2 arm64 1.3.7-3 [75.5 kB]
+#8 15.64 Get:80 http://deb.debian.org/debian trixie/main arm64 libvpx9 arm64 1.15.0-2.1+deb13u1 [1158 kB]
+#8 16.10 Get:81 http://deb.debian.org/debian trixie/main arm64 libwebpmux3 arm64 1.5.0-0.1 [125 kB]
+#8 16.13 Get:82 http://deb.debian.org/debian trixie/main arm64 libx264-164 arm64 2:0.164.3108+git31e19f9-2+b1 [454 kB]
+#8 16.25 Get:83 http://deb.debian.org/debian trixie/main arm64 libnuma1 arm64 2.0.19-1 [21.6 kB]
+#8 16.25 Get:84 http://deb.debian.org/debian trixie/main arm64 libx265-215 arm64 4.1-2 [1857 kB]
+#8 17.14 Get:85 http://deb.debian.org/debian trixie/main arm64 libxvidcore4 arm64 2:1.3.7-1+b2 [202 kB]
+#8 17.21 Get:86 http://deb.debian.org/debian trixie/main arm64 libzvbi-common all 0.2.44-1 [71.4 kB]
+#8 17.23 Get:87 http://deb.debian.org/debian trixie/main arm64 libzvbi0t64 arm64 0.2.44-1 [262 kB]
+#8 17.35 Get:88 http://deb.debian.org/debian trixie/main arm64 libavcodec61 arm64 7:7.1.5-0+deb13u1 [5395 kB]
+#8 19.57 Get:89 http://deb.debian.org/debian trixie/main arm64 libasound2-data all 1.2.14-1 [21.1 kB]
+#8 19.58 Get:90 http://deb.debian.org/debian trixie/main arm64 libasound2t64 arm64 1.2.14-1 [342 kB]
+#8 19.78 Get:91 http://deb.debian.org/debian trixie/main arm64 libraw1394-11 arm64 2.1.2-2+b2 [38.1 kB]
+#8 19.80 Get:92 http://deb.debian.org/debian trixie/main arm64 libavc1394-0 arm64 0.5.4-5+b2 [17.9 kB]
+#8 19.81 Get:93 http://deb.debian.org/debian trixie/main arm64 libunibreak6 arm64 6.1-3 [21.5 kB]
+#8 19.82 Get:94 http://deb.debian.org/debian trixie/main arm64 libass9 arm64 1:0.17.3-1+deb13u1 [101 kB]
+#8 19.85 Get:95 http://deb.debian.org/debian trixie/main arm64 libudfread0 arm64 1.1.2-1+b2 [17.3 kB]
+#8 19.88 Get:96 http://deb.debian.org/debian trixie/main arm64 libbluray2 arm64 1:1.3.4-1+b2 [126 kB]
+#8 19.91 Get:97 http://deb.debian.org/debian trixie/main arm64 libchromaprint1 arm64 1.5.1-7 [38.9 kB]
+#8 19.92 Get:98 http://deb.debian.org/debian trixie/main arm64 libdvdread8t64 arm64 6.1.3-2 [81.2 kB]
+#8 19.94 Get:99 http://deb.debian.org/debian trixie/main arm64 libdvdnav4 arm64 6.1.1-3+b1 [41.0 kB]
+#8 19.97 Get:100 http://deb.debian.org/debian trixie/main arm64 libgme0 arm64 0.6.3-7+b2 [120 kB]
+#8 20.02 Get:101 http://deb.debian.org/debian trixie/main arm64 libunistring5 arm64 1.3-2 [453 kB]
+#8 20.12 Get:102 http://deb.debian.org/debian trixie/main arm64 libidn2-0 arm64 2.3.8-2 [107 kB]
+#8 20.14 Get:103 http://deb.debian.org/debian trixie/main arm64 libp11-kit0 arm64 0.25.5-3 [409 kB]
+#8 20.31 Get:104 http://deb.debian.org/debian trixie/main arm64 libtasn1-6 arm64 4.20.0-2+deb13u1 [47.3 kB]
+#8 20.33 Get:105 http://deb.debian.org/debian trixie/main arm64 libgnutls30t64 arm64 3.8.9-3+deb13u4 [1379 kB]
+#8 20.59 Get:106 http://deb.debian.org/debian trixie/main arm64 libmpg123-0t64 arm64 1.32.10-1+deb13u1 [143 kB]
+#8 20.62 Get:107 http://deb.debian.org/debian trixie/main arm64 libvorbisfile3 arm64 1.3.7-3 [20.1 kB]
+#8 20.65 Get:108 http://deb.debian.org/debian trixie/main arm64 libopenmpt0t64 arm64 0.7.13-1+b1 [745 kB]
+#8 20.93 Get:109 http://deb.debian.org/debian trixie/main arm64 librabbitmq4 arm64 0.15.0-1+deb13u1 [41.1 kB]
+#8 20.94 Get:110 http://deb.debian.org/debian trixie/main arm64 libcjson1 arm64 1.7.18-3.1+deb13u1 [29.0 kB]
+#8 20.95 Get:111 http://deb.debian.org/debian trixie/main arm64 libmbedcrypto16 arm64 3.6.5-0.1~deb13u1 [347 kB]
+#8 21.03 Get:112 http://deb.debian.org/debian trixie/main arm64 librist4 arm64 0.2.11+dfsg-1 [69.0 kB]
+#8 21.04 Get:113 http://deb.debian.org/debian trixie/main arm64 libsrt1.5-gnutls arm64 1.5.4-1 [300 kB]
+#8 21.15 Get:114 http://deb.debian.org/debian trixie/main arm64 libkrb5support0 arm64 1.21.3-5+deb13u1 [32.5 kB]
+#8 21.19 Get:115 http://deb.debian.org/debian trixie/main arm64 libcom-err2 arm64 1.47.2-3+b11 [24.9 kB]
+#8 21.19 Get:116 http://deb.debian.org/debian trixie/main arm64 libk5crypto3 arm64 1.21.3-5+deb13u1 [81.4 kB]
+#8 21.20 Get:117 http://deb.debian.org/debian trixie/main arm64 libkeyutils1 arm64 1.6.3-6 [9716 B]
+#8 21.31 Get:118 http://deb.debian.org/debian trixie/main arm64 libkrb5-3 arm64 1.21.3-5+deb13u1 [308 kB]
+#8 21.45 Get:119 http://deb.debian.org/debian trixie/main arm64 libgssapi-krb5-2 arm64 1.21.3-5+deb13u1 [128 kB]
+#8 21.50 Get:120 http://deb.debian.org/debian trixie/main arm64 libssh-4 arm64 0.11.2-1+deb13u1 [196 kB]
+#8 21.56 Get:121 http://deb.debian.org/debian trixie/main arm64 libnorm1t64 arm64 1.5.9+dfsg-3.1+b2 [205 kB]
+#8 21.62 Get:122 http://deb.debian.org/debian trixie/main arm64 libpgm-5.3-0t64 arm64 5.3.128~dfsg-2.1+b1 [152 kB]
+#8 21.68 Get:123 http://deb.debian.org/debian trixie/main arm64 libsodium23 arm64 1.0.18-1+deb13u1 [120 kB]
+#8 21.71 Get:124 http://deb.debian.org/debian trixie/main arm64 libzmq5 arm64 4.3.5-1+b3 [253 kB]
+#8 21.87 Get:125 http://deb.debian.org/debian trixie/main arm64 libavformat61 arm64 7:7.1.5-0+deb13u1 [1140 kB]
+#8 22.18 Get:126 http://deb.debian.org/debian trixie/main arm64 libbs2b0 arm64 3.1.0+dfsg-8+b1 [11.4 kB]
+#8 22.46 Get:127 http://deb.debian.org/debian trixie/main arm64 libflite1 arm64 2.2-7 [12.8 MB]
+#8 27.36 Get:128 http://deb.debian.org/debian trixie/main arm64 libserd-0-0 arm64 0.32.4-1 [45.6 kB]
+#8 27.36 Get:129 http://deb.debian.org/debian trixie/main arm64 libzix-0-0 arm64 0.6.2-1 [22.5 kB]
+#8 27.37 Get:130 http://deb.debian.org/debian trixie/main arm64 libsord-0-0 arm64 0.16.18-1 [17.3 kB]
+#8 27.38 Get:131 http://deb.debian.org/debian trixie/main arm64 libsratom-0-0 arm64 0.6.18-1 [16.0 kB]
+#8 27.38 Get:132 http://deb.debian.org/debian trixie/main arm64 liblilv-0-0 arm64 0.24.26-1 [41.7 kB]
+#8 27.39 Get:133 http://deb.debian.org/debian trixie/main arm64 libmysofa1 arm64 1.3.3+dfsg-1 [1157 kB]
+#8 27.87 Get:134 http://deb.debian.org/debian trixie/main arm64 libvulkan1 arm64 1.4.309.0-1 [127 kB]
+#8 27.91 Get:135 http://deb.debian.org/debian trixie/main arm64 libplacebo349 arm64 7.349.0-3 [2275 kB]
+#8 28.91 Get:136 http://deb.debian.org/debian trixie/main arm64 libblas3 arm64 3.12.1-6 [104 kB]
+#8 28.96 Get:137 http://deb.debian.org/debian trixie/main arm64 libgfortran5 arm64 14.2.0-19 [361 kB]
+#8 29.20 Get:138 http://deb.debian.org/debian trixie/main arm64 liblapack3 arm64 3.12.1-6 [1820 kB]
+#8 29.77 Get:139 http://deb.debian.org/debian trixie/main arm64 libasyncns0 arm64 0.8-6+b5 [11.7 kB]
+#8 29.77 Get:140 http://deb.debian.org/debian trixie/main arm64 libdbus-1-3 arm64 1.16.2-2 [169 kB]
+#8 29.82 Get:141 http://deb.debian.org/debian trixie/main arm64 libflac14 arm64 1.5.0+ds-2 [180 kB]
+#8 29.85 Get:142 http://deb.debian.org/debian trixie/main arm64 libsndfile1 arm64 1.2.2-2+deb13u1 [186 kB]
+#8 29.94 Get:143 http://deb.debian.org/debian trixie/main arm64 libpulse0 arm64 17.0+dfsg1-2+b1 [236 kB]
+#8 30.07 Get:144 http://deb.debian.org/debian trixie/main arm64 libsphinxbase3t64 arm64 0.8+5prealpha+1-21+b1 [112 kB]
+#8 30.12 Get:145 http://deb.debian.org/debian trixie/main arm64 libpocketsphinx3 arm64 0.8+5prealpha+1-15+b4 [115 kB]
+#8 30.23 Get:146 http://deb.debian.org/debian trixie/main arm64 libpostproc58 arm64 7:7.1.5-0+deb13u1 [86.9 kB]
+#8 30.23 Get:147 http://deb.debian.org/debian trixie/main arm64 libfftw3-double3 arm64 3.3.10-2+b1 [337 kB]
+#8 30.35 Get:148 http://deb.debian.org/debian trixie/main arm64 libsamplerate0 arm64 0.2.2-4+b2 [945 kB]
+#8 30.64 Get:149 http://deb.debian.org/debian trixie/main arm64 librubberband2 arm64 3.3.0+dfsg-2+b3 [123 kB]
+#8 30.79 Get:150 http://deb.debian.org/debian trixie/main arm64 libswscale8 arm64 7:7.1.5-0+deb13u1 [215 kB]
+#8 30.93 Get:151 http://deb.debian.org/debian trixie/main arm64 libvidstab1.1 arm64 1.1.0-2+b2 [36.8 kB]
+#8 30.95 Get:152 http://deb.debian.org/debian trixie/main arm64 libzimg2 arm64 3.0.5+ds1-1+b2 [117 kB]
+#8 31.04 Get:153 http://deb.debian.org/debian trixie/main arm64 libavfilter10 arm64 7:7.1.5-0+deb13u1 [3697 kB]
+#8 33.03 Get:154 http://deb.debian.org/debian trixie/main arm64 libslang2 arm64 2.3.3-5+b2 [506 kB]
+#8 33.20 Get:155 http://deb.debian.org/debian trixie/main arm64 libcaca0 arm64 0.99.beta20-5+deb13u1 [196 kB]
+#8 33.26 Get:156 http://deb.debian.org/debian trixie/main arm64 libcdio19t64 arm64 2.2.0-4.1~deb13u1 [59.3 kB]
+#8 33.27 Get:157 http://deb.debian.org/debian trixie/main arm64 libcdio-cdda2t64 arm64 10.2+2.0.2-1+b1 [17.2 kB]
+#8 33.28 Get:158 http://deb.debian.org/debian trixie/main arm64 libcdio-paranoia2t64 arm64 10.2+2.0.2-1+b1 [16.5 kB]
+#8 33.37 Get:159 http://deb.debian.org/debian trixie/main arm64 libusb-1.0-0 arm64 2:1.0.28-1 [56.1 kB]
+#8 33.41 Get:160 http://deb.debian.org/debian trixie/main arm64 libdc1394-25 arm64 2.2.6-5 [106 kB]
+#8 33.44 Get:161 http://deb.debian.org/debian trixie/main arm64 libglvnd0 arm64 1.7.0-1+b2 [41.6 kB]
+#8 33.45 Get:162 http://deb.debian.org/debian trixie/main arm64 libxcb-glx0 arm64 1.17.0-2+b1 [123 kB]
+#8 33.51 Get:163 http://deb.debian.org/debian trixie/main arm64 libxcb-present0 arm64 1.17.0-2+b1 [106 kB]
+#8 33.55 Get:164 http://deb.debian.org/debian trixie/main arm64 libxcb-xfixes0 arm64 1.17.0-2+b1 [110 kB]
+#8 33.56 Get:165 http://deb.debian.org/debian trixie/main arm64 libxxf86vm1 arm64 1:1.1.4-1+b4 [19.2 kB]
+#8 33.57 Get:166 http://deb.debian.org/debian trixie/main arm64 libdrm-amdgpu1 arm64 2.4.124-2 [21.8 kB]
+#8 33.61 Get:167 http://deb.debian.org/debian trixie/main arm64 libelf1t64 arm64 0.192-4 [189 kB]
+#8 33.65 Get:168 http://deb.debian.org/debian trixie/main arm64 libedit2 arm64 3.1-20250104-1 [89.3 kB]
+#8 33.67 Get:169 http://deb.debian.org/debian trixie/main arm64 libz3-4 arm64 4.13.3-1 [7507 kB]
+#8 36.25 Get:170 http://deb.debian.org/debian trixie/main arm64 libllvm19 arm64 1:19.1.7-3+b1 [23.3 MB]
+#8 46.17 Get:171 http://deb.debian.org/debian trixie/main arm64 libsensors-config all 1:3.6.2-2 [16.2 kB]
+#8 46.17 Get:172 http://deb.debian.org/debian trixie/main arm64 libsensors5 arm64 1:3.6.2-2 [36.4 kB]
+#8 46.18 Get:173 http://deb.debian.org/debian trixie/main arm64 libxcb-randr0 arm64 1.17.0-2+b1 [117 kB]
+#8 46.21 Get:174 http://deb.debian.org/debian trixie/main arm64 libxcb-sync1 arm64 1.17.0-2+b1 [109 kB]
+#8 46.25 Get:175 http://deb.debian.org/debian trixie/main arm64 libxshmfence1 arm64 1.3.3-1 [11.1 kB]
+#8 46.28 Get:176 http://deb.debian.org/debian trixie/main arm64 mesa-libgallium arm64 25.0.7-2+deb13u1 [8033 kB]
+#8 50.45 Get:177 http://deb.debian.org/debian trixie/main arm64 libwayland-server0 arm64 1.23.1-3 [33.7 kB]
+#8 50.46 Get:178 http://deb.debian.org/debian trixie/main arm64 libgbm1 arm64 25.0.7-2+deb13u1 [44.1 kB]
+#8 50.48 Get:179 http://deb.debian.org/debian trixie/main arm64 libgl1-mesa-dri arm64 25.0.7-2+deb13u1 [45.9 kB]
+#8 50.49 Get:180 http://deb.debian.org/debian trixie/main arm64 libglx-mesa0 arm64 25.0.7-2+deb13u1 [142 kB]
+#8 50.53 Get:181 http://deb.debian.org/debian trixie/main arm64 libglx0 arm64 1.7.0-1+b2 [31.1 kB]
+#8 50.54 Get:182 http://deb.debian.org/debian trixie/main arm64 libgl1 arm64 1.7.0-1+b2 [90.9 kB]
+#8 50.57 Get:183 http://deb.debian.org/debian trixie/main arm64 libiec61883-0 arm64 1.2.0-7 [29.1 kB]
+#8 50.58 Get:184 http://deb.debian.org/debian trixie/main arm64 libjack-jackd2-0 arm64 1.9.22~dfsg-4 [265 kB]
+#8 50.77 Get:185 http://deb.debian.org/debian trixie/main arm64 libopenal-data all 1:1.24.2-1 [168 kB]
+#8 50.86 Get:186 http://deb.debian.org/debian trixie/main arm64 libopenal1 arm64 1:1.24.2-1 [577 kB]
+#8 51.02 Get:187 http://deb.debian.org/debian trixie/main arm64 libwayland-client0 arm64 1.23.1-3 [26.1 kB]
+#8 51.02 Get:188 http://deb.debian.org/debian trixie/main arm64 libdecor-0-0 arm64 0.2.2-2 [15.2 kB]
+#8 51.04 Get:189 http://deb.debian.org/debian trixie/main arm64 libwayland-cursor0 arm64 1.23.1-3 [11.7 kB]
+#8 51.05 Get:190 http://deb.debian.org/debian trixie/main arm64 libwayland-egl1 arm64 1.23.1-3 [5952 B]
+#8 51.05 Get:191 http://deb.debian.org/debian trixie/main arm64 libxcursor1 arm64 1:1.2.3-1 [39.3 kB]
+#8 51.06 Get:192 http://deb.debian.org/debian trixie/main arm64 libxi6 arm64 2:1.8.2-1 [77.8 kB]
+#8 51.07 Get:193 http://deb.debian.org/debian trixie/main arm64 xkb-data all 2.42-1 [790 kB]
+#8 51.32 Get:194 http://deb.debian.org/debian trixie/main arm64 libxkbcommon0 arm64 1.7.0-2 [106 kB]
+#8 51.34 Get:195 http://deb.debian.org/debian trixie/main arm64 libxrandr2 arm64 2:1.5.4-1+b3 [35.9 kB]
+#8 51.35 Get:196 http://deb.debian.org/debian trixie/main arm64 x11-common all 1:7.7+24+deb13u1 [217 kB]
+#8 51.38 Get:197 http://deb.debian.org/debian trixie/main arm64 libxss1 arm64 1:1.2.3-1+b3 [17.1 kB]
+#8 51.42 Get:198 http://deb.debian.org/debian trixie/main arm64 libsdl2-2.0-0 arm64 2.32.4+dfsg-1 [603 kB]
+#8 51.54 Get:199 http://deb.debian.org/debian trixie/main arm64 libxcb-shape0 arm64 1.17.0-2+b1 [106 kB]
+#8 51.55 Get:200 http://deb.debian.org/debian trixie/main arm64 libxv1 arm64 2:1.0.11-1.1+b3 [23.3 kB]
+#8 51.57 Get:201 http://deb.debian.org/debian trixie/main arm64 libavdevice61 arm64 7:7.1.5-0+deb13u1 [123 kB]
+#8 51.62 Get:202 http://deb.debian.org/debian trixie/main arm64 ffmpeg arm64 7:7.1.5-0+deb13u1 [1990 kB]
+#8 52.69 debconf: unable to initialize frontend: Dialog
+#8 52.69 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#8 52.69 debconf: falling back to frontend: Readline
+#8 52.69 debconf: unable to initialize frontend: Readline
+#8 52.69 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/aarch64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/aarch64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/aarch64-linux-gnu/perl-base /usr/lib/aarch64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 202.)
+#8 52.69 debconf: falling back to frontend: Teletype
+#8 52.69 debconf: unable to initialize frontend: Teletype
+#8 52.69 debconf: (This frontend requires a controlling tty.)
+#8 52.69 debconf: falling back to frontend: Noninteractive
+#8 54.90 Preconfiguring packages ...
+#8 54.93 Fetched 121 MB in 48s (2539 kB/s)
+#8 54.94 Selecting previously unselected package libexpat1:arm64.
+#8 54.94 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 5642 files and directories currently installed.)
+#8 54.94 Preparing to unpack .../000-libexpat1_2.7.1-2_arm64.deb ...
+#8 54.94 Unpacking libexpat1:arm64 (2.7.1-2) ...
+#8 54.96 Selecting previously unselected package libaom3:arm64.
+#8 54.96 Preparing to unpack .../001-libaom3_3.12.1-1_arm64.deb ...
+#8 54.96 Unpacking libaom3:arm64 (3.12.1-1) ...
+#8 55.05 Selecting previously unselected package libdrm-common.
+#8 55.05 Preparing to unpack .../002-libdrm-common_2.4.124-2_all.deb ...
+#8 55.05 Unpacking libdrm-common (2.4.124-2) ...
+#8 55.07 Selecting previously unselected package libdrm2:arm64.
+#8 55.07 Preparing to unpack .../003-libdrm2_2.4.124-2_arm64.deb ...
+#8 55.07 Unpacking libdrm2:arm64 (2.4.124-2) ...
+#8 55.08 Selecting previously unselected package libva2:arm64.
+#8 55.08 Preparing to unpack .../004-libva2_2.22.0-3_arm64.deb ...
+#8 55.08 Unpacking libva2:arm64 (2.22.0-3) ...
+#8 55.10 Selecting previously unselected package libva-drm2:arm64.
+#8 55.10 Preparing to unpack .../005-libva-drm2_2.22.0-3_arm64.deb ...
+#8 55.10 Unpacking libva-drm2:arm64 (2.22.0-3) ...
+#8 55.11 Selecting previously unselected package libxau6:arm64.
+#8 55.11 Preparing to unpack .../006-libxau6_1%3a1.0.11-1_arm64.deb ...
+#8 55.11 Unpacking libxau6:arm64 (1:1.0.11-1) ...
+#8 55.12 Selecting previously unselected package libxdmcp6:arm64.
+#8 55.12 Preparing to unpack .../007-libxdmcp6_1%3a1.1.5-1_arm64.deb ...
+#8 55.12 Unpacking libxdmcp6:arm64 (1:1.1.5-1) ...
+#8 55.14 Selecting previously unselected package libxcb1:arm64.
+#8 55.14 Preparing to unpack .../008-libxcb1_1.17.0-2+b1_arm64.deb ...
+#8 55.14 Unpacking libxcb1:arm64 (1.17.0-2+b1) ...
+#8 55.15 Selecting previously unselected package libx11-data.
+#8 55.15 Preparing to unpack .../009-libx11-data_2%3a1.8.12-1_all.deb ...
+#8 55.15 Unpacking libx11-data (2:1.8.12-1) ...
+#8 55.18 Selecting previously unselected package libx11-6:arm64.
+#8 55.18 Preparing to unpack .../010-libx11-6_2%3a1.8.12-1_arm64.deb ...
+#8 55.18 Unpacking libx11-6:arm64 (2:1.8.12-1) ...
+#8 55.22 Selecting previously unselected package libx11-xcb1:arm64.
+#8 55.22 Preparing to unpack .../011-libx11-xcb1_2%3a1.8.12-1_arm64.deb ...
+#8 55.22 Unpacking libx11-xcb1:arm64 (2:1.8.12-1) ...
+#8 55.24 Selecting previously unselected package libxcb-dri3-0:arm64.
+#8 55.24 Preparing to unpack .../012-libxcb-dri3-0_1.17.0-2+b1_arm64.deb ...
+#8 55.24 Unpacking libxcb-dri3-0:arm64 (1.17.0-2+b1) ...
+#8 55.25 Selecting previously unselected package libxext6:arm64.
+#8 55.26 Preparing to unpack .../013-libxext6_2%3a1.3.4-1+b3_arm64.deb ...
+#8 55.26 Unpacking libxext6:arm64 (2:1.3.4-1+b3) ...
+#8 55.27 Selecting previously unselected package libxfixes3:arm64.
+#8 55.27 Preparing to unpack .../014-libxfixes3_1%3a6.0.0-2+b4_arm64.deb ...
+#8 55.27 Unpacking libxfixes3:arm64 (1:6.0.0-2+b4) ...
+#8 55.29 Selecting previously unselected package libva-x11-2:arm64.
+#8 55.29 Preparing to unpack .../015-libva-x11-2_2.22.0-3_arm64.deb ...
+#8 55.29 Unpacking libva-x11-2:arm64 (2.22.0-3) ...
+#8 55.30 Selecting previously unselected package libvdpau1:arm64.
+#8 55.30 Preparing to unpack .../016-libvdpau1_1.5-3+b1_arm64.deb ...
+#8 55.30 Unpacking libvdpau1:arm64 (1.5-3+b1) ...
+#8 55.32 Selecting previously unselected package ocl-icd-libopencl1:arm64.
+#8 55.32 Preparing to unpack .../017-ocl-icd-libopencl1_2.3.3-1_arm64.deb ...
+#8 55.32 Unpacking ocl-icd-libopencl1:arm64 (2.3.3-1) ...
+#8 55.33 Selecting previously unselected package libavutil59:arm64.
+#8 55.33 Preparing to unpack .../018-libavutil59_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 55.33 Unpacking libavutil59:arm64 (7:7.1.5-0+deb13u1) ...
+#8 55.36 Selecting previously unselected package libbrotli1:arm64.
+#8 55.36 Preparing to unpack .../019-libbrotli1_1.1.0-2+b7_arm64.deb ...
+#8 55.36 Unpacking libbrotli1:arm64 (1.1.0-2+b7) ...
+#8 55.39 Selecting previously unselected package libpng16-16t64:arm64.
+#8 55.39 Preparing to unpack .../020-libpng16-16t64_1.6.48-1+deb13u5_arm64.deb ...
+#8 55.39 Unpacking libpng16-16t64:arm64 (1.6.48-1+deb13u5) ...
+#8 55.41 Selecting previously unselected package libfreetype6:arm64.
+#8 55.41 Preparing to unpack .../021-libfreetype6_2.13.3+dfsg-1+deb13u1_arm64.deb ...
+#8 55.41 Unpacking libfreetype6:arm64 (2.13.3+dfsg-1+deb13u1) ...
+#8 55.44 Selecting previously unselected package fonts-dejavu-mono.
+#8 55.44 Preparing to unpack .../022-fonts-dejavu-mono_2.37-8_all.deb ...
+#8 55.44 Unpacking fonts-dejavu-mono (2.37-8) ...
+#8 55.47 Selecting previously unselected package fonts-dejavu-core.
+#8 55.48 Preparing to unpack .../023-fonts-dejavu-core_2.37-8_all.deb ...
+#8 55.48 Unpacking fonts-dejavu-core (2.37-8) ...
+#8 55.53 Selecting previously unselected package fontconfig-config.
+#8 55.53 Preparing to unpack .../024-fontconfig-config_2.15.0-2.3_arm64.deb ...
+#8 55.53 Unpacking fontconfig-config (2.15.0-2.3) ...
+#8 55.55 Selecting previously unselected package libfontconfig1:arm64.
+#8 55.55 Preparing to unpack .../025-libfontconfig1_2.15.0-2.3_arm64.deb ...
+#8 55.55 Unpacking libfontconfig1:arm64 (2.15.0-2.3) ...
+#8 55.57 Selecting previously unselected package libpixman-1-0:arm64.
+#8 55.57 Preparing to unpack .../026-libpixman-1-0_0.44.0-3_arm64.deb ...
+#8 55.57 Unpacking libpixman-1-0:arm64 (0.44.0-3) ...
+#8 55.59 Selecting previously unselected package libxcb-render0:arm64.
+#8 55.59 Preparing to unpack .../027-libxcb-render0_1.17.0-2+b1_arm64.deb ...
+#8 55.59 Unpacking libxcb-render0:arm64 (1.17.0-2+b1) ...
+#8 55.61 Selecting previously unselected package libxcb-shm0:arm64.
+#8 55.61 Preparing to unpack .../028-libxcb-shm0_1.17.0-2+b1_arm64.deb ...
+#8 55.61 Unpacking libxcb-shm0:arm64 (1.17.0-2+b1) ...
+#8 55.62 Selecting previously unselected package libxrender1:arm64.
+#8 55.62 Preparing to unpack .../029-libxrender1_1%3a0.9.12-1_arm64.deb ...
+#8 55.62 Unpacking libxrender1:arm64 (1:0.9.12-1) ...
+#8 55.63 Selecting previously unselected package libcairo2:arm64.
+#8 55.63 Preparing to unpack .../030-libcairo2_1.18.4-1+b1_arm64.deb ...
+#8 55.64 Unpacking libcairo2:arm64 (1.18.4-1+b1) ...
+#8 55.67 Selecting previously unselected package libcodec2-1.2:arm64.
+#8 55.67 Preparing to unpack .../031-libcodec2-1.2_1.2.0-3_arm64.deb ...
+#8 55.67 Unpacking libcodec2-1.2:arm64 (1.2.0-3) ...
+#8 56.02 Selecting previously unselected package libdav1d7:arm64.
+#8 56.02 Preparing to unpack .../032-libdav1d7_1.5.1-1_arm64.deb ...
+#8 56.02 Unpacking libdav1d7:arm64 (1.5.1-1) ...
+#8 56.04 Selecting previously unselected package libatomic1:arm64.
+#8 56.04 Preparing to unpack .../033-libatomic1_14.2.0-19_arm64.deb ...
+#8 56.04 Unpacking libatomic1:arm64 (14.2.0-19) ...
+#8 56.06 Selecting previously unselected package libglib2.0-0t64:arm64.
+#8 56.06 Preparing to unpack .../034-libglib2.0-0t64_2.84.4-3~deb13u3_arm64.deb ...
+#8 56.06 Unpacking libglib2.0-0t64:arm64 (2.84.4-3~deb13u3) ...
+#8 56.13 Selecting previously unselected package libgsm1:arm64.
+#8 56.13 Preparing to unpack .../035-libgsm1_1.0.22-1+b2_arm64.deb ...
+#8 56.13 Unpacking libgsm1:arm64 (1.0.22-1+b2) ...
+#8 56.14 Selecting previously unselected package libhwy1t64:arm64.
+#8 56.14 Preparing to unpack .../036-libhwy1t64_1.2.0-2+b2_arm64.deb ...
+#8 56.14 Unpacking libhwy1t64:arm64 (1.2.0-2+b2) ...
+#8 56.18 Selecting previously unselected package liblcms2-2:arm64.
+#8 56.18 Preparing to unpack .../037-liblcms2-2_2.16-2+deb13u2_arm64.deb ...
+#8 56.18 Unpacking liblcms2-2:arm64 (2.16-2+deb13u2) ...
+#8 56.20 Selecting previously unselected package libjxl0.11:arm64.
+#8 56.20 Preparing to unpack .../038-libjxl0.11_0.11.2-0.1~deb13u2_arm64.deb ...
+#8 56.20 Unpacking libjxl0.11:arm64 (0.11.2-0.1~deb13u2) ...
+#8 56.25 Selecting previously unselected package libmp3lame0:arm64.
+#8 56.25 Preparing to unpack .../039-libmp3lame0_3.100-6+b3_arm64.deb ...
+#8 56.26 Unpacking libmp3lame0:arm64 (3.100-6+b3) ...
+#8 56.27 Selecting previously unselected package libopenjp2-7:arm64.
+#8 56.27 Preparing to unpack .../040-libopenjp2-7_2.5.3-2.1~deb13u2_arm64.deb ...
+#8 56.27 Unpacking libopenjp2-7:arm64 (2.5.3-2.1~deb13u2) ...
+#8 56.29 Selecting previously unselected package libopus0:arm64.
+#8 56.30 Preparing to unpack .../041-libopus0_1.5.2-2_arm64.deb ...
+#8 56.30 Unpacking libopus0:arm64 (1.5.2-2) ...
+#8 56.43 Selecting previously unselected package librav1e0.7:arm64.
+#8 56.43 Preparing to unpack .../042-librav1e0.7_0.7.1-9+b2_arm64.deb ...
+#8 56.43 Unpacking librav1e0.7:arm64 (0.7.1-9+b2) ...
+#8 56.47 Selecting previously unselected package libcairo-gobject2:arm64.
+#8 56.48 Preparing to unpack .../043-libcairo-gobject2_1.18.4-1+b1_arm64.deb ...
+#8 56.48 Unpacking libcairo-gobject2:arm64 (1.18.4-1+b1) ...
+#8 56.49 Selecting previously unselected package libgdk-pixbuf2.0-common.
+#8 56.49 Preparing to unpack .../044-libgdk-pixbuf2.0-common_2.42.12+dfsg-4+deb13u1_all.deb ...
+#8 56.49 Unpacking libgdk-pixbuf2.0-common (2.42.12+dfsg-4+deb13u1) ...
+#8 56.52 Selecting previously unselected package libxml2:arm64.
+#8 56.52 Preparing to unpack .../045-libxml2_2.12.7+dfsg+really2.9.14-2.1+deb13u3_arm64.deb ...
+#8 56.52 Unpacking libxml2:arm64 (2.12.7+dfsg+really2.9.14-2.1+deb13u3) ...
+#8 56.56 Selecting previously unselected package shared-mime-info.
+#8 56.56 Preparing to unpack .../046-shared-mime-info_2.4-5+b2_arm64.deb ...
+#8 56.57 Unpacking shared-mime-info (2.4-5+b2) ...
+#8 56.61 Selecting previously unselected package libjpeg62-turbo:arm64.
+#8 56.61 Preparing to unpack .../047-libjpeg62-turbo_1%3a2.1.5-4_arm64.deb ...
+#8 56.62 Unpacking libjpeg62-turbo:arm64 (1:2.1.5-4) ...
+#8 56.64 Selecting previously unselected package libdeflate0:arm64.
+#8 56.64 Preparing to unpack .../048-libdeflate0_1.23-2_arm64.deb ...
+#8 56.64 Unpacking libdeflate0:arm64 (1.23-2) ...
+#8 56.65 Selecting previously unselected package libjbig0:arm64.
+#8 56.65 Preparing to unpack .../049-libjbig0_2.1-6.1+b2_arm64.deb ...
+#8 56.66 Unpacking libjbig0:arm64 (2.1-6.1+b2) ...
+#8 56.67 Selecting previously unselected package liblerc4:arm64.
+#8 56.67 Preparing to unpack .../050-liblerc4_4.0.0+ds-5_arm64.deb ...
+#8 56.67 Unpacking liblerc4:arm64 (4.0.0+ds-5) ...
+#8 56.69 Selecting previously unselected package libsharpyuv0:arm64.
+#8 56.69 Preparing to unpack .../051-libsharpyuv0_1.5.0-0.1_arm64.deb ...
+#8 56.69 Unpacking libsharpyuv0:arm64 (1.5.0-0.1) ...
+#8 56.71 Selecting previously unselected package libwebp7:arm64.
+#8 56.71 Preparing to unpack .../052-libwebp7_1.5.0-0.1_arm64.deb ...
+#8 56.71 Unpacking libwebp7:arm64 (1.5.0-0.1) ...
+#8 56.73 Selecting previously unselected package libtiff6:arm64.
+#8 56.73 Preparing to unpack .../053-libtiff6_4.7.0-3+deb13u3_arm64.deb ...
+#8 56.73 Unpacking libtiff6:arm64 (4.7.0-3+deb13u3) ...
+#8 56.75 Selecting previously unselected package libgdk-pixbuf-2.0-0:arm64.
+#8 56.75 Preparing to unpack .../054-libgdk-pixbuf-2.0-0_2.42.12+dfsg-4+deb13u1_arm64.deb ...
+#8 56.75 Unpacking libgdk-pixbuf-2.0-0:arm64 (2.42.12+dfsg-4+deb13u1) ...
+#8 56.77 Selecting previously unselected package fontconfig.
+#8 56.77 Preparing to unpack .../055-fontconfig_2.15.0-2.3_arm64.deb ...
+#8 56.77 Unpacking fontconfig (2.15.0-2.3) ...
+#8 56.79 Selecting previously unselected package libfribidi0:arm64.
+#8 56.79 Preparing to unpack .../056-libfribidi0_1.0.16-1_arm64.deb ...
+#8 56.80 Unpacking libfribidi0:arm64 (1.0.16-1) ...
+#8 56.81 Selecting previously unselected package libgraphite2-3:arm64.
+#8 56.81 Preparing to unpack .../057-libgraphite2-3_1.3.14-2+deb13u1_arm64.deb ...
+#8 56.81 Unpacking libgraphite2-3:arm64 (1.3.14-2+deb13u1) ...
+#8 56.82 Selecting previously unselected package libharfbuzz0b:arm64.
+#8 56.82 Preparing to unpack .../058-libharfbuzz0b_10.2.0-1+deb13u1_arm64.deb ...
+#8 56.82 Unpacking libharfbuzz0b:arm64 (10.2.0-1+deb13u1) ...
+#8 56.85 Selecting previously unselected package libthai-data.
+#8 56.86 Preparing to unpack .../059-libthai-data_0.1.29-2_all.deb ...
+#8 56.86 Unpacking libthai-data (0.1.29-2) ...
+#8 56.88 Selecting previously unselected package libdatrie1:arm64.
+#8 56.88 Preparing to unpack .../060-libdatrie1_0.2.13-3+b1_arm64.deb ...
+#8 56.88 Unpacking libdatrie1:arm64 (0.2.13-3+b1) ...
+#8 56.89 Selecting previously unselected package libthai0:arm64.
+#8 56.89 Preparing to unpack .../061-libthai0_0.1.29-2+b1_arm64.deb ...
+#8 56.89 Unpacking libthai0:arm64 (0.1.29-2+b1) ...
+#8 56.91 Selecting previously unselected package libpango-1.0-0:arm64.
+#8 56.91 Preparing to unpack .../062-libpango-1.0-0_1.56.3-1_arm64.deb ...
+#8 56.91 Unpacking libpango-1.0-0:arm64 (1.56.3-1) ...
+#8 56.93 Selecting previously unselected package libpangoft2-1.0-0:arm64.
+#8 56.93 Preparing to unpack .../063-libpangoft2-1.0-0_1.56.3-1_arm64.deb ...
+#8 56.94 Unpacking libpangoft2-1.0-0:arm64 (1.56.3-1) ...
+#8 56.95 Selecting previously unselected package libpangocairo-1.0-0:arm64.
+#8 56.95 Preparing to unpack .../064-libpangocairo-1.0-0_1.56.3-1_arm64.deb ...
+#8 56.95 Unpacking libpangocairo-1.0-0:arm64 (1.56.3-1) ...
+#8 56.97 Selecting previously unselected package librsvg2-2:arm64.
+#8 56.97 Preparing to unpack .../065-librsvg2-2_2.60.0+dfsg-1_arm64.deb ...
+#8 56.97 Unpacking librsvg2-2:arm64 (2.60.0+dfsg-1) ...
+#8 57.06 Selecting previously unselected package libshine3:arm64.
+#8 57.06 Preparing to unpack .../066-libshine3_3.1.1-2+b2_arm64.deb ...
+#8 57.06 Unpacking libshine3:arm64 (3.1.1-2+b2) ...
+#8 57.07 Selecting previously unselected package libsnappy1v5:arm64.
+#8 57.07 Preparing to unpack .../067-libsnappy1v5_1.2.2-1_arm64.deb ...
+#8 57.07 Unpacking libsnappy1v5:arm64 (1.2.2-1) ...
+#8 57.08 Selecting previously unselected package libspeex1:arm64.
+#8 57.09 Preparing to unpack .../068-libspeex1_1.2.1-3_arm64.deb ...
+#8 57.09 Unpacking libspeex1:arm64 (1.2.1-3) ...
+#8 57.10 Selecting previously unselected package libsvtav1enc2:arm64.
+#8 57.10 Preparing to unpack .../069-libsvtav1enc2_2.3.0+dfsg-1_arm64.deb ...
+#8 57.10 Unpacking libsvtav1enc2:arm64 (2.3.0+dfsg-1) ...
+#8 57.18 Selecting previously unselected package libgomp1:arm64.
+#8 57.18 Preparing to unpack .../070-libgomp1_14.2.0-19_arm64.deb ...
+#8 57.18 Unpacking libgomp1:arm64 (14.2.0-19) ...
+#8 57.20 Selecting previously unselected package libsoxr0:arm64.
+#8 57.20 Preparing to unpack .../071-libsoxr0_0.1.3-4+b2_arm64.deb ...
+#8 57.20 Unpacking libsoxr0:arm64 (0.1.3-4+b2) ...
+#8 57.21 Selecting previously unselected package libswresample5:arm64.
+#8 57.21 Preparing to unpack .../072-libswresample5_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 57.21 Unpacking libswresample5:arm64 (7:7.1.5-0+deb13u1) ...
+#8 57.23 Selecting previously unselected package libtheoradec1:arm64.
+#8 57.23 Preparing to unpack .../073-libtheoradec1_1.2.0~alpha1+dfsg-6_arm64.deb ...
+#8 57.23 Unpacking libtheoradec1:arm64 (1.2.0~alpha1+dfsg-6) ...
+#8 57.24 Selecting previously unselected package libogg0:arm64.
+#8 57.24 Preparing to unpack .../074-libogg0_1.3.5-3+b2_arm64.deb ...
+#8 57.25 Unpacking libogg0:arm64 (1.3.5-3+b2) ...
+#8 57.26 Selecting previously unselected package libtheoraenc1:arm64.
+#8 57.26 Preparing to unpack .../075-libtheoraenc1_1.2.0~alpha1+dfsg-6_arm64.deb ...
+#8 57.26 Unpacking libtheoraenc1:arm64 (1.2.0~alpha1+dfsg-6) ...
+#8 57.27 Selecting previously unselected package libtwolame0:arm64.
+#8 57.27 Preparing to unpack .../076-libtwolame0_0.4.0-2+b2_arm64.deb ...
+#8 57.28 Unpacking libtwolame0:arm64 (0.4.0-2+b2) ...
+#8 57.29 Selecting previously unselected package libvorbis0a:arm64.
+#8 57.29 Preparing to unpack .../077-libvorbis0a_1.3.7-3_arm64.deb ...
+#8 57.29 Unpacking libvorbis0a:arm64 (1.3.7-3) ...
+#8 57.30 Selecting previously unselected package libvorbisenc2:arm64.
+#8 57.30 Preparing to unpack .../078-libvorbisenc2_1.3.7-3_arm64.deb ...
+#8 57.31 Unpacking libvorbisenc2:arm64 (1.3.7-3) ...
+#8 57.32 Selecting previously unselected package libvpx9:arm64.
+#8 57.32 Preparing to unpack .../079-libvpx9_1.15.0-2.1+deb13u1_arm64.deb ...
+#8 57.32 Unpacking libvpx9:arm64 (1.15.0-2.1+deb13u1) ...
+#8 57.38 Selecting previously unselected package libwebpmux3:arm64.
+#8 57.38 Preparing to unpack .../080-libwebpmux3_1.5.0-0.1_arm64.deb ...
+#8 57.38 Unpacking libwebpmux3:arm64 (1.5.0-0.1) ...
+#8 57.40 Selecting previously unselected package libx264-164:arm64.
+#8 57.40 Preparing to unpack .../081-libx264-164_2%3a0.164.3108+git31e19f9-2+b1_arm64.deb ...
+#8 57.40 Unpacking libx264-164:arm64 (2:0.164.3108+git31e19f9-2+b1) ...
+#8 57.43 Selecting previously unselected package libnuma1:arm64.
+#8 57.43 Preparing to unpack .../082-libnuma1_2.0.19-1_arm64.deb ...
+#8 57.44 Unpacking libnuma1:arm64 (2.0.19-1) ...
+#8 57.45 Selecting previously unselected package libx265-215:arm64.
+#8 57.45 Preparing to unpack .../083-libx265-215_4.1-2_arm64.deb ...
+#8 57.45 Unpacking libx265-215:arm64 (4.1-2) ...
+#8 57.55 Selecting previously unselected package libxvidcore4:arm64.
+#8 57.55 Preparing to unpack .../084-libxvidcore4_2%3a1.3.7-1+b2_arm64.deb ...
+#8 57.55 Unpacking libxvidcore4:arm64 (2:1.3.7-1+b2) ...
+#8 57.57 Selecting previously unselected package libzvbi-common.
+#8 57.57 Preparing to unpack .../085-libzvbi-common_0.2.44-1_all.deb ...
+#8 57.57 Unpacking libzvbi-common (0.2.44-1) ...
+#8 57.58 Selecting previously unselected package libzvbi0t64:arm64.
+#8 57.58 Preparing to unpack .../086-libzvbi0t64_0.2.44-1_arm64.deb ...
+#8 57.58 Unpacking libzvbi0t64:arm64 (0.2.44-1) ...
+#8 57.61 Selecting previously unselected package libavcodec61:arm64.
+#8 57.61 Preparing to unpack .../087-libavcodec61_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 57.61 Unpacking libavcodec61:arm64 (7:7.1.5-0+deb13u1) ...
+#8 57.85 Selecting previously unselected package libasound2-data.
+#8 57.85 Preparing to unpack .../088-libasound2-data_1.2.14-1_all.deb ...
+#8 57.85 Unpacking libasound2-data (1.2.14-1) ...
+#8 57.86 Selecting previously unselected package libasound2t64:arm64.
+#8 57.86 Preparing to unpack .../089-libasound2t64_1.2.14-1_arm64.deb ...
+#8 57.86 Unpacking libasound2t64:arm64 (1.2.14-1) ...
+#8 57.89 Selecting previously unselected package libraw1394-11:arm64.
+#8 57.89 Preparing to unpack .../090-libraw1394-11_2.1.2-2+b2_arm64.deb ...
+#8 57.89 Unpacking libraw1394-11:arm64 (2.1.2-2+b2) ...
+#8 57.91 Selecting previously unselected package libavc1394-0:arm64.
+#8 57.91 Preparing to unpack .../091-libavc1394-0_0.5.4-5+b2_arm64.deb ...
+#8 57.91 Unpacking libavc1394-0:arm64 (0.5.4-5+b2) ...
+#8 57.92 Selecting previously unselected package libunibreak6:arm64.
+#8 57.92 Preparing to unpack .../092-libunibreak6_6.1-3_arm64.deb ...
+#8 57.92 Unpacking libunibreak6:arm64 (6.1-3) ...
+#8 57.93 Selecting previously unselected package libass9:arm64.
+#8 57.93 Preparing to unpack .../093-libass9_1%3a0.17.3-1+deb13u1_arm64.deb ...
+#8 57.93 Unpacking libass9:arm64 (1:0.17.3-1+deb13u1) ...
+#8 57.95 Selecting previously unselected package libudfread0:arm64.
+#8 57.95 Preparing to unpack .../094-libudfread0_1.1.2-1+b2_arm64.deb ...
+#8 57.95 Unpacking libudfread0:arm64 (1.1.2-1+b2) ...
+#8 57.96 Selecting previously unselected package libbluray2:arm64.
+#8 57.97 Preparing to unpack .../095-libbluray2_1%3a1.3.4-1+b2_arm64.deb ...
+#8 57.97 Unpacking libbluray2:arm64 (1:1.3.4-1+b2) ...
+#8 57.98 Selecting previously unselected package libchromaprint1:arm64.
+#8 57.98 Preparing to unpack .../096-libchromaprint1_1.5.1-7_arm64.deb ...
+#8 57.98 Unpacking libchromaprint1:arm64 (1.5.1-7) ...
+#8 58.00 Selecting previously unselected package libdvdread8t64:arm64.
+#8 58.00 Preparing to unpack .../097-libdvdread8t64_6.1.3-2_arm64.deb ...
+#8 58.00 Unpacking libdvdread8t64:arm64 (6.1.3-2) ...
+#8 58.02 Selecting previously unselected package libdvdnav4:arm64.
+#8 58.02 Preparing to unpack .../098-libdvdnav4_6.1.1-3+b1_arm64.deb ...
+#8 58.02 Unpacking libdvdnav4:arm64 (6.1.1-3+b1) ...
+#8 58.03 Selecting previously unselected package libgme0:arm64.
+#8 58.03 Preparing to unpack .../099-libgme0_0.6.3-7+b2_arm64.deb ...
+#8 58.03 Unpacking libgme0:arm64 (0.6.3-7+b2) ...
+#8 58.05 Selecting previously unselected package libunistring5:arm64.
+#8 58.05 Preparing to unpack .../100-libunistring5_1.3-2_arm64.deb ...
+#8 58.05 Unpacking libunistring5:arm64 (1.3-2) ...
+#8 58.08 Selecting previously unselected package libidn2-0:arm64.
+#8 58.08 Preparing to unpack .../101-libidn2-0_2.3.8-2_arm64.deb ...
+#8 58.09 Unpacking libidn2-0:arm64 (2.3.8-2) ...
+#8 58.10 Selecting previously unselected package libp11-kit0:arm64.
+#8 58.10 Preparing to unpack .../102-libp11-kit0_0.25.5-3_arm64.deb ...
+#8 58.10 Unpacking libp11-kit0:arm64 (0.25.5-3) ...
+#8 58.13 Selecting previously unselected package libtasn1-6:arm64.
+#8 58.13 Preparing to unpack .../103-libtasn1-6_4.20.0-2+deb13u1_arm64.deb ...
+#8 58.13 Unpacking libtasn1-6:arm64 (4.20.0-2+deb13u1) ...
+#8 58.14 Selecting previously unselected package libgnutls30t64:arm64.
+#8 58.14 Preparing to unpack .../104-libgnutls30t64_3.8.9-3+deb13u4_arm64.deb ...
+#8 58.15 Unpacking libgnutls30t64:arm64 (3.8.9-3+deb13u4) ...
+#8 58.20 Selecting previously unselected package libmpg123-0t64:arm64.
+#8 58.20 Preparing to unpack .../105-libmpg123-0t64_1.32.10-1+deb13u1_arm64.deb ...
+#8 58.20 Unpacking libmpg123-0t64:arm64 (1.32.10-1+deb13u1) ...
+#8 58.22 Selecting previously unselected package libvorbisfile3:arm64.
+#8 58.22 Preparing to unpack .../106-libvorbisfile3_1.3.7-3_arm64.deb ...
+#8 58.22 Unpacking libvorbisfile3:arm64 (1.3.7-3) ...
+#8 58.23 Selecting previously unselected package libopenmpt0t64:arm64.
+#8 58.24 Preparing to unpack .../107-libopenmpt0t64_0.7.13-1+b1_arm64.deb ...
+#8 58.24 Unpacking libopenmpt0t64:arm64 (0.7.13-1+b1) ...
+#8 58.28 Selecting previously unselected package librabbitmq4:arm64.
+#8 58.28 Preparing to unpack .../108-librabbitmq4_0.15.0-1+deb13u1_arm64.deb ...
+#8 58.28 Unpacking librabbitmq4:arm64 (0.15.0-1+deb13u1) ...
+#8 58.29 Selecting previously unselected package libcjson1:arm64.
+#8 58.30 Preparing to unpack .../109-libcjson1_1.7.18-3.1+deb13u1_arm64.deb ...
+#8 58.30 Unpacking libcjson1:arm64 (1.7.18-3.1+deb13u1) ...
+#8 58.31 Selecting previously unselected package libmbedcrypto16:arm64.
+#8 58.31 Preparing to unpack .../110-libmbedcrypto16_3.6.5-0.1~deb13u1_arm64.deb ...
+#8 58.31 Unpacking libmbedcrypto16:arm64 (3.6.5-0.1~deb13u1) ...
+#8 58.33 Selecting previously unselected package librist4:arm64.
+#8 58.34 Preparing to unpack .../111-librist4_0.2.11+dfsg-1_arm64.deb ...
+#8 58.34 Unpacking librist4:arm64 (0.2.11+dfsg-1) ...
+#8 58.35 Selecting previously unselected package libsrt1.5-gnutls:arm64.
+#8 58.35 Preparing to unpack .../112-libsrt1.5-gnutls_1.5.4-1_arm64.deb ...
+#8 58.35 Unpacking libsrt1.5-gnutls:arm64 (1.5.4-1) ...
+#8 58.38 Selecting previously unselected package libkrb5support0:arm64.
+#8 58.38 Preparing to unpack .../113-libkrb5support0_1.21.3-5+deb13u1_arm64.deb ...
+#8 58.38 Unpacking libkrb5support0:arm64 (1.21.3-5+deb13u1) ...
+#8 58.39 Selecting previously unselected package libcom-err2:arm64.
+#8 58.39 Preparing to unpack .../114-libcom-err2_1.47.2-3+b11_arm64.deb ...
+#8 58.39 Unpacking libcom-err2:arm64 (1.47.2-3+b11) ...
+#8 58.40 Selecting previously unselected package libk5crypto3:arm64.
+#8 58.40 Preparing to unpack .../115-libk5crypto3_1.21.3-5+deb13u1_arm64.deb ...
+#8 58.41 Unpacking libk5crypto3:arm64 (1.21.3-5+deb13u1) ...
+#8 58.42 Selecting previously unselected package libkeyutils1:arm64.
+#8 58.42 Preparing to unpack .../116-libkeyutils1_1.6.3-6_arm64.deb ...
+#8 58.42 Unpacking libkeyutils1:arm64 (1.6.3-6) ...
+#8 58.44 Selecting previously unselected package libkrb5-3:arm64.
+#8 58.44 Preparing to unpack .../117-libkrb5-3_1.21.3-5+deb13u1_arm64.deb ...
+#8 58.44 Unpacking libkrb5-3:arm64 (1.21.3-5+deb13u1) ...
+#8 58.46 Selecting previously unselected package libgssapi-krb5-2:arm64.
+#8 58.46 Preparing to unpack .../118-libgssapi-krb5-2_1.21.3-5+deb13u1_arm64.deb ...
+#8 58.47 Unpacking libgssapi-krb5-2:arm64 (1.21.3-5+deb13u1) ...
+#8 58.48 Selecting previously unselected package libssh-4:arm64.
+#8 58.48 Preparing to unpack .../119-libssh-4_0.11.2-1+deb13u1_arm64.deb ...
+#8 58.48 Unpacking libssh-4:arm64 (0.11.2-1+deb13u1) ...
+#8 58.50 Selecting previously unselected package libnorm1t64:arm64.
+#8 58.50 Preparing to unpack .../120-libnorm1t64_1.5.9+dfsg-3.1+b2_arm64.deb ...
+#8 58.51 Unpacking libnorm1t64:arm64 (1.5.9+dfsg-3.1+b2) ...
+#8 58.53 Selecting previously unselected package libpgm-5.3-0t64:arm64.
+#8 58.53 Preparing to unpack .../121-libpgm-5.3-0t64_5.3.128~dfsg-2.1+b1_arm64.deb ...
+#8 58.53 Unpacking libpgm-5.3-0t64:arm64 (5.3.128~dfsg-2.1+b1) ...
+#8 58.55 Selecting previously unselected package libsodium23:arm64.
+#8 58.55 Preparing to unpack .../122-libsodium23_1.0.18-1+deb13u1_arm64.deb ...
+#8 58.55 Unpacking libsodium23:arm64 (1.0.18-1+deb13u1) ...
+#8 58.56 Selecting previously unselected package libzmq5:arm64.
+#8 58.57 Preparing to unpack .../123-libzmq5_4.3.5-1+b3_arm64.deb ...
+#8 58.57 Unpacking libzmq5:arm64 (4.3.5-1+b3) ...
+#8 58.59 Selecting previously unselected package libavformat61:arm64.
+#8 58.59 Preparing to unpack .../124-libavformat61_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 58.59 Unpacking libavformat61:arm64 (7:7.1.5-0+deb13u1) ...
+#8 58.65 Selecting previously unselected package libbs2b0:arm64.
+#8 58.65 Preparing to unpack .../125-libbs2b0_3.1.0+dfsg-8+b1_arm64.deb ...
+#8 58.65 Unpacking libbs2b0:arm64 (3.1.0+dfsg-8+b1) ...
+#8 58.66 Selecting previously unselected package libflite1:arm64.
+#8 58.66 Preparing to unpack .../126-libflite1_2.2-7_arm64.deb ...
+#8 58.66 Unpacking libflite1:arm64 (2.2-7) ...
+#8 59.19 Selecting previously unselected package libserd-0-0:arm64.
+#8 59.19 Preparing to unpack .../127-libserd-0-0_0.32.4-1_arm64.deb ...
+#8 59.19 Unpacking libserd-0-0:arm64 (0.32.4-1) ...
+#8 59.20 Selecting previously unselected package libzix-0-0:arm64.
+#8 59.21 Preparing to unpack .../128-libzix-0-0_0.6.2-1_arm64.deb ...
+#8 59.21 Unpacking libzix-0-0:arm64 (0.6.2-1) ...
+#8 59.22 Selecting previously unselected package libsord-0-0:arm64.
+#8 59.22 Preparing to unpack .../129-libsord-0-0_0.16.18-1_arm64.deb ...
+#8 59.22 Unpacking libsord-0-0:arm64 (0.16.18-1) ...
+#8 59.23 Selecting previously unselected package libsratom-0-0:arm64.
+#8 59.23 Preparing to unpack .../130-libsratom-0-0_0.6.18-1_arm64.deb ...
+#8 59.23 Unpacking libsratom-0-0:arm64 (0.6.18-1) ...
+#8 59.25 Selecting previously unselected package liblilv-0-0:arm64.
+#8 59.25 Preparing to unpack .../131-liblilv-0-0_0.24.26-1_arm64.deb ...
+#8 59.25 Unpacking liblilv-0-0:arm64 (0.24.26-1) ...
+#8 59.26 Selecting previously unselected package libmysofa1:arm64.
+#8 59.26 Preparing to unpack .../132-libmysofa1_1.3.3+dfsg-1_arm64.deb ...
+#8 59.26 Unpacking libmysofa1:arm64 (1.3.3+dfsg-1) ...
+#8 59.30 Selecting previously unselected package libvulkan1:arm64.
+#8 59.30 Preparing to unpack .../133-libvulkan1_1.4.309.0-1_arm64.deb ...
+#8 59.30 Unpacking libvulkan1:arm64 (1.4.309.0-1) ...
+#8 59.32 Selecting previously unselected package libplacebo349:arm64.
+#8 59.32 Preparing to unpack .../134-libplacebo349_7.349.0-3_arm64.deb ...
+#8 59.32 Unpacking libplacebo349:arm64 (7.349.0-3) ...
+#8 59.43 Selecting previously unselected package libblas3:arm64.
+#8 59.43 Preparing to unpack .../135-libblas3_3.12.1-6_arm64.deb ...
+#8 59.44 Unpacking libblas3:arm64 (3.12.1-6) ...
+#8 59.45 Selecting previously unselected package libgfortran5:arm64.
+#8 59.45 Preparing to unpack .../136-libgfortran5_14.2.0-19_arm64.deb ...
+#8 59.45 Unpacking libgfortran5:arm64 (14.2.0-19) ...
+#8 59.48 Selecting previously unselected package liblapack3:arm64.
+#8 59.48 Preparing to unpack .../137-liblapack3_3.12.1-6_arm64.deb ...
+#8 59.48 Unpacking liblapack3:arm64 (3.12.1-6) ...
+#8 59.57 Selecting previously unselected package libasyncns0:arm64.
+#8 59.57 Preparing to unpack .../138-libasyncns0_0.8-6+b5_arm64.deb ...
+#8 59.58 Unpacking libasyncns0:arm64 (0.8-6+b5) ...
+#8 59.59 Selecting previously unselected package libdbus-1-3:arm64.
+#8 59.59 Preparing to unpack .../139-libdbus-1-3_1.16.2-2_arm64.deb ...
+#8 59.59 Unpacking libdbus-1-3:arm64 (1.16.2-2) ...
+#8 59.61 Selecting previously unselected package libflac14:arm64.
+#8 59.61 Preparing to unpack .../140-libflac14_1.5.0+ds-2_arm64.deb ...
+#8 59.61 Unpacking libflac14:arm64 (1.5.0+ds-2) ...
+#8 59.63 Selecting previously unselected package libsndfile1:arm64.
+#8 59.63 Preparing to unpack .../141-libsndfile1_1.2.2-2+deb13u1_arm64.deb ...
+#8 59.63 Unpacking libsndfile1:arm64 (1.2.2-2+deb13u1) ...
+#8 59.65 Selecting previously unselected package libpulse0:arm64.
+#8 59.65 Preparing to unpack .../142-libpulse0_17.0+dfsg1-2+b1_arm64.deb ...
+#8 59.65 Unpacking libpulse0:arm64 (17.0+dfsg1-2+b1) ...
+#8 59.68 Selecting previously unselected package libsphinxbase3t64:arm64.
+#8 59.68 Preparing to unpack .../143-libsphinxbase3t64_0.8+5prealpha+1-21+b1_arm64.deb ...
+#8 59.68 Unpacking libsphinxbase3t64:arm64 (0.8+5prealpha+1-21+b1) ...
+#8 59.69 Selecting previously unselected package libpocketsphinx3:arm64.
+#8 59.69 Preparing to unpack .../144-libpocketsphinx3_0.8+5prealpha+1-15+b4_arm64.deb ...
+#8 59.69 Unpacking libpocketsphinx3:arm64 (0.8+5prealpha+1-15+b4) ...
+#8 59.71 Selecting previously unselected package libpostproc58:arm64.
+#8 59.71 Preparing to unpack .../145-libpostproc58_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 59.71 Unpacking libpostproc58:arm64 (7:7.1.5-0+deb13u1) ...
+#8 59.73 Selecting previously unselected package libfftw3-double3:arm64.
+#8 59.73 Preparing to unpack .../146-libfftw3-double3_3.3.10-2+b1_arm64.deb ...
+#8 59.73 Unpacking libfftw3-double3:arm64 (3.3.10-2+b1) ...
+#8 59.75 Selecting previously unselected package libsamplerate0:arm64.
+#8 59.75 Preparing to unpack .../147-libsamplerate0_0.2.2-4+b2_arm64.deb ...
+#8 59.76 Unpacking libsamplerate0:arm64 (0.2.2-4+b2) ...
+#8 59.81 Selecting previously unselected package librubberband2:arm64.
+#8 59.81 Preparing to unpack .../148-librubberband2_3.3.0+dfsg-2+b3_arm64.deb ...
+#8 59.81 Unpacking librubberband2:arm64 (3.3.0+dfsg-2+b3) ...
+#8 59.83 Selecting previously unselected package libswscale8:arm64.
+#8 59.83 Preparing to unpack .../149-libswscale8_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 59.83 Unpacking libswscale8:arm64 (7:7.1.5-0+deb13u1) ...
+#8 59.85 Selecting previously unselected package libvidstab1.1:arm64.
+#8 59.85 Preparing to unpack .../150-libvidstab1.1_1.1.0-2+b2_arm64.deb ...
+#8 59.85 Unpacking libvidstab1.1:arm64 (1.1.0-2+b2) ...
+#8 59.87 Selecting previously unselected package libzimg2:arm64.
+#8 59.87 Preparing to unpack .../151-libzimg2_3.0.5+ds1-1+b2_arm64.deb ...
+#8 59.87 Unpacking libzimg2:arm64 (3.0.5+ds1-1+b2) ...
+#8 59.91 Selecting previously unselected package libavfilter10:arm64.
+#8 59.91 Preparing to unpack .../152-libavfilter10_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 59.91 Unpacking libavfilter10:arm64 (7:7.1.5-0+deb13u1) ...
+#8 60.09 Selecting previously unselected package libslang2:arm64.
+#8 60.09 Preparing to unpack .../153-libslang2_2.3.3-5+b2_arm64.deb ...
+#8 60.09 Unpacking libslang2:arm64 (2.3.3-5+b2) ...
+#8 60.12 Selecting previously unselected package libcaca0:arm64.
+#8 60.12 Preparing to unpack .../154-libcaca0_0.99.beta20-5+deb13u1_arm64.deb ...
+#8 60.12 Unpacking libcaca0:arm64 (0.99.beta20-5+deb13u1) ...
+#8 60.14 Selecting previously unselected package libcdio19t64:arm64.
+#8 60.14 Preparing to unpack .../155-libcdio19t64_2.2.0-4.1~deb13u1_arm64.deb ...
+#8 60.14 Unpacking libcdio19t64:arm64 (2.2.0-4.1~deb13u1) ...
+#8 60.16 Selecting previously unselected package libcdio-cdda2t64:arm64.
+#8 60.16 Preparing to unpack .../156-libcdio-cdda2t64_10.2+2.0.2-1+b1_arm64.deb ...
+#8 60.16 Unpacking libcdio-cdda2t64:arm64 (10.2+2.0.2-1+b1) ...
+#8 60.17 Selecting previously unselected package libcdio-paranoia2t64:arm64.
+#8 60.17 Preparing to unpack .../157-libcdio-paranoia2t64_10.2+2.0.2-1+b1_arm64.deb ...
+#8 60.18 Unpacking libcdio-paranoia2t64:arm64 (10.2+2.0.2-1+b1) ...
+#8 60.19 Selecting previously unselected package libusb-1.0-0:arm64.
+#8 60.19 Preparing to unpack .../158-libusb-1.0-0_2%3a1.0.28-1_arm64.deb ...
+#8 60.19 Unpacking libusb-1.0-0:arm64 (2:1.0.28-1) ...
+#8 60.20 Selecting previously unselected package libdc1394-25:arm64.
+#8 60.20 Preparing to unpack .../159-libdc1394-25_2.2.6-5_arm64.deb ...
+#8 60.20 Unpacking libdc1394-25:arm64 (2.2.6-5) ...
+#8 60.22 Selecting previously unselected package libglvnd0:arm64.
+#8 60.22 Preparing to unpack .../160-libglvnd0_1.7.0-1+b2_arm64.deb ...
+#8 60.22 Unpacking libglvnd0:arm64 (1.7.0-1+b2) ...
+#8 60.24 Selecting previously unselected package libxcb-glx0:arm64.
+#8 60.24 Preparing to unpack .../161-libxcb-glx0_1.17.0-2+b1_arm64.deb ...
+#8 60.24 Unpacking libxcb-glx0:arm64 (1.17.0-2+b1) ...
+#8 60.26 Selecting previously unselected package libxcb-present0:arm64.
+#8 60.26 Preparing to unpack .../162-libxcb-present0_1.17.0-2+b1_arm64.deb ...
+#8 60.26 Unpacking libxcb-present0:arm64 (1.17.0-2+b1) ...
+#8 60.27 Selecting previously unselected package libxcb-xfixes0:arm64.
+#8 60.28 Preparing to unpack .../163-libxcb-xfixes0_1.17.0-2+b1_arm64.deb ...
+#8 60.28 Unpacking libxcb-xfixes0:arm64 (1.17.0-2+b1) ...
+#8 60.29 Selecting previously unselected package libxxf86vm1:arm64.
+#8 60.29 Preparing to unpack .../164-libxxf86vm1_1%3a1.1.4-1+b4_arm64.deb ...
+#8 60.29 Unpacking libxxf86vm1:arm64 (1:1.1.4-1+b4) ...
+#8 60.30 Selecting previously unselected package libdrm-amdgpu1:arm64.
+#8 60.31 Preparing to unpack .../165-libdrm-amdgpu1_2.4.124-2_arm64.deb ...
+#8 60.31 Unpacking libdrm-amdgpu1:arm64 (2.4.124-2) ...
+#8 60.32 Selecting previously unselected package libelf1t64:arm64.
+#8 60.32 Preparing to unpack .../166-libelf1t64_0.192-4_arm64.deb ...
+#8 60.32 Unpacking libelf1t64:arm64 (0.192-4) ...
+#8 60.35 Selecting previously unselected package libedit2:arm64.
+#8 60.35 Preparing to unpack .../167-libedit2_3.1-20250104-1_arm64.deb ...
+#8 60.35 Unpacking libedit2:arm64 (3.1-20250104-1) ...
+#8 60.36 Selecting previously unselected package libz3-4:arm64.
+#8 60.37 Preparing to unpack .../168-libz3-4_4.13.3-1_arm64.deb ...
+#8 60.37 Unpacking libz3-4:arm64 (4.13.3-1) ...
+#8 60.68 Selecting previously unselected package libllvm19:arm64.
+#8 60.68 Preparing to unpack .../169-libllvm19_1%3a19.1.7-3+b1_arm64.deb ...
+#8 60.68 Unpacking libllvm19:arm64 (1:19.1.7-3+b1) ...
+#8 61.16 Selecting previously unselected package libsensors-config.
+#8 61.16 Preparing to unpack .../170-libsensors-config_1%3a3.6.2-2_all.deb ...
+#8 61.16 Unpacking libsensors-config (1:3.6.2-2) ...
+#8 61.18 Selecting previously unselected package libsensors5:arm64.
+#8 61.18 Preparing to unpack .../171-libsensors5_1%3a3.6.2-2_arm64.deb ...
+#8 61.18 Unpacking libsensors5:arm64 (1:3.6.2-2) ...
+#8 61.19 Selecting previously unselected package libxcb-randr0:arm64.
+#8 61.19 Preparing to unpack .../172-libxcb-randr0_1.17.0-2+b1_arm64.deb ...
+#8 61.19 Unpacking libxcb-randr0:arm64 (1.17.0-2+b1) ...
+#8 61.21 Selecting previously unselected package libxcb-sync1:arm64.
+#8 61.21 Preparing to unpack .../173-libxcb-sync1_1.17.0-2+b1_arm64.deb ...
+#8 61.21 Unpacking libxcb-sync1:arm64 (1.17.0-2+b1) ...
+#8 61.23 Selecting previously unselected package libxshmfence1:arm64.
+#8 61.23 Preparing to unpack .../174-libxshmfence1_1.3.3-1_arm64.deb ...
+#8 61.23 Unpacking libxshmfence1:arm64 (1.3.3-1) ...
+#8 61.24 Selecting previously unselected package mesa-libgallium:arm64.
+#8 61.25 Preparing to unpack .../175-mesa-libgallium_25.0.7-2+deb13u1_arm64.deb ...
+#8 61.25 Unpacking mesa-libgallium:arm64 (25.0.7-2+deb13u1) ...
+#8 61.58 Selecting previously unselected package libwayland-server0:arm64.
+#8 61.58 Preparing to unpack .../176-libwayland-server0_1.23.1-3_arm64.deb ...
+#8 61.58 Unpacking libwayland-server0:arm64 (1.23.1-3) ...
+#8 61.60 Selecting previously unselected package libgbm1:arm64.
+#8 61.60 Preparing to unpack .../177-libgbm1_25.0.7-2+deb13u1_arm64.deb ...
+#8 61.60 Unpacking libgbm1:arm64 (25.0.7-2+deb13u1) ...
+#8 61.62 Selecting previously unselected package libgl1-mesa-dri:arm64.
+#8 61.62 Preparing to unpack .../178-libgl1-mesa-dri_25.0.7-2+deb13u1_arm64.deb ...
+#8 61.62 Unpacking libgl1-mesa-dri:arm64 (25.0.7-2+deb13u1) ...
+#8 61.64 Selecting previously unselected package libglx-mesa0:arm64.
+#8 61.64 Preparing to unpack .../179-libglx-mesa0_25.0.7-2+deb13u1_arm64.deb ...
+#8 61.64 Unpacking libglx-mesa0:arm64 (25.0.7-2+deb13u1) ...
+#8 61.66 Selecting previously unselected package libglx0:arm64.
+#8 61.66 Preparing to unpack .../180-libglx0_1.7.0-1+b2_arm64.deb ...
+#8 61.66 Unpacking libglx0:arm64 (1.7.0-1+b2) ...
+#8 61.67 Selecting previously unselected package libgl1:arm64.
+#8 61.67 Preparing to unpack .../181-libgl1_1.7.0-1+b2_arm64.deb ...
+#8 61.68 Unpacking libgl1:arm64 (1.7.0-1+b2) ...
+#8 61.69 Selecting previously unselected package libiec61883-0:arm64.
+#8 61.70 Preparing to unpack .../182-libiec61883-0_1.2.0-7_arm64.deb ...
+#8 61.70 Unpacking libiec61883-0:arm64 (1.2.0-7) ...
+#8 61.71 Selecting previously unselected package libjack-jackd2-0:arm64.
+#8 61.71 Preparing to unpack .../183-libjack-jackd2-0_1.9.22~dfsg-4_arm64.deb ...
+#8 61.71 Unpacking libjack-jackd2-0:arm64 (1.9.22~dfsg-4) ...
+#8 61.73 Selecting previously unselected package libopenal-data.
+#8 61.73 Preparing to unpack .../184-libopenal-data_1%3a1.24.2-1_all.deb ...
+#8 61.74 Unpacking libopenal-data (1:1.24.2-1) ...
+#8 61.75 Selecting previously unselected package libopenal1:arm64.
+#8 61.75 Preparing to unpack .../185-libopenal1_1%3a1.24.2-1_arm64.deb ...
+#8 61.76 Unpacking libopenal1:arm64 (1:1.24.2-1) ...
+#8 61.79 Selecting previously unselected package libwayland-client0:arm64.
+#8 61.79 Preparing to unpack .../186-libwayland-client0_1.23.1-3_arm64.deb ...
+#8 61.80 Unpacking libwayland-client0:arm64 (1.23.1-3) ...
+#8 61.81 Selecting previously unselected package libdecor-0-0:arm64.
+#8 61.81 Preparing to unpack .../187-libdecor-0-0_0.2.2-2_arm64.deb ...
+#8 61.81 Unpacking libdecor-0-0:arm64 (0.2.2-2) ...
+#8 61.82 Selecting previously unselected package libwayland-cursor0:arm64.
+#8 61.82 Preparing to unpack .../188-libwayland-cursor0_1.23.1-3_arm64.deb ...
+#8 61.83 Unpacking libwayland-cursor0:arm64 (1.23.1-3) ...
+#8 61.84 Selecting previously unselected package libwayland-egl1:arm64.
+#8 61.84 Preparing to unpack .../189-libwayland-egl1_1.23.1-3_arm64.deb ...
+#8 61.84 Unpacking libwayland-egl1:arm64 (1.23.1-3) ...
+#8 61.85 Selecting previously unselected package libxcursor1:arm64.
+#8 61.85 Preparing to unpack .../190-libxcursor1_1%3a1.2.3-1_arm64.deb ...
+#8 61.85 Unpacking libxcursor1:arm64 (1:1.2.3-1) ...
+#8 61.87 Selecting previously unselected package libxi6:arm64.
+#8 61.87 Preparing to unpack .../191-libxi6_2%3a1.8.2-1_arm64.deb ...
+#8 61.87 Unpacking libxi6:arm64 (2:1.8.2-1) ...
+#8 61.89 Selecting previously unselected package xkb-data.
+#8 61.89 Preparing to unpack .../192-xkb-data_2.42-1_all.deb ...
+#8 61.89 Unpacking xkb-data (2.42-1) ...
+#8 61.94 Selecting previously unselected package libxkbcommon0:arm64.
+#8 61.94 Preparing to unpack .../193-libxkbcommon0_1.7.0-2_arm64.deb ...
+#8 61.95 Unpacking libxkbcommon0:arm64 (1.7.0-2) ...
+#8 61.97 Selecting previously unselected package libxrandr2:arm64.
+#8 61.97 Preparing to unpack .../194-libxrandr2_2%3a1.5.4-1+b3_arm64.deb ...
+#8 61.97 Unpacking libxrandr2:arm64 (2:1.5.4-1+b3) ...
+#8 61.99 Selecting previously unselected package x11-common.
+#8 61.99 Preparing to unpack .../195-x11-common_1%3a7.7+24+deb13u1_all.deb ...
+#8 61.99 Unpacking x11-common (1:7.7+24+deb13u1) ...
+#8 62.01 Selecting previously unselected package libxss1:arm64.
+#8 62.01 Preparing to unpack .../196-libxss1_1%3a1.2.3-1+b3_arm64.deb ...
+#8 62.01 Unpacking libxss1:arm64 (1:1.2.3-1+b3) ...
+#8 62.03 Selecting previously unselected package libsdl2-2.0-0:arm64.
+#8 62.03 Preparing to unpack .../197-libsdl2-2.0-0_2.32.4+dfsg-1_arm64.deb ...
+#8 62.03 Unpacking libsdl2-2.0-0:arm64 (2.32.4+dfsg-1) ...
+#8 62.07 Selecting previously unselected package libxcb-shape0:arm64.
+#8 62.07 Preparing to unpack .../198-libxcb-shape0_1.17.0-2+b1_arm64.deb ...
+#8 62.07 Unpacking libxcb-shape0:arm64 (1.17.0-2+b1) ...
+#8 62.09 Selecting previously unselected package libxv1:arm64.
+#8 62.09 Preparing to unpack .../199-libxv1_2%3a1.0.11-1.1+b3_arm64.deb ...
+#8 62.09 Unpacking libxv1:arm64 (2:1.0.11-1.1+b3) ...
+#8 62.10 Selecting previously unselected package libavdevice61:arm64.
+#8 62.10 Preparing to unpack .../200-libavdevice61_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 62.11 Unpacking libavdevice61:arm64 (7:7.1.5-0+deb13u1) ...
+#8 62.12 Selecting previously unselected package ffmpeg.
+#8 62.12 Preparing to unpack .../201-ffmpeg_7%3a7.1.5-0+deb13u1_arm64.deb ...
+#8 62.12 Unpacking ffmpeg (7:7.1.5-0+deb13u1) ...
+#8 62.20 Setting up libgme0:arm64 (0.6.3-7+b2) ...
+#8 62.20 Setting up libchromaprint1:arm64 (1.5.1-7) ...
+#8 62.21 Setting up libhwy1t64:arm64 (1.2.0-2+b2) ...
+#8 62.21 Setting up libexpat1:arm64 (2.7.1-2) ...
+#8 62.22 Setting up libgraphite2-3:arm64 (1.3.14-2+deb13u1) ...
+#8 62.22 Setting up liblcms2-2:arm64 (2.16-2+deb13u2) ...
+#8 62.23 Setting up libpixman-1-0:arm64 (0.44.0-3) ...
+#8 62.23 Setting up libdvdread8t64:arm64 (6.1.3-2) ...
+#8 62.23 Setting up libudfread0:arm64 (1.1.2-1+b2) ...
+#8 62.24 Setting up libnorm1t64:arm64 (1.5.9+dfsg-3.1+b2) ...
+#8 62.24 Setting up libsharpyuv0:arm64 (1.5.0-0.1) ...
+#8 62.24 Setting up libwayland-server0:arm64 (1.23.1-3) ...
+#8 62.25 Setting up libaom3:arm64 (3.12.1-1) ...
+#8 62.25 Setting up librabbitmq4:arm64 (0.15.0-1+deb13u1) ...
+#8 62.25 Setting up libxau6:arm64 (1:1.0.11-1) ...
+#8 62.26 Setting up libxdmcp6:arm64 (1:1.1.5-1) ...
+#8 62.26 Setting up libraw1394-11:arm64 (2.1.2-2+b2) ...
+#8 62.27 Setting up libkeyutils1:arm64 (1.6.3-6) ...
+#8 62.27 Setting up libxcb1:arm64 (1.17.0-2+b1) ...
+#8 62.28 Setting up libsodium23:arm64 (1.0.18-1+deb13u1) ...
+#8 62.28 Setting up libxcb-xfixes0:arm64 (1.17.0-2+b1) ...
+#8 62.28 Setting up libogg0:arm64 (1.3.5-3+b2) ...
+#8 62.29 Setting up liblerc4:arm64 (4.0.0+ds-5) ...
+#8 62.29 Setting up libspeex1:arm64 (1.2.1-3) ...
+#8 62.29 Setting up libshine3:arm64 (3.1.1-2+b2) ...
+#8 62.30 Setting up libx264-164:arm64 (2:0.164.3108+git31e19f9-2+b1) ...
+#8 62.30 Setting up libtwolame0:arm64 (0.4.0-2+b2) ...
+#8 62.30 Setting up libdatrie1:arm64 (0.2.13-3+b1) ...
+#8 62.31 Setting up libgsm1:arm64 (1.0.22-1+b2) ...
+#8 62.31 Setting up libxcb-render0:arm64 (1.17.0-2+b1) ...
+#8 62.32 Setting up libzix-0-0:arm64 (0.6.2-1) ...
+#8 62.32 Setting up libglvnd0:arm64 (1.7.0-1+b2) ...
+#8 62.32 Setting up libcodec2-1.2:arm64 (1.2.0-3) ...
+#8 62.33 Setting up libxcb-glx0:arm64 (1.17.0-2+b1) ...
+#8 62.33 Setting up libbrotli1:arm64 (1.1.0-2+b7) ...
+#8 62.33 Setting up libedit2:arm64 (3.1-20250104-1) ...
+#8 62.34 Setting up libgdk-pixbuf2.0-common (2.42.12+dfsg-4+deb13u1) ...
+#8 62.34 Setting up libmysofa1:arm64 (1.3.3+dfsg-1) ...
+#8 62.34 Setting up libxcb-shape0:arm64 (1.17.0-2+b1) ...
+#8 62.35 Setting up x11-common (1:7.7+24+deb13u1) ...
+#8 62.40 debconf: unable to initialize frontend: Dialog
+#8 62.40 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#8 62.40 debconf: falling back to frontend: Readline
+#8 62.40 debconf: unable to initialize frontend: Readline
+#8 62.40 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/aarch64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/aarch64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/aarch64-linux-gnu/perl-base /usr/lib/aarch64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+#8 62.40 debconf: falling back to frontend: Teletype
+#8 62.40 debconf: unable to initialize frontend: Teletype
+#8 62.40 debconf: (This frontend requires a controlling tty.)
+#8 62.40 debconf: falling back to frontend: Noninteractive
+#8 62.40 invoke-rc.d: could not determine current runlevel
+#8 62.41 invoke-rc.d: policy-rc.d denied execution of start.
+#8 62.41 Setting up libsensors-config (1:3.6.2-2) ...
+#8 62.41 Setting up libcdio19t64:arm64 (2.2.0-4.1~deb13u1) ...
+#8 62.42 Setting up libdeflate0:arm64 (1.23-2) ...
+#8 62.42 Setting up xkb-data (2.42-1) ...
+#8 62.43 Setting up libxcb-shm0:arm64 (1.17.0-2+b1) ...
+#8 62.43 Setting up libcom-err2:arm64 (1.47.2-3+b11) ...
+#8 62.43 Setting up libmpg123-0t64:arm64 (1.32.10-1+deb13u1) ...
+#8 62.44 Setting up libgomp1:arm64 (14.2.0-19) ...
+#8 62.44 Setting up libcjson1:arm64 (1.7.18-3.1+deb13u1) ...
+#8 62.44 Setting up libxvidcore4:arm64 (2:1.3.7-1+b2) ...
+#8 62.45 Setting up libjbig0:arm64 (2.1-6.1+b2) ...
+#8 62.45 Setting up libelf1t64:arm64 (0.192-4) ...
+#8 62.45 Setting up libsnappy1v5:arm64 (1.2.2-1) ...
+#8 62.46 Setting up libcdio-cdda2t64:arm64 (10.2+2.0.2-1+b1) ...
+#8 62.46 Setting up libkrb5support0:arm64 (1.21.3-5+deb13u1) ...
+#8 62.47 Setting up libxcb-present0:arm64 (1.17.0-2+b1) ...
+#8 62.47 Setting up libasound2-data (1.2.14-1) ...
+#8 62.47 Setting up libpgm-5.3-0t64:arm64 (5.3.128~dfsg-2.1+b1) ...
+#8 62.48 Setting up libtheoraenc1:arm64 (1.2.0~alpha1+dfsg-6) ...
+#8 62.48 Setting up libz3-4:arm64 (4.13.3-1) ...
+#8 62.48 Setting up libblas3:arm64 (3.12.1-6) ...
+#8 62.49 update-alternatives: using /usr/lib/aarch64-linux-gnu/blas/libblas.so.3 to provide /usr/lib/aarch64-linux-gnu/libblas.so.3 (libblas.so.3-aarch64-linux-gnu) in auto mode
+#8 62.49 Setting up libasound2t64:arm64 (1.2.14-1) ...
+#8 62.50 Setting up libjpeg62-turbo:arm64 (1:2.1.5-4) ...
+#8 62.50 Setting up libslang2:arm64 (2.3.3-5+b2) ...
+#8 62.50 Setting up libva2:arm64 (2.22.0-3) ...
+#8 62.51 Setting up libx11-data (2:1.8.12-1) ...
+#8 62.51 Setting up libsvtav1enc2:arm64 (2.3.0+dfsg-1) ...
+#8 62.51 Setting up libxcb-sync1:arm64 (1.17.0-2+b1) ...
+#8 62.52 Setting up libdbus-1-3:arm64 (1.16.2-2) ...
+#8 62.52 Setting up libfribidi0:arm64 (1.0.16-1) ...
+#8 62.52 Setting up libopus0:arm64 (1.5.2-2) ...
+#8 62.53 Setting up libp11-kit0:arm64 (0.25.5-3) ...
+#8 62.53 Setting up libcdio-paranoia2t64:arm64 (10.2+2.0.2-1+b1) ...
+#8 62.53 Setting up libunistring5:arm64 (1.3-2) ...
+#8 62.54 Setting up fonts-dejavu-mono (2.37-8) ...
+#8 62.55 Setting up libpng16-16t64:arm64 (1.6.48-1+deb13u5) ...
+#8 62.55 Setting up libatomic1:arm64 (14.2.0-19) ...
+#8 62.56 Setting up libvorbis0a:arm64 (1.3.7-3) ...
+#8 62.56 Setting up fonts-dejavu-core (2.37-8) ...
+#8 62.58 Setting up libflac14:arm64 (1.5.0+ds-2) ...
+#8 62.59 Setting up libsensors5:arm64 (1:3.6.2-2) ...
+#8 62.59 Setting up libk5crypto3:arm64 (1.21.3-5+deb13u1) ...
+#8 62.59 Setting up libfftw3-double3:arm64 (3.3.10-2+b1) ...
+#8 62.60 Setting up libgfortran5:arm64 (14.2.0-19) ...
+#8 62.60 Setting up libvulkan1:arm64 (1.4.309.0-1) ...
+#8 62.60 Setting up libwebp7:arm64 (1.5.0-0.1) ...
+#8 62.61 Setting up libnuma1:arm64 (2.0.19-1) ...
+#8 62.61 Setting up libvidstab1.1:arm64 (1.1.0-2+b2) ...
+#8 62.61 Setting up libvpx9:arm64 (1.15.0-2.1+deb13u1) ...
+#8 62.62 Setting up libflite1:arm64 (2.2-7) ...
+#8 62.62 Setting up libdav1d7:arm64 (1.5.1-1) ...
+#8 62.62 Setting up ocl-icd-libopencl1:arm64 (2.3.3-1) ...
+#8 62.63 Setting up libasyncns0:arm64 (0.8-6+b5) ...
+#8 62.63 Setting up libxshmfence1:arm64 (1.3.3-1) ...
+#8 62.63 Setting up libtiff6:arm64 (4.7.0-3+deb13u3) ...
+#8 62.64 Setting up libbs2b0:arm64 (3.1.0+dfsg-8+b1) ...
+#8 62.64 Setting up libxcb-randr0:arm64 (1.17.0-2+b1) ...
+#8 62.64 Setting up librav1e0.7:arm64 (0.7.1-9+b2) ...
+#8 62.65 Setting up libtasn1-6:arm64 (4.20.0-2+deb13u1) ...
+#8 62.65 Setting up libzimg2:arm64 (3.0.5+ds1-1+b2) ...
+#8 62.66 Setting up libopenjp2-7:arm64 (2.5.3-2.1~deb13u2) ...
+#8 62.66 Setting up libx11-6:arm64 (2:1.8.12-1) ...
+#8 62.66 Setting up libopenal-data (1:1.24.2-1) ...
+#8 62.67 Setting up libthai-data (0.1.29-2) ...
+#8 62.67 Setting up libkrb5-3:arm64 (1.21.3-5+deb13u1) ...
+#8 62.68 Setting up libunibreak6:arm64 (6.1-3) ...
+#8 62.68 Setting up libwayland-egl1:arm64 (1.23.1-3) ...
+#8 62.68 Setting up libusb-1.0-0:arm64 (2:1.0.28-1) ...
+#8 62.69 Setting up libmbedcrypto16:arm64 (3.6.5-0.1~deb13u1) ...
+#8 62.69 Setting up libx265-215:arm64 (4.1-2) ...
+#8 62.69 Setting up libsamplerate0:arm64 (0.2.2-4+b2) ...
+#8 62.70 Setting up libwebpmux3:arm64 (1.5.0-0.1) ...
+#8 62.70 Setting up libdrm-common (2.4.124-2) ...
+#8 62.71 Setting up libjxl0.11:arm64 (0.11.2-0.1~deb13u2) ...
+#8 62.71 Setting up libxml2:arm64 (2.12.7+dfsg+really2.9.14-2.1+deb13u3) ...
+#8 62.71 Setting up libzvbi-common (0.2.44-1) ...
+#8 62.72 Setting up libmp3lame0:arm64 (3.100-6+b3) ...
+#8 62.72 Setting up libvorbisenc2:arm64 (1.3.7-3) ...
+#8 62.72 Setting up libdvdnav4:arm64 (6.1.1-3+b1) ...
+#8 62.73 Setting up libiec61883-0:arm64 (1.2.0-7) ...
+#8 62.73 Setting up libserd-0-0:arm64 (0.32.4-1) ...
+#8 62.74 Setting up libxkbcommon0:arm64 (1.7.0-2) ...
+#8 62.74 Setting up libwayland-client0:arm64 (1.23.1-3) ...
+#8 62.74 Setting up libavc1394-0:arm64 (0.5.4-5+b2) ...
+#8 62.75 Setting up libxcb-dri3-0:arm64 (1.17.0-2+b1) ...
+#8 62.75 Setting up libllvm19:arm64 (1:19.1.7-3+b1) ...
+#8 62.75 Setting up libx11-xcb1:arm64 (2:1.8.12-1) ...
+#8 62.76 Setting up liblapack3:arm64 (3.12.1-6) ...
+#8 62.76 update-alternatives: using /usr/lib/aarch64-linux-gnu/lapack/liblapack.so.3 to provide /usr/lib/aarch64-linux-gnu/liblapack.so.3 (liblapack.so.3-aarch64-linux-gnu) in auto mode
+#8 62.77 Setting up libcaca0:arm64 (0.99.beta20-5+deb13u1) ...
+#8 62.77 Setting up libzvbi0t64:arm64 (0.2.44-1) ...
+#8 62.78 Setting up libxrender1:arm64 (1:0.9.12-1) ...
+#8 62.78 Setting up libsoxr0:arm64 (0.1.3-4+b2) ...
+#8 62.79 Setting up fontconfig-config (2.15.0-2.3) ...
+#8 62.82 debconf: unable to initialize frontend: Dialog
+#8 62.82 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#8 62.82 debconf: falling back to frontend: Readline
+#8 62.82 debconf: unable to initialize frontend: Readline
+#8 62.82 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/aarch64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/aarch64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/aarch64-linux-gnu/perl-base /usr/lib/aarch64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+#8 62.82 debconf: falling back to frontend: Teletype
+#8 62.82 debconf: unable to initialize frontend: Teletype
+#8 62.82 debconf: (This frontend requires a controlling tty.)
+#8 62.82 debconf: falling back to frontend: Noninteractive
+#8 62.84 Setting up libxext6:arm64 (2:1.3.4-1+b3) ...
+#8 62.84 Setting up libidn2-0:arm64 (2.3.8-2) ...
+#8 62.85 Setting up libopenal1:arm64 (1:1.24.2-1) ...
+#8 62.85 Setting up libxxf86vm1:arm64 (1:1.1.4-1+b4) ...
+#8 62.86 Setting up librist4:arm64 (0.2.11+dfsg-1) ...
+#8 62.86 Setting up libthai0:arm64 (0.1.29-2+b1) ...
+#8 62.86 Setting up libvorbisfile3:arm64 (1.3.7-3) ...
+#8 62.87 Setting up libglib2.0-0t64:arm64 (2.84.4-3~deb13u3) ...
+#8 62.87 No schema files found: doing nothing.
+#8 62.87 Setting up libfreetype6:arm64 (2.13.3+dfsg-1+deb13u1) ...
+#8 62.88 Setting up libxfixes3:arm64 (1:6.0.0-2+b4) ...
+#8 62.88 Setting up shared-mime-info (2.4-5+b2) ...
+#8 63.58 Setting up libplacebo349:arm64 (7.349.0-3) ...
+#8 63.58 Setting up libdc1394-25:arm64 (2.2.6-5) ...
+#8 63.58 Setting up libxv1:arm64 (2:1.0.11-1.1+b3) ...
+#8 63.59 Setting up libgssapi-krb5-2:arm64 (1.21.3-5+deb13u1) ...
+#8 63.59 Setting up libxrandr2:arm64 (2:1.5.4-1+b3) ...
+#8 63.60 Setting up libssh-4:arm64 (0.11.2-1+deb13u1) ...
+#8 63.60 Setting up librubberband2:arm64 (3.3.0+dfsg-2+b3) ...
+#8 63.60 Setting up libjack-jackd2-0:arm64 (1.9.22~dfsg-4) ...
+#8 63.60 Setting up libdrm2:arm64 (2.4.124-2) ...
+#8 63.61 Setting up libva-drm2:arm64 (2.22.0-3) ...
+#8 63.61 Setting up libvdpau1:arm64 (1.5-3+b1) ...
+#8 63.62 Setting up libsord-0-0:arm64 (0.16.18-1) ...
+#8 63.62 Setting up libwayland-cursor0:arm64 (1.23.1-3) ...
+#8 63.63 Setting up libsratom-0-0:arm64 (0.6.18-1) ...
+#8 63.63 Setting up libdecor-0-0:arm64 (0.2.2-2) ...
+#8 63.63 Setting up libharfbuzz0b:arm64 (10.2.0-1+deb13u1) ...
+#8 63.64 Setting up libgdk-pixbuf-2.0-0:arm64 (2.42.12+dfsg-4+deb13u1) ...
+#8 63.65 Setting up libxss1:arm64 (1:1.2.3-1+b3) ...
+#8 63.65 Setting up libfontconfig1:arm64 (2.15.0-2.3) ...
+#8 63.65 Setting up libsndfile1:arm64 (1.2.2-2+deb13u1) ...
+#8 63.66 Setting up libbluray2:arm64 (1:1.3.4-1+b2) ...
+#8 63.66 Setting up libva-x11-2:arm64 (2.22.0-3) ...
+#8 63.66 Setting up liblilv-0-0:arm64 (0.24.26-1) ...
+#8 63.67 Setting up libopenmpt0t64:arm64 (0.7.13-1+b1) ...
+#8 63.67 Setting up libdrm-amdgpu1:arm64 (2.4.124-2) ...
+#8 63.67 Setting up libgnutls30t64:arm64 (3.8.9-3+deb13u4) ...
+#8 63.68 Setting up mesa-libgallium:arm64 (25.0.7-2+deb13u1) ...
+#8 63.68 Setting up fontconfig (2.15.0-2.3) ...
+#8 63.68 Regenerating fonts cache... done.
+#8 65.71 Setting up libzmq5:arm64 (4.3.5-1+b3) ...
+#8 65.72 Setting up libxi6:arm64 (2:1.8.2-1) ...
+#8 65.73 Setting up libgbm1:arm64 (25.0.7-2+deb13u1) ...
+#8 65.73 Setting up libpulse0:arm64 (17.0+dfsg1-2+b1) ...
+#8 65.74 Setting up libxcursor1:arm64 (1:1.2.3-1) ...
+#8 65.74 Setting up libpango-1.0-0:arm64 (1.56.3-1) ...
+#8 65.75 Setting up libgl1-mesa-dri:arm64 (25.0.7-2+deb13u1) ...
+#8 65.75 Setting up libavutil59:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.76 Setting up libcairo2:arm64 (1.18.4-1+b1) ...
+#8 65.76 Setting up libpostproc58:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.76 Setting up libsphinxbase3t64:arm64 (0.8+5prealpha+1-21+b1) ...
+#8 65.77 Setting up libswresample5:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.77 Setting up libswscale8:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.78 Setting up libass9:arm64 (1:0.17.3-1+deb13u1) ...
+#8 65.78 Setting up libtheoradec1:arm64 (1.2.0~alpha1+dfsg-6) ...
+#8 65.78 Setting up libsrt1.5-gnutls:arm64 (1.5.4-1) ...
+#8 65.79 Setting up libcairo-gobject2:arm64 (1.18.4-1+b1) ...
+#8 65.79 Setting up libpangoft2-1.0-0:arm64 (1.56.3-1) ...
+#8 65.79 Setting up libsdl2-2.0-0:arm64 (2.32.4+dfsg-1) ...
+#8 65.79 Setting up libpangocairo-1.0-0:arm64 (1.56.3-1) ...
+#8 65.80 Setting up libglx-mesa0:arm64 (25.0.7-2+deb13u1) ...
+#8 65.80 Setting up libglx0:arm64 (1.7.0-1+b2) ...
+#8 65.80 Setting up librsvg2-2:arm64 (2.60.0+dfsg-1) ...
+#8 65.81 Setting up libpocketsphinx3:arm64 (0.8+5prealpha+1-15+b4) ...
+#8 65.81 Setting up libgl1:arm64 (1.7.0-1+b2) ...
+#8 65.81 Setting up libavcodec61:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.82 Setting up libavformat61:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.82 Setting up libavfilter10:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.82 Setting up libavdevice61:arm64 (7:7.1.5-0+deb13u1) ...
+#8 65.83 Setting up ffmpeg (7:7.1.5-0+deb13u1) ...
+#8 65.83 Processing triggers for libc-bin (2.41-12+deb13u3) ...
+#8 DONE 66.1s
+
+#9 [4/7] COPY requirements.txt ./
+#9 DONE 0.0s
+
+#10 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+#10 1.092 Collecting Flask<4.0,>=3.0 (from -r requirements.txt (line 1))
+#10 1.257   Downloading flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
+#10 1.444 Collecting opencv-python-headless<5,>=4.10 (from -r requirements.txt (line 2))
+#10 1.486   Downloading opencv_python_headless-4.13.0.92-cp37-abi3-manylinux_2_28_aarch64.whl.metadata (19 kB)
+#10 1.533 Collecting paho-mqtt<3,>=2 (from -r requirements.txt (line 3))
+#10 1.571   Downloading paho_mqtt-2.1.0-py3-none-any.whl.metadata (23 kB)
+#10 1.632 Collecting pymemcache<5,>=4 (from -r requirements.txt (line 4))
+#10 1.668   Downloading pymemcache-4.0.0-py2.py3-none-any.whl.metadata (14 kB)
+#10 1.713 Collecting qrcode<8.0,>=7.4 (from qrcode[pil]<8.0,>=7.4->-r requirements.txt (line 5))
+#10 1.754   Downloading qrcode-7.4.2-py3-none-any.whl.metadata (17 kB)
+#10 1.874 Collecting blinker>=1.9.0 (from Flask<4.0,>=3.0->-r requirements.txt (line 1))
+#10 1.907   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#10 1.947 Collecting click>=8.1.3 (from Flask<4.0,>=3.0->-r requirements.txt (line 1))
+#10 1.985   Downloading click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#10 2.014 Collecting itsdangerous>=2.2.0 (from Flask<4.0,>=3.0->-r requirements.txt (line 1))
+#10 2.049   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#10 2.089 Collecting jinja2>=3.1.2 (from Flask<4.0,>=3.0->-r requirements.txt (line 1))
+#10 2.120   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#10 2.185 Collecting markupsafe>=2.1.1 (from Flask<4.0,>=3.0->-r requirements.txt (line 1))
+#10 2.217   Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#10 2.265 Collecting werkzeug>=3.1.0 (from Flask<4.0,>=3.0->-r requirements.txt (line 1))
+#10 2.298   Downloading werkzeug-3.1.8-py3-none-any.whl.metadata (4.0 kB)
+#10 2.560 Collecting numpy>=2 (from opencv-python-headless<5,>=4.10->-r requirements.txt (line 2))
+#10 2.599   Downloading numpy-2.5.1-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#10 2.645 Collecting typing-extensions (from qrcode<8.0,>=7.4->qrcode[pil]<8.0,>=7.4->-r requirements.txt (line 5))
+#10 2.707   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#10 2.755 Collecting pypng (from qrcode<8.0,>=7.4->qrcode[pil]<8.0,>=7.4->-r requirements.txt (line 5))
+#10 2.810   Downloading pypng-0.20220715.0-py3-none-any.whl.metadata (13 kB)
+#10 2.991 Collecting pillow>=9.1.0 (from qrcode[pil]<8.0,>=7.4->-r requirements.txt (line 5))
+#10 3.040   Downloading pillow-12.3.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#10 3.082 Downloading flask-3.1.3-py3-none-any.whl (103 kB)
+#10 3.164 Downloading opencv_python_headless-4.13.0.92-cp37-abi3-manylinux_2_28_aarch64.whl (35.0 MB)
+#10 15.71    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.0/35.0 MB 2.8 MB/s  0:00:12
+#10 15.75 Downloading paho_mqtt-2.1.0-py3-none-any.whl (67 kB)
+#10 15.79 Downloading pymemcache-4.0.0-py2.py3-none-any.whl (60 kB)
+#10 15.83 Downloading qrcode-7.4.2-py3-none-any.whl (46 kB)
+#10 15.87 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#10 15.90 Downloading click-8.4.2-py3-none-any.whl (119 kB)
+#10 16.02 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#10 16.06 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#10 16.13 Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (24 kB)
+#10 16.18 Downloading numpy-2.5.1-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (15.2 MB)
+#10 20.61    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.2/15.2 MB 3.4 MB/s  0:00:04
+#10 20.65 Downloading pillow-12.3.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.3 MB)
+#10 23.57    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 2.2 MB/s  0:00:02
+#10 23.60 Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
+#10 23.71 Downloading pypng-0.20220715.0-py3-none-any.whl (58 kB)
+#10 23.76 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#10 23.83 Installing collected packages: pypng, typing-extensions, pymemcache, pillow, paho-mqtt, numpy, markupsafe, itsdangerous, click, blinker, werkzeug, qrcode, opencv-python-headless, jinja2, Flask
+#10 25.64 
+#10 25.64 Successfully installed Flask-3.1.3 blinker-1.9.0 click-8.4.2 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.3 numpy-2.5.1 opencv-python-headless-4.13.0.92 paho-mqtt-2.1.0 pillow-12.3.0 pymemcache-4.0.0 pypng-0.20220715.0 qrcode-7.4.2 typing-extensions-4.16.0 werkzeug-3.1.8
+#10 25.64 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#10 DONE 25.8s
+
+#11 [6/7] COPY . ./
+#11 DONE 0.0s
+
+#12 [7/7] RUN chmod +x scripts/docker-entrypoint.sh
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 7.7s done
+#13 exporting manifest sha256:7c3ea00eb9c3f6a95e5a74dd4725a630ca99e74933841a78c12463c92e2d8bdc
+#13 exporting manifest sha256:7c3ea00eb9c3f6a95e5a74dd4725a630ca99e74933841a78c12463c92e2d8bdc done
+#13 exporting config sha256:48f1597bd0dbe589739dc4d1523582b87f64f9e2ffdea02b57945912626ab1fb done
+#13 exporting attestation manifest sha256:ec20c91cd4c352a79a4d9f9b918b647f215d67edf07cc2d2e65363efc2b6767b done
+#13 exporting manifest list sha256:4ca47d1a419d0db6a19fecc53836805e7534f740117d5ad70ecdc4181fefa7a1 done
+#13 naming to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest 1.9s done
+#13 DONE 9.7s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+ Image przemek-alicia-web-20260710-alicia-web Built 
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token docker compose --project-directory .worktrees/przemek-alicia-web-20260710 run --rm --no-deps --entrypoint python alicia-web -m unittest tests.test_events tests.test_recording_sessions
+
+[stderr]
+ Container przemek-alicia-web-20260710-alicia-web-run-ec75425e6acd Creating 
+ Container przemek-alicia-web-20260710-alicia-web-run-ec75425e6acd Created 
+..........2026-07-26 21:07:07,937 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:07,992 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,046 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+...2026-07-26 21:07:08,167 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,220 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+..2026-07-26 21:07:08,306 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+....2026-07-26 21:07:08,446 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,500 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,539 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+...2026-07-26 21:07:08,653 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+....2026-07-26 21:07:08,811 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+2026-07-26 21:07:08,815 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,865 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,915 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:08,970 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:09,019 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:09,082 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:09,132 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.
+----------------------------------------------------------------------
+Ran 38 tests in 1.678s
+
+OK
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token docker compose --project-directory .worktrees/przemek-alicia-web-20260710 run --rm --no-deps --entrypoint python alicia-web -m unittest discover -s tests
+
+[stderr]
+ Container przemek-alicia-web-20260710-alicia-web-run-892611e024a6 Creating 
+ Container przemek-alicia-web-20260710-alicia-web-run-892611e024a6 Created 
+...........2026-07-26 21:07:48,283 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:48,335 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:48,391 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+...2026-07-26 21:07:48,502 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:48,552 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+..............2026-07-26 21:07:48,984 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+............2026-07-26 21:07:49,375 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+...................................2026-07-26 21:07:50,273 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+....2026-07-26 21:07:50,391 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,433 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,466 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+...2026-07-26 21:07:50,551 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+....2026-07-26 21:07:50,673 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+2026-07-26 21:07:50,678 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,721 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,768 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,812 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,857 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,905 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.2026-07-26 21:07:50,956 WARNING:app:Could not publish recording state for location court-1: [Errno -2] Name or service not known
+.........
+----------------------------------------------------------------------
+Ran 106 tests in 3.320s
+
+OK
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 .worktrees/przemek-alicia-web-20260710/scripts/local-up.sh --build
+#1 [internal] load local bake definitions
+#1 reading from stdin 648B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.13-slim
+#3 DONE 0.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 118B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#5 resolve docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 5.25kB done
+#6 DONE 0.0s
+
+#7 [4/7] COPY requirements.txt ./
+#7 CACHED
+
+#8 [6/7] COPY . ./
+#8 CACHED
+
+#9 [2/7] WORKDIR /app
+#9 CACHED
+
+#10 [3/7] RUN apt-get update     && apt-get install --yes --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+#11 CACHED
+
+#12 [7/7] RUN chmod +x scripts/docker-entrypoint.sh
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:7c3ea00eb9c3f6a95e5a74dd4725a630ca99e74933841a78c12463c92e2d8bdc done
+#13 exporting config sha256:48f1597bd0dbe589739dc4d1523582b87f64f9e2ffdea02b57945912626ab1fb done
+#13 exporting attestation manifest sha256:6b430949793632accd8a162424eddad5452d77426e473a92df25c625b05f7151 done
+#13 exporting manifest list sha256:1780beb1c2c4a72272a42a30fc2bab705c1bf7f970b6dd4d60e60f07060eea33 done
+#13 naming to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 DONE 0.0s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+ Image przemek-alicia-web-20260710-alicia-web Built 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreate 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreated 
+ Container przemek-alicia-web-20260710-memcached-1 Starting 
+ Container przemek-alicia-web-20260710-mosquitto-1 Starting 
+ Container przemek-alicia-web-20260710-mosquitto-1 Started 
+ Container przemek-alicia-web-20260710-memcached-1 Started 
+ Container przemek-alicia-web-20260710-alicia-web-1 Starting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Started 
+ Container przemek-alicia-web-20260710-mosquitto-1 Waiting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Healthy 
+ Container przemek-alicia-web-20260710-mosquitto-1 Healthy 
+ Container przemek-alicia-web-20260710-alicia-web-1 Healthy 
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 .worktrees/przemek-alicia-web-20260710/scripts/local-smoke.sh
+Compose project directory: .worktrees/przemek-alicia-web-20260710/scripts/..
+NAME                                       IMAGE                                    COMMAND                  SERVICE      CREATED          STATUS                    PORTS
+przemek-alicia-web-20260710-alicia-web-1   przemek-alicia-web-20260710-alicia-web   "./scripts/docker-en…"   alicia-web   12 seconds ago   Up 11 seconds (healthy)   127.0.0.1:15050->5050/tcp
+przemek-alicia-web-20260710-memcached-1    memcached:1.6-alpine                     "docker-entrypoint.s…"   memcached    2 weeks ago      Up 11 seconds             11211/tcp
+przemek-alicia-web-20260710-mosquitto-1    eclipse-mosquitto:2                      "/docker-entrypoint.…"   mosquitto    2 weeks ago      Up 11 seconds             127.0.0.1:11883->1883/tcp
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Alicia Web</title>
+  </head>
+  <body>
+    <main>
+      <h1>Alicia Web</h1>
+      <p>is running</p>
+    </main>
+  </body>
+</html>{
+  "created_status": 201,
+  "event": {
+    "device_id": "5f39d52a32673806",
+    "event_id": 21,
+    "shared_clock_nanos": 1785100101834728000,
+    "type": "automation-palm"
+  },
+  "read_status": 200,
+  "retry_status": 200
+}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   330  100   330    0     0   190k      0 --:--:-- --:--:-- --:--:--  322k
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 .worktrees/przemek-hydracam-client-20260710/scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34
+#1 [internal] load local bake definitions
+#1 reading from stdin 648B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.13-slim
+#3 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 118B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#5 resolve docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 5.25kB done
+#6 DONE 0.0s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [4/7] COPY requirements.txt ./
+#8 CACHED
+
+#9 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [6/7] COPY . ./
+#10 CACHED
+
+#11 [3/7] RUN apt-get update     && apt-get install --yes --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+#11 CACHED
+
+#12 [7/7] RUN chmod +x scripts/docker-entrypoint.sh
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:7c3ea00eb9c3f6a95e5a74dd4725a630ca99e74933841a78c12463c92e2d8bdc done
+#13 exporting config sha256:48f1597bd0dbe589739dc4d1523582b87f64f9e2ffdea02b57945912626ab1fb done
+#13 exporting attestation manifest sha256:e990fd6df660c1f758c600786a5aa27aafdb5a697ea0c2de527b57e1ff15885d done
+#13 exporting manifest list sha256:bce2b8bac78ceb4e3612d4ccf350116e19214b22f7fc75f92b206da5cb131b48 done
+#13 naming to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 DONE 0.0s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+ Image przemek-alicia-web-20260710-alicia-web Built 
+ Container przemek-alicia-web-20260710-memcached-1 Running 
+ Container przemek-alicia-web-20260710-mosquitto-1 Running 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreate 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreated 
+ Container przemek-alicia-web-20260710-alicia-web-1 Starting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Started 
+ Container przemek-alicia-web-20260710-memcached-1 Waiting 
+ Container przemek-alicia-web-20260710-mosquitto-1 Waiting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Healthy 
+ Container przemek-alicia-web-20260710-mosquitto-1 Healthy 
+ Container przemek-alicia-web-20260710-alicia-web-1 Healthy 
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Directory '/Users/jose/src/work/hydracamv2' does not contain a Gradle build.
+
+A Gradle build's root directory should contain one of the possible settings files: settings.gradle, settings.gradle.kts, settings.gradle.dcl. It may also contain one of the possible build files: build.gradle, build.gradle.kts, build.gradle.dcl.
+
+To create a new Gradle build in this directory run 'gradlew init'
+
+For more information about the 'init' task, please refer to https://docs.gradle.org/9.4.1/userguide/build_init_plugin.html in the Gradle documentation.
+
+For more details on creating a Gradle build, please refer to https://docs.gradle.org/9.4.1/userguide/tutorial_using_tasks.html in the Gradle documentation.
+
+* Try:
+> Run gradlew init to create a new Gradle build in this directory.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1s
+[exit-code] 1
+
+$ env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34
+
+[stderr]
+env: scripts/local-system-e2e.sh: No such file or directory
+[exit-code] 127
+
+$ /bin/sh -c cd /Users/jose/src/work/hydracamv2/.worktrees/przemek-hydracam-client-20260710 && exec env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34
+#1 [internal] load local bake definitions
+#1 reading from stdin 648B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.13-slim
+#3 DONE 0.9s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 118B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#5 resolve docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 5.25kB done
+#6 DONE 0.0s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [4/7] COPY requirements.txt ./
+#8 CACHED
+
+#9 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [3/7] RUN apt-get update     && apt-get install --yes --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [6/7] COPY . ./
+#11 CACHED
+
+#12 [7/7] RUN chmod +x scripts/docker-entrypoint.sh
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:7c3ea00eb9c3f6a95e5a74dd4725a630ca99e74933841a78c12463c92e2d8bdc done
+#13 exporting config sha256:48f1597bd0dbe589739dc4d1523582b87f64f9e2ffdea02b57945912626ab1fb done
+#13 exporting attestation manifest sha256:4d486cb34cac9e2b9991816a9ac1c4768675ccf97ce31191ef5737f5b7d5a225 done
+#13 exporting manifest list sha256:b554440886f71e0a60aececb76e53d189af21262b7014eb33e10f1a33a26b5cb done
+#13 naming to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 DONE 0.1s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :app:testDebugUnitTest :app:assembleDebug :app:processReleaseMainManifest
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:generateDebugHydracamConfigAssets
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:compressDebugAssets
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:testDebugUnitTest UP-TO-DATE
+> Task :app:packageDebug
+> Task :app:assembleDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+
+BUILD SUCCESSFUL in 6s
+47 actionable tasks: 4 executed, 43 up-to-date
+Configuration cache entry stored.
+Verified debug-only receiver/cleartext configuration and release exclusion.
+Verified detached serial-mapped emulator launcher configuration.
+device
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :app:installDebug
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:generateDebugHydracamConfigAssets UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+
+> Task :app:installDebug
+Installing APK 'app-debug.apk' on 'Hydra_Master_API34(AVD) - 14' for :app:debug
+Installed on 1 device.
+
+BUILD SUCCESSFUL in 7s
+40 actionable tasks: 1 executed, 39 up-to-date
+Configuration cache entry stored.
+Device already registered: 794d0477730abc7c
+794d0477730abc7c
+Starting: Intent { cmp=com.alicia.hydracamclient/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.alicia.hydracamclient/.MainActivity
+TotalTime: 901
+WaitTime: 907
+Complete
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+ Image przemek-alicia-web-20260710-alicia-web Built 
+ Container przemek-alicia-web-20260710-mosquitto-1 Running 
+ Container przemek-alicia-web-20260710-memcached-1 Running 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreate 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreated 
+ Container przemek-alicia-web-20260710-alicia-web-1 Starting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Started 
+ Container przemek-alicia-web-20260710-mosquitto-1 Waiting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Healthy 
+ Container przemek-alicia-web-20260710-mosquitto-1 Healthy 
+ Container przemek-alicia-web-20260710-alicia-web-1 Healthy 
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.109s
+
+OK
+HydraCam did not reach a healthy connected state on emulator-5554.
+[exit-code] 1
+
+$ env API_TOKEN=local-test-token ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 docker compose --project-directory .worktrees/przemek-alicia-web-20260710 run --rm --no-deps --entrypoint python alicia-web -m unittest discover -s tests
+
+[stderr]
+ Container przemek-alicia-web-20260710-alicia-web-run-e1e9f7cefac3 Creating 
+ Container przemek-alicia-web-20260710-alicia-web-run-e1e9f7cefac3 Created 
+...........................................................................................................
+----------------------------------------------------------------------
+Ran 107 tests in 4.086s
+
+OK
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 .worktrees/przemek-alicia-web-20260710/scripts/local-smoke.sh
+Compose project directory: .worktrees/przemek-alicia-web-20260710/scripts/..
+NAME                                       IMAGE                                    COMMAND                  SERVICE      CREATED         STATUS                   PORTS
+przemek-alicia-web-20260710-alicia-web-1   przemek-alicia-web-20260710-alicia-web   "./scripts/docker-en…"   alicia-web   2 minutes ago   Up 2 minutes (healthy)   127.0.0.1:15050->5050/tcp
+przemek-alicia-web-20260710-memcached-1    memcached:1.6-alpine                     "docker-entrypoint.s…"   memcached    2 weeks ago     Up 14 minutes            11211/tcp
+przemek-alicia-web-20260710-mosquitto-1    eclipse-mosquitto:2                      "/docker-entrypoint.…"   mosquitto    2 weeks ago     Up 14 minutes            127.0.0.1:11883->1883/tcp
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Alicia Web</title>
+  </head>
+  <body>
+    <main>
+      <h1>Alicia Web</h1>
+      <p>is running</p>
+    </main>
+  </body>
+</html>{
+  "created_status": 201,
+  "event": {
+    "device_id": "5f39d52a32673806",
+    "event_id": 24,
+    "shared_clock_nanos": 1785100939041820000,
+    "type": "automation-palm"
+  },
+  "read_status": 200,
+  "retry_status": 200
+}
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   330  100   330    0     0   178k      0 --:--:-- --:--:-- --:--:--  322k
+[exit-code] 0
+
+$ /bin/sh -c cd /Users/jose/src/work/hydracamv2/.worktrees/przemek-hydracam-client-20260710 && exec env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34
+#1 [internal] load local bake definitions
+#1 reading from stdin 648B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.13-slim
+#3 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 118B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#5 resolve docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 5.25kB done
+#6 DONE 0.0s
+
+#7 [4/7] COPY requirements.txt ./
+#7 CACHED
+
+#8 [3/7] RUN apt-get update     && apt-get install --yes --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [6/7] COPY . ./
+#10 CACHED
+
+#11 [2/7] WORKDIR /app
+#11 CACHED
+
+#12 [7/7] RUN chmod +x scripts/docker-entrypoint.sh
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:ef29d586315c497ecc668c62de7d8dd551d596edfea1d8bcbca264b44f310c5a done
+#13 exporting config sha256:d62acad3220e29f3e0393aa9f09f478766efc42c75bfa4e945c3cccdae5dd307 done
+#13 exporting attestation manifest sha256:da2d8672dab786bded08651d95cf7fbe6f1363c8c62851a0435f550469ab0aaa 0.0s done
+#13 exporting manifest list sha256:1381161698c313a43621ab6a22b64fe31a47e852646e66ef7991625a08a7829a done
+#13 naming to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 DONE 0.1s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Reusing configuration cache.
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugHydracamConfigAssets UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:assembleDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:testDebugUnitTest UP-TO-DATE
+
+BUILD SUCCESSFUL in 4s
+47 actionable tasks: 47 up-to-date
+Configuration cache entry reused.
+Verified debug-only receiver/cleartext configuration and release exclusion.
+Verified detached serial-mapped emulator launcher configuration.
+device
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Reusing configuration cache.
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:generateDebugHydracamConfigAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+
+> Task :app:installDebug
+Installing APK 'app-debug.apk' on 'Hydra_Master_API34(AVD) - 14' for :app:debug
+Installed on 1 device.
+
+BUILD SUCCESSFUL in 6s
+40 actionable tasks: 1 executed, 39 up-to-date
+Configuration cache entry reused.
+Device already registered: 794d0477730abc7c
+794d0477730abc7c
+Starting: Intent { cmp=com.alicia.hydracamclient/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.alicia.hydracamclient/.MainActivity
+TotalTime: 787
+WaitTime: 789
+Complete
+Broadcasting: Intent { act=com.alicia.hydracamclient.debug.POST_EVENT flg=0x400000 cmp=com.alicia.hydracamclient/.automation.DebugEventReceiver (has extras) }
+Broadcast completed: result=0
+true
+{
+  "status": "verified",
+  "serial": "emulator-5554",
+  "event": {
+    "device_id": "794d0477730abc7c",
+    "event_id": 25,
+    "shared_clock_nanos": 1785100969000011116,
+    "type": "automation-fresh-event"
+  }
+}
+true
+true
+{
+  "status": "verified",
+  "serial": "emulator-5554",
+  "device_id": "794d0477730abc7c",
+  "stream_id": "5bc0d98527f04107b6a6069fb31c7292",
+  "artifact_dir": "/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710/runtime/data/streams/794d0477730abc7c/5bc0d98527f04107b6a6069fb31c7292",
+  "chunks": 5,
+  "video": {
+    "width": 1280,
+    "height": 720,
+    "frameRate": 30,
+    "bitRate": 4444444
+  },
+  "media": {
+    "programs": [
+      {
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 1
+          }
+        ]
+      }
+    ],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 1
+      }
+    ],
+    "format": {
+      "duration": "8.679999"
+    }
+  }
+}
+Verified com.alicia.hydracamclient MainActivity on emulator-5554 with pid 12581
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+ Image przemek-alicia-web-20260710-alicia-web Built 
+ Container przemek-alicia-web-20260710-memcached-1 Running 
+ Container przemek-alicia-web-20260710-mosquitto-1 Running 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreate 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreated 
+ Container przemek-alicia-web-20260710-alicia-web-1 Starting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Started 
+ Container przemek-alicia-web-20260710-alicia-web-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Waiting 
+ Container przemek-alicia-web-20260710-mosquitto-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Healthy 
+ Container przemek-alicia-web-20260710-mosquitto-1 Healthy 
+ Container przemek-alicia-web-20260710-alicia-web-1 Healthy 
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.110s
+
+OK
+[null @ 0x7c500d180] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 50 >= 50
+[null @ 0x7c500d180] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 85 >= 85
+[null @ 0x7c500d180] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 87 >= 87
+[null @ 0x7c500d180] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 164 >= 164
+[null @ 0x7c500d180] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 238 >= 238
+[exit-code] 0
+
+$ /bin/sh -c cd /Users/jose/src/work/hydracamv2/.worktrees/przemek-hydracam-client-20260710 && exec env API_TOKEN=local-test-token ALICIA_BACKEND_DIR=/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710 ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 ALICIA_API_BASE_URL=http://10.0.2.2:15050 ALICIA_VERIFY_BASE_URL=http://127.0.0.1:15050 ALICIA_MQTT_PORT=11883 scripts/local-system-e2e.sh emulator-5554 Hydra_Master_API34
+#1 [internal] load local bake definitions
+#1 reading from stdin 648B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.13-slim
+#3 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 118B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+#5 resolve docker.io/library/python:3.13-slim@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 5.29kB done
+#6 DONE 0.0s
+
+#7 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+#7 CACHED
+
+#8 [2/7] WORKDIR /app
+#8 CACHED
+
+#9 [3/7] RUN apt-get update     && apt-get install --yes --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+#9 CACHED
+
+#10 [6/7] COPY . ./
+#10 CACHED
+
+#11 [4/7] COPY requirements.txt ./
+#11 CACHED
+
+#12 [7/7] RUN chmod +x scripts/docker-entrypoint.sh
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:ba882100e80a9eb4737698ee8986d8d7b4bf3f5c5a74aab57794adde6303c8c4 done
+#13 exporting config sha256:425cda2dbae272a5269ef19887e82429435dcd00e7a3e0401dbf749d166588b0 done
+#13 exporting attestation manifest sha256:72b300ea6a16ad8c9046877e25c634ce7773b1f3e651c07939b0476b7dd70cee 0.0s done
+#13 exporting manifest list sha256:b22995b459f47b17b8f0ee54216306cf7b34d1b33ef2a5dd2cb48b1e5676e657 done
+#13 naming to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 unpacking to docker.io/library/przemek-alicia-web-20260710-alicia-web:latest done
+#13 DONE 0.0s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Reusing configuration cache.
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:generateDebugHydracamConfigAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:assembleDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:testDebugUnitTest UP-TO-DATE
+
+BUILD SUCCESSFUL in 4s
+47 actionable tasks: 47 up-to-date
+Configuration cache entry reused.
+Verified debug-only receiver/cleartext configuration and release exclusion.
+Verified detached serial-mapped emulator launcher configuration.
+device
+Wrote debug configuration for http://10.0.2.2:15050 and mqtt://10.0.2.2:11883
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Reusing configuration cache.
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:generateDebugHydracamConfigAssets UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+
+> Task :app:installDebug
+Installing APK 'app-debug.apk' on 'Hydra_Master_API34(AVD) - 14' for :app:debug
+Installed on 1 device.
+
+BUILD SUCCESSFUL in 6s
+40 actionable tasks: 1 executed, 39 up-to-date
+Configuration cache entry reused.
+Device already registered: 794d0477730abc7c
+794d0477730abc7c
+Starting: Intent { cmp=com.alicia.hydracamclient/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.alicia.hydracamclient/.MainActivity
+TotalTime: 675
+WaitTime: 677
+Complete
+Broadcasting: Intent { act=com.alicia.hydracamclient.debug.POST_EVENT flg=0x400000 cmp=com.alicia.hydracamclient/.automation.DebugEventReceiver (has extras) }
+Broadcast completed: result=0
+true
+{
+  "status": "verified",
+  "serial": "emulator-5554",
+  "event": {
+    "device_id": "794d0477730abc7c",
+    "event_id": 27,
+    "shared_clock_nanos": 1785101492000018753,
+    "type": "automation-fresh-event"
+  }
+}
+true
+true
+{
+  "status": "verified",
+  "serial": "emulator-5554",
+  "device_id": "794d0477730abc7c",
+  "stream_id": "39f3425846de43169bc227701c1e8c2c",
+  "artifact_dir": "/Users/jose/src/work/hydracamv2/.worktrees/przemek-alicia-web-20260710/runtime/data/streams/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c",
+  "chunks": 5,
+  "video": {
+    "width": 1280,
+    "height": 720,
+    "frameRate": 30,
+    "bitRate": 4444444
+  },
+  "media": {
+    "programs": [
+      {
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 1
+          }
+        ]
+      }
+    ],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 1
+      }
+    ],
+    "format": {
+      "duration": "8.667999"
+    }
+  }
+}
+Verified com.alicia.hydracamclient MainActivity on emulator-5554 with pid 14148
+
+[stderr]
+ Image przemek-alicia-web-20260710-alicia-web Building 
+ Image przemek-alicia-web-20260710-alicia-web Built 
+ Container przemek-alicia-web-20260710-memcached-1 Running 
+ Container przemek-alicia-web-20260710-mosquitto-1 Running 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreate 
+ Container przemek-alicia-web-20260710-alicia-web-1 Recreated 
+ Container przemek-alicia-web-20260710-alicia-web-1 Starting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Started 
+ Container przemek-alicia-web-20260710-mosquitto-1 Waiting 
+ Container przemek-alicia-web-20260710-alicia-web-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Waiting 
+ Container przemek-alicia-web-20260710-memcached-1 Healthy 
+ Container przemek-alicia-web-20260710-mosquitto-1 Healthy 
+ Container przemek-alicia-web-20260710-alicia-web-1 Healthy 
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.111s
+
+OK
+[null @ 0x74ccc0f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 232 >= 232
+[null @ 0x74ccc0f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 235 >= 235
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token ALICIA_WEB_PORT=15050 MQTT_HOST_PORT=11883 docker compose --project-directory .worktrees/przemek-alicia-web-20260710 run --rm --no-deps --entrypoint python alicia-web -m unittest discover -s tests
+
+[stderr]
+ Container przemek-alicia-web-20260710-alicia-web-run-f53d3696f207 Creating 
+ Container przemek-alicia-web-20260710-alicia-web-run-f53d3696f207 Created 
+............................................................................................................
+----------------------------------------------------------------------
+Ran 108 tests in 4.547s
+
+OK
+[exit-code] 0
+
+$ docker run --detach --name alicia-web-fresh-evidence-20260726 --publish 127.0.0.1:15051:5050 --env API_TOKEN=local-test-token --env STREAMS_ROOT_DIRECTORY=/data przemek-alicia-web-20260710-alicia-web:latest
+659552da5b2cadc2b983308593e4fd34d1db6793d1e583236406c00ea4cbd0a6
+[exit-code] 0
+
+$ curl --fail --show-error --retry 20 --retry-connrefused --retry-delay 1 --max-time 30 http://127.0.0.1:15051/
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Alicia Web</title>
+  </head>
+  <body>
+    <main>
+      <h1>Alicia Web</h1>
+      <p>is running</p>
+    </main>
+  </body>
+</html>
+
+[stderr]
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   330  100   330    0     0  60406      0 --:--:-- --:--:-- --:--:-- 66000
+[exit-code] 0
+
+$ env API_TOKEN=local-test-token python3 .worktrees/przemek-alicia-web-20260710/scripts/verify_local_event.py 5f39d52a32673806 --base-url http://127.0.0.1:15051
+{
+  "created_status": 201,
+  "event": {
+    "device_id": "5f39d52a32673806",
+    "event_id": 1,
+    "shared_clock_nanos": 1785101579409939000,
+    "type": "automation-palm"
+  },
+  "read_status": 200,
+  "retry_status": 200
+}
+[exit-code] 0

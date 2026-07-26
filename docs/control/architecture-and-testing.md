@@ -103,6 +103,12 @@ mock/integration harness for them:
 - T-015 sports center/court CRUD.
 - T-023 delivery package notification.
 
+The 2026-07-26 Przemek client/Alicia Web integration passed the complete
+108-test server suite, persistent and first-run Compose event smokes, and an
+Android 14 emulator record/upload flow that produced finalized H.264/AAC HLS.
+Evidence:
+`logs/verification-runs/20260726-2302-przemek-server-client-emulator-e2e/`.
+
 ### Acceptance for New Mobile Work
 
 - Create and validate a run-specific evidence pack using

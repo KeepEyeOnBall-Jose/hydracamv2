@@ -1,0 +1,321 @@
+alicia-web-1  | Migrated the database.
+alicia-web-1  |  * Serving Flask app 'run'
+alicia-web-1  |  * Debug mode: off
+mosquitto-1   | 1783705687: Info: running mosquitto as user: mosquitto.
+mosquitto-1   | 1783705687: mosquitto version 2.1.2 starting
+mosquitto-1   | 1783705687: Config loaded from /mosquitto/config/mosquitto.conf.
+alicia-web-1  | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+alicia-web-1  |  * Running on all addresses (0.0.0.0)
+alicia-web-1  |  * Running on http://127.0.0.1:5050
+alicia-web-1  |  * Running on http://172.28.0.4:5050
+alicia-web-1  | [33mPress CTRL+C to quit[0m
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:15] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:16] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:17] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:20] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:22] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:24] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:26] "GET / HTTP/1.1" 200 -
+mosquitto-1   | 1783705687: Bridge support available.
+mosquitto-1   | 1783705687: Persistence support available.
+mosquitto-1   | 1783705687: TLS support available.
+mosquitto-1   | 1783705687: TLS-PSK support available.
+mosquitto-1   | 1783705687: Websockets support available.
+mosquitto-1   | 1783705687: Opening ipv4 listen socket on port 1883.
+mosquitto-1   | 1783705687: Opening ipv6 listen socket on port 1883.
+mosquitto-1   | 1783705687: mosquitto version 2.1.2 running
+mosquitto-1   | 1783705722: New connection from 172.28.0.1:64416 on port 1883.
+mosquitto-1   | 1783705722: New connection from 172.28.0.1:64424 on port 1883.
+mosquitto-1   | 1783705722: New client connected from 172.28.0.1:64424 as hydracam-794d0477730abc7c-bacc7a0f-aca2-4f0e-8d71-5218a62386c6 (p5, c1, k60, u'local').
+mosquitto-1   | 1783705722: New client connected from 172.28.0.1:64416 as hydracam-794d0477730abc7c-20ccbca4-89e9-4189-b8ee-220837d4e682 (p5, c1, k60, u'local').
+mosquitto-1   | 1783705722: Client hydracam-794d0477730abc7c-20ccbca4-89e9-4189-b8ee-220837d4e682 [172.28.0.1:64416] disconnected.
+mosquitto-1   | 1783705727: New connection from 172.28.0.4:60659 on port 1883.
+mosquitto-1   | 1783705727: New client connected from 172.28.0.4:60659 as auto-161A2426-7933-AECB-DADD-F781CCB77027 (p4, c1, k60).
+mosquitto-1   | 1783705727: Client auto-161A2426-7933-AECB-DADD-F781CCB77027 [172.28.0.4:60659] disconnected.
+mosquitto-1   | 1783705747: New connection from 172.28.0.4:42065 on port 1883.
+mosquitto-1   | 1783705747: New client connected from 172.28.0.4:42065 as auto-4E703B96-96E9-DBA4-B064-64B7FD8289C0 (p4, c1, k60).
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:28] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:30] "GET /camera/794d0477730abc7c/is-recording HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:30] "GET /camera/794d0477730abc7c/is-recording HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:31] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:32] "[35m[1mPOST /events HTTP/1.1[0m" 201 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:33] "GET /events/27 HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:33] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:35] "GET /camera/794d0477730abc7c/is-recording HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:35] "[32mPOST /location/local/toggle-recording HTTP/1.1[0m" 302 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:35] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:35] "GET /camera/794d0477730abc7c/is-recording HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:37] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:39] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:40] "POST /streams HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:41] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/init HTTP/1.1[0m" 204 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:41] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:42] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/playlist HTTP/1.1[0m" 204 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:43] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/chunks/0 HTTP/1.1[0m" 204 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:44] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:44] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/playlist HTTP/1.1[0m" 204 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:45] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/chunks/1 HTTP/1.1[0m" 204 -
+mosquitto-1   | 1783705747: Client auto-4E703B96-96E9-DBA4-B064-64B7FD8289C0 [172.28.0.4:42065] disconnected.
+mosquitto-1   | 1783705751: Client hydracam-794d0477730abc7c-bacc7a0f-aca2-4f0e-8d71-5218a62386c6 [172.28.0.1:64424] disconnected: connection closed by client.
+mosquitto-1   | 1785100090: Info: running mosquitto as user: mosquitto.
+mosquitto-1   | 1785100090: mosquitto version 2.1.2 starting
+mosquitto-1   | 1785100090: Config loaded from /mosquitto/config/mosquitto.conf.
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:46] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/chunks/2 HTTP/1.1[0m" 204 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:46] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:47] "[32mPOST /location/local/toggle-recording HTTP/1.1[0m" 302 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:48] "GET /camera/794d0477730abc7c/is-recording HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:48] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/chunks/3 HTTP/1.1[0m" 204 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:48] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:48] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/chunks/4 HTTP/1.1[0m" 204 -
+mosquitto-1   | 1785100090: Bridge support available.
+mosquitto-1   | 1785100090: Persistence support available.
+mosquitto-1   | 1785100090: TLS support available.
+mosquitto-1   | 1785100090: TLS-PSK support available.
+mosquitto-1   | 1785100090: Websockets support available.
+mosquitto-1   | 1785100090: Opening ipv4 listen socket on port 1883.
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:49] "[35m[1mPUT /streams/39f3425846de43169bc227701c1e8c2c/playlist HTTP/1.1[0m" 204 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:50] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "GET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/playlist.m3u8 HTTP/1.1" 200 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/playlist.m3u8 HTTP/1.1[0m" 206 -
+mosquitto-1   | 1785100090: Opening ipv6 listen socket on port 1883.
+mosquitto-1   | 1785100090: mosquitto version 2.1.2 running
+mosquitto-1   | 1785100250: New connection from 172.28.0.1:57968 on port 1883.
+mosquitto-1   | 1785100250: New connection from 172.28.0.1:57984 on port 1883.
+mosquitto-1   | 1785100250: New client connected from 172.28.0.1:57984 as hydracam-794d0477730abc7c-62b011f9-61b0-4c22-b95c-32f3c8cff167 (p5, c1, k60, u'local').
+mosquitto-1   | 1785100250: New client connected from 172.28.0.1:57968 as hydracam-794d0477730abc7c-57c2d9c6-f767-41ea-8748-3346d25d1369 (p5, c1, k60, u'local').
+mosquitto-1   | 1785100251: Client hydracam-794d0477730abc7c-57c2d9c6-f767-41ea-8748-3346d25d1369 [172.28.0.1:57968] disconnected.
+mosquitto-1   | 1785100751: New connection from 172.28.0.5:46245 on port 1883.
+mosquitto-1   | 1785100751: New client connected from 172.28.0.5:46245 as auto-91919311-E7FA-286D-3680-419F5326E5CB (p4, c1, k60).
+mosquitto-1   | 1785100751: Client auto-91919311-E7FA-286D-3680-419F5326E5CB [172.28.0.5:46245] disconnected.
+mosquitto-1   | 1785100751: New connection from 172.28.0.5:47457 on port 1883.
+mosquitto-1   | 1785100751: New client connected from 172.28.0.5:47457 as auto-EE526131-AC43-73AE-E3E8-6ED0D022919E (p4, c1, k60).
+mosquitto-1   | 1785100751: Client auto-EE526131-AC43-73AE-E3E8-6ED0D022919E [172.28.0.5:47457] disconnected.
+mosquitto-1   | 1785100751: New connection from 172.28.0.5:41059 on port 1883.
+mosquitto-1   | 1785100751: New client connected from 172.28.0.5:41059 as auto-D75ED399-4154-25A6-5374-432716E9ADFF (p4, c1, k60).
+mosquitto-1   | 1785100751: Client auto-D75ED399-4154-25A6-5374-432716E9ADFF [172.28.0.5:41059] disconnected.
+mosquitto-1   | 1785100752: New connection from 172.28.0.5:55067 on port 1883.
+mosquitto-1   | 1785100752: New client connected from 172.28.0.5:55067 as auto-42241F68-27C4-27BA-AAE3-36F169422D21 (p4, c1, k60).
+mosquitto-1   | 1785100752: Client auto-42241F68-27C4-27BA-AAE3-36F169422D21 [172.28.0.5:55067] disconnected.
+mosquitto-1   | 1785100752: New connection from 172.28.0.5:35853 on port 1883.
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/init.mp4 HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000000.m4s HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000001.m4s HTTP/1.1[0m" 206 -
+mosquitto-1   | 1785100752: New client connected from 172.28.0.5:35853 as auto-CAD4306B-1C1A-A251-FE44-37F8500F87DE (p4, c1, k60).
+mosquitto-1   | 1785100752: Client auto-CAD4306B-1C1A-A251-FE44-37F8500F87DE [172.28.0.5:35853] disconnected.
+mosquitto-1   | 1785100752: New connection from 172.28.0.5:53059 on port 1883.
+mosquitto-1   | 1785100752: New client connected from 172.28.0.5:53059 as auto-2BBE3DF6-2CF1-E50D-2FD3-BFCAECB0E0EC (p4, c1, k60).
+mosquitto-1   | 1785100752: Client auto-2BBE3DF6-2CF1-E50D-2FD3-BFCAECB0E0EC [172.28.0.5:53059] disconnected.
+mosquitto-1   | 1785100753: New connection from 172.28.0.5:42819 on port 1883.
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/playlist.m3u8 HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/init.mp4 HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000000.m4s HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000001.m4s HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000002.m4s HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000003.m4s HTTP/1.1[0m" 206 -
+alicia-web-1  | 172.28.0.1 - - [26/Jul/2026 21:31:52] "[35m[1mGET /stream-files/794d0477730abc7c/39f3425846de43169bc227701c1e8c2c/794d0477730abc7c-39f3425846de43169bc227701c1e8c2c-00000004.m4s HTTP/1.1[0m" 206 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:52] "GET / HTTP/1.1" 200 -
+mosquitto-1   | 1785100753: New client connected from 172.28.0.5:42819 as auto-6F7C8349-695E-FC62-5A59-89FC5735373A (p4, c1, k60).
+mosquitto-1   | 1785100753: Client auto-6F7C8349-695E-FC62-5A59-89FC5735373A [172.28.0.5:42819] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:43631 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:43631 as auto-210741BC-B527-AB2B-F1A0-F60A6EF9D1B1 (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-210741BC-B527-AB2B-F1A0-F60A6EF9D1B1 [172.28.0.5:43631] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:55691 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:55691 as auto-49D02E09-D75D-9BF7-5427-314EEDE49277 (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-49D02E09-D75D-9BF7-5427-314EEDE49277 [172.28.0.5:55691] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:60695 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:60695 as auto-3A79E8E0-93C2-D692-042E-88E9A7EEFEA8 (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-3A79E8E0-93C2-D692-042E-88E9A7EEFEA8 [172.28.0.5:60695] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:54851 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:54851 as auto-BE2CB0DD-E911-DCB2-B791-EE896FAA1F3A (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-BE2CB0DD-E911-DCB2-B791-EE896FAA1F3A [172.28.0.5:54851] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:37853 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:37853 as auto-A42EFBF1-0B7E-B804-D01C-B4433A57DAEF (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-A42EFBF1-0B7E-B804-D01C-B4433A57DAEF [172.28.0.5:37853] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:39441 on port 1883.
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:55] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:57] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:31:59] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:32:01] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:32:03] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:32:06] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:32:08] "GET / HTTP/1.1" 200 -
+alicia-web-1  | 127.0.0.1 - - [26/Jul/2026 21:32:10] "GET / HTTP/1.1" 200 -
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:39441 as auto-7C2E9311-FB6B-67ED-FB02-C55795371896 (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-7C2E9311-FB6B-67ED-FB02-C55795371896 [172.28.0.5:39441] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:36281 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:36281 as auto-7C445584-DE37-F051-0B20-7DF273180333 (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-7C445584-DE37-F051-0B20-7DF273180333 [172.28.0.5:36281] disconnected.
+mosquitto-1   | 1785100754: New connection from 172.28.0.5:36105 on port 1883.
+mosquitto-1   | 1785100754: New client connected from 172.28.0.5:36105 as auto-DFA71086-3A38-D74F-F3A2-49F2E6E677AF (p4, c1, k60).
+mosquitto-1   | 1785100754: Client auto-DFA71086-3A38-D74F-F3A2-49F2E6E677AF [172.28.0.5:36105] disconnected.
+mosquitto-1   | 1785100755: New connection from 172.28.0.5:59745 on port 1883.
+mosquitto-1   | 1785100755: New client connected from 172.28.0.5:59745 as auto-D49AF69F-F31B-0906-30FC-871164B9CD7A (p4, c1, k60).
+mosquitto-1   | 1785100755: Client auto-D49AF69F-F31B-0906-30FC-871164B9CD7A [172.28.0.5:59745] disconnected.
+mosquitto-1   | 1785100755: New connection from 172.28.0.5:57407 on port 1883.
+mosquitto-1   | 1785100755: New client connected from 172.28.0.5:57407 as auto-2B863726-5093-EDEE-9ACD-C1229EEBDB96 (p4, c1, k60).
+mosquitto-1   | 1785100755: Client auto-2B863726-5093-EDEE-9ACD-C1229EEBDB96 [172.28.0.5:57407] disconnected.
+mosquitto-1   | 1785100755: New connection from 172.28.0.5:54553 on port 1883.
+mosquitto-1   | 1785100755: New client connected from 172.28.0.5:54553 as auto-18BB0CC3-86AC-5A97-DE04-2F4AA5713B35 (p4, c1, k60).
+mosquitto-1   | 1785100755: Client auto-18BB0CC3-86AC-5A97-DE04-2F4AA5713B35 [172.28.0.5:54553] disconnected.
+mosquitto-1   | 1785100755: New connection from 172.28.0.5:57491 on port 1883.
+mosquitto-1   | 1785100755: New client connected from 172.28.0.5:57491 as auto-2E3C0E45-A372-5658-6E98-6DD0ADC94AE9 (p4, c1, k60).
+mosquitto-1   | 1785100755: Client auto-2E3C0E45-A372-5658-6E98-6DD0ADC94AE9 [172.28.0.5:57491] disconnected.
+mosquitto-1   | 1785100755: New connection from 172.28.0.5:37747 on port 1883.
+mosquitto-1   | 1785100755: New client connected from 172.28.0.5:37747 as auto-4293A8D5-28AC-F48C-01DB-64CE435C7C48 (p4, c1, k60).
+mosquitto-1   | 1785100755: Client auto-4293A8D5-28AC-F48C-01DB-64CE435C7C48 [172.28.0.5:37747] disconnected.
+mosquitto-1   | 1785100798: Client hydracam-794d0477730abc7c-62b011f9-61b0-4c22-b95c-32f3c8cff167 [172.28.0.1:57984] disconnected: connection closed by client.
+mosquitto-1   | 1785100801: New connection from 172.28.0.1:60984 on port 1883.
+mosquitto-1   | 1785100801: New connection from 172.28.0.1:60988 on port 1883.
+mosquitto-1   | 1785100801: New client connected from 172.28.0.1:60984 as hydracam-794d0477730abc7c-a2d7b563-1df5-4819-ac90-678950b777f5 (p5, c1, k60, u'local').
+mosquitto-1   | 1785100801: New client connected from 172.28.0.1:60988 as hydracam-794d0477730abc7c-ee69289b-a140-4b59-95a9-35d224bac35b (p5, c1, k60, u'local').
+mosquitto-1   | 1785100807: New connection from 172.28.0.4:51197 on port 1883.
+mosquitto-1   | 1785100807: New client connected from 172.28.0.4:51197 as auto-9E7D431D-71C6-6E4C-91D8-487C7A2E9C0D (p4, c1, k60).
+mosquitto-1   | 1785100807: Client auto-9E7D431D-71C6-6E4C-91D8-487C7A2E9C0D [172.28.0.4:51197] disconnected.
+mosquitto-1   | 1785100830: New connection from 172.28.0.4:34141 on port 1883.
+mosquitto-1   | 1785100830: New client connected from 172.28.0.4:34141 as auto-16C192E7-8971-1298-FF7D-DF8C8702D454 (p4, c1, k60).
+mosquitto-1   | 1785100830: Client auto-16C192E7-8971-1298-FF7D-DF8C8702D454 [172.28.0.4:34141] disconnected.
+mosquitto-1   | 1785100930: New connection from 172.28.0.5:44495 on port 1883.
+mosquitto-1   | 1785100930: New client connected from 172.28.0.5:44495 as auto-26C6628F-614D-D909-52C3-FC127400E51A (p4, c1, k60).
+mosquitto-1   | 1785100930: Client auto-26C6628F-614D-D909-52C3-FC127400E51A [172.28.0.5:44495] disconnected.
+mosquitto-1   | 1785100931: New connection from 172.28.0.5:37499 on port 1883.
+mosquitto-1   | 1785100931: New client connected from 172.28.0.5:37499 as auto-5A01C324-BE34-6179-2BCC-5B43A0733F95 (p4, c1, k60).
+mosquitto-1   | 1785100931: Client auto-5A01C324-BE34-6179-2BCC-5B43A0733F95 [172.28.0.5:37499] disconnected.
+mosquitto-1   | 1785100931: New connection from 172.28.0.5:50177 on port 1883.
+mosquitto-1   | 1785100931: New client connected from 172.28.0.5:50177 as auto-08FEA3F6-5FA6-254E-EB71-F0AC648B94E5 (p4, c1, k60).
+mosquitto-1   | 1785100931: Client auto-08FEA3F6-5FA6-254E-EB71-F0AC648B94E5 [172.28.0.5:50177] disconnected.
+mosquitto-1   | 1785100931: New connection from 172.28.0.5:32979 on port 1883.
+mosquitto-1   | 1785100931: New client connected from 172.28.0.5:32979 as auto-E53C82F1-AC5F-FEDB-83F0-0A5236ED668B (p4, c1, k60).
+mosquitto-1   | 1785100931: Client auto-E53C82F1-AC5F-FEDB-83F0-0A5236ED668B [172.28.0.5:32979] disconnected.
+mosquitto-1   | 1785100931: New connection from 172.28.0.5:42909 on port 1883.
+mosquitto-1   | 1785100931: New client connected from 172.28.0.5:42909 as auto-CF2BD06E-DFAB-FBE9-E215-8CFA6705AFA0 (p4, c1, k60).
+mosquitto-1   | 1785100931: Client auto-CF2BD06E-DFAB-FBE9-E215-8CFA6705AFA0 [172.28.0.5:42909] disconnected.
+mosquitto-1   | 1785100931: New connection from 172.28.0.5:36941 on port 1883.
+mosquitto-1   | 1785100931: New client connected from 172.28.0.5:36941 as auto-BB305BE2-6418-B92F-B6CB-B19CC75F7D29 (p4, c1, k60).
+mosquitto-1   | 1785100931: Client auto-BB305BE2-6418-B92F-B6CB-B19CC75F7D29 [172.28.0.5:36941] disconnected.
+mosquitto-1   | 1785100932: New connection from 172.28.0.5:44795 on port 1883.
+mosquitto-1   | 1785100932: New client connected from 172.28.0.5:44795 as auto-F3FAD555-E499-2B9B-4A50-4DF7C29B05FE (p4, c1, k60).
+mosquitto-1   | 1785100932: Client auto-F3FAD555-E499-2B9B-4A50-4DF7C29B05FE [172.28.0.5:44795] disconnected.
+mosquitto-1   | 1785100933: New connection from 172.28.0.5:54419 on port 1883.
+mosquitto-1   | 1785100933: New client connected from 172.28.0.5:54419 as auto-A44EDAB3-77E0-2779-329A-AE90607E8F6A (p4, c1, k60).
+mosquitto-1   | 1785100933: Client auto-A44EDAB3-77E0-2779-329A-AE90607E8F6A [172.28.0.5:54419] disconnected.
+mosquitto-1   | 1785100933: New connection from 172.28.0.5:36325 on port 1883.
+mosquitto-1   | 1785100933: New client connected from 172.28.0.5:36325 as auto-48BAF3FC-E902-FF1C-8116-1BFE39E75FE8 (p4, c1, k60).
+mosquitto-1   | 1785100933: Client auto-48BAF3FC-E902-FF1C-8116-1BFE39E75FE8 [172.28.0.5:36325] disconnected.
+mosquitto-1   | 1785100933: New connection from 172.28.0.5:44965 on port 1883.
+mosquitto-1   | 1785100933: New client connected from 172.28.0.5:44965 as auto-26EEECEE-2749-67BA-AB8A-CB8260DFC456 (p4, c1, k60).
+mosquitto-1   | 1785100933: Client auto-26EEECEE-2749-67BA-AB8A-CB8260DFC456 [172.28.0.5:44965] disconnected.
+mosquitto-1   | 1785100933: New connection from 172.28.0.5:34493 on port 1883.
+mosquitto-1   | 1785100933: New client connected from 172.28.0.5:34493 as auto-F9155494-E28A-D609-5F59-C08713B3AAA1 (p4, c1, k60).
+mosquitto-1   | 1785100933: Client auto-F9155494-E28A-D609-5F59-C08713B3AAA1 [172.28.0.5:34493] disconnected.
+mosquitto-1   | 1785100933: New connection from 172.28.0.5:55291 on port 1883.
+mosquitto-1   | 1785100933: New client connected from 172.28.0.5:55291 as auto-0515F0CD-E82D-7178-BAD0-76B65D80B61A (p4, c1, k60).
+mosquitto-1   | 1785100933: Client auto-0515F0CD-E82D-7178-BAD0-76B65D80B61A [172.28.0.5:55291] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:49157 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:49157 as auto-1759060A-1206-DEBB-2D75-6CC73ED8CA0A (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-1759060A-1206-DEBB-2D75-6CC73ED8CA0A [172.28.0.5:49157] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:49353 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:49353 as auto-7857C01B-9B5F-44AF-A7AC-5FA736D14A18 (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-7857C01B-9B5F-44AF-A7AC-5FA736D14A18 [172.28.0.5:49353] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:51733 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:51733 as auto-38AC32EB-82B8-0265-248B-0DD4C08F97B9 (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-38AC32EB-82B8-0265-248B-0DD4C08F97B9 [172.28.0.5:51733] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:55391 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:55391 as auto-56EE8F12-66FA-2D1E-380D-6C5C087D153B (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-56EE8F12-66FA-2D1E-380D-6C5C087D153B [172.28.0.5:55391] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:51773 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:51773 as auto-32DA7B3E-14B5-C8E6-13F8-BD3859E13B71 (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-32DA7B3E-14B5-C8E6-13F8-BD3859E13B71 [172.28.0.5:51773] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:54491 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:54491 as auto-0D15821D-D8A8-71E5-B32B-DCAEB2CEB585 (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-0D15821D-D8A8-71E5-B32B-DCAEB2CEB585 [172.28.0.5:54491] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:43711 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:43711 as auto-96C2611F-2595-1FCC-C6F4-3415971D653D (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-96C2611F-2595-1FCC-C6F4-3415971D653D [172.28.0.5:43711] disconnected.
+mosquitto-1   | 1785100934: New connection from 172.28.0.5:53685 on port 1883.
+mosquitto-1   | 1785100934: New client connected from 172.28.0.5:53685 as auto-46707C90-75C8-BC8D-2CEB-1BFB032759AE (p4, c1, k60).
+mosquitto-1   | 1785100934: Client auto-46707C90-75C8-BC8D-2CEB-1BFB032759AE [172.28.0.5:53685] disconnected.
+mosquitto-1   | 1785100964: Client hydracam-794d0477730abc7c-a2d7b563-1df5-4819-ac90-678950b777f5 [172.28.0.1:60984] disconnected: connection closed by client.
+mosquitto-1   | 1785100964: Client hydracam-794d0477730abc7c-ee69289b-a140-4b59-95a9-35d224bac35b [172.28.0.1:60988] disconnected: connection closed by client.
+mosquitto-1   | 1785100966: New connection from 172.28.0.1:55620 on port 1883.
+mosquitto-1   | 1785100966: New connection from 172.28.0.1:55628 on port 1883.
+mosquitto-1   | 1785100967: New client connected from 172.28.0.1:55628 as hydracam-794d0477730abc7c-f7257843-ea60-41e6-a621-f2afb0bafcf9 (p5, c1, k60, u'local').
+mosquitto-1   | 1785100967: New client connected from 172.28.0.1:55620 as hydracam-794d0477730abc7c-72061966-7f9f-43ae-b0de-970f93033880 (p5, c1, k60, u'local').
+mosquitto-1   | 1785100967: Client hydracam-794d0477730abc7c-72061966-7f9f-43ae-b0de-970f93033880 [172.28.0.1:55620] disconnected.
+mosquitto-1   | 1785100971: New connection from 172.28.0.4:60627 on port 1883.
+mosquitto-1   | 1785100971: New client connected from 172.28.0.4:60627 as auto-613AF7E4-D1E5-504C-C990-5293B510AD05 (p4, c1, k60).
+mosquitto-1   | 1785100971: Client auto-613AF7E4-D1E5-504C-C990-5293B510AD05 [172.28.0.4:60627] disconnected.
+mosquitto-1   | 1785100984: New connection from 172.28.0.4:57815 on port 1883.
+mosquitto-1   | 1785100984: New client connected from 172.28.0.4:57815 as auto-55CEF4E9-43C5-80BD-6E2D-325A5F3946CB (p4, c1, k60).
+mosquitto-1   | 1785100984: Client auto-55CEF4E9-43C5-80BD-6E2D-325A5F3946CB [172.28.0.4:57815] disconnected.
+mosquitto-1   | 1785101441: New connection from 172.28.0.5:55263 on port 1883.
+mosquitto-1   | 1785101441: New client connected from 172.28.0.5:55263 as auto-C3D1554E-0977-4AD7-6070-CA7A0A415E7D (p4, c1, k60).
+mosquitto-1   | 1785101441: Client auto-C3D1554E-0977-4AD7-6070-CA7A0A415E7D [172.28.0.5:55263] disconnected.
+mosquitto-1   | 1785101441: New connection from 172.28.0.5:38233 on port 1883.
+mosquitto-1   | 1785101441: New client connected from 172.28.0.5:38233 as auto-EA1D2668-2284-8439-1AB5-148E5EF70667 (p4, c1, k60).
+mosquitto-1   | 1785101441: Client auto-EA1D2668-2284-8439-1AB5-148E5EF70667 [172.28.0.5:38233] disconnected.
+mosquitto-1   | 1785101441: New connection from 172.28.0.5:33351 on port 1883.
+mosquitto-1   | 1785101441: New client connected from 172.28.0.5:33351 as auto-494DEF0F-C9BB-3E86-7397-71FA97E889D9 (p4, c1, k60).
+mosquitto-1   | 1785101441: Client auto-494DEF0F-C9BB-3E86-7397-71FA97E889D9 [172.28.0.5:33351] disconnected.
+mosquitto-1   | 1785101441: New connection from 172.28.0.5:60991 on port 1883.
+mosquitto-1   | 1785101441: New client connected from 172.28.0.5:60991 as auto-D3916185-1EE7-3541-D68D-1F94AEBC25EE (p4, c1, k60).
+mosquitto-1   | 1785101441: Client auto-D3916185-1EE7-3541-D68D-1F94AEBC25EE [172.28.0.5:60991] disconnected.
+mosquitto-1   | 1785101441: New connection from 172.28.0.5:40505 on port 1883.
+mosquitto-1   | 1785101441: New client connected from 172.28.0.5:40505 as auto-9D1C98A4-FE20-DA14-D8F2-DE6ECB692A2D (p4, c1, k60).
+mosquitto-1   | 1785101441: Client auto-9D1C98A4-FE20-DA14-D8F2-DE6ECB692A2D [172.28.0.5:40505] disconnected.
+mosquitto-1   | 1785101441: New connection from 172.28.0.5:53041 on port 1883.
+mosquitto-1   | 1785101441: New client connected from 172.28.0.5:53041 as auto-27880199-ED99-A2FC-C280-66A6F0BF19CB (p4, c1, k60).
+mosquitto-1   | 1785101441: Client auto-27880199-ED99-A2FC-C280-66A6F0BF19CB [172.28.0.5:53041] disconnected.
+mosquitto-1   | 1785101442: New connection from 172.28.0.5:59203 on port 1883.
+mosquitto-1   | 1785101442: New client connected from 172.28.0.5:59203 as auto-AA6273EF-CAED-2E1D-FBB1-009E366F7E0E (p4, c1, k60).
+mosquitto-1   | 1785101442: Client auto-AA6273EF-CAED-2E1D-FBB1-009E366F7E0E [172.28.0.5:59203] disconnected.
+mosquitto-1   | 1785101443: New connection from 172.28.0.5:58085 on port 1883.
+mosquitto-1   | 1785101443: New client connected from 172.28.0.5:58085 as auto-DFE799B9-4549-8E03-4A8D-F7D7F1F4A8F1 (p4, c1, k60).
+mosquitto-1   | 1785101443: Client auto-DFE799B9-4549-8E03-4A8D-F7D7F1F4A8F1 [172.28.0.5:58085] disconnected.
+mosquitto-1   | 1785101443: New connection from 172.28.0.5:43897 on port 1883.
+mosquitto-1   | 1785101443: New client connected from 172.28.0.5:43897 as auto-1D2F5027-4D92-E165-1587-9C11DC8D99F8 (p4, c1, k60).
+mosquitto-1   | 1785101443: Client auto-1D2F5027-4D92-E165-1587-9C11DC8D99F8 [172.28.0.5:43897] disconnected.
+mosquitto-1   | 1785101443: New connection from 172.28.0.5:45107 on port 1883.
+mosquitto-1   | 1785101443: New client connected from 172.28.0.5:45107 as auto-E2CB09D1-9C5D-E281-594C-542DDD9D49ED (p4, c1, k60).
+mosquitto-1   | 1785101443: Client auto-E2CB09D1-9C5D-E281-594C-542DDD9D49ED [172.28.0.5:45107] disconnected.
+mosquitto-1   | 1785101443: New connection from 172.28.0.5:38235 on port 1883.
+mosquitto-1   | 1785101443: New client connected from 172.28.0.5:38235 as auto-CE8893EC-8CDB-1D49-DAF7-183D577F2B5B (p4, c1, k60).
+mosquitto-1   | 1785101443: Client auto-CE8893EC-8CDB-1D49-DAF7-183D577F2B5B [172.28.0.5:38235] disconnected.
+mosquitto-1   | 1785101443: New connection from 172.28.0.5:35543 on port 1883.
+mosquitto-1   | 1785101443: New client connected from 172.28.0.5:35543 as auto-2DFC0CCA-CC97-A5CE-E66E-64B00AA46C7F (p4, c1, k60).
+mosquitto-1   | 1785101443: Client auto-2DFC0CCA-CC97-A5CE-E66E-64B00AA46C7F [172.28.0.5:35543] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:48143 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:48143 as auto-6E64121D-A894-5A58-97D9-A1F33D9D46B9 (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-6E64121D-A894-5A58-97D9-A1F33D9D46B9 [172.28.0.5:48143] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:34275 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:34275 as auto-9B70F003-985C-4FBA-5F35-16A8416C27A7 (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-9B70F003-985C-4FBA-5F35-16A8416C27A7 [172.28.0.5:34275] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:55159 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:55159 as auto-56EBDC9A-4252-D007-B4C3-00C35DE94233 (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-56EBDC9A-4252-D007-B4C3-00C35DE94233 [172.28.0.5:55159] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:55043 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:55043 as auto-F71F1581-BB96-16C9-C28E-54C98D0A0AFB (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-F71F1581-BB96-16C9-C28E-54C98D0A0AFB [172.28.0.5:55043] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:37169 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:37169 as auto-201E36A3-CF42-9C5A-303D-3AADC79556CD (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-201E36A3-CF42-9C5A-303D-3AADC79556CD [172.28.0.5:37169] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:59097 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:59097 as auto-8FFEF88A-A3E9-25BA-7CB1-8A030315A22B (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-8FFEF88A-A3E9-25BA-7CB1-8A030315A22B [172.28.0.5:59097] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:48235 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:48235 as auto-AA7DD3B6-59E3-9E64-36F6-B45D8029346A (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-AA7DD3B6-59E3-9E64-36F6-B45D8029346A [172.28.0.5:48235] disconnected.
+mosquitto-1   | 1785101444: New connection from 172.28.0.5:47317 on port 1883.
+mosquitto-1   | 1785101444: New client connected from 172.28.0.5:47317 as auto-3663686A-A728-4160-F91B-D426477248EC (p4, c1, k60).
+mosquitto-1   | 1785101444: Client auto-3663686A-A728-4160-F91B-D426477248EC [172.28.0.5:47317] disconnected.
+mosquitto-1   | 1785101487: Client hydracam-794d0477730abc7c-f7257843-ea60-41e6-a621-f2afb0bafcf9 [172.28.0.1:55628] disconnected: connection closed by client.
+mosquitto-1   | 1785101490: New connection from 172.28.0.1:63780 on port 1883.
+mosquitto-1   | 1785101490: New connection from 172.28.0.1:63782 on port 1883.
+mosquitto-1   | 1785101490: New client connected from 172.28.0.1:63782 as hydracam-794d0477730abc7c-fe3e9767-ffb5-438b-8291-22dacd34beba (p5, c1, k60, u'local').
+mosquitto-1   | 1785101490: New client connected from 172.28.0.1:63780 as hydracam-794d0477730abc7c-29685c96-c497-4bff-a36a-eea9ac541e18 (p5, c1, k60, u'local').
+mosquitto-1   | 1785101490: Client hydracam-794d0477730abc7c-29685c96-c497-4bff-a36a-eea9ac541e18 [172.28.0.1:63780] disconnected.
+mosquitto-1   | 1785101495: New connection from 172.28.0.4:57933 on port 1883.
+mosquitto-1   | 1785101495: New client connected from 172.28.0.4:57933 as auto-DC929FF2-995E-62E8-DCE4-2C1338ACD8B8 (p4, c1, k60).
+mosquitto-1   | 1785101495: Client auto-DC929FF2-995E-62E8-DCE4-2C1338ACD8B8 [172.28.0.4:57933] disconnected.
+mosquitto-1   | 1785101507: New connection from 172.28.0.4:35057 on port 1883.
+mosquitto-1   | 1785101507: New client connected from 172.28.0.4:35057 as auto-6CE08B2C-5005-2404-B71C-F1FC2FC690CC (p4, c1, k60).
+mosquitto-1   | 1785101507: Client auto-6CE08B2C-5005-2404-B71C-F1FC2FC690CC [172.28.0.4:35057] disconnected.
