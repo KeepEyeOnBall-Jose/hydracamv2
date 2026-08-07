@@ -13,16 +13,27 @@ remote Mac reached over SSH/Tailscale.
   it; reachable over Tailscale SSH (see `scripts/adb_remote_bridge.sh`).
 - The repo is checked out on both Macs at the same path.
 
-Current fleet (2026-06-24):
+Current fleet (re-inventoried 2026-07-23):
 
-| Device | Serial | Host | Notes |
+| Operator/device role | Serial | Host | Identity confidence and notes |
 | --- | --- | --- | --- |
-| S10e (glasses/watch governor) | `RF8M21J8XRT` | this Mac | also wireless-adb Watch4 |
-| Galaxy Watch4 | `192.168.178.117:41145` | this Mac | Wear OS module |
-| iPhone (26.5) | `00008101-…` | this Mac | iOS, `xcrun devicectl` |
-| iPad 5 (17.7) | `8b406aa5…` | this Mac | iOS |
-| S7 edge | `9885e6503930304946` | M1 | Android |
-| S10e #2 | `RF8M90QE7LX` | M1 | Android |
+| S7 edge | `9885e6503930304946` | M1 | Confirmed by ADB and the media-timeline device manifest. |
+| S9 old / media-timeline `galaxy-s9` | `29d816ac550b7ece` | M1 | Confirmed by ADB and the media-timeline device manifest. |
+| S9 new | unknown | M1 expected | Not USB/ADB-visible on 2026-07-23 and absent from the media-timeline manifest; record its serial on first connection. |
+| S10e Przemek I | `RF8M2125DAJ` | M1 | Confirmed by the media-timeline device manifest. |
+| S10e Przemek II | `RF8M40MT6AW` | M1 | Inferred from the remaining live S10e set and the same saved-network set as Przemek I; physically confirm before treating the label as canonical. |
+| S10e broken-screen / media-timeline `s10e-camera-only` | `RF8M90QE7LX` | M1 | Inferred after resolving Przemek I and main; physically confirm before treating the label as canonical. |
+| S10e main / media-timeline `s10e-daily-sim` | `RF8M21J8XRT` | M1 | Strongly inferred from Android device name `S10e von José Ramón` and the Watch4/Ray-Ban pairings. |
+| Galaxy Watch4 | `192.168.178.117:41145` | this Mac | Historical wireless-ADB endpoint; re-pair if the dynamic port changed. |
+| iPhone 11 | `00008030-000D05302190402E` / CoreDevice `7931E735-717E-5B88-A283-11343FEB0795` | M1 | Paired but CoreDevice-unavailable on 2026-07-23; unlock and enable Developer Mode. |
+| iPhone 12 Pro | `00008101-000A68811E43001E` / CoreDevice `AB1E2F45-61B1-5FBD-972A-940EA7EC8B0A` | M1 | Paired and CoreDevice-available on 2026-07-23. |
+| iPad 5 (17.7) | `8b406aa5c597eab4c4dfd9908f4a09b10a89ec63` / CoreDevice `0A947DBD-A462-5BAA-AB84-17F143D41619` | M1 | Paired and CoreDevice-available on 2026-07-23. |
+
+The operator-role labels above were reconciled with
+`media-timeline/frontend/public/camera-devices/manifest.json`. That manifest
+contains confirmed serials only for S7, S9 old, and S10e Przemek I, so inferred
+S10e labels remain explicitly provisional instead of silently becoming
+canonical.
 
 ## Core principle: build once, control per-host
 
