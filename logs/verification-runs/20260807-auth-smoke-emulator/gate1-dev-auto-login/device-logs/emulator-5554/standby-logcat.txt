@@ -1,0 +1,343 @@
+--------- beginning of system
+08-07 07:36:59.613   522  2578 I ActivityManager: Force stopping com.amaia23.hydracam appid=10190 user=0: from pid 11855
+08-07 07:36:59.614   522   539 D DisplayManagerService: Drop pending events for gone uid 10190
+08-07 07:36:59.614   522  2578 I ActivityManager: Killing 11609:com.amaia23.hydracam/u0a190 (adj 0): stop com.amaia23.hydracam due to from pid 11855
+08-07 07:36:59.615   522  2578 W ActivityTaskManager: Force removing ActivityRecord{9866694 u0 com.amaia23.hydracam/.MainActivity t11 f}}: app died, no saved state
+08-07 07:36:59.615   863   915 V WindowManagerShell: Transition requested: android.os.BinderProxy@ff21fb TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=11 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=0 lastActiveTime=1785274 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@c1e2218} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+--------- beginning of main
+08-07 07:36:59.617   522  2578 E IPCThreadState: Binder transaction failure: 1293817/29189/-3
+08-07 07:36:59.617   522  2578 W WindowManager: Failed to deliver inset control state change to w=Window{c0099de u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+08-07 07:36:59.617   522  2578 W WindowManager: android.os.DeadObjectException
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsControlChanged(IWindow.java:479)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsControlChanged(WindowState.java:3802)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$notifyPendingInsetsControlChanged$3(InsetsStateController.java:343)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.InsetsStateController.$r8$lambda$8yykPRG1GyNq_J17QvL9d5xANMc(InsetsStateController.java:0)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.InsetsStateController$$ExternalSyntheticLambda2.run(R8$$SyntheticClass:0)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.WindowAnimator.executeAfterPrepareSurfacesRunnables(WindowAnimator.java:294)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:811)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:756)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:115)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.continueLayout(WindowSurfacePlacer.java:97)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.ActivityTaskManagerService.continueWindowLayout(ActivityTaskManagerService.java:4660)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.wm.ActivityTaskManagerService$LocalService.handleAppDied(ActivityTaskManagerService.java:6349)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.handleAppDiedLocked(ActivityManagerService.java:3349)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ProcessList.removeProcessLocked(ProcessList.java:3056)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ProcessList.killPackageProcessesLSP(ProcessList.java:2991)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.forceStopPackageLocked(ActivityManagerService.java:4354)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.forceStopPackageLocked(ActivityManagerService.java:4308)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.forceStopPackageLocked(ActivityManagerService.java:4125)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.forceStopPackage(ActivityManagerService.java:3849)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.forceStopPackage(ActivityManagerService.java:3796)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerShellCommand.runForceStop(ActivityManagerShellCommand.java:1398)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerShellCommand.onCommand(ActivityManagerShellCommand.java:277)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.ShellCommand.exec(ShellCommand.java:38)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.onShellCommand(ActivityManagerService.java:9697)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.Binder.shellCommand(Binder.java:1068)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.Binder.onTransact(Binder.java:888)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:5267)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at com.android.server.am.ActivityManagerService.onTransact(ActivityManagerService.java:2720)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.Binder.execTransactInternal(Binder.java:1344)
+08-07 07:36:59.617   522  2578 W WindowManager: 	at android.os.Binder.execTransact(Binder.java:1275)
+08-07 07:36:59.618   522  2578 W ProcessStats: Tracking association SourceState{9082649 com.google.android.gms.persistent/10129 BFgs #19864} whose proc state 4 is better than process ProcessState{998bb4e com.google.android.gms/10129 pkg=com.google.android.gms (sub)} proc state 8 (14 skipped)
+08-07 07:36:59.619  1078  1078 D CarrierSvcBindHelper: onHandleForceStop: [com.amaia23.hydracam]
+08-07 07:36:59.620  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+08-07 07:36:59.620   522   541 I ActivityManager: Killing 10942:com.google.android.deskclock/u0a142 (adj 985): empty #17
+08-07 07:36:59.621  1678  2089 I AssistantForeground: (REDACTED) Get launcher package: %s
+08-07 07:36:59.623   522   550 I libprocessgroup: Successfully killed process cgroup uid 10142 pid 10942 in 0ms
+08-07 07:36:59.623   350   350 I Zygote  : Process 10942 exited due to signal 9 (Killed)
+08-07 07:36:59.624   522   539 D DisplayManagerService: Drop pending events for gone uid 10142
+08-07 07:36:59.625  1113  1147 D QuickstepModelDelegate: notifyAppTargetEvent action=1 launchLocation=workspace/0/[-1,-1]/[1,1]
+08-07 07:36:59.627  1646  1936 I AiAiEcho: Predicting[0]: 
+08-07 07:36:59.627  1646  1936 I AiAiEcho: EchoTargets: 
+08-07 07:36:59.627  1646  1936 I AiAiEcho: Filtered by AiAi flag check: 
+08-07 07:36:59.627  1646  1936 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+08-07 07:36:59.628  1646  1936 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+08-07 07:36:59.629  8812  9043 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:36:59.638   522  2235 V ActivityManager: Got obituary of 11609:com.amaia23.hydracam
+08-07 07:36:59.638   350   350 I Zygote  : Process 11609 exited due to signal 9 (Killed)
+08-07 07:36:59.638   522  1638 I WindowManager: WIN DEATH: Window{c0099de u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+08-07 07:36:59.638   522  1638 W InputManager-JNI: Input channel object 'c0099de com.amaia23.hydracam/com.amaia23.hydracam.MainActivity (client)' was disposed without first being removed with the input manager!
+08-07 07:36:59.639   522  1687 W AppSearchIcing: icing-search-engine.cc:283: Error: 5, Message: Document (com.google.android.googlequicksearchbox$OneSearchZeroStateGoogleSuggestions/default, zp) not found.
+08-07 07:36:59.640   522   541 W ActivityManager: setHasOverlayUi called on unknown pid: 11609
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: Failed to fetch suggestions from AppSearch, fallback to AGA
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: java.util.concurrent.CompletionException: java.util.NoSuchElementException: No value present
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:308)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:323)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:684)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:486)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2138)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at com.google.android.apps.nexuslauncher.allapps.H0.onResult(Unknown Source:59)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1.lambda$onResult$0(SearchSessionUtil.java:129)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1.$r8$lambda$_nlk9WiPjSfaAsqKYmp0aPvSRC0(SearchSessionUtil.java:1)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:13)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.os.Handler.handleCallback(Handler.java:958)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.os.Looper.loopOnce(Looper.java:205)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.os.Looper.loop(Looper.java:294)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: Caused by: java.util.NoSuchElementException: No value present
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at java.util.Optional.get(Optional.java:144)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	at com.google.android.apps.nexuslauncher.allapps.H0.onResult(Unknown Source:16)
+08-07 07:36:59.640  1113  2228 E OneSearchSuggestProvider: 	... 8 more
+08-07 07:36:59.640  1113  2228 D OneSearchSuggestProvider: Created the binder channel successfully for end point service =com.google.android.apps.search.googleapp.search.suggest.plugins.onesearch.server.OneSearchSuggestService , mChannel=z1{delegate=s1{logId=21, target=directaddress:///AndroidComponentAddress%5BIntent%20%7B%20act=grpc.io.action.BIND%20cmp=com.google.android.googlequicksearchbox/com.google.android.apps.search.googleapp.search.suggest.plugins.onesearch.server.OneSearchSuggestService%20%7D%5D}} , mOneSearchConnection=X1.T@14c134e
+08-07 07:36:59.644   406   406 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+08-07 07:36:59.644  1678  1678 I GsaVoiceInteractionSrv: Handling ACTION_START_HOTWORD
+08-07 07:36:59.644  1678  2077 I GsaVoiceInteractionSrv: (REDACTED) disregardVoiceMatch: %b
+08-07 07:36:59.644  1678  2077 I GsaVoiceInteractionSrv: Cannot start hotword, hotword has been explicitly disabled.
+08-07 07:36:59.645  1113  1893 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:36:59.670  8812  8812 I A       : (REDACTED) Created gRPC endpoint for service %s
+08-07 07:36:59.675   522   538 V WindowManager: Sent Transition #16 createdAt=08-07 07:36:59.615 via request=TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=11 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=0 lastActiveTime=1785274 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{d9d11a9 Task{bf2f53d #11 type=standard A=10190:com.amaia23.hydracam}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+08-07 07:36:59.675   522   538 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+08-07 07:36:59.675   522   538 V WindowManager:     info={id=16 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{d9d11a9 Task{bf2f53d #11 type=standard A=10190:com.amaia23.hydracam}}} m=CLOSE f=NONE leash=Surface(name=Task=11)/@0xe8ee73 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{d3e597d Task{c986047 #1 type=home}}} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xbca8030 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x34d8d27 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.675   863   915 V WindowManagerShell: onTransitionReady android.os.BinderProxy@ff21fb: {id=16 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@749d573} m=CLOSE f=NONE leash=Surface(name=Task=11)/@0xf13e2d7 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@36b1c30} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x3df47c4 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x38776ad sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.675   863   915 V WindowManagerShell: Playing animation for (#16)android.os.BinderProxy@ff21fb@0
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@1f58d4d
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@d28d002
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@d4d5d13
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@bfe9b50
+08-07 07:36:59.675   863   915 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@e9ab149
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@157ea4e
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@226b76f
+08-07 07:36:59.675   863   915 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=16 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@749d573} m=CLOSE f=NONE leash=Surface(name=Task=11)/@0xf13e2d7 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@36b1c30} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x3df47c4 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x38776ad sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.675   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@fc26c92, appThread = android.app.IApplicationThread$Stub$Proxy@dc8e663, debugName = LauncherToDream }}
+08-07 07:36:59.675   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@84e7260, appThread = android.app.IApplicationThread$Stub$Proxy@6802319, debugName = QuickstepLaunchHome }}
+08-07 07:36:59.675   863   915 V WindowManagerShell:  Delegate animation for #16 to null
+08-07 07:36:59.675   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:36:59.675   863   915 V WindowManagerShell: start default transition animation, info = {id=16 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@749d573} m=CLOSE f=NONE leash=Surface(name=Task=11)/@0xf13e2d7 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@36b1c30} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x3df47c4 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x38776ad sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.676   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@1f862e animAttr=0x10 type=CLOSE isEntrance=true
+08-07 07:36:59.676   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@84dce65 animAttr=0x11 type=CLOSE isEntrance=false
+08-07 07:36:59.676   863   915 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:36:59.679  1113  1113 D SearchTargetUtil:  query= size=0
+08-07 07:36:59.686   522  1260 W ActivityTaskManager: callingPackage for (uid=2000, pid=11866) has no WPC
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265464455; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265452344; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 266124927; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265451093; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265456536; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 255940284; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 236283604; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 263959004; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 264304459; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 264301586; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 254631730; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 273509367; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 263259275; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 174042980; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 174042936; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 181136395; UID 10190; state: DISABLED
+08-07 07:36:59.687   522  1260 D CompatibilityChangeReporter: Compat change id reported: 194480991; UID 10190; state: ENABLED
+08-07 07:36:59.688   522  1260 D CompatibilityChangeReporter: Compat change id reported: 184838306; UID 10190; state: DISABLED
+08-07 07:36:59.688   522  1260 D CompatibilityChangeReporter: Compat change id reported: 185004937; UID 10190; state: DISABLED
+08-07 07:36:59.688   522  1260 D CompatibilityChangeReporter: Compat change id reported: 205907456; UID 10190; state: ENABLED
+08-07 07:36:59.689   522  1260 I ActivityTaskManager: Add Task{bf2f53d #11 type=standard A=10190:com.amaia23.hydracam} to hidden list because adding Task{c8e674a #12 type=standard A=10190:com.amaia23.hydracam}
+08-07 07:36:59.689   863   915 V WindowManagerShell: Transition requested: android.os.BinderProxy@951ebe1 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=12 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} topActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=1 lastActiveTime=1830913 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@ec62d06} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{4bd2fc7 com.amaia23.hydracam.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+08-07 07:36:59.690   522  1260 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity (has extras)} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+08-07 07:36:59.690   522  1260 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10190; state: DISABLED
+08-07 07:36:59.690   522   541 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10190; state: DISABLED
+08-07 07:36:59.690   522   541 D CompatibilityChangeReporter: Compat change id reported: 177438394; UID 10190; state: DISABLED
+08-07 07:36:59.690   522   541 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 10190; state: DISABLED
+08-07 07:36:59.690   522   541 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 10190; state: ENABLED
+08-07 07:36:59.691   522  1260 D CompatibilityChangeReporter: Compat change id reported: 273564678; UID 10190; state: DISABLED
+08-07 07:36:59.691   522   549 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10190; state: ENABLED
+08-07 07:36:59.693   522   582 D CoreBackPreview: Window{8d3ae16 u0 Splash Screen com.amaia23.hydracam}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@f53b984, mPriority=0, mIsAnimationCallback=false}
+08-07 07:36:59.694   350   350 D Zygote  : Forked child process 11869
+08-07 07:36:59.694   522   549 I ActivityManager: Start proc 11869:com.amaia23.hydracam/u0a190 for next-top-activity {com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+08-07 07:36:59.698 11869 11869 I maia23.hydracam: Late-enabling -Xcheck:jni
+08-07 07:36:59.701  2213  2213 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+08-07 07:36:59.705 11869 11869 I maia23.hydracam: Using CollectorTypeCC GC.
+08-07 07:36:59.708   863   956 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:36:59.709   522   600 D CompatibilityChangeReporter: Compat change id reported: 265195908; UID 10190; state: ENABLED
+08-07 07:36:59.729   863   915 V WindowManagerShell: onTransitionReady android.os.BinderProxy@951ebe1: {id=17 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@a8b98b7} m=OPEN f=NONE leash=Surface(name=Task=12)/@0x2548c78 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@a81f824} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xd9c8f51 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.730   863   915 V WindowManagerShell: Transition (#17)android.os.BinderProxy@951ebe1@0 ready while (#16)android.os.BinderProxy@ff21fb@0 is still animating. Notify the animating transition in case they can be merged
+08-07 07:36:59.730   863   915 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#16)android.os.BinderProxy@ff21fb@0
+08-07 07:36:59.731   522   538 V WindowManager: Sent Transition #17 createdAt=08-07 07:36:59.687 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=12 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} topActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=1 lastActiveTime=1830913 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{c80708 Task{c8e674a #12 type=standard A=10190:com.amaia23.hydracam}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{f7f9ea1 com.amaia23.hydracam.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+08-07 07:36:59.731   522   538 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+08-07 07:36:59.731   522   538 V WindowManager:     info={id=17 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{c80708 Task{c8e674a #12 type=standard A=10190:com.amaia23.hydracam}}} m=OPEN f=NONE leash=Surface(name=Task=12)/@0x80a69ee sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{d3e597d Task{c986047 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xbca8030 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.731  2213  2223 I adbd    : jdwp connection from 11869
+08-07 07:36:59.731   863   934 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@fdd127d
+08-07 07:36:59.731   522   538 V WindowManager: Finish Transition #16: created at 08-07 07:36:59.615 collect-started=0.028ms request-sent=0.048ms started=3.624ms ready=3.616ms sent=59.819ms finished=116.103ms
+08-07 07:36:59.731   522  1913 W InputManager-JNI: Input channel object '5e52e7e Splash Screen com.amaia23.hydracam (client)' was disposed without first being removed with the input manager!
+08-07 07:36:59.734   863   915 V WindowManagerShell: Playing animation for (#17)android.os.BinderProxy@951ebe1@0
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@1f58d4d
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@d28d002
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@d4d5d13
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@bfe9b50
+08-07 07:36:59.734   863   915 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@e9ab149
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@157ea4e
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@226b76f
+08-07 07:36:59.734   863   915 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=17 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@a8b98b7} m=OPEN f=NONE leash=Surface(name=Task=12)/@0x2548c78 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@a81f824} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xd9c8f51 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.734   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@fc26c92, appThread = android.app.IApplicationThread$Stub$Proxy@dc8e663, debugName = LauncherToDream }}
+08-07 07:36:59.734   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@84e7260, appThread = android.app.IApplicationThread$Stub$Proxy@6802319, debugName = QuickstepLaunchHome }}
+08-07 07:36:59.734   863   915 V WindowManagerShell:  Delegate animation for #17 to null
+08-07 07:36:59.734   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:36:59.734   863   915 V WindowManagerShell: start default transition animation, info = {id=17 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@a8b98b7} m=OPEN f=NONE leash=Surface(name=Task=12)/@0x2548c78 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@a81f824} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xd9c8f51 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:36:59.734   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@710d789 animAttr=0x13 type=OPEN isEntrance=false
+08-07 07:36:59.734   522  2853 W WindowManager: Failed looking up window session=Session{6954e06 863:u0a10161} callers=com.android.server.wm.WindowManagerService.windowForClientLocked:6034 com.android.server.wm.Session.setOnBackInvokedCallbackInfo:944 android.view.IWindowSession$Stub.onTransact:1145 
+08-07 07:36:59.734   522  2853 I WindowManager: setOnBackInvokedCallback(): No window state for package:com.android.systemui
+08-07 07:36:59.734   522  1260 W WindowManager: Failed looking up window session=Session{6954e06 863:u0a10161} callers=com.android.server.wm.WindowManagerService.windowForClientLocked:6034 com.android.server.wm.WindowManagerService.removeWindow:1974 com.android.server.wm.Session.remove:231 
+08-07 07:36:59.735   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@4a66345 animAttr=0x12 type=OPEN isEntrance=true
+08-07 07:36:59.735   863   915 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:36:59.738 11869 11869 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10190; state: ENABLED
+08-07 07:36:59.738 11869 11869 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10190; state: ENABLED
+08-07 07:36:59.740   522  1260 D CompatibilityChangeReporter: Compat change id reported: 170503758; UID 10190; state: ENABLED
+08-07 07:36:59.741  1678  2089 I AssistantForeground: (REDACTED) Get launcher package: %s
+08-07 07:36:59.741 11869 11869 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+08-07 07:36:59.742 11869 11869 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+08-07 07:36:59.742 11869 11869 W ziparchive: Unable to open '/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.dm': No such file or directory
+08-07 07:36:59.742 11869 11869 W ziparchive: Unable to open '/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.dm': No such file or directory
+08-07 07:36:59.779   863   956 D EGL_emulation: app_time_stats: avg=1905.03ms min=0.42ms max=43799.95ms count=23
+08-07 07:36:59.808  1678  1678 I GsaVoiceInteractionSrv: Handling ACTION_STOP_HOTWORD
+08-07 07:36:59.808  1678  1980 I HwDetectorWithState: (REDACTED) a: %d
+08-07 07:36:59.925 11869 11869 D nativeloader: Configuring clns-6 for other apk /data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/lib/arm64:/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.amaia23.hydracam
+08-07 07:36:59.931 11869 11869 V GraphicsEnvironment: Currently set values for:
+08-07 07:36:59.931 11869 11869 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+08-07 07:36:59.931 11869 11869 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+08-07 07:36:59.931 11869 11869 V GraphicsEnvironment: ANGLE GameManagerService for com.amaia23.hydracam: false
+08-07 07:36:59.931 11869 11869 V GraphicsEnvironment: com.amaia23.hydracam is not listed in per-application setting
+08-07 07:36:59.931 11869 11869 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+08-07 07:36:59.938   522  1260 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10190. pid: 11869
+08-07 07:36:59.942 11869 11891 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+08-07 07:36:59.942 11869 11891 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+08-07 07:36:59.945 11869 11891 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+08-07 07:36:59.952 11869 11892 D FlutterJNI: Beginning load of flutter...
+08-07 07:36:59.952 11869 11893 I ResourceExtractor: Found extracted resources res_timestamp-19-1786080973208
+08-07 07:36:59.956 11869 11892 D FlutterJNI: flutter (null) was loaded normally!
+08-07 07:36:59.958 11869 11894 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+08-07 07:36:59.961 11869 11869 W maia23.hydracam: type=1400 audit(0.0:427): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=75292 scontext=u:r:untrusted_app:s0:c190,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=com.amaia23.hydracam
+08-07 07:36:59.985 11869 11895 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+08-07 07:37:00.011  1646  1936 I AiAiEcho: Predicting[0]: 
+08-07 07:37:00.011  1646  1936 I AiAiEcho: EchoTargets: 
+08-07 07:37:00.011  1646  1936 I AiAiEcho: Filtered by AiAi flag check: 
+08-07 07:37:00.011  1646  1936 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+08-07 07:37:00.011  1646  1936 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+08-07 07:37:00.014 11869 11902 I flutter : The Dart VM service is listening on http://127.0.0.1:45699/Nv-L6iVN8G8=/
+08-07 07:37:00.016   863   956 D EGL_emulation: app_time_stats: avg=33979.68ms min=33979.68ms max=33979.68ms count=1
+08-07 07:37:00.016   863   863 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+08-07 07:37:00.026   863   915 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#17)android.os.BinderProxy@951ebe1@0
+08-07 07:37:00.027   522   538 V WindowManager: Finish Transition #17: created at 08-07 07:36:59.687 collect-started=0.011ms request-sent=2.178ms started=3.222ms ready=39.237ms sent=41.999ms finished=339.433ms
+08-07 07:37:00.028   863   915 V WindowManagerShell: Track 0 became idle
+08-07 07:37:00.028   863   915 V WindowManagerShell: All active transition animations finished
+08-07 07:37:00.154 11869 11869 D FlutterGeolocator: Attaching Geolocator to activity
+08-07 07:37:00.178 11869 11869 W maia23.hydracam: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+08-07 07:37:00.178 11869 11869 W maia23.hydracam: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+08-07 07:37:00.178 11869 11869 W maia23.hydracam: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+08-07 07:37:00.178 11869 11869 W maia23.hydracam: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+08-07 07:37:00.183 11869 11869 D FlutterRenderer: Width is zero. 0,0
+08-07 07:37:00.189 11869 11869 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10190; state: DISABLED
+08-07 07:37:00.189 11869 11869 W OpenGLRenderer: Unknown dataspace 0
+08-07 07:37:00.228 11869 11869 I flutter : Log registered: {message: Get token, timestamp: 2026-08-07 07:37:00.224802, function: null, file: null}
+08-07 07:37:00.228 11869 11869 I flutter : Log registered: {message: Fetch token, timestamp: 2026-08-07 07:37:00.228907, function: null, file: null}
+08-07 07:37:00.288 11869 11869 D FlutterRenderer: Width is zero. 0,0
+08-07 07:37:00.288   522   582 D CoreBackPreview: Window{e375fb9 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@57f167b, mPriority=0, mIsAnimationCallback=false}
+08-07 07:37:00.291 11869 11869 D FlutterJNI: Sending viewport metrics to the engine.
+08-07 07:37:00.293 11869 11889 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+08-07 07:37:00.293 11869 11889 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+08-07 07:37:00.303   157   157 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+08-07 07:37:00.303 11869 11895 I Gralloc4: mapper 4.x is not supported
+08-07 07:37:00.332 11869 11889 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:37:00.653 11869 11869 D FlutterGeolocator: Creating service.
+08-07 07:37:00.654 11869 11869 D FlutterGeolocator: Binding to location service.
+08-07 07:37:00.658 11869 11869 I flutter : Log registered: {message: Launch config from intent: role=standby, preferredMasterIp=null, targetId=emulator-5554, forceSlaveMode=null, manualLaunch=null, timestamp: 2026-08-07 07:37:00.658012, function: null, file: null}
+08-07 07:37:00.666 11869 11869 D FlutterGeolocator: Geolocator foreground service connected
+08-07 07:37:00.666 11869 11869 D FlutterGeolocator: Initializing Geolocator services
+08-07 07:37:00.666 11869 11869 D FlutterGeolocator: Flutter engine connected. Connected engine count 1
+08-07 07:37:00.669 11869 11869 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-08-07 07:37:00.669573, function: null, file: null}
+08-07 07:37:00.675 11869 11869 I flutter : Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-08-07 07:37:00.675503, function: null, file: null}
+08-07 07:37:00.682 11869 11869 I flutter : Log registered: {message: Permission request completed.
+08-07 07:37:00.682 11869 11869 I flutter : Granted: [Permission.camera, Permission.locationWhenInUse, Permission.microphone]
+08-07 07:37:00.682 11869 11869 I flutter : Denied: [], timestamp: 2026-08-07 07:37:00.682372, function: requestAllPermissions, file: PermissionService}
+08-07 07:37:00.682 11869 11869 I flutter : Log registered: {message: Retrieved existing Device ID: 87ebc3e9-214b-4bd9-a119-1e780b19a6cf, timestamp: 2026-08-07 07:37:00.682645, function: null, file: null}
+08-07 07:37:00.682 11869 11869 I flutter : Log registered: {message: Device ID: 87ebc3e9-214b-4bd9-a119-1e780b19a6cf, timestamp: 2026-08-07 07:37:00.682699, function: null, file: null}
+08-07 07:37:00.682 11869 11869 I flutter : Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-08-07 07:37:00.682736, function: null, file: null}
+08-07 07:37:00.684 11869 11869 I flutter : Log registered: {message: Get token, timestamp: 2026-08-07 07:37:00.684432, function: null, file: null}
+08-07 07:37:00.684 11869 11869 I flutter : Log registered: {message: Fetch token, timestamp: 2026-08-07 07:37:00.684482, function: null, file: null}
+08-07 07:37:00.691 11869 11869 D FlutterJNI: Sending viewport metrics to the engine.
+08-07 07:37:00.757  1678  2089 I A       : Started new service configuration
+08-07 07:37:00.759  1678  2090 I NLUFF   : Incoming RPC ngaOnlyConfigure [CONTEXT rpc_id=33 ]
+08-07 07:37:00.759  1678  2090 I NLUFF   : RPC processing completed [CONTEXT rpc_id=33 ]
+08-07 07:37:00.759  1678  2089 I A       : Successfully configured the service
+08-07 07:37:00.779   863   956 D EGL_emulation: app_time_stats: avg=8.15ms min=0.43ms max=37.61ms count=59
+08-07 07:37:01.700   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+08-07 07:37:01.900 11869 11869 I flutter : Log registered: {message: M2M token obtained successfully, timestamp: 2026-08-07 07:37:01.899857, function: null, file: null}
+08-07 07:37:01.902 11869 11869 I flutter : Log registered: {message: M2M token obtained successfully, timestamp: 2026-08-07 07:37:01.902902, function: null, file: null}
+08-07 07:37:02.207   863   863 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+08-07 07:37:03.697   522  2893 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+08-07 07:37:05.214   863   863 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+08-07 07:37:05.240 11869 11869 I flutter : Log registered: {message: Backend warm-up timed out., timestamp: 2026-08-07 07:37:05.240557, function: null, file: null}
+08-07 07:37:05.280 11869 11934 D ProfileInstaller: Installing profile for com.amaia23.hydracam
+08-07 07:37:06.021   863   863 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+08-07 07:37:08.220   863   863 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+08-07 07:37:09.638   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+08-07 07:37:09.694   522   541 W ActivityTaskManager: Launch timeout has expired, giving up wake lock!
+08-07 07:37:09.743   522   541 W ProcessStats: Tracking association SourceState{7fd2f55 com.google.android.gms/10129 BFgs #19896} whose proc state 4 is better than process ProcessState{8f09bc com.google.android.gms.persistent/10129 pkg=com.google.android.gms (sub)} proc state 6 (86 skipped)
+08-07 07:37:09.743  1113  2228 D OneSearchSuggestProvider: Shut down the binder channel
+08-07 07:37:09.744  1113  2198 I IPCThreadState: oneway function results for code 2 on binder at 0xb4000072776b20b0 will be dropped but finished with status UNKNOWN_TRANSACTION
+08-07 07:37:09.745   522   582 D CompatibilityChangeReporter: Compat change id reported: 197654537; UID 10190; state: ENABLED
+08-07 07:37:09.747  1113  1146 I ImeTracker: com.google.android.apps.nexuslauncher:25aff1ba: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT
+08-07 07:37:09.747   522  2853 I ImeTracker: com.google.android.apps.nexuslauncher:25aff1ba: onCancelled at PHASE_SERVER_SHOULD_HIDE
+08-07 07:37:13.576 11390 11465 I Finsky  : [81] Stats for Executor: LightweightExecutor wbt@298017[Running, pool size = 3, active threads = 0, queued tasks = 0, completed tasks = 204]
+08-07 07:37:13.576 11390 11465 I Finsky  : [81] Stats for Executor: BlockingExecutor wbt@f7cbc04[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 25]
+08-07 07:37:13.581 11429 11470 I Finsky:background: [81] Stats for Executor: bgExecutor wbt@a6e4efb[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 108]
+08-07 07:37:13.588 11429 11470 I Finsky:background: [81] Stats for Executor: LightweightExecutor wbt@e2a4b18[Running, pool size = 3, active threads = 0, queued tasks = 0, completed tasks = 14]
+08-07 07:37:13.588 11390 11465 I Finsky  : [81] Stats for Executor: bgExecutor wbt@87d75ed[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 164]
+08-07 07:37:13.605 11429 11470 I Finsky:background: [81] Stats for Executor: BlockingExecutor wbt@7737971[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 7]
+08-07 07:37:14.011 10089 10089 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+08-07 07:37:14.233   863   863 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+08-07 07:37:16.022   863   863 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+08-07 07:37:17.575   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+08-07 07:37:23.755 11390 11492 E IPCThreadState: Binder transaction failure: 1299171/29202/0
+08-07 07:37:23.755 11390 11492 E JavaBinder: !!! FAILED BINDER TRANSACTION !!!  (parcel size = 428)
+08-07 07:37:23.756 11390 11492 I ActivityThread: Removing dead content provider:android.content.ContentProviderProxy@603c721
+08-07 07:37:23.757   522  1260 E IPCThreadState: Binder transaction failure: 1299175/29202/0
+08-07 07:37:23.759   522  1260 I ActivityManager: Process com.google.process.gservices (pid 1693) early provider death
+08-07 07:37:23.759   522  1260 I ActivityManager: Process com.google.process.gservices (pid 1693) has died: cch+35 CEM 
+08-07 07:37:23.760   522  1260 W ProcessStats: Tracking association SourceState{7fd2f55 com.google.android.gms/10129 BFgs #19906} whose proc state 4 is better than process ProcessState{8f09bc com.google.android.gms.persistent/10129 pkg=com.google.android.gms (sub)} proc state 6 (63 skipped)
+08-07 07:37:23.764   522  1260 V ActivityManager: Got obituary of 1693:com.google.process.gservices
+08-07 07:37:23.764   350   350 I Zygote  : Process 1693 exited due to signal 9 (Killed)
+08-07 07:37:23.764   522   550 I libprocessgroup: Successfully killed process cgroup uid 10129 pid 1693 in 5ms
+08-07 07:37:23.766 11390 11496 E AbstractLogEventBuilder: The provided ProductIdOrigin 3 is not one of the process-level expected values: 1 or 2
+08-07 07:37:23.787   522   583 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10129; state: DISABLED
+08-07 07:37:23.787   522   583 D CompatibilityChangeReporter: Compat change id reported: 177438394; UID 10129; state: DISABLED
+08-07 07:37:23.787   522   583 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 10129; state: DISABLED
+08-07 07:37:23.787   522   583 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 10129; state: ENABLED
+08-07 07:37:23.787   522   549 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10129; state: ENABLED
+08-07 07:37:23.790   350   350 D Zygote  : Forked child process 11944
+08-07 07:37:23.790   522   549 I ActivityManager: Start proc 11944:com.google.process.gservices/u0a129 for content provider {com.google.android.gsf/com.google.android.gsf.gservices.GservicesProvider}
+08-07 07:37:23.818 11944 11944 I ocess.gservices: Using CollectorTypeCC GC.
+08-07 07:37:23.824 11944 11944 E ocess.gservices: Not starting debugger since process cannot load the jdwp agent.
+08-07 07:37:23.830   522   583 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10129; state: DISABLED
+08-07 07:37:23.831   522   583 D CompatibilityChangeReporter: Compat change id reported: 273564678; UID 10129; state: DISABLED
+08-07 07:37:23.832 11944 11944 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10129; state: ENABLED
+08-07 07:37:23.832 11944 11944 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10129; state: ENABLED
+08-07 07:37:23.833   522   583 D CompatibilityChangeReporter: Compat change id reported: 170503758; UID 10129; state: ENABLED
+08-07 07:37:23.835 11944 11944 D nativeloader: Configuring clns-shared-6 for other apk /system/framework/org.apache.http.legacy.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/system_ext/priv-app/GoogleServicesFramework/lib/arm64:/system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk!/lib/arm64-v8a:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gsf:/system_ext/priv-app/GoogleServicesFramework:/system/lib64:/system_ext/lib64
+08-07 07:37:23.837 11944 11944 D nativeloader: Configuring clns-shared-7 for other apk /system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk. target_sdk_version=34, uses_libraries=, library_path=/system_ext/priv-app/GoogleServicesFramework/lib/arm64:/system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk!/lib/arm64-v8a:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gsf:/system_ext/priv-app/GoogleServicesFramework:/system/lib64:/system_ext/lib64
+08-07 07:37:23.871 11944 11944 V GraphicsEnvironment: Currently set values for:
+08-07 07:37:23.871 11944 11944 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+08-07 07:37:23.871 11944 11944 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+08-07 07:37:23.872 11944 11944 V GraphicsEnvironment: ANGLE GameManagerService for com.google.android.gsf: false
+08-07 07:37:23.872 11944 11944 V GraphicsEnvironment: com.google.android.gsf is not listed in per-application setting
+08-07 07:37:23.872 11944 11944 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+08-07 07:37:23.875 11944 11944 I GservicesProvider: Gservices pushing to system: true; secure/global: true
+08-07 07:37:23.877   522   583 W ActivityManager: Unable to start service Intent { act=com.google.android.gms.gservices.START pkg=com.google.android.gms } U=0: not found
+08-07 07:37:23.877   522   583 W ActivityManager: Unbind failed: could not find connection for android.os.BinderProxy@6f548a5
+08-07 07:37:23.877 11944 11961 E GmsClient: unable to connect to service: com.google.android.gms.gservices.START on com.google.android.gms
+08-07 07:37:23.885   522   583 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10129. pid: 11944
+08-07 07:37:25.764   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+08-07 07:37:26.026   863   863 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+08-07 07:37:28.961   522  1639 D CompatibilityChangeReporter: Compat change id reported: 261072174; UID 1000; state: ENABLED
+08-07 07:37:33.701   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+08-07 07:37:33.859   522   607 D ActivityManager: freezing 11944 com.google.process.gservices
+08-07 07:37:36.026   863   863 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+08-07 07:37:38.728 11390 11943 I IPCThreadState: oneway function results for code 2 on binder at 0xb400007277698730 will be dropped but finished with status UNKNOWN_TRANSACTION
+08-07 07:37:38.729   522   600 D CompatibilityChangeReporter: Compat change id reported: 265195908; UID 10131; state: ENABLED
+08-07 07:37:38.739   522  1639 W BatteryExternalStatsWorker: error reading Bluetooth stats: 11
+08-07 07:37:38.833   522  1639 W ProcessStats: Tracking association SourceState{7fd2f55 com.google.android.gms/10129 BFgs #19925} whose proc state 4 is better than process ProcessState{8f09bc com.google.android.gms.persistent/10129 pkg=com.google.android.gms (sub)} proc state 6 (89 skipped)
+08-07 07:37:41.638   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 

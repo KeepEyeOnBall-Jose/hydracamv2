@@ -1,0 +1,944 @@
+--------- beginning of system
+08-07 07:39:08.233   522   851 I ActivityManager: Force stopping com.amaia23.hydracam appid=10190 user=0: from pid 12052
+08-07 07:39:08.233   522   851 I ActivityManager: Killing 11869:com.amaia23.hydracam/u0a190 (adj 0): stop com.amaia23.hydracam due to from pid 12052
+08-07 07:39:08.233   522   851 D CompatibilityChangeReporter: Compat change id reported: 261072174; UID 10190; state: ENABLED
+08-07 07:39:08.233   522   539 D DisplayManagerService: Drop pending events for gone uid 10190
+08-07 07:39:08.234   522   851 W ActivityTaskManager: Force removing ActivityRecord{9f154b5 u0 com.amaia23.hydracam/.MainActivity t12 f}}: app died, no saved state
+08-07 07:39:08.234   863   915 V WindowManagerShell: Transition requested: android.os.BinderProxy@5ae3527 TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=12 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=0 lastActiveTime=1830959 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@288b3d4} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+--------- beginning of main
+08-07 07:39:08.236   522  1687 W AppSearchIcing: icing-search-engine.cc:283: Error: 5, Message: Document (com.google.android.googlequicksearchbox$OneSearchZeroStateGoogleSuggestions/default, zp) not found.
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: Failed to fetch suggestions from AppSearch, fallback to AGA
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: java.util.concurrent.CompletionException: java.util.NoSuchElementException: No value present
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:308)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:323)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:684)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:486)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2138)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at com.google.android.apps.nexuslauncher.allapps.H0.onResult(Unknown Source:59)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1.lambda$onResult$0(SearchSessionUtil.java:129)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1.$r8$lambda$_nlk9WiPjSfaAsqKYmp0aPvSRC0(SearchSessionUtil.java:1)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.app.appsearch.SearchSessionUtil$1$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:13)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.os.Handler.handleCallback(Handler.java:958)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.os.Looper.loopOnce(Looper.java:205)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.os.Looper.loop(Looper.java:294)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: Caused by: java.util.NoSuchElementException: No value present
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at java.util.Optional.get(Optional.java:144)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	at com.google.android.apps.nexuslauncher.allapps.H0.onResult(Unknown Source:16)
+08-07 07:39:08.237  1113  2228 E OneSearchSuggestProvider: 	... 8 more
+08-07 07:39:08.237  1113  2228 D OneSearchSuggestProvider: Created the binder channel successfully for end point service =com.google.android.apps.search.googleapp.search.suggest.plugins.onesearch.server.OneSearchSuggestService , mChannel=z1{delegate=s1{logId=25, target=directaddress:///AndroidComponentAddress%5BIntent%20%7B%20act=grpc.io.action.BIND%20cmp=com.google.android.googlequicksearchbox/com.google.android.apps.search.googleapp.search.suggest.plugins.onesearch.server.OneSearchSuggestService%20%7D%5D}} , mOneSearchConnection=X1.T@fec9062
+08-07 07:39:08.238  1678  2090 I AssistantForeground: (REDACTED) Get launcher package: %s
+08-07 07:39:08.239  1646  1936 I AiAiEcho: Predicting[0]: 
+08-07 07:39:08.239  1646  1936 I AiAiEcho: EchoTargets: 
+08-07 07:39:08.239  1646  1936 I AiAiEcho: Filtered by AiAi flag check: 
+08-07 07:39:08.239  1646  1936 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+08-07 07:39:08.239  1646  1936 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+08-07 07:39:08.239  1113  1147 D QuickstepModelDelegate: notifyAppTargetEvent action=1 launchLocation=workspace/0/[-1,-1]/[1,1]
+08-07 07:39:08.240  1078  1078 D CarrierSvcBindHelper: onHandleForceStop: [com.amaia23.hydracam]
+08-07 07:39:08.240  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+08-07 07:39:08.243   406   406 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+08-07 07:39:08.248  1113  1893 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:39:08.248   522   936 E IPCThreadState: Binder transaction failure: 1303845/29189/-3
+08-07 07:39:08.248   350   350 I Zygote  : Process 11869 exited due to signal 9 (Killed)
+08-07 07:39:08.248   522   936 W WindowManager: Failed to deliver inset control state change to w=Window{e375fb9 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+08-07 07:39:08.248   522   936 W WindowManager: android.os.DeadObjectException
+08-07 07:39:08.248   522   936 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+08-07 07:39:08.248   522   936 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+08-07 07:39:08.248   522   936 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsControlChanged(IWindow.java:479)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsControlChanged(WindowState.java:3802)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$notifyPendingInsetsControlChanged$3(InsetsStateController.java:343)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.InsetsStateController.$r8$lambda$8yykPRG1GyNq_J17QvL9d5xANMc(InsetsStateController.java:0)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.InsetsStateController$$ExternalSyntheticLambda2.run(R8$$SyntheticClass:0)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.WindowAnimator.executeAfterPrepareSurfacesRunnables(WindowAnimator.java:294)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:811)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:756)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.WindowManagerService.relayoutWindow(WindowManagerService.java:2410)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.Session.relayout(Session.java:249)
+08-07 07:39:08.248   522   936 W WindowManager: 	at android.view.IWindowSession$Stub.onTransact(IWindowSession.java:701)
+08-07 07:39:08.248   522   936 W WindowManager: 	at com.android.server.wm.Session.onTransact(Session.java:178)
+08-07 07:39:08.248   522   936 W WindowManager: 	at android.os.Binder.execTransactInternal(Binder.java:1339)
+08-07 07:39:08.248   522   936 W WindowManager: 	at android.os.Binder.execTransact(Binder.java:1275)
+08-07 07:39:08.248   522   535 V ActivityManager: Got obituary of 11869:com.amaia23.hydracam
+08-07 07:39:08.249   522  2235 I ImeTracker: com.amaia23.hydracam:28192460: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_REMOVE_CLIENT
+08-07 07:39:08.249   522  2235 I ImeTracker: com.amaia23.hydracam:28192460: onCancelled at PHASE_SERVER_SHOULD_HIDE
+08-07 07:39:08.249   522  1640 I WindowManager: WIN DEATH: Window{e375fb9 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+08-07 07:39:08.249   522  1640 W InputManager-JNI: Input channel object 'e375fb9 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity (client)' was disposed without first being removed with the input manager!
+08-07 07:39:08.251  8812  9043 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:39:08.262   863   915 V WindowManagerShell: onTransitionReady android.os.BinderProxy@5ae3527: {id=18 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@f251079} m=CLOSE f=NONE leash=Surface(name=Task=12)/@0x4f7597d sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@46311be} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xe436072 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x43efcc3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.262   863   915 V WindowManagerShell: Playing animation for (#18)android.os.BinderProxy@5ae3527@0
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@1f58d4d
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@d28d002
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@d4d5d13
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@bfe9b50
+08-07 07:39:08.262   863   915 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@e9ab149
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@157ea4e
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@226b76f
+08-07 07:39:08.262   863   915 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=18 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@f251079} m=CLOSE f=NONE leash=Surface(name=Task=12)/@0x4f7597d sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@46311be} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xe436072 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x43efcc3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.262   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@fc26c92, appThread = android.app.IApplicationThread$Stub$Proxy@dc8e663, debugName = LauncherToDream }}
+08-07 07:39:08.262   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@84e7260, appThread = android.app.IApplicationThread$Stub$Proxy@6802319, debugName = QuickstepLaunchHome }}
+08-07 07:39:08.262   863   915 V WindowManagerShell:  Delegate animation for #18 to null
+08-07 07:39:08.262   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:39:08.262   863   915 V WindowManagerShell: start default transition animation, info = {id=18 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@f251079} m=CLOSE f=NONE leash=Surface(name=Task=12)/@0x4f7597d sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@46311be} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xe436072 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x43efcc3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.262   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@f66a96c animAttr=0x10 type=CLOSE isEntrance=true
+08-07 07:39:08.263   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@8c1413b animAttr=0x11 type=CLOSE isEntrance=false
+08-07 07:39:08.263   863   915 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:39:08.263   522   538 V WindowManager: Sent Transition #18 createdAt=08-07 07:39:08.234 via request=TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=12 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=0 lastActiveTime=1830959 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{c80708 Task{c8e674a #12 type=standard A=10190:com.amaia23.hydracam}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+08-07 07:39:08.263   522   538 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+08-07 07:39:08.263   522   538 V WindowManager:     info={id=18 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{c80708 Task{c8e674a #12 type=standard A=10190:com.amaia23.hydracam}}} m=CLOSE f=NONE leash=Surface(name=Task=12)/@0x80a69ee sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{d3e597d Task{c986047 #1 type=home}}} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xbca8030 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{673947c token=android.os.Binder@6fb0f6f})/@0x34d8d27 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.263   522   541 V WindowManager: Unknown focus tokens, dropping reportFocusChanged
+08-07 07:39:08.265  1678  1678 I GsaVoiceInteractionSrv: Handling ACTION_START_HOTWORD
+08-07 07:39:08.265  1678  2077 I GsaVoiceInteractionSrv: (REDACTED) disregardVoiceMatch: %b
+08-07 07:39:08.265  1678  2077 I GsaVoiceInteractionSrv: Cannot start hotword, hotword has been explicitly disabled.
+08-07 07:39:08.266  8812  8812 I A       : (REDACTED) Created gRPC endpoint for service %s
+08-07 07:39:08.274   522   533 W System  : A resource failed to call release. 
+08-07 07:39:08.274   522   533 W System  : A resource failed to call HardwareBuffer.close. 
+08-07 07:39:08.274   522   533 W System  : A resource failed to call release. 
+08-07 07:39:08.275   522   533 W System  : A resource failed to call HardwareBuffer.close. 
+08-07 07:39:08.279   522  1260 D CompatibilityChangeReporter: Compat change id reported: 161252188; UID 10190; state: DISABLED
+08-07 07:39:08.279   522  1260 W ActivityTaskManager: callingPackage for (uid=2000, pid=12064) has no WPC
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265464455; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265452344; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 266124927; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265451093; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 265456536; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 255940284; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 236283604; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 263959004; UID 10190; state: DISABLED
+08-07 07:39:08.280   522  1260 D CompatibilityChangeReporter: Compat change id reported: 264304459; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 264301586; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 254631730; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 273509367; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 263259275; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 174042980; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 174042936; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 181136395; UID 10190; state: DISABLED
+08-07 07:39:08.281   522  1260 D CompatibilityChangeReporter: Compat change id reported: 194480991; UID 10190; state: ENABLED
+08-07 07:39:08.282   522  1260 D CompatibilityChangeReporter: Compat change id reported: 184838306; UID 10190; state: DISABLED
+08-07 07:39:08.282   522  1260 D CompatibilityChangeReporter: Compat change id reported: 185004937; UID 10190; state: DISABLED
+08-07 07:39:08.282   522  1260 D CompatibilityChangeReporter: Compat change id reported: 205907456; UID 10190; state: ENABLED
+08-07 07:39:08.283   522  1260 I ActivityTaskManager: Add Task{c8e674a #12 type=standard A=10190:com.amaia23.hydracam} to hidden list because adding Task{abdb78e #13 type=standard A=10190:com.amaia23.hydracam}
+08-07 07:39:08.283   863   915 V WindowManagerShell: Transition requested: android.os.BinderProxy@2f69bed TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=13 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} topActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=1 lastActiveTime=1959507 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@cd0ca22} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{ac89cb3 com.amaia23.hydracam.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+08-07 07:39:08.283   522  1260 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity (has extras)} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+08-07 07:39:08.284   522   583 I ImeTracker: com.google.android.apps.nexuslauncher:8c3a1ad4: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+08-07 07:39:08.284   522   583 I ImeTracker: com.google.android.apps.nexuslauncher:8c3a1ad4: onCancelled at PHASE_SERVER_SHOULD_HIDE
+08-07 07:39:08.284   522   541 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10190; state: DISABLED
+08-07 07:39:08.284   522   541 D CompatibilityChangeReporter: Compat change id reported: 177438394; UID 10190; state: DISABLED
+08-07 07:39:08.284   522   541 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 10190; state: DISABLED
+08-07 07:39:08.284   522   541 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 10190; state: ENABLED
+08-07 07:39:08.284   522   549 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10190; state: ENABLED
+08-07 07:39:08.284   522  2567 D CompatibilityChangeReporter: Compat change id reported: 168419799; UID 10190; state: DISABLED
+08-07 07:39:08.284   522  2567 D CompatibilityChangeReporter: Compat change id reported: 273564678; UID 10190; state: DISABLED
+08-07 07:39:08.285  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3227 
+08-07 07:39:08.285  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 0, unlocked = true
+08-07 07:39:08.285  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.google.android.apps.nexuslauncher fieldId=0 fieldName=null extras=null}, false)
+08-07 07:39:08.285  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4008 ShouldHideHeaderOnInitialState = false
+08-07 07:39:08.285  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 2, unlocked = true
+08-07 07:39:08.286   522   542 W WindowManager: Failed to deliver inset control state change to w=Window{e375fb9 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity EXITING}
+08-07 07:39:08.286   522   542 W WindowManager: android.os.DeadObjectException
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsControlChanged(IWindow.java:479)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsControlChanged(WindowState.java:3802)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$notifyPendingInsetsControlChanged$3(InsetsStateController.java:343)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.InsetsStateController.$r8$lambda$8yykPRG1GyNq_J17QvL9d5xANMc(InsetsStateController.java:0)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.InsetsStateController$$ExternalSyntheticLambda2.run(R8$$SyntheticClass:0)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.WindowAnimator.executeAfterPrepareSurfacesRunnables(WindowAnimator.java:294)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:811)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:756)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:115)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer$Traverser.run(WindowSurfacePlacer.java:57)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.Handler.handleCallback(Handler.java:958)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.Looper.loopOnce(Looper.java:205)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.Looper.loop(Looper.java:294)
+08-07 07:39:08.286   522   542 W WindowManager: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+08-07 07:39:08.286   522   542 W WindowManager: 	at com.android.server.ServiceThread.run(ServiceThread.java:46)
+08-07 07:39:08.287   350   350 D Zygote  : Forked child process 12067
+08-07 07:39:08.287   522   549 I ActivityManager: Start proc 12067:com.amaia23.hydracam/u0a190 for next-top-activity {com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}
+08-07 07:39:08.290 12067 12067 I maia23.hydracam: Late-enabling -Xcheck:jni
+08-07 07:39:08.294   522  1260 D CoreBackPreview: Window{2cd43cb u0 Splash Screen com.amaia23.hydracam}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@bb186f2, mPriority=0, mIsAnimationCallback=false}
+08-07 07:39:08.294  1113  1113 D SearchTargetUtil:  query= size=0
+08-07 07:39:08.298 12067 12067 I maia23.hydracam: Using CollectorTypeCC GC.
+08-07 07:39:08.309   863   956 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:39:08.309   522   600 D CompatibilityChangeReporter: Compat change id reported: 265195908; UID 10190; state: ENABLED
+08-07 07:39:08.312  2213  2223 I adbd    : jdwp connection from 12067
+08-07 07:39:08.328  2213  2213 E adbd    : failed to connect to socket 'tcp:4762': Connection refused
+08-07 07:39:08.329   522   538 V WindowManager: Sent Transition #19 createdAt=08-07 07:39:08.281 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=13 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.amaia23.hydracam/.MainActivity } baseActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} topActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} origActivity=null realActivity=ComponentInfo{com.amaia23.hydracam/com.amaia23.hydracam.MainActivity} numActivities=1 lastActiveTime=1959507 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{ecc48f9 Task{abdb78e #13 type=standard A=10190:com.amaia23.hydracam}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{4cd203e com.amaia23.hydracam.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+08-07 07:39:08.329   522   538 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+08-07 07:39:08.329   522   538 V WindowManager:     info={id=19 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{ecc48f9 Task{abdb78e #13 type=standard A=10190:com.amaia23.hydracam}}} m=OPEN f=NONE leash=Surface(name=Task=13)/@0x2e06143 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{d3e597d Task{c986047 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xbca8030 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.330   863   915 V WindowManagerShell: onTransitionReady android.os.BinderProxy@2f69bed: {id=19 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@71d5307} m=OPEN f=NONE leash=Surface(name=Task=13)/@0x871f88 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@532ac34} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x540d21 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.330   863   915 V WindowManagerShell: Transition (#19)android.os.BinderProxy@2f69bed@0 ready while (#18)android.os.BinderProxy@5ae3527@0 is still animating. Notify the animating transition in case they can be merged
+08-07 07:39:08.331   863   915 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#18)android.os.BinderProxy@5ae3527@0
+08-07 07:39:08.332   522   538 V WindowManager: Finish Transition #18: created at 08-07 07:39:08.234 collect-started=0.014ms request-sent=0.038ms started=1.483ms ready=1.474ms sent=27.998ms finished=97.797ms
+08-07 07:39:08.332   522  1260 W WindowManager: Exception thrown during dispatchAppVisibility Window{e375fb9 u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity EXITING}
+08-07 07:39:08.332   522  1260 W WindowManager: android.os.DeadObjectException
+08-07 07:39:08.332   522  1260 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at android.view.IWindow$Stub$Proxy.dispatchAppVisibility(IWindow.java:546)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.WindowState.sendAppVisibilityToClients(WindowState.java:3271)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.WindowContainer.sendAppVisibilityToClients(WindowContainer.java:1221)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.WindowToken.setClientVisible(WindowToken.java:409)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.ActivityRecord.setClientVisible(ActivityRecord.java:6946)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.ActivityRecord.postApplyAnimation(ActivityRecord.java:5637)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.ActivityRecord.commitVisibility(ActivityRecord.java:5580)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.Transition.finishTransition(Transition.java:1151)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.TransitionController.finishTransition(TransitionController.java:868)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.WindowOrganizerController.finishTransition(WindowOrganizerController.java:396)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at android.window.IWindowOrganizerController$Stub.onTransact(IWindowOrganizerController.java:286)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:181)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at android.os.Binder.execTransactInternal(Binder.java:1344)
+08-07 07:39:08.332   522  1260 W WindowManager: 	at android.os.Binder.execTransact(Binder.java:1275)
+08-07 07:39:08.332   522  1260 I Process : Sending signal. PID: 11869 SIG: 9
+08-07 07:39:08.334   522   541 W ActivityManager: setHasOverlayUi called on unknown pid: 11869
+08-07 07:39:08.334   863   915 V WindowManagerShell: Playing animation for (#19)android.os.BinderProxy@2f69bed@0
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@1f58d4d
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@d28d002
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@d4d5d13
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@bfe9b50
+08-07 07:39:08.334   863   915 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@e9ab149
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@157ea4e
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@226b76f
+08-07 07:39:08.334   863   915 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=19 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@71d5307} m=OPEN f=NONE leash=Surface(name=Task=13)/@0x871f88 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@532ac34} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x540d21 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.334   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@fc26c92, appThread = android.app.IApplicationThread$Stub$Proxy@dc8e663, debugName = LauncherToDream }}
+08-07 07:39:08.334   863   915 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@84e7260, appThread = android.app.IApplicationThread$Stub$Proxy@6802319, debugName = QuickstepLaunchHome }}
+08-07 07:39:08.334   863   915 V WindowManagerShell:  Delegate animation for #19 to null
+08-07 07:39:08.334   863   915 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:39:08.334   863   915 V WindowManagerShell: start default transition animation, info = {id=19 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@71d5307} m=OPEN f=NONE leash=Surface(name=Task=13)/@0x871f88 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{android.window.IWindowContainerToken$Stub$Proxy@532ac34} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x540d21 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+08-07 07:39:08.335   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@36857a0 animAttr=0x13 type=OPEN isEntrance=false
+08-07 07:39:08.335   863   915 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@18b4dcc animAttr=0x12 type=OPEN isEntrance=true
+08-07 07:39:08.335   863   915 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@53a1c7c
+08-07 07:39:08.346 12067 12067 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10190; state: ENABLED
+08-07 07:39:08.346 12067 12067 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10190; state: ENABLED
+08-07 07:39:08.347  1678  2089 I AssistantForeground: (REDACTED) Get launcher package: %s
+08-07 07:39:08.348   863   956 D EGL_emulation: app_time_stats: avg=8302.31ms min=8302.31ms max=8302.31ms count=1
+08-07 07:39:08.349   522  1260 D CompatibilityChangeReporter: Compat change id reported: 170503758; UID 10190; state: ENABLED
+08-07 07:39:08.350 12067 12067 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+08-07 07:39:08.350 12067 12067 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+08-07 07:39:08.350 12067 12067 W ziparchive: Unable to open '/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.dm': No such file or directory
+08-07 07:39:08.350 12067 12067 W ziparchive: Unable to open '/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.dm': No such file or directory
+08-07 07:39:08.360   406   406 E BpTransactionCompletedListener: Failed to transact (-32)
+08-07 07:39:08.360   406   406 E BpTransactionCompletedListener: Failed to transact (-32)
+08-07 07:39:08.412  1678  1678 I GsaVoiceInteractionSrv: Handling ACTION_STOP_HOTWORD
+08-07 07:39:08.412  1678  1980 I HwDetectorWithState: (REDACTED) a: %d
+08-07 07:39:08.493 12067 12067 D nativeloader: Configuring clns-6 for other apk /data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/lib/arm64:/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.amaia23.hydracam
+08-07 07:39:08.498 12067 12067 V GraphicsEnvironment: Currently set values for:
+08-07 07:39:08.498 12067 12067 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+08-07 07:39:08.498 12067 12067 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+08-07 07:39:08.498 12067 12067 V GraphicsEnvironment: ANGLE GameManagerService for com.amaia23.hydracam: false
+08-07 07:39:08.498 12067 12067 V GraphicsEnvironment: com.amaia23.hydracam is not listed in per-application setting
+08-07 07:39:08.498 12067 12067 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+08-07 07:39:08.506   522  2567 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10190. pid: 12067
+08-07 07:39:08.510 12067 12089 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+08-07 07:39:08.511 12067 12089 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+08-07 07:39:08.512 12067 12089 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+08-07 07:39:08.520 12067 12090 D FlutterJNI: Beginning load of flutter...
+08-07 07:39:08.520 12067 12091 I ResourceExtractor: Found extracted resources res_timestamp-19-1786080973208
+08-07 07:39:08.523 12067 12090 D FlutterJNI: flutter (null) was loaded normally!
+08-07 07:39:08.525 12067 12092 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+08-07 07:39:08.529 12067 12067 W maia23.hydracam: type=1400 audit(0.0:429): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=75292 scontext=u:r:untrusted_app:s0:c190,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=com.amaia23.hydracam
+08-07 07:39:08.553 12067 12093 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+08-07 07:39:08.574 12067 12099 I flutter : The Dart VM service is listening on http://127.0.0.1:40423/v5LXmsW_sak=/
+08-07 07:39:08.594   863   956 D EGL_emulation: app_time_stats: avg=3853.49ms min=15.70ms max=68832.91ms count=18
+08-07 07:39:08.628   863   915 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#19)android.os.BinderProxy@2f69bed@0
+08-07 07:39:08.628   522   538 V WindowManager: Finish Transition #19: created at 08-07 07:39:08.281 collect-started=0.025ms request-sent=1.826ms started=2.34ms ready=46.782ms sent=47.518ms finished=347.358ms
+08-07 07:39:08.629   863   915 V WindowManagerShell: Track 0 became idle
+08-07 07:39:08.629   863   915 V WindowManagerShell: All active transition animations finished
+08-07 07:39:08.706 12067 12067 D FlutterGeolocator: Attaching Geolocator to activity
+08-07 07:39:08.729 12067 12067 W maia23.hydracam: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+08-07 07:39:08.729 12067 12067 W maia23.hydracam: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+08-07 07:39:08.729 12067 12067 W maia23.hydracam: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+08-07 07:39:08.729 12067 12067 W maia23.hydracam: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+08-07 07:39:08.733 12067 12067 D FlutterRenderer: Width is zero. 0,0
+08-07 07:39:08.738 12067 12067 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10190; state: DISABLED
+08-07 07:39:08.738 12067 12067 W OpenGLRenderer: Unknown dataspace 0
+08-07 07:39:08.778 12067 12067 I flutter : Log registered: {message: Get token, timestamp: 2026-08-07 07:39:08.774863, function: null, file: null}
+08-07 07:39:08.779 12067 12067 I flutter : Log registered: {message: Fetch token, timestamp: 2026-08-07 07:39:08.779006, function: null, file: null}
+08-07 07:39:08.835 12067 12067 D FlutterRenderer: Width is zero. 0,0
+08-07 07:39:08.835   522  2567 D CoreBackPreview: Window{d80a54d u0 com.amaia23.hydracam/com.amaia23.hydracam.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@1990f6f, mPriority=0, mIsAnimationCallback=false}
+08-07 07:39:08.838 12067 12067 D FlutterJNI: Sending viewport metrics to the engine.
+08-07 07:39:08.839 12067 12087 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+08-07 07:39:08.839 12067 12087 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+08-07 07:39:08.842   157   157 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+08-07 07:39:08.842 12067 12093 I Gralloc4: mapper 4.x is not supported
+08-07 07:39:08.864 12067 12087 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:39:09.167 12067 12067 D FlutterGeolocator: Creating service.
+08-07 07:39:09.167 12067 12067 D FlutterGeolocator: Binding to location service.
+08-07 07:39:09.171 12067 12067 I flutter : Log registered: {message: Launch config from intent: role=setup, preferredMasterIp=null, targetId=emulator-5554, forceSlaveMode=null, manualLaunch=null, timestamp: 2026-08-07 07:39:09.171404, function: null, file: null}
+08-07 07:39:09.178 12067 12067 D FlutterGeolocator: Geolocator foreground service connected
+08-07 07:39:09.179 12067 12067 D FlutterGeolocator: Initializing Geolocator services
+08-07 07:39:09.179 12067 12067 D FlutterGeolocator: Flutter engine connected. Connected engine count 1
+08-07 07:39:09.182 12067 12067 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (startup), timestamp: 2026-08-07 07:39:09.182164, function: null, file: null}
+08-07 07:39:09.187 12067 12067 I flutter : Log registered: {message: Automation bridge listening on port 4762, timestamp: 2026-08-07 07:39:09.187103, function: null, file: null}
+08-07 07:39:09.191 12067 12067 I flutter : Log registered: {message: Permission request completed.
+08-07 07:39:09.191 12067 12067 I flutter : Granted: [Permission.camera, Permission.locationWhenInUse, Permission.microphone]
+08-07 07:39:09.191 12067 12067 I flutter : Denied: [], timestamp: 2026-08-07 07:39:09.191518, function: requestAllPermissions, file: PermissionService}
+08-07 07:39:09.191 12067 12067 I flutter : Log registered: {message: Retrieved existing Device ID: 87ebc3e9-214b-4bd9-a119-1e780b19a6cf, timestamp: 2026-08-07 07:39:09.191711, function: null, file: null}
+08-07 07:39:09.191 12067 12067 I flutter : Log registered: {message: Device ID: 87ebc3e9-214b-4bd9-a119-1e780b19a6cf, timestamp: 2026-08-07 07:39:09.191767, function: null, file: null}
+08-07 07:39:09.191 12067 12067 I flutter : Log registered: {message: Location access will be requested on demand when the user opens the location view., timestamp: 2026-08-07 07:39:09.191798, function: null, file: null}
+08-07 07:39:09.193 12067 12067 I flutter : Log registered: {message: Get token, timestamp: 2026-08-07 07:39:09.193921, function: null, file: null}
+08-07 07:39:09.194 12067 12067 I flutter : Log registered: {message: Fetch token, timestamp: 2026-08-07 07:39:09.193992, function: null, file: null}
+08-07 07:39:09.197 12067 12067 D FlutterJNI: Sending viewport metrics to the engine.
+08-07 07:39:09.613   863   956 D EGL_emulation: app_time_stats: avg=16.37ms min=2.94ms max=29.59ms count=61
+08-07 07:39:09.700   848   848 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+08-07 07:39:09.975 12067 12067 I flutter : Log registered: {message: M2M token obtained successfully, timestamp: 2026-08-07 07:39:09.975854, function: null, file: null}
+08-07 07:39:09.983 12067 12067 I flutter : Log registered: {message: M2M token obtained successfully, timestamp: 2026-08-07 07:39:09.983006, function: null, file: null}
+08-07 07:39:10.467 12067 12067 I flutter : Log registered: {message: Backend warm-up completed., timestamp: 2026-08-07 07:39:10.467436, function: null, file: null}
+08-07 07:39:10.476 12067 12067 I flutter : Log registered: {message: Development auto-login restored user jose@keepeyeonball.com., timestamp: 2026-08-07 07:39:10.475946, function: null, file: null}
+08-07 07:39:10.476 12067 12067 I flutter : Log registered: {message: Restored persisted user session during startup., timestamp: 2026-08-07 07:39:10.476063, function: null, file: null}
+08-07 07:39:10.477 12067 12067 I flutter : Log registered: {message: CameraServiceSingleton initialized; mockCamera=false, timestamp: 2026-08-07 07:39:10.477024, function: null, file: null}
+08-07 07:39:10.516 12067 12067 I flutter : Log registered: {message: Navigation decision: automationEnabled=true, config=Instance of 'LaunchConfig', automationMaster=false, automationStandby=false, automationSetupPreview=true, forceSlave=false, timestamp: 2026-08-07 07:39:10.516752, function: null, file: null}
+08-07 07:39:10.516 12067 12067 I flutter : Log registered: {message: Navigating to CameraSetupStandaloneScreen, timestamp: 2026-08-07 07:39:10.516904, function: null, file: null}
+08-07 07:39:10.831 12067 12067 I flutter : Log registered: {message: Prevent screen from turning off: wakelock enabled (app init), timestamp: 2026-08-07 07:39:10.831209, function: null, file: null}
+08-07 07:39:10.840 12067 12067 I flutter : Log registered: {message: Retrieved existing Device ID: 87ebc3e9-214b-4bd9-a119-1e780b19a6cf, timestamp: 2026-08-07 07:39:10.840122, function: null, file: null}
+08-07 07:39:10.840 12067 12067 I flutter : Log registered: {message: Initializing camera preview..., timestamp: 2026-08-07 07:39:10.840510, function: null, file: null}
+08-07 07:39:10.902   522   538 W ziparchive: Unable to open '/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.dm': No such file or directory
+08-07 07:39:10.903   522   538 I ActivityTaskManager: Displayed com.amaia23.hydracam/.MainActivity for user 0: +2s622ms
+08-07 07:39:10.903   522   538 I ActivityTaskManager: Fully drawn com.amaia23.hydracam/.MainActivity: +2s622ms
+08-07 07:39:10.903   522   538 W ziparchive: Unable to open '/data/app/~~Qn0WEeZiqaL2WCVRnX3h6A==/com.amaia23.hydracam-1uHP73sEw4W3lzmzWFRHSw==/base.dm': No such file or directory
+08-07 07:39:10.906 12067 12067 D QuirkSettingsLoader: QuirkSettings$MetadataHolderService is not found.
+08-07 07:39:10.906 12067 12067 D CameraX : QuirkSettings from app metadata: null
+08-07 07:39:10.906 12067 12067 D CameraX : QuirkSettings by default: QuirkSettings{enabledWhenDeviceHasQuirk=true, forceEnabledQuirks=[], forceDisabledQuirks=[]}
+08-07 07:39:10.919   863   956 E OpenGLRenderer: Unable to match the desired swap behavior.
+08-07 07:39:10.920   522   583 D CompatibilityChangeReporter: Compat change id reported: 214016041; UID 10190; state: ENABLED
+08-07 07:39:10.920 12067 12135 D DeviceQuirks: camera2 DeviceQuirks = PixelJpegRSupportedQuirk
+08-07 07:39:10.920   522   583 I ImeTracker: com.amaia23.hydracam:d4de7782: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+08-07 07:39:10.920   522   583 I ImeTracker: com.amaia23.hydracam:d4de7782: onCancelled at PHASE_SERVER_SHOULD_HIDE
+08-07 07:39:10.920 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:10.922  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3227 
+08-07 07:39:10.922  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 0, unlocked = true
+08-07 07:39:10.922  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.amaia23.hydracam fieldId=0 fieldName=null extras=null}, false)
+08-07 07:39:10.922  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4008 ShouldHideHeaderOnInitialState = false
+08-07 07:39:10.922  8985  8985 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 2, unlocked = true
+08-07 07:39:10.924 12067 12135 D CXCP    : Created CameraPipe in 1.724 ms
+08-07 07:39:10.926 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:10.929   863   956 D EGL_emulation: app_time_stats: avg=258.13ms min=15.60ms max=2434.71ms count=10
+08-07 07:39:10.934 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.123 ms
+08-07 07:39:10.934 12067 12135 I CameraManagerGlobal: Connecting to camera service
+08-07 07:39:10.937 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:10.937 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:10.937 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:10.937 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:10.938 12067 12135 D CompatibilityChangeReporter: Compat change id reported: 250678880; UID 10190; state: ENABLED
+08-07 07:39:10.939 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 1.528 ms
+08-07 07:39:10.943 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:10.947 12067 12135 D CompatibilityChangeReporter: Compat change id reported: 206033068; UID 10190; state: ENABLED
+08-07 07:39:10.948 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:10.948 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:10.950 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:10.956 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:10.957 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(1)> for CameraId-1
+08-07 07:39:10.957 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:10.957 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:10.957 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:10.957 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:10.958 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:10.958  1113  1146 I ImeTracker: com.google.android.apps.nexuslauncher:edbe0b09: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT
+08-07 07:39:10.958  1113  1146 I ImeTracker: com.google.android.apps.nexuslauncher:edbe0b09: onFailed at PHASE_CLIENT_VIEW_SERVED
+08-07 07:39:10.958  1113  2228 D OneSearchSuggestProvider: Shut down the binder channel
+08-07 07:39:10.958  1113  8698 I IPCThreadState: oneway function results for code 2 on binder at 0xb4000072776aa310 will be dropped but finished with status UNKNOWN_TRANSACTION
+08-07 07:39:10.960 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:10.961 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:10.961 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:10.961 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:10.961 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1962185
+08-07 07:39:10.961 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:10.961 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:10.961 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:10.961 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:10.961 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:10.961 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:10.961 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:11.179   863   934 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@d55666e
+08-07 07:39:11.179   522   583 D CoreBackPreview: Window{2cd43cb u0 Splash Screen com.amaia23.hydracam EXITING}: Setting back callback null
+08-07 07:39:11.180   522  1638 W InputManager-JNI: Input channel object '2cd43cb Splash Screen com.amaia23.hydracam (client)' was disposed without first being removed with the input manager!
+08-07 07:39:11.180   863   956 D EGL_emulation: app_time_stats: avg=38.01ms min=12.95ms max=903.15ms count=41
+08-07 07:39:11.464 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:11.464 12067 12135 D CXCP    : Created CameraPipe in 0.218 ms
+08-07 07:39:11.465 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:11.465 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.010 ms
+08-07 07:39:11.466 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:11.466 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:11.466 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:11.466 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:11.467 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 0.820 ms
+08-07 07:39:11.468 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:11.468 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:11.468 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:11.469 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:11.470 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:11.470 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(2)> for CameraId-1
+08-07 07:39:11.470 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:11.470 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:11.470 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:11.470 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:11.471 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:11.471 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:11.471 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:11.471 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:11.471 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:11.471 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1962695
+08-07 07:39:11.471 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:11.471 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:11.471 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:11.471 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:11.472 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:11.472 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:11.472 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:11.897 12067 12093 D EGL_emulation: app_time_stats: avg=5.06ms min=1.03ms max=48.14ms count=60
+08-07 07:39:11.973 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:11.973 12067 12135 D CXCP    : Created CameraPipe in 0.245 ms
+08-07 07:39:11.973 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:11.974 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.013 ms
+08-07 07:39:11.974 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:11.974 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:11.974 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:11.974 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:11.976 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 0.987 ms
+08-07 07:39:11.977 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:11.978 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:11.978 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:11.978 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:11.979 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:11.979 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(3)> for CameraId-1
+08-07 07:39:11.979 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:11.979 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:11.979 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:11.980 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:11.980 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:11.980 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:11.980 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:11.980 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:11.980 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:11.981 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1963204
+08-07 07:39:11.981 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:11.981 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:11.981 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:11.981 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:11.981 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:11.981 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:11.981 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:12.194   863   956 D EGL_emulation: app_time_stats: avg=16.99ms min=13.38ms max=33.60ms count=59
+08-07 07:39:12.288   522  2893 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+08-07 07:39:12.484 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:12.485 12067 12135 D CXCP    : Created CameraPipe in 0.237 ms
+08-07 07:39:12.485 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:12.486 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.011 ms
+08-07 07:39:12.486 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:12.486 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:12.486 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:12.486 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:12.487 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 0.989 ms
+08-07 07:39:12.488 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:12.489 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:12.489 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:12.489 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:12.490 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:12.490 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(4)> for CameraId-1
+08-07 07:39:12.490 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:12.490 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:12.490 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:12.490 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:12.490 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:12.491 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:12.491 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:12.491 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:12.491 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:12.491 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1963715
+08-07 07:39:12.491 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:12.491 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:12.491 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:12.491 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:12.491 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:12.491 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:12.491 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:12.913 12067 12093 D EGL_emulation: app_time_stats: avg=2.76ms min=0.84ms max=6.48ms count=61
+08-07 07:39:12.993 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:12.993 12067 12135 D CXCP    : Created CameraPipe in 0.310 ms
+08-07 07:39:12.994 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:12.995 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.016 ms
+08-07 07:39:12.995 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:12.995 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:12.995 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:12.995 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:12.997 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 1.350 ms
+08-07 07:39:12.998 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:12.999 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:12.999 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:12.999 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:13.001 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:13.001 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(5)> for CameraId-1
+08-07 07:39:13.001 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:13.001 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:13.001 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:13.001 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:13.001 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:13.001 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:13.002 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:13.002 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:13.002 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:13.002 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1964226
+08-07 07:39:13.002 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:13.002 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:13.002 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:13.002 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:13.002 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:13.002 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:13.002 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:13.505 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:13.505 12067 12135 D CXCP    : Created CameraPipe in 0.188 ms
+08-07 07:39:13.506 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:13.506 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.009 ms
+08-07 07:39:13.506 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:13.506 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:13.507 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:13.507 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:13.508 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 0.834 ms
+08-07 07:39:13.509 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:13.509 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:13.509 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:13.509 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:13.511 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:13.511 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(6)> for CameraId-1
+08-07 07:39:13.511 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:13.511 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:13.511 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:13.511 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:13.511 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:13.511 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:13.512 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:13.512 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:13.512 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:13.512 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1964736
+08-07 07:39:13.512 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:13.512 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:13.512 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:13.512 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:13.512 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:13.512 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:13.512 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:13.932 12067 12093 D EGL_emulation: app_time_stats: avg=4.30ms min=0.98ms max=71.75ms count=58
+08-07 07:39:14.015 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:14.016 12067 12135 D CXCP    : Created CameraPipe in 0.261 ms
+08-07 07:39:14.016 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:14.017 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.010 ms
+08-07 07:39:14.017 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:14.017 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:14.017 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:14.017 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:14.018 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 0.871 ms
+08-07 07:39:14.019 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:14.020 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:14.020 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:14.020 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:14.021 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:14.021 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(7)> for CameraId-1
+08-07 07:39:14.021 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:14.022 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:14.022 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:14.022 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:14.022 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:14.022 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:14.022 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:14.022 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:14.022 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:14.023 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1965246
+08-07 07:39:14.023 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:14.023 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:14.023 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:14.023 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:14.023 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:14.023 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:14.023 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:14.180 12067 12179 D ProfileInstaller: Installing profile for com.amaia23.hydracam
+08-07 07:39:14.523   863   863 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+08-07 07:39:14.525 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:14.525 12067 12135 D CXCP    : Created CameraPipe in 0.196 ms
+08-07 07:39:14.526 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:14.526 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.010 ms
+08-07 07:39:14.527 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:14.527 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:14.527 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:14.527 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:14.529 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 1.934 ms
+08-07 07:39:14.530 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:14.530 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:14.530 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:14.531 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:14.532 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:14.532 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(8)> for CameraId-1
+08-07 07:39:14.532 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:14.532 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:14.532 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:14.533 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:14.533 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:14.533 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:14.533 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:14.533 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:14.533 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:14.533 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1965757
+08-07 07:39:14.533 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:14.533 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:14.533 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:14.533 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:14.534 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:14.534 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:14.534 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:14.933 12067 12093 D EGL_emulation: app_time_stats: avg=2.66ms min=0.92ms max=8.78ms count=60
+08-07 07:39:15.036 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:15.037 12067 12135 D CXCP    : Created CameraPipe in 0.272 ms
+08-07 07:39:15.037 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:15.038 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.013 ms
+08-07 07:39:15.038 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:15.038 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:15.038 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:15.038 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:15.039 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 1.071 ms
+08-07 07:39:15.040 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:15.041 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:15.041 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:15.041 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:15.044 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:15.044 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(9)> for CameraId-1
+08-07 07:39:15.045 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:15.045 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:15.045 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:15.045 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:15.045 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:15.045 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:15.045 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:15.045 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:15.045 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:15.046 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1966270
+08-07 07:39:15.046 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:15.046 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:15.046 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:15.046 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:15.046 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:15.046 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:15.046 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:15.549 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:15.550 12067 12135 D CXCP    : Created CameraPipe in 0.225 ms
+08-07 07:39:15.550 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:15.551 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.010 ms
+08-07 07:39:15.551 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:15.551 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:15.551 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:15.551 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:15.552 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 0.926 ms
+08-07 07:39:15.553 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:15.553 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:15.553 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:15.554 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:15.555 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:15.555 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(10)> for CameraId-1
+08-07 07:39:15.555 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:15.555 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:15.555 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:15.555 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:15.555 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:15.555 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:15.556 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:15.556 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:15.556 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:15.556 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1966780
+08-07 07:39:15.556 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:15.556 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:15.556 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:15.556 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:15.556 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:15.556 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:15.556 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
+08-07 07:39:15.933 12067 12093 D EGL_emulation: app_time_stats: avg=2.46ms min=0.87ms max=7.08ms count=60
+08-07 07:39:16.049   863   863 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+08-07 07:39:16.059 12067 12135 D CXCP    : Created UseCaseConfigurationMap
+08-07 07:39:16.059 12067 12135 D CXCP    : Created CameraPipe in 0.248 ms
+08-07 07:39:16.060 12067 12135 D CXCP    : Camera2DeviceCache: Expected minimum camera count = 2
+08-07 07:39:16.061 12067 12135 D CXCP    : Created CameraFactoryAdapter in 0.013 ms
+08-07 07:39:16.061 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:16.061 12067 12135 D CXCP    : Updated available camera list: [] -> [1]
+08-07 07:39:16.061 12067 12135 D CXCP    : Creating new surface combinations for: [1]
+08-07 07:39:16.061 12067 12135 D CXCP    : Loading metadata for CameraId-1
+08-07 07:39:16.063 12067 12135 I CXCP    : Loaded metadata for CameraId-1 in 1.074 ms
+08-07 07:39:16.064 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:16.065 12067 12135 D CXCP    : Committed new surface combination map. Total cameras: 1
+08-07 07:39:16.065 12067 12135 D CameraRepository: Added camera: 1
+08-07 07:39:16.065 12067 12135 D CameraQuirks: camera2 CameraQuirks = CloseCaptureSessionOnVideoQuirk | FinalizeSessionOnCloseQuirk
+08-07 07:39:16.066 12067 12135 I CXCP    : Device Level: INFO_SUPPORTED_HARDWARE_LEVEL_3
+08-07 07:39:16.066 12067 12135 D CXCP    : Created CameraInternalAdapter<CameraId-1(11)> for CameraId-1
+08-07 07:39:16.066 12067 12135 W CXCP    : Failed to query camera ID list: Invalid list returned: [CameraId-1].
+08-07 07:39:16.067 12067 12135 D CXCP    : Loaded ConcurrentCameraIdsSet {{1}}
+08-07 07:39:16.067 12067 12135 I CameraPresencePrvdr: Starting CameraPresenceProvider monitoring.
+08-07 07:39:16.067 12067 12135 I CameraPresenceSrc: First observer added. Starting monitoring.
+08-07 07:39:16.067 12067 12135 I PipePresenceSrc: Starting to collect camera ID flow.
+08-07 07:39:16.067 12067 12135 D CameraValidator: Verifying camera lens facing on emu64a
+08-07 07:39:16.067 12067 12135 W CameraValidator: Camera LENS_FACING_FRONT verification failed
+08-07 07:39:16.067 12067 12135 W CameraValidator: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:16.067 12067 12135 W CameraValidator: 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:16.068 12067 12135 W CameraX : Retry init. Start time 1962131 current time 1967291
+08-07 07:39:16.068 12067 12135 W CameraX : androidx.camera.core.impl.CameraValidator$CameraIdListIncorrectException: Expected camera missing from device.
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:136)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.CameraX.lambda$initAndRetryRecursively$3$androidx-camera-core-CameraX(CameraX.java:485)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.CameraX$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1.lambda$newThread$0(CameraExecutor.java:76)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.CameraExecutor$1$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at java.lang.Thread.run(Thread.java:1012)
+08-07 07:39:16.068 12067 12135 W CameraX : Caused by: java.lang.IllegalArgumentException: No available camera can be found. Cams:1 Id:1  Lens:1 PhyId:null  Filters:1 Id:Identifier{value=java.lang.Object@c5d7bca} LensFilter:0
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.CameraSelector.select(CameraSelector.java:109)
+08-07 07:39:16.068 12067 12135 W CameraX : 	at androidx.camera.core.impl.CameraValidatorImpl.validateOnFirstInit(CameraValidator.kt:128)
+08-07 07:39:16.068 12067 12135 W CameraX : 	... 10 more
+08-07 07:39:16.068 12067 12135 I CameraPresencePrvdr: Shutting down CameraPresenceProvider monitoring.
+08-07 07:39:16.068 12067 12135 I CameraPresenceSrc: Last observer removed. Stopping monitoring.
+08-07 07:39:16.068 12067 12135 I PipePresenceSrc: Stopping camera ID flow collection.
