@@ -58,6 +58,7 @@ android/app/.cxx/
 android/key.properties
 android/*.jks
 android/*.keystore
+android/*.pem
 android/fastlane/*.json
 android/fastlane/report.xml
 
@@ -106,11 +107,24 @@ logs/verification-runs/**/*.zip
 logs/verification-runs/**/screenshots/
 logs/verification-runs/**/video/
 logs/verification-runs/**/*.mov
-logs/verification-runs/**/*.mp4
-logs/verification-runs/**/*.png
 logs/verification-runs/**/automation-snapshots.json
 logs/verification-runs/**/logs.json
 logs/verification-runs/**/logs-live.json
+
+# Bulky evidence media anywhere under logs/, not just verification-runs.
+logs/**/*.mp4
+logs/**/*.webm
+logs/**/*.png
+logs/**/*.jpg
+logs/**/*.jpeg
+logs/**/*.gif
+
+# Raw device log dumps (large logcat captures). Small summary .txt files
+# outside device-logs/ and not logcat-named stay tracked.
+logs/**/*logcat*.txt
+logs/**/device-logs/*.txt
+logs/**/*.stderr.txt
+logs/**/*.stdout.txt
 
 # Agent worktrees
 .worktrees/
