@@ -1,5 +1,7 @@
 # HydraCam Evidence-First Advancement Loop
 
+Last reviewed: 2026-08-26 (content dated 2026-08-26).
+
 This is the required verification loop for recurring HydraCam project work.
 It consumes only existing control-plane work from `docs/control/` and requires
 run-specific evidence before an item can be called complete.

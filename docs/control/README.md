@@ -1,5 +1,7 @@
 # HydraCam Control Plane
 
+Last reviewed: 2026-08-26 (content dated 2026-08-26).
+
 This directory is the product/control-plane entrypoint for the HydraCam mobile
 repo. It replaces the Google Sheet as the canonical source for durable project
 state.
@@ -55,6 +57,9 @@ spreadsheet sprint rows.
 
 - `status-and-roadmap.md`: current mobile status, release blockers, roadmap, and
   future product ideas separated from active mobile work.
+- `status-archive-2026.md`: verbatim historical status log, device-matrix
+  evidence narratives, and superseded decisions moved out of
+  `status-and-roadmap.md` on 2026-08-26 to keep that document current-focused.
 - `baseline-functionality-and-support.md`: basic support contract for baseline
   functionality, supported hardware, emulator/simulator scope, and minimum
   gates before making support claims.
@@ -153,6 +158,18 @@ The `history/` snapshot archive (dated status notes and one-off debugging logs
 moved out of the repo root on 2026-06-28) was removed on 2026-08-26 as
 superseded; the files remain available in git history at the pre-removal
 commit (`05b60544`).
+
+## Staleness Convention
+
+Every live file directly under `docs/control/` (excluding `status-and-roadmap.md`
+and `backlog-import.md`, which carry their own refresh markers) carries a
+`Last reviewed: <date> (content dated <git-date>)` line under its H1. The
+`git-date` is the file's last substantive `git log` commit date; `Last
+reviewed` is bumped to the current date only when someone actually re-reads
+and re-verifies the content, not on every edit. A `Last reviewed` date equal
+to `content dated` means the line was added to mark staleness, not that the
+document was freshly re-verified — check the gap between the two to judge how
+stale a document is likely to be.
 
 ## Update Rules
 

@@ -1,5 +1,7 @@
 # HydraCam Device Relationship FSM
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
+
 Derived on 2026-06-08 from the current Flutter app code and control-plane docs.
 This document describes the current behavior first, then the recommended explicit
 fleet FSM that should be implemented before treating master loss as production

@@ -1,6 +1,6 @@
 # Wearable Replay Integration Plan
 
-Last reviewed: 2026-06-22.
+Last reviewed: 2026-06-23 (content dated 2026-06-23).
 
 This document is the durable control-plane plan for adding player-worn wearable
 capture to HydraCam sessions. It covers Ray-Ban Meta no-display glasses,

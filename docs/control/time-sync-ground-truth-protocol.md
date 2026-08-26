@@ -1,5 +1,7 @@
 # Clock-Sync Ground-Truth Verification Protocol
 
+Last reviewed: 2026-06-10 (content dated 2026-06-10).
+
 Operator protocol for empirically validating HydraCam's cross-device
 clock-synchronization feature against the **< 50 ms** cross-device alignment
 target from the NTP sync specification.
@@ -103,7 +105,7 @@ estimates, and RSS is the standard propagation for independent uncertainties.
 
 A run **PASSES** when:
 
-```
+```text
 |alignment error| + combined uncertainty < 50 ms
 ```
 

@@ -1,5 +1,7 @@
 # Native Android Client Feature Comparison
 
+Last reviewed: 2026-06-19 (content dated 2026-06-19).
+
 Source snapshot: `local-przemek-notes/hydracam-android-client`.
 
 ## Feature Matrix

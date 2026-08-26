@@ -1,5 +1,6 @@
 # Win11 Development Host
 
+Last reviewed: 2026-06-09 (content dated 2026-06-09).
 Last refreshed: 2026-06-09.
 
 This document records the current Windows host prepared for HydraCam

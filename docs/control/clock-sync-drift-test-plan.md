@@ -1,5 +1,6 @@
 # Clock-Sync Drift Test Plan
 
+> Last reviewed: 2026-06-24 (content dated 2026-06-24)
 > Created: 2026-06-24
 
 Hardware ground-truth test for multi-camera time synchronization. Every camera

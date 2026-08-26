@@ -1,5 +1,7 @@
 # HydraCam Architecture and Testing
 
+Last reviewed: 2026-07-26 (content dated 2026-07-26).
+
 Source: deprecated Google Sheet `HydraCam Dev Process`, read 2026-06-05, plus
 current repo control-plane context.
 

@@ -1,5 +1,11 @@
 # Linear Backlog Import Queue
 
+> **Frozen import.** This file was imported from the `HydraCam Dev Process`
+> Google Sheet and frozen on 2026-06-25. The canonical backlog is moving to
+> Linear per `AGENTS.md`. Treat every row below as historical staging data,
+> not a live task list — verify each item against current code before acting
+> on it.
+
 Source: deprecated Google Sheet `HydraCam Dev Process`, read 2026-06-05.
 
 Live Linear issue creation is gated until the Linear workspace, team, project,

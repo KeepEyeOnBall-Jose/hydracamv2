@@ -1,5 +1,7 @@
 # HydraCam Requirements
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
+
 Source: deprecated Google Sheet `HydraCam Dev Process`, read 2026-06-05.
 
 Scope labels:
