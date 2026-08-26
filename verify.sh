@@ -1,8 +1,23 @@
 #!/bin/bash
 # HydraCam Build & Test Verification Script
-# Run this before deploying to ensure everything is ready
+# Run this before deploying to ensure everything is ready.
+#
+# Every gated step below must exit non-zero on failure and stop the script
+# (set -euo pipefail). Nothing here is allowed to reach "VERIFICATION
+# COMPLETE" after a real failure, so string-matching on command output is
+# not used for pass/fail decisions — only exit codes are.
 
-set -e  # Exit on any error
+set -euo pipefail
+
+# Directories that must be `dart format --set-exit-if-changed` clean. Keep in
+# sync with the set the format gate below actually checks.
+readonly FORMAT_DIRS=(lib test tool integration_test)
+readonly BUILD_LOG="build/verify-build.log"
+
+fail() {
+    echo "❌ $1"
+    exit 1
+}
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  HydraCam Build & Test Verification"
@@ -17,74 +32,73 @@ echo ""
 # Check Flutter installation
 echo "🔍 Checking Flutter installation..."
 if ! command -v flutter &> /dev/null; then
-    echo "❌ Flutter not found. Please install Flutter SDK."
-    exit 1
+    fail "Flutter not found. Please install Flutter SDK."
 fi
 flutter --version | head -1
 echo ""
 
-# Run Flutter Doctor
+# Run Flutter Doctor (informational only; does not gate the run)
 echo "🏥 Running Flutter Doctor..."
-flutter doctor --android-licenses 2>/dev/null || true
-flutter doctor
+flutter doctor --android-licenses < /dev/null || true
+flutter doctor || true
 echo ""
 
 # Clean build
 echo "🧹 Cleaning previous build..."
-flutter clean > /dev/null 2>&1
+if ! flutter clean; then
+    fail "flutter clean failed"
+fi
 echo "✅ Clean complete"
 echo ""
 
 # Get dependencies
 echo "📦 Getting dependencies..."
-flutter pub get > /dev/null 2>&1
+if ! flutter pub get; then
+    fail "flutter pub get failed"
+fi
 echo "✅ Dependencies updated"
 echo ""
 
-# Run analyzer
+# Check formatting (gated on exit code; does not rewrite files)
+echo "🎨 Checking dart format (${FORMAT_DIRS[*]})..."
+if ! dart format --output=none --set-exit-if-changed "${FORMAT_DIRS[@]}"; then
+    fail "dart format found unformatted files in: ${FORMAT_DIRS[*]} (run 'dart format ${FORMAT_DIRS[*]}' to fix)"
+fi
+echo "✅ Format: clean"
+echo ""
+
+# Run analyzer (gated on exit code, not "No issues found" text)
 echo "🔎 Running Flutter Analyzer..."
-ANALYZER_OUTPUT=$(flutter analyze 2>&1)
-if echo "$ANALYZER_OUTPUT" | grep -q "No issues found"; then
-    echo "✅ Analyzer: 0 issues"
-else
-    echo "❌ Analyzer found issues:"
-    echo "$ANALYZER_OUTPUT"
-    exit 1
+if ! flutter analyze --no-pub; then
+    fail "flutter analyze found issues"
 fi
+echo "✅ Analyzer: 0 issues"
 echo ""
 
-# Run tests
+# Run full test suite (gated on exit code, not "All tests passed" text)
 echo "🧪 Running Tests..."
-TEST_OUTPUT=$(flutter test test/widget_test.dart test/services test/platform 2>&1 || true)
-if echo "$TEST_OUTPUT" | grep -q "All tests passed"; then
-    PASSED=$(echo "$TEST_OUTPUT" | grep -o "+[0-9]*" | head -1 | tr -d '+')
-    echo "✅ Tests: $PASSED passed"
-else
-    PASSED=$(echo "$TEST_OUTPUT" | grep -oE '\+[0-9]+' | head -1 | tr -d '+' || echo "0")
-    FAILED=$(echo "$TEST_OUTPUT" | grep -oE '\-[0-9]+' | head -1 | tr -d '-' || echo "0")
-    if [ "$FAILED" = "0" ]; then
-        echo "✅ Tests: $PASSED passed"
-    else
-        echo "⚠️  Tests: $PASSED passed, $FAILED failed (see details above)"
-    fi
+if ! flutter test --no-pub; then
+    fail "flutter test failed"
 fi
+echo "✅ Tests: all passed"
 echo ""
 
-# Check for connected devices
+# Check for connected devices (informational only; does not gate the run)
 echo "📱 Checking for connected devices..."
-DEVICES=$(flutter devices 2>&1)
-DEVICE_COUNT=$(echo "$DEVICES" | grep -c "•" || echo "0")
+DEVICES_OUTPUT=$(flutter devices 2>&1 || true)
+DEVICE_COUNT=$(printf '%s\n' "$DEVICES_OUTPUT" | grep -c "•" || true)
 if [ "$DEVICE_COUNT" -gt 0 ]; then
     echo "✅ Found $DEVICE_COUNT connected device(s)"
-    echo "$DEVICES" | grep "•" | head -3
+    printf '%s\n' "$DEVICES_OUTPUT" | grep "•" | head -3
 else
     echo "⚠️  No devices connected (but can still build)"
 fi
 echo ""
 
-# Try to build Android APK
+# Build Android APK (gated on exit code; full log kept under build/, not /tmp)
 echo "🔨 Building Android APK (debug)..."
-if flutter build apk --debug > /tmp/build.log 2>&1; then
+mkdir -p build
+if flutter build apk --debug --no-pub > "$BUILD_LOG" 2>&1; then
     echo "✅ Android APK built successfully"
     APK_PATH=$(find build/app/outputs -name "*.apk" | head -1)
     if [ -n "$APK_PATH" ]; then
@@ -93,9 +107,9 @@ if flutter build apk --debug > /tmp/build.log 2>&1; then
         echo "   Size: $APK_SIZE"
     fi
 else
-    echo "❌ Android build failed (see /tmp/build.log for details)"
-    tail -20 /tmp/build.log
-    exit 1
+    echo "❌ Android build failed (see $BUILD_LOG for details)"
+    tail -40 "$BUILD_LOG"
+    fail "flutter build apk --debug failed"
 fi
 echo ""
 
@@ -106,6 +120,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo "📋 Summary:"
 echo "   ✅ Flutter SDK: OK"
+echo "   ✅ Format: clean"
 echo "   ✅ Analyzer: 0 issues"
 echo "   ✅ Tests: Passing"
 echo "   ✅ Build: Success"
@@ -121,4 +136,3 @@ echo "For release builds:"
 echo "  • flutter build apk --release"
 echo "  • flutter build appbundle --release"
 echo ""
-

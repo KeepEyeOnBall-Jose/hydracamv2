@@ -38,7 +38,8 @@ void main() {
     expect(capabilities.cameraModes, hasLength(3));
 
     final cam0 = capabilities.modesForCamera("0");
-    expect(cam0.map((m) => "${m.width}x${m.height}"), ["3840x2160", "1920x1080"]);
+    expect(
+        cam0.map((m) => "${m.width}x${m.height}"), ["3840x2160", "1920x1080"]);
 
     final highest = capabilities.highestModeForCamera("0");
     expect(highest, isNotNull);
