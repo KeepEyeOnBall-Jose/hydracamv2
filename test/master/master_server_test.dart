@@ -8,7 +8,9 @@ import "package:mocktail/mocktail.dart";
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
+import "package:hydracam/constants.dart";
 import "package:hydracam/master/master_server.dart";
+import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/network_info_service.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/session_media_storage.dart";
@@ -68,13 +70,16 @@ void main() {
   });
 
   /// A server whose master-network snapshot is injected (never probes real
-  /// Wi-Fi) and whose media storage writes into [storageRoot].
+  /// Wi-Fi) and whose media storage writes into [storageRoot]. Pass [now] to
+  /// drive every server timestamp from a test-controlled clock.
   MasterServer buildServer({
     required Directory storageRoot,
     String masterIp = "192.168.1.10",
+    DateTime Function()? now,
   }) {
     return MasterServer(
       MockCameraService(),
+      now: now,
       masterNetworkSnapshotCache: MasterNetworkSnapshotCache(
         loadSnapshot: () async => snapshotFor(masterIp),
       ),
@@ -205,6 +210,95 @@ void main() {
       expect(master.getConnectedDeviceIds(), isEmpty);
     });
 
+    test("a second startServer does not rebind or restart the heartbeat",
+        () async {
+      final bound = <HttpServer>[];
+      final master = MasterServer(
+        MockCameraService(),
+        bindMasterSocket: (
+            {Object address = "0.0.0.0", int port = 4040}) async {
+          final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+          bound.add(server);
+          return server;
+        },
+      );
+
+      try {
+        await master.startServer();
+        final firstStartedAt = master.serverStartedAt;
+        expect(bound, hasLength(1));
+
+        await master.startServer();
+
+        // The duplicate start is ignored outright, so the live HttpServer is
+        // never orphaned and no second heartbeat timer is scheduled.
+        expect(bound, hasLength(1));
+        expect(master.serverStartedAt, firstStartedAt);
+      } finally {
+        master.stopServer();
+        for (final server in bound) {
+          await server.close(force: true);
+        }
+      }
+    });
+
+    test("concurrent startServer calls share one bind", () async {
+      final bindCompleter = Completer<HttpServer>();
+      var bindCalls = 0;
+      HttpServer? bound;
+      final master = MasterServer(
+        MockCameraService(),
+        bindMasterSocket: ({Object address = "0.0.0.0", int port = 4040}) {
+          bindCalls += 1;
+          return bindCompleter.future;
+        },
+      );
+
+      try {
+        final firstStart = master.startServer();
+        final secondStart = master.startServer();
+
+        bound = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+        bindCompleter.complete(bound);
+        await Future.wait([firstStart, secondStart]);
+
+        expect(bindCalls, 1);
+        expect(master.serverStartedAt, isNotNull);
+      } finally {
+        master.stopServer();
+        await bound?.close(force: true);
+      }
+    });
+
+    test("startServer after stopServer rebinds cleanly", () async {
+      final bound = <HttpServer>[];
+      final master = MasterServer(
+        MockCameraService(),
+        bindMasterSocket: (
+            {Object address = "0.0.0.0", int port = 4040}) async {
+          final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+          bound.add(server);
+          return server;
+        },
+      );
+
+      try {
+        await master.startServer();
+        master.stopServer();
+        expect(master.serverStartedAt, isNotNull);
+
+        await master.startServer();
+
+        expect(bound, hasLength(2));
+        expect(master.getConnectedDeviceIds(), isEmpty);
+      } finally {
+        master.stopServer();
+        for (final server in bound) {
+          await server.close(force: true);
+        }
+      }
+    });
+
     test("stopServer is a no-op when the server was never started", () {
       final master = MasterServer(MockCameraService());
       expect(master.stopServer, returnsNormally);
@@ -304,19 +398,124 @@ void main() {
       }
     });
 
-    test("a frame with no deviceId registers under the literal Unknown id",
+    test("a registration frame with no deviceId is rejected, not tracked",
         () async {
       final storageRoot =
           Directory.systemTemp.createTempSync("master_server_unknown");
       final master = buildServer(storageRoot: storageRoot);
+      final socket = buildMockSocket();
 
       try {
         await master.handleIncomingMessageForTest(
           jsonEncode({"type": "deviceId"}),
-          socket: buildMockSocket(),
+          socket: socket,
           remoteIp: null,
         );
-        expect(master.getConnectedDeviceIds(), contains("Unknown"));
+
+        expect(master.getConnectedDeviceIds(), isEmpty);
+        expect(master.getConnectedDeviceInfos(), isEmpty);
+        // No session-status handshake is sent to an unidentified slave.
+        verifyNever(() => socket.add(any()));
+      } finally {
+        storageRoot.deleteSync(recursive: true);
+      }
+    });
+
+    test("a blank or whitespace-only deviceId counts as unidentified",
+        () async {
+      final storageRoot =
+          Directory.systemTemp.createTempSync("master_server_blank_id");
+      final master = buildServer(storageRoot: storageRoot);
+
+      try {
+        for (final blankId in ["", "   "]) {
+          await master.handleIncomingMessageForTest(
+            jsonEncode({"type": "deviceId", "deviceId": blankId}),
+            socket: buildMockSocket(),
+            remoteIp: null,
+          );
+        }
+
+        expect(master.getConnectedDeviceIds(), isEmpty);
+        expect(master.getConnectedDeviceInfos(), isEmpty);
+      } finally {
+        storageRoot.deleteSync(recursive: true);
+      }
+    });
+
+    test("unidentified slaves never collide on a shared placeholder entry",
+        () async {
+      final storageRoot =
+          Directory.systemTemp.createTempSync("master_server_collision");
+      final master = buildServer(storageRoot: storageRoot);
+      final identified = buildMockSocket();
+
+      try {
+        // Two anonymous slaves plus one that identifies itself. Previously all
+        // three shared a single "Unknown"/deviceId entry, so the anonymous
+        // pair overwrote each other and the real slave's socket could be lost.
+        await master.handleIncomingMessageForTest(
+          jsonEncode({"type": "deviceId"}),
+          socket: buildMockSocket(),
+          remoteIp: "192.168.1.55",
+        );
+        await master.handleIncomingMessageForTest(
+          jsonEncode({"type": "heartbeat"}),
+          socket: buildMockSocket(),
+          remoteIp: "192.168.1.56",
+        );
+        await master.handleIncomingMessageForTest(
+          jsonEncode({"type": "deviceId", "deviceId": "slave-a"}),
+          socket: identified,
+          remoteIp: "192.168.1.57",
+        );
+
+        expect(master.getConnectedDeviceIds(), ["slave-a"]);
+        expect(master.getConnectedDeviceInfos().single.deviceId, "slave-a");
+        expect(master.getConnectedDeviceIds(), isNot(contains("Unknown")));
+      } finally {
+        storageRoot.deleteSync(recursive: true);
+      }
+    });
+
+    test("state-changing frames without a deviceId are all rejected", () async {
+      final storageRoot =
+          Directory.systemTemp.createTempSync("master_server_anon_frames");
+      final master = buildServer(storageRoot: storageRoot);
+
+      try {
+        for (final type in ["deviceId", "heartbeat", "identifyAck", "photo"]) {
+          await master.handleIncomingMessageForTest(
+            jsonEncode({"type": type}),
+            socket: buildMockSocket(),
+            remoteIp: "192.168.1.55",
+          );
+        }
+
+        expect(master.getConnectedDeviceIds(), isEmpty);
+        expect(master.getConnectedDeviceInfos(), isEmpty);
+      } finally {
+        storageRoot.deleteSync(recursive: true);
+      }
+    });
+
+    test("stateless frames still work without a deviceId", () async {
+      final storageRoot =
+          Directory.systemTemp.createTempSync("master_server_anon_stateless");
+      final master = buildServer(storageRoot: storageRoot);
+      final socket = buildMockSocket();
+
+      try {
+        await master.handleIncomingMessageForTest(
+          jsonEncode({"type": "getSessionStatus"}),
+          socket: socket,
+          remoteIp: null,
+        );
+
+        final sent =
+            verify(() => socket.add(captureAny())).captured.single as String;
+        expect(jsonDecode(sent)["command"], "noSession");
+        expect(master.getConnectedDeviceIds(), isEmpty);
       } finally {
         storageRoot.deleteSync(recursive: true);
       }
@@ -405,8 +604,11 @@ void main() {
       expect(decoded.containsKey("t2"), isTrue);
     });
 
-    test("forcedStop is logged without registering or replying", () async {
+    test("forcedStop is logged exactly once, without registering or replying",
+        () async {
       final socket = buildMockSocket();
+      LogService.instance.clearLogs();
+
       await master.handleIncomingMessageForTest(
         jsonEncode({
           "type": "forcedStop",
@@ -416,8 +618,17 @@ void main() {
         socket: socket,
         remoteIp: null,
       );
+
       verifyNever(() => socket.add(any()));
       expect(master.getConnectedDeviceIds(), isEmpty);
+
+      final forcedStopLogs = LogService.instance.logs
+          .map((entry) => entry["message"] as String)
+          .where((message) => message.contains("forcibly stopped"))
+          .toList();
+      expect(forcedStopLogs, [
+        "Slave slave-a forcibly stopped. Reason: battery",
+      ]);
     });
 
     test("an unknown message type is ignored without error", () async {
@@ -859,6 +1070,120 @@ void main() {
 
       master.sendCommand("takePhoto", deviceId: "slave-a");
       verifyNever(() => socket.add(any()));
+    });
+  });
+
+  group("inactivity eviction (injected clock)", () {
+    late Directory storageRoot;
+    late DateTime clock;
+    late MasterServer master;
+    late List<String> removed;
+
+    setUp(() {
+      storageRoot = Directory.systemTemp.createTempSync("master_server_evict");
+      clock = DateTime.utc(2026, 6, 9, 3, 40);
+      master = buildServer(storageRoot: storageRoot, now: () => clock);
+      removed = <String>[];
+      master.onClientRemoved = (deviceId, threshold) => removed.add(deviceId);
+    });
+
+    tearDown(() {
+      storageRoot.deleteSync(recursive: true);
+    });
+
+    Future<MockWebSocket> registerAt(String deviceId) async {
+      final socket = buildMockSocket();
+      await master.registerOrUpdateClientForTest(
+        deviceId: deviceId,
+        socket: socket,
+        remoteIp: null,
+        networkSnapshot: null,
+      );
+      await pumpEventQueue();
+      return socket;
+    }
+
+    test("registration timestamps come from the injected clock", () async {
+      await registerAt("slave-a");
+      final info = master.getConnectedDeviceInfos().single;
+      expect(info.registeredAt, clock);
+      expect(info.lastSeen, clock);
+    });
+
+    test(
+        "a client exactly at the threshold is kept, one second past is evicted",
+        () async {
+      await registerAt("slave-a");
+
+      clock = clock.add(const Duration(seconds: inactivityThreshold));
+      master.sweepInactiveClientsForTest();
+      expect(master.getConnectedDeviceIds(), contains("slave-a"));
+      expect(removed, isEmpty);
+
+      clock = clock.add(const Duration(seconds: 1));
+      master.sweepInactiveClientsForTest();
+
+      expect(master.getConnectedDeviceIds(), isEmpty);
+      expect(removed, ["slave-a"]);
+      // The device stays known, flipped to disconnected at the injected time.
+      final info = master.getConnectedDeviceInfos().single;
+      expect(info.deviceId, "slave-a");
+      expect(info.isConnected, isFalse);
+      expect(info.disconnectedAt, clock);
+      expect(info.lastSeen, clock);
+    });
+
+    test("a heartbeat renews the inactivity deadline", () async {
+      final socket = await registerAt("slave-a");
+
+      clock = clock.add(const Duration(seconds: inactivityThreshold - 2));
+      await master.handleIncomingMessageForTest(
+        jsonEncode({"type": "heartbeat", "deviceId": "slave-a"}),
+        socket: socket,
+        remoteIp: null,
+      );
+      await pumpEventQueue();
+
+      // Well past the original deadline, but only 2s past the heartbeat.
+      clock = clock.add(const Duration(seconds: 2));
+      master.sweepInactiveClientsForTest();
+
+      expect(master.getConnectedDeviceIds(), contains("slave-a"));
+      expect(removed, isEmpty);
+      expect(master.getConnectedDeviceInfos().single.isConnected, isTrue);
+    });
+
+    test("the sweep evicts only the stale clients", () async {
+      await registerAt("slave-stale");
+      clock = clock.add(const Duration(seconds: inactivityThreshold));
+      final freshSocket = await registerAt("slave-fresh");
+
+      clock = clock.add(const Duration(seconds: 1));
+      master.sweepInactiveClientsForTest();
+
+      expect(removed, ["slave-stale"]);
+      expect(master.getConnectedDeviceIds(), ["slave-fresh"]);
+      // The surviving slave is still commandable.
+      clearInteractions(freshSocket);
+      master.sendCommand("takePhoto");
+      verify(() => freshSocket.add("takePhoto")).called(1);
+    });
+
+    test("an evicted client can re-register on a fresh socket", () async {
+      await registerAt("slave-a");
+      clock = clock.add(const Duration(seconds: inactivityThreshold + 1));
+      master.sweepInactiveClientsForTest();
+      expect(master.getConnectedDeviceIds(), isEmpty);
+
+      final secondSocket = await registerAt("slave-a");
+
+      expect(master.getConnectedDeviceIds(), ["slave-a"]);
+      final info = master.getConnectedDeviceInfos().single;
+      expect(info.isConnected, isTrue);
+      expect(info.lastSeen, clock);
+      clearInteractions(secondSocket);
+      master.sendCommand("takePhoto", deviceId: "slave-a");
+      verify(() => secondSocket.add("takePhoto")).called(1);
     });
   });
 
