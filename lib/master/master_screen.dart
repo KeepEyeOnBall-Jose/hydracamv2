@@ -5,31 +5,20 @@ import "package:flutter/material.dart";
 import "package:video_player/video_player.dart"; // Add video_player dependency in pubspec.yaml
 
 import "../app_theme.dart";
-import "../automation/automation_bridge.dart";
-import "../automation/automation_config.dart";
 import "../constants.dart" as constants;
 import "../models/captured_photo.dart";
 import "../models/captured_video.dart";
-import "../models/sync_metadata.dart";
 import "../screens/camera_setup_preview_screen.dart";
 import "../screens/master_video_recording_screen.dart";
 import "../screens/previous_sessions_screen.dart";
 import "../screens/role_selection_screen.dart";
 import "../screens/sports_centers_screen.dart";
 import "../services/alert_utils.dart";
-import "../services/camera_service_singleton.dart";
-import "../services/debug_session_policy.dart";
-import "../services/debug_session_registry.dart";
-import "../services/device_service.dart";
-import "../services/hydracam_api_service.dart";
 import "../services/log_service.dart";
 import "../services/network_info_service.dart";
 import "../services/session_naming_service.dart";
 import "../services/session_manager.dart";
 import "../services/settings_service.dart";
-import "../services/storage_service.dart";
-import "../services/uploader_service.dart";
-import "../services/user_service.dart";
 import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
 import "../widgets/camera_preview_widget.dart";
@@ -39,7 +28,7 @@ import "../widgets/hydracam_surface.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
 import "master_announcer.dart";
-import "connected_client_automation_payload.dart";
+import "master_screen_controller.dart";
 import "master_server.dart";
 
 class MasterScreen extends StatefulWidget {
@@ -58,346 +47,95 @@ class MasterScreen extends StatefulWidget {
 }
 
 class MasterScreenState extends State<MasterScreen> {
-  late final MasterServer _server;
-  late final MasterAnnouncer _announcer; // Broadcast announcer
-  final HydraCamApiService _apiService =
-      HydraCamApiService(); // API service instance
-  final DebugSessionPolicy _debugSessionPolicy = DebugSessionPolicy();
-  final Map<String, AutomationHandler> _automationHandlers = {};
+  late final MasterScreenController _controller;
 
-  int connectedClients = 0; // To display connected clients count
-  bool isRecording = false;
-  bool get _recordingActive =>
-      isRecording ||
-      _server.cameraService.isRecording ||
-      (_server.cameraService.controller?.value.isRecordingVideo ?? false);
-  bool _isRecordingTransitioning =
-      false; // Track if recording state is changing
-  bool get sessionActive => SessionManager.instance.isSessionActive;
-  String selectedActivityPreset = sessionNamingService.defaultActivityPreset;
-  String? selectedSportsCenterName; // Name of the selected sports center
-  String? selectedCourtName; // Name of the selected Court
-  String? selectedCourtGuid; // GUID of the selected Court
   final TextEditingController sessionNameController = TextEditingController();
   bool sessionNameEditedManually = false;
 
-  // Getters for SessionManager photos and videos
-  List<CapturedPhoto> get photos =>
-      SessionManager.instance.currentSession?.capturedPhotos ?? [];
-  List<CapturedVideo> get videos =>
-      SessionManager.instance.currentSession?.capturedVideos ?? [];
+  // Thin forwarders so the presentation methods below read the controller's
+  // domain state without structural changes to the widget tree.
+  int get connectedClients => _controller.connectedClients;
+  bool get _recordingActive => _controller.recordingActive;
+  bool get sessionActive => _controller.sessionActive;
+  String get selectedActivityPreset => _controller.selectedActivityPreset;
+  bool get isProcessingStartSession => _controller.isProcessingStartSession;
+  bool get isProcessingEndSession => _controller.isProcessingEndSession;
+  bool get isProcessingTakePhoto => _controller.isProcessingTakePhoto;
+  List<CapturedPhoto> get photos => _controller.photos;
+  List<CapturedVideo> get videos => _controller.videos;
 
   List<String> getConnectedDevices() {
-    return _server.getConnectedDeviceIds();
+    return _controller.getConnectedDeviceIds();
   }
 
   List<ConnectedDeviceInfo> getConnectedDeviceInfos() {
-    return _server.getConnectedDeviceInfos();
+    return _controller.getConnectedDeviceInfos();
   }
-
-  // Processing indicators to prevent user from spamming buttons
-  bool isProcessingEndSession = false; // To block button "End Session"
-  bool isProcessingStartSession = false; // To block button "Start Session"
-  bool isProcessingTakePhoto = false; // To block button "Take Photo"
 
   @override
   void initState() {
     super.initState();
-    _announcer = widget._announcer ?? MasterAnnouncer();
-    _server =
-        widget._masterServer ?? MasterServer(CameraServiceSingleton.instance);
+    _controller = MasterScreenController(
+      masterServer: widget._masterServer,
+      announcer: widget._announcer,
+    );
+    _controller
+      ..showMessage = _showMessage
+      ..showCountdownDialog = _showCountdown
+      ..confirmStartWithoutCourt = _confirmStartWithoutCourt
+      ..confirmEndSession = _confirmEndSession
+      ..showCameraSetupPreview = _showMasterCameraSetupPreview
+      ..showMasterVideoPreview = _showMasterVideoPreview
+      ..showPhotoDialog = _showPhotoDialog
+      ..showVideoDialog = _showVideoDialog
+      ..currentCustomSessionName = () => sessionNameController.text;
+    _controller.addListener(_handleControllerChanged);
     _refreshGeneratedSessionName(force: true);
-
-    _announcer.startBroadcasting();
-    // Use singletons directly instead of Provider
-
-    _server.onClientCountChange = (count) {
-      if (mounted) {
-        setState(() {
-          connectedClients = count;
-        });
-      }
-    };
-    _server.onMediaReceived = (media) {
-      setState(() {});
-    };
-    // Configure callback to notify disconnection
-    _server.onClientRemoved = (deviceId, inactivityThreshold) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Client $deviceId disconnected after $inactivityThreshold seconds of inactivity.",
-          ),
-        ),
-      );
-    };
-    unawaited(_server.startServer());
-
-    if (automationEnabled) {
-      _registerAutomationHandlers();
-      // Register callback for automation bridge to get recording state
-      AutomationBridge.instance.getRecordingState = () => _recordingActive;
-    }
+    _controller.initialize();
   }
 
   @override
   void dispose() {
-    if (automationEnabled && _automationHandlers.isNotEmpty) {
-      AutomationBridge.instance.unregisterCommandsIfCurrent(
-        _automationHandlers,
-      );
-      _automationHandlers.clear();
-    }
-    try {
-      // Nullify callbacks to prevent setState() after dispose
-      _server.onClientCountChange = null;
-      _server.onMediaReceived = null;
-      _server.onClientRemoved = null;
-
-      // Stop server and announcer
-      _server.stopServer();
-      _announcer.stopBroadcasting();
-      // Screen disposal is resource cleanup only. End the capture session via
-      // _endCurrentSession() when the user or automation explicitly requests it.
-    } catch (e) {
-      LogService.instance.registerLog("Error during dispose: $e");
-    }
+    _controller.removeListener(_handleControllerChanged);
+    _controller.dispose();
     sessionNameController.dispose();
     super.dispose();
   }
 
-  // Method to init a new session
-  Future<void> _startOrEndSession() async {
-    if (sessionActive) {
-      await _endCurrentSession();
-    } else {
-      final shouldStart =
-          selectedCourtGuid != null || await _confirmStartWithoutCourt();
-      if (!shouldStart) {
-        return;
-      }
-      await _createSession(skipCourtSelectionWarning: true);
+  void _handleControllerChanged() {
+    if (mounted) {
+      setState(() {});
     }
+  }
+
+  void _showMessage(String message, {Duration? duration}) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: duration ?? const Duration(seconds: 4),
+      ),
+    );
+  }
+
+  void _showCountdown(int durationMs) {
+    if (!mounted) {
+      return;
+    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AnimatedCountdownTimer(
+        duration: durationMs,
+        onComplete: () => Navigator.of(context).pop(),
+      ),
+    );
   }
 
   void _handleToggleRecordingButton() {
-    unawaited(_toggleRecording());
-  }
-
-  Future<void> _startAllUploads() async {
-    _server.sendCommand("startUploadingAll");
-    await UploaderService().startUploadingManually();
-  }
-
-  Future<void> _toggleRecording({
-    bool showCountdown = true,
-    bool suppressSnackbars = false,
-    bool showPreview = true,
-  }) async {
-    if (StorageService.instance.isRecordingBlocked) {
-      if (!suppressSnackbars) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content:
-                  Text("Cannot start recording: Storage is critically low.")),
-        );
-      }
-      LogService.instance
-          .registerLog("Recording toggle blocked due to critical storage.");
-      return;
-    }
-
-    if (_server.cameraService.recordingInterrupted.value) {
-      if (!suppressSnackbars) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content:
-                  Text("Recording already interrupted due to low storage.")),
-        );
-      }
-      return;
-    }
-
-    LogService.instance.registerLog(
-        "PRESSED TOGGLE RECORDING. IS RECORDING = $_recordingActive");
-
-    final bool shouldStartRecording = !_recordingActive;
-    final bool shouldMasterRecord =
-        await SettingsService.getMasterShouldRecord();
-    if (shouldStartRecording && shouldMasterRecord && showPreview) {
-      final didConfirmSetup = await _showMasterCameraSetupPreview();
-      if (!didConfirmSetup) {
-        LogService.instance
-            .registerLog("Master recording setup preview was cancelled.");
-        return;
-      }
-    }
-
-    final timerDuration = await SettingsService.getTimerDuration();
-    final DateTime scheduledTime =
-        DateTime.now().add(Duration(seconds: timerDuration));
-    final String command =
-        _recordingActive ? "stopRecordingVideo" : "startRecordingVideo";
-
-    if (!mounted) return;
-    if (showCountdown) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AnimatedCountdownTimer(
-          duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-          onComplete: () => Navigator.of(context).pop(),
-        ),
-      );
-    }
-
-    _server.scheduleCommand(command, scheduledTime);
-    await Future.delayed(scheduledTime.difference(DateTime.now()));
-
-    if (!mounted) return;
-
-    try {
-      if (_recordingActive) {
-        if (shouldMasterRecord) {
-          await _stopMasterRecordingVideo();
-        } else {
-          setState(() {
-            isRecording = false;
-          });
-        }
-      } else {
-        if (shouldMasterRecord) {
-          final didStart =
-              await _startMasterRecordingVideo(showPreview: showPreview);
-          if (!didStart) {
-            LogService.instance.registerLog(
-                "Recording toggle did not start local master recording.");
-          }
-        } else {
-          setState(() {
-            isRecording = true;
-          });
-        }
-      }
-    } catch (error, stackTrace) {
-      LogService.instance
-          .registerLog("Recording toggle failed: $error\n$stackTrace");
-      if (!suppressSnackbars && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Recording command failed: ${_describeError(error)}"),
-          ),
-        );
-      }
-    }
-
-    LogService.instance.registerLog(
-        "Command '$command' finished executing by master at ${DateTime.now()}");
-  }
-
-  Future<void> _ensureRecordingState({required bool shouldRecord}) async {
-    // Wait for any ongoing state transitions
-    int waitCount = 0;
-    while (_isRecordingTransitioning && waitCount < 100) {
-      await Future.delayed(const Duration(milliseconds: 100));
-      waitCount++;
-    }
-
-    if (shouldRecord == _recordingActive) {
-      return;
-    }
-
-    _isRecordingTransitioning = true;
-    try {
-      await _toggleRecording(
-        showCountdown: false,
-        suppressSnackbars: true,
-        showPreview: false,
-      );
-
-      // Wait for recording state to actually change (with timeout)
-      waitCount = 0;
-      while (_recordingActive != shouldRecord && waitCount < 300) {
-        await Future.delayed(const Duration(milliseconds: 100));
-        waitCount++;
-      }
-
-      if (_recordingActive != shouldRecord) {
-        LogService.instance.registerLog(
-            "Warning: Recording state did not change to $shouldRecord after 30s");
-      }
-    } finally {
-      _isRecordingTransitioning = false;
-    }
-  }
-
-  void _registerAutomationHandlers() {
-    if (!automationEnabled) {
-      return;
-    }
-
-    final handlers = <String, AutomationHandler>{
-      "start_session": (payload) async {
-        await _createSession(
-          suppressSnackbars: true,
-          skipCourtSelectionWarning: true,
-          overrideCourtGuid: payload["courtGuid"] as String?,
-          overrideSessionId: payload["sessionId"] as String?,
-          overrideDisplayName: payload["displayName"] as String?,
-        );
-        return AutomationBridge.instance.buildSessionSnapshot();
-      },
-      "connected_clients": (payload) async {
-        return {
-          ...buildConnectedClientAutomationPayload(
-            _server.getConnectedDeviceInfos(),
-            serverStartedAt: _server.serverStartedAt,
-            masterSessionGuid: SessionManager.instance.sessionGuid,
-          ),
-          "session": AutomationBridge.instance.buildSessionSnapshot(),
-        };
-      },
-      "end_session": (payload) async {
-        await _endCurrentSession(
-          requireConfirmation: false,
-          suppressSnackbars: true,
-        );
-        return AutomationBridge.instance.buildSessionSnapshot();
-      },
-      "take_photo": (payload) async {
-        await _executeTakePhoto(
-          showCountdown: payload["showCountdown"] as bool? ?? false,
-          suppressSnackbars: true,
-        );
-        return AutomationBridge.instance.buildSessionSnapshot();
-      },
-      "list_cameras": (payload) async {
-        final cameraService = _server.cameraService;
-        await cameraService.initAvailableCameras();
-        return {
-          "isUsingMockCamera": cameraService.isUsingMockCamera,
-          "selectedCameraIndex": cameraService.selectedCameraIndex,
-          "cameras": cameraService.deviceCameras
-              .map((camera) => {
-                    "name": camera.name,
-                    "lensDirection": camera.lensDirection.name,
-                    "sensorOrientation": camera.sensorOrientation,
-                  })
-              .toList(),
-        };
-      },
-      "start_recording": (payload) async {
-        await _ensureRecordingState(shouldRecord: true);
-        return AutomationBridge.instance.buildSessionSnapshot();
-      },
-      "stop_recording": (payload) async {
-        await _ensureRecordingState(shouldRecord: false);
-        return AutomationBridge.instance.buildSessionSnapshot();
-      },
-    };
-
-    handlers.forEach(AutomationBridge.instance.registerCommand);
-    _automationHandlers.addAll(handlers);
+    unawaited(_controller.toggleRecording());
   }
 
   String _describeError(Object error) {
@@ -406,7 +144,7 @@ class MasterScreenState extends State<MasterScreen> {
 
   Future<bool> _showMasterCameraSetupPreview() async {
     try {
-      await _server.cameraService.prepareCameraPreview();
+      await _controller.cameraService.prepareCameraPreview();
     } catch (error, stackTrace) {
       LogService.instance.registerLog(
           "Master setup preview camera init failed: $error\n$stackTrace");
@@ -425,7 +163,7 @@ class MasterScreenState extends State<MasterScreen> {
       return false;
     }
 
-    final controller = _server.cameraService.controller;
+    final controller = _controller.cameraService.controller;
     final confirmed = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
@@ -440,81 +178,6 @@ class MasterScreenState extends State<MasterScreen> {
     return confirmed ?? false;
   }
 
-  Future<bool> _startMasterRecordingVideo({bool showPreview = true}) async {
-    LogService.instance.registerLog("Will record from master and show preview");
-    try {
-      await _server.cameraService.startRecordingVideo();
-      if (!mounted) {
-        return false;
-      }
-      setState(() {
-        isRecording = true;
-      });
-      if (showPreview) {
-        unawaited(_showMasterVideoPreview());
-      }
-      return true;
-    } catch (error, stackTrace) {
-      LogService.instance
-          .registerLog("Master recording start failed: $error\n$stackTrace");
-      if (mounted) {
-        setState(() {
-          isRecording = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text("Could not start recording: ${_describeError(error)}"),
-          ),
-        );
-      }
-      return false;
-    }
-  }
-
-  Future<CapturedVideo> _stopMasterRecordingVideo() async {
-    // Send command to slaves before stopping from master
-    _server.sendCommand("stopRecordingVideo");
-
-    final String videoPath = await _server.cameraService.stopRecordingVideo();
-
-    // Get the device ID
-    final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-
-    // Add video to current session
-    final startRecordingDate = _server.cameraService.videoStartRecordingDate;
-    final endRecordingDate = _server.cameraService.videoEndRecordingDate;
-    if (startRecordingDate == null || endRecordingDate == null) {
-      throw StateError("Master recording timestamps are missing after stop. "
-          "start=$startRecordingDate end=$endRecordingDate");
-    }
-
-    final receivedDate = DateTime.now();
-    final capturedVideo = CapturedVideo(
-      videoData: null,
-      videoPath: videoPath,
-      slaveDeviceId: deviceId,
-      startRecordingDate: startRecordingDate,
-      endRecordingDate: endRecordingDate,
-      receivedDate: receivedDate,
-      captureContext: _server.cameraService.recordingCaptureContext,
-      // The master defines the shared clock, so its captures are the anchor.
-      syncMetadata: SyncMetadata.masterAnchor(at: startRecordingDate),
-    );
-
-    await SessionManager.instance.addVideo(capturedVideo);
-
-    if (mounted) {
-      setState(() {
-        isRecording = false; // Update recording state
-      });
-    }
-
-    // Do not show the dialog here
-    // Return the captured video
-    return capturedVideo;
-  }
-
   /// Open the "camera" preview screen while recording and then return video and show preview.
   Future<void> _showMasterVideoPreview() async {
     // Move to recording preview screen and get recorded video
@@ -522,8 +185,8 @@ class MasterScreenState extends State<MasterScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => MasterVideoRecordingScreen(
-          cameraService: _server.cameraService,
-          onStopRecording: _stopMasterRecordingVideo,
+          cameraService: _controller.cameraService,
+          onStopRecording: _controller.stopMasterRecordingVideo,
         ),
       ),
     );
@@ -547,97 +210,7 @@ class MasterScreenState extends State<MasterScreen> {
   }
 
   void _handleTakePhotoButton() {
-    unawaited(_executeTakePhoto(showCountdown: true));
-  }
-
-  Future<void> _executeTakePhoto({
-    required bool showCountdown,
-    bool suppressSnackbars = false,
-  }) async {
-    if (isProcessingTakePhoto) return;
-
-    setState(() {
-      isProcessingTakePhoto = true;
-    });
-
-    try {
-      final timerDuration = await SettingsService.getTimerDuration();
-      final DateTime scheduledTime =
-          DateTime.now().add(Duration(seconds: timerDuration));
-
-      if (!mounted) return;
-      if (showCountdown) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => AnimatedCountdownTimer(
-            duration: scheduledTime.difference(DateTime.now()).inMilliseconds,
-            onComplete: () => Navigator.of(context).pop(),
-          ),
-        );
-      }
-
-      _server.scheduleCommand("takePhoto", scheduledTime);
-      await Future.delayed(scheduledTime.difference(DateTime.now()));
-
-      if (!mounted) return;
-
-      final bool shouldMasterRecord =
-          await SettingsService.getMasterShouldRecord();
-      if (shouldMasterRecord) {
-        try {
-          final String photoPath = await _server.cameraService.takePhoto();
-          final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-
-          final masterCaptureDate = DateTime.now();
-          final capturedPhoto = CapturedPhoto(
-            photoData: null,
-            photoPath: photoPath,
-            captureDate: masterCaptureDate,
-            receivedDate: masterCaptureDate,
-            slaveDeviceId: deviceId,
-            captureContext: _server.cameraService.lastPhotoCaptureContext,
-            // The master defines the shared clock, so its captures are the anchor.
-            syncMetadata: SyncMetadata.masterAnchor(at: masterCaptureDate),
-          );
-
-          await SessionManager.instance.addPhoto(capturedPhoto);
-          if (!mounted) return;
-          setState(() {});
-
-          if (!suppressSnackbars) {
-            _showPhotoDialog(capturedPhoto, autoClose: true);
-          }
-        } catch (error, stackTrace) {
-          LogService.instance
-              .registerLog("Master photo capture failed: $error\n$stackTrace");
-          if (!suppressSnackbars && mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Could not take photo: ${_describeError(error)}"),
-              ),
-            );
-          }
-        }
-      }
-
-      if (!mounted) return;
-      if (!suppressSnackbars) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text("Photo scheduled for ${scheduledTime.toLocal()}")),
-        );
-      }
-
-      LogService.instance
-          .registerLog("Photo command executed by master at ${DateTime.now()}");
-    } finally {
-      if (mounted) {
-        setState(() {
-          isProcessingTakePhoto = false;
-        });
-      }
-    }
+    unawaited(_controller.executeTakePhoto(showCountdown: true));
   }
 
   void _showPhotoDialog(CapturedPhoto photo, {bool autoClose = false}) {
@@ -672,188 +245,32 @@ class MasterScreenState extends State<MasterScreen> {
     );
   }
 
-  Future<void> _createSession({
-    bool suppressSnackbars = false,
-    bool skipCourtSelectionWarning = false,
-    String? overrideCourtGuid,
-    String? overrideSessionId,
-    String? overrideDisplayName,
-  }) async {
-    if (isProcessingStartSession) return;
-
-    setState(() {
-      isProcessingStartSession = true;
-    });
-
-    try {
-      final sessionId =
-          overrideSessionId ?? _debugSessionPolicy.defaultSessionId();
-      final debugSession =
-          overrideSessionId == null && _debugSessionPolicy.debugBuild;
-      final displayName = _sessionDisplayNameForCreation(
-        overrideDisplayName: overrideDisplayName,
-      );
-
-      if (!skipCourtSelectionWarning && selectedCourtGuid == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("No court selected. Proceeding without a court."),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
-
-      final String? userGuid = UserService().guid;
-      final backendSession = await _apiService.createSession(
-        sessionId,
-        courtGuid: overrideCourtGuid ?? selectedCourtGuid,
-        userGuid: userGuid,
-      );
-
-      LogService.instance
-          .registerLog("Response to create session: $backendSession");
-
-      if (!mounted) return;
-
-      if (backendSession != null) {
-        final String sessionGuid = backendSession.guid;
-        SessionManager.instance.startCreatedSession(
-          backendSession,
-          deviceType: "Master",
-          debugSession: debugSession,
-          displayName: displayName,
-        );
-        if (debugSession) {
-          await DebugSessionRegistry().record(
-            DebugSessionRef(
-              sessionGuid: backendSession.guid,
-              sessionId: backendSession.sessionId,
-              serviceNumericId: backendSession.numericId,
+  Future<bool> _confirmEndSession() async {
+    final bool? confirmEnd = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("End Current Session"),
+          content:
+              const Text("Are you sure you want to end the current session?"),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
             ),
-          );
-          if (!mounted) return;
-        }
-        _server.startNewSession(sessionGuid, displayName: displayName);
-
-        LogService.instance
-            .registerLog("Session created with GUID: $sessionGuid");
-
-        setState(() {});
-        if (!suppressSnackbars && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Session created: $displayName")),
-          );
-        }
-      } else {
-        if (!suppressSnackbars && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Failed to create session")),
-          );
-        }
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          isProcessingStartSession = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _endCurrentSession({
-    bool requireConfirmation = true,
-    bool suppressSnackbars = false,
-  }) async {
-    if (isProcessingEndSession) return;
-
-    // If recording is active, stop and save video first
-    if (_recordingActive) {
-      LogService.instance
-          .registerLog("Stopping active recording before ending session");
-      try {
-        if (await SettingsService.getMasterShouldRecord()) {
-          await _stopMasterRecordingVideo();
-        } else {
-          setState(() {
-            isRecording = false;
-          });
-        }
-      } catch (e) {
-        LogService.instance
-            .registerLog("Error stopping recording before session end: $e");
-      }
-    }
-
-    if (!mounted) return;
-    setState(() {
-      isProcessingEndSession = true;
-    });
-
-    try {
-      bool proceed = true;
-      if (requireConfirmation) {
-        final bool? confirmEnd = await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("End Current Session"),
-              content: const Text(
-                  "Are you sure you want to end the current session?"),
-              actions: [
-                TextButton(
-                  child: const Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-                TextButton(
-                  child: const Text("End Session"),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-              ],
-            );
-          },
+            TextButton(
+              child: const Text("End Session"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
         );
-        proceed = confirmEnd ?? false;
-      }
-
-      if (!proceed) {
-        return;
-      }
-
-      if (SessionManager.instance.currentSession != null) {
-        final bool success =
-            await _apiService.endSession(SessionManager.instance.sessionGuid!);
-
-        if (!mounted) return;
-
-        if (success) {
-          await _server.endCurrentSession();
-          if (!mounted) return;
-          setState(() {});
-          if (!suppressSnackbars) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Capture session ended")),
-            );
-          }
-        } else {
-          if (!suppressSnackbars && context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text("Failed to end session on the server")),
-            );
-          }
-        }
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          isProcessingEndSession = false;
-        });
-      }
-    }
+      },
+    );
+    return confirmEnd ?? false;
   }
 
   // Method to show a modal with the connected device IDs
@@ -982,46 +399,14 @@ class MasterScreenState extends State<MasterScreen> {
   }
 
   String _sessionDisplay() {
-    if (!sessionActive) {
-      return "No active session";
-    }
-    return SessionManager.instance.currentSession?.displayTitle ??
-        "Active session";
-  }
-
-  String _sessionDisplayNameForCreation({String? overrideDisplayName}) {
-    final override =
-        sessionNamingService.sanitizeCustomName(overrideDisplayName ?? "");
-    if (override.isNotEmpty) {
-      return override;
-    }
-
-    final custom =
-        sessionNamingService.sanitizeCustomName(sessionNameController.text);
-    if (custom.isNotEmpty) {
-      return custom;
-    }
-
-    return _generatedSessionName();
-  }
-
-  String _generatedSessionName() {
-    return sessionNamingService.defaultName(
-      SessionNamingContext(
-        activityPreset: selectedActivityPreset,
-        sportsCenterName: selectedSportsCenterName,
-        courtName: selectedCourtName,
-        players: const [],
-        startTime: DateTime.now(),
-      ),
-    );
+    return _controller.sessionDisplay;
   }
 
   void _refreshGeneratedSessionName({bool force = false}) {
     if (sessionNameEditedManually && !force) {
       return;
     }
-    sessionNameController.text = _generatedSessionName();
+    sessionNameController.text = _controller.generatedSessionName;
     sessionNameEditedManually = false;
   }
 
@@ -1143,13 +528,12 @@ class MasterScreenState extends State<MasterScreen> {
                         CourtSelectionWidget(
                           groupedCourts: sortedGroupedCourts,
                           onCourtSelected: (selection) {
-                            setState(() {
-                              selectedSportsCenterName =
-                                  selection?.sportsCenterName;
-                              selectedCourtName = selection?.courtName;
-                              selectedCourtGuid = selection?.courtGuid;
-                              _refreshGeneratedSessionName();
-                            });
+                            _controller.selectCourt(
+                              sportsCenterName: selection?.sportsCenterName,
+                              courtName: selection?.courtName,
+                              courtGuid: selection?.courtGuid,
+                            );
+                            _refreshGeneratedSessionName();
                           },
                         ),
                         const SizedBox(height: 12),
@@ -1176,10 +560,8 @@ class MasterScreenState extends State<MasterScreen> {
                             if (preset == null) {
                               return;
                             }
-                            setState(() {
-                              selectedActivityPreset = preset;
-                              _refreshGeneratedSessionName();
-                            });
+                            _controller.selectActivityPreset(preset);
+                            _refreshGeneratedSessionName();
                           },
                         ),
                         const SizedBox(height: 12),
@@ -1227,7 +609,8 @@ class MasterScreenState extends State<MasterScreen> {
                                   : "Start Session",
                               onPressed: isProcessingStartSession
                                   ? null
-                                  : () => unawaited(_startOrEndSession()),
+                                  : () => unawaited(
+                                      _controller.startOrEndSession()),
                             ),
                             _actionButton(
                               width: buttonWidth,
@@ -1270,7 +653,7 @@ class MasterScreenState extends State<MasterScreen> {
 
   // Build the UI when a session is active
   Widget _buildSessionUI() {
-    final String? sessionGuid = SessionManager.instance.sessionGuid;
+    final String? sessionGuid = _controller.sessionGuid;
 
     // Buttons and connected devices widget
     final Widget controls = LayoutBuilder(
@@ -1368,7 +751,7 @@ class MasterScreenState extends State<MasterScreen> {
                         : "End Session",
                     onPressed: isProcessingEndSession || sessionGuid == null
                         ? null
-                        : () => unawaited(_endCurrentSession()),
+                        : () => unawaited(_controller.endCurrentSession()),
                     style: AppTheme.dangerButtonStyle(),
                   ),
                   _actionButton(
@@ -1376,7 +759,7 @@ class MasterScreenState extends State<MasterScreen> {
                     icon: const Icon(Icons.cloud_upload_outlined),
                     label: "Start Uploads",
                     onPressed: sessionGuid != null
-                        ? () => unawaited(_startAllUploads())
+                        ? () => unawaited(_controller.startAllUploads())
                         : null,
                   ),
                   SizedBox(
@@ -1457,8 +840,7 @@ class MasterScreenState extends State<MasterScreen> {
         if (_recordingActive) return; // Ignore back while recording
 
         // Handle the back button press
-        _server.stopServer();
-        _announcer.stopBroadcasting();
+        _controller.stopServerAndAnnouncer();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
@@ -1468,8 +850,7 @@ class MasterScreenState extends State<MasterScreen> {
         appBar: HydraCamAppBar(
           title: "HydraCam - Master Control",
           onBack: () {
-            _server.stopServer();
-            _announcer.stopBroadcasting();
+            _controller.stopServerAndAnnouncer();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
