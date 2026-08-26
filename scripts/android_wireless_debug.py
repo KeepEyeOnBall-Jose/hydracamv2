@@ -6,11 +6,13 @@ from __future__ import annotations
 import argparse
 import re
 import shutil
-import subprocess
 import sys
 import time
 from dataclasses import dataclass
 from typing import Sequence
+
+from hydracam_lib.proc import CommandResult
+from hydracam_lib.proc import run as _run
 
 
 IPV4_PATTERN = re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b")
@@ -37,17 +39,11 @@ def run_command(
     *,
     timeout: int = 30,
     check: bool = True,
-) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        list(command),
-        check=check,
-        text=True,
-        capture_output=True,
-        timeout=timeout,
-    )
+) -> CommandResult:
+    return _run(command, timeout=timeout, check=check)
 
 
-def adb(*args: str, timeout: int = 30, check: bool = True) -> subprocess.CompletedProcess[str]:
+def adb(*args: str, timeout: int = 30, check: bool = True) -> CommandResult:
     return run_command(["adb", *args], timeout=timeout, check=check)
 
 
@@ -57,7 +53,7 @@ def adb_shell(
     *,
     timeout: int = 30,
     check: bool = True,
-) -> subprocess.CompletedProcess[str]:
+) -> CommandResult:
     return adb("-s", serial, "shell", command, timeout=timeout, check=check)
 
 

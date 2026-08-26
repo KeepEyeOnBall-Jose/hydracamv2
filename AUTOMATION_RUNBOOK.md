@@ -295,3 +295,17 @@ You can still re-run manual checks with curl if needed.
 - **Command returns 404**: the master screen was not mounted (e.g., app stuck on slave role). Switch to master or force `--es role master` when launching.
 - **Python script can’t find devices**: run `adb devices` manually; the script skips `offline` and `unauthorized` entries.
 - **Need verbose logging**: tail `flutter logs -d <serial>` while invoking orchestration commands.
+
+## 8. Lab configuration
+
+Lab bridge IPs, expected Wi-Fi subnets, media-timeline URLs, and store URLs
+used across scripts and both runbooks are documented in one place:
+`config/lab.env.example`. Copy it to `config/lab.env` (git-ignored) and edit
+values for your lab; `scripts/hydracam_lib/labconfig.py` reads that file with
+real environment variables always taking precedence, and falls back to the
+same hard-coded defaults scripts already use today if neither is present.
+
+This is consultative only for now — no existing script reads `config/lab.env`
+yet, so editing it does not change current script behavior. See the module
+docstring in `scripts/hydracam_lib/labconfig.py` for the `get(key, default)`
+API once scripts migrate to it.
