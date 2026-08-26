@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import stat
 import subprocess
 import tempfile
@@ -13,6 +14,10 @@ from pathlib import Path
 SCRIPT_PATH = Path(__file__).with_name("deploy_macos_dev_host.zsh")
 
 
+@unittest.skipUnless(
+    shutil.which("zsh"),
+    "zsh is unavailable; deploy_macos_dev_host.zsh is a macOS dev-host wrapper",
+)
 class DeployMacosDevHostTests(unittest.TestCase):
     def test_help_documents_one_click_usage_and_validation_modes(self) -> None:
         result = subprocess.run(

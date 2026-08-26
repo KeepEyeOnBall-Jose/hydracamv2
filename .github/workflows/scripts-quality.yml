@@ -32,6 +32,14 @@ jobs:
       # is not a unittest suite (no TestCase, no assertions) and makes live
       # network calls to a real hosted endpoint, so it is non-deterministic
       # and unsuitable for CI.
+
+      # scripts/multi_device_orchestrator.py imports `requests`, so the
+      # scripts/ tree is not strictly stdlib-only and its backend test cannot
+      # import without this. Installed explicitly rather than vendored so the
+      # dependency stays visible.
+      - name: Install script dependencies
+        run: python3 -m pip install --upgrade requests
+
       - name: Run scripts/test_*.py
         run: |
           set -e
