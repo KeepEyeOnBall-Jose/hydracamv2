@@ -184,7 +184,8 @@ class MediaCaptureContext {
     final perspective = CameraPerspectiveMetadata.fromJson(json);
     return MediaCaptureContext(
       perspective: perspective,
-      level: DeviceLevelMetadata.fromJson(toStringKeyedMap(json["deviceLevel"])),
+      level:
+          DeviceLevelMetadata.fromJson(toStringKeyedMap(json["deviceLevel"])),
       cameraName: _nonEmpty(json["cameraName"]?.toString()),
       cameraLensDirection: _nonEmpty(json["cameraLensDirection"]?.toString()),
       cameraSensorOrientation: toIntOrNull(json["cameraSensorOrientation"]),

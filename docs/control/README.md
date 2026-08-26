@@ -1,5 +1,7 @@
 # HydraCam Control Plane
 
+Last reviewed: 2026-08-26 (content dated 2026-08-26).
+
 This directory is the product/control-plane entrypoint for the HydraCam mobile
 repo. It replaces the Google Sheet as the canonical source for durable project
 state.
@@ -55,6 +57,9 @@ spreadsheet sprint rows.
 
 - `status-and-roadmap.md`: current mobile status, release blockers, roadmap, and
   future product ideas separated from active mobile work.
+- `status-archive-2026.md`: verbatim historical status log, device-matrix
+  evidence narratives, and superseded decisions moved out of
+  `status-and-roadmap.md` on 2026-08-26 to keep that document current-focused.
 - `baseline-functionality-and-support.md`: basic support contract for baseline
   functionality, supported hardware, emulator/simulator scope, and minimum
   gates before making support claims.
@@ -149,38 +154,22 @@ spreadsheet sprint rows.
 
 ## Historical Status Files
 
-These dated snapshots and one-off debugging notes were moved out of the repo
-root into `history/` (2026-06-28) to keep the root onboarding surface limited to
-canonical docs. They are retained as dated evidence only, carry historical
-warnings, and must not override `status-and-roadmap.md`:
+The `history/` snapshot archive (dated status notes and one-off debugging logs
+moved out of the repo root on 2026-06-28) was removed on 2026-08-26 as
+superseded; the files remain available in git history at the pre-removal
+commit (`05b60544`).
 
-- `history/RECOVERY_PLAN.md`
-- `history/TESTING_SUMMARY.md`
-- `history/READY_TO_DEPLOY.md`
-- `history/BUILD_COMPLETE.md`
-- `history/SUCCESS_SUMMARY.md`
-- `history/DEPLOYMENT_STATUS.md`
-- `history/DEPLOYMENT_GUIDE.md`
-- `history/QUICKSTART.md`
-- `history/MIGRATION_NOTES.md`
-- `history/FINAL_STATUS.md`
-- `history/VIDEO_UPLOAD_FAILURE_ANALYSIS.md` — the documented video-upload race is
-  already resolved in `lib/master/master_screen.dart`
-  (`_ensureRecordingState`/`_isRecordingTransitioning`); kept as a record only.
-- `history/iOS_BUILD_IMPOSSIBLE.md`, `history/iOS_BUILD_FIX.md`,
-  `history/iOS_FINAL_FIX.md`, `history/CORRECTION_iOS_SANDBOX.md`,
-  `history/RESTART_VSCODE.md`, `history/XCODE_SOLUTION.md` — superseded
-  iOS-sandbox debugging notes. Physical iOS builds work; see
-  `status-and-roadmap.md`.
-- `history/PACKAGE_ALTERNATIVES_PLAN.md` — stale dependency status; superseded by
-  `../superpowers/plans/2026-06-05-dependency-toolchain-upgrade.md` and the
-  current `pubspec.yaml`.
-- `history/TEST_PLAN_MULTI_DEVICE.md` — superseded by
-  `architecture-and-testing.md` and `regular-evaluation-plan.md` (its launch
-  command also used a stale applicationId).
-- `history/MULTI_DEVICE_AUTOMATION.md` — early automation plan; the bridge and
-  orchestrator it proposed now exist (`lib/automation/`, `scripts/`). See
-  `../../AUTOMATION_RUNBOOK.md` for current automation guidance.
+## Staleness Convention
+
+Every live file directly under `docs/control/` (excluding `status-and-roadmap.md`
+and `backlog-import.md`, which carry their own refresh markers) carries a
+`Last reviewed: <date> (content dated <git-date>)` line under its H1. The
+`git-date` is the file's last substantive `git log` commit date; `Last
+reviewed` is bumped to the current date only when someone actually re-reads
+and re-verifies the content, not on every edit. A `Last reviewed` date equal
+to `content dated` means the line was added to mark staleness, not that the
+document was freshly re-verified — check the gap between the two to judge how
+stale a document is likely to be.
 
 ## Update Rules
 

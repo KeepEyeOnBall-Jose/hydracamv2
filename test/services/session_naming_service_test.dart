@@ -111,7 +111,8 @@ void main() {
       ),
     );
 
-    expect(name.length, lessThanOrEqualTo(sessionNamingService.maxDisplayNameLength));
+    expect(name.length,
+        lessThanOrEqualTo(sessionNamingService.maxDisplayNameLength));
     expect(name.length, sessionNamingService.maxDisplayNameLength);
     expect(name, startsWith("Training - "));
     expect(name, isNot(endsWith(" ")));

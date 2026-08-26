@@ -1,6 +1,6 @@
 # HydraCam, MoBo, And Media Timeline Merge Plan
 
-Last reviewed: 2026-07-07.
+Last reviewed: 2026-07-07 (content dated 2026-07-07).
 
 This plan covers three active codebases:
 

@@ -82,8 +82,8 @@ class LocalHlsServer {
       response.headers.set(HttpHeaders.acceptRangesHeader, "bytes");
       response.headers.set(HttpHeaders.cacheControlHeader, "no-store");
 
-      final range = _parseRange(request.headers.value(HttpHeaders.rangeHeader),
-          length);
+      final range =
+          _parseRange(request.headers.value(HttpHeaders.rangeHeader), length);
       if (range != null) {
         response.statusCode = HttpStatus.partialContent;
         response.headers.set(
@@ -123,10 +123,9 @@ class LocalHlsServer {
     }
     final candidate = File("$_rootPath/$relative");
     final normalized = candidate.absolute.uri.normalizePath().toFilePath();
-    final rootWithSep =
-        _rootPath.endsWith(Platform.pathSeparator)
-            ? _rootPath
-            : "$_rootPath${Platform.pathSeparator}";
+    final rootWithSep = _rootPath.endsWith(Platform.pathSeparator)
+        ? _rootPath
+        : "$_rootPath${Platform.pathSeparator}";
     if (!normalized.startsWith(rootWithSep)) {
       return null;
     }
@@ -178,7 +177,8 @@ class LocalHlsServer {
         return null;
       }
       start = parsedStart;
-      end = endText.isEmpty ? length - 1 : (int.tryParse(endText) ?? length - 1);
+      end =
+          endText.isEmpty ? length - 1 : (int.tryParse(endText) ?? length - 1);
       if (end >= length) {
         end = length - 1;
       }

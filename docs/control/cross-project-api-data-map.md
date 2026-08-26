@@ -1,6 +1,6 @@
 # Cross-Project API And Data Map
 
-Last reviewed: 2026-06-12.
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
 
 This document visualizes how HydraCam mobile, the MoBo HydraCam webservice, and
 media-timeline relate at the API, endpoint, storage, and ownership layers.

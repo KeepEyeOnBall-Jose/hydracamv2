@@ -1,5 +1,7 @@
 # Wireless Device Debugging
 
+Last reviewed: 2026-06-07 (content dated 2026-06-07).
+
 Use this runbook to prepare HydraCam phones for cable-free debugging. Keep all
 devices and this Mac on the same trusted WiFi or hotspot network before starting.
 

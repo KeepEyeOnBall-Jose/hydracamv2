@@ -1,5 +1,7 @@
 # HydraCam Regular Evaluation Plan
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
+
 Use this runbook whenever a change lands in the app. It turns the existing
 evidence-first contract into a repeatable gate sequence for local development,
 handoff, release prep, and device-facing work.

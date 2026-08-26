@@ -1,5 +1,7 @@
 # Two-Device Clock-Sync Capture Runbook (Operator)
 
+Last reviewed: 2026-06-10 (content dated 2026-06-10).
+
 Step-by-step procedure for performing the **real** two-device capture that
 exercises HydraCam's clock-synchronization feature end to end on physical
 hardware, confirms the slave's sync status chip is green, captures a photo and a
@@ -18,10 +20,10 @@ cross-device error is within the < 50 ms target), follow
 
 ## Device targets
 
-| Role   | Candidate devices                                  | Availability (2026-06-10)                          |
-| ------ | -------------------------------------------------- | -------------------------------------------------- |
-| Master | Any supported device (see `status-and-roadmap.md`) | Android Samsung S7 / S9 / S10e have recent passing launch evidence; use one as master. |
-| Slave  | Any supported device                               | A second Android device (S9/S10e) is the most reliable slave right now. |
+| Role   | Candidate devices                                  | Availability (2026-06-10)                                                                                                                                                                                                                                                                                         |
+|--------|----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Master | Any supported device (see `status-and-roadmap.md`) | Android Samsung S7 / S9 / S10e have recent passing launch evidence; use one as master.                                                                                                                                                                                                                            |
+| Slave  | Any supported device                               | A second Android device (S9/S10e) is the most reliable slave right now.                                                                                                                                                                                                                                           |
 | iOS    | iPhone / iPad                                      | **OFFLINE** — recent runs recorded iOS device visibility/warm-prime failures (`logs/verification-runs/20260609-0557-ios-iphone-ipad-not-working`, `…-recovery-continuation`, and the iOS warm-prime failure evidence). Do not assume iOS is available; confirm device visibility before selecting an iPhone/iPad. |
 
 Pick two devices that are currently reachable (Android recommended today). Record
@@ -98,7 +100,7 @@ the exact device models you used in the results section.
 Create a sibling evidence run folder and drop the pulled artifacts and notes
 there:
 
-```
+```text
 logs/verification-runs/<YYYYMMDD>-time-sync-two-device-hardware/
   README.md            # device models, hotspot, chip color/text per device, pass/fail
   master-metadata.json

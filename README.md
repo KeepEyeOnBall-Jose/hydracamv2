@@ -7,12 +7,63 @@ and test strategy live in `docs/control/README.md`. Older top-level status
 reports are historical snapshots and must not override the control docs.
 
 ## Overview
+
 HydraCam is a mobile application designed for multi-device camera synchronization, intended for sports events like squash or padel matches. It allows a master device to control multiple slave devices' cameras connected via a hotspot. The master device can send commands to start or stop camera recording or capture photos on the slave devices, making it useful for capturing different angles during a sports match.
+
+## Build & Run
+
+### Prerequisites
+
+- **Flutter (stable channel)** matching the SDK constraint in `pubspec.yaml`
+  (`environment.sdk: '>=3.0.0 <4.0.0'`).
+- **Android SDK + `adb`** on `PATH` for building, installing, or debugging on
+  Android devices/emulators. Xcode is additionally required for iOS/macOS
+  builds.
+
+### Getting Started
+
+```bash
+flutter pub get              # fetch dependencies
+flutter devices              # list available devices/emulators
+flutter run                  # run on the only/default device
+flutter run -d <device-id>   # or target a specific device explicitly
+```
+
+### Running Quality Gates Locally
+
+- `bash scripts/agent_gate.sh` — change-scoped gate: runs `git diff --check`
+  and a large-file guard on every changed file, plus `dart format`/`flutter
+  analyze` for changed `.dart` files, `markdownlint-cli2` for changed `.md`
+  files, `shellcheck` for changed `.sh` files, and the matching
+  `scripts/test_*.py` unit test for any changed Python script.
+- `./verify.sh` — full pre-deploy pass: cleans the build, runs `flutter pub
+  get`, checks `dart format`, runs `flutter analyze` and the entire `flutter
+  test` suite, then builds a debug Android APK.
+
+### Testing
+
+```bash
+flutter analyze                       # static analysis
+flutter test                          # Dart/Flutter test suite
+python3 scripts/test_some_script.py   # run a Python script's own tests directly
+```
+
+### Automation & Distribution
+
+See `AUTOMATION_RUNBOOK.md` for emulator/hardware automation flows and
+`DISTRIBUTION_RUNBOOK.md` for App Store/Play Store distribution; copy
+`config/lab.env.example` to `config/lab.env` to configure lab-specific
+constants. Hardware/emulator UI automation builds pass
+`--dart-define=HYDRACAM_AUTOMATION=true` (see
+`scripts/run_hardware_ui_e2e.py`) to enable the in-app automation bridge used
+for scripted device control.
 
 ## Architecture and Components
 
 ### Architecture
+
 The application follows a client-server model where:
+
 - The **master device** acts as a server and hotspot, sending commands to connected slave devices.
 - **Slave devices** act as WebSocket clients connected to the master, receiving commands and controlling their cameras based on these instructions.
 
@@ -21,37 +72,44 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 ### Main Components
 
 #### 1. Master
+
 - **MasterServer**: A WebSocket server running on the master device to manage connections and issue camera commands.
 - **MasterAnnouncer**: Broadcasts the master device's presence to help slaves connect.
 - **MasterScreen**: The control interface for the master device, showing connected clients and managing media capture and upload.
 
 #### 2. Slave
+
 - **SlaveClient**: A WebSocket client to receive commands from the master and control the camera accordingly.
 - **MasterDiscovery**: Service to discover the master device and establish a connection.
 - **SlaveScreen**: UI on slave devices to display camera status and handle incoming commands.
 
 #### 3. Models
+
 - **CapturedPhoto**: Stores data about a photo taken, including timestamps and file paths.
 - **CapturedVideo**: Stores data about a video recorded, with start and end timestamps and file paths.
 - **CaptureSession**: Manages a session's photos and videos, with methods to start and end sessions.
 
 #### 4. Services
+
 - **CameraService**: Handles camera functionality, such as starting and stopping video recording and taking photos.
 - **HydraCamApiService**: Manages API communication to upload media files and create capture sessions on the external MoBo API.
 - **PermissionService**: Ensures that camera and network permissions are obtained on both master and slave devices.
 
 #### 5. API Communication
+
 - **API Endpoint**: The application communicates with an API hosted on MoBo (keobmotherboardweb) to manage capture sessions.
 - **Session Creation**: When a new session starts, the master device sends a request to create a session on the API, receiving a GUID that identifies this session.
 - **Media Upload**: The master device uses the session GUID to upload media files (photos and videos) to the API.
 - **API Notification**: Although this is still WIP in API, Slave devices use `HydraCamApiService` to notify the external API when they are ready to transmit media. This notification includes the `deviceId` and the `sessionGuid`, ensuring proper association of media files with the active session.
 
 #### 6. Screens
+
 - **RoleSelectionScreen** (`screens/role_selection_screen.dart`): The initial screen where the user selects the device role, either "Master" or "Slave."
 - **MasterScreen** (`master/master_screen.dart`): The control interface on the master device where the user can send camera commands to the slaves and view received photos.
 - **SlaveScreen** (`slave/slave_screen.dart`): The main screen on the slave devices that listens for incoming commands, shows camera status, and displays taken photos in a pop-up dialog.
 
 ## Photo and Video Management
+
 - *On Slave Devices*: Photos and videos are captured and stored locally in the
   current session. Each device queues its own captured media for upload; slaves
   do not transfer large media files through the master.
@@ -64,26 +122,29 @@ Communication is managed in real-time using WebSockets, ensuring synchronized ca
 
 The camera functionality has been centralized into a singleton pattern using `CameraServiceSingleton`. This ensures a single shared instance of the camera service is used across the app, improving resource management and consistency.
 
-#### Key Updates:
+#### Key Updates
+
 - **Singleton Architecture**:
     - Both master and slave roles now interact with the same `CameraService` instance via `CameraServiceSingleton`. This prevents redundant reinitializations and ensures consistent behavior.
 - **Dynamic Callback Handling**:
     - Master and slave roles dynamically set or update callbacks (e.g., for `onPhotoTaken` or `onVideoRecorded`) without reinitializing the camera.
 
-#### Benefits:
+#### Benefits
+
 - **Efficiency**: The camera is initialized once and reused across all interactions.
 - **Consistency**: Camera state and configuration are maintained throughout the app lifecycle.
 - **Flexibility**: Callbacks can be changed as roles or contexts shift during operation.
 
-
 ### Flash Mode Control
+
 When capturing photos or videos, the `enableFlash` parameter can be used to dynamically toggle the flash. For example:
+
 - **Enable Flash**: Use `enableFlash: true` to turn on the flash for the duration of the photo or video capture.
 - **Disable Flash**: The flash is automatically turned off after the operation to save battery and avoid unintended usage.
   This behavior is configurable in `CameraService` for both `takePhoto` and `startRecordingVideo`.
 
-
 ## Application Flow
+
 1. The **master device** starts by setting up a WebSocket server and broadcasts its presence.
 2. **Slave Device Connection and Synchronization**:
    - Slave devices discover the master using the broadcast and establish a WebSocket connection.
@@ -97,7 +158,6 @@ When capturing photos or videos, the `enableFlash` parameter can be used to dyna
    - Additionally, photos are saved in the `HydraCam` album for easy local access.
    - The media can also be manually uploaded from the uploader menu.
 5. At the end of the session, the master notifies server and slaves that session has ended.
-
 
 ## Project Structure
 
@@ -153,8 +213,8 @@ lib/
 ├── constants.dart                  # Application-wide constants.
 └── main.dart                       # Main entry point of the application.
 
-
 ## Media Management and Memory Optimization
+
 HydraCam handles photos and videos efficiently by leveraging the **SessionManager** and **UploaderService**. Each device (master or slave) independently manages its captured media and uploads directly to the server without transferring large files between devices. This approach minimizes network usage and ensures smooth operation during capture sessions:
 
 - **On All Devices**:
@@ -170,8 +230,6 @@ HydraCam handles photos and videos efficiently by leveraging the **SessionManage
    - Each device independently queues its media for upload to the server using the **UploaderService**. This avoids delays caused by transferring files between devices.
    - The **UploaderService** handles retries and provides real-time upload status updates to the UI.
    - Media uploads include metadata for proper association on the server, such as the session GUID, device ID, and capture timestamps.
-
-
 
 ## Additional Explanations
 
@@ -199,19 +257,21 @@ HydraCam handles photos and videos efficiently by leveraging the **SessionManage
 
 > **Important:** This service works in tandem with `SessionManager`, fetching the session GUID and media metadata to facilitate accurate uploads.
 
-
 ## Next Steps
+
 1. **Enhanced Session Management**: Abstract sessions into matches, sports, or specific venues (like a court or field).
 2. **User Interaction**: Improve the user interface for better control and experience.
 3. **AI Content Processing**: Develop AI algorithms to process captured content for highlights, player tracking, or other analytical purposes.
 4. **Match, Pitch and and Clips Abstraction**: Introduce a structure to represent matches and clips, allowing users to start matches and view or manage captured clips.
 5. **Specific Slave**: Optionally include id of specific slave in websocket messages to give an order to ONE slave instead of all.
 6. **Testing**: Populate the `test` folder with widget tests and integration tests to ensure the application functions correctly and efficiently.
+
 ---
 
 ## Getting Started
 
 ### Prerequisites
+
 1. **Flutter SDK** installed.
 2. **Android Studio** for Android development or **Xcode** for iOS (if needed).
 3. **Devices**: One master device and multiple slave devices to test the multi-device setup.
@@ -221,6 +281,7 @@ HydraCam handles photos and videos efficiently by leveraging the **SessionManage
 ...
 
 ## Usage
+
 1. Connect to same Network:
    - All devices must be in the same network.
    - This typically means the master (or one slave) is acting as a hotspot and the others are connected to its WiFi.
@@ -234,10 +295,13 @@ HydraCam handles photos and videos efficiently by leveraging the **SessionManage
    - The recorded materials are available in the lower part of the screen for each device along with the uploading state.
 
 ## Future Enhancements
+
 ...
 
 ## Available settings
+
 These are the preferences that one can adjust in the settings screen:
+
 1. Master should record: Controls whether the master should also take a picture or video too when telling slaves to do so.
 
 ## App Theme and Visual Style
@@ -247,6 +311,5 @@ HydraCam uses a centralized theme system defined in the file `app_theme.dart`. T
 The theme is applied globally in `main.dart`, ensuring consistent visual styles across the entire app.
 
 ### **Modifying Styles**
+
 To customize the app's appearance, you can update the properties in `app_theme.dart`. Changes to colors, fonts, or widget styles will automatically reflect throughout the app. For details, refer to the examples provided within `app_theme.dart`.
-
-

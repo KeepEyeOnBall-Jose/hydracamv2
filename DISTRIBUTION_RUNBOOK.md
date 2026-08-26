@@ -112,17 +112,17 @@ Do not submit a production build until all gates pass:
 Official references:
 
 - Apple App Store Connect workflow:
-  https://developer.apple.com/help/app-store-connect/get-started/app-store-connect-workflow/
+  <https://developer.apple.com/help/app-store-connect/get-started/app-store-connect-workflow/>
 - Apple upload builds:
-  https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/
+  <https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/>
 - Apple submit app:
-  https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app/
+  <https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app/>
 - Apple app privacy details:
-  https://developer.apple.com/app-store/app-privacy-details/
+  <https://developer.apple.com/app-store/app-privacy-details/>
 - Apple SDK minimum requirements:
-  https://developer.apple.com/news/upcoming-requirements/?id=02032026a
+  <https://developer.apple.com/news/upcoming-requirements/?id=02032026a>
 - Flutter iOS release:
-  https://docs.flutter.dev/deployment/ios
+  <https://docs.flutter.dev/deployment/ios>
 
 ## Physical iPhone Development Launch Modes
 
@@ -231,17 +231,17 @@ Current recovery evidence from 2026-06-09:
 Official references:
 
 - Google Play release rollout:
-  https://support.google.com/googleplay/android-developer/answer/9859348
+  <https://support.google.com/googleplay/android-developer/answer/9859348>
 - Google Play testing tracks:
-  https://support.google.com/googleplay/android-developer/answer/9845334
+  <https://support.google.com/googleplay/android-developer/answer/9845334>
 - Google Play personal account testing requirement:
-  https://support.google.com/googleplay/android-developer/answer/14151465
+  <https://support.google.com/googleplay/android-developer/answer/14151465>
 - Google Play Data safety:
-  https://support.google.com/googleplay/android-developer/answer/10787469
+  <https://support.google.com/googleplay/android-developer/answer/10787469>
 - Google Play target API requirements:
-  https://developer.android.com/google/play/requirements/target-sdk
+  <https://developer.android.com/google/play/requirements/target-sdk>
 - Flutter Android release:
-  https://docs.flutter.dev/deployment/android
+  <https://docs.flutter.dev/deployment/android>
 
 ## Store Privacy Inputs
 
@@ -261,6 +261,13 @@ SDK behavior:
 
 App Store privacy labels and Google Play Data Safety must match the app,
 backend, Auth0, and any SDKs included in the release build.
+
+The `HYDRACAM_PRIVACY_POLICY_URL`, `HYDRACAM_SUPPORT_URL`, and
+`HYDRACAM_ACCOUNT_DELETION_URL` defaults baked into
+`scripts/testflight_release_and_invite.sh` and `scripts/google_play_release.sh`
+are documented alongside the rest of the lab/store constants in
+`config/lab.env.example` (see AUTOMATION_RUNBOOK.md's "Lab configuration"
+section for how to override them).
 
 ## Build Artifacts
 

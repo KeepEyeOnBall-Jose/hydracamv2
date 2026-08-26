@@ -266,7 +266,8 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
                     ? null
                     : (value) => setState(() => _useCamera2 = value),
               ),
-            if (_useCamera2 && capabilities != null) _buildModeSelector(capabilities),
+            if (_useCamera2 && capabilities != null)
+              _buildModeSelector(capabilities),
             const SizedBox(height: 12),
             Row(
               children: [

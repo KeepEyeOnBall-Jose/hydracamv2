@@ -1,5 +1,6 @@
 # HydraCam User Flow Tracker
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
 Last derived: 2026-06-11.
 
 This is the repo-local tracker for product and validation user flows. It is

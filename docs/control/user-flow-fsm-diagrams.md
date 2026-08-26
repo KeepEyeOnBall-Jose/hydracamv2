@@ -1,5 +1,6 @@
 # HydraCam User Flow FSM Diagrams
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
 Last derived: 2026-06-14.
 
 This document turns the user-flow tracker into finite-state-machine diagrams.
