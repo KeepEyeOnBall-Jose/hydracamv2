@@ -3,7 +3,9 @@ import "dart:io";
 
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/automation/automation_bridge.dart";
+import "package:hydracam/services/auth0_service.dart";
 import "package:hydracam/services/log_service.dart";
+import "package:hydracam/services/user_service.dart";
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -118,6 +120,70 @@ void main() {
     expect(payload["error"], "invalid_request");
     expect(handlerInvoked, isFalse);
   });
+
+  test(
+      "logout command invokes UserService logout and reports cleared session",
+      () async {
+    final reservedServer =
+        await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final port = reservedServer.port;
+    await reservedServer.close(force: true);
+
+    final bridge = AutomationBridge.forTesting(
+      automationEnabled: true,
+      automationServerPort: port,
+    );
+    final authService = _FakeLogoutAuthService();
+    final userService = UserService.forTesting(
+      authService: authService,
+      getUserGuidByEmail: (_) async => "logout-test-guid",
+    );
+    const command = "logout";
+    bridge.registerCommand(command, (payload) async {
+      await userService.logout();
+      return {
+        "loggedOut": true,
+        "isLoggedIn": userService.isLoggedIn,
+      };
+    });
+    addTearDown(() async {
+      bridge.unregisterCommands([command]);
+      await bridge.closeForTesting();
+      LogService.instance.clearLogs();
+    });
+
+    await bridge.ensureInitialized();
+
+    final requestBytes = utf8.encode(
+      "POST /commands/$command HTTP/1.1\r\n"
+      "Host: 127.0.0.1:$port\r\n"
+      "Content-Type: application/json\r\n"
+      "Content-Length: 0\r\n"
+      "Connection: close\r\n"
+      "\r\n",
+    );
+    final socket = await Socket.connect(InternetAddress.loopbackIPv4, port);
+    socket.add(requestBytes);
+    await socket.flush();
+    final rawResponse = await utf8.decoder.bind(socket).join();
+    final payload = jsonDecode(_decodeHttpResponseBody(rawResponse))
+        as Map<String, dynamic>;
+
+    expect(authService.logoutCalls, 1);
+    expect(userService.isLoggedIn, isFalse);
+    expect(payload["status"], "ok");
+    expect(payload["command"], command);
+    expect(payload["result"], {"loggedOut": true, "isLoggedIn": false});
+  });
+}
+
+class _FakeLogoutAuthService extends AuthService {
+  int logoutCalls = 0;
+
+  @override
+  Future<void> logout() async {
+    logoutCalls += 1;
+  }
 }
 
 String _decodeHttpResponseBody(String rawResponse) {

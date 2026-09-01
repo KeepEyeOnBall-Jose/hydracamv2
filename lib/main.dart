@@ -161,6 +161,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
       _handleSetRuntimeRole;
   late final AutomationHandler _captureScreenshotAutomationHandler =
       AutomationScreenshotService.capture;
+  late final AutomationHandler _logoutAutomationHandler = _handleLogout;
   bool _automationRouteActive = false;
 
   @override
@@ -178,6 +179,10 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
         "capture_screenshot",
         _captureScreenshotAutomationHandler,
       );
+      AutomationBridge.instance.registerCommand(
+        "logout",
+        _logoutAutomationHandler,
+      );
     }
   }
 
@@ -188,6 +193,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
       AutomationBridge.instance.unregisterCommandsIfCurrent({
         "set_role": _setRoleAutomationHandler,
         "capture_screenshot": _captureScreenshotAutomationHandler,
+        "logout": _logoutAutomationHandler,
       });
     }
     super.dispose();
@@ -225,6 +231,15 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
     return {
       ...request.toJson(),
       "status": "role_set",
+    };
+  }
+
+  Future<Map<String, dynamic>> _handleLogout(
+      Map<String, dynamic> payload) async {
+    await UserService().logout();
+    return {
+      "loggedOut": true,
+      "isLoggedIn": UserService().isLoggedIn,
     };
   }
 
