@@ -1,0 +1,68 @@
+name: Owned Hardware Check
+
+on:
+  push:
+    branches: [codex/owned-ci-hardware]
+    paths: [.github/workflows/owned-hardware-check.yml]
+  workflow_dispatch:
+    inputs:
+      host:
+        description: Registered hardware to check
+        type: choice
+        options: [windows, mbp, mba]
+        default: windows
+
+permissions: {}
+
+jobs:
+  windows:
+    if: github.event_name == 'push' || inputs.host == 'windows'
+    runs-on: [owned-windows]
+    timeout-minutes: 5
+    steps:
+      - name: Verify actual Windows service identity and scratch IO
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+          $expected = if ($env:GITHUB_REPOSITORY -eq 'KeepEyeOnBall-Jose/hydracamv2') { 'S-1-5-19' } else { 'S-1-5-20' }
+          if ($identity.User.Value -ne $expected) { throw 'Unexpected service SID' }
+          if (!(Test-Path 'C:\OwnedHardwareCI\capacity\slot.lock')) { throw 'Host slot was not acquired' }
+          if ($expected -eq 'S-1-5-19') {
+            try { [IO.File]::ReadAllText('C:\OwnedHardwareCI\keobbackendcore\.credentials') | Out-Null; throw 'Public runner can read private credentials' } catch [UnauthorizedAccessException] { Write-Host 'Public/private isolation passed' }
+          }
+          $admin = [Security.Principal.WindowsPrincipal]::new($identity).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+          if ($admin) { throw 'Administrator token forbidden' }
+          $os = Get-CimInstance Win32_OperatingSystem
+          if ($os.Caption -notlike '*Windows 11*') { throw 'Expected Windows 11' }
+          $probe = Join-Path $env:RUNNER_TEMP ('hardware-' + [guid]::NewGuid() + '.txt')
+          try {
+            [IO.File]::WriteAllText($probe, $env:RUNNER_NAME)
+            if ([IO.File]::ReadAllText($probe) -ne $env:RUNNER_NAME) { throw 'Scratch IO failed' }
+          } finally { Remove-Item -LiteralPath $probe -ErrorAction SilentlyContinue }
+          Write-Host "Verified runner=$env:RUNNER_NAME host=$env:COMPUTERNAME identity=$($identity.Name) os=$($os.Caption) scratch=passed"
+  mac:
+    if: github.event_name == 'workflow_dispatch' && inputs.host != 'windows'
+    runs-on: ['owned-${{ inputs.host }}']
+    timeout-minutes: 5
+    steps:
+      - name: Verify actual Mac service identity and scratch IO
+        shell: bash
+        run: |
+          set -euo pipefail
+          account=_ownedci
+          if [[ "$GITHUB_REPOSITORY" == KeepEyeOnBall-Jose/hydracamv2 ]]; then account=_ownpubci; fi
+          test "$(id -un)" = "$account"
+          test -f /Library/OwnedHardwareCI/capacity/active/owner
+          if [[ "$account" == _ownpubci ]]; then
+            test ! -r /Users/_ownedci/keobbackendcore/.credentials
+            test ! -r /Users/_tradeci/runner/.credentials
+            echo "Public/private isolation passed"
+          fi
+          test "$(uname -m)" = arm64
+          case " $(id -Gn) " in *' admin '*) exit 1;; esac
+          probe=$(mktemp "$RUNNER_TEMP/hardware.XXXXXX")
+          trap 'rm -f "$probe"' EXIT
+          printf '%s' "$RUNNER_NAME" > "$probe"
+          test "$(cat "$probe")" = "$RUNNER_NAME"
+          echo "Verified runner=$RUNNER_NAME host=$(hostname -s) identity=$(id -un) arch=$(uname -m) scratch=passed"
