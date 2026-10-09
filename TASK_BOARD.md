@@ -1,3 +1,5 @@
+# Task board
+
 ## Human session continuity — 2026-10-09
 
 - Owner: client-auth chat 01a1207f; baseline `6e83866bd`.
@@ -8,6 +10,3 @@
 - Status: draft implementation; unit doubles are not live acceptance.
 - Blockers: real devices, Android SDK for APK, delegated human API contract.
 - [Migration, rollback and acceptance](docs/control/human-session-continuity.md).
-
-# Task board
-
