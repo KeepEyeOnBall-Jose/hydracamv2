@@ -1,11 +1,167 @@
+import "dart:async";
 import "dart:convert";
 
 import "package:flutter/foundation.dart";
+import "package:flutter_appauth/flutter_appauth.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/auth0_service.dart";
 
 void main() {
+  test("rejected identity clears memory even when credential deletion fails",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final store = _RecordingAuthCredentialStore()
+      ..clearError = StateError("locked store");
+    final auth = AuthService(
+        credentialStore: store,
+        authClient: _FakeAuthClient(
+            response: AuthLoginResponse(
+          accessToken: "unit-test-access",
+          idToken:
+              _idTokenFromPayload({"email": "player@example.com", "sub": ""}),
+          refreshToken: "unit-test-refresh",
+          accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+        )));
+    await expectLater(auth.login(), throwsA(anything));
+    expect(auth.email, isNull);
+    expect(auth.accessToken, isNull);
+  });
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  AuthCredentials expiredCredentials() => AuthCredentials(
+        accessToken: "expired-test-access",
+        idToken: _idToken(email: "player@example.com", picture: ""),
+        refreshToken: "stored-test-refresh",
+        accessTokenExpiresAt:
+            DateTime.now().subtract(const Duration(minutes: 1)),
+      );
+  AuthLoginResponse freshResponse() => AuthLoginResponse(
+        accessToken: "renewed-test-access",
+        idToken: _idToken(email: "player@example.com", picture: ""),
+        refreshToken: "rotated-test-refresh",
+        accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+      );
+
+  test("concurrent restores exchange a rotating refresh token once", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse())
+      ..refreshPending = Completer<AuthLoginResponse>();
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    final first = auth.restoreStoredSession();
+    final second = auth.restoreStoredSession();
+    await Future<void>.delayed(Duration.zero);
+    expect(client.refreshCalls, 1);
+    client.refreshPending!.complete(freshResponse());
+    expect(await Future.wait([first, second]), [true, true]);
+    expect(store.storedCredentials?.refreshToken, "rotated-test-refresh");
+  });
+
+  test("offline refresh retains credentials and a later attempt recovers",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse())
+      ..refreshError = TimeoutException("network unavailable");
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    expect(await auth.restoreStoredSession(), false);
+    expect(store.clearCalls, 0);
+    expect(auth.accessToken, isNull);
+    client.refreshError = null;
+    expect(await auth.restoreStoredSession(), false);
+    expect(client.refreshCalls, 1);
+    await Future<void>.delayed(const Duration(seconds: 2));
+    expect(await auth.restoreStoredSession(), true);
+  });
+
+  test("logout fences an in-flight refresh and cannot resurrect credentials",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse())
+      ..refreshPending = Completer<AuthLoginResponse>();
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    final pending = auth.restoreStoredSession();
+    await Future<void>.delayed(Duration.zero);
+    await auth.logout();
+    client.refreshPending!.complete(freshResponse());
+    expect(await pending, false);
+    expect(store.storedCredentials, isNull);
+    expect(auth.accessToken, isNull);
+  });
+
+  test("revoked refresh token clears credentials without exposing SDK errors",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse())
+      ..refreshError = FlutterAppAuthPlatformException(
+        code: "token_failed",
+        platformErrorDetails:
+            FlutterAppAuthPlatformErrorDetails(error: "invalid_grant"),
+      );
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    expect(await auth.restoreStoredSession(), false);
+    expect(store.storedCredentials, isNull);
+  });
+
+  test("rotated credentials retry persistence without another token exchange",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse());
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials())
+          ..saveError = StateError("keychain temporarily unavailable");
+    final auth = AuthService(authClient: client, credentialStore: store);
+    expect(await auth.restoreStoredSession(), false);
+    store.saveError = null;
+    await Future<void>.delayed(const Duration(seconds: 2));
+    expect(await auth.restoreStoredSession(), true);
+    expect(client.refreshCalls, 1);
+    expect(store.storedCredentials?.refreshToken, "rotated-test-refresh");
+  });
+
+  test("refresh cannot switch subject even when email matches", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(
+        response: AuthLoginResponse(
+      accessToken: "other-test-access",
+      idToken: _idTokenFromPayload({
+        "iss": "https://keepeyeonball.eu.auth0.com/",
+        "sub": "different-test-subject",
+        "email": "player@example.com",
+      }),
+      refreshToken: "other-test-refresh",
+      accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+    ));
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    expect(await auth.restoreStoredSession(), false);
+    expect(auth.email, isNull);
+    expect(store.storedCredentials, isNull);
+  });
+
+  test("cancelled login preserves the previously accepted credentials",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse());
+    final store = _RecordingAuthCredentialStore();
+    final auth = AuthService(authClient: client, credentialStore: store);
+    await auth.login();
+    client.loginError = FlutterAppAuthUserCancelledException(
+      code: "cancelled",
+      platformErrorDetails: FlutterAppAuthPlatformErrorDetails(),
+    );
+    await expectLater(
+        auth.login(), throwsA(isA<FlutterAppAuthUserCancelledException>()));
+    expect(store.storedCredentials?.refreshToken, "rotated-test-refresh");
+    expect(auth.email, "player@example.com");
+  });
 
   tearDown(() {
     debugDefaultTargetPlatformOverride = null;
@@ -203,7 +359,7 @@ void main() {
         isA<Exception>().having(
           (error) => error.toString(),
           "message",
-          contains("browser login failed"),
+          contains("Failed to log in. Please try again."),
         ),
       ),
     );
@@ -722,6 +878,8 @@ class _FakeAuthClient implements AuthClient {
   final AuthLoginResponse response;
   final AuthLoginResponse? refreshResponse;
   Object? loginError;
+  Object? refreshError;
+  Completer<AuthLoginResponse>? refreshPending;
   int refreshCalls = 0;
   int loginCalls = 0;
   int logoutCalls = 0;
@@ -760,6 +918,8 @@ class _FakeAuthClient implements AuthClient {
     refreshCalls += 1;
     lastRefreshRedirectUrl = redirectUrl;
     lastRefreshToken = refreshToken;
+    if (refreshError != null) throw refreshError!;
+    if (refreshPending != null) return refreshPending!.future;
     return refreshResponse ?? response;
   }
 
@@ -776,6 +936,8 @@ class _FakeAuthClient implements AuthClient {
 }
 
 class _RecordingAuthCredentialStore implements AuthCredentialStore {
+  Object? saveError;
+  Object? clearError;
   AuthCredentials? savedCredentials;
   AuthCredentials? storedCredentials;
   int clearCalls = 0;
@@ -785,6 +947,7 @@ class _RecordingAuthCredentialStore implements AuthCredentialStore {
 
   @override
   Future<void> save(AuthCredentials credentials) async {
+    if (saveError != null) throw saveError!;
     savedCredentials = credentials;
     storedCredentials = credentials;
   }
@@ -798,6 +961,7 @@ class _RecordingAuthCredentialStore implements AuthCredentialStore {
   @override
   Future<void> clear() async {
     clearCalls += 1;
+    if (clearError != null) throw clearError!;
     savedCredentials = null;
     storedCredentials = null;
   }
@@ -807,6 +971,8 @@ String _idToken({required String email, required String picture}) {
   return [
     "eyJhbGciOiJub25lIn0",
     _base64UrlJson({
+      "iss": "https://keepeyeonball.eu.auth0.com/",
+      "sub": "unit-test-subject",
       "email": email,
       "picture": picture,
     }),
@@ -825,15 +991,17 @@ String _idTokenWithoutEmail({required String picture}) {
 String _idTokenFromPayload(Map<String, Object?> payload) {
   return [
     "eyJhbGciOiJub25lIn0",
-    _base64UrlNoPadding(jsonEncode(payload)),
+    _base64UrlNoPadding(jsonEncode({
+      "iss": "https://keepeyeonball.eu.auth0.com/",
+      "sub": "unit-test-subject",
+      ...payload,
+    })),
     "signature",
   ].join(".");
 }
 
 String _base64UrlJson(Map<String, Object?> payload) {
-  final json =
-      '{"email":"${payload["email"]}","picture":"${payload["picture"]}"}';
-  return _base64UrlNoPadding(json);
+  return _base64UrlNoPadding(jsonEncode(payload));
 }
 
 String _base64UrlNoPadding(String value) {

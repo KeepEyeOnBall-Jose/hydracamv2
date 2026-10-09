@@ -1,9 +1,43 @@
+import "dart:async";
 import "package:flutter_test/flutter_test.dart";
+import "package:flutter_appauth/flutter_appauth.dart";
 import "package:hydracam/services/auth0_service.dart";
 import "package:hydracam/services/user_service.dart";
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test("logout rejects late GUID lookup from startup restore", () async {
+    final lookup = Completer<String?>();
+    final service = UserService.forTesting(
+      authService: _FakeAuthService(
+          restoreResult: true, restoredEmail: "player@example.com"),
+      getUserGuidByEmail: (_) => lookup.future,
+    );
+    final restore = service.restoreStoredSession();
+    await Future<void>.delayed(Duration.zero);
+    await service.logout();
+    lookup.complete("old-user-guid");
+    expect(await restore, false);
+    expect(service.isLoggedIn, false);
+    expect(service.guid, isNull);
+  });
+
+  test("cancelled login preserves accepted user and retained capture identity",
+      () async {
+    final auth = _FakeAuthService(
+        restoreResult: false, loginEmail: "player@example.com");
+    final service = UserService.forTesting(
+        authService: auth, getUserGuidByEmail: (_) async => "original-guid");
+    await service.login();
+    auth.loginError = FlutterAppAuthUserCancelledException(
+        code: "cancelled",
+        platformErrorDetails: FlutterAppAuthPlatformErrorDetails());
+    await expectLater(
+        service.login(), throwsA(isA<FlutterAppAuthUserCancelledException>()));
+    expect(service.guid, "original-guid");
+    expect(service.isLoggedIn, true);
+  });
 
   test("UserService restores HydraCam GUID after Auth0 restore", () async {
     String? requestedEmail;
@@ -228,6 +262,8 @@ void main() {
 }
 
 class _FakeAuthService extends AuthService {
+  @override
+  Future<void> logout() async {}
   final bool restoreResult;
   final String? restoredEmail;
   final String? restoredProfilePicture;
