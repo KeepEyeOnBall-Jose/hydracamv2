@@ -18,6 +18,9 @@ Future<void> main() async {
         ..remove("screenshots");
       await File("${output.path}/audit.json")
           .writeAsString(const JsonEncoder.withIndent("  ").convert(report));
+      if (report["complete"] != true) {
+        throw StateError("Hardware audit did not complete; inspect audit.json");
+      }
     },
   );
 }

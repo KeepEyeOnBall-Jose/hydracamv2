@@ -27,8 +27,16 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       if (find.byType(MasterScreen).evaluate().isNotEmpty) break;
     }
-    FlutterError.onError = (details) => errors.add(details.toString());
+    FlutterError.onError = (details) {
+      errors.add(details.toString());
+      testErrorHandler?.call(details);
+    };
     addTearDown(() {
+      binding.reportData = {
+        ...?binding.reportData,
+        "phase": phase,
+        "frameworkErrors": errors
+      };
       FlutterError.onError = testErrorHandler;
       tester.platformDispatcher.clearAllTestValues();
     });
@@ -64,6 +72,10 @@ void main() {
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(SettingsScreen), findsOneWidget);
+    // AnimatedTheme needs another frame after the platform notification.
+    for (var i = 0; i < 4; i++) {
+      await tester.pump(const Duration(milliseconds: 250));
+    }
     final settingsContext = tester.element(find.byType(SettingsScreen));
     final brightness = Theme.of(settingsContext).brightness;
     if (phase == "after") expect(brightness, Brightness.dark);
@@ -74,6 +86,7 @@ void main() {
     binding.reportData = {
       ...?binding.reportData,
       "phase": phase,
+      "complete": true,
       "renderedBrightness": brightness.name,
       "source": const String.fromEnvironment("AUDIT_SOURCE",
           defaultValue: "working-tree"),
