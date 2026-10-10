@@ -89,14 +89,15 @@ class SessionDetailsScreen extends StatelessWidget {
                 Text("Total Photos: ${session.capturedPhotos.length}"),
                 Text("Total Videos: ${session.capturedVideos.length}"),
                 const SizedBox(height: 12),
-                _buildPlayerAssignmentState(),
+                _buildPlayerAssignmentState(context),
               ],
             ),
           ),
           // Compact button with icon
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: AppTheme.border),
+              border: Border.all(
+                  color: Theme.of(context).colorScheme.outlineVariant),
               borderRadius: BorderRadius.circular(8),
             ),
             child: IconButton(
@@ -113,12 +114,12 @@ class SessionDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerAssignmentState() {
+  Widget _buildPlayerAssignmentState(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(maxWidth: 420),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -144,7 +145,8 @@ class SessionDetailsScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             "Player assignment unavailable",
-            style: const TextStyle(color: AppTheme.textSecondary),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
         ],
       ),
@@ -185,7 +187,9 @@ class SessionDetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           "No $title in this session.",
-          style: const TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+          style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
       );
     }
@@ -234,7 +238,8 @@ class SessionDetailsScreen extends StatelessWidget {
       ),
       trailing: IconButton(
         icon: media.isUploaded
-            ? const Icon(Icons.cloud_done, color: AppTheme.textPrimary)
+            ? Icon(Icons.cloud_done,
+                color: Theme.of(context).colorScheme.onSurface)
             : const Icon(Icons.cloud_upload_outlined, color: AppTheme.danger),
         onPressed: () {
           if (!fileExists) {

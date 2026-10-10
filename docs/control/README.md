@@ -55,6 +55,9 @@ spreadsheet sprint rows.
 
 ## Control Documents
 
+- [2026-10-10 accessibility repair proof](../reports/2026-10-10-apple-design/index.html):
+  iPhone screenshots, contrast and large-text fixes, source and validation scope.
+
 - `status-and-roadmap.md`: current mobile status, release blockers, roadmap, and
   future product ideas separated from active mobile work.
 - `status-archive-2026.md`: verbatim historical status log, device-matrix

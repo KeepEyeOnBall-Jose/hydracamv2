@@ -37,20 +37,22 @@ class HydraCamSurface extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry? margin;
 
-  Color get _backgroundColor {
+  Color _backgroundColor(BuildContext context) {
     return switch (tone) {
-      HydraCamSurfaceTone.defaultTone => AppTheme.surface,
-      HydraCamSurfaceTone.muted => AppTheme.surfaceMuted,
+      HydraCamSurfaceTone.defaultTone => Theme.of(context).colorScheme.surface,
+      HydraCamSurfaceTone.muted =>
+        Theme.of(context).colorScheme.surfaceContainerLow,
       HydraCamSurfaceTone.dark => AppTheme.appChrome,
-      HydraCamSurfaceTone.danger => AppTheme.dangerSurface,
+      HydraCamSurfaceTone.danger =>
+        Theme.of(context).colorScheme.errorContainer,
     };
   }
 
-  Color get _borderColor {
+  Color _borderColor(BuildContext context) {
     return switch (tone) {
       HydraCamSurfaceTone.danger => AppTheme.danger,
-      HydraCamSurfaceTone.dark => AppTheme.borderStrong,
-      _ => AppTheme.border,
+      HydraCamSurfaceTone.dark => Theme.of(context).colorScheme.outline,
+      _ => Theme.of(context).colorScheme.outlineVariant,
     };
   }
 
@@ -58,8 +60,8 @@ class HydraCamSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final content = DecoratedBox(
       decoration: BoxDecoration(
-        color: _backgroundColor,
-        border: Border.all(color: _borderColor),
+        color: _backgroundColor(context),
+        border: Border.all(color: _borderColor(context)),
         borderRadius: AppTheme.smallRadius,
       ),
       child: Padding(
@@ -70,7 +72,7 @@ class HydraCamSurface extends StatelessWidget {
             style: TextStyle(
               color: tone == HydraCamSurfaceTone.dark
                   ? AppTheme.inverseText
-                  : AppTheme.textPrimary,
+                  : Theme.of(context).colorScheme.onSurface,
             ),
             child: child,
           ),
@@ -134,11 +136,12 @@ class HydraCamButton extends StatelessWidget {
       HydraCamButtonVariant.primary => AppTheme.primaryButtonStyle(),
       HydraCamButtonVariant.danger => AppTheme.dangerButtonStyle(),
       HydraCamButtonVariant.neutral => ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.surface,
-          foregroundColor: AppTheme.textPrimary,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          foregroundColor: Theme.of(context).colorScheme.onSurface,
           disabledBackgroundColor: AppTheme.disabledSurface,
-          disabledForegroundColor: AppTheme.textSecondary,
-          side: const BorderSide(color: AppTheme.border),
+          disabledForegroundColor:
+              Theme.of(context).colorScheme.onSurfaceVariant,
+          side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           shape: const RoundedRectangleBorder(
             borderRadius: AppTheme.smallRadius,
           ),
@@ -173,7 +176,7 @@ class HydraCamBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = _statusColors(tone);
+    final colors = _statusColors(context, tone);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.background,
@@ -189,12 +192,14 @@ class HydraCamBadge extends StatelessWidget {
               Icon(icon, size: 14, color: colors.foreground),
               const SizedBox(width: 4),
             ],
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: colors.foreground,
-                    fontWeight: FontWeight.w700,
-                  ),
+            Flexible(
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: colors.foreground,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
             ),
           ],
         ),
@@ -217,7 +222,7 @@ class HydraCamStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = _statusColors(status);
+    final colors = _statusColors(context, status);
     return Chip(
       avatar:
           icon == null ? null : Icon(icon, size: 16, color: colors.foreground),
@@ -246,29 +251,29 @@ class _StatusColors {
   final Color border;
 }
 
-_StatusColors _statusColors(HydraCamStatusTone tone) {
+_StatusColors _statusColors(BuildContext context, HydraCamStatusTone tone) {
   return switch (tone) {
-    HydraCamStatusTone.neutral => const _StatusColors(
-        foreground: AppTheme.textSecondary,
-        background: AppTheme.surfaceMuted,
-        border: AppTheme.border,
+    HydraCamStatusTone.neutral => _StatusColors(
+        foreground: Theme.of(context).colorScheme.onSurfaceVariant,
+        background: Theme.of(context).colorScheme.surfaceContainerLow,
+        border: Theme.of(context).colorScheme.outlineVariant,
       ),
-    HydraCamStatusTone.active => const _StatusColors(
-        foreground: AppTheme.textPrimary,
+    HydraCamStatusTone.active => _StatusColors(
+        foreground: AppTheme.textOnAccent,
         background: AppTheme.accent,
         border: AppTheme.accent,
       ),
-    HydraCamStatusTone.warning => const _StatusColors(
-        foreground: AppTheme.textPrimary,
+    HydraCamStatusTone.warning => _StatusColors(
+        foreground: Theme.of(context).colorScheme.onSurface,
         background: AppTheme.accentSurface,
         border: AppTheme.accent,
       ),
-    HydraCamStatusTone.danger => const _StatusColors(
-        foreground: AppTheme.danger,
-        background: AppTheme.dangerSurface,
-        border: AppTheme.danger,
+    HydraCamStatusTone.danger => _StatusColors(
+        foreground: Theme.of(context).colorScheme.onErrorContainer,
+        background: Theme.of(context).colorScheme.errorContainer,
+        border: Theme.of(context).colorScheme.error,
       ),
-    HydraCamStatusTone.recording => const _StatusColors(
+    HydraCamStatusTone.recording => _StatusColors(
         foreground: AppTheme.inverseText,
         background: AppTheme.danger,
         border: AppTheme.danger,

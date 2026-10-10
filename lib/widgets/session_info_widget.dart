@@ -102,7 +102,7 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
   Widget _buildInfoText(
     String text, {
     int maxLines = 2,
-    Color color = AppTheme.textSecondary,
+    Color? color,
     FontWeight? fontWeight,
     double fontSize = 14,
   }) {
@@ -115,7 +115,7 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
         style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,
-          color: color,
+          color: color ?? Theme.of(context).colorScheme.onSurfaceVariant,
         ),
       ),
     );
@@ -148,7 +148,7 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
         Widget compactLine(
           String text, {
           double? width,
-          Color color = AppTheme.textSecondary,
+          Color? color,
           FontWeight? fontWeight,
         }) {
           return SizedBox(
@@ -169,7 +169,7 @@ class _SessionInfoWidgetState extends State<SessionInfoWidget> {
             compactLine(
               "Session: ${widget.sessionDisplay}",
               width: maxWidth,
-              color: AppTheme.textPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.bold,
             ),
             if (widget.showDiagnostics) ...[
