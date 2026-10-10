@@ -355,7 +355,7 @@ class MasterScreenState extends State<MasterScreen> {
                                   ? Icons.warning
                                   : Icons.wifi,
                           color: isDisconnected
-                              ? AppTheme.textTertiary
+                              ? Theme.of(context).colorScheme.onSurfaceVariant
                               : device.networkStatus ==
                                       ConnectedDeviceNetworkStatus.wrongNetwork
                                   ? AppTheme.danger

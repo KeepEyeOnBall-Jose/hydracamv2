@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "../app_theme.dart";
 import "../services/alert_utils.dart";
 import "hydracam_surface.dart";
 
@@ -29,7 +28,9 @@ class SettingsOption extends StatelessWidget {
             description: description,
           );
 
-          if (constraints.maxWidth < 520) {
+          final labeledControl = Semantics(label: title, child: control);
+          if (constraints.maxWidth < 520 ||
+              MediaQuery.textScalerOf(context).scale(16) > 20) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,7 +38,7 @@ class SettingsOption extends StatelessWidget {
                 const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: control,
+                  child: labeledControl,
                 ),
               ],
             );
@@ -47,7 +48,8 @@ class SettingsOption extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(child: label),
-              control,
+              const SizedBox(width: 16),
+              Expanded(child: labeledControl),
             ],
           );
         },
@@ -73,15 +75,16 @@ class _SettingsOptionLabel extends StatelessWidget {
         Flexible(
           child: Text(
             title,
-            style: AppTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge!,
           ),
         ),
         if (description != null)
           IconButton(
-            icon: const Icon(
+            tooltip: title,
+            icon: Icon(
               Icons.info_outline,
               size: 20,
-              color: AppTheme.accentColor,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             onPressed: () {
               AlertUtils.showInfoDialog(

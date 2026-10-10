@@ -46,18 +46,18 @@ class MediaListWidget extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(
                 Icons.perm_media_outlined, // Multimedia icon
                 size: 100, // Adjust the size as needed
-                color: AppTheme.textTertiary,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
               SizedBox(height: 20),
               Text(
                 "No media available",
                 style: TextStyle(
                   fontSize: 18, // Text size
-                  color: AppTheme.textTertiary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -66,7 +66,7 @@ class MediaListWidget extends StatelessWidget {
                 "Photos and videos will appear here once captured.",
                 style: TextStyle(
                   fontSize: 14, // Smaller text size
-                  color: AppTheme.textSecondary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -89,9 +89,10 @@ class MediaListWidget extends StatelessWidget {
               final missingLocalFile =
                   _isLocalFileMissing(photo, currentlyUploading);
               return ListTile(
-                leading: _buildPhotoLeading(photo, missingLocalFile),
+                leading: _buildPhotoLeading(context, photo, missingLocalFile),
                 title: Text("Photo from: ${photo.slaveDeviceId}"),
                 subtitle: _buildSubtitle(
+                  context,
                   primary: "Captured: ${photo.captureDate}",
                   media: photo,
                   currentlyUploading: currentlyUploading,
@@ -101,6 +102,7 @@ class MediaListWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildUploadStatusIndicator(
+                      context,
                       photo,
                       currentlyUploading,
                       missingLocalFile: missingLocalFile,
@@ -127,9 +129,9 @@ class MediaListWidget extends StatelessWidget {
                         onCancelPhotoUpload != null)
                       IconButton(
                         tooltip: "Cancel upload",
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.cancel_outlined,
-                          color: AppTheme.danger,
+                          color: Theme.of(context).colorScheme.error,
                         ),
                         onPressed: () async {
                           await onCancelPhotoUpload!(photo);
@@ -153,9 +155,10 @@ class MediaListWidget extends StatelessWidget {
               final missingLocalFile =
                   _isLocalFileMissing(video, currentlyUploading);
               return ListTile(
-                leading: _buildVideoLeading(missingLocalFile),
+                leading: _buildVideoLeading(context, missingLocalFile),
                 title: Text("Video from: ${video.slaveDeviceId}"),
                 subtitle: _buildSubtitle(
+                  context,
                   primary: "Started: ${video.startRecordingDate}",
                   media: video,
                   currentlyUploading: currentlyUploading,
@@ -165,6 +168,7 @@ class MediaListWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildUploadStatusIndicator(
+                      context,
                       video,
                       currentlyUploading,
                       missingLocalFile: missingLocalFile,
@@ -191,9 +195,9 @@ class MediaListWidget extends StatelessWidget {
                         onCancelVideoUpload != null)
                       IconButton(
                         tooltip: "Cancel upload",
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.cancel_outlined,
-                          color: AppTheme.danger,
+                          color: Theme.of(context).colorScheme.error,
                         ),
                         onPressed: () async {
                           await onCancelVideoUpload!(video);
@@ -216,6 +220,7 @@ class MediaListWidget extends StatelessWidget {
 
   /// Builds a non-interactive upload status indicator.
   Widget _buildUploadStatusIndicator(
+    BuildContext context,
     dynamic media,
     dynamic currentlyUploading, {
     required bool missingLocalFile,
@@ -225,9 +230,9 @@ class MediaListWidget extends StatelessWidget {
         icon: Icons.error_outline,
         label: "Missing",
         semanticsLabel: "Upload status: Local file missing",
-        foregroundColor: AppTheme.danger,
-        backgroundColor: AppTheme.dangerSurface,
-        borderColor: AppTheme.danger,
+        foregroundColor: Theme.of(context).colorScheme.onErrorContainer,
+        backgroundColor: Theme.of(context).colorScheme.errorContainer,
+        borderColor: Theme.of(context).colorScheme.error,
       );
     }
 
@@ -253,18 +258,18 @@ class MediaListWidget extends StatelessWidget {
                       ),
                       Text(
                         "${(progress * 100).toInt()}%", // Percentage text
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 10,
-                          color: AppTheme.textPrimary,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],
                   ),
                   Text(
                     _formatByteProgress(media, progress),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10,
-                      color: AppTheme.textPrimary,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -278,9 +283,9 @@ class MediaListWidget extends StatelessWidget {
         icon: Icons.cloud_done,
         label: "Uploaded",
         semanticsLabel: "Upload status: Uploaded",
-        foregroundColor: AppTheme.textPrimary,
-        backgroundColor: AppTheme.surfaceMuted,
-        borderColor: AppTheme.border,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderColor: Theme.of(context).colorScheme.outlineVariant,
       );
     } else if (_hasUploadFailed(media, currentlyUploading)) {
       final uploadFailureReason = _uploadFailureReason(media);
@@ -290,18 +295,18 @@ class MediaListWidget extends StatelessWidget {
         semanticsLabel: uploadFailureReason == null
             ? "Upload status: Upload failed"
             : "Upload status: $uploadFailureReason",
-        foregroundColor: AppTheme.danger,
-        backgroundColor: AppTheme.dangerSurface,
-        borderColor: AppTheme.danger,
+        foregroundColor: Theme.of(context).colorScheme.onErrorContainer,
+        backgroundColor: Theme.of(context).colorScheme.errorContainer,
+        borderColor: Theme.of(context).colorScheme.error,
       );
     } else {
       return _buildStatusPill(
         icon: Icons.cloud_upload_outlined,
         label: "Pending",
         semanticsLabel: "Upload status: Pending upload",
-        foregroundColor: AppTheme.textSecondary,
-        backgroundColor: AppTheme.surfaceMuted,
-        borderColor: AppTheme.border,
+        foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderColor: Theme.of(context).colorScheme.outlineVariant,
       );
     }
   }
@@ -348,7 +353,8 @@ class MediaListWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSubtitle({
+  Widget _buildSubtitle(
+    BuildContext context, {
     required String primary,
     required dynamic media,
     required dynamic currentlyUploading,
@@ -367,8 +373,8 @@ class MediaListWidget extends StatelessWidget {
           style: TextStyle(
             color:
                 missingLocalFile || _hasUploadFailed(media, currentlyUploading)
-                    ? AppTheme.danger
-                    : AppTheme.textSecondary,
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 12,
           ),
         ),
@@ -385,8 +391,8 @@ class MediaListWidget extends StatelessWidget {
               }
               return Text(
                 timeRemaining,
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 12,
                 ),
               );
@@ -416,9 +422,11 @@ class MediaListWidget extends StatelessWidget {
     return "Pending upload";
   }
 
-  Widget _buildPhotoLeading(CapturedPhoto photo, bool missingLocalFile) {
+  Widget _buildPhotoLeading(
+      BuildContext context, CapturedPhoto photo, bool missingLocalFile) {
     if (missingLocalFile) {
-      return _buildMissingLocalFileLeading(Icons.broken_image_outlined);
+      return _buildMissingLocalFileLeading(
+          context, Icons.broken_image_outlined);
     }
     return Image.file(
       File(photo.photoPath),
@@ -428,26 +436,26 @@ class MediaListWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildVideoLeading(bool missingLocalFile) {
+  Widget _buildVideoLeading(BuildContext context, bool missingLocalFile) {
     if (missingLocalFile) {
-      return _buildMissingLocalFileLeading(Icons.videocam_off);
+      return _buildMissingLocalFileLeading(context, Icons.videocam_off);
     }
     return const Icon(Icons.videocam, size: 50);
   }
 
-  Widget _buildMissingLocalFileLeading(IconData icon) {
+  Widget _buildMissingLocalFileLeading(BuildContext context, IconData icon) {
     return Container(
       width: 50,
       height: 50,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppTheme.dangerSurface,
+        color: Theme.of(context).colorScheme.errorContainer,
         border: Border.all(color: AppTheme.danger),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(
         icon,
-        color: AppTheme.danger,
+        color: Theme.of(context).colorScheme.error,
         size: 28,
       ),
     );

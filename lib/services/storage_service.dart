@@ -118,18 +118,18 @@ class StorageService {
         children: [
           Icon(
             Icons.sd_storage,
-            color: AppTheme.danger,
+            color: AppTheme.inverseText,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               "Low storage available: ${availableStorage.toStringAsFixed(1)} GB. Free up space.",
-              style: const TextStyle(color: AppTheme.danger),
+              style: TextStyle(color: AppTheme.inverseText),
             ),
           ),
         ],
       ),
-      backgroundColor: AppTheme.dangerSurface,
+      backgroundColor: AppTheme.danger,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 5),
     );
@@ -141,8 +141,8 @@ class StorageService {
     if (_messengerState == null) return;
     _messengerState!.showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(color: AppTheme.danger)),
-        backgroundColor: AppTheme.dangerSurface,
+        content: Text(message, style: TextStyle(color: AppTheme.inverseText)),
+        backgroundColor: AppTheme.danger,
         duration: const Duration(seconds: 5),
       ),
     );
