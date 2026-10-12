@@ -7,17 +7,20 @@ on:
 
 jobs:
   python-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: >-
+      ${{ github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.base.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && fromJSON('["owned-madrid","owned-arm64","trusted-owner"]') || 'ubuntu-latest' }}
+    timeout-minutes: 40
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Checkout exact source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          python-version: "3.x"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: '0.11.32'
 
       # scripts/test_*.py are standalone scripts, each run directly with
       # `python3 <file>` (mirrors scripts/run_backend_regression_checks.py).
@@ -37,8 +40,12 @@ jobs:
       # scripts/ tree is not strictly stdlib-only and its backend test cannot
       # import without this. Installed explicitly rather than vendored so the
       # dependency stays visible.
-      - name: Install script dependencies
-        run: python3 -m pip install --upgrade requests
+      - name: Record exact admitted source
+        env:
+          EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          printf 'Runner: %s\nSource: %s\n' "$RUNNER_NAME" "$EXPECTED_SOURCE" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run scripts/test_*.py
         run: |
@@ -50,7 +57,7 @@ jobs:
               continue
             fi
             echo "=== $f ==="
-            if ! python3 "$f"; then
+            if ! uv run --no-project --python 3.12.9 --with requests==2.34.2 python "$f"; then
               echo "FAILED: $f"
               failures=$((failures + 1))
             fi
