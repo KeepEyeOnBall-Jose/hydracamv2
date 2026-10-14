@@ -218,7 +218,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                 const Icon(Icons.tune_outlined, color: AppTheme.accent),
                 Text(
                   l10n.settingsPreferencesHeading,
-                  style: AppTheme.headline1.copyWith(fontSize: 24),
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(fontSize: 24),
                 ),
               ],
             ),
@@ -227,6 +230,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               title: l10n.settingsLanguageTitle,
               description: l10n.settingsLanguageDescription,
               control: DropdownButton<String>(
+                isExpanded: true,
+                itemHeight: null,
                 key: const ValueKey("localeOverrideDropdown"),
                 value: _selectedLocaleCode,
                 items: _localeOverrideItems(l10n),
@@ -242,8 +247,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _masterShouldRecord,
                 onChanged: _updateMasterRecording,
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             Padding(
@@ -258,6 +261,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               title: l10n.settingsCameraLensTitle,
               description: l10n.settingsCameraLensDescription,
               control: DropdownButton<LensPreference>(
+                isExpanded: true,
+                itemHeight: null,
                 value: _lensPreference,
                 items: LensPreference.values
                     .map(
@@ -278,6 +283,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               title: l10n.settingsVideoProfileTitle,
               description: l10n.settingsVideoProfileDescription,
               control: DropdownButton<VideoCaptureProfile>(
+                isExpanded: true,
+                itemHeight: null,
                 value: _videoCaptureProfile,
                 items: VideoCaptureProfile.values
                     .map(
@@ -298,7 +305,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.only(bottom: 12.0),
               child: Text(
                 l10n.settingsVideoTarget(_videoCaptureProfile.targetLabel),
-                style: AppTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge!,
               ),
             ),
             SettingsOption(
@@ -306,8 +313,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _deleteLocalAfterUpload,
                 onChanged: _updateDeleteLocalAfterUpload,
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
@@ -315,8 +320,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _autoUploadMaterials,
                 onChanged: _updateAutoUploadMaterials,
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
@@ -327,14 +330,14 @@ class SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   Text(
                     l10n.settingsInternalAppStorage,
-                    style: AppTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge!,
                     textAlign: TextAlign.right,
                   ),
                   Text(
                     l10n.settingsSdCardNotConfigured,
-                    style: AppTheme.bodyText1.copyWith(
-                      color: AppTheme.disabledButtonColor,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                     textAlign: TextAlign.right,
                   ),
                 ],
@@ -346,8 +349,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _autoplayVideoOnMaster,
                 onChanged: _updateAutoplayVideoOnMaster,
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
@@ -357,8 +358,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                 key: const ValueKey("autoRecordMode"),
                 value: _autoRecordMode,
                 onChanged: _updateAutoRecordMode,
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
@@ -367,8 +366,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               control: Switch(
                 value: _screenAutoOff,
                 onChanged: _updateScreenAutoOff,
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
             SettingsOption(
@@ -403,8 +400,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                     _flashForVideoAnnounce = value;
                   });
                 },
-                activeThumbColor: AppTheme.primaryColor,
-                inactiveThumbColor: AppTheme.disabledButtonColor,
               ),
             ),
           ],

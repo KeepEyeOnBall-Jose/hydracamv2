@@ -8,6 +8,7 @@ class AppTheme {
   static const Color squashRed = Color(0xFFD32F2F);
 
   static const Color neutral900 = Color(0xFF212121);
+  static const Color neutral700 = Color(0xFF595959);
   static const Color neutral600 = Color(0xFF757575);
   static const Color neutral500 = Color(0xFF9E9E9E);
   static const Color neutral400 = Color(0xFFBDBDBD);
@@ -24,8 +25,8 @@ class AppTheme {
   static const Color previewOverlay = Color(0x3DFFFFFF);
 
   static const Color textPrimary = neutral900;
-  static const Color textSecondary = neutral600;
-  static const Color textTertiary = neutral500;
+  static const Color textSecondary = neutral700;
+  static const Color textTertiary = neutral700;
   static const Color textOnAccent = squashBlack;
   static const Color inverseText = squashWhite;
   static const Color inverseTextMuted = Color(0xB3FFFFFF);
@@ -100,158 +101,176 @@ class AppTheme {
     );
   }
 
-  static ThemeData lightTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.light,
-    primaryColor: accent,
-    scaffoldBackgroundColor: pageBackground,
-    fontFamily: "Montserrat",
-    colorScheme: const ColorScheme.light(
-      primary: accent,
-      onPrimary: textOnAccent,
-      secondary: accent,
-      onSecondary: textOnAccent,
-      error: danger,
-      onError: inverseText,
-      surface: surface,
-      onSurface: textPrimary,
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: appChrome,
-      foregroundColor: squashWhite,
-      elevation: 0,
-      centerTitle: false,
-      titleTextStyle: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: squashWhite,
+  static final ThemeData lightTheme = _theme(Brightness.light);
+  static final ThemeData darkTheme = _theme(Brightness.dark);
+
+  static ThemeData _theme(Brightness brightness) {
+    final dark = brightness == Brightness.dark;
+    final surface = dark ? neutral900 : AppTheme.surface;
+    final muted = dark ? const Color(0xFF181818) : surfaceMuted;
+    final foreground = dark ? neutral100 : textPrimary;
+    final secondary = dark ? neutral400 : textSecondary;
+    final outline = dark ? neutral600 : border;
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      primaryColor: accent,
+      scaffoldBackgroundColor: dark ? const Color(0xFF121212) : pageBackground,
+      fontFamily: "Montserrat",
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: accent,
+        brightness: brightness,
+        primary: accent,
+        onPrimary: textOnAccent,
+        secondary: accent,
+        onSecondary: textOnAccent,
+        error: dark ? const Color(0xFFFF8A80) : danger,
+        onError: inverseText,
+        surface: surface,
+        onSurface: foreground,
+        onSurfaceVariant: secondary,
+        surfaceContainerLow: muted,
+        surfaceContainerHighest: dark ? neutral900 : surfaceAlt,
+        outline: secondary,
+        outlineVariant: outline,
       ),
-      iconTheme: IconThemeData(color: accent),
-      actionsIconTheme: IconThemeData(color: accent),
-    ),
-    textTheme: const TextTheme(
-      displayLarge: headline1,
-      headlineSmall: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: textPrimary,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: appChrome,
+        foregroundColor: squashWhite,
+        elevation: 0,
+        centerTitle: false,
+        titleTextStyle: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: squashWhite,
+        ),
+        iconTheme: IconThemeData(color: accent),
+        actionsIconTheme: IconThemeData(color: accent),
       ),
-      titleLarge: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
+      textTheme: TextTheme(
+        displayLarge: headline1.copyWith(color: foreground),
+        headlineSmall: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: foreground,
+        ),
+        titleLarge: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: foreground,
+        ),
+        titleMedium: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: foreground,
+        ),
+        bodyLarge: bodyText1.copyWith(color: foreground),
+        bodyMedium: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          color: foreground,
+        ),
+        bodySmall: caption.copyWith(color: secondary),
       ),
-      titleMedium: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
+      elevatedButtonTheme: ElevatedButtonThemeData(style: primaryButtonStyle()),
+      filledButtonTheme: FilledButtonThemeData(style: primaryButtonStyle()),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: foreground,
+          side: BorderSide(color: outline),
+          shape: RoundedRectangleBorder(borderRadius: smallRadius),
+          minimumSize: const Size(0, 44),
+        ),
       ),
-      bodyLarge: bodyText1,
-      bodyMedium: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-        color: textPrimary,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: foreground,
+          shape: RoundedRectangleBorder(borderRadius: smallRadius),
+        ),
       ),
-      bodySmall: caption,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(style: primaryButtonStyle()),
-    filledButtonTheme: FilledButtonThemeData(style: primaryButtonStyle()),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: textPrimary,
-        side: const BorderSide(color: border),
-        shape: const RoundedRectangleBorder(borderRadius: smallRadius),
-        minimumSize: const Size(0, 44),
+      buttonTheme: const ButtonThemeData(
+        buttonColor: accent,
+        disabledColor: disabledButtonColor,
+        textTheme: ButtonTextTheme.primary,
       ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: textPrimary,
-        shape: const RoundedRectangleBorder(borderRadius: smallRadius),
+      cardTheme: CardThemeData(
+        color: surface,
+        surfaceTintColor: surface,
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: smallRadius,
+          side: BorderSide(color: outline),
+        ),
       ),
-    ),
-    buttonTheme: const ButtonThemeData(
-      buttonColor: accent,
-      disabledColor: disabledButtonColor,
-      textTheme: ButtonTextTheme.primary,
-    ),
-    cardTheme: const CardThemeData(
-      color: surface,
-      surfaceTintColor: surface,
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: smallRadius,
-        side: BorderSide(color: border),
+      dividerTheme: DividerThemeData(color: outline),
+      dialogTheme: DialogThemeData(
+        backgroundColor: surface,
+        surfaceTintColor: surface,
+        titleTextStyle: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: foreground,
+        ),
+        contentTextStyle: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 14,
+          color: foreground,
+        ),
       ),
-    ),
-    dividerTheme: const DividerThemeData(color: border),
-    dialogTheme: const DialogThemeData(
-      backgroundColor: surface,
-      surfaceTintColor: surface,
-      titleTextStyle: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: textPrimary,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: surface,
+        border: OutlineInputBorder(
+          borderRadius: smallRadius,
+          borderSide: BorderSide(color: outline),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: smallRadius,
+          borderSide: BorderSide(color: outline),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: smallRadius,
+          borderSide: BorderSide(color: foreground, width: 2),
+        ),
+        labelStyle: TextStyle(color: secondary),
+        hintStyle: TextStyle(color: secondary),
       ),
-      contentTextStyle: TextStyle(
-        fontFamily: "Montserrat",
-        fontSize: 14,
-        color: textPrimary,
+      popupMenuTheme: PopupMenuThemeData(
+        color: surface,
+        surfaceTintColor: surface,
+        textStyle: TextStyle(color: foreground),
       ),
-    ),
-    inputDecorationTheme: const InputDecorationTheme(
-      filled: true,
-      fillColor: surface,
-      border: OutlineInputBorder(
-        borderRadius: smallRadius,
-        borderSide: BorderSide(color: border),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: appChrome,
+        contentTextStyle: TextStyle(color: inverseText),
+        actionTextColor: accent,
+        behavior: SnackBarBehavior.floating,
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: smallRadius,
-        borderSide: BorderSide(color: border),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return textOnAccent;
+          }
+          return disabledButtonColor;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return accent;
+          }
+          return border;
+        }),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: smallRadius,
-        borderSide: BorderSide(color: accent, width: 2),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: accent,
+        circularTrackColor: border,
+        linearTrackColor: border,
       ),
-      labelStyle: TextStyle(color: textSecondary),
-      hintStyle: TextStyle(color: textTertiary),
-    ),
-    popupMenuTheme: const PopupMenuThemeData(
-      color: surface,
-      surfaceTintColor: surface,
-      textStyle: TextStyle(color: textPrimary),
-    ),
-    snackBarTheme: const SnackBarThemeData(
-      backgroundColor: appChrome,
-      contentTextStyle: TextStyle(color: inverseText),
-      actionTextColor: accent,
-      behavior: SnackBarBehavior.floating,
-    ),
-    switchTheme: SwitchThemeData(
-      thumbColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return accent;
-        }
-        return disabledButtonColor;
-      }),
-      trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return accent.withValues(alpha: 0.38);
-        }
-        return border;
-      }),
-    ),
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: accent,
-      circularTrackColor: border,
-      linearTrackColor: border,
-    ),
-  );
+    );
+  }
 }

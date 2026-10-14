@@ -73,7 +73,8 @@ void main() {
     await tester.pump();
 
     final chip = tester.widget<Chip>(find.byType(Chip));
-    expect(chip.backgroundColor, AppTheme.dangerSurface);
+    expect(chip.backgroundColor,
+        Theme.of(tester.element(find.byType(Chip))).colorScheme.errorContainer);
     expect(find.byIcon(Icons.sync_disabled_outlined), findsOneWidget);
   });
 }

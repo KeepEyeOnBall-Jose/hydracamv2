@@ -92,6 +92,7 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
             overflow: TextOverflow.ellipsis,
           ),
           leading: IconButton(
+            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
             icon: const Icon(Icons.arrow_back),
             onPressed: onBack,
           ),
@@ -156,8 +157,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _deviceInfoMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.info_outline,
-                            color: AppTheme.accentColor),
+                        Icon(Icons.info_outline,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -172,7 +174,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _settingsMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.settings, color: AppTheme.accentColor),
+                        Icon(Icons.settings,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -187,8 +191,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _cameraSelectionMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.camera_alt,
-                            color: AppTheme.accentColor),
+                        Icon(Icons.camera_alt,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -203,7 +208,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _fixedCameraHlsMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.live_tv, color: AppTheme.accentColor),
+                        Icon(Icons.live_tv,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         const Expanded(
                           child: Text(
@@ -218,8 +225,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _locationInfoMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.location_on,
-                            color: AppTheme.accentColor),
+                        Icon(Icons.location_on,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -234,7 +242,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _logsMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.list_alt, color: AppTheme.accentColor),
+                        Icon(Icons.list_alt,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -249,8 +259,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _uploaderInfoMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.cloud_upload,
-                            color: AppTheme.accentColor),
+                        Icon(Icons.cloud_upload,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -265,8 +276,9 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: _appVersionMenuValue,
                     child: Row(
                       children: [
-                        const Icon(Icons.perm_device_info,
-                            color: AppTheme.accentColor),
+                        Icon(Icons.perm_device_info,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -285,7 +297,8 @@ class HydraCamAppBar extends StatelessWidget implements PreferredSizeWidget {
                             UserService().isLoggedIn
                                 ? Icons.account_circle
                                 : Icons.login,
-                            color: AppTheme.accentColor),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(

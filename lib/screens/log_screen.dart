@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "../app_theme.dart";
 import "../services/log_service.dart";
 
 /// A screen to display application logs, stored from any part of the app.
@@ -35,10 +34,12 @@ class LogScreenState extends State<LogScreen> {
         ],
       ),
       body: logs.isEmpty
-          ? const Center(
+          ? Center(
               child: Text(
                 "No logs available.",
-                style: TextStyle(fontSize: 18, color: AppTheme.textSecondary),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
               ),
             )
           : ListView.builder(
@@ -61,19 +62,26 @@ class LogScreenState extends State<LogScreen> {
                         const SizedBox(height: 4),
                         Text(
                           'Timestamp: ${log['timestamp']?.toString() ?? 'N/A'}',
-                          style: const TextStyle(color: AppTheme.textSecondary),
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant),
                         ),
                         if (log["function"] != null)
                           Text(
                             'Function: ${log['function']}',
-                            style:
-                                const TextStyle(color: AppTheme.textSecondary),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant),
                           ),
                         if (log["file"] != null)
                           Text(
                             'File: ${log['file']}',
-                            style:
-                                const TextStyle(color: AppTheme.textSecondary),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant),
                           ),
                       ],
                     ),

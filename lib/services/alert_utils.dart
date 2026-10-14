@@ -22,14 +22,12 @@ class AlertUtils {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title, style: AppTheme.headline1),
-          content: Text(message, style: AppTheme.bodyText1),
+          scrollable: true,
+          title: Text(title),
+          content: Text(message),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              style: TextButton.styleFrom(
-                foregroundColor: AppTheme.accentColor,
-              ),
               child: const Text("Close"),
             ),
           ],
