@@ -877,6 +877,8 @@ if [[ -f "$AUTH0_SERVICE" ]]; then
   else
     pass "Auth0 service omits the generic com.hydracam redirect URI"
   fi
+  require_text "$AUTH0_SERVICE" 'retiredStrategies = \[' \
+    "Auth0 service declares retired strategies guard"
 fi
 
 if [[ -f "$STORE_PRIVACY_CHECKLIST" ]]; then

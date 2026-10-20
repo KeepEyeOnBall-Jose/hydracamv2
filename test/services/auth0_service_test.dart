@@ -18,6 +18,49 @@ void main() {
     );
   });
 
+  test("Auth0 client strategy validator rejects retired facebook strategy", () {
+    const manifestWithFacebook = '''
+Auth0.setClient({
+  "id": "wChCAH6ZES2UU8sGKRDjgN7JEETblQKf",
+  "strategies": [
+    {"name": "apple"},
+    {"name": "auth0"},
+    {"name": "facebook"},
+    {"name": "google-oauth2"}
+  ]
+});
+''';
+
+    expect(
+      () => AuthService.validateClientStrategies(manifestWithFacebook),
+      throwsA(
+        isA<StateError>().having(
+          (error) => error.message,
+          "message",
+          contains("facebook"),
+        ),
+      ),
+    );
+  });
+
+  test("Auth0 client strategy validator accepts active KEOB strategies", () {
+    const cleanManifest = '''
+Auth0.setClient({
+  "id": "wChCAH6ZES2UU8sGKRDjgN7JEETblQKf",
+  "strategies": [
+    {"name": "apple"},
+    {"name": "auth0"},
+    {"name": "google-oauth2"}
+  ]
+});
+''';
+
+    expect(
+      () => AuthService.validateClientStrategies(cleanManifest),
+      returnsNormally,
+    );
+  });
+
   test("Auth0 login uses Android package redirect URI", () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     final authClient = _FakeAuthClient(
