@@ -252,6 +252,41 @@ class AuthService {
     "offline_access",
   ];
 
+  static const List<String> retiredStrategies = [
+    "facebook",
+  ];
+
+  static void validateClientStrategies(String clientManifestJs) {
+    final match = RegExp(
+      r"Auth0\.setClient\((\{.*\})\)\s*;?",
+      dotAll: true,
+    ).firstMatch(clientManifestJs);
+    if (match == null) {
+      throw const FormatException("Invalid Auth0 client manifest payload.");
+    }
+
+    final decoded = jsonDecode(match.group(1)!);
+    if (decoded is! Map<String, Object?>) {
+      throw const FormatException("Auth0 client manifest root must be a map.");
+    }
+
+    final strategies = decoded["strategies"];
+    if (strategies is! List) {
+      return;
+    }
+
+    for (final entry in strategies) {
+      if (entry is Map) {
+        final name = entry["name"]?.toString().toLowerCase();
+        if (name != null && retiredStrategies.contains(name)) {
+          throw StateError(
+            "Auth0 client manifest still exposes retired strategy: $name",
+          );
+        }
+      }
+    }
+  }
+
   static const String iosRedirectScheme = String.fromEnvironment(
       "HYDRACAM_IOS_AUTH_REDIRECT_SCHEME",
       defaultValue: "com.keepeyeonball");

@@ -1,0 +1,65 @@
+{
+  "baselineSource": "6e83866bd7256abc4725e775f3144700e68ccb12",
+  "device": "iPhone 12 Pro, iOS 26.6.1",
+  "proofTarget": "Locally installed signed Profile automation build, 1.4.0+19",
+  "run": "20261010-1128-apple-design-audit",
+  "before": [
+    "images/before-master.png",
+    "images/before-settings.png",
+    "images/before-menu.png",
+    "images/before-settings-text200-scrolled.png"
+  ],
+  "limits": [
+    "No supported Android attached",
+    "No panorama implementation found in lib",
+    "No new capture, upload, destructive storage operation, or distribution release performed",
+    "Reduced motion before-state evidenced by source, not a captured animation",
+    "200 percent text uses test binding on physical iPhone; not a claim of changing the iOS Settings preference"
+  ],
+  "productSource": "cbd63b42f8bc585c289b2075707a04fef2e674e3",
+  "tests": {
+    "analyze": "pass",
+    "flutterTest": {
+      "passed": 722,
+      "skipped": 1,
+      "skip": "wearable_replay_live_upload_test opt-in live upload"
+    }
+  },
+  "hardwareAudit": {
+    "phase": "after",
+    "complete": true,
+    "renderedBrightness": "dark",
+    "source": "cbd63b42",
+    "frameworkErrors": [],
+    "appearanceCheck": "Test binding requests dark appearance on real hardware",
+    "textScaleCheck": "Test binding requests 200 percent text on real hardware"
+  },
+  "after": [
+    "images/after-menu.png",
+    "images/after-settings-text200.png",
+    "images/after-master.png",
+    "images/after-settings-text200-scrolled.png",
+    "images/after-settings.png",
+    "images/after-settings-dark-requested.png",
+    "images/after-info-dialog.png"
+  ],
+  "capturedAt": "2026-10-10T12:08:00+02:00",
+  "compression": "PNG lossless compression for files exceeding 1 MiB; raw captures retained in run directory",
+  "reportVerification": {
+    "url": "http://127.0.0.1:9182/hydracam-apple-design-20261010/",
+    "browser": "Chrome",
+    "narrowViewport": [
+      390,
+      844
+    ],
+    "horizontalOverflow": false,
+    "brokenLoadedImages": [],
+    "consoleWarningsOrErrors": [],
+    "controls": [
+      "section links",
+      "evidence disclosures",
+      "back to top"
+    ],
+    "normalViewportRestored": true
+  }
+}

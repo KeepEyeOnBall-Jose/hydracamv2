@@ -52,8 +52,7 @@ void main() {
     expect(appBar.actionsIconTheme?.color, AppTheme.accent);
   });
 
-  testWidgets("popup menu preserves labels and uses squash accent icons",
-      (tester) async {
+  testWidgets("popup menu preserves labels and readable icons", (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -84,7 +83,11 @@ void main() {
       expect(find.text(label), findsOneWidget);
 
       final menuIcon = tester.widget<Icon>(find.byIcon(icon));
-      expect(menuIcon.color, AppTheme.accent);
+      expect(
+          menuIcon.color,
+          Theme.of(tester.element(find.byIcon(icon)))
+              .colorScheme
+              .onSurfaceVariant);
     }
   });
 }
