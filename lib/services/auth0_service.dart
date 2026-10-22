@@ -216,6 +216,7 @@ class AuthService {
   Future<bool>? _restoration;
   Future<void> _credentialWrites = Future<void>.value();
   int _generation = 0;
+  bool _loggingIn = false;
   bool _loggingOut = false;
   AuthCredentials? _pendingRotation;
   DateTime? _retryAfter;
@@ -332,6 +333,28 @@ class AuthService {
 
   Future<void> login() async {
     if (_loggingOut) throw StateError("Logout is still in progress.");
+    if (_loggingIn) throw StateError("Login is still in progress.");
+    _loggingIn = true;
+    final generation = _generation;
+    try {
+      // Let a consumed refresh token's replacement reach storage (or the
+      // persistence retry slot) before interactive login can fence it out.
+      final restoration = _restoration;
+      if (restoration != null) {
+        try {
+          await restoration;
+        } catch (_) {
+          // An unavailable credential store must not prevent fresh sign-in.
+        }
+      }
+      if (generation != _generation || _loggingOut) return;
+      await _login();
+    } finally {
+      _loggingIn = false;
+    }
+  }
+
+  Future<void> _login() async {
     if (!_isMobileAuthPlatform) {
       _clearInMemorySession();
       throw UnsupportedError(
@@ -341,7 +364,6 @@ class AuthService {
 
     final generation = ++_generation;
     _retryAfter = null;
-    _pendingRotation = null;
     var clearedRejectedCredentials = false;
     try {
       final result = await _authClient.login(
@@ -366,6 +388,9 @@ class AuthService {
         throw const FormatException(_missingEmailClaimMessage);
       }
 
+      // Cancellation leaves the previous rotation available for persistence.
+      // Only an accepted replacement or explicit rejection/logout supersedes it.
+      _pendingRotation = null;
       await _writeCredentials(() async {
         if (generation == _generation) await _credentialStore.save(credentials);
       });
@@ -376,6 +401,7 @@ class AuthService {
       if (generation != _generation) return;
       // Closing Universal Login is not revocation of the existing session.
       if (e is FlutterAppAuthUserCancelledException) rethrow;
+      _pendingRotation = null;
       if (!clearedRejectedCredentials) {
         await _clearFor(generation);
       }
@@ -438,7 +464,7 @@ class AuthService {
   }
 
   Future<bool> restoreStoredSession() {
-    if (_loggingOut) return Future.value(false);
+    if (_loggingIn || _loggingOut) return Future.value(false);
     if (_retryAfter?.isAfter(DateTime.now()) == true) {
       return Future.value(false);
     }

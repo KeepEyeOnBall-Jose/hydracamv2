@@ -63,6 +63,32 @@ only a forwarding bridge. Live legacy Web is on `media-timeline-vps`, with an
 existing durable Data Protection bind mount. Do not infer missing cookie keys
 from Azure’s disabled App Service storage setting.
 
+## Sequential review — 22 October 2026
+
+Current `master-jose-2025` (`bf6ce477`) is merged into the review branch.
+PR24 remains separate and unmerged; this PR keeps the current main dependency
+versions, including secure storage10.3.4.
+
+Review reproduced two ways cancelled interactive login could lose a consumed
+refresh token's replacement: clearing the pending persistence retry immediately,
+or invalidating a still-running refresh before it could retain the new token.
+Login now waits for an existing restore to settle before advancing its generation,
+blocks overlapping login/new restore, and preserves a pending rotation on
+cancellation. Accepted replacement login or explicit rejection/logout supersedes
+that pending rotation. Logout during the wait still wins.
+
+Four new regressions failed before the fix. The focused AuthService, credential
+store and UserService run passes48 tests with zero skips on Flutter3.47.7 /
+Dart3.13.5. Targeted analysis, formatting and independent Standards/Spec reviews
+pass. Full tests pass743 with one existing opt-in live wearable-upload skip; full
+analysis finds no issues. Android compile and exact-head CI remain merge checks;
+final results are recorded in the PR and task board.
+
+This is service-level evidence (Tier D). Native in-place upgrade, actual Auth0
+expiry/revocation/cancellation and retained real-capture upload remain release
+acceptance gates. No device data, login session, production host or tenant changed.
+The user requested this PR as the final item; no further PR iteration follows it.
+
 ## Recorded validation
 
 On `keob-hetzner-dev`: `bash scripts/check_human_session.sh` ran with 3 GiB RAM,

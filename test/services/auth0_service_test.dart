@@ -163,6 +163,114 @@ void main() {
     expect(auth.email, "player@example.com");
   });
 
+  test("cancelled login preserves a rotation awaiting secure-store retry",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse());
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials())
+          ..saveError = StateError("keychain temporarily unavailable");
+    final auth = AuthService(
+        authClient: client, credentialStore: store, retryDelay: Duration.zero);
+    expect(await auth.restoreStoredSession(), false);
+    client.loginError = FlutterAppAuthUserCancelledException(
+      code: "cancelled",
+      platformErrorDetails: FlutterAppAuthPlatformErrorDetails(),
+    );
+    await expectLater(
+        auth.login(), throwsA(isA<FlutterAppAuthUserCancelledException>()));
+    store.saveError = null;
+    client.refreshError = StateError("previous refresh token already consumed");
+    expect(await auth.restoreStoredSession(), true);
+    expect(client.refreshCalls, 1);
+    expect(store.storedCredentials?.refreshToken, "rotated-test-refresh");
+  });
+
+  test("cancelled login waits for and retains an in-flight rotation", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse())
+      ..refreshPending = Completer<AuthLoginResponse>()
+      ..loginError = FlutterAppAuthUserCancelledException(
+        code: "cancelled",
+        platformErrorDetails: FlutterAppAuthPlatformErrorDetails(),
+      );
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    final restore = auth.restoreStoredSession();
+    await Future<void>.delayed(Duration.zero);
+    final cancelled = expectLater(
+        auth.login(), throwsA(isA<FlutterAppAuthUserCancelledException>()));
+    await Future<void>.delayed(Duration.zero);
+    final loginCallsBeforeRefresh = client.loginCalls;
+    client.refreshPending!.complete(freshResponse());
+    await cancelled;
+    expect(await restore, true);
+    expect(loginCallsBeforeRefresh, 0);
+    expect(client.refreshCalls, 1);
+    expect(store.storedCredentials?.refreshToken, "rotated-test-refresh");
+    expect(auth.accessToken, "renewed-test-access");
+  });
+
+  test("logout aborts login waiting for an in-flight restoration", () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final client = _FakeAuthClient(response: freshResponse())
+      ..refreshPending = Completer<AuthLoginResponse>();
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials());
+    final auth = AuthService(authClient: client, credentialStore: store);
+    final restore = auth.restoreStoredSession();
+    await Future<void>.delayed(Duration.zero);
+    final login = auth.login();
+    await Future<void>.delayed(Duration.zero);
+    await auth.logout();
+    client.refreshPending!.complete(freshResponse());
+    await login;
+    expect(await restore, false);
+    expect(client.loginCalls, 0);
+    expect(store.storedCredentials, isNull);
+    expect(auth.identity, isNull);
+  });
+
+  test("accepted account replacement supersedes pending rotation exclusively",
+      () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final replacement = AuthLoginResponse(
+      accessToken: "replacement-test-access",
+      idToken: _idTokenFromPayload({
+        "sub": "replacement-test-subject",
+        "email": "replacement@example.com",
+      }),
+      refreshToken: "replacement-test-refresh",
+      accessTokenExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+    );
+    final client = _FakeAuthClient(
+        response: replacement, refreshResponse: freshResponse());
+    final store =
+        _RecordingAuthCredentialStore(storedCredentials: expiredCredentials())
+          ..saveError = StateError("keychain temporarily unavailable");
+    final auth = AuthService(
+        authClient: client, credentialStore: store, retryDelay: Duration.zero);
+    expect(await auth.restoreStoredSession(), false);
+    store.saveError = null;
+    client.loginPending = Completer<AuthLoginResponse>();
+    final login = auth.login();
+    await Future<void>.delayed(Duration.zero);
+    final competingLogin =
+        expectLater(auth.login(), throwsA(isA<StateError>()));
+    final restoredDuringLogin = await auth.restoreStoredSession();
+    client.loginPending!.complete(replacement);
+    await login;
+    await competingLogin;
+    expect(restoredDuringLogin, false);
+    expect(client.loginCalls, 1);
+    expect(await auth.restoreStoredSession(), true);
+    expect(client.refreshCalls, 1);
+    expect(store.storedCredentials?.refreshToken, "replacement-test-refresh");
+    expect(auth.identity,
+        "https://keepeyeonball.eu.auth0.com/|replacement-test-subject");
+  });
+
   tearDown(() {
     debugDefaultTargetPlatformOverride = null;
   });
@@ -922,6 +1030,7 @@ class _FakeAuthClient implements AuthClient {
   final AuthLoginResponse? refreshResponse;
   Object? loginError;
   Object? refreshError;
+  Completer<AuthLoginResponse>? loginPending;
   Completer<AuthLoginResponse>? refreshPending;
   int refreshCalls = 0;
   int loginCalls = 0;
@@ -947,6 +1056,7 @@ class _FakeAuthClient implements AuthClient {
     if (error != null) {
       throw error;
     }
+    if (loginPending != null) return loginPending!.future;
     return response;
   }
 
