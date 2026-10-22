@@ -274,19 +274,15 @@ section for how to override them).
 Use the version in `pubspec.yaml` by default, or override with `BUILD_NAME` and
 `BUILD_NUMBER`.
 
-Known build warnings from Flutter 3.44:
+Known build warnings from Flutter 3.47:
 
-- Android release builds still warn that Gradle `8.10.2`, Android Gradle Plugin
-  `8.7.3`, and Kotlin `2.1.0` will be unsupported by a future Flutter release.
-  A direct bump to Gradle `8.14.5`, AGP `8.11.1`, and Kotlin `2.2.20` was
-  attempted on 2026-06-09, but `flutter build appbundle --release` did not
-  finish in the validation window and was terminated after `652.2s` with exit
-  code `143`. Keep the proven current toolchain for beta artifacts and handle
-  this as an isolated Android toolchain upgrade before it becomes a hard build
-  failure.
-- `url_launcher_android` is pinned to `6.3.23` because `6.3.29+` pulls
-  AndroidX Core `1.17.0` and Browser `1.9.0`, which require Android Gradle
-  Plugin `8.9.1+`. Keep the pin until the Android toolchain upgrade is proven.
+- The Android toolchain is Gradle `9.3.1`, Android Gradle Plugin `9.1.1`
+  (the minimum for `compileSdk = 37`), and Kotlin `2.2.20`. AGP 9 runs with
+  `android.builtInKotlin=false` and `android.newDsl=false` in
+  `android/gradle.properties` because the app and the `disk_space_plus` and
+  `photo_manager` plugins still apply the Kotlin Gradle Plugin. Flutter warns
+  that Kotlin `2.2.20` support will be dropped; plan a move to Kotlin
+  `2.3.20+` and built-in Kotlin before it becomes a hard build failure.
 - Flutter also warns that several iOS/macOS plugins do not yet support Swift
   Package Manager and that Android app/plugin builds still use the legacy
   Kotlin Gradle Plugin path. These are future-compatibility issues, not current
