@@ -4,6 +4,11 @@ import "captured_video.dart";
 /// Represents a session of photo or video capture, storing all captured photos,
 /// videos, and related metadata for the session.
 class CaptureSession {
+  /// Local account isolation only; backend authorization remains authoritative.
+  /// Null identifies legacy/delegated capture, never the next signed-in user.
+  final String? humanOwnerIdentity;
+  bool canUploadAs(String? identity) => humanOwnerIdentity == identity;
+
   /// A unique identifier for the capture session, typically generated as a timestamp.
   final String sessionId;
 
@@ -46,6 +51,7 @@ class CaptureSession {
   ///
   /// If no lists are provided, empty lists are used.
   CaptureSession({
+    this.humanOwnerIdentity,
     required this.sessionId,
     this.sessionGuid,
     this.displayName,

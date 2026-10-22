@@ -1,4 +1,5 @@
 import "package:flutter/foundation.dart";
+import "package:flutter_appauth/flutter_appauth.dart";
 
 import "auth0_service.dart";
 import "hydracam_api_service.dart";
@@ -73,6 +74,7 @@ class UserService {
   final DevelopmentAutoLoginConfig _developmentAutoLogin;
 
   bool _isLoggedIn = false;
+  int _generation = 0;
   String? _email;
   String? _guid;
   String? _profilePicture;
@@ -80,13 +82,17 @@ class UserService {
   bool get isLoggedIn => _isLoggedIn;
   String? get email => _email;
   String? get guid => _guid;
+  String? get identity => _isLoggedIn ? _authService.identity : null;
   String? get profilePicture => _profilePicture;
 
   /// Log in the user using Auth0 and fetch their GUID.
   Future<void> login() async {
+    final generation = ++_generation;
+    final previous = (_isLoggedIn, _email, _guid, _profilePicture);
     _clearUserState();
     try {
       await _authService.login();
+      if (generation != _generation) return;
       _email = _authService.email;
       _profilePicture = _authService.profilePicture;
 
@@ -100,6 +106,7 @@ class UserService {
         _email = loginEmail;
         LogService.instance.registerLog("Fetching GUID for email: $loginEmail");
         final fetchedGuid = await _getUserGuidByEmail(loginEmail);
+        if (generation != _generation) return;
         final normalizedGuid = _normalizeGuid(fetchedGuid);
 
         if (normalizedGuid != null) {
@@ -116,19 +123,29 @@ class UserService {
         _clearUserState();
       }
     } catch (e) {
+      if (generation != _generation) return;
+      if (e is FlutterAppAuthUserCancelledException) {
+        _isLoggedIn = previous.$1;
+        _email = previous.$2;
+        _guid = previous.$3;
+        _profilePicture = previous.$4;
+        rethrow;
+      }
       _clearUserState();
-      LogService.instance.registerLog("Error during login: $e");
+      LogService.instance.registerLog("User sign-in failed.");
       rethrow;
     }
   }
 
   Future<bool> restoreStoredSession() async {
+    final generation = _generation;
     try {
       if (await _restoreDevelopmentAutoLogin()) {
         return true;
       }
 
       final restored = await _authService.restoreStoredSession();
+      if (generation != _generation) return false;
       if (!restored) {
         _clearUserState();
         return false;
@@ -146,6 +163,7 @@ class UserService {
       LogService.instance
           .registerLog("Fetching restored GUID for email: $restoredEmail");
       final fetchedGuid = await _getUserGuidByEmail(restoredEmail);
+      if (generation != _generation) return false;
       final normalizedGuid = _normalizeGuid(fetchedGuid);
       if (normalizedGuid == null) {
         _clearUserState();
@@ -159,14 +177,17 @@ class UserService {
       LogService.instance.registerLog("User session restored. GUID: $_guid");
       return true;
     } catch (e) {
+      if (generation != _generation) return false;
       _clearUserState();
-      LogService.instance.registerLog("Error during restore: $e");
+      LogService.instance.registerLog("User session restoration unavailable.");
       return false;
     }
   }
 
   /// Log out the user by clearing their state.
   Future<void> logout() async {
+    ++_generation;
+    _clearUserState();
     try {
       await _authService.logout();
     } finally {
