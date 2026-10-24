@@ -99,8 +99,32 @@ Galaxy S20 FE (RF8RA1C0ZKB, SM-G780G), same run, evidence in
 | 1/60 | locked | 16666667 | 3200 | true |
 | 1/120 | locked | 8333333 | 3200 | true |
 
-S20 FE readout is ~28.7 ms (`rollingShutterSkewNs` 28739700). Its auto mode
-goes above the manual ISO max (3995 vs 3200), so manual presets need more light.
+Galaxy S20 FE 5G (RFCNC0SVDFN, SM-G781B), evidence in
+`logs/verification-runs/manual-exposure-RFCNC0SVDFN-20261024T184120/`: same
+values as the SM-G780G above (auto 29994234 / ISO 3995; 1/30, 1/60, 1/120
+locked at 33333333, 16666667, 8333333, ISO 3200, `underexposed` true).
+
+S20 FE readout is ~28.7 ms (`rollingShutterSkewNs` 28739700) on both models.
+Its auto mode goes above the manual ISO max (3995 vs 3200), so manual presets
+need more light.
+
+iPhone 12 Pro (iOS debug build, `detail4k30`), all clips 2160x3840 (portrait
+4K), camera `built-in_video:5`, evidence in
+`logs/verification-runs/manual-exposure-ios-20261024T185845/`:
+
+| Preset | lockStatus | exposureTimeNs | iso | underexposed |
+| --- | --- | --- | --- | --- |
+| auto | auto | 24997000 | 2304 | - |
+| 1/30 | locked | 33229000 | 1451 | false |
+| 1/60 | locked | 16665000 | 2304 | true |
+| 1/120 | locked | 8332000 | 2304 | true |
+
+iOS run: `flutter run` on the phone, then drive the bridge at
+`http://<phone LAN IP>:4762`. On this Mac, Python and the flutter tool are
+denied macOS Local Network access (sockets fail with "No route to host";
+curl works), so bridge discovery from `scripts/ios_capture_repro.py` finds
+nothing. Grant Local Network access to the terminal app, or call the bridge
+through curl.
 
 S10e `rollingShutterSkewNs` = 15931210 (~16 ms readout) in every clip. All clips
 reported `cameraId` 0 although the lens preference was `ultraWide`: check
