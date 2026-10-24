@@ -27,6 +27,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   LensPreference _lensPreference = LensPreference.autoBack;
   VideoCaptureProfile _videoCaptureProfile =
       VideoCaptureProfile.standard1080p30;
+  ExposurePreset _exposurePreset = ExposurePreset.defaultPreset;
   bool _deleteLocalAfterUpload = false;
   bool _autoUploadMaterials = true;
   bool _autoplayVideoOnMaster = false;
@@ -52,6 +53,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     final shouldRecord = await SettingsService.getMasterShouldRecord();
     final lensPreference = await SettingsService.getCameraLensPreference();
     final videoCaptureProfile = await SettingsService.getVideoCaptureProfile();
+    final exposurePreset = await SettingsService.getExposurePreset();
     final deleteLocalAfterUpload =
         await SettingsService.getDeleteLocalAfterUpload();
     final autoUploadMaterials = await SettingsService.getAutoUploadMaterials();
@@ -70,6 +72,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       _masterShouldRecord = shouldRecord;
       _lensPreference = lensPreference;
       _videoCaptureProfile = videoCaptureProfile;
+      _exposurePreset = exposurePreset;
       _deleteLocalAfterUpload = deleteLocalAfterUpload;
       _autoUploadMaterials = autoUploadMaterials;
       _autoplayVideoOnMaster = autoplayVideoOnMaster;
@@ -113,6 +116,14 @@ class SettingsScreenState extends State<SettingsScreen> {
     if (CameraServiceSingleton.isInitialized) {
       await CameraServiceSingleton.instance.setVideoCaptureProfile(profile);
     }
+  }
+
+  Future<void> _updateExposurePreset(ExposurePreset preset) async {
+    await SettingsService.setExposurePreset(preset);
+    if (!mounted) return;
+    setState(() {
+      _exposurePreset = preset;
+    });
   }
 
   Future<void> _updateDeleteLocalAfterUpload(bool value) async {
@@ -306,6 +317,29 @@ class SettingsScreenState extends State<SettingsScreen> {
               child: Text(
                 l10n.settingsVideoTarget(_videoCaptureProfile.targetLabel),
                 style: Theme.of(context).textTheme.bodyLarge!,
+              ),
+            ),
+            SettingsOption(
+              title: l10n.settingsExposurePresetTitle,
+              description: l10n.settingsExposurePresetDescription,
+              control: DropdownButton<ExposurePreset>(
+                key: const Key("settings-exposure-preset"),
+                isExpanded: true,
+                itemHeight: null,
+                value: _exposurePreset,
+                items: ExposurePreset.values
+                    .map(
+                      (preset) => DropdownMenuItem(
+                        value: preset,
+                        child: Text(preset.label),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    _updateExposurePreset(value);
+                  }
+                },
               ),
             ),
             SettingsOption(

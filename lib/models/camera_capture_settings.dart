@@ -119,6 +119,35 @@ enum VideoCaptureProfile {
   }
 }
 
+/// Shutter presets for measurable ball streaks. A manual preset locks exposure
+/// time, ISO (metered once from auto exposure), white balance and focus for the
+/// whole clip; [auto] leaves the camera on auto exposure for comparison.
+enum ExposurePreset {
+  auto("auto", "Auto exposure", null),
+  shutter1_30("shutter1_30", "1/30 s shutter", 33333333),
+  shutter1_60("shutter1_60", "1/60 s shutter", 16666667),
+  shutter1_120("shutter1_120", "1/120 s shutter", 8333333);
+
+  const ExposurePreset(this.storageValue, this.label, this.exposureTimeNs);
+
+  static const ExposurePreset defaultPreset = ExposurePreset.shutter1_60;
+
+  final String storageValue;
+  final String label;
+
+  /// Requested sensor exposure time; null for [auto].
+  final int? exposureTimeNs;
+
+  bool get isManual => exposureTimeNs != null;
+
+  static ExposurePreset fromStorageValue(String? value) {
+    return ExposurePreset.values.firstWhere(
+      (preset) => preset.storageValue == value,
+      orElse: () => defaultPreset,
+    );
+  }
+}
+
 class CameraLensLabels {
   const CameraLensLabels._();
 

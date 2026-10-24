@@ -23,6 +23,10 @@ class MainActivity: FlutterActivity() {
 	private val videoMetadataChannelName = "hydracamv2/video_metadata"
 	private val fixedCameraHlsChannelName = "hydracamv2/fixed_camera_hls"
 	private val wearableReplayChannelName = "hydracamv2/wearable_replay"
+	private val manualExposureChannelName = "hydracamv2/manual_exposure"
+	private val manualExposureController: ManualExposureController by lazy {
+		ManualExposureController(this)
+	}
 	private val fixedCameraLocalHlsRecorder: FixedCameraLocalHlsRecorder by lazy {
 		FixedCameraLocalHlsRecorder(getFixedCameraHlsOutputDirectory())
 	}
@@ -91,6 +95,30 @@ class MainActivity: FlutterActivity() {
 					"startMetaPovCapture" -> startMockMetaPovCapture(call, result)
 					"stopMetaPovCapture" -> stopMockMetaPovCapture(call, result)
 					"sendFeedback" -> result.success(true)
+					else -> result.notImplemented()
+				}
+			}
+		MethodChannel(flutterEngine.dartExecutor.binaryMessenger, manualExposureChannelName)
+			.setMethodCallHandler { call, result ->
+				when (call.method) {
+					"applyLock" -> {
+						val exposureTimeNs = call.argument<Number>("exposureTimeNs")?.toLong()
+						val frameDurationNs = call.argument<Number>("frameDurationNs")?.toLong()
+						if (exposureTimeNs == null || frameDurationNs == null) {
+							result.error(
+								"missing_arguments",
+								"exposureTimeNs and frameDurationNs are required",
+								null
+							)
+						} else {
+							manualExposureController.applyLock(exposureTimeNs, frameDurationNs) {
+								result.success(it)
+							}
+						}
+					}
+					"release" -> manualExposureController.release { result.success(it) }
+					"readCaptureSettings" ->
+						result.success(manualExposureController.readCaptureSettings())
 					else -> result.notImplemented()
 				}
 			}

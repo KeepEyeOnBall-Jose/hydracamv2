@@ -284,6 +284,8 @@ class AutomationBridge {
       "selectedCameraName": selectedCameraName,
       "videoCaptureProfile": videoProfile.storageValue,
       "videoCaptureTarget": videoProfile.targetLabel,
+      "exposurePreset":
+          (await SettingsService.getExposurePreset()).storageValue,
     };
   }
 
@@ -331,6 +333,10 @@ class AutomationBridge {
           break;
         case "videoCaptureProfile":
           videoProfile = VideoCaptureProfile.fromStorageValue(_asString(value));
+          break;
+        case "exposurePreset":
+          await SettingsService.setExposurePreset(
+              ExposurePreset.fromStorageValue(_asString(value)));
           break;
         default:
           LogService.instance
