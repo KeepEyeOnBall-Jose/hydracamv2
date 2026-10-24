@@ -89,7 +89,20 @@ Galaxy S10e (RF8M40MT6AW), `detail4k30`, all clips 3840x2160, evidence in
 | 1/60 | locked | 16666000 | 3200 | true |
 | 1/120 | locked | 8333000 | 3200 | true |
 
-`rollingShutterSkewNs` = 15931210 (~16 ms readout) in every clip. All clips
+Galaxy S20 FE (RF8RA1C0ZKB, SM-G780G), same run, evidence in
+`logs/verification-runs/manual-exposure-RF8RA1C0ZKB-20261024T182424/`:
+
+| Preset | lockStatus | exposureTimeNs | iso | underexposed |
+| --- | --- | --- | --- | --- |
+| auto | auto | 29994234 | 3995 | - |
+| 1/30 | locked | 33333333 | 3200 | true |
+| 1/60 | locked | 16666667 | 3200 | true |
+| 1/120 | locked | 8333333 | 3200 | true |
+
+S20 FE readout is ~28.7 ms (`rollingShutterSkewNs` 28739700). Its auto mode
+goes above the manual ISO max (3995 vs 3200), so manual presets need more light.
+
+S10e `rollingShutterSkewNs` = 15931210 (~16 ms readout) in every clip. All clips
 reported `cameraId` 0 although the lens preference was `ultraWide`: check
 which lens camera 0 is before the court run (see Known gaps).
 
