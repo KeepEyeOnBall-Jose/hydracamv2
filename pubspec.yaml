@@ -70,6 +70,12 @@ dependencies:
   # this unpinned only while the Android toolchain remains on AGP 8.9.1+.
   url_launcher_android: ^6.3.32
 
+# HydraCam patch of the CameraX plugin: exposes the bound camera and its capture
+# results for manual exposure. See packages/camera_android_camerax/HYDRACAM_PATCH.md.
+dependency_overrides:
+  camera_android_camerax:
+    path: packages/camera_android_camerax
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

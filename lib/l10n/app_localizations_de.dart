@@ -86,6 +86,13 @@ class AppLocalizationsDe extends AppLocalizations {
       'Profile sind Zielwerte; das Telefon kann ausweichen, wenn sie nicht unterstützt werden.';
 
   @override
+  String get settingsExposurePresetTitle => 'Belichtung';
+
+  @override
+  String get settingsExposurePresetDescription =>
+      'Feste Verschlusszeit, ISO, Weißabgleich und Fokus während der Aufnahme. Kürzere Verschlusszeit ergibt kürzere Ballspuren, aber ein dunkleres Bild.';
+
+  @override
   String settingsVideoTarget(String target) {
     return 'Ziel: $target';
   }

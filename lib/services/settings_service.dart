@@ -18,6 +18,7 @@ class SettingsService {
   static const String _cameraLensPreferenceKey = "cameraLensPreference";
   static const String _selectedCameraNameKey = "selectedCameraName";
   static const String _videoCaptureProfileKey = "videoCaptureProfile";
+  static const String _exposurePresetKey = "exposurePreset";
   static const String _cameraPerspectiveIdKey = "cameraPerspectiveId";
   static const String _deleteLocalAfterUploadKey =
       "deleteLocalAfterUpload"; // Choose if delete or not the media after uploading
@@ -147,6 +148,18 @@ class SettingsService {
     await prefs.remove(_cameraQualityKey);
     LogService.instance.registerLog(
         "Updated video capture profile to ${profile.storageValue}");
+  }
+
+  static Future<ExposurePreset> getExposurePreset() async {
+    final prefs = await SharedPreferences.getInstance();
+    return ExposurePreset.fromStorageValue(prefs.getString(_exposurePresetKey));
+  }
+
+  static Future<void> setExposurePreset(ExposurePreset preset) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_exposurePresetKey, preset.storageValue);
+    LogService.instance
+        .registerLog("Updated exposure preset to ${preset.storageValue}");
   }
 
   static String _legacyQualityFromVideoCaptureProfile(

@@ -246,6 +246,18 @@ abstract class AppLocalizations {
   /// **'Profiles are targets; the phone may fall back if unsupported.'**
   String get settingsVideoProfileDescription;
 
+  /// Settings row title for the recording exposure preset.
+  ///
+  /// In en, this message translates to:
+  /// **'Exposure'**
+  String get settingsExposurePresetTitle;
+
+  /// Settings row description for the recording exposure preset.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed shutter, ISO, white balance and focus while recording. Faster shutter gives shorter ball streaks but a darker image.'**
+  String get settingsExposurePresetDescription;
+
   /// Label showing the selected video target.
   ///
   /// In en, this message translates to:

@@ -15,6 +15,7 @@ import "camera_compatibility_policy.dart";
 import "camera_setup_service.dart";
 import "device_service.dart";
 import "log_service.dart";
+import "manual_exposure_service.dart";
 import "video_metadata_service.dart";
 
 /// CameraService - Manages camera operations such as taking photos and recording videos.
@@ -39,6 +40,8 @@ class CameraService {
   final String _mockMediaSourceDir;
   final CameraDeviceInfoProvider _deviceInfoProvider;
   final Duration _cameraOperationTimeout;
+  final ManualExposureService _manualExposureService;
+  RecordingExposureSession? _recordingExposure;
 
   CameraController? _controller; // The camera controller instance
   CameraController? get controller =>
@@ -94,8 +97,11 @@ class CameraService {
       bool? useMockCamera,
       String? mockMediaSourceDir,
       CameraDeviceInfoProvider? deviceInfoProvider,
-      Duration? cameraOperationTimeout})
+      Duration? cameraOperationTimeout,
+      ManualExposureService? manualExposureService})
       : _storageService = storageService,
+        _manualExposureService =
+            manualExposureService ?? ManualExposureService(),
         _useMockCamera = useMockCamera ?? false,
         _deviceInfoProvider =
             deviceInfoProvider ?? DeviceIdService.getDeviceInfo,
@@ -441,9 +447,11 @@ class CameraService {
         await _setFlashModeIfSupported(FlashMode.torch, "video recording");
       }
 
+      await _lockRecordingExposure();
       final startTime = DateTime.now();
       await _startVideoRecordingWithFallback();
       videoStartRecordingDate = startTime;
+      _recordingExposure?.afterStart();
       LogService.instance.registerLog(
           "Video recording started with flash ${enableFlash ? 'on' : 'off'}");
 
@@ -454,6 +462,7 @@ class CameraService {
       _isRecording = false;
       videoStartRecordingDate = null;
       recordingCaptureContext = null;
+      await _abortRecordingExposure();
       throw Exception("Failed to start video recording: $e");
     }
   }
@@ -472,10 +481,12 @@ class CameraService {
             "stopVideoRecording was called when no video is recording.");
       }
 
+      await _recordingExposure?.readBeforeStop();
       final XFile video = await _controller!.stopVideoRecording();
       videoEndRecordingDate = DateTime.now();
 
       _isRecording = false;
+      await _finishRecordingExposure();
 
       final newPath = await _getSessionMediaPath(video.name);
 
@@ -501,6 +512,9 @@ class CameraService {
       LogService.instance
           .registerLog("Error stopping video recording: $e\n$stackTrace");
       _isRecording = _controller?.value.isRecordingVideo ?? false;
+      if (!_isRecording) {
+        await _abortRecordingExposure();
+      }
       throw Exception("Failed to stop video recording: $e");
     }
   }
@@ -1061,6 +1075,63 @@ class CameraService {
       return "$directoryPath$fileName";
     }
     return "$directoryPath${Platform.pathSeparator}$fileName";
+  }
+
+  /// Applies the selected exposure preset before recording starts. Failures
+  /// never block recording: the clip falls back to auto exposure and the
+  /// metadata records why.
+  Future<void> _lockRecordingExposure() async {
+    await _abortRecordingExposure();
+    final cameraName = _controller?.description.name;
+    if (cameraName == null) {
+      return;
+    }
+    final preset = await SettingsService.getExposurePreset();
+    final session = RecordingExposureSession(
+      service: _manualExposureService,
+      preset: preset,
+      cameraName: cameraName,
+      frameDurationNs: 1000000000 ~/ _currentProfile.framesPerSecond,
+    );
+    _recordingExposure = session;
+    try {
+      await session.lockBeforeStart();
+      LogService.instance.registerLog(
+          "Exposure preset ${preset.storageValue}: ${session.lockStatus}");
+    } catch (error) {
+      LogService.instance.registerLog("Exposure lock failed: $error");
+    }
+  }
+
+  Future<void> _finishRecordingExposure() async {
+    final session = _recordingExposure;
+    _recordingExposure = null;
+    if (session == null) {
+      return;
+    }
+    try {
+      final exposure = await session.finish();
+      recordingCaptureContext = recordingCaptureContext?.withExposure(exposure);
+      LogService.instance.registerLog(
+          "Recorded exposure ${exposure.preset} (${exposure.lockStatus}): "
+          "exposureTimeNs=${exposure.exposureTimeNs} iso=${exposure.iso} "
+          "frameDurationNs=${exposure.frameDurationNs} "
+          "rollingShutterSkewNs=${exposure.rollingShutterSkewNs} "
+          "underexposed=${exposure.underexposed} "
+          "cameraId=${exposure.start?["cameraId"] ?? exposure.stop?["cameraId"]}");
+    } catch (error) {
+      LogService.instance.registerLog("Exposure release failed: $error");
+    }
+  }
+
+  Future<void> _abortRecordingExposure() async {
+    final session = _recordingExposure;
+    _recordingExposure = null;
+    try {
+      await session?.abort();
+    } catch (error) {
+      LogService.instance.registerLog("Exposure release failed: $error");
+    }
   }
 
   Future<MediaCaptureContext> _buildCurrentCaptureContext() async {

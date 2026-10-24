@@ -1,4 +1,5 @@
 import "json_value_parsers.dart";
+import "recording_exposure_metadata.dart";
 
 class CameraPerspectiveMetadata {
   const CameraPerspectiveMetadata({
@@ -167,6 +168,7 @@ class MediaCaptureContext {
     required this.cameraSensorOrientation,
     required this.videoCaptureProfile,
     required this.deviceId,
+    this.exposure,
   });
 
   final CameraPerspectiveMetadata perspective;
@@ -176,6 +178,23 @@ class MediaCaptureContext {
   final int? cameraSensorOrientation;
   final String? videoCaptureProfile;
   final String deviceId;
+
+  /// Exposure preset and the sensor values used for the clip; null for photos
+  /// and for clips recorded before manual exposure existed.
+  final RecordingExposureMetadata? exposure;
+
+  MediaCaptureContext withExposure(RecordingExposureMetadata? exposure) {
+    return MediaCaptureContext(
+      perspective: perspective,
+      level: level,
+      cameraName: cameraName,
+      cameraLensDirection: cameraLensDirection,
+      cameraSensorOrientation: cameraSensorOrientation,
+      videoCaptureProfile: videoCaptureProfile,
+      deviceId: deviceId,
+      exposure: exposure,
+    );
+  }
 
   static MediaCaptureContext? fromJson(Map<String, dynamic>? json) {
     if (json == null || !_hasContextKeys(json)) {
@@ -191,6 +210,8 @@ class MediaCaptureContext {
       cameraSensorOrientation: toIntOrNull(json["cameraSensorOrientation"]),
       videoCaptureProfile: _nonEmpty(json["videoCaptureProfile"]?.toString()),
       deviceId: _nonEmpty(json["deviceId"]?.toString()) ?? "Unknown",
+      exposure: RecordingExposureMetadata.fromJson(
+          toStringKeyedMap(json["exposure"])),
     );
   }
 
@@ -203,6 +224,7 @@ class MediaCaptureContext {
       "cameraSensorOrientation": cameraSensorOrientation,
       "videoCaptureProfile": videoCaptureProfile,
       "deviceId": deviceId,
+      if (exposure != null) "exposure": exposure!.toJson(),
     };
   }
 
@@ -211,7 +233,8 @@ class MediaCaptureContext {
         json.containsKey("cameraPerspectiveLabel") ||
         json.containsKey("deviceLevel") ||
         json.containsKey("cameraName") ||
-        json.containsKey("videoCaptureProfile");
+        json.containsKey("videoCaptureProfile") ||
+        json.containsKey("exposure");
   }
 }
 
