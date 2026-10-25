@@ -70,11 +70,21 @@ void main() {
 
   test("startRecordingVideo stays inactive when the camera platform fails",
       () async {
+    final closed = Completer<void>();
+    var disposals = 0;
     CameraPlatform.instance = _FakeCameraPlatform(
       startRecordingError: PlatformException(
         code: "ios_camera_start_failed",
         message: "Simulated iPad recording start failure",
       ),
+      stopRecordingError: PlatformException(
+          code: "RECORDING_STOP_UNCONFIRMED", message: "Unknown retry"),
+      stopErrorAfterStarts: 2,
+      onEvent: (event) {
+        if (event == "dispose" && ++disposals == 2) {
+          closed.complete();
+        }
+      },
     );
     final cameraService = CameraService(
       storageService: storageService,
@@ -101,6 +111,9 @@ void main() {
             contains("Original recording"))));
     expect(platform.recordingStarts, dispatched,
         reason: "Unconfirmed start must retain its original native owner");
+    await closed.future.timeout(const Duration(seconds: 1));
+    expect(platform.recordingStops, 2,
+        reason: "Failed FPS retry must request original STOP automatically");
     await cameraService.stopCamera();
   });
 
@@ -512,6 +525,42 @@ void main() {
     expect(platform.recordingStops, 1);
     expect(events.indexOf("stop"), lessThan(events.indexOf("dispose")));
     expect(service.isRecording, isFalse);
+  });
+
+  test("failed start automatically closes hardware without a reachable UI STOP",
+      () async {
+    final rawStart = Completer<void>();
+    final closed = Completer<void>();
+    final platform = _FakeCameraPlatform(
+        startRecordingReply: rawStart.future,
+        onEvent: (event) {
+          if (event == "dispose" && !closed.isCompleted) {
+            closed.complete();
+          }
+        });
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        cameraOperationTimeout: const Duration(milliseconds: 50));
+    try {
+      await expectLater(service.startRecordingVideo(), throwsException);
+      expect(service.isRecording, isFalse);
+      await closed.future.timeout(const Duration(seconds: 1));
+      expect(platform.recordingStarts, 1);
+      rawStart.complete();
+      await Future<void>.delayed(Duration.zero);
+      expect(platform.recordingStops, 0,
+          reason: "Never send a global generic/iOS STOP after disposal");
+      await expectLater(
+          service.startRecordingVideo(),
+          throwsA(isA<StateError>().having((error) => error.message, "message",
+              contains("Original recording"))));
+    } finally {
+      if (!rawStart.isCompleted) {
+        rawStart.complete();
+      }
+      await service.stopCamera();
+    }
   });
 
   test("an unconfirmed native stop retains ownership before another capture",
@@ -1106,6 +1155,7 @@ class _FakeCameraPlatform extends CameraPlatform {
     this.setFlashModeError,
     this.startRecordingReply,
     this.stopRecordingError,
+    this.stopErrorAfterStarts,
   }) : cameras = cameras ??
             const [
               CameraDescription(
@@ -1122,6 +1172,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   final PlatformException? setFlashModeError;
   final Future<void>? startRecordingReply;
   Exception? stopRecordingError;
+  final int? stopErrorAfterStarts;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
   CameraDescription? lastCreatedCamera;
@@ -1219,7 +1270,9 @@ class _FakeCameraPlatform extends CameraPlatform {
     recordingStops++;
     onEvent?.call("stop");
     final error = stopRecordingError;
-    if (error != null) {
+    if (error != null &&
+        (stopErrorAfterStarts == null ||
+            recordingStarts >= stopErrorAfterStarts!)) {
       throw error;
     }
     if (!_isRecording) {
