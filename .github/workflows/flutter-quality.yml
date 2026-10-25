@@ -175,8 +175,28 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib, json, os, pathlib, shutil, signal, subprocess, time, xml.etree.ElementTree as ET
+          import hashlib, json, os, pathlib, shutil, signal, subprocess, time, zipfile, xml.etree.ElementTree as ET
           root = pathlib.Path.cwd(); out = pathlib.Path(os.environ['TASK_OUTPUT']); G = 1024**3
+          jar_name = 'arm64_v8a_debug-1.0.0-deb287481e3ce9468f3434937ced4240a70539ca.jar'
+          jar_version = '1.0.0-deb287481e3ce9468f3434937ced4240a70539ca'
+          jar_sha256 = 'e58ef2523b336de488f6d19df27a63c032cfe6c09e1d55c26b6a4f22dc735695'
+          jar_entries = {'lib/arm64-v8a/libflutter.so': 395316440,
+              'lib/arm64-v8a/libVkLayer_khronos_validation.so': 248644248}
+          cached_jar = pathlib.Path(os.environ['GRADLE_USER_HOME'])/'caches/modules-2/files-2.1/io.flutter/arm64_v8a_debug'/jar_version/'5231e7ca773fc3789c114eca038c7d9a12135db9'/jar_name
+          def verify_native_jar(path):
+              digest = hashlib.sha256()
+              with path.open('rb') as source:
+                  for chunk in iter(lambda: source.read(1024*1024), b''): digest.update(chunk)
+              with zipfile.ZipFile(path) as archive:
+                  entries = archive.infolist()
+                  actual_entries = {entry.filename: entry.file_size for entry in entries}
+              observed = {'path': str(path), 'bytes': path.stat().st_size, 'sha256': digest.hexdigest(),
+                  'entries': actual_entries, 'entryCount': len(entries)}
+              print('NATIVE_ONLY_FLUTTER_JAR '+json.dumps(observed), flush=True)
+              assert observed['bytes'] == 180591679 and observed['sha256'] == jar_sha256, 'Pinned Flutter JAR bytes/hash mismatch'
+              assert len(entries) == 2 and actual_entries == jar_entries, 'Pinned JAR must contain only the two native libraries'
+              observed['verified'] = True
+              return observed
           def projection(native_only=False):
               digest = hashlib.sha256()
               for raw in subprocess.check_output(['git','ls-files','-z']).split(b'\0'):
@@ -264,6 +284,15 @@ jobs:
                       for p in (sdk/'ndk').glob('*/source.properties')]}
               print('INSTALLED_EXACT_NDK '+json.dumps(receipt['installedNdk']), flush=True)
               assert receipt['installedNdk']['properties'].get('Pkg.Revision') == '28.2.13676358', 'Installed NDK version mismatch'
+              # Inspect the exact public native-only archive without modifying
+              # Gradle's cache. Embedding/classes and all other JARs stay Jetified.
+              jar_probe = out/jar_name
+              jar_url = f'https://storage.googleapis.com/download.flutter.io/io/flutter/arm64_v8a_debug/{jar_version}/{jar_name}'
+              code = run(['curl','--fail','--location','--proto','=https','--proto-redir','=https',
+                  '--connect-timeout','10','--max-time','60','--max-filesize','180591679',
+                  '--output',str(jar_probe),jar_url], root, 60, stdin=subprocess.DEVNULL)
+              assert code == 0, 'Pinned public Flutter JAR download failed'
+              receipt['nativeFlutterJar'] = verify_native_jar(jar_probe)
               code = run(['flutter','pub','get'], root, 120)
               assert code == 0, 'Dependency resolution failed; no native RED claimed'
               flutter = pathlib.Path(shutil.which('flutter')).resolve().parents[1]
@@ -289,6 +318,7 @@ jobs:
               command = ['gradle','--no-daemon','--max-workers=1','--console=plain',
                   '-Dorg.gradle.jvmargs=-Xmx2048m -XX:ActiveProcessorCount=2',
                   '-Pkotlin.compiler.execution.strategy=in-process','-Pandroid.builder.sdkDownload=false',
+                  r'-Pandroid.jetifier.ignorelist=/arm64_v8a_debug-1\.0\.0-deb287481e3ce9468f3434937ced4240a70539ca\.jar$',
                   '-Ptarget-platform=android-arm64', ':camera_android_camerax:testDebugUnitTest',
                   '--tests','io.flutter.plugins.camerax.HydracamCaptureHooksTest',
                   ':app:testDebugUnitTest','--tests','com.amaia23.hydracam.ManualExposureControllerTest']
@@ -302,6 +332,11 @@ jobs:
               receipt['error'] = str(error); print('DIAGNOSTIC_ERROR '+str(error), flush=True)
               code = 1
           finally:
+              try:
+                  receipt['resolvedNativeFlutterJar'] = verify_native_jar(cached_jar)
+              except Exception as error:
+                  receipt['resolvedNativeFlutterJarError'] = str(error)
+                  print('RESOLVED_NATIVE_FLUTTER_JAR_ERROR '+str(error), flush=True); code = 1
               cases = []
               outputs = [
                   root/'build/camera_android_camerax/test-results/testDebugUnitTest/TEST-io.flutter.plugins.camerax.HydracamCaptureHooksTest.xml',
@@ -330,6 +365,7 @@ jobs:
                   ['io.flutter.plugins.camerax.HydracamCaptureHooksTest','com.amaia23.hydracam.ManualExposureControllerTest']}
               receipt['qualifiedNativeOnly'] = code == 0 and receipt['counts'] == {'PASS':26,'FAIL':0,'ERROR':0,'SKIP':0} and receipt['classCounts'] == {
                   'io.flutter.plugins.camerax.HydracamCaptureHooksTest':10,'com.amaia23.hydracam.ManualExposureControllerTest':16}
+              if not all(receipt.get(key, {}).get('verified', False) for key in ['nativeFlutterJar','resolvedNativeFlutterJar']): receipt['qualifiedNativeOnly'] = False
               if receipt['nativeProjectionAfter'] != receipt['beforeToolSetup']['nativeProjectionBeforeToolSetup'] or receipt['remainingDiskBytes'] < 20*G: receipt['qualifiedNativeOnly'] = False
               (out/'receipt.json').write_text(json.dumps(receipt, indent=2)); print('ACTUAL_RECEIPT '+json.dumps(receipt), flush=True)
               if not receipt['qualifiedNativeOnly']: code = 1
