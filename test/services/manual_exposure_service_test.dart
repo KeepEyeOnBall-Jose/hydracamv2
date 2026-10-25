@@ -213,14 +213,21 @@ void main() {
       expect(metadata.lockStatus, "unavailable");
       expect(metadata.isLocked, isFalse);
       expect(metadata.start, containsPair("status", "timeout"));
+      expect(metadata.lock, containsPair("releaseStatus", "pending"));
+      expect(exposure.cleanupPending, isTrue);
+      expect(calls.where((call) => call.method == "release"), isEmpty,
+          reason: "No restoration may overtake its pending mutation");
     } finally {
       relock.complete({"status": "error"});
       await Future<void>.delayed(Duration.zero);
     }
+    expect(metadata.lockStatus, "unavailable");
+    expect(metadata.lock, containsPair("releaseStatus", "pending"),
+        reason: "Late mutation and cleanup must not rewrite returned metadata");
   });
 
-  test("a late relock during release cannot change finalized recording status",
-      () async {
+  testWidgets("a late relock after the deadline cannot change recording status",
+      (tester) async {
     final relock = Completer<Object?>();
     final releaseStarted = Completer<void>();
     final released = Completer<Object?>();
@@ -237,15 +244,20 @@ void main() {
       }
       return Future.value({"status": "ok"});
     });
+    const deadline = Duration(milliseconds: 20);
     final exposure =
-        session(ExposurePreset.shutter1_60, snapshotTimeout: Duration.zero);
+        session(ExposurePreset.shutter1_60, snapshotTimeout: deadline);
     await exposure.lockBeforeStart();
     exposure.afterStart();
     final finishing = exposure.finish();
-    await releaseStarted.future;
+    await tester.pump(deadline);
+    expect(releaseStarted.isCompleted, isFalse,
+        reason: "Restoration must join the pending mutation first");
     relock.complete({"status": "locked"});
-    await Future<void>.delayed(Duration.zero);
+    await tester.pump();
+    expect(releaseStarted.isCompleted, isTrue);
     released.complete({"status": "released"});
+    await tester.pump();
     final metadata = await finishing;
     expect(metadata.lockStatus, "unavailable");
     expect(metadata.isLocked, isFalse);
