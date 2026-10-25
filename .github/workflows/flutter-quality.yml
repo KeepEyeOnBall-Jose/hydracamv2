@@ -100,7 +100,12 @@ jobs:
           sdk = pathlib.Path(os.environ['ANDROID_HOME']).resolve(strict=True)
           java = pathlib.Path(os.environ['JAVA_HOME_17_X64']).resolve(strict=True)
           def props(path):
-              return dict(line.split('=', 1) for line in path.read_text().splitlines() if '=' in line and not line.startswith('#'))
+              values = {}
+              for line in path.read_text().splitlines():
+                  if '=' in line and not line.lstrip().startswith('#'):
+                      key, value = line.split('=', 1)
+                      values[key.strip()] = value.strip()
+              return values
           def projection(native_only=False):
               digest = hashlib.sha256()
               for raw in subprocess.check_output(['git','ls-files','-z']).split(b'\0'):
@@ -111,14 +116,19 @@ jobs:
                   digest.update(raw+b'\0'+hashlib.sha256(data).digest())
               return digest.hexdigest()
           platforms = [(str(p.parent), props(p)) for p in (sdk/'platforms').glob('*/source.properties')]
-          stable37 = [p for p in platforms if p[1].get('AndroidVersion.ApiLevel') == '37' and p[1].get('AndroidVersion.CodeName', 'REL') == 'REL']
+          stable37 = [p for p in platforms
+              if p[1].get('AndroidVersion.ApiLevel') in ('37', '37.0')
+              and p[1].get('AndroidVersion.CodeName', '') in ('', 'REL')
+              and p[1].get('AndroidVersion.PreviewSdkInt', '0') == '0'
+              and p[1].get('AndroidVersion.BetaVersion', '') == '']
           ndks = [(str(p.parent), props(p).get('Pkg.Revision')) for p in (sdk/'ndk').glob('*/source.properties')]
           mem = dict(line.split(':', 1) for line in pathlib.Path('/proc/meminfo').read_text().splitlines())
           available = int(mem['MemAvailable'].split()[0])*1024
           free = shutil.disk_usage(root).free
           facts = {'source': subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(),
                    'tree': subprocess.check_output(['git','rev-parse','HEAD^{tree}'], text=True).strip(),
-                   'sdk': str(sdk), 'platform37': stable37, 'ndksObserved': ndks,
+                   'sdk': str(sdk), 'platformsObserved': platforms,
+                   'platform37': stable37, 'ndksObserved': ndks,
                    'java': subprocess.check_output([str(java/'bin/java'),'-version'], stderr=subprocess.STDOUT, text=True, timeout=10),
                    'memAvailable': available, 'load1': os.getloadavg()[0], 'cpus': os.cpu_count(),
                    'freeBytes': free, 'projectedAdditionalBytes': 8*G, 'requiredRemainingBytes': 20*G,
