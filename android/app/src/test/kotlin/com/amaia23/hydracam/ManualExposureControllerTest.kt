@@ -33,8 +33,6 @@ import org.robolectric.annotation.Config
 @Config(sdk = [28])
 class ManualExposureControllerTest {
     private lateinit var hooks: MockedStatic<HydracamCaptureHooks>
-    private lateinit var controls: MockedStatic<Camera2CameraControl>
-    private lateinit var infos: MockedStatic<Camera2CameraInfo>
     private lateinit var executors: MockedStatic<ContextCompat>
     private lateinit var controller: ManualExposureController
     private lateinit var camera: Camera
@@ -56,37 +54,35 @@ class ManualExposureControllerTest {
             .build()
         `when`(camera.cameraInfo).thenReturn(cameraInfo)
         `when`(camera.cameraControl).thenReturn(cameraControl)
-        `when`(info.cameraId).thenReturn("0")
         `when`(info.getCameraCharacteristic(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES))
             .thenReturn(intArrayOf(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR))
         `when`(control.getCaptureRequestOptions()).thenReturn(previous)
-        `when`(control.addCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
+        `when`(control.addCaptureRequestOptions(any(CaptureRequestOptions::class.java) ?: previous))
             .thenReturn(Futures.immediateFuture(null))
 
         hooks = mockStatic(HydracamCaptureHooks::class.java)
         hooks.`when`<Camera> { HydracamCaptureHooks.getBoundCamera() }.thenReturn(camera)
-        controls = mockStatic(Camera2CameraControl::class.java)
-        controls.`when`<Camera2CameraControl> { Camera2CameraControl.from(cameraControl) }.thenReturn(control)
-        infos = mockStatic(Camera2CameraInfo::class.java)
-        infos.`when`<Camera2CameraInfo> { Camera2CameraInfo.from(cameraInfo) }.thenReturn(info)
         executors = mockStatic(ContextCompat::class.java)
         executors.`when`<Executor> { ContextCompat.getMainExecutor(context) }
             .thenReturn(Executor { command -> command.run() })
-        controller = ManualExposureController(context)
+        controller = ManualExposureController(
+            context,
+            infoFor = { info },
+            controlFor = { control },
+            cameraIdFor = { "0" },
+        )
         assertEquals("locked", apply().single()["status"])
     }
 
     @After
     fun tearDown() {
         if (::executors.isInitialized) executors.close()
-        if (::infos.isInitialized) infos.close()
-        if (::controls.isInitialized) controls.close()
         if (::hooks.isInitialized) hooks.close()
     }
 
     @Test
     fun failedRestorationRetriesTheOriginalOptions() {
-        `when`(control.setCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
+        `when`(control.setCaptureRequestOptions(previous))
             .thenReturn(Futures.immediateFailedFuture(IllegalStateException("restore rejected")))
             .thenReturn(Futures.immediateFuture(null))
 
@@ -94,7 +90,7 @@ class ManualExposureControllerTest {
         assertEquals("released", release().single()["status"])
 
         val options = ArgumentCaptor.forClass(CaptureRequestOptions::class.java)
-        verify(control, times(2)).setCaptureRequestOptions(options.capture())
+        verify(control, times(2)).setCaptureRequestOptions(options.capture() ?: previous)
         options.allValues.forEach { assertSame(previous, it) }
         assertEquals("not_locked", release().single()["status"])
     }
@@ -102,7 +98,7 @@ class ManualExposureControllerTest {
     @Test
     fun concurrentRestoresShareTheNativeAcknowledgement() {
         val restoration = SettableFuture.create<Void?>()
-        `when`(control.setCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
+        `when`(control.setCaptureRequestOptions(previous))
             .thenReturn(restoration)
         val first = release()
         val second = release()
@@ -119,12 +115,12 @@ class ManualExposureControllerTest {
     @Test
     fun applyCannotOverwriteAnUnsettledRestoration() {
         val restoration = SettableFuture.create<Void?>()
-        `when`(control.setCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
+        `when`(control.setCaptureRequestOptions(previous))
             .thenReturn(restoration)
         val release = release()
 
         assertEquals("error", apply(exposureTimeNs = 8_333_333L).single()["status"])
-        verify(control, times(1)).addCaptureRequestOptions(any(CaptureRequestOptions::class.java))
+        verify(control, times(1)).addCaptureRequestOptions(any(CaptureRequestOptions::class.java) ?: previous)
         assertTrue(release.isEmpty())
         restoration.set(null)
         assertEquals("released", release.single()["status"])
@@ -132,13 +128,13 @@ class ManualExposureControllerTest {
 
     @Test
     fun applyCannotOverwriteAFailedRestorationBeforeRetry() {
-        `when`(control.setCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
+        `when`(control.setCaptureRequestOptions(previous))
             .thenReturn(Futures.immediateFailedFuture(IllegalStateException("restore rejected")))
             .thenReturn(Futures.immediateFuture(null))
         assertEquals("error", release().single()["status"])
 
         assertEquals("error", apply(exposureTimeNs = 8_333_333L).single()["status"])
-        verify(control, times(1)).addCaptureRequestOptions(any(CaptureRequestOptions::class.java))
+        verify(control, times(1)).addCaptureRequestOptions(any(CaptureRequestOptions::class.java) ?: previous)
         assertEquals("released", release().single()["status"])
         verify(control, times(2)).setCaptureRequestOptions(previous)
     }

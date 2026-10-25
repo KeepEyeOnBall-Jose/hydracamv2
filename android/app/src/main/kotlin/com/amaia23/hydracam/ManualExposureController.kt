@@ -10,6 +10,7 @@ import androidx.camera.camera2.interop.Camera2CameraControl
 import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.camera2.interop.CaptureRequestOptions
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
+import androidx.camera.core.Camera
 import androidx.core.content.ContextCompat
 import io.flutter.plugins.camerax.HydracamCaptureHooks
 
@@ -20,7 +21,12 @@ import io.flutter.plugins.camerax.HydracamCaptureHooks
  * Reports the values the sensor actually used from the latest capture result.
  */
 @OptIn(ExperimentalCamera2Interop::class)
-class ManualExposureController(private val context: Context) {
+class ManualExposureController(
+	private val context: Context,
+	private val infoFor: (Camera) -> Camera2CameraInfo = { Camera2CameraInfo.from(it.cameraInfo) },
+	private val controlFor: (Camera) -> Camera2CameraControl = { Camera2CameraControl.from(it.cameraControl) },
+	private val cameraIdFor: (Camera2CameraInfo) -> String = { it.cameraId },
+) {
 	private var lockedCameraId: String? = null
 	private var optionsBeforeLock: CaptureRequestOptions? = null
 	private var lockedRequest: Map<String, Any?>? = null
@@ -35,8 +41,8 @@ class ManualExposureController(private val context: Context) {
 			onDone(mapOf("status" to "no_camera"))
 			return
 		}
-		val info = Camera2CameraInfo.from(camera.cameraInfo)
-		val cameraId = info.cameraId
+		val info = infoFor(camera)
+		val cameraId = cameraIdFor(info)
 		if (!supportsManualSensor(info)) {
 			onDone(mapOf("status" to "unsupported", "cameraId" to cameraId))
 			return
@@ -45,7 +51,7 @@ class ManualExposureController(private val context: Context) {
 		val request = lockedRequest?.takeIf {
 			lockedCameraId == cameraId && it["requestedExposureTimeNs"] == exposureTimeNs
 		} ?: meterLockRequest(info, exposureTimeNs, frameDurationNs)
-		val control = Camera2CameraControl.from(camera.cameraControl)
+		val control = controlFor(camera)
 		if (lockedCameraId != cameraId) {
 			optionsBeforeLock = control.getCaptureRequestOptions()
 		}
@@ -100,7 +106,7 @@ class ManualExposureController(private val context: Context) {
 
 	fun release(onDone: (Map<String, Any?>) -> Unit) {
 		val camera = HydracamCaptureHooks.getBoundCamera()
-		val cameraId = camera?.let { Camera2CameraInfo.from(it.cameraInfo).cameraId }
+		val cameraId = camera?.let { cameraIdFor(infoFor(it)) }
 		val previous = optionsBeforeLock
 		val wasLockedCameraId = lockedCameraId
 		lockedCameraId = null
@@ -110,7 +116,7 @@ class ManualExposureController(private val context: Context) {
 			onDone(mapOf("status" to "not_locked"))
 			return
 		}
-		val future = Camera2CameraControl.from(camera.cameraControl)
+		val future = controlFor(camera)
 			.setCaptureRequestOptions(previous ?: CaptureRequestOptions.Builder().build())
 		future.addListener(
 			{
@@ -135,14 +141,15 @@ class ManualExposureController(private val context: Context) {
 	fun readCaptureSettings(): Map<String, Any?> {
 		val camera = HydracamCaptureHooks.getBoundCamera()
 			?: return mapOf("status" to "no_camera")
-		val info = Camera2CameraInfo.from(camera.cameraInfo)
+		val info = infoFor(camera)
+		val cameraId = cameraIdFor(info)
 		val result = HydracamCaptureHooks.getLatestCaptureResult()
-			?: return mapOf("status" to "no_capture_result", "cameraId" to info.cameraId)
+			?: return mapOf("status" to "no_capture_result", "cameraId" to cameraId)
 		val frameDurationNs = result.get(CaptureResult.SENSOR_FRAME_DURATION)
 		return mapOf(
 			"status" to "ok",
 			"source" to "camera2_capture_result",
-			"cameraId" to info.cameraId,
+			"cameraId" to cameraId,
 			"hardwareLevel" to hardwareLevelName(
 				info.getCameraCharacteristic(
 					CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL,
@@ -158,7 +165,7 @@ class ManualExposureController(private val context: Context) {
 			"afMode" to result.get(CaptureResult.CONTROL_AF_MODE),
 			"focusDistanceDiopters" to result.get(CaptureResult.LENS_FOCUS_DISTANCE),
 			"sensorTimestampNs" to result.get(CaptureResult.SENSOR_TIMESTAMP),
-			"manualLockActive" to (lockedCameraId == info.cameraId),
+			"manualLockActive" to (lockedCameraId == cameraId),
 		)
 	}
 
