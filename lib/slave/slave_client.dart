@@ -671,13 +671,16 @@ class SlaveClient implements SlaveConnectionClient {
       LogService.instance.registerLog("Stopping video recording");
       try {
         final videoPath = await _cameraService.stopRecordingVideo();
-        videoEndRecordingDate = _cameraService.videoEndRecordingDate;
-        final startRecordingDate = videoStartRecordingDate;
-        final endRecordingDate = videoEndRecordingDate;
+        final snapshot =
+            await _cameraService.snapshotForRecordedVideo(videoPath);
+        final startRecordingDate = snapshot.startedAt;
+        final endRecordingDate = snapshot.stoppedAt;
         if (startRecordingDate == null || endRecordingDate == null) {
           throw StateError("Slave recording timestamps are missing after stop. "
               "start=$startRecordingDate end=$endRecordingDate");
         }
+        videoStartRecordingDate = startRecordingDate;
+        videoEndRecordingDate = endRecordingDate;
         final receivedDate = DateTime.now();
 
         // Get the device ID
@@ -691,10 +694,17 @@ class SlaveClient implements SlaveConnectionClient {
           startRecordingDate: startRecordingDate,
           endRecordingDate: endRecordingDate,
           receivedDate: receivedDate,
-          captureContext: _cameraService.recordingCaptureContext,
+          captureContext: snapshot.context,
           syncMetadata: _syncMetadataAt(startRecordingDate),
         );
+        if (snapshot.sessionGuid == null ||
+            snapshot.sessionGuid != SessionManager.instance.sessionGuid) {
+          throw StateError(
+              "The original recording session is no longer active; "
+              "capture metadata remains pending recovery.");
+        }
         await SessionManager.instance.addVideo(capturedVideo);
+        await _cameraService.acknowledgeRecordedVideo(snapshot);
 
         // Update the UI
         _statusStreamController
