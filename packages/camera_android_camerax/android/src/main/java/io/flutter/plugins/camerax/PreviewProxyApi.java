@@ -63,10 +63,15 @@ class PreviewProxyApi extends PigeonApiPreview {
           CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, (Range<Integer>) targetFpsRange);
     }
     // HydraCam patch: observe capture results for manual exposure verification.
+    final HydracamCaptureHooks.PreviewObserver observer =
+        HydracamCaptureHooks.newPreviewObserver();
     new Camera2Interop.Extender<>(builder)
-        .setSessionCaptureCallback(HydracamCaptureHooks.sessionCaptureCallback());
+        .setSessionCaptureCallback(observer.captureCallback)
+        .setSessionStateCallback(observer.stateCallback);
 
-    return builder.build();
+    final Preview preview = builder.build();
+    HydracamCaptureHooks.registerPreview(preview, observer);
+    return preview;
   }
 
   @Override

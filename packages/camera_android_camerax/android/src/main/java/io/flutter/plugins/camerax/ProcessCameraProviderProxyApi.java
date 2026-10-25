@@ -67,11 +67,12 @@ class ProcessCameraProviderProxyApi extends PigeonApiProcessCameraProvider {
       @NonNull List<? extends UseCase> useCases) {
     final LifecycleOwner lifecycleOwner = getPigeonRegistrar().getLifecycleOwner();
     if (lifecycleOwner != null) {
+      HydracamCaptureHooks.beforeGraphChange();
       final Camera camera =
           pigeonInstance.bindToLifecycle(
               lifecycleOwner, cameraSelector, useCases.toArray(new UseCase[0]));
       // HydraCam patch: let the host app reach the bound camera's Camera2 controls.
-      HydracamCaptureHooks.onCameraBound(camera);
+      HydracamCaptureHooks.onCameraBound(camera, useCases);
       return camera;
     }
 
@@ -87,11 +88,14 @@ class ProcessCameraProviderProxyApi extends PigeonApiProcessCameraProvider {
   @Override
   public void unbind(
       ProcessCameraProvider pigeonInstance, @NonNull List<? extends UseCase> useCases) {
+    HydracamCaptureHooks.beforeGraphChange();
     pigeonInstance.unbind(useCases.toArray(new UseCase[0]));
+    HydracamCaptureHooks.onUseCasesUnbound(useCases);
   }
 
   @Override
   public void unbindAll(ProcessCameraProvider pigeonInstance) {
+    HydracamCaptureHooks.beforeGraphChange();
     pigeonInstance.unbindAll();
     HydracamCaptureHooks.onCamerasUnbound();
   }
