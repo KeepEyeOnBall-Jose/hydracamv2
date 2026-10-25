@@ -41,6 +41,25 @@ void main() {
   File metadata(String session) =>
       File("${directory.path}/session_$session/metadata.json");
 
+  Future<void> retainExposureContext() async {
+    snapshot = RecordedVideoSnapshot.capture(
+      captureId: snapshot.captureId,
+      path: snapshot.path,
+      startedAt: started,
+      stoppedAt: stopped,
+      sessionGuid: snapshot.sessionGuid,
+      context: MediaCaptureContext.fromJson({
+        "cameraName": "0",
+        "exposure": {
+          "preset": "shutter1_60",
+          "iso": 3200,
+          "lockStatus": "locked"
+        }
+      }),
+    );
+    await receipts.remember(snapshot);
+  }
+
   setUp(() async {
     SharedPreferences.setMockInitialValues({
       "device_id": "durability-device",
@@ -105,8 +124,12 @@ void main() {
 
   test("persisted different capture context cannot acknowledge original",
       () async {
-    await sessions.addVideo(video(
-        context: MediaCaptureContext.fromJson({"cameraName": "other-camera"})));
+    await retainExposureContext();
+    await sessions.addVideo(video(context: snapshot.context));
+    final file = metadata("original-session");
+    final disk = jsonDecode(await file.readAsString());
+    disk["videos"].single["captureContext"]["exposure"]["iso"] = 1600;
+    await file.writeAsString(jsonEncode(disk), flush: true);
     await camera.acknowledgeRecordedVideo(snapshot);
     expect(await receipt().exists(), isTrue);
   });
@@ -138,7 +161,8 @@ void main() {
 
   test("exact original session clip read back from disk acknowledges receipt",
       () async {
-    await sessions.addVideo(video());
+    await retainExposureContext();
+    await sessions.addVideo(video(context: snapshot.context));
     final disk = jsonDecode(await metadata("original-session").readAsString());
     expect(disk["videos"].single["videoPath"], snapshot.path);
     await camera.acknowledgeRecordedVideo(snapshot);
