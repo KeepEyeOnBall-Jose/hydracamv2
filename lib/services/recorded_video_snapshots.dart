@@ -144,6 +144,7 @@ class RecordedVideoSnapshots {
     if (!await root.exists()) {
       return null;
     }
+    RecordedVideoSnapshot? match;
     await for (final entity in root.list()) {
       if (entity is! File || !entity.path.endsWith(".json")) {
         continue;
@@ -151,11 +152,16 @@ class RecordedVideoSnapshots {
       final snapshot = RecordedVideoSnapshot.fromJson(
           Map<String, dynamic>.from(jsonDecode(await entity.readAsString())));
       if (snapshot.path == path) {
-        _cache(snapshot);
-        return snapshot;
+        if (match != null && match.captureId != snapshot.captureId) {
+          throw StateError("Competing recovery receipts for $path");
+        }
+        match = snapshot;
       }
     }
-    return null;
+    if (match != null) {
+      _cache(match);
+    }
+    return match;
   }
 
   Future<void> acknowledge(RecordedVideoSnapshot snapshot) async {

@@ -525,7 +525,7 @@ class CameraService {
       if (epoch != _captureEpoch) {
         throw StateError("Camera start was cancelled by hardware stop");
       }
-      final startTime = await _startVideoRecordingWithFallback();
+      final startTime = await _startVideoRecordingWithFallback(epoch);
       if (epoch != _captureEpoch) {
         throw StateError("Camera start was cancelled by hardware stop");
       }
@@ -636,7 +636,8 @@ class CameraService {
     }
     late final Future<String> settling;
     settling = _finalizeVideoAttempt(attempt).whenComplete(() {
-      if (!attempt.terminal && identical(attempt.settlement, settling)) {
+      if (identical(_videoAttempt, attempt) &&
+          identical(attempt.settlement, settling)) {
         attempt.settlement = null;
       }
     });
@@ -645,56 +646,66 @@ class CameraService {
   }
 
   Future<String> _finalizeVideoAttempt(_OwnedVideoAttempt attempt) async {
-    final sensor = attempt.exposure?.readBeforeStop();
-    XFile video;
-    try {
-      if (!attempt.supportsPostDisposeStop) {
-        // AVFoundation's stop ignores cameraId. Never send it after disposal,
-        // even when the original start replies after our caller's deadline.
-        try {
-          await attempt.rawStart;
-        } catch (_) {}
-        if (attempt.disposed) {
-          throw StateError("Original native camera was closed before STOP");
-        }
-      }
-      video = await attempt.platform.stopVideoRecording(attempt.cameraId);
-      attempt.terminal = true;
-      // Consume the original public controller completion before updating its
-      // notifier or permitting another dispatch on that same controller.
+    if (attempt.nativeFile == null) {
+      attempt.stopSnapshot ??= attempt.exposure?.readBeforeStop();
       try {
-        await attempt.rawStart;
-      } catch (_) {}
-    } catch (error) {
-      final code = error is CameraException
-          ? error.code
-          : error is PlatformException
-              ? error.code
-              : null;
-      if (code == "RECORDING_NOT_STARTED" ||
-          code == "RECORDING_FINALIZED_WITHOUT_PATH") {
+        if (!attempt.supportsPostDisposeStop) {
+          // AVFoundation's stop ignores cameraId. Never send it after disposal,
+          // even when the original start replies after our caller's deadline.
+          try {
+            await attempt.rawStart;
+          } catch (_) {}
+          if (attempt.disposed) {
+            throw StateError("Original native camera was closed before STOP");
+          }
+        }
+        attempt.nativeFile =
+            await attempt.platform.stopVideoRecording(attempt.cameraId);
+        attempt.stoppedAt = DateTime.now();
         attempt.terminal = true;
+        // Consume the original public controller completion before updating
+        // its notifier or permitting another dispatch on that controller.
         try {
           await attempt.rawStart;
         } catch (_) {}
-        await _completeVideoExposure(attempt, sensor);
-        _clearTerminalVideoAttempt(attempt);
+      } catch (error) {
+        final code = error is CameraException
+            ? error.code
+            : error is PlatformException
+                ? error.code
+                : null;
+        if (code == "RECORDING_NOT_STARTED" ||
+            code == "RECORDING_FINALIZED_WITHOUT_PATH") {
+          attempt.terminal = true;
+          try {
+            await attempt.rawStart;
+          } catch (_) {}
+          try {
+            await _completeVideoExposure(attempt, attempt.stopSnapshot);
+          } finally {
+            _clearTerminalVideoAttempt(attempt);
+          }
+        }
+        rethrow;
       }
-      rethrow;
     }
-    attempt.stoppedAt = DateTime.now();
-    await _completeVideoExposure(attempt, sensor);
-    final captured = RecordedVideoSnapshot.capture(
-        captureId: attempt.captureId,
-        path: video.path,
-        startedAt: attempt.startedAt,
-        stoppedAt: attempt.stoppedAt,
-        context: attempt.context,
-        sessionGuid: attempt.sessionGuid);
+    final video = attempt.nativeFile!;
+    if (attempt.captured == null) {
+      await _completeVideoExposure(attempt, attempt.stopSnapshot);
+      attempt.captured = RecordedVideoSnapshot.capture(
+          captureId: attempt.captureId,
+          path: video.path,
+          startedAt: attempt.startedAt,
+          stoppedAt: attempt.stoppedAt,
+          context: attempt.context,
+          sessionGuid: attempt.sessionGuid);
+    }
+    final captured = attempt.captured!;
     try {
       // Persist a clearly pending receipt first. Late STOP with no String
       // consumer still leaves original media and its exact metadata reachable.
       await _recordedVideoSnapshots.remember(captured);
+      attempt.receiptDurable = true;
       final path =
           await _getMediaPathForSession(video.name, attempt.sessionGuid);
       if (path != video.path) {
@@ -703,7 +714,11 @@ class CameraService {
       await _recordedVideoSnapshots.remember(captured.atPath(path));
       return path;
     } finally {
-      _clearTerminalVideoAttempt(attempt);
+      // A disk-full failure before the first receipt ACK retains the exact
+      // immutable result. Retry persistence without sending another STOP.
+      if (attempt.receiptDurable) {
+        _clearTerminalVideoAttempt(attempt);
+      }
     }
   }
 
@@ -1063,8 +1078,8 @@ class CameraService {
     }
   }
 
-  Future<DateTime> _startVideoRecordingWithFallback() async {
-    final first = _dispatchVideoStart();
+  Future<DateTime> _startVideoRecordingWithFallback(int epoch) async {
+    final first = _dispatchVideoStart(epoch);
     try {
       await first.rawStart.timeout(_cameraOperationTimeout);
       return first.startedAt;
@@ -1098,13 +1113,16 @@ class CameraService {
       }
       recordingCaptureContext = await _buildCurrentCaptureContext();
       await _lockRecordingExposure();
-      final retry = _dispatchVideoStart();
+      final retry = _dispatchVideoStart(epoch);
       await retry.rawStart.timeout(_cameraOperationTimeout);
       return retry.startedAt;
     }
   }
 
-  _OwnedVideoAttempt _dispatchVideoStart() {
+  _OwnedVideoAttempt _dispatchVideoStart(int epoch) {
+    if (epoch != _captureEpoch) {
+      throw StateError("Camera start was cancelled by hardware stop");
+    }
     final controller = _controller!;
     final platform = CameraPlatform.instance;
     final attempt = _OwnedVideoAttempt(
@@ -1628,6 +1646,10 @@ class _OwnedVideoAttempt {
   final bool supportsPostDisposeStop;
   late final Future<void> rawStart;
   Future<String>? settlement;
+  XFile? nativeFile;
+  RecordedVideoSnapshot? captured;
+  Future<void>? stopSnapshot;
+  bool receiptDurable = false;
   MediaCaptureContext? context;
   DateTime? stoppedAt;
   bool disposed = false;

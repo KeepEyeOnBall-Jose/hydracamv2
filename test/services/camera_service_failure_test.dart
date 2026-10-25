@@ -515,9 +515,12 @@ void main() {
         storageService: storageService, recordedVideoSnapshots: store);
     try {
       await service.startRecordingVideo();
-      await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
-      await expectLater(service.startRecordingVideo(), throwsA(isA<Exception>()));
-      await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(
+          service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(
+          service.startRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(
+          service.stopRecordingVideo(), throwsA(isA<Exception>()));
       expect(platform.recordingStops, 1,
           reason: "Metadata retry must not stop another native recording");
       expect((await store.forPath("unused-video.mp4"))?.sourcePath,
@@ -536,8 +539,8 @@ void main() {
     Future<void>? stopping;
     late CameraService service;
     final platform = _FakeCameraPlatform(
-        startRecordingError:
-            PlatformException(code: "forced_fps_failure", message: "FPS failed"),
+        startRecordingError: PlatformException(
+            code: "forced_fps_failure", message: "FPS failed"),
         startRecordingFailures: 1,
         onEvent: (event) {
           if (event == "create" && ++creates == 2) {
