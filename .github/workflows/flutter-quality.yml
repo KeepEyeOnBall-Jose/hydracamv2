@@ -131,17 +131,17 @@ jobs:
                    'platform37': stable37, 'ndksObserved': ndks,
                    'java': subprocess.check_output([str(java/'bin/java'),'-version'], stderr=subprocess.STDOUT, text=True, timeout=10),
                    'memAvailable': available, 'load1': os.getloadavg()[0], 'cpus': os.cpu_count(),
-                   'freeBytes': free, 'projectedAdditionalBytes': 8*G, 'requiredRemainingBytes': 20*G,
+                   'freeBytes': free, 'projectedAdditionalBytes': 12*G, 'requiredRemainingBytes': 20*G,
                    'fullProjectionBeforeToolSetup': projection(), 'nativeProjectionBeforeToolSetup': projection(True)}
           (out/'preflight.json').write_text(json.dumps(facts, indent=2)); print(json.dumps(facts), flush=True)
           assert facts['source'] == os.environ['SOURCE_SHA'] and facts['tree'] == os.environ['SOURCE_TREE']
           subprocess.run(['git','fetch','--no-tags','--depth=1','origin',os.environ['NATIVE_BASELINE_SHA']], check=True, timeout=20)
           subprocess.run(['git','diff','--exit-code',os.environ['NATIVE_BASELINE_SHA'],'HEAD','--',
               'android','packages/camera_android_camerax/android','packages/camera_android_camerax/pubspec.yaml','.metadata'], check=True, timeout=10)
-          assert stable37 and (sdk/'build-tools/37.0.0/aapt2').is_file(), 'Existing Android 37 platform/build-tools required; no SDK bootstrap'
+          assert stable37 and (sdk/'build-tools/37.0.0/aapt2').is_file(), 'Existing Android 37 platform/build-tools required; no platform/bootstrap upgrades'
           assert 'version "17.' in facts['java'] or 'openjdk 17.' in facts['java']
           assert available >= 6*G and os.getloadavg()[0] <= os.cpu_count(), 'Resource admission refused'
-          assert free - 8*G >= 20*G, 'Preserve 20 GiB after projected outputs; no image-tool deletion'
+          assert free - 12*G >= 20*G, 'Preserve 20 GiB after projected outputs; no image-tool deletion'
           with open(os.environ['GITHUB_ENV'], 'a') as env:
               env.write(f'JAVA_HOME={java}\nANDROID_SDK_ROOT={sdk}\n')
           with open(os.environ['GITHUB_PATH'], 'a') as path:
@@ -194,11 +194,15 @@ jobs:
           receipt = {'source': os.environ['SOURCE_SHA'], 'nativeBaseline': os.environ['NATIVE_BASELINE_SHA'],
               'beforeToolSetup': json.loads((out/'preflight.json').read_text()),
               'fullProjectionBeforeTools': projection(), 'nativeProjectionBefore': projection(True), 'commands': []}
-          def run(command, cwd, seconds):
+          # The 720s step retains at least 30s after the last command's owned
+          # cleanup for projections, actual XML and the final receipt.
+          execution_deadline = time.monotonic()+680
+          def run(command, cwd, seconds, stdin=None):
               # Each command owns a separate session; retain PID/start identities
               # and descendants rather than selecting unrelated Java processes.
-              p = subprocess.Popen(command, cwd=cwd, start_new_session=True)
-              owned = {}; deadline = time.monotonic()+seconds; peak = 0
+              assert time.monotonic() < execution_deadline, 'No command may start after the absolute deadline'
+              p = subprocess.Popen(command, cwd=cwd, start_new_session=True, stdin=stdin)
+              owned = {}; deadline = min(time.monotonic()+seconds, execution_deadline); peak = 0
               state = {'command': command, 'cwd': str(cwd), 'pid': p.pid}; receipt['commands'].append(state)
               def collect():
                   current = rows(); changed = True
@@ -230,7 +234,31 @@ jobs:
                   assert not state['remainingOwned'], 'Owned processes remain'
           code = 1
           try:
-              assert shutil.disk_usage(root).free - 5*G >= 20*G, 'Post-tool-setup output reserve'
+              sdk = pathlib.Path(os.environ['ANDROID_HOME']).resolve(strict=True)
+              manager = sdk/'cmdline-tools/latest/bin/sdkmanager'
+              accepted = sdk/'licenses/android-sdk-license'
+              mem = dict(line.split(':',1) for line in pathlib.Path('/proc/meminfo').read_text().splitlines())
+              receipt['preNdkAdmission'] = {'memAvailableBytes': int(mem['MemAvailable'].split()[0])*1024,
+                  'load1': os.getloadavg()[0], 'cpus': os.cpu_count(), 'freeBytes': shutil.disk_usage(root).free,
+                  'remainingProjectedBytes': 9*G}
+              print('PRE_NDK_ADMISSION '+json.dumps(receipt['preNdkAdmission']), flush=True)
+              assert receipt['preNdkAdmission']['memAvailableBytes'] >= 6*G and receipt['preNdkAdmission']['load1'] <= os.cpu_count(), 'Pre-NDK resource admission refused'
+              assert receipt['preNdkAdmission']['freeBytes']-9*G >= 20*G, 'Post-tool-setup NDK/output reserve'
+              assert manager.is_file() and os.access(manager,os.X_OK) and os.access(sdk,os.W_OK), 'Existing writable ephemeral hosted SDK/manager required'
+              assert accepted.is_file() and accepted.stat().st_size > 0, 'Existing accepted SDK licenses required; no acceptance bypass'
+              code = run([str(manager),f'--sdk_root={sdk}','--install','ndk;28.2.13676358'], root, 120, stdin=subprocess.DEVNULL)
+              assert code == 0, 'Exact NDK install failed; no native RED claimed'
+              def installed_props(path):
+                  return {key.strip(): value.strip() for key,value in
+                      (line.split('=',1) for line in path.read_text().splitlines() if '=' in line and not line.lstrip().startswith('#'))}
+              properties = sdk/'ndk/28.2.13676358/source.properties'
+              assert properties.is_file(), 'Exact installed NDK metadata missing'
+              receipt['installedNdk'] = {'path': str(properties.parent), 'properties': installed_props(properties),
+                  'sourcePropertiesSha256': hashlib.sha256(properties.read_bytes()).hexdigest(),
+                  'sdkNdkInventory': [(str(p.parent), installed_props(p), hashlib.sha256(p.read_bytes()).hexdigest())
+                      for p in (sdk/'ndk').glob('*/source.properties')]}
+              print('INSTALLED_EXACT_NDK '+json.dumps(receipt['installedNdk']), flush=True)
+              assert receipt['installedNdk']['properties'].get('Pkg.Revision') == '28.2.13676358', 'Installed NDK version mismatch'
               code = run(['flutter','pub','get'], root, 120)
               assert code == 0, 'Dependency resolution failed; no native RED claimed'
               flutter = pathlib.Path(shutil.which('flutter')).resolve().parents[1]
@@ -258,7 +286,7 @@ jobs:
                   '-Pkotlin.compiler.execution.strategy=in-process','-Pandroid.builder.sdkDownload=false',
                   '-Ptarget-platform=android-arm64', ':camera_android_camerax:testDebugUnitTest',
                   '--tests','io.flutter.plugins.camerax.HydracamCaptureHooksTest']
-              code = run(command, root/'android', 540)
+              code = run(command, root/'android', 420)
           except Exception as error:
               receipt['error'] = str(error); print('DIAGNOSTIC_ERROR '+str(error), flush=True)
               code = 1
