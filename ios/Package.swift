@@ -1,5 +1,9 @@
 // swift-tools-version: 5.9
 import PackageDescription
+import Foundation
+
+let runnerDirectory = URL(fileURLWithPath: #filePath)
+  .deletingLastPathComponent().appendingPathComponent("Runner")
 
 let package = Package(
   name: "HydraCamManualExposure",
@@ -11,8 +15,9 @@ let package = Package(
       exclude: [
         "AppDelegate.swift", "AVManualExposureDevice.swift", "Assets.xcassets",
         "Base.lproj", "GeneratedPluginRegistrant.h", "GeneratedPluginRegistrant.m",
-        "Info.plist", "PrivacyInfo.xcprivacy", "Runner-Bridging-Header.h"
-      ],
+        "Info.plist", "PrivacyInfo.xcprivacy", "Runner-Bridging-Header.h",
+        "xcode_backend_wrapper.sh"
+      ].filter { FileManager.default.fileExists(atPath: runnerDirectory.appendingPathComponent($0).path) },
       sources: ["ManualExposureController.swift"]
     ),
     .testTarget(
