@@ -15,8 +15,16 @@ import 'package:stream_transform/stream_transform.dart';
 import 'camerax_library.dart';
 import 'rotated_preview_delegate.dart';
 
+/// A platform whose owned recording terminal result survives camera disposal.
+/// [CameraPlatform.stopVideoRecording] returns the original path after Finalize.
+/// Only RECORDING_NOT_STARTED and RECORDING_FINALIZED_WITHOUT_PATH acknowledge
+/// a terminal recording without a file; other errors remain unconfirmed.
+/// A returned path does not establish playable media. Callers must retain the
+/// original delegate/camera ID and context until terminal consumption.
+abstract interface class CameraRecordingSettlementAfterDispose {}
+
 /// The Android implementation of [CameraPlatform] that uses the CameraX library.
-class AndroidCameraCameraX extends CameraPlatform {
+class AndroidCameraCameraX extends CameraPlatform implements CameraRecordingSettlementAfterDispose {
   /// Constructs an [AndroidCameraCameraX].
   AndroidCameraCameraX();
 
@@ -505,6 +513,7 @@ class AndroidCameraCameraX extends CameraPlatform {
   @override
   Future<void> dispose(int cameraId) async {
     final attempt = _videoRecordingAttempts[cameraId];
+    final failedBindingAtEntry = attempt?.bindingCleanupFailed ?? false;
     final activeAtEntry = _activeVideoRecordingAttempt;
     attempt?.disposed = true;
     attempt?.disposalPending = true;
@@ -519,6 +528,9 @@ class AndroidCameraCameraX extends CameraPlatform {
     final oldState = liveCameraState;
     final oldAnalysis = imageAnalysis;
     await unbinding;
+    if (failedBindingAtEntry) {
+      attempt?.bindingCleanupFailed = false;
+    }
     await oldPreview?.releaseSurfaceProvider();
     await oldState?.removeObservers();
     await oldAnalysis?.clearAnalyzer();
@@ -1172,7 +1184,7 @@ class AndroidCameraCameraX extends CameraPlatform {
         await _unbindUseCaseFromLifecycle(imageAnalysis!);
       }
       _checkRecordingStartAllowed(attempt);
-      await _bindUseCaseToLifecycle(capture, options.cameraId);
+      await _bindUseCaseToLifecycle(capture, options.cameraId, recordingAttempt: attempt);
       _checkRecordingStartAllowed(attempt);
       if (!captureOrientationLocked && shouldSetDefaultRotation) {
         await capture.setTargetRotation(await deviceOrientationManager.getDefaultDisplayRotation());
@@ -1269,6 +1281,9 @@ class AndroidCameraCameraX extends CameraPlatform {
   Future<XFile> _stopOwnedRecording(_VideoRecordingAttempt attempt) async {
     final handle = await attempt.handleReady.future;
     if (attempt.neverStarted) {
+      if (attempt.bindingCleanupFailed) {
+        throw CameraException('RECORDING_STOP_UNCONFIRMED', 'A late binding remains unconfirmed.');
+      }
       attempt.terminalConsumed = true;
       throw CameraException('RECORDING_NOT_STARTED', 'PendingRecording.start was never invoked.');
     }
@@ -1364,8 +1379,15 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// [cameraId] used to build [CameraEvent]s should you wish to filter
   /// these based on a reference to a cameraId received from calling
   /// [createCamera].
-  Future<void> _bindUseCaseToLifecycle(UseCase useCase, int cameraId) async {
-    final bool useCaseIsBound = await processCameraProvider!.isBound(useCase);
+  Future<void> _bindUseCaseToLifecycle(
+    UseCase useCase,
+    int cameraId, {
+    _VideoRecordingAttempt? recordingAttempt,
+  }) async {
+    final provider = recordingAttempt?.provider ?? processCameraProvider!;
+    final selector = cameraSelector;
+    final bool useCaseIsBound = await provider.isBound(useCase);
+    if (recordingAttempt != null) _checkRecordingStartAllowed(recordingAttempt);
     final bool useCaseIsPausedPreview = useCase is Preview && _previewIsPaused;
 
     if (useCaseIsBound || useCaseIsPausedPreview) {
@@ -1374,7 +1396,17 @@ class AndroidCameraCameraX extends CameraPlatform {
       return;
     }
 
-    camera = await processCameraProvider!.bindToLifecycle(cameraSelector!, <UseCase>[useCase]);
+    final boundCamera = await provider.bindToLifecycle(selector!, <UseCase>[useCase]);
+    if (recordingAttempt != null && recordingAttempt.stopRequested) {
+      try {
+        await provider.unbind(<UseCase>[useCase]);
+      } catch (_) {
+        recordingAttempt.bindingCleanupFailed = true;
+        rethrow;
+      }
+      _checkRecordingStartAllowed(recordingAttempt);
+    }
+    camera = boundCamera;
 
     await _updateCameraInfoAndLiveCameraState(cameraId);
   }
@@ -1922,6 +1954,7 @@ class _VideoRecordingAttempt {
   bool neverStarted = false;
   bool disposed = false;
   bool disposalPending = false;
+  bool bindingCleanupFailed = false;
   bool stopRequested = false;
   bool terminalConsumed = false;
 
