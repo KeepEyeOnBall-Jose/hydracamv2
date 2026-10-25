@@ -9,6 +9,7 @@ import "package:hydracam/models/camera_capture_settings.dart";
 import "package:hydracam/services/camera_service.dart";
 import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/manual_exposure_service.dart";
+import "package:hydracam/services/recorded_video_snapshots.dart";
 import "package:hydracam/services/session_manager.dart";
 import "package:hydracam/services/settings_service.dart";
 import "package:mocktail/mocktail.dart";
@@ -668,6 +669,37 @@ void main() {
     }
   });
 
+  test("forced stop rechecks original session after device identity resolves",
+      () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance.startSession("original", "original",
+        deviceType: "Master");
+    final requested = Completer<void>();
+    final identity = Completer<String>();
+    final service = _StoppedMetadataCamera(
+        storageService: storageService,
+        deviceIdProvider: () {
+          requested.complete();
+          return identity.future;
+        });
+    await service.startRecordingVideo();
+    final stopping = service.forceStopRecordingDueToBattery();
+    await requested.future;
+    await SessionManager.instance.endSession();
+    SessionManager.instance.startSession("replacement", "replacement",
+        deviceType: "Master");
+    identity.complete("existing-device");
+    try {
+      await stopping;
+      expect(SessionManager.instance.currentSession?.capturedVideos, isEmpty);
+      expect(service.acknowledged, isFalse);
+    } finally {
+      await SessionManager.instance.endSession();
+    }
+  });
+
   test("critical storage force stop saves mock recording and interrupts",
       () async {
     if (SessionManager.instance.isSessionActive) {
@@ -923,6 +955,32 @@ void main() {
 
     expect(cameraService.isUsingMockCamera, isFalse);
   });
+}
+
+class _StoppedMetadataCamera extends CameraService {
+  _StoppedMetadataCamera(
+      {required super.storageService, required super.deviceIdProvider})
+      : super(useMockCamera: true);
+
+  bool acknowledged = false;
+
+  @override
+  Future<String> stopRecordingVideo() async => "opaque-sdk-return-path";
+
+  @override
+  Future<RecordedVideoSnapshot> snapshotForRecordedVideo(String path) async =>
+      RecordedVideoSnapshot.capture(
+          captureId: "original-capture",
+          path: path,
+          startedAt: DateTime.utc(2026, 10, 25),
+          stoppedAt: DateTime.utc(2026, 10, 25, 0, 0, 1),
+          context: null,
+          sessionGuid: "original");
+
+  @override
+  Future<void> acknowledgeRecordedVideo(RecordedVideoSnapshot snapshot) async {
+    acknowledged = true;
+  }
 }
 
 class _FakeCameraPlatform extends CameraPlatform {
