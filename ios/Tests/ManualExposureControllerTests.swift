@@ -160,6 +160,27 @@ final class ManualExposureControllerTests: XCTestCase {
     XCTAssertEqual(controller.release(ownerId: "recording-A", cameraName: camera.uniqueID)["status"] as? String, "released")
     XCTAssertEqual(camera.exposureMode, .autoExpose)
   }
+
+  func testRestorationWaitsForPendingNativeExposureCompletion() {
+    let controller = controller()
+    camera.holdExposureCompletion = true
+    var response: [String: Any?]?
+    controller.applyLock(ownerId: "recording-A", cameraName: camera.uniqueID,
+      exposureTimeNs: 16_666_667, frameDurationNs: 33_333_333) { response = $0 }
+
+    let pendingRelease = controller.release(ownerId: "recording-A", cameraName: camera.uniqueID)
+
+    XCTAssertEqual(pendingRelease["status"] as? String, "busy")
+    XCTAssertEqual(pendingRelease["cleanupRequired"] as? Bool, true)
+    XCTAssertEqual(camera.exposureMode, .custom)
+    XCTAssertEqual(apply(controller, ownerId: "recording-B")["status"] as? String, "busy")
+    camera.completeExposure()
+    XCTAssertNotNil(response)
+    XCTAssertEqual(controller.release(ownerId: "recording-A", cameraName: camera.uniqueID)["status"] as? String, "released")
+    XCTAssertEqual(camera.exposureMode, .autoExpose)
+    XCTAssertEqual(camera.whiteBalanceMode, .autoWhiteBalance)
+    XCTAssertEqual(camera.focusMode, .autoFocus)
+  }
 }
 
 /// The external camera boundary only; all ownership decisions run in the
