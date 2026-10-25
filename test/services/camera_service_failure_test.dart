@@ -443,6 +443,30 @@ void main() {
     }
   });
 
+  test("hardware stop finalizes the original start that replies late", () async {
+    final started = Completer<void>();
+    final events = <String>[];
+    final platform = _FakeCameraPlatform(
+        startRecordingReply: started.future, onEvent: events.add);
+    CameraPlatform.instance = platform;
+    final service = CameraService(storageService: storageService);
+    final starting = service.startRecordingVideo().then<Object?>(
+        (_) => null, onError: (Object error) => error);
+    while (platform.recordingStarts == 0) {
+      await Future<void>.delayed(Duration.zero);
+    }
+    final stopping = service.stopCamera();
+    await Future<void>.delayed(Duration.zero);
+    expect(events, isNot(contains("dispose")),
+        reason: "An unpatched platform must stop before native disposal");
+    started.complete();
+    await stopping;
+    await starting;
+    expect(platform.recordingStops, 1);
+    expect(events.indexOf("stop"), lessThan(events.indexOf("dispose")));
+    expect(service.isRecording, isFalse);
+  });
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
@@ -871,6 +895,7 @@ class _FakeCameraPlatform extends CameraPlatform {
     this.startRecordingFailures,
     this.onEvent,
     this.setFlashModeError,
+    this.startRecordingReply,
   }) : cameras = cameras ??
             const [
               CameraDescription(
@@ -885,6 +910,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   int? startRecordingFailures;
   final void Function(String)? onEvent;
   final PlatformException? setFlashModeError;
+  final Future<void>? startRecordingReply;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
   CameraDescription? lastCreatedCamera;
@@ -964,6 +990,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   Future<void> startVideoCapturing(VideoCaptureOptions options) async {
     recordingStarts++;
     onEvent?.call("start");
+    await startRecordingReply;
     final error = startRecordingError;
     if (error != null &&
         (startRecordingFailures == null || startRecordingFailures! > 0)) {
@@ -978,6 +1005,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   @override
   Future<XFile> stopVideoRecording(int cameraId) async {
     recordingStops++;
+    onEvent?.call("stop");
     if (!_isRecording) {
       throw PlatformException(
         code: "No video is recording",
