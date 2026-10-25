@@ -69,7 +69,7 @@ void main() {
     attempt.emit(_Finalize());
     attempt.returnHandle();
 
-    expect(await rig.bounded(starting), isNot(isA<_Pending>()));
+    expect(await rig.bounded(starting), anyOf(isNull, isA<CameraException>()));
     final stopped =
         await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(stopped, isA<XFile>());
@@ -320,6 +320,7 @@ class _Rig {
   }
 
   Future<void> settleTestDoubles() async {
+    // Bounded fixture cleanup is not proof of plugin/native settlement.
     for (final attempt in attempts) {
       attempt.returnHandle();
     }
