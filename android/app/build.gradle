@@ -56,6 +56,22 @@ android {
         buildConfig = true
     }
 
+    // Match the vendored CameraX plugin's native test environment.
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+            all {
+                outputs.upToDateWhen { false }
+                testLogging {
+                    events("passed", "skipped", "failed", "standardOut", "standardError")
+                    showStandardStreams = true
+                }
+                jvmArgs("-Xmx1G")
+            }
+        }
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         // Exactly one of these source sets is compiled. Both define
@@ -125,6 +141,10 @@ dependencies {
     // ListenableFuture for Camera2CameraControl; same version as the plugin.
     implementation "com.google.guava:guava:33.5.0-android"
     testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito:mockito-core:5.23.0"
+    testImplementation "org.mockito:mockito-inline:5.2.0"
+    testImplementation "androidx.test:core:1.7.0"
+    testImplementation "org.robolectric:robolectric:4.16"
 }
 
 tasks.withType(JavaCompile).configureEach { task ->
