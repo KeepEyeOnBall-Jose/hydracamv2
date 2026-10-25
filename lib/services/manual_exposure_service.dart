@@ -1,4 +1,5 @@
 import "package:flutter/services.dart";
+import "package:uuid/uuid.dart";
 
 import "../models/camera_capture_settings.dart";
 import "../models/json_value_parsers.dart";
@@ -6,7 +7,8 @@ import "../models/recording_exposure_metadata.dart";
 
 /// Client for the native manual exposure channel (Camera2 interop on Android,
 /// AVFoundation on iOS). Every call degrades to null when the platform side is
-/// missing, so capture never fails because of exposure control.
+/// missing. Unresolved native mutations retain their owner so a later capture
+/// cannot silently inherit unknown settings.
 class ManualExposureService {
   ManualExposureService({MethodChannel? channel})
       : _channel = channel ?? _defaultChannel;
@@ -19,19 +21,24 @@ class ManualExposureService {
   /// Locks exposure time, metered ISO, white balance and focus on [cameraName]
   /// (the Flutter camera description name).
   Future<Map<String, dynamic>?> applyLock({
+    required String ownerId,
     required String cameraName,
     required int exposureTimeNs,
     required int frameDurationNs,
   }) {
     return _invoke("applyLock", {
+      "ownerId": ownerId,
       "cameraName": cameraName,
       "exposureTimeNs": exposureTimeNs,
       "frameDurationNs": frameDurationNs,
     });
   }
 
-  Future<Map<String, dynamic>?> release({required String cameraName}) {
-    return _invoke("release", {"cameraName": cameraName});
+  Future<Map<String, dynamic>?> release({
+    required String cameraName,
+    required String ownerId,
+  }) {
+    return _invoke("release", {"cameraName": cameraName, "ownerId": ownerId});
   }
 
   /// Values the sensor used for the latest frame.
@@ -76,6 +83,7 @@ class RecordingExposureSession {
   final ExposurePreset preset;
   final String cameraName;
   final int frameDurationNs;
+  final String ownerId = const Uuid().v4();
 
   /// Wait after recording starts before sampling, so the sample reflects the
   /// recording session rather than the preview it replaced.
@@ -89,7 +97,8 @@ class RecordingExposureSession {
 
   String get lockStatus => _lockStatus;
   bool get isLocked => _lockStatus == "locked";
-  bool get cleanupPending => _needsRelease;
+  bool get cleanupPending => _needsRelease || mutationPending;
+  bool get mutationPending => _pendingApply != null;
 
   Future<void> lockBeforeStart() async {
     final exposureTimeNs = preset.exposureTimeNs;
@@ -99,11 +108,12 @@ class RecordingExposureSession {
     }
     _lock = await _applyLock(exposureTimeNs);
     _lockStatus = _lock?["status"]?.toString() ?? "unavailable";
-    _needsRelease = isLocked;
+    _needsRelease = _needsRelease || isLocked;
   }
 
-  /// Starting a recording reconfigures the capture session on Android, so the
-  /// lock is applied again before sampling what the sensor uses.
+  /// Confirm the same owner's lock after recording starts before sampling.
+  /// CameraX retains request options across ordinary use-case transitions;
+  /// this confirmation is not evidence of an earlier automatic-exposure gap.
   void afterStart() {
     _startSnapshot = _sampleAfterStart();
   }
@@ -120,7 +130,9 @@ class RecordingExposureSession {
     // Cleanup may await native work while a timed-out relock completes. Keep
     // the recording status observed at the snapshot deadline.
     final recordingLockStatus = _lockStatus;
-    await abort();
+    await abort().timeout(snapshotTimeout, onTimeout: () {
+      _lock = {...?_lock, "releaseStatus": "pending"};
+    });
     return RecordingExposureMetadata.fromSnapshots(
       preset: preset.storageValue,
       lockStatus: recordingLockStatus,
@@ -134,18 +146,34 @@ class RecordingExposureSession {
   /// Attempts to restore the camera's previous auto modes. Concurrent callers
   /// share settlement; a failed acknowledgement remains eligible for retry.
   Future<void> abort() {
-    if (!_needsRelease) {
+    _cleanupRequested = true;
+    if (!cleanupPending) {
       return Future<void>.value();
     }
     return _releaseFuture ??= _release();
   }
 
   bool _needsRelease = false;
+  bool _cleanupRequested = false;
+  Future<Map<String, dynamic>?>? _pendingApply;
   Future<void>? _releaseFuture;
 
   Future<void> _release() async {
     try {
-      final result = await _service.release(cameraName: cameraName);
+      final applying = _pendingApply;
+      if (applying != null) {
+        try {
+          await applying;
+        } catch (_) {
+          // The initial caller observes the error. An uncertain mutation
+          // still needs its original owner's restoration attempt.
+        }
+      }
+      if (!_needsRelease) {
+        return;
+      }
+      final result =
+          await _service.release(cameraName: cameraName, ownerId: ownerId);
       final status = result?["status"]?.toString() ?? "unavailable";
       _lock = {...?_lock, "releaseStatus": status};
       if (status == "released") {
@@ -157,6 +185,9 @@ class RecordingExposureSession {
   }
 
   Future<Map<String, dynamic>?> _sampleAfterStart() async {
+    if (_cleanupRequested) {
+      return null;
+    }
     final exposureTimeNs = preset.exposureTimeNs;
     if (isLocked && exposureTimeNs != null) {
       // A preview acknowledgement does not establish that this relock has
@@ -172,10 +203,29 @@ class RecordingExposureSession {
   }
 
   Future<Map<String, dynamic>?> _applyLock(int exposureTimeNs) {
-    return _service.applyLock(
-      cameraName: cameraName,
-      exposureTimeNs: exposureTimeNs,
-      frameDurationNs: frameDurationNs,
-    );
+    late final Future<Map<String, dynamic>?> applying;
+    applying = Future<Map<String, dynamic>?>.sync(() => _service.applyLock(
+          ownerId: ownerId,
+          cameraName: cameraName,
+          exposureTimeNs: exposureTimeNs,
+          frameDurationNs: frameDurationNs,
+        )).then((result) {
+      final status = result?["status"]?.toString();
+      _needsRelease = _needsRelease ||
+          status == "locked" ||
+          status == "busy" ||
+          result?["cleanupRequired"] == true ||
+          (status == "error" && result?["cleanupRequired"] != false);
+      return result;
+    }, onError: (Object error, StackTrace stack) {
+      _needsRelease = true;
+      Error.throwWithStackTrace(error, stack);
+    }).whenComplete(() {
+      if (identical(_pendingApply, applying)) {
+        _pendingApply = null;
+      }
+    });
+    _pendingApply = applying;
+    return applying;
   }
 }

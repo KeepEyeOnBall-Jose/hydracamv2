@@ -412,7 +412,34 @@ class CameraService {
   /// Starts recording a video.
   ///
   /// - `enableFlash`: Whether to enable the flash during recording (default: `false`).
-  Future<void> startRecordingVideo({bool enableFlash = false}) async {
+  Future<void>? _recordingStartInFlight;
+  Future<String>? _recordingStopInFlight;
+
+  Future<void> startRecordingVideo({bool enableFlash = false}) {
+    final inFlight = _recordingStartInFlight;
+    if (inFlight != null) {
+      return inFlight;
+    }
+    late final Future<void> starting;
+    starting = _startRecordingVideo(enableFlash: enableFlash).whenComplete(() {
+      if (identical(_recordingStartInFlight, starting)) {
+        _recordingStartInFlight = null;
+      }
+    });
+    _recordingStartInFlight = starting;
+    return starting;
+  }
+
+  Future<void> _startRecordingVideo({required bool enableFlash}) async {
+    // Capture the operation present at entry: a later stop may itself be
+    // waiting for this start, so never create a cycle between their futures.
+    final stopping = _recordingStopInFlight;
+    if (stopping != null) {
+      await stopping;
+    }
+    if (_isRecording) {
+      throw StateError("A video recording is already active");
+    }
     // Check if storage is critically low before proceeding
     if (_storageService.isRecordingBlocked) {
       LogService.instance
@@ -451,8 +478,7 @@ class CameraService {
       }
 
       await _lockRecordingExposure();
-      final startTime = DateTime.now();
-      await _startVideoRecordingWithFallback();
+      final startTime = await _startVideoRecordingWithFallback();
       videoStartRecordingDate = startTime;
       _recordingExposure?.afterStart();
       LogService.instance.registerLog(
@@ -473,7 +499,26 @@ class CameraService {
   /// Stops recording a video and saves it to the gallery.
   ///
   /// - Returns the file path of the recorded video.
-  Future<String> stopRecordingVideo() async {
+  Future<String> stopRecordingVideo() {
+    final inFlight = _recordingStopInFlight;
+    if (inFlight != null) {
+      return inFlight;
+    }
+    late final Future<String> stopping;
+    stopping = _stopRecordingVideo().whenComplete(() {
+      if (identical(_recordingStopInFlight, stopping)) {
+        _recordingStopInFlight = null;
+      }
+    });
+    _recordingStopInFlight = stopping;
+    return stopping;
+  }
+
+  Future<String> _stopRecordingVideo() async {
+    final starting = _recordingStartInFlight;
+    if (starting != null) {
+      await starting;
+    }
     try {
       if (_useMockCamera) {
         return await _stopMockVideoRecording();
@@ -784,9 +829,11 @@ class CameraService {
     }
   }
 
-  Future<void> _startVideoRecordingWithFallback() async {
+  Future<DateTime> _startVideoRecordingWithFallback() async {
     try {
+      final startedAt = DateTime.now();
       await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
+      return startedAt;
     } on TimeoutException catch (error, stackTrace) {
       LogService.instance.registerLog(
           "Camera video recording start timed out after "
@@ -794,6 +841,10 @@ class CameraService {
           "$error\n$stackTrace");
       rethrow;
     } catch (error, stackTrace) {
+      if (!_controllerUsesExplicitFps) {
+        rethrow;
+      }
+      await _abortRecordingExposure(requireReleased: true);
       final didRecover = await _reinitializeWithoutExplicitFps(
         "video recording start",
         error,
@@ -802,7 +853,11 @@ class CameraService {
       if (!didRecover) {
         rethrow;
       }
+      recordingCaptureContext = await _buildCurrentCaptureContext();
+      await _lockRecordingExposure();
+      final startedAt = DateTime.now();
       await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
+      return startedAt;
     }
   }
 
@@ -1098,11 +1153,18 @@ class CameraService {
     );
     _recordingExposure = session;
     try {
-      await session.lockBeforeStart();
+      await session.lockBeforeStart().timeout(_cameraOperationTimeout);
+      if (session.lockStatus == "busy" ||
+          (!session.isLocked && session.cleanupPending)) {
+        throw StateError("Exposure ownership is unresolved before recording");
+      }
       LogService.instance.registerLog(
           "Exposure preset ${preset.storageValue}: ${session.lockStatus}");
     } catch (error) {
       LogService.instance.registerLog("Exposure lock failed: $error");
+      if (session.cleanupPending) {
+        rethrow;
+      }
     }
   }
 
@@ -1133,7 +1195,9 @@ class CameraService {
   Future<void> _abortRecordingExposure({bool requireReleased = false}) async {
     final session = _recordingExposure;
     try {
-      await session?.abort();
+      if (session != null) {
+        await session.abort().timeout(session.snapshotTimeout);
+      }
     } catch (error) {
       LogService.instance.registerLog("Exposure release failed: $error");
     }
