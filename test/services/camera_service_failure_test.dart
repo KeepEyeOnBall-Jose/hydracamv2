@@ -228,6 +228,83 @@ void main() {
     });
   }
 
+  test("concurrent starts share the same pending exposure owner", () async {
+    const channel = MethodChannel("hydracam-concurrent-start-test");
+    final applied = Completer<Object?>();
+    var locks = 0;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+      if (call.method == "applyLock") {
+        locks++;
+        return applied.future;
+      }
+      return {"status": "released"};
+    });
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    final first = service.startRecordingVideo();
+    final second = service.startRecordingVideo();
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    try {
+      expect(locks, 1);
+      expect(platform.createdCameras, 1);
+    } finally {
+      applied.complete({"status": "locked"});
+      await Future.wait([first, second]);
+    }
+    expect(platform.recordingStarts, 1);
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    await service.stopCamera();
+  });
+
+  test("start waits for concurrent stop cleanup instead of replacing its owner",
+      () async {
+    const channel = MethodChannel("hydracam-concurrent-stop-test");
+    final released = Completer<Object?>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+            channel,
+            (call) async => call.method == "release"
+                ? released.future
+                : {"status": call.method == "applyLock" ? "locked" : "ok"});
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    await service.startRecordingVideo();
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    final stopping = service
+        .stopRecordingVideo()
+        .then<Object?>((v) => v, onError: (Object error) => error);
+    var nextStartDone = false;
+    final starting = service.startRecordingVideo().then<Object?>((_) {
+      nextStartDone = true;
+      return null;
+    }, onError: (Object error) => error);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    try {
+      expect(nextStartDone, isFalse);
+      expect(platform.recordingStarts, 1);
+    } finally {
+      released.complete({"status": "released"});
+      await Future.wait([stopping, starting]);
+    }
+    // The platform double intentionally returns no media file. This verifies
+    // ordering/ownership only, not a saved-video or physical-camera witness.
+    expect(await stopping, isA<Exception>());
+    expect(platform.recordingStarts, 1);
+  });
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
