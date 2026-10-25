@@ -310,7 +310,7 @@ void main() {
         .setMockMethodCallHandler(
             channel,
             (call) async => call.method == "release"
-                ? released.future
+                ? await released.future
                 : {"status": call.method == "applyLock" ? "locked" : "ok"});
     addTearDown(() => TestDefaultBinaryMessengerBinding
         .instance.defaultBinaryMessenger
@@ -322,17 +322,20 @@ void main() {
         manualExposureService: ManualExposureService(channel: channel));
     await service.startRecordingVideo();
     await Future<void>.delayed(const Duration(milliseconds: 600));
+    var stopDone = false;
     final stopping = service
         .stopRecordingVideo()
-        .then<Object?>((v) => v, onError: (Object error) => error);
+        .then<Object?>((v) => v, onError: (Object error) => error)
+        .whenComplete(() => stopDone = true);
     var nextStartDone = false;
-    final starting = service.startRecordingVideo().then<Object?>((_) {
-      nextStartDone = true;
-      return null;
-    }, onError: (Object error) => error);
+    final starting = service
+        .startRecordingVideo()
+        .then<Object?>((_) => null, onError: (Object error) => error)
+        .whenComplete(() => nextStartDone = true);
     await Future<void>.delayed(const Duration(milliseconds: 20));
     try {
       expect(nextStartDone, isFalse);
+      expect(stopDone, isFalse);
       expect(platform.recordingStarts, 1);
     } finally {
       released.complete({"status": "released"});
@@ -341,6 +344,11 @@ void main() {
     // The platform double intentionally returns no media file. This verifies
     // ordering/ownership only, not a saved-video or physical-camera witness.
     expect(await stopping, isA<Exception>());
+    expect(await starting, same(await stopping),
+        reason:
+            "The next start must consume the same acknowledged stop result");
+    expect(stopDone, isTrue);
+    expect(nextStartDone, isTrue);
     expect(platform.recordingStarts, 1);
   });
 
@@ -470,14 +478,16 @@ void main() {
   test("a hung exposure read cannot delay the native recording stop", () async {
     const channel = MethodChannel("hydracam-stop-read-test");
     final sensor = Completer<Object?>();
+    var readReturned = false;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(
-            channel,
-            (call) async => call.method == "readCaptureSettings"
-                ? sensor.future
-                : {
-                    "status": call.method == "applyLock" ? "locked" : "released"
-                  });
+        .setMockMethodCallHandler(channel, (call) async {
+      if (call.method == "readCaptureSettings") {
+        final value = await sensor.future;
+        readReturned = true;
+        return value;
+      }
+      return {"status": call.method == "applyLock" ? "locked" : "released"};
+    });
     addTearDown(() => TestDefaultBinaryMessengerBinding
         .instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, null));
@@ -494,6 +504,8 @@ void main() {
     try {
       expect(platform.recordingStops, 1,
           reason: "A sensor timeout must not keep the encoder running");
+      expect(readReturned, isFalse,
+          reason: "Native STOP must precede the actual sensor reply");
     } finally {
       sensor.complete({"status": "ok"});
       await stopping;
