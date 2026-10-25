@@ -153,6 +153,8 @@ void main() {
     await exposure.abort();
     await exposure.abort();
     expect(calls.where((call) => call.method == "release"), hasLength(2));
+    expect(metadata.lock, containsPair("releaseStatus", "error"),
+        reason: "A later retry must not rewrite already returned metadata");
   });
 
   test("concurrent abort calls share one in-flight release", () async {

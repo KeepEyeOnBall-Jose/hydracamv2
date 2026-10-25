@@ -98,6 +98,7 @@ class RecordingExposureSession {
     }
     _lock = await _applyLock(exposureTimeNs);
     _lockStatus = _lock?["status"]?.toString() ?? "unavailable";
+    _needsRelease = isLocked;
   }
 
   /// Starting a recording reconfigures the capture session on Android, so the
@@ -115,10 +116,13 @@ class RecordingExposureSession {
   Future<RecordingExposureMetadata> finish() async {
     final start = await (_startSnapshot ?? Future.value(null))
         .timeout(snapshotTimeout, onTimeout: () => {"status": "timeout"});
+    // Cleanup may await native work while a timed-out relock completes. Keep
+    // the recording status observed at the snapshot deadline.
+    final recordingLockStatus = _lockStatus;
     await abort();
     return RecordingExposureMetadata.fromSnapshots(
       preset: preset.storageValue,
-      lockStatus: _lockStatus,
+      lockStatus: recordingLockStatus,
       requestedExposureTimeNs: preset.exposureTimeNs,
       lock: _lock,
       start: start,
@@ -126,22 +130,40 @@ class RecordingExposureSession {
     );
   }
 
-  /// Restores the camera's previous auto modes. Safe to call more than once.
-  Future<void> abort() async {
-    if (!isLocked || _released) {
-      return;
+  /// Attempts to restore the camera's previous auto modes. Concurrent callers
+  /// share settlement; a failed acknowledgement remains eligible for retry.
+  Future<void> abort() {
+    if (!_needsRelease) {
+      return Future<void>.value();
     }
-    _released = true;
-    await _service.release(cameraName: cameraName);
+    return _releaseFuture ??= _release();
   }
 
-  bool _released = false;
+  bool _needsRelease = false;
+  Future<void>? _releaseFuture;
+
+  Future<void> _release() async {
+    try {
+      final result = await _service.release(cameraName: cameraName);
+      final status = result?["status"]?.toString() ?? "unavailable";
+      _lock = {...?_lock, "releaseStatus": status};
+      if (status == "released") {
+        _needsRelease = false;
+      }
+    } finally {
+      _releaseFuture = null;
+    }
+  }
 
   Future<Map<String, dynamic>?> _sampleAfterStart() async {
     final exposureTimeNs = preset.exposureTimeNs;
     if (isLocked && exposureTimeNs != null) {
+      // A preview acknowledgement does not establish that this relock has
+      // succeeded. Keep cleanup eligibility separately from recording truth.
+      _lockStatus = "unavailable";
       final relock = await _applyLock(exposureTimeNs);
       final relockStatus = relock?["status"]?.toString() ?? "unavailable";
+      _lockStatus = relockStatus;
       _lock = {...?_lock, "relockAfterStartStatus": relockStatus};
     }
     await Future<void>.delayed(settleDelay);
