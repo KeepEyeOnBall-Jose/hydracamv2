@@ -79,7 +79,16 @@ void main() {
       "readCaptureSettings",
       "release",
     ]);
+    final owner = (calls.first.arguments as Map)["ownerId"];
+    expect(owner, isA<String>());
+    expect((owner as String).isNotEmpty, isTrue);
+    expect(
+        calls
+            .where((call) => call.method != "readCaptureSettings")
+            .map((call) => (call.arguments as Map)["ownerId"]),
+        everyElement(owner));
     expect(calls.first.arguments, {
+      "ownerId": owner,
       "cameraName": "2",
       "exposureTimeNs": 8333333,
       "frameDurationNs": 33333333,
@@ -241,6 +250,61 @@ void main() {
     expect(metadata.lockStatus, "unavailable");
     expect(metadata.isLocked, isFalse);
     expect(metadata.start, containsPair("status", "timeout"));
+  });
+
+  for (final status in ["locked", "error"]) {
+    test("abort retains a pending apply until late $status can be cleaned up",
+        () async {
+      final applied = Completer<Object?>();
+      handle((call) => call.method == "applyLock"
+          ? applied.future
+          : Future.value({"status": "released"}));
+      final exposure = session(ExposurePreset.shutter1_60);
+      final locking = exposure.lockBeforeStart();
+      var cleanupDone = false;
+      final aborting = exposure.abort().then((_) => cleanupDone = true);
+      await Future<void>.delayed(Duration.zero);
+      try {
+        expect(cleanupDone, isFalse);
+        expect(exposure.cleanupPending, isTrue);
+        expect(calls.where((call) => call.method == "release"), isEmpty);
+      } finally {
+        applied.complete({"status": status, "cleanupRequired": true});
+        await Future.wait([locking, aborting]);
+      }
+      expect(calls.where((call) => call.method == "release"), hasLength(1));
+      expect(exposure.cleanupPending, isFalse);
+    });
+  }
+
+  test("finish bounds pending release while retaining its original cleanup",
+      () async {
+    final released = Completer<Object?>();
+    handle((call) => call.method == "release"
+        ? released.future
+        : Future.value({"status": "locked"}));
+    final exposure =
+        session(ExposurePreset.shutter1_60, snapshotTimeout: Duration.zero);
+    await exposure.lockBeforeStart();
+    var finished = false;
+    final finishing = exposure.finish().then((metadata) {
+      finished = true;
+      return metadata;
+    });
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    try {
+      expect(finished, isTrue);
+      expect(exposure.cleanupPending, isTrue);
+      final metadata = await finishing;
+      expect(metadata.lock, containsPair("releaseStatus", "pending"));
+    } finally {
+      released.complete({"status": "released"});
+      await finishing;
+      await Future<void>.delayed(Duration.zero);
+    }
+    expect(exposure.cleanupPending, isFalse);
+    expect((await finishing).lock, containsPair("releaseStatus", "pending"),
+        reason: "Late acknowledgement must not rewrite returned metadata");
   });
 
   test("unsupported camera records the status and never releases", () async {
