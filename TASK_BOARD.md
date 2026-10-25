@@ -9,16 +9,19 @@
   report pending/error relock truth, coalesce bounded cleanup, reject stale
   camera/session results, and preserve immutable per-path recovery metadata.
   Failed starts schedule hardware cleanup without relying on a visible STOP.
-- Actual source evidence: initial seven Dart regressions failed first; vendor
-  lifecycle 10, snapshot 6 and consumer 7 cases passed in run `40237419446`.
-  Native identity baseline `40239147623` executed 10 cases: 3 passed, 7
-  assertions failed, zero skipped/errors. Identity repair and nearby ownership
-  16-case validation await the combined native GREEN run.
-- Latest diagnostic full suite `40239133047`: 802 passed, one failed, one
-  existing gated live-upload skip. The remaining recovery fixture returned a
-  nested nullable Future before its ACK; an exact pinned-Dart probe reproduced
-  that issue and explicit awaits corrected it. New failed-start observer tests
-  and final combined source still require current-head normal CI.
+- Actual source evidence: native identity baseline `40239147623` produced
+  seven assertion failures; corrected identity10 and nearby ownership16 all
+  passed with zero skips/errors in `40243403015`. Android/dependency inputs
+  match the current product source; diagnostic workflow changes are excluded.
+- Current published `d429f3db` normal Flutter run `40242677053`: 804 passed,
+  one existing gated live-upload skip; format/analyze passed. Its docs check
+  found nine vendored Markdown formatting issues, corrected locally.
+- Disk-custody regressions `40244522804`: 805 passed, six expected failures,
+  one existing skip. A swallowed metadata write failure/RAM queue could delete
+  the only durable recovery receipt. The repair now verifies raw original
+  session GUID, path, timestamps and nested context from disk before ACK;
+  unreadable/missing/mismatched evidence retains and logs pending recovery.
+  Final normal PR qualification of this repair remains pending.
 - CameraX 1.6.2 retains camera-scoped request options through graph replacement;
   no normal-path exposure-reset counterexample established. First-frame and
   whole-clip acceptance remain unverified. Historical 16-preset phone receipts

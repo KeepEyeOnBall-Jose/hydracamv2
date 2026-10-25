@@ -15,6 +15,7 @@ import "debug_session_policy.dart";
 import "device_service.dart";
 import "hydracam_api_service.dart" as api;
 import "log_service.dart";
+import "recorded_video_snapshots.dart";
 import "dart:io";
 
 /// A global manager to handle session-related information across Master and Slave.
@@ -350,6 +351,44 @@ class SessionManager extends ChangeNotifier {
     } catch (e) {
       LogService.instance.registerLog("Error loading session metadata: $e");
       return null;
+    }
+  }
+
+  /// Read-only proof before discarding a recording's recovery receipt.
+  /// Unlike the legacy loader, this never repairs identity or defaults fields.
+  Future<bool> hasPersistedRecordingSnapshot(
+      RecordedVideoSnapshot snapshot) async {
+    final guid = snapshot.sessionGuid;
+    final started = snapshot.startedAt;
+    final stopped = snapshot.stoppedAt;
+    if (guid == null ||
+        guid.isEmpty ||
+        guid != guid.trim() ||
+        RegExp(r"[/\\]").hasMatch(guid) ||
+        started == null ||
+        stopped == null) {
+      return false;
+    }
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File("${directory.path}/session_$guid/metadata.json");
+      final metadata = jsonDecode(await file.readAsString());
+      if (metadata is! Map<String, dynamic> ||
+          metadata["sessionGuid"] != guid ||
+          metadata["videos"] is! List) {
+        return false;
+      }
+      final expectedContext = jsonEncode(snapshot.toJson()["context"]);
+      return (metadata["videos"] as List).any((row) =>
+          row is Map<String, dynamic> &&
+          row["videoPath"] == snapshot.path &&
+          row["startRecordingDate"] == started.toIso8601String() &&
+          row["endRecordingDate"] == stopped.toIso8601String() &&
+          jsonEncode(row["captureContext"]) == expectedContext);
+    } catch (error) {
+      LogService.instance
+          .registerLog("Recording metadata disk verification failed: $error");
+      return false;
     }
   }
 

@@ -650,8 +650,16 @@ class CameraService {
     return snapshot;
   }
 
-  Future<void> acknowledgeRecordedVideo(RecordedVideoSnapshot snapshot) =>
-      _recordedVideoSnapshots.acknowledge(snapshot);
+  Future<void> acknowledgeRecordedVideo(RecordedVideoSnapshot snapshot) async {
+    if (!await SessionManager.instance
+        .hasPersistedRecordingSnapshot(snapshot)) {
+      LogService.instance.registerLog(
+          "Recording metadata remains pending recovery: original session "
+          "disk custody is not confirmed.");
+      return;
+    }
+    await _recordedVideoSnapshots.acknowledge(snapshot);
+  }
 
   Duration _remaining(DateTime deadline) {
     final left = deadline.difference(DateTime.now());

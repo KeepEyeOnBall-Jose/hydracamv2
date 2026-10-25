@@ -162,5 +162,7 @@ which lens camera 0 is before the court run (see Known gaps).
   separate acceptance work.
 - A terminal native path first gets an immutable, explicitly pending recovery
   receipt. Receipt-write failures retain the original result for retry; normal
-  session persistence acknowledges it. A receipt or returned path does not
+  session metadata must be read back with the exact original identity, path,
+  timestamps and context before acknowledging it. A failed or mismatched disk
+  save retains the recovery receipt. A receipt or returned path does not
   itself prove playable media or successful server upload.
