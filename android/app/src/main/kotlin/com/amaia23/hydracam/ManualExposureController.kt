@@ -32,6 +32,8 @@ class ManualExposureController(
 	private var lockedRequest: Map<String, Any?>? = null
 
 	fun applyLock(
+		ownerId: String,
+		cameraName: String,
 		exposureTimeNs: Long,
 		frameDurationNs: Long,
 		onDone: (Map<String, Any?>) -> Unit,
@@ -104,7 +106,7 @@ class ManualExposureController(
 		)
 	}
 
-	fun release(onDone: (Map<String, Any?>) -> Unit) {
+	fun release(ownerId: String, cameraName: String, onDone: (Map<String, Any?>) -> Unit) {
 		val camera = HydracamCaptureHooks.getBoundCamera()
 		val cameraId = camera?.let { cameraIdFor(infoFor(it)) }
 		val previous = optionsBeforeLock

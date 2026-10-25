@@ -102,21 +102,32 @@ class MainActivity: FlutterActivity() {
 			.setMethodCallHandler { call, result ->
 				when (call.method) {
 					"applyLock" -> {
+						val ownerId = call.argument<String>("ownerId")
+						val cameraName = call.argument<String>("cameraName")
 						val exposureTimeNs = call.argument<Number>("exposureTimeNs")?.toLong()
 						val frameDurationNs = call.argument<Number>("frameDurationNs")?.toLong()
-						if (exposureTimeNs == null || frameDurationNs == null) {
+						if (ownerId.isNullOrBlank() || cameraName.isNullOrBlank() ||
+							exposureTimeNs == null || frameDurationNs == null) {
 							result.error(
 								"missing_arguments",
-								"exposureTimeNs and frameDurationNs are required",
+								"ownerId, cameraName, exposureTimeNs and frameDurationNs are required",
 								null
 							)
 						} else {
-							manualExposureController.applyLock(exposureTimeNs, frameDurationNs) {
+							manualExposureController.applyLock(ownerId, cameraName, exposureTimeNs, frameDurationNs) {
 								result.success(it)
 							}
 						}
 					}
-					"release" -> manualExposureController.release { result.success(it) }
+					"release" -> {
+						val ownerId = call.argument<String>("ownerId")
+						val cameraName = call.argument<String>("cameraName")
+						if (ownerId.isNullOrBlank() || cameraName.isNullOrBlank()) {
+							result.error("missing_arguments", "ownerId and cameraName are required", null)
+						} else {
+							manualExposureController.release(ownerId, cameraName) { result.success(it) }
+						}
+					}
 					"readCaptureSettings" ->
 						result.success(manualExposureController.readCaptureSettings())
 					else -> result.notImplemented()
