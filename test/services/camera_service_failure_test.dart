@@ -367,7 +367,7 @@ void main() {
                   "Recovery fixture native ACK owner=$owner value=$value");
             }));
           }
-          return retryCleanup ? released.future : {"status": "error"};
+          return retryCleanup ? await released.future : {"status": "error"};
         }
         if (call.method == "applyLock") {
           owners.add((call.arguments as Map)["ownerId"] as String);
