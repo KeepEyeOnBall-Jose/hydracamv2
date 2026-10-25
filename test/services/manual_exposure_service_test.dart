@@ -19,13 +19,15 @@ void main() {
     });
   }
 
-  RecordingExposureSession session(ExposurePreset preset) {
+  RecordingExposureSession session(ExposurePreset preset,
+      {Duration snapshotTimeout = const Duration(seconds: 2)}) {
     return RecordingExposureSession(
       service: ManualExposureService(channel: channel),
       preset: preset,
       cameraName: "2",
       frameDurationNs: 33333333,
       settleDelay: Duration.zero,
+      snapshotTimeout: snapshotTimeout,
     );
   }
 
@@ -160,13 +162,50 @@ void main() {
         : Future.value({"status": "locked"}));
     final exposure = session(ExposurePreset.shutter1_60);
     await exposure.lockBeforeStart();
-    final first = exposure.abort();
-    final second = exposure.abort();
+    var firstDone = false;
+    var secondDone = false;
+    final first = exposure.abort().then((_) => firstDone = true);
+    final second = exposure.abort().then((_) => secondDone = true);
     await Future<void>.delayed(Duration.zero);
     expect(calls.where((call) => call.method == "release"), hasLength(1));
-    released.complete({"status": "released"});
-    await Future.wait([first, second]);
+    try {
+      expect(firstDone, isFalse);
+      expect(secondDone, isFalse);
+    } finally {
+      released.complete({"status": "released"});
+      await Future.wait([first, second]);
+    }
+    expect(firstDone, isTrue);
+    expect(secondDone, isTrue);
     expect(calls.where((call) => call.method == "release"), hasLength(1));
+  });
+
+  test("a pending recording relock cannot finalize as successfully locked",
+      () async {
+    final relock = Completer<Object?>();
+    var locks = 0;
+    handle((call) {
+      if (call.method == "applyLock") {
+        return ++locks == 1
+            ? Future.value({"status": "locked"})
+            : relock.future;
+      }
+      return Future.value(
+          {"status": call.method == "release" ? "released" : "ok"});
+    });
+    final exposure =
+        session(ExposurePreset.shutter1_60, snapshotTimeout: Duration.zero);
+    await exposure.lockBeforeStart();
+    exposure.afterStart();
+    final metadata = await exposure.finish();
+    try {
+      expect(metadata.lockStatus, "unavailable");
+      expect(metadata.isLocked, isFalse);
+      expect(metadata.start, containsPair("status", "timeout"));
+    } finally {
+      relock.complete({"status": "error"});
+      await Future<void>.delayed(Duration.zero);
+    }
   });
 
   test("unsupported camera records the status and never releases", () async {
