@@ -674,8 +674,8 @@ void main() {
     if (SessionManager.instance.isSessionActive) {
       await SessionManager.instance.endSession();
     }
-    SessionManager.instance.startSession("original", "original",
-        deviceType: "Master");
+    SessionManager.instance
+        .startSession("original", "original", deviceType: "Master");
     final requested = Completer<void>();
     final identity = Completer<String>();
     final service = _StoppedMetadataCamera(
@@ -688,8 +688,8 @@ void main() {
     final stopping = service.forceStopRecordingDueToBattery();
     await requested.future;
     await SessionManager.instance.endSession();
-    SessionManager.instance.startSession("replacement", "replacement",
-        deviceType: "Master");
+    SessionManager.instance
+        .startSession("replacement", "replacement", deviceType: "Master");
     identity.complete("existing-device");
     try {
       await stopping;

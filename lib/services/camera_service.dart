@@ -45,6 +45,7 @@ class CameraService {
   final bool _useMockCamera;
   final String _mockMediaSourceDir;
   final CameraDeviceInfoProvider _deviceInfoProvider;
+  final Future<String> Function() _deviceIdProvider;
   final Duration _cameraOperationTimeout;
   final ManualExposureService _manualExposureService;
   final RecordedVideoSnapshots _recordedVideoSnapshots;
@@ -115,6 +116,7 @@ class CameraService {
       bool? useMockCamera,
       String? mockMediaSourceDir,
       CameraDeviceInfoProvider? deviceInfoProvider,
+      Future<String> Function()? deviceIdProvider,
       Duration? cameraOperationTimeout,
       ManualExposureService? manualExposureService,
       RecordedVideoSnapshots? recordedVideoSnapshots})
@@ -126,6 +128,8 @@ class CameraService {
         _useMockCamera = useMockCamera ?? false,
         _deviceInfoProvider =
             deviceInfoProvider ?? DeviceIdService.getDeviceInfo,
+        _deviceIdProvider =
+            deviceIdProvider ?? DeviceIdService.getOrCreateDeviceId,
         _cameraOperationTimeout =
             cameraOperationTimeout ?? defaultCameraOperationTimeout,
         _mockMediaSourceDir = mockMediaSourceDir ??
@@ -782,7 +786,11 @@ class CameraService {
     if (snapshot.sessionGuid != SessionManager.instance.sessionGuid) {
       throw StateError("Original clip belongs to a different session");
     }
-    final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+    final String deviceId = await _deviceIdProvider();
+    if (snapshot.sessionGuid == null ||
+        snapshot.sessionGuid != SessionManager.instance.sessionGuid) {
+      throw StateError("Original clip belongs to a different session");
+    }
     final capturedVideo = _buildForcedStopCapturedVideo(
       videoPath: videoPath,
       deviceId: deviceId,
