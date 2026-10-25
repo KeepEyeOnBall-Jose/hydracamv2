@@ -530,6 +530,28 @@ void main() {
     }
   });
 
+  test("STOP during FPS recovery prevents the replacement encoder dispatch",
+      () async {
+    var creates = 0;
+    Future<void>? stopping;
+    late CameraService service;
+    final platform = _FakeCameraPlatform(
+        startRecordingError:
+            PlatformException(code: "forced_fps_failure", message: "FPS failed"),
+        startRecordingFailures: 1,
+        onEvent: (event) {
+          if (event == "create" && ++creates == 2) {
+            stopping = service.stopCamera();
+          }
+        });
+    CameraPlatform.instance = platform;
+    service = CameraService(storageService: storageService);
+    await expectLater(service.startRecordingVideo(), throwsA(isA<Exception>()));
+    await stopping;
+    expect(platform.recordingStarts, 1);
+    expect(service.isRecording, isFalse);
+  });
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(

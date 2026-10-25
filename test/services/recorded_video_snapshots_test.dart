@@ -102,4 +102,13 @@ void main() {
     expect((await store.forPath("reused-path"))?.captureId, "capture-two");
     expect(await File("${directory.path}/capture-two.json").exists(), isTrue);
   });
+
+  test("restarted lookup fails closed on competing receipts for one path",
+      () async {
+    await store.remember(snapshot("capture-one", "reused-path"));
+    await store.remember(snapshot("capture-two", "reused-path"));
+    final restarted = RecordedVideoSnapshots(directory: () async => directory);
+    await expectLater(
+        restarted.forPath("reused-path"), throwsA(isA<StateError>()));
+  });
 }
