@@ -101,7 +101,7 @@ class ManualExposureControllerTest {
 
     @Test
     fun concurrentRestoresShareTheNativeAcknowledgement() {
-        val restoration = SettableFuture.create<Void>()
+        val restoration = SettableFuture.create<Void?>()
         `when`(control.setCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
             .thenReturn(restoration)
         val first = release()
@@ -118,7 +118,7 @@ class ManualExposureControllerTest {
 
     @Test
     fun applyCannotOverwriteAnUnsettledRestoration() {
-        val restoration = SettableFuture.create<Void>()
+        val restoration = SettableFuture.create<Void?>()
         `when`(control.setCaptureRequestOptions(any(CaptureRequestOptions::class.java)))
             .thenReturn(restoration)
         val release = release()
