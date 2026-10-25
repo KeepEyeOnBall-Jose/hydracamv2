@@ -7,29 +7,37 @@ on:
         description: Optional admitted repository runner label
         type: string
         required: false
+      run_native_identity_red:
+        type: boolean
+        required: true
+        default: false
   pull_request:
   push:
     branches: [master-jose-2025]
 
 jobs:
   flutter-quality:
+    if: >-
+      !(github.event_name == 'workflow_dispatch' &&
+      github.repository == 'KeepEyeOnBall-Jose/hydracamv2' &&
+      !github.event.repository.private && !github.event.repository.fork &&
+      github.actor == github.repository_owner &&
+      github.triggering_actor == github.repository_owner &&
+      github.ref == 'refs/heads/codex/pr25-native-identity-red-20261025' &&
+      inputs.run_native_identity_red)
     runs-on: ${{ github.repository == 'KeepEyeOnBall-Jose/hydracamv2' && github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name != 'pull_request' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && (inputs.runner_label || fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]')) || 'ubuntu-latest' }}
     timeout-minutes: 20
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.47.7
           cache: true
-
       - name: flutter pub get
         run: flutter pub get
-
       # Scoped to lib/test/tool/integration_test (matches scripts/agent_gate.sh's
       # changed-file dart-format check). Verified clean locally on the full tree
       # including generated lib/l10n/*.dart at the time this gate was added, so
@@ -37,9 +45,234 @@ jobs:
       # than evidence of an existing problem.
       - name: dart format --set-exit-if-changed
         run: dart format --output=none --set-exit-if-changed lib test tool integration_test
-
       - name: flutter analyze
         run: flutter analyze --no-pub
-
       - name: flutter test
         run: flutter test --no-pub
+
+  native-identity-red:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'KeepEyeOnBall-Jose/hydracamv2' &&
+      !github.event.repository.private && !github.event.repository.fork &&
+      github.actor == github.repository_owner &&
+      github.triggering_actor == github.repository_owner &&
+      github.ref == 'refs/heads/codex/pr25-native-identity-red-20261025' &&
+      inputs.run_native_identity_red
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    concurrency:
+      group: pr25-native-identity-red-20261025
+      cancel-in-progress: false
+    env:
+      SOURCE_SHA: 4d4977c5b9c140e75dfaa890d475cc241cc16810
+      SOURCE_TREE: 3e60b98a9046211425d7373eefbe72de3fdac39f
+      NATIVE_BASELINE_SHA: 9b1fea4c3ff8e25be21438b4cf123d0118610b46
+      GRADLE_USER_HOME: ${{ runner.temp }}/pr25-native-gradle
+      PUB_CACHE: ${{ runner.temp }}/pr25-native-pub
+      TASK_OUTPUT: ${{ runner.temp }}/pr25-native-identity-red
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          ref: 4d4977c5b9c140e75dfaa890d475cc241cc16810
+          path: source
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Read actual toolchain and admit existing standard runner
+        working-directory: source
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, shutil, subprocess
+          G = 1024**3
+          root = pathlib.Path.cwd()
+          out = pathlib.Path(os.environ['TASK_OUTPUT']); out.mkdir(mode=0o700)
+          sdk = pathlib.Path(os.environ['ANDROID_HOME']).resolve(strict=True)
+          java = pathlib.Path(os.environ['JAVA_HOME_17_X64']).resolve(strict=True)
+          def props(path):
+              return dict(line.split('=', 1) for line in path.read_text().splitlines() if '=' in line and not line.startswith('#'))
+          def projection(native_only=False):
+              digest = hashlib.sha256()
+              for raw in subprocess.check_output(['git','ls-files','-z']).split(b'\0'):
+                  if not raw: continue
+                  name = os.fsdecode(raw); p = root/name
+                  if native_only and not (name.startswith('android/') or name.startswith('packages/camera_android_camerax/android/') or name in ['packages/camera_android_camerax/pubspec.yaml','.metadata']): continue
+                  data = os.fsencode(os.readlink(p)) if p.is_symlink() else p.read_bytes()
+                  digest.update(raw+b'\0'+hashlib.sha256(data).digest())
+              return digest.hexdigest()
+          platforms = [(str(p.parent), props(p)) for p in (sdk/'platforms').glob('*/source.properties')]
+          stable37 = [p for p in platforms if p[1].get('AndroidVersion.ApiLevel') == '37' and p[1].get('AndroidVersion.CodeName', 'REL') == 'REL']
+          ndks = [(str(p.parent), props(p).get('Pkg.Revision')) for p in (sdk/'ndk').glob('*/source.properties')]
+          mem = dict(line.split(':', 1) for line in pathlib.Path('/proc/meminfo').read_text().splitlines())
+          available = int(mem['MemAvailable'].split()[0])*1024
+          free = shutil.disk_usage(root).free
+          facts = {'source': subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(),
+                   'tree': subprocess.check_output(['git','rev-parse','HEAD^{tree}'], text=True).strip(),
+                   'sdk': str(sdk), 'platform37': stable37, 'ndksObserved': ndks,
+                   'java': subprocess.check_output([str(java/'bin/java'),'-version'], stderr=subprocess.STDOUT, text=True, timeout=10),
+                   'memAvailable': available, 'load1': os.getloadavg()[0], 'cpus': os.cpu_count(),
+                   'freeBytes': free, 'projectedAdditionalBytes': 8*G, 'requiredRemainingBytes': 20*G,
+                   'fullProjectionBeforeToolSetup': projection(), 'nativeProjectionBeforeToolSetup': projection(True)}
+          (out/'preflight.json').write_text(json.dumps(facts, indent=2)); print(json.dumps(facts), flush=True)
+          assert facts['source'] == os.environ['SOURCE_SHA'] and facts['tree'] == os.environ['SOURCE_TREE']
+          subprocess.run(['git','fetch','--no-tags','--depth=1','origin',os.environ['NATIVE_BASELINE_SHA']], check=True, timeout=20)
+          subprocess.run(['git','diff','--exit-code',os.environ['NATIVE_BASELINE_SHA'],'HEAD','--',
+              'android','packages/camera_android_camerax/android','packages/camera_android_camerax/pubspec.yaml','.metadata'], check=True, timeout=10)
+          assert stable37 and (sdk/'build-tools/37.0.0/aapt2').is_file(), 'Existing Android 37 platform/build-tools required; no SDK bootstrap'
+          assert 'version "17.' in facts['java'] or 'openjdk 17.' in facts['java']
+          assert available >= 6*G and os.getloadavg()[0] <= os.cpu_count(), 'Resource admission refused'
+          assert free - 8*G >= 20*G, 'Preserve 20 GiB after projected outputs; no image-tool deletion'
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f'JAVA_HOME={java}\nANDROID_SDK_ROOT={sdk}\n')
+          with open(os.environ['GITHUB_PATH'], 'a') as path:
+              path.write(f'{java}/bin\n')
+          PY
+
+      - uses: subosito/flutter-action@v2
+        timeout-minutes: 3
+        with:
+          channel: stable
+          flutter-version: 3.47.7
+          cache: false
+
+      # This checkout does not track gradlew or gradle-wrapper.jar. Install only
+      # the Gradle version already specified by wrapper.properties, not an SDK.
+      - uses: gradle/actions/setup-gradle@v4
+        timeout-minutes: 2
+        with:
+          gradle-version: 9.3.1
+          cache-disabled: true
+
+      - name: Execute exact native baseline and retain actual RED in logs
+        working-directory: source
+        timeout-minutes: 12
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, shutil, signal, subprocess, time, xml.etree.ElementTree as ET
+          root = pathlib.Path.cwd(); out = pathlib.Path(os.environ['TASK_OUTPUT']); G = 1024**3
+          def projection(native_only=False):
+              digest = hashlib.sha256()
+              for raw in subprocess.check_output(['git','ls-files','-z']).split(b'\0'):
+                  if not raw: continue
+                  p = root/os.fsdecode(raw)
+                  name = os.fsdecode(raw)
+                  if native_only and not (name.startswith('android/') or name.startswith('packages/camera_android_camerax/android/') or name in ['packages/camera_android_camerax/pubspec.yaml','.metadata']): continue
+                  data = os.fsencode(os.readlink(p)) if p.is_symlink() else p.read_bytes()
+                  digest.update(raw+b'\0'+hashlib.sha256(data).digest())
+              return digest.hexdigest()
+          def rows():
+              found = {}
+              for p in pathlib.Path('/proc').glob('[0-9]*/stat'):
+                  try:
+                      text = p.read_text(); values = text[text.rfind(')')+2:].split()
+                      found[int(p.parent.name)] = {'state': values[0], 'parent': int(values[1]), 'group': int(values[2]),
+                          'session': int(values[3]), 'start': values[19], 'rss': int(values[21])*os.sysconf('SC_PAGE_SIZE')}
+                  except (FileNotFoundError, ProcessLookupError, PermissionError): pass
+              return found
+          receipt = {'source': os.environ['SOURCE_SHA'], 'nativeBaseline': os.environ['NATIVE_BASELINE_SHA'],
+              'beforeToolSetup': json.loads((out/'preflight.json').read_text()),
+              'fullProjectionBeforeTools': projection(), 'nativeProjectionBefore': projection(True), 'commands': []}
+          def run(command, cwd, seconds):
+              # Each command owns a separate session; retain PID/start identities
+              # and descendants rather than selecting unrelated Java processes.
+              p = subprocess.Popen(command, cwd=cwd, start_new_session=True)
+              owned = {}; deadline = time.monotonic()+seconds; peak = 0
+              state = {'command': command, 'cwd': str(cwd), 'pid': p.pid}; receipt['commands'].append(state)
+              def collect():
+                  current = rows(); changed = True
+                  while changed:
+                      changed = False
+                      for pid, row in current.items():
+                          if pid not in owned and (pid == p.pid or row['session'] == p.pid or row['parent'] in owned):
+                              owned[pid] = row['start']; changed = True
+                  return {pid: row for pid, row in current.items() if owned.get(pid) == row['start'] and row['state'] != 'Z'}
+              try:
+                  while p.poll() is None:
+                      live = collect(); rss = sum(row['rss'] for row in live.values()); peak = max(peak, rss)
+                      assert time.monotonic() < deadline, 'Bounded command deadline'
+                      assert rss <= int(4.5*G), 'Owned RSS exceeds 4.5 GiB'
+                      assert shutil.disk_usage(root).free >= 20*G, 'Disk reserve breached'
+                      time.sleep(1)
+                  state['exit'] = p.returncode
+                  return p.returncode
+              finally:
+                  for sig, limit in [(signal.SIGTERM, 5), (signal.SIGKILL, 5)]:
+                      for pid in collect():
+                          try: os.kill(pid, sig)
+                          except ProcessLookupError: pass
+                      stop = time.monotonic()+limit
+                      while collect() and time.monotonic() < stop: time.sleep(.2)
+                  if p.poll() is not None: p.wait(timeout=1)
+                  state.update({'owned': owned, 'remainingOwned': list(collect()), 'peakRssBytes': peak})
+                  print('OWNED_SETTLEMENT '+json.dumps(state), flush=True)
+                  assert not state['remainingOwned'], 'Owned processes remain'
+          code = 1
+          try:
+              assert shutil.disk_usage(root).free - 5*G >= 20*G, 'Post-tool-setup output reserve'
+              code = run(['flutter','pub','get'], root, 120)
+              assert code == 0, 'Dependency resolution failed; no native RED claimed'
+              flutter = pathlib.Path(shutil.which('flutter')).resolve().parents[1]
+              (root/'android/local.properties').write_text(f'sdk.dir={os.environ["ANDROID_HOME"]}\nflutter.sdk={flutter}\n')
+              print(subprocess.check_output(['gradle','--version'], text=True, timeout=10), flush=True)
+              def fresh_resources():
+                  mem = dict(line.split(':', 1) for line in pathlib.Path('/proc/meminfo').read_text().splitlines())
+                  vm = dict(line.split() for line in pathlib.Path('/proc/vmstat').read_text().splitlines())
+                  return {'memAvailableBytes': int(mem['MemAvailable'].split()[0])*1024,
+                      'load1': os.getloadavg()[0], 'cpus': os.cpu_count(),
+                      'freeBytes': shutil.disk_usage(root).free, 'remainingProjectedBytes': 5*G,
+                      'swapUsedBytes': (int(mem['SwapTotal'].split()[0])-int(mem['SwapFree'].split()[0]))*1024,
+                      'swapCounters': {key: int(vm[key]) for key in ['pswpin','pswpout']},
+                      'swapStatus': pathlib.Path('/proc/swaps').read_text()}
+              admission_first = fresh_resources(); time.sleep(5); admission_last = fresh_resources()
+              receipt['preGradleAdmission'] = {'first': admission_first, 'last': admission_last,
+                  'swapOutDelta': admission_last['swapCounters']['pswpout']-admission_first['swapCounters']['pswpout']}
+              print('FRESH_PRE_GRADLE_ADMISSION '+json.dumps(receipt['preGradleAdmission']), flush=True)
+              for sample in [admission_first, admission_last]:
+                  assert sample['memAvailableBytes'] >= 6*G and sample['load1'] <= sample['cpus'], 'Fresh memory/load admission refused'
+                  assert sample['freeBytes']-sample['remainingProjectedBytes'] >= 20*G, 'Fresh disk/output reserve refused'
+              assert receipt['preGradleAdmission']['swapOutDelta'] == 0 and admission_last['swapUsedBytes'] <= admission_first['swapUsedBytes'], 'Fresh swap growth refused'
+              command = ['gradle','--no-daemon','--max-workers=1','--console=plain',
+                  '-Dorg.gradle.jvmargs=-Xmx2048m -XX:ActiveProcessorCount=2',
+                  '-Pkotlin.compiler.execution.strategy=in-process','-Pandroid.builder.sdkDownload=false',
+                  '-Ptarget-platform=android-arm64', ':camera_android_camerax:testDebugUnitTest',
+                  '--tests','io.flutter.plugins.camerax.HydracamCaptureHooksTest']
+              code = run(command, root/'android', 540)
+          except Exception as error:
+              receipt['error'] = str(error); print('DIAGNOSTIC_ERROR '+str(error), flush=True)
+              code = 1
+          finally:
+              xml = root/'build/camera_android_camerax/test-results/testDebugUnitTest/TEST-io.flutter.plugins.camerax.HydracamCaptureHooksTest.xml'
+              cases = []
+              if xml.exists():
+                  print('ACTUAL_JUNIT_XML\n'+xml.read_text(), flush=True)
+                  try:
+                      for case in ET.parse(xml).getroot().iter('testcase'):
+                          status = 'FAIL' if case.find('failure') is not None else 'ERROR' if case.find('error') is not None else 'SKIP' if case.find('skipped') is not None else 'PASS'
+                          failure = case.find('failure'); error = case.find('error')
+                          detail = failure if failure is not None else error
+                          cases.append({'class': case.get('classname'), 'name': case.get('name'), 'status': status,
+                              'failureType': detail.get('type') if detail is not None else None})
+                  except ET.ParseError as error:
+                      receipt['junitParseError'] = str(error); code = 1
+              receipt['cases'] = cases
+              receipt['counts'] = {s: sum(c['status'] == s for c in cases) for s in ['PASS','FAIL','ERROR','SKIP']}
+              receipt['nativeProjectionAfter'] = projection(True)
+              receipt['fullProjectionAfterTools'] = projection()
+              delta = subprocess.check_output(['git','diff','--no-ext-diff','--binary'], text=True)
+              (out/'tool-generated-tracked-delta.diff').write_text(delta)
+              print('EXACT_TOOL_GENERATED_TRACKED_DELTA\n'+delta, flush=True)
+              receipt['remainingDiskBytes'] = shutil.disk_usage(root).free
+              (out/'receipt.json').write_text(json.dumps(receipt, indent=2)); print('ACTUAL_RECEIPT '+json.dumps(receipt), flush=True)
+              if receipt['nativeProjectionAfter'] != receipt['beforeToolSetup']['nativeProjectionBeforeToolSetup'] or receipt['remainingDiskBytes'] < 20*G: code = 1
+          # Report actual outcomes, including unexpected cases or setup errors.
+          # Preserve Gradle's real exit; this diagnostic never qualifies Dart.
+          raise SystemExit(code)
+          PY
