@@ -1,6 +1,8 @@
 import "dart:async";
 
 import "package:camera_android_camerax/camera_android_camerax.dart";
+// Exercise the vendored plugin's existing native-proxy test boundary directly.
+// ignore: implementation_imports
 import "package:camera_android_camerax/src/camerax_library.dart";
 import "package:camera_platform_interface/camera_platform_interface.dart";
 import "package:flutter_test/flutter_test.dart";
