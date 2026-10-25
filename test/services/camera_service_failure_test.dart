@@ -305,6 +305,85 @@ void main() {
     expect(platform.recordingStarts, 1);
   });
 
+  for (final operation in ["settings", "recover", "pending"]) {
+    test("retained exposure keeps hardware stop distinct from $operation",
+        () async {
+      const channel = MethodChannel("hydracam-stopped-owner-test");
+      final released = Completer<Object?>();
+      final events = <String>[];
+      final owners = <String>[];
+      var retryCleanup = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+        if (call.method == "release") {
+          return retryCleanup ? released.future : {"status": "error"};
+        }
+        if (call.method == "applyLock") {
+          owners.add((call.arguments as Map)["ownerId"] as String);
+          return {"status": "locked"};
+        }
+        return {"status": "ok"};
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null));
+      final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_start_failure", message: "forced start failure"),
+        onEvent: events.add,
+      );
+      CameraPlatform.instance = platform;
+      final service = CameraService(
+          storageService: storageService,
+          manualExposureService: ManualExposureService(channel: channel));
+      await expectLater(service.startRecordingVideo(), throwsException);
+      platform.startRecordingError = null;
+      if (operation == "settings") {
+        await expectLater(
+            service.applyCaptureSettings(
+                videoProfile: VideoCaptureProfile.compat720p30),
+            throwsException);
+        expect(events.where((event) => event == "dispose"), isEmpty);
+        return;
+      }
+      await service.stopCamera();
+      expect(events.where((event) => event == "dispose"), hasLength(1),
+          reason: "Explicit hardware stop must not wait forever for restore");
+      final oldOwner = owners.single;
+      final startsBeforeRecovery = platform.recordingStarts;
+      retryCleanup = true;
+      final starting = service
+          .startRecordingVideo()
+          .then<Object?>((_) => null, onError: (Object error) => error);
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      try {
+        expect(platform.createdCameras, 2,
+            reason: "Reactivate original control without starting an encoder");
+        expect(platform.lastCreatedCamera?.name, "fake-back-camera");
+        expect(platform.recordingStarts, startsBeforeRecovery);
+        expect(owners, [oldOwner], reason: "No new lease before restore ACK");
+        if (operation == "pending") {
+          expect(await starting, isA<Exception>());
+          expect(events.where((event) => event == "dispose"), hasLength(2),
+              reason: "Unsettled recovery must close hardware again");
+          expect(platform.recordingStarts, startsBeforeRecovery);
+        } else {
+          released.complete({"status": "released"});
+          expect(await starting, isNull);
+          expect(service.isRecording, isTrue);
+          expect(owners.last, isNot(oldOwner));
+        }
+      } finally {
+        if (!released.isCompleted) {
+          released.complete({"status": "released"});
+        }
+        await starting;
+        await Future<void>.delayed(const Duration(milliseconds: 600));
+        await service.stopCamera();
+      }
+    });
+  }
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
