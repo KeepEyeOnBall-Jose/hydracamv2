@@ -34,6 +34,10 @@ protocol tests are in `test/plugins/camerax_recording_lifecycle_test.dart`.
 Upstream's test tree remains omitted. Unit protocol results do not establish
 live sensor, playable-clip or whole-clip exposure acceptance.
 
+`README.md` and `CHANGELOG.md` also carry documentation-only formatting fixes
+(autolinks, blank lines and unused reference definitions) for this repository's
+Markdown gate; those files are not byte-identical upstream copies.
+
 To upgrade, compare the new upstream release and replay these local Java/Dart
 changes while preserving HydraCam's regression tests. Keep the CameraX version
 in `android/app/build.gradle` equal to the plugin's `cameraxVersion`.

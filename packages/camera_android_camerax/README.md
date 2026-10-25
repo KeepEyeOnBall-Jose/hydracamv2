@@ -63,9 +63,9 @@ If you wish to record a video to a custom file path, you may specify `videoOutpu
 - **Recommended Directory:** Use `getTemporaryDirectory()` or `getApplicationDocumentsDirectory()`.
 
 #### Setting description while recording
+
 To avoid cancelling any active recording when calling `setDescriptionWhileRecording`,
 you must start the recording with `startVideoCapturing` with `enablePersistentRecording` set to `true`.
-
 
 ### Notes on image streaming
 
@@ -86,7 +86,7 @@ As of Android 14, to allow for background image streaming, you will need to spec
 
 If you initialize a `CameraController` with `ImageFormatGroup.nv21`, then streamed images will
 still have the `ImageFormatGroup.yuv420` format, but their image data will be formatted in NV21.
-See https://developer.android.com/reference/kotlin/androidx/camera/core/ImageAnalysis#OUTPUT_IMAGE_FORMAT_NV21().
+See <https://developer.android.com/reference/kotlin/androidx/camera/core/ImageAnalysis#OUTPUT_IMAGE_FORMAT_NV21()>.
 
 ## Contributing
 
@@ -97,14 +97,9 @@ For more information on contributing to this plugin, see [`CONTRIBUTING.md`](CON
 [1]: https://pub.dev/packages/camera
 [2]: https://developer.android.com/training/camerax
 [3]: https://flutter.dev/to/endorsed-federated-plugin
-[4]: https://pub.dev/packages/camera_android
 [5]: https://github.com/flutter/flutter/issues/new/choose
-[6]: https://developer.android.com/media/camera/camerax/architecture#combine-use-cases
-[7]: https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#INFO_SUPPORTED_HARDWARE_LEVEL_3
-[8]: https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED
 [9]: https://pub.dev/packages/camera_android#usage
 [10]: https://developer.android.com/media/camera/camerax/architecture#permissions
 [11]: https://developer.android.com/reference/android/Manifest.permission#WRITE_EXTERNAL_STORAGE
 [12]: https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE_CAMERA
 [13]: https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE
-[148013]: https://github.com/flutter/flutter/issues/148013
