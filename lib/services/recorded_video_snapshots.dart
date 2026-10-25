@@ -45,10 +45,13 @@ class RecordedVideoSnapshot {
   final String? sessionGuid;
   final String? _contextJson;
 
-  MediaCaptureContext? get context => _contextJson == null
-      ? null
-      : MediaCaptureContext.fromJson(
-          Map<String, dynamic>.from(jsonDecode(_contextJson)));
+  MediaCaptureContext? get context {
+    final encoded = _contextJson;
+    return encoded == null
+        ? null
+        : MediaCaptureContext.fromJson(
+            Map<String, dynamic>.from(jsonDecode(encoded)));
+  }
 
   RecordedVideoSnapshot atPath(String returnedPath) => RecordedVideoSnapshot._(
         captureId: captureId,
@@ -60,17 +63,20 @@ class RecordedVideoSnapshot {
         contextJson: _contextJson,
       );
 
-  Map<String, dynamic> toJson() => {
-        "status": "pending-recovery",
-        "mediaPersisted": false,
-        "captureId": captureId,
-        "path": path,
-        "sourcePath": sourcePath,
-        "startedAt": startedAt?.toIso8601String(),
-        "stoppedAt": stoppedAt?.toIso8601String(),
-        "sessionGuid": sessionGuid,
-        "context": _contextJson == null ? null : jsonDecode(_contextJson),
-      };
+  Map<String, dynamic> toJson() {
+    final encoded = _contextJson;
+    return {
+      "status": "pending-recovery",
+      "mediaPersisted": false,
+      "captureId": captureId,
+      "path": path,
+      "sourcePath": sourcePath,
+      "startedAt": startedAt?.toIso8601String(),
+      "stoppedAt": stoppedAt?.toIso8601String(),
+      "sessionGuid": sessionGuid,
+      "context": encoded == null ? null : jsonDecode(encoded),
+    };
+  }
 
   factory RecordedVideoSnapshot.fromJson(Map<String, dynamic> json) =>
       RecordedVideoSnapshot._(
