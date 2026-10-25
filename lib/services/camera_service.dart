@@ -478,7 +478,10 @@ class CameraService {
     if (stopping != null) {
       await stopping;
     }
-    if (_isRecording || _videoAttempt != null) {
+    if (_videoAttempt != null) {
+      throw StateError("Original recording must settle before another capture");
+    }
+    if (_isRecording) {
       throw StateError("A video recording is already active");
     }
     // Check if storage is critically low before proceeding
@@ -540,7 +543,9 @@ class CameraService {
           .registerLog("Error starting video recording: $e\n$stackTrace");
       // A rejected/timed-out start may have already changed native state.
       // Keep its original operation until STOP confirms terminal settlement.
-      _isRecording = _videoAttempt != null;
+      // This flag reports confirmed Start, independently from the retained
+      // unknown native owner that still prevents another capture.
+      _isRecording = false;
       if (_videoAttempt == null) {
         videoStartRecordingDate = null;
         recordingCaptureContext = null;
@@ -605,7 +610,8 @@ class CameraService {
     } catch (e, stackTrace) {
       LogService.instance
           .registerLog("Error stopping video recording: $e\n$stackTrace");
-      _isRecording = _videoAttempt != null;
+      _isRecording =
+          _isRecording && _videoAttempt != null && !_videoAttempt!.terminal;
       if (_videoAttempt == null) {
         await _abortRecordingExposure();
       }
@@ -784,7 +790,7 @@ class CameraService {
     required String errorLogPrefix,
   }) async {
     try {
-      if (_isRecording) {
+      if (_isRecording || _videoAttempt != null) {
         LogService.instance.registerLog(logMessage);
         final videoPath = await stopRecordingVideo();
         _storageService.showNotification(notificationMessage);
