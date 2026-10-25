@@ -307,6 +307,37 @@ void main() {
         reason: "Late acknowledgement must not rewrite returned metadata");
   });
 
+  test("uncertain apply error retains cleanup even without a locked reply",
+      () async {
+    handle((call) async =>
+        {"status": call.method == "applyLock" ? "error" : "released"});
+    final exposure = session(ExposurePreset.shutter1_60);
+    await exposure.lockBeforeStart();
+    expect(exposure.cleanupPending, isTrue);
+    await exposure.abort();
+    expect(calls.where((call) => call.method == "release"), hasLength(1));
+    expect(exposure.cleanupPending, isFalse);
+  });
+
+  test("a hung sensor read does not delay mutation cleanup", () async {
+    final read = Completer<Object?>();
+    handle((call) => call.method == "readCaptureSettings"
+        ? read.future
+        : Future.value(
+            {"status": call.method == "applyLock" ? "locked" : "released"}));
+    final exposure =
+        session(ExposurePreset.shutter1_60, snapshotTimeout: Duration.zero);
+    await exposure.lockBeforeStart();
+    exposure.afterStart();
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    final metadata = await exposure.finish();
+    expect(metadata.start, containsPair("status", "timeout"));
+    expect(calls.where((call) => call.method == "release"), hasLength(1));
+    expect(exposure.cleanupPending, isFalse);
+    read.complete({"status": "ok"});
+    await Future<void>.delayed(Duration.zero);
+  });
+
   test("unsupported camera records the status and never releases", () async {
     handle((call) async => call.method == "applyLock"
         ? {"status": "unsupported", "cameraId": "2"}
