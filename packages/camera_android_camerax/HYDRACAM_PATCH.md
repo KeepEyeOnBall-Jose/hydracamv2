@@ -7,15 +7,25 @@ wired in through `dependency_overrides` in the app `pubspec.yaml`. Upstream
 The camera plugin API has no manual shutter or ISO. The patch only exposes
 what the app needs to drive Camera2 itself:
 
-- `HydracamCaptureHooks.java` (new): holds the bound CameraX `Camera` and the
-  latest `TotalCaptureResult`.
-- `PreviewProxyApi.java`: registers the hook as the Preview session capture
-  callback.
-- `ProcessCameraProviderProxyApi.java`: records the camera returned by
-  `bindToLifecycle` and clears it on `unbindAll`.
+- `HydracamCaptureHooks.java` (new): keeps the bound CameraX `Camera`, registered
+  Preview observer and configured Camera2 session together. Results from retired
+  sessions, unbound Previews or another camera are rejected. Expected-camera
+  lookup is atomic with binding/result publication.
+- `PreviewProxyApi.java`: registers capture and session-state callbacks for each
+  Preview. Retained Preview observers survive analysis/video graph transitions.
+- `ProcessCameraProviderProxyApi.java`: invalidates the prior result before graph
+  changes, records bindings and removes only the explicitly unbound Previews.
+  Full unbind clears the camera/session/result tuple.
 
 The app side lives in
 `android/app/src/main/kotlin/com/amaia23/hydracam/ManualExposureController.kt`.
+Both ISO/focus metering and recorded metadata use expected-camera lookup.
+Its exposure lease retains the original owner/control/options until restoration
+is acknowledged; another binding cannot silently inherit that lease.
+
+The local native regression tests are under `android/src/test/`; upstream's
+test tree remains omitted. Unit protocol results do not establish live sensor
+or whole-clip exposure acceptance.
 
 To upgrade: copy the new upstream version over this folder (same subset),
 re-apply the three edits marked `HydraCam patch`, and keep the CameraX version

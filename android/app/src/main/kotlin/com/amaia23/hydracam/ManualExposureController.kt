@@ -92,7 +92,7 @@ class ManualExposureController(
 			// original control snapshot. A replacement camera cannot inherit them.
 			val request = current?.request?.takeIf {
 				it["requestedExposureTimeNs"] == exposureTimeNs
-			} ?: meterLockRequest(info, exposureTimeNs, frameDurationNs)
+			} ?: meterLockRequest(camera, info, exposureTimeNs, frameDurationNs)
 			val options = CaptureRequestOptions.Builder()
 				.setCaptureRequestOption(
 					CaptureRequest.CONTROL_AE_MODE,
@@ -215,7 +215,7 @@ class ManualExposureController(
 			?: return mapOf("status" to "no_camera")
 		val info = infoFor(camera)
 		val cameraId = cameraIdFor(info)
-		val result = HydracamCaptureHooks.getLatestCaptureResult()
+		val result = HydracamCaptureHooks.getLatestCaptureResult(camera)
 			?: return mapOf("status" to "no_capture_result", "cameraId" to cameraId)
 		val frameDurationNs = result.get(CaptureResult.SENSOR_FRAME_DURATION)
 		return mapOf(
@@ -248,6 +248,7 @@ class ManualExposureController(
 	 * gives the same brightness auto exposure is currently producing.
 	 */
 	private fun meterLockRequest(
+		camera: Camera,
 		info: Camera2CameraInfo,
 		exposureTimeNs: Long,
 		frameDurationNs: Long,
@@ -267,7 +268,7 @@ class ManualExposureController(
 			exposure = exposure.coerceIn(exposureRange.lower, exposureRange.upper)
 		}
 
-		val metered = HydracamCaptureHooks.getLatestCaptureResult()
+		val metered = HydracamCaptureHooks.getLatestCaptureResult(camera)
 		val autoExposureNs = metered?.get(CaptureResult.SENSOR_EXPOSURE_TIME)
 		val autoIso = metered?.get(CaptureResult.SENSOR_SENSITIVITY)
 		val isoMin = isoRange?.lower ?: 100
