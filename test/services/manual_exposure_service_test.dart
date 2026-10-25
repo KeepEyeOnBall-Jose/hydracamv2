@@ -208,6 +208,39 @@ void main() {
     }
   });
 
+  test("a late relock during release cannot change finalized recording status",
+      () async {
+    final relock = Completer<Object?>();
+    final releaseStarted = Completer<void>();
+    final released = Completer<Object?>();
+    var locks = 0;
+    handle((call) {
+      if (call.method == "applyLock") {
+        return ++locks == 1
+            ? Future.value({"status": "locked"})
+            : relock.future;
+      }
+      if (call.method == "release") {
+        releaseStarted.complete();
+        return released.future;
+      }
+      return Future.value({"status": "ok"});
+    });
+    final exposure =
+        session(ExposurePreset.shutter1_60, snapshotTimeout: Duration.zero);
+    await exposure.lockBeforeStart();
+    exposure.afterStart();
+    final finishing = exposure.finish();
+    await releaseStarted.future;
+    relock.complete({"status": "locked"});
+    await Future<void>.delayed(Duration.zero);
+    released.complete({"status": "released"});
+    final metadata = await finishing;
+    expect(metadata.lockStatus, "unavailable");
+    expect(metadata.isLocked, isFalse);
+    expect(metadata.start, containsPair("status", "timeout"));
+  });
+
   test("unsupported camera records the status and never releases", () async {
     handle((call) async => call.method == "applyLock"
         ? {"status": "unsupported", "cameraId": "2"}
