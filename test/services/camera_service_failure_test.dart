@@ -384,6 +384,65 @@ void main() {
     });
   }
 
+  test("explicit stop invalidates a start before it can reopen the camera",
+      () async {
+    const channel = MethodChannel("hydracam-stop-pending-start-test");
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+            channel,
+            (call) async =>
+                {"status": call.method == "applyLock" ? "locked" : "released"});
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    final starting = service
+        .startRecordingVideo()
+        .then<Object?>((_) => null, onError: (Object error) => error);
+    await service.stopCamera();
+    expect(await starting, isA<Exception>());
+    expect(platform.createdCameras, 0);
+    expect(platform.recordingStarts, 0);
+  });
+
+  test("a hung exposure read cannot delay the native recording stop", () async {
+    const channel = MethodChannel("hydracam-stop-read-test");
+    final sensor = Completer<Object?>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+            channel,
+            (call) async => call.method == "readCaptureSettings"
+                ? sensor.future
+                : {
+                    "status": call.method == "applyLock" ? "locked" : "released"
+                  });
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    await service.startRecordingVideo();
+    final stopping = service
+        .stopRecordingVideo()
+        .then<Object?>((value) => value, onError: (Object error) => error);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    try {
+      expect(platform.recordingStops, 1,
+          reason: "A sensor timeout must not keep the encoder running");
+    } finally {
+      sensor.complete({"status": "ok"});
+      await stopping;
+      await service.stopCamera();
+    }
+  });
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
@@ -835,6 +894,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   int _nextCameraId = 1;
   int createdCameras = 0;
   int recordingStarts = 0;
+  int recordingStops = 0;
 
   @override
   Future<List<CameraDescription>> availableCameras() async => cameras;
@@ -917,6 +977,7 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   @override
   Future<XFile> stopVideoRecording(int cameraId) async {
+    recordingStops++;
     if (!_isRecording) {
       throw PlatformException(
         code: "No video is recording",
