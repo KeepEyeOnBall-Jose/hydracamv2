@@ -93,6 +93,15 @@ void main() {
     );
 
     expect(cameraService.isRecording, isFalse);
+    final platform = CameraPlatform.instance as _FakeCameraPlatform;
+    final dispatched = platform.recordingStarts;
+    await expectLater(
+        cameraService.startRecordingVideo(),
+        throwsA(isA<StateError>().having((error) => error.message, "message",
+            contains("Original recording"))));
+    expect(platform.recordingStarts, dispatched,
+        reason: "Unconfirmed start must retain its original native owner");
+    await cameraService.stopCamera();
   });
 
   test("startRecordingVideo works when the iPad has no flash capability",
@@ -125,11 +134,15 @@ void main() {
       const channel = MethodChannel("hydracam-retained-exposure-test");
       var releaseFails = true;
       var releases = 0;
+      final appliedOwners = <Object?>[];
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(channel, (call) async {
         if (call.method == "release") {
           releases++;
           return {"status": releaseFails ? "error" : "released"};
+        }
+        if (call.method == "applyLock") {
+          appliedOwners.add((call.arguments as Map)["ownerId"]);
         }
         return {"status": call.method == "applyLock" ? "locked" : "ok"};
       });
@@ -150,6 +163,10 @@ void main() {
       await service.stopCamera();
       final createsBeforeRetry = platform.createdCameras;
       final startsBeforeRetry = platform.recordingStarts;
+      final disposalsBeforeRetry = platform.disposedCameras;
+      final originalCamera = platform.lastCreatedCamera;
+      final originalSettings = platform.lastMediaSettings;
+      final locksBeforeRetry = appliedOwners.length;
       platform.startRecordingError = null;
       await SettingsService.setExposurePreset(nextPreset);
 
@@ -158,8 +175,16 @@ void main() {
           throwsA(isA<Exception>().having((error) => error.toString(),
               "message", contains("Exposure cleanup"))));
       expect(service.isRecording, isFalse);
-      expect(platform.createdCameras, createsBeforeRetry,
-          reason: "Unresolved restoration must precede camera replacement");
+      expect(platform.createdCameras, createsBeforeRetry + 1,
+          reason: "Only the saved original preview may reactivate for restore");
+      expect(platform.lastCreatedCamera, originalCamera);
+      expect(platform.lastMediaSettings?.resolutionPreset,
+          originalSettings?.resolutionPreset);
+      expect(platform.lastMediaSettings?.fps, originalSettings?.fps);
+      expect(appliedOwners.length, locksBeforeRetry,
+          reason: "Recovery cannot create another exposure lease");
+      expect(platform.disposedCameras, disposalsBeforeRetry + 1,
+          reason: "Failed recovery must close the saved preview again");
       expect(platform.recordingStarts, startsBeforeRetry);
 
       releaseFails = false;
@@ -313,10 +338,22 @@ void main() {
       final released = Completer<Object?>();
       final events = <String>[];
       final owners = <String>[];
+      final releaseInvocations = <({Object? owner, bool retry})>[];
       var retryCleanup = false;
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(channel, (call) async {
         if (call.method == "release") {
+          final owner = (call.arguments as Map)["ownerId"];
+          releaseInvocations.add((owner: owner, retry: retryCleanup));
+          LogService.instance.registerLog(
+              "Recovery fixture release owner=$owner retry=$retryCleanup "
+              "ackCompleted=${released.isCompleted}");
+          if (retryCleanup) {
+            unawaited(released.future.then<void>((value) {
+              LogService.instance.registerLog(
+                  "Recovery fixture native ACK owner=$owner value=$value");
+            }));
+          }
           return retryCleanup ? released.future : {"status": "error"};
         }
         if (call.method == "applyLock") {
@@ -343,7 +380,8 @@ void main() {
         await expectLater(
             service.applyCaptureSettings(
                 videoProfile: VideoCaptureProfile.compat720p30),
-            throwsException);
+            throwsA(isA<StateError>().having((error) => error.message,
+                "message", contains("Exposure cleanup"))));
         expect(events.where((event) => event == "dispose"), isEmpty);
         return;
       }
@@ -363,6 +401,12 @@ void main() {
         expect(platform.lastCreatedCamera?.name, "fake-back-camera");
         expect(platform.recordingStarts, startsBeforeRecovery);
         expect(owners, [oldOwner], reason: "No new lease before restore ACK");
+        expect(
+            releaseInvocations.any((invocation) =>
+                invocation.retry && invocation.owner == oldOwner),
+            isTrue,
+            reason:
+                "Recovery must dispatch restoration for the original owner");
         if (operation == "pending") {
           expect(await starting, isA<Exception>());
           expect(events.where((event) => event == "dispose"), hasLength(2),
@@ -480,7 +524,10 @@ void main() {
     await service.startRecordingVideo();
     await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
     final starts = platform.recordingStarts;
-    await expectLater(service.startRecordingVideo(), throwsA(isA<Exception>()));
+    await expectLater(
+        service.startRecordingVideo(),
+        throwsA(isA<StateError>().having((error) => error.message, "message",
+            contains("Original recording"))));
     expect(platform.recordingStarts, starts);
     platform.stopRecordingError = null;
     await service.stopCamera();
@@ -518,7 +565,9 @@ void main() {
       await expectLater(
           service.stopRecordingVideo(), throwsA(isA<Exception>()));
       await expectLater(
-          service.startRecordingVideo(), throwsA(isA<Exception>()));
+          service.startRecordingVideo(),
+          throwsA(isA<StateError>().having((error) => error.message, "message",
+              contains("Original recording"))));
       await expectLater(
           service.stopRecordingVideo(), throwsA(isA<Exception>()));
       expect(platform.recordingStops, 1,
@@ -1083,6 +1132,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   int createdCameras = 0;
   int recordingStarts = 0;
   int recordingStops = 0;
+  int disposedCameras = 0;
 
   @override
   Future<List<CameraDescription>> availableCameras() async => cameras;
@@ -1187,6 +1237,7 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   @override
   Future<void> dispose(int cameraId) async {
+    disposedCameras++;
     onEvent?.call("dispose");
   }
 }
