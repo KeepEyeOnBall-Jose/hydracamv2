@@ -1,8 +1,9 @@
 # Manual exposure test plan
 
 Goal: measurable squash ball streaks at 4K 30 fps. A streak is only measurable
-when the shutter time is known and fixed for the whole clip, so each clip
-records the values the sensor actually used (`captureContext.exposure`).
+when the shutter time is known and fixed for the whole clip. Each clip records
+lock/start/stop sensor samples (`captureContext.exposure`); those samples alone
+do not prove the first encoded frame or every frame in the clip.
 
 ## What the app does
 
@@ -10,11 +11,17 @@ records the values the sensor actually used (`captureContext.exposure`).
   `auto`, `shutter1_30`, `shutter1_60` (default), `shutter1_120`.
 - For a manual preset, recording start locks shutter, ISO, white balance and
   focus. ISO is metered once from auto exposure (shutter priority) and held.
-  The lock is released when recording stops.
-- Android: Camera2 interop on the camera CameraX bound (incl. 0.5x ultra-wide).
+  Original camera settings are restored after native recording finalization.
+- Android: Camera2 interop on the camera CameraX actually bound. Lens selection
+  and the 0.5x camera require separate verification.
   Needs the `MANUAL_SENSOR` capability, else `lockStatus: unsupported`.
 - iOS: AVFoundation custom exposure, locked white balance and focus.
-- If the lock fails, recording still runs; `lockStatus` says why.
+- A definite unsupported/no-owner result can record without manual exposure;
+  `lockStatus` describes that limit. Uncertain mutations, pending restoration
+  or native recording settlement block another capture until acknowledged.
+- A failed public start schedules bounded cleanup of its original native
+  attempt even when the UI has returned to its inactive state. An unresolved
+  generic/iOS start never triggers a global STOP after camera disposal.
 
 ## Per-clip metadata
 
@@ -24,7 +31,7 @@ Stored in the clip's capture context and sent with the upload as
 | Field | Meaning |
 | --- | --- |
 | `preset` | selected preset |
-| `lockStatus` | `locked`, `auto`, `unsupported`, `no_camera`, `unavailable`, `error` |
+| `lockStatus` | `locked`, `auto`, `unsupported`, `no_camera`, `unavailable`, `error`, `busy` |
 | `requestedExposureTimeNs` | preset shutter |
 | `exposureTimeNs` | shutter the sensor used (capture result / device) |
 | `iso` | ISO used |
@@ -78,6 +85,10 @@ needs internet; without it the run times out at the first await.
 Then check `adb logcat | grep "Recorded exposure"` for one line per preset.
 
 ## Bench results (2026-10-24, dark office, no court)
+
+These historical author receipts predate the review repairs. They support the
+reported samples and recording dimensions, not current-head device behavior,
+encoded-first-frame alignment, whole-clip constancy or the rally-drill pass.
 
 Galaxy S10e (RF8M40MT6AW), `detail4k30`, all clips 3840x2160, evidence in
 `logs/verification-runs/manual-exposure-RF8M40MT6AW-20261024T164555/`:
@@ -137,7 +148,18 @@ which lens camera 0 is before the court run (see Known gaps).
   ultra-wide. On the S10e the run used camera 0. Confirm the 0.5x lens on the
   preview before filming.
 
-- The backend has to persist `captureSettings`; until it does, the values live
-  in the app's local capture context and the upload request only.
-- Locking is applied after recording starts too, because CameraX rebinds the
-  session; the first ~0.5 s of a clip may still be auto exposed.
+- Client requests carry `captureSettings`. In the inspected media-timeline
+  bridge, direct completion and compat per-clip metadata omit the exposure
+  mapping; compat also forwards raw fields into session metadata. Persistence
+  by the legacy Azure receiver has not been verified. This is a separate
+  integration limit; uploads are not evidence of per-clip server persistence.
+- CameraX 1.6.2 retains camera-scoped request options through ordinary graph
+  replacement. No normal-path exposure-reset counterexample was established;
+  the earlier speculative first-0.5-second automatic interval is withdrawn.
+  Start/stop samples still do not establish encoded-first-frame or whole-clip
+  shutter stability. The rally drill and current-head physical smoke remain
+  separate acceptance work.
+- A terminal native path first gets an immutable, explicitly pending recovery
+  receipt. Receipt-write failures retain the original result for retry; normal
+  session persistence acknowledges it. A receipt or returned path does not
+  itself prove playable media or successful server upload.

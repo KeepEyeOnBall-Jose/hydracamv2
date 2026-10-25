@@ -3,21 +3,32 @@
 ## PR25 manual exposure review — 2026-10-25
 
 - Owner: sequential review; isolated `codex/review-pr25-fix-20261025`;
-  published `a3855972`, current default `f101b766` integrated without conflicts.
-- Seven new regressions reproduced in unmodified Flutter Quality run
-  `40222973536`: 749 passed, 7 failed, one existing gated live-upload skip.
-  Format and analysis passed. Raw logs and settlement evidence retained in
-  `logs/backlog-dispatch-20261025/pr25/`.
-- Bounded correction: report failed/pending relock truth; share in-flight
-  cleanup settlement; record release acknowledgement without losing retry
-  eligibility or rewriting returned metadata. Final validation pending.
+  current default `f101b766` integrated. Original published head `a3855972` is
+  preserved as an ancestor; final normal PR qualification is pending.
+- Repairs retain the original exposure owner/control and recording future,
+  report pending/error relock truth, coalesce bounded cleanup, reject stale
+  camera/session results, and preserve immutable per-path recovery metadata.
+  Failed starts schedule hardware cleanup without relying on a visible STOP.
+- Actual source evidence: initial seven Dart regressions failed first; vendor
+  lifecycle 10, snapshot 6 and consumer 7 cases passed in run `40237419446`.
+  Native identity baseline `40239147623` executed 10 cases: 3 passed, 7
+  assertions failed, zero skipped/errors. Identity repair and nearby ownership
+  16-case validation await the combined native GREEN run.
+- Latest diagnostic full suite `40239133047`: 802 passed, one failed, one
+  existing gated live-upload skip. The remaining recovery fixture returned a
+  nested nullable Future before its ACK; an exact pinned-Dart probe reproduced
+  that issue and explicit awaits corrected it. New failed-start observer tests
+  and final combined source still require current-head normal CI.
 - CameraX 1.6.2 retains camera-scoped request options through graph replacement;
   no normal-path exposure-reset counterexample established. First-frame and
-  whole-clip acceptance remain unverified. Native future bounds, restoration
-  ownership and capture-result/session identity remain open review findings.
-- Three Android apps/cameras and paired iPhone preserved; no new capture,
-  install, release, account or device-data writes. Next: final source reviews,
-  actual full-suite green, then qualify native/device evidence separately.
+  whole-clip acceptance remain unverified. Historical 16-preset phone receipts
+  do not qualify the repaired head or prove court streak quality.
+- Device data/apps and shared services preserved; no review capture/install or
+  release performed yet. Next: final normal/native results, an admitted current
+  APK/build route, then an idle-owner physical smoke with uploads off. Raw logs,
+  exact source hashes, commands and process settlement remain under
+  `logs/backlog-dispatch-20261025/pr25/`; diagnostic workflow branches are
+  excluded from product source.
 
 ## PR17 review completion — 2026-10-22
 
