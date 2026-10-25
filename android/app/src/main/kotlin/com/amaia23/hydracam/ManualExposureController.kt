@@ -11,7 +11,9 @@ import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.camera2.interop.CaptureRequestOptions
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.Camera
+import androidx.camera.core.CameraControl
 import androidx.core.content.ContextCompat
+import com.google.common.util.concurrent.ListenableFuture
 import io.flutter.plugins.camerax.HydracamCaptureHooks
 
 /**
@@ -27,9 +29,24 @@ class ManualExposureController(
 	private val controlFor: (Camera) -> Camera2CameraControl = { Camera2CameraControl.from(it.cameraControl) },
 	private val cameraIdFor: (Camera2CameraInfo) -> String = { it.cameraId },
 ) {
-	private var lockedCameraId: String? = null
-	private var optionsBeforeLock: CaptureRequestOptions? = null
-	private var lockedRequest: Map<String, Any?>? = null
+	private class ExposureLease(
+		val ownerId: String,
+		val cameraId: String,
+		val camera: Camera,
+		val sourceControl: CameraControl,
+		val control: Camera2CameraControl,
+		val previousOptions: CaptureRequestOptions,
+		var request: Map<String, Any?>,
+	) {
+		var applying = false
+		var applied = false
+		var cleanupOnly = false
+		var applyFuture: ListenableFuture<Void?>? = null
+		var restoreFuture: ListenableFuture<Void?>? = null
+		val releaseCallbacks = mutableListOf<(Map<String, Any?>) -> Unit>()
+	}
+
+	private var lease: ExposureLease? = null
 
 	fun applyLock(
 		ownerId: String,
@@ -38,106 +55,159 @@ class ManualExposureController(
 		frameDurationNs: Long,
 		onDone: (Map<String, Any?>) -> Unit,
 	) {
+		val current = lease
+		if (current != null && current.ownerId != ownerId) {
+			onDone(mapOf("status" to "busy", "cleanupRequired" to false))
+			return
+		}
+		if (current != null && (current.cameraId != cameraName || current.applying || current.cleanupOnly)) {
+			onDone(ownedError(current, "The original exposure lease must settle before another apply"))
+			return
+		}
 		val camera = HydracamCaptureHooks.getBoundCamera()
 		if (camera == null) {
-			onDone(mapOf("status" to "no_camera"))
+			onDone(mapOf("status" to "no_camera", "cleanupRequired" to (current != null)))
 			return
 		}
-		val info = infoFor(camera)
-		val cameraId = cameraIdFor(info)
-		if (!supportsManualSensor(info)) {
-			onDone(mapOf("status" to "unsupported", "cameraId" to cameraId))
-			return
-		}
-		// Re-applying after the recording rebinds the session keeps the metered ISO.
-		val request = lockedRequest?.takeIf {
-			lockedCameraId == cameraId && it["requestedExposureTimeNs"] == exposureTimeNs
-		} ?: meterLockRequest(info, exposureTimeNs, frameDurationNs)
-		val control = controlFor(camera)
-		if (lockedCameraId != cameraId) {
-			optionsBeforeLock = control.getCaptureRequestOptions()
-		}
-		val options = CaptureRequestOptions.Builder()
-			.setCaptureRequestOption(
-				CaptureRequest.CONTROL_AE_MODE,
-				CameraMetadata.CONTROL_AE_MODE_OFF,
-			)
-			.setCaptureRequestOption(
-				CaptureRequest.SENSOR_EXPOSURE_TIME,
-				request["exposureTimeNs"] as Long,
-			)
-			.setCaptureRequestOption(
-				CaptureRequest.SENSOR_SENSITIVITY,
-				request["iso"] as Int,
-			)
-			.setCaptureRequestOption(
-				CaptureRequest.SENSOR_FRAME_DURATION,
-				request["frameDurationNs"] as Long,
-			)
-			.setCaptureRequestOption(CaptureRequest.CONTROL_AWB_LOCK, true)
-		val focusDistance = request["focusDistanceDiopters"] as Float?
-		if (focusDistance != null) {
-			options
+		try {
+			val info = infoFor(camera)
+			val cameraId = cameraIdFor(info)
+			val control = controlFor(camera)
+			if (cameraId != cameraName) {
+				onDone(mapOf("status" to "error", "error" to "Camera does not match cameraName",
+					"cleanupRequired" to (current != null)))
+				return
+			}
+			if (current != null && (current.camera !== camera ||
+				current.sourceControl !== camera.cameraControl || current.control !== control)) {
+				onDone(ownedError(current, "The original camera control must be restored before replacement"))
+				return
+			}
+			if (!supportsManualSensor(info)) {
+				onDone(mapOf("status" to "unsupported", "cameraId" to cameraId,
+					"cleanupRequired" to (current != null)))
+				return
+			}
+			// A same-owner recording relock keeps both the metered request and the
+			// original control snapshot. A replacement camera cannot inherit them.
+			val request = current?.request?.takeIf {
+				it["requestedExposureTimeNs"] == exposureTimeNs
+			} ?: meterLockRequest(info, exposureTimeNs, frameDurationNs)
+			val options = CaptureRequestOptions.Builder()
 				.setCaptureRequestOption(
-					CaptureRequest.CONTROL_AF_MODE,
-					CameraMetadata.CONTROL_AF_MODE_OFF,
+					CaptureRequest.CONTROL_AE_MODE,
+					CameraMetadata.CONTROL_AE_MODE_OFF,
 				)
-				.setCaptureRequestOption(CaptureRequest.LENS_FOCUS_DISTANCE, focusDistance)
-		}
-		val future = control.addCaptureRequestOptions(options.build())
-		future.addListener(
-			{
-				try {
-					future.get()
-					lockedCameraId = cameraId
-					lockedRequest = request
-					onDone(request + mapOf("status" to "locked", "cameraId" to cameraId))
-				} catch (error: Exception) {
-					onDone(
-						mapOf(
-							"status" to "error",
-							"cameraId" to cameraId,
-							"error" to (error.cause?.message ?: error.message),
-						),
+				.setCaptureRequestOption(
+					CaptureRequest.SENSOR_EXPOSURE_TIME,
+					request["exposureTimeNs"] as Long,
+				)
+				.setCaptureRequestOption(
+					CaptureRequest.SENSOR_SENSITIVITY,
+					request["iso"] as Int,
+				)
+				.setCaptureRequestOption(
+					CaptureRequest.SENSOR_FRAME_DURATION,
+					request["frameDurationNs"] as Long,
+				)
+				.setCaptureRequestOption(CaptureRequest.CONTROL_AWB_LOCK, true)
+			val focusDistance = request["focusDistanceDiopters"] as Float?
+			if (focusDistance != null) {
+				options
+					.setCaptureRequestOption(
+						CaptureRequest.CONTROL_AF_MODE,
+						CameraMetadata.CONTROL_AF_MODE_OFF,
 					)
+					.setCaptureRequestOption(CaptureRequest.LENS_FOCUS_DISTANCE, focusDistance)
+			}
+			val active = current ?: ExposureLease(ownerId, cameraId, camera,
+				camera.cameraControl, control, control.getCaptureRequestOptions(), request)
+			active.request = request
+			active.applying = true
+			active.applied = false
+			lease = active // Reserve ownership before native options can mutate.
+			val future = control.addCaptureRequestOptions(options.build())
+			active.applyFuture = future
+			future.addListener({
+				val result = try {
+					future.get()
+					active.applied = true
+					request + mapOf("status" to "locked", "cameraId" to cameraId, "cleanupRequired" to true)
+				} catch (error: Exception) {
+					active.cleanupOnly = true
+					ownedError(active, error.cause?.message ?: error.message)
 				}
-			},
-			ContextCompat.getMainExecutor(context),
-		)
+				completeApply(active, result, onDone)
+			}, ContextCompat.getMainExecutor(context))
+		} catch (error: Exception) {
+			val active = lease
+			if (active != null && active.ownerId == ownerId) {
+				active.cleanupOnly = true
+				completeApply(active, ownedError(active, error.cause?.message ?: error.message), onDone)
+			} else {
+				onDone(mapOf("status" to "error", "error" to (error.cause?.message ?: error.message),
+					"cleanupRequired" to false))
+			}
+		}
 	}
 
 	fun release(ownerId: String, cameraName: String, onDone: (Map<String, Any?>) -> Unit) {
-		val camera = HydracamCaptureHooks.getBoundCamera()
-		val cameraId = camera?.let { cameraIdFor(infoFor(it)) }
-		val previous = optionsBeforeLock
-		val wasLockedCameraId = lockedCameraId
-		lockedCameraId = null
-		lockedRequest = null
-		optionsBeforeLock = null
-		if (camera == null || wasLockedCameraId == null || cameraId != wasLockedCameraId) {
-			onDone(mapOf("status" to "not_locked"))
+		val active = lease
+		if (active == null) {
+			onDone(mapOf("status" to "released", "cleanupRequired" to false))
 			return
 		}
-		val future = controlFor(camera)
-			.setCaptureRequestOptions(previous ?: CaptureRequestOptions.Builder().build())
-		future.addListener(
-			{
-				try {
-					future.get()
-					onDone(mapOf("status" to "released", "cameraId" to cameraId))
-				} catch (error: Exception) {
-					onDone(
-						mapOf(
-							"status" to "error",
-							"cameraId" to cameraId,
-							"error" to (error.cause?.message ?: error.message),
-						),
-					)
-				}
-			},
-			ContextCompat.getMainExecutor(context),
-		)
+		if (active.ownerId != ownerId) {
+			onDone(mapOf("status" to "busy", "cleanupRequired" to false))
+			return
+		}
+		if (active.cameraId != cameraName) {
+			onDone(ownedError(active, "cameraName does not own the original control"))
+			return
+		}
+		active.cleanupOnly = true
+		active.releaseCallbacks.add(onDone)
+		if (!active.applying && active.restoreFuture == null) restore(active)
 	}
+
+	private fun completeApply(active: ExposureLease, result: Map<String, Any?>, onDone: (Map<String, Any?>) -> Unit) {
+		active.applying = false
+		active.applyFuture = null
+		onDone(result)
+		if (active.releaseCallbacks.isNotEmpty() && active.restoreFuture == null) restore(active)
+	}
+
+	private fun restore(active: ExposureLease) {
+		try {
+			// Restore the saved control, even after the plugin binds another camera.
+			val future = active.control.setCaptureRequestOptions(active.previousOptions)
+			active.restoreFuture = future
+			future.addListener({
+				val result = try {
+					future.get()
+					if (lease === active) lease = null
+					mapOf("status" to "released", "cameraId" to active.cameraId, "cleanupRequired" to false)
+				} catch (error: Exception) {
+					ownedError(active, error.cause?.message ?: error.message)
+				}
+				completeRelease(active, result)
+			}, ContextCompat.getMainExecutor(context))
+		} catch (error: Exception) {
+			completeRelease(active, ownedError(active, error.cause?.message ?: error.message))
+		}
+	}
+
+	private fun completeRelease(active: ExposureLease, result: Map<String, Any?>) {
+		active.restoreFuture = null
+		val callbacks = active.releaseCallbacks.toList()
+		active.releaseCallbacks.clear()
+		callbacks.forEach { it(result) }
+	}
+
+	private fun ownedError(active: ExposureLease, message: String?): Map<String, Any?> = mapOf(
+		"status" to "error", "cameraId" to active.cameraId,
+		"error" to message, "cleanupRequired" to true,
+	)
 
 	/** Values the sensor used for the latest completed frame. */
 	fun readCaptureSettings(): Map<String, Any?> {
@@ -167,7 +237,9 @@ class ManualExposureController(
 			"afMode" to result.get(CaptureResult.CONTROL_AF_MODE),
 			"focusDistanceDiopters" to result.get(CaptureResult.LENS_FOCUS_DISTANCE),
 			"sensorTimestampNs" to result.get(CaptureResult.SENSOR_TIMESTAMP),
-			"manualLockActive" to (lockedCameraId == cameraId),
+			"manualLockActive" to (lease?.let {
+				it.camera === camera && it.sourceControl === camera.cameraControl && it.applied && !it.cleanupOnly
+			} == true),
 		)
 	}
 
