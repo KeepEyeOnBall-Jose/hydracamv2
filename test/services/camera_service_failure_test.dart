@@ -485,6 +485,24 @@ void main() {
     await service.stopCamera();
   });
 
+  for (final code in [
+    "RECORDING_NOT_STARTED",
+    "RECORDING_FINALIZED_WITHOUT_PATH"
+  ]) {
+    test("typed CameraX terminal $code permits the next owner", () async {
+      final platform = _FakeCameraPlatform(
+          stopRecordingError: CameraException(code, "Terminal acknowledged"));
+      CameraPlatform.instance = platform;
+      final service = CameraService(storageService: storageService);
+      await service.startRecordingVideo();
+      await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      platform.stopRecordingError = null;
+      await service.startRecordingVideo();
+      expect(platform.recordingStarts, 2);
+      await service.stopCamera();
+    });
+  }
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
@@ -930,7 +948,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   final void Function(String)? onEvent;
   final PlatformException? setFlashModeError;
   final Future<void>? startRecordingReply;
-  PlatformException? stopRecordingError;
+  Exception? stopRecordingError;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
   CameraDescription? lastCreatedCamera;
