@@ -170,6 +170,64 @@ void main() {
     });
   }
 
+  for (final restoreSucceeds in [true, false]) {
+    test(
+        "FPS fallback restores old exposure before replacement ($restoreSucceeds)",
+        () async {
+      const channel = MethodChannel("hydracam-fps-owner-test");
+      final events = <String>[];
+      final owners = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+        final owner = (call.arguments as Map)["ownerId"].toString();
+        if (call.method == "applyLock") {
+          owners.add(owner);
+          events.add("lock:$owner");
+          return {"status": "locked"};
+        }
+        if (call.method == "release") {
+          events.add("release:$owner");
+          return {"status": restoreSucceeds ? "released" : "error"};
+        }
+        return {"status": "ok"};
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null));
+      final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_fps_failure", message: "forced FPS failure"),
+        startRecordingFailures: 1,
+        onEvent: events.add,
+      );
+      CameraPlatform.instance = platform;
+      final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel),
+      );
+      if (!restoreSucceeds) {
+        await expectLater(service.startRecordingVideo(), throwsException);
+        expect(platform.createdCameras, 1);
+        expect(platform.recordingStarts, 1);
+        expect(events, isNot(contains("dispose")));
+        return;
+      }
+      await service.startRecordingVideo();
+      expect(owners.length, greaterThanOrEqualTo(2));
+      expect(owners.first, isNot(owners[1]));
+      final release = events.indexOf("release:${owners.first}");
+      final dispose = events.indexOf("dispose");
+      final secondLock = events.indexOf("lock:${owners[1]}");
+      final retryStart = events.lastIndexOf("start");
+      expect(release, greaterThanOrEqualTo(0));
+      expect(dispose, greaterThan(release));
+      expect(secondLock, greaterThan(dispose));
+      expect(retryStart, greaterThan(secondLock));
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      await service.stopCamera();
+    });
+  }
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
@@ -595,6 +653,8 @@ class _FakeCameraPlatform extends CameraPlatform {
   _FakeCameraPlatform({
     List<CameraDescription>? cameras,
     this.startRecordingError,
+    this.startRecordingFailures,
+    this.onEvent,
     this.setFlashModeError,
   }) : cameras = cameras ??
             const [
@@ -607,6 +667,8 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   final List<CameraDescription> cameras;
   PlatformException? startRecordingError;
+  int? startRecordingFailures;
+  final void Function(String)? onEvent;
   final PlatformException? setFlashModeError;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
@@ -627,6 +689,7 @@ class _FakeCameraPlatform extends CameraPlatform {
     MediaSettings mediaSettings,
   ) async {
     createdCameras++;
+    onEvent?.call("create");
     lastCreatedCamera = cameraDescription;
     lastMediaSettings = mediaSettings;
     return _nextCameraId++;
@@ -684,8 +747,13 @@ class _FakeCameraPlatform extends CameraPlatform {
   @override
   Future<void> startVideoCapturing(VideoCaptureOptions options) async {
     recordingStarts++;
+    onEvent?.call("start");
     final error = startRecordingError;
-    if (error != null) {
+    if (error != null &&
+        (startRecordingFailures == null || startRecordingFailures! > 0)) {
+      if (startRecordingFailures != null) {
+        startRecordingFailures = startRecordingFailures! - 1;
+      }
       throw error;
     }
     _isRecording = true;
@@ -707,7 +775,9 @@ class _FakeCameraPlatform extends CameraPlatform {
   Future<XFile> takePicture(int cameraId) async => XFile("unused-photo.jpg");
 
   @override
-  Future<void> dispose(int cameraId) async {}
+  Future<void> dispose(int cameraId) async {
+    onEvent?.call("dispose");
+  }
 }
 
 class _TestPathProviderPlatform extends PathProviderPlatform {
