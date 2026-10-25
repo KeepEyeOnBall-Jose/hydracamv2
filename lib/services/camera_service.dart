@@ -1,7 +1,12 @@
 import "dart:async";
 import "dart:io";
 import "package:camera/camera.dart";
+import "package:camera_android_camerax/camera_android_camerax.dart";
+import "package:camera_platform_interface/camera_platform_interface.dart"
+    show CameraPlatform;
 import "package:flutter/cupertino.dart";
+import "package:flutter/services.dart";
+import "package:uuid/uuid.dart";
 import "session_manager.dart";
 import "settings_service.dart";
 import "storage_service.dart";
@@ -16,6 +21,7 @@ import "camera_setup_service.dart";
 import "device_service.dart";
 import "log_service.dart";
 import "manual_exposure_service.dart";
+import "recorded_video_snapshots.dart";
 import "video_metadata_service.dart";
 
 /// CameraService - Manages camera operations such as taking photos and recording videos.
@@ -41,7 +47,19 @@ class CameraService {
   final CameraDeviceInfoProvider _deviceInfoProvider;
   final Duration _cameraOperationTimeout;
   final ManualExposureService _manualExposureService;
+  final RecordedVideoSnapshots _recordedVideoSnapshots;
   RecordingExposureSession? _recordingExposure;
+  ({
+    CameraDescription camera,
+    VideoCaptureProfile profile,
+    bool explicitFps
+  })? _exposureCameraOrigin;
+  bool _exposureOwnerWasDisposed = false;
+  Future<void>? _exposureRecoveryInFlight;
+  _OwnedVideoAttempt? _videoAttempt;
+  int _captureEpoch = 0;
+  Future<void>? _hardwareClosing;
+  Future<void>? _cameraStopInFlight;
 
   CameraController? _controller; // The camera controller instance
   CameraController? get controller =>
@@ -98,10 +116,13 @@ class CameraService {
       String? mockMediaSourceDir,
       CameraDeviceInfoProvider? deviceInfoProvider,
       Duration? cameraOperationTimeout,
-      ManualExposureService? manualExposureService})
+      ManualExposureService? manualExposureService,
+      RecordedVideoSnapshots? recordedVideoSnapshots})
       : _storageService = storageService,
         _manualExposureService =
             manualExposureService ?? ManualExposureService(),
+        _recordedVideoSnapshots =
+            recordedVideoSnapshots ?? RecordedVideoSnapshots(),
         _useMockCamera = useMockCamera ?? false,
         _deviceInfoProvider =
             deviceInfoProvider ?? DeviceIdService.getDeviceInfo,
@@ -154,6 +175,7 @@ class CameraService {
   /// - Loads previous camera setting if exists.
   /// - Ensures the flash is turned off during initialization.
   Future<void> startCamera({int? cameraIndex}) async {
+    await _cameraStopInFlight;
     if (_useMockCamera) {
       await _ensureMockCameraReady();
       return;
@@ -278,7 +300,13 @@ class CameraService {
   /// - Initializes the camera if it has not been initialized already.
   /// - Configures the flash to be off by default.
   /// - Throws an exception if initialization fails.
-  Future<void> ensureCameraIsReady({bool requireExplicitFps = true}) async {
+  Future<void> ensureCameraIsReady({bool requireExplicitFps = true}) =>
+      _ensureCameraIsReady(requireExplicitFps: requireExplicitFps);
+
+  Future<void> _ensureCameraIsReady({
+    bool requireExplicitFps = true,
+    bool duringRecordingStart = false,
+  }) async {
     if (_useMockCamera) {
       await _ensureMockCameraReady();
       return;
@@ -296,6 +324,9 @@ class CameraService {
       return; // Camera is already ready
     }
 
+    _requireNoCaptureReconfiguration(
+        duringRecordingStart: duringRecordingStart);
+    await _settleExposureBeforeReuse();
     LogService.instance.registerLog(requireExplicitFps
         ? "Initializing camera..."
         : "Initializing camera preview...");
@@ -308,7 +339,8 @@ class CameraService {
     final cameraDescription = await _resolveCameraDescription(cameras);
     final profile = await _loadVideoCaptureProfile();
 
-    await _disposeController("camera readiness initialization");
+    await _disposeController("camera readiness initialization",
+        duringRecordingStart: duringRecordingStart);
     _controller = _createControllerForPolicy(
       cameraDescription,
       profile,
@@ -431,13 +463,18 @@ class CameraService {
   }
 
   Future<void> _startRecordingVideo({required bool enableFlash}) async {
+    final cameraStop = _cameraStopInFlight;
+    if (cameraStop != null) {
+      await cameraStop;
+    }
+    final epoch = _captureEpoch;
     // Capture the operation present at entry: a later stop may itself be
     // waiting for this start, so never create a cycle between their futures.
     final stopping = _recordingStopInFlight;
     if (stopping != null) {
       await stopping;
     }
-    if (_isRecording) {
+    if (_isRecording || _videoAttempt != null) {
       throw StateError("A video recording is already active");
     }
     // Check if storage is critically low before proceeding
@@ -466,8 +503,11 @@ class CameraService {
 
       // Restore the previous recording before replacing or configuring its
       // camera, including when the next recording requests automatic exposure.
-      await _abortRecordingExposure(requireReleased: true);
-      await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
+      await _settleExposureBeforeReuse();
+      if (epoch != _captureEpoch) {
+        throw StateError("Camera start was cancelled by hardware stop");
+      }
+      await _ensureCameraIsReady(duringRecordingStart: true);
       recordingCaptureContext = await _buildCurrentCaptureContext();
 
       // Announce with flash before starting (if setting is enabled)
@@ -478,7 +518,13 @@ class CameraService {
       }
 
       await _lockRecordingExposure();
+      if (epoch != _captureEpoch) {
+        throw StateError("Camera start was cancelled by hardware stop");
+      }
       final startTime = await _startVideoRecordingWithFallback();
+      if (epoch != _captureEpoch) {
+        throw StateError("Camera start was cancelled by hardware stop");
+      }
       videoStartRecordingDate = startTime;
       _recordingExposure?.afterStart();
       LogService.instance.registerLog(
@@ -488,10 +534,14 @@ class CameraService {
     } catch (e, stackTrace) {
       LogService.instance
           .registerLog("Error starting video recording: $e\n$stackTrace");
-      _isRecording = false;
-      videoStartRecordingDate = null;
-      recordingCaptureContext = null;
-      await _abortRecordingExposure();
+      // A rejected/timed-out start may have already changed native state.
+      // Keep its original operation until STOP confirms terminal settlement.
+      _isRecording = _videoAttempt != null;
+      if (_videoAttempt == null) {
+        videoStartRecordingDate = null;
+        recordingCaptureContext = null;
+        await _abortRecordingExposure();
+      }
       throw Exception("Failed to start video recording: $e");
     }
   }
@@ -515,30 +565,22 @@ class CameraService {
   }
 
   Future<String> _stopRecordingVideo() async {
-    final starting = _recordingStartInFlight;
-    if (starting != null) {
-      await starting;
-    }
     try {
       if (_useMockCamera) {
         return await _stopMockVideoRecording();
       }
 
-      if (!_isRecording && !(_controller?.value.isRecordingVideo ?? false)) {
+      if (_videoAttempt == null && _recordingStartInFlight != null) {
+        await _recordingStartInFlight!.timeout(_cameraOperationTimeout);
+      }
+      final attempt = _videoAttempt;
+      if (attempt == null) {
         throw Exception(
             "stopVideoRecording was called when no video is recording.");
       }
 
-      await _recordingExposure?.readBeforeStop();
-      final XFile video = await _controller!.stopVideoRecording();
-      videoEndRecordingDate = DateTime.now();
-
-      _isRecording = false;
-      await _finishRecordingExposure();
-
-      final newPath = await _getSessionMediaPath(video.name);
-
-      await File(video.path).copy(newPath); // Move to session directory
+      final newPath =
+          await _settleVideoAttempt(attempt).timeout(_cameraOperationTimeout);
       LogService.instance.registerLog("Video saved to session path: $newPath");
       await _logRecordedVideoMetadata(newPath);
 
@@ -559,11 +601,135 @@ class CameraService {
     } catch (e, stackTrace) {
       LogService.instance
           .registerLog("Error stopping video recording: $e\n$stackTrace");
-      _isRecording = _controller?.value.isRecordingVideo ?? false;
-      if (!_isRecording) {
+      _isRecording = _videoAttempt != null;
+      if (_videoAttempt == null) {
         await _abortRecordingExposure();
       }
       throw Exception("Failed to stop video recording: $e");
+    }
+  }
+
+  Future<RecordedVideoSnapshot> snapshotForRecordedVideo(String path) async {
+    final snapshot = await _recordedVideoSnapshots.forPath(path);
+    if (snapshot == null) {
+      throw StateError("Original capture metadata is unavailable for $path");
+    }
+    return snapshot;
+  }
+
+  Future<void> acknowledgeRecordedVideo(RecordedVideoSnapshot snapshot) =>
+      _recordedVideoSnapshots.acknowledge(snapshot);
+
+  Duration _remaining(DateTime deadline) {
+    final left = deadline.difference(DateTime.now());
+    return left.isNegative ? Duration.zero : left;
+  }
+
+  Future<String> _settleVideoAttempt(_OwnedVideoAttempt attempt) {
+    final existing = attempt.settlement;
+    if (existing != null) {
+      return existing;
+    }
+    late final Future<String> settling;
+    settling = _finalizeVideoAttempt(attempt).whenComplete(() {
+      if (!attempt.terminal && identical(attempt.settlement, settling)) {
+        attempt.settlement = null;
+      }
+    });
+    attempt.settlement = settling;
+    return settling;
+  }
+
+  Future<String> _finalizeVideoAttempt(_OwnedVideoAttempt attempt) async {
+    final sensor = attempt.exposure?.readBeforeStop();
+    XFile video;
+    try {
+      if (!attempt.supportsPostDisposeStop) {
+        // AVFoundation's stop ignores cameraId. Never send it after disposal,
+        // even when the original start replies after our caller's deadline.
+        try {
+          await attempt.rawStart;
+        } catch (_) {}
+        if (attempt.disposed) {
+          throw StateError("Original native camera was closed before STOP");
+        }
+      }
+      video = await attempt.platform.stopVideoRecording(attempt.cameraId);
+      attempt.terminal = true;
+      // Consume the original public controller completion before updating its
+      // notifier or permitting another dispatch on that same controller.
+      try {
+        await attempt.rawStart;
+      } catch (_) {}
+    } on PlatformException catch (error) {
+      if (error.code == "RECORDING_NOT_STARTED" ||
+          error.code == "RECORDING_FINALIZED_WITHOUT_PATH") {
+        attempt.terminal = true;
+        await _completeVideoExposure(attempt, sensor);
+        _clearTerminalVideoAttempt(attempt);
+      }
+      rethrow;
+    }
+    attempt.stoppedAt = DateTime.now();
+    await _completeVideoExposure(attempt, sensor);
+    final captured = RecordedVideoSnapshot.capture(
+        captureId: attempt.captureId,
+        path: video.path,
+        startedAt: attempt.startedAt,
+        stoppedAt: attempt.stoppedAt,
+        context: attempt.context,
+        sessionGuid: attempt.sessionGuid);
+    try {
+      // Persist a clearly pending receipt first. Late STOP with no String
+      // consumer still leaves original media and its exact metadata reachable.
+      await _recordedVideoSnapshots.remember(captured);
+      final path =
+          await _getMediaPathForSession(video.name, attempt.sessionGuid);
+      if (path != video.path) {
+        await File(video.path).copy(path);
+      }
+      await _recordedVideoSnapshots.remember(captured.atPath(path));
+      return path;
+    } finally {
+      _clearTerminalVideoAttempt(attempt);
+    }
+  }
+
+  Future<void> _completeVideoExposure(
+      _OwnedVideoAttempt attempt, Future<void>? sensor) async {
+    if (sensor != null) {
+      await sensor;
+    }
+    final exposure = attempt.exposure;
+    if (exposure != null) {
+      final metadata = await exposure.finish();
+      attempt.context = attempt.context?.withExposure(metadata);
+      LogService.instance.registerLog(
+          "Recorded exposure ${metadata.preset} (${metadata.lockStatus}): "
+          "exposureTimeNs=${metadata.exposureTimeNs} iso=${metadata.iso} "
+          "frameDurationNs=${metadata.frameDurationNs} "
+          "rollingShutterSkewNs=${metadata.rollingShutterSkewNs} "
+          "underexposed=${metadata.underexposed} "
+          "cameraId=${metadata.start?["cameraId"] ?? metadata.stop?["cameraId"]}");
+      if (identical(_recordingExposure, exposure) && !exposure.cleanupPending) {
+        _recordingExposure = null;
+        _exposureCameraOrigin = null;
+        _exposureOwnerWasDisposed = false;
+      }
+    }
+    videoStartRecordingDate = attempt.startedAt;
+    videoEndRecordingDate = attempt.stoppedAt;
+    recordingCaptureContext = attempt.context;
+  }
+
+  void _clearTerminalVideoAttempt(_OwnedVideoAttempt attempt) {
+    if (attempt.terminal && identical(_videoAttempt, attempt)) {
+      if (!attempt.disposed) {
+        attempt.controller.value = attempt.controller.value
+            .copyWith(isRecordingVideo: false, isRecordingPaused: false);
+      }
+      _videoAttempt = null;
+      _isRecording = false;
     }
   }
 
@@ -604,21 +770,28 @@ class CameraService {
   }
 
   Future<void> _persistForcedStopCapturedVideo(String videoPath) async {
+    final snapshot = await snapshotForRecordedVideo(videoPath);
+    if (snapshot.sessionGuid != SessionManager.instance.sessionGuid) {
+      throw StateError("Original clip belongs to a different session");
+    }
     final String deviceId = await DeviceIdService.getOrCreateDeviceId();
     final capturedVideo = _buildForcedStopCapturedVideo(
       videoPath: videoPath,
       deviceId: deviceId,
+      snapshot: snapshot,
     );
     await SessionManager.instance.addVideo(capturedVideo);
+    await acknowledgeRecordedVideo(snapshot);
   }
 
   CapturedVideo _buildForcedStopCapturedVideo({
     required String videoPath,
     required String deviceId,
+    required RecordedVideoSnapshot snapshot,
   }) {
-    final endRecordingDate = videoEndRecordingDate ?? DateTime.now();
-    final startRecordingDate = videoStartRecordingDate ?? endRecordingDate;
-    if (videoStartRecordingDate == null) {
+    final endRecordingDate = snapshot.stoppedAt ?? DateTime.now();
+    final startRecordingDate = snapshot.startedAt ?? endRecordingDate;
+    if (snapshot.startedAt == null) {
       LogService.instance.registerLog(
           "Recording start timestamp was missing during forced stop; "
           "using end timestamp as fallback.");
@@ -631,12 +804,29 @@ class CameraService {
       startRecordingDate: startRecordingDate,
       endRecordingDate: endRecordingDate,
       receivedDate: DateTime.now(),
-      captureContext: recordingCaptureContext,
+      captureContext: snapshot.context,
     );
   }
 
   /// Stops the camera and disposes of its resources.
-  Future<void> stopCamera() async {
+  Future<void> stopCamera() {
+    final existing = _cameraStopInFlight;
+    if (existing != null) {
+      return existing;
+    }
+    late final Future<void> stopping;
+    stopping = _stopCamera().whenComplete(() {
+      if (identical(_cameraStopInFlight, stopping)) {
+        _cameraStopInFlight = null;
+      }
+    });
+    _cameraStopInFlight = stopping;
+    return stopping;
+  }
+
+  Future<void> _stopCamera() async {
+    ++_captureEpoch;
+    final deadline = DateTime.now().add(_cameraOperationTimeout);
     try {
       if (_useMockCamera) {
         _isCameraInitialized = false;
@@ -644,8 +834,34 @@ class CameraService {
         return;
       }
 
-      await _setFlashModeIfSupported(FlashMode.off, "camera stop");
-      await _disposeController("camera stop");
+      var attempt = _videoAttempt;
+      if (attempt == null && _recordingStartInFlight != null) {
+        try {
+          await _recordingStartInFlight!.timeout(_remaining(deadline));
+        } catch (_) {
+          // A before-dispatch cancellation has no recorder. A dispatched
+          // operation remains retained independently from the UI start call.
+        }
+        attempt = _videoAttempt;
+      }
+      if (attempt != null) {
+        try {
+          await _settleVideoAttempt(attempt).timeout(_remaining(deadline));
+        } catch (error) {
+          LogService.instance.registerLog(
+              "Recorder settlement remains pending during camera stop: $error");
+        }
+      }
+      if (_recordingExposure?.cleanupPending ?? false) {
+        _exposureOwnerWasDisposed = true;
+      }
+      // Explicit hardware stop must not depend on an exposure acknowledgement.
+      // Keep the original lease and operation for controlled recovery later.
+      if (attempt != null) {
+        attempt.disposed = true;
+      }
+      await _disposeController("camera stop",
+          allowUnsettledExposure: true, deadline: deadline);
       LogService.instance.registerLog("Camera stopped");
     } catch (e) {
       LogService.instance.registerLog("Error stopping camera: $e");
@@ -688,6 +904,8 @@ class CameraService {
     bool clearSelectedCameraName = false,
     VideoCaptureProfile? videoProfile,
   }) async {
+    _requireNoCaptureReconfiguration();
+    await _settleExposureBeforeReuse();
     if (lensPreference != null) {
       await SettingsService.setCameraLensPreference(lensPreference);
     }
@@ -830,10 +1048,10 @@ class CameraService {
   }
 
   Future<DateTime> _startVideoRecordingWithFallback() async {
+    final first = _dispatchVideoStart();
     try {
-      final startedAt = DateTime.now();
-      await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
-      return startedAt;
+      await first.rawStart.timeout(_cameraOperationTimeout);
+      return first.startedAt;
     } on TimeoutException catch (error, stackTrace) {
       LogService.instance.registerLog(
           "Camera video recording start timed out after "
@@ -841,6 +1059,14 @@ class CameraService {
           "$error\n$stackTrace");
       rethrow;
     } catch (error, stackTrace) {
+      // A start error alone is not proof that no encoder exists. Consume an
+      // actual native terminal acknowledgement before replacing its camera.
+      try {
+        await _settleVideoAttempt(first).timeout(_cameraOperationTimeout);
+      } catch (_) {}
+      if (!first.terminal) {
+        rethrow;
+      }
       if (!_controllerUsesExplicitFps) {
         rethrow;
       }
@@ -849,16 +1075,39 @@ class CameraService {
         "video recording start",
         error,
         stackTrace,
+        duringRecordingStart: true,
       );
       if (!didRecover) {
         rethrow;
       }
       recordingCaptureContext = await _buildCurrentCaptureContext();
       await _lockRecordingExposure();
-      final startedAt = DateTime.now();
-      await _controller!.startVideoRecording().timeout(_cameraOperationTimeout);
-      return startedAt;
+      final retry = _dispatchVideoStart();
+      await retry.rawStart.timeout(_cameraOperationTimeout);
+      return retry.startedAt;
     }
+  }
+
+  _OwnedVideoAttempt _dispatchVideoStart() {
+    final controller = _controller!;
+    final platform = CameraPlatform.instance;
+    final attempt = _OwnedVideoAttempt(
+        controller: controller,
+        platform: platform,
+        cameraId: controller.cameraId,
+        captureId: _recordingExposure?.ownerId ?? const Uuid().v4(),
+        exposure: _recordingExposure,
+        context: recordingCaptureContext,
+        startedAt: DateTime.now(),
+        sessionGuid: SessionManager.instance.sessionGuid,
+        supportsPostDisposeStop:
+            platform is CameraRecordingSettlementAfterDispose);
+    _videoAttempt = attempt;
+    attempt.rawStart = controller.startVideoRecording();
+    // The original future remains retained when its bounded caller returns.
+    // Install an observer now so a late rejection is never unhandled.
+    unawaited(attempt.rawStart.then<void>((_) {}, onError: (Object _) {}));
+    return attempt;
   }
 
   Future<bool> _reinitializeAfterTimedOutPhoto(
@@ -913,8 +1162,9 @@ class CameraService {
   Future<bool> _reinitializeWithoutExplicitFps(
     String operation,
     Object error,
-    StackTrace stackTrace,
-  ) async {
+    StackTrace stackTrace, {
+    bool duringRecordingStart = false,
+  }) async {
     if (!_controllerUsesExplicitFps) {
       return false;
     }
@@ -934,7 +1184,8 @@ class CameraService {
       _deviceCameras = cameras;
       final cameraDescription = await _resolveCameraDescription(cameras);
       final profile = await _loadVideoCaptureProfile();
-      await _disposeController("$operation retry");
+      await _disposeController("$operation retry",
+          duringRecordingStart: duringRecordingStart);
       _controller = _createControllerUsingPresetDefaults(
         cameraDescription,
         profile,
@@ -987,7 +1238,15 @@ class CameraService {
     }
   }
 
-  Future<void> _disposeController(String operation) async {
+  Future<void> _disposeController(String operation,
+      {bool allowUnsettledExposure = false,
+      bool duringRecordingStart = false,
+      DateTime? deadline}) async {
+    if (!allowUnsettledExposure) {
+      _requireNoCaptureReconfiguration(
+          duringRecordingStart: duringRecordingStart);
+      await _settleExposureBeforeReuse();
+    }
     final controller = _controller;
     if (controller == null) {
       return;
@@ -997,12 +1256,26 @@ class CameraService {
     _isCameraInitialized = false;
     _flashAvailable = null;
     try {
-      await controller.dispose().timeout(const Duration(seconds: 5));
+      final closing = controller.dispose();
+      _hardwareClosing = closing;
+      unawaited(closing.then<void>((_) {
+        if (identical(_hardwareClosing, closing)) {
+          _hardwareClosing = null;
+        }
+      }, onError: (Object _) {}));
+      await closing.timeout(
+          deadline == null ? const Duration(seconds: 5) : _remaining(deadline));
     } catch (error) {
       LogService.instance.registerLog(
           "Error disposing camera controller during $operation: $error");
     }
-    await Future.delayed(_cameraDisposeSettleDelay);
+    final settle =
+        deadline == null ? _cameraDisposeSettleDelay : _remaining(deadline);
+    if (settle > Duration.zero) {
+      await Future.delayed(settle < _cameraDisposeSettleDelay
+          ? settle
+          : _cameraDisposeSettleDelay);
+    }
   }
 
   Future<bool> _setFlashModeIfSupported(
@@ -1088,6 +1361,13 @@ class CameraService {
           contents: "HydraCam mock video captured from $start to "
               "$videoEndRecordingDate\n",
         );
+    await _recordedVideoSnapshots.remember(RecordedVideoSnapshot.capture(
+        captureId: const Uuid().v4(),
+        path: filePath,
+        startedAt: videoStartRecordingDate,
+        stoppedAt: videoEndRecordingDate,
+        context: recordingCaptureContext,
+        sessionGuid: SessionManager.instance.sessionGuid));
     LogService.instance
         .registerLog("Mock video saved to session path: $filePath");
     if (onVideoRecorded != null) {
@@ -1138,6 +1418,66 @@ class CameraService {
   /// Applies the selected exposure preset before recording starts. Failures
   /// never block recording: the clip falls back to auto exposure and the
   /// metadata records why.
+  void _requireNoCaptureReconfiguration({bool duringRecordingStart = false}) {
+    if (_isRecording ||
+        _videoAttempt != null ||
+        _cameraStopInFlight != null ||
+        _recordingStopInFlight != null ||
+        (!duringRecordingStart && _recordingStartInFlight != null)) {
+      throw Exception(
+          "Camera reconfiguration must wait for capture settlement");
+    }
+  }
+
+  Future<void> _settleExposureBeforeReuse() async {
+    if (_videoAttempt != null) {
+      throw StateError(
+          "Original recording has not reached terminal settlement");
+    }
+    await _hardwareClosing?.timeout(_cameraOperationTimeout);
+    if (!_exposureOwnerWasDisposed ||
+        !(_recordingExposure?.cleanupPending ?? false)) {
+      await _abortRecordingExposure(requireReleased: true);
+      return;
+    }
+    final inFlight = _exposureRecoveryInFlight;
+    if (inFlight != null) {
+      await inFlight;
+      return;
+    }
+    late final Future<void> recovering;
+    recovering = _reactivateOriginalExposureOwner().whenComplete(() {
+      if (identical(_exposureRecoveryInFlight, recovering)) {
+        _exposureRecoveryInFlight = null;
+      }
+    });
+    _exposureRecoveryInFlight = recovering;
+    return recovering;
+  }
+
+  Future<void> _reactivateOriginalExposureOwner() async {
+    final origin = _exposureCameraOrigin;
+    if (origin == null) {
+      throw Exception("Original exposure camera is unavailable for cleanup");
+    }
+    try {
+      // Only the saved preview may reactivate the original native control.
+      // No new exposure owner or encoder is created here.
+      _controller = origin.explicitFps
+          ? _createController(origin.camera, origin.profile)
+          : _createControllerUsingPresetDefaults(origin.camera, origin.profile);
+      _flashAvailable = null;
+      await _controller!.initialize().timeout(_cameraOperationTimeout);
+      _isCameraInitialized = true;
+      await _abortRecordingExposure(requireReleased: true);
+    } finally {
+      // A timeout or control mismatch must close the recovery hardware too.
+      // Retained ownership is cleared only by the original native ACK.
+      await _disposeController("exposure owner recovery",
+          allowUnsettledExposure: true);
+    }
+  }
+
   Future<void> _lockRecordingExposure() async {
     await _abortRecordingExposure(requireReleased: true);
     final cameraName = _controller?.description.name;
@@ -1152,6 +1492,11 @@ class CameraService {
       frameDurationNs: 1000000000 ~/ _currentProfile.framesPerSecond,
     );
     _recordingExposure = session;
+    _exposureCameraOrigin = (
+      camera: _controller!.description,
+      profile: _currentProfile,
+      explicitFps: _controllerUsesExplicitFps,
+    );
     try {
       await session.lockBeforeStart().timeout(_cameraOperationTimeout);
       if (session.lockStatus == "busy" ||
@@ -1168,30 +1513,6 @@ class CameraService {
     }
   }
 
-  Future<void> _finishRecordingExposure() async {
-    final session = _recordingExposure;
-    if (session == null) {
-      return;
-    }
-    try {
-      final exposure = await session.finish();
-      recordingCaptureContext = recordingCaptureContext?.withExposure(exposure);
-      LogService.instance.registerLog(
-          "Recorded exposure ${exposure.preset} (${exposure.lockStatus}): "
-          "exposureTimeNs=${exposure.exposureTimeNs} iso=${exposure.iso} "
-          "frameDurationNs=${exposure.frameDurationNs} "
-          "rollingShutterSkewNs=${exposure.rollingShutterSkewNs} "
-          "underexposed=${exposure.underexposed} "
-          "cameraId=${exposure.start?["cameraId"] ?? exposure.stop?["cameraId"]}");
-    } catch (error) {
-      LogService.instance.registerLog("Exposure release failed: $error");
-    } finally {
-      if (identical(_recordingExposure, session) && !session.cleanupPending) {
-        _recordingExposure = null;
-      }
-    }
-  }
-
   Future<void> _abortRecordingExposure({bool requireReleased = false}) async {
     final session = _recordingExposure;
     try {
@@ -1204,6 +1525,8 @@ class CameraService {
     if (session == null || !session.cleanupPending) {
       if (identical(_recordingExposure, session)) {
         _recordingExposure = null;
+        _exposureCameraOrigin = null;
+        _exposureOwnerWasDisposed = false;
       }
     } else if (requireReleased) {
       throw StateError("Exposure cleanup must finish before recording");
@@ -1238,7 +1561,13 @@ class CameraService {
   /// Function to find session directory to store files
   /// Directory would be something like `/data/user/0/com.amaia23.hydracam/session_<sessionGuid>/...` in Android.
   Future<String> _getSessionMediaPath(String fileName) async {
-    final sessionGuid = SessionManager.instance.sessionGuid?.trim();
+    return _getMediaPathForSession(
+        fileName, SessionManager.instance.sessionGuid);
+  }
+
+  Future<String> _getMediaPathForSession(
+      String fileName, String? originalSessionGuid) async {
+    final sessionGuid = originalSessionGuid?.trim();
     if (sessionGuid == null || sessionGuid.isEmpty) {
       throw Exception(
           "No active service session available for captured media.");
@@ -1250,4 +1579,41 @@ class CameraService {
     }
     return "${sessionDir.path}/$fileName";
   }
+}
+
+/// One application-owned dispatch. Controller, delegate and camera ID are
+/// captured together; a later global camera can never receive this STOP.
+class _OwnedVideoAttempt {
+  _OwnedVideoAttempt({
+    required this.controller,
+    required this.platform,
+    required this.cameraId,
+    required this.captureId,
+    required this.exposure,
+    required MediaCaptureContext? context,
+    required this.startedAt,
+    required this.sessionGuid,
+    required this.supportsPostDisposeStop,
+  }) : context = RecordedVideoSnapshot.capture(
+                captureId: captureId,
+                path: "",
+                startedAt: startedAt,
+                stoppedAt: null,
+                context: context)
+            .context;
+
+  final CameraController controller;
+  final CameraPlatform platform;
+  final int cameraId;
+  final String captureId;
+  final RecordingExposureSession? exposure;
+  final DateTime startedAt;
+  final String? sessionGuid;
+  final bool supportsPostDisposeStop;
+  late final Future<void> rawStart;
+  Future<String>? settlement;
+  MediaCaptureContext? context;
+  DateTime? stoppedAt;
+  bool disposed = false;
+  bool terminal = false;
 }

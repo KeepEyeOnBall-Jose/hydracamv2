@@ -262,6 +262,10 @@ void main() {
     expect(metadata.lockStatus, "unavailable");
     expect(metadata.isLocked, isFalse);
     expect(metadata.start, containsPair("status", "timeout"));
+    // The late relock's nonmutating sample has its own zero-delay timer.
+    // Drain it too: test teardown must not leave that work behind.
+    await tester.pump(Duration.zero);
+    expect(metadata.lockStatus, "unavailable");
   });
 
   for (final status in ["locked", "error"]) {

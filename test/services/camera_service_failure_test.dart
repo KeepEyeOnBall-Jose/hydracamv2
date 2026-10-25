@@ -443,15 +443,17 @@ void main() {
     }
   });
 
-  test("hardware stop finalizes the original start that replies late", () async {
+  test("hardware stop finalizes the original start that replies late",
+      () async {
     final started = Completer<void>();
     final events = <String>[];
     final platform = _FakeCameraPlatform(
         startRecordingReply: started.future, onEvent: events.add);
     CameraPlatform.instance = platform;
     final service = CameraService(storageService: storageService);
-    final starting = service.startRecordingVideo().then<Object?>(
-        (_) => null, onError: (Object error) => error);
+    final starting = service
+        .startRecordingVideo()
+        .then<Object?>((_) => null, onError: (Object error) => error);
     while (platform.recordingStarts == 0) {
       await Future<void>.delayed(Duration.zero);
     }
@@ -1030,7 +1032,7 @@ class _FakeCameraPlatform extends CameraPlatform {
     }
     if (!_isRecording) {
       throw PlatformException(
-        code: "No video is recording",
+        code: "RECORDING_NOT_STARTED",
         message: "stopVideoRecording was called when no video is recording.",
       );
     }
