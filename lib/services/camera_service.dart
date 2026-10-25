@@ -437,6 +437,9 @@ class CameraService {
         return;
       }
 
+      // Restore the previous recording before replacing or configuring its
+      // camera, including when the next recording requests automatic exposure.
+      await _abortRecordingExposure(requireReleased: true);
       await ensureCameraIsReady(); // Ensure the camera is ready before starting video recording
       recordingCaptureContext = await _buildCurrentCaptureContext();
 
@@ -1081,7 +1084,7 @@ class CameraService {
   /// never block recording: the clip falls back to auto exposure and the
   /// metadata records why.
   Future<void> _lockRecordingExposure() async {
-    await _abortRecordingExposure();
+    await _abortRecordingExposure(requireReleased: true);
     final cameraName = _controller?.description.name;
     if (cameraName == null) {
       return;
@@ -1105,7 +1108,6 @@ class CameraService {
 
   Future<void> _finishRecordingExposure() async {
     final session = _recordingExposure;
-    _recordingExposure = null;
     if (session == null) {
       return;
     }
@@ -1121,16 +1123,26 @@ class CameraService {
           "cameraId=${exposure.start?["cameraId"] ?? exposure.stop?["cameraId"]}");
     } catch (error) {
       LogService.instance.registerLog("Exposure release failed: $error");
+    } finally {
+      if (identical(_recordingExposure, session) && !session.cleanupPending) {
+        _recordingExposure = null;
+      }
     }
   }
 
-  Future<void> _abortRecordingExposure() async {
+  Future<void> _abortRecordingExposure({bool requireReleased = false}) async {
     final session = _recordingExposure;
-    _recordingExposure = null;
     try {
       await session?.abort();
     } catch (error) {
       LogService.instance.registerLog("Exposure release failed: $error");
+    }
+    if (session == null || !session.cleanupPending) {
+      if (identical(_recordingExposure, session)) {
+        _recordingExposure = null;
+      }
+    } else if (requireReleased) {
+      throw StateError("Exposure cleanup must finish before recording");
     }
   }
 

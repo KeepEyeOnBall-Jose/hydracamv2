@@ -89,6 +89,7 @@ class RecordingExposureSession {
 
   String get lockStatus => _lockStatus;
   bool get isLocked => _lockStatus == "locked";
+  bool get cleanupPending => _needsRelease;
 
   Future<void> lockBeforeStart() async {
     final exposureTimeNs = preset.exposureTimeNs;
