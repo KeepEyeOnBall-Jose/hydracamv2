@@ -467,6 +467,22 @@ void main() {
     expect(service.isRecording, isFalse);
   });
 
+  test("an unconfirmed native stop retains ownership before another capture",
+      () async {
+    final platform = _FakeCameraPlatform(
+        stopRecordingError: PlatformException(
+            code: "RECORDING_STOP_UNCONFIRMED", message: "Still owned"));
+    CameraPlatform.instance = platform;
+    final service = CameraService(storageService: storageService);
+    await service.startRecordingVideo();
+    await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+    final starts = platform.recordingStarts;
+    await expectLater(service.startRecordingVideo(), throwsA(isA<Exception>()));
+    expect(platform.recordingStarts, starts);
+    platform.stopRecordingError = null;
+    await service.stopCamera();
+  });
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
@@ -896,6 +912,7 @@ class _FakeCameraPlatform extends CameraPlatform {
     this.onEvent,
     this.setFlashModeError,
     this.startRecordingReply,
+    this.stopRecordingError,
   }) : cameras = cameras ??
             const [
               CameraDescription(
@@ -911,6 +928,7 @@ class _FakeCameraPlatform extends CameraPlatform {
   final void Function(String)? onEvent;
   final PlatformException? setFlashModeError;
   final Future<void>? startRecordingReply;
+  PlatformException? stopRecordingError;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
   CameraDescription? lastCreatedCamera;
@@ -1006,6 +1024,10 @@ class _FakeCameraPlatform extends CameraPlatform {
   Future<XFile> stopVideoRecording(int cameraId) async {
     recordingStops++;
     onEvent?.call("stop");
+    final error = stopRecordingError;
+    if (error != null) {
+      throw error;
+    }
     if (!_isRecording) {
       throw PlatformException(
         code: "No video is recording",
