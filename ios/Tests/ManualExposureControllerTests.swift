@@ -61,7 +61,7 @@ final class ManualExposureControllerTests: XCTestCase {
       controller.readCaptureSettings(cameraName: camera.uniqueID)["manualLockActive"] as? Bool,
       false
     )
-    XCTAssertEqual(controller.release(ownerId: "recording-A", cameraName: camera.uniqueID)["status"] as? String, "not_locked")
+    XCTAssertEqual(controller.release(ownerId: "recording-A", cameraName: camera.uniqueID)["status"] as? String, "released")
   }
 
   func testWrongDeviceCannotDiscardTheOriginalRestoration() {
