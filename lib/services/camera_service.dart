@@ -550,9 +550,32 @@ class CameraService {
         videoStartRecordingDate = null;
         recordingCaptureContext = null;
         await _abortRecordingExposure();
+      } else {
+        _closeFailedStartAfterCallerSettles(_videoAttempt!);
       }
       throw Exception("Failed to start video recording: $e");
     }
+  }
+
+  void _closeFailedStartAfterCallerSettles(_OwnedVideoAttempt attempt) {
+    final publicStart = _recordingStartInFlight;
+    unawaited(() async {
+      try {
+        // Do not join rawStart here: it may be the unresolved operation that
+        // caused the failure. Let the public error reach its existing caller.
+        try {
+          await publicStart;
+        } catch (_) {}
+        if (identical(_videoAttempt, attempt)) {
+          // Coalesces navigation/STOP, retains the existing absolute budget,
+          // and never selects a newer controller or issues post-dispose iOS STOP.
+          await stopCamera();
+        }
+      } catch (error, stackTrace) {
+        LogService.instance.registerLog(
+            "Failed-start cleanup remains pending: $error\n$stackTrace");
+      }
+    }());
   }
 
   /// Stops recording a video and saves it to the gallery.
