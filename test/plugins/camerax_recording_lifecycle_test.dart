@@ -290,8 +290,9 @@ class _Rig {
     when(() => attempt.recording.close()).thenAnswer((_) async {
       attempt.closeCalls++;
       if (!attempt.closed.isCompleted) attempt.closed.complete();
-      if (attempt.finalizeOnClose)
+      if (attempt.finalizeOnClose) {
         scheduleMicrotask(() => attempt.emit(_Finalize()));
+      }
     });
     if (!delayHandle) attempt.returnHandle();
     return attempt;
