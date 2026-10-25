@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/camera_capture_settings.dart";
@@ -100,6 +102,71 @@ void main() {
         ["readCaptureSettings", "readCaptureSettings"]);
     expect(metadata.lockStatus, "auto");
     expect(metadata.exposureTimeNs, 10000000);
+  });
+
+  for (final status in ["error", "unavailable", "unsupported", "no_camera"]) {
+    test("failed recording relock reports $status and releases preview lock",
+        () async {
+      var locks = 0;
+      handle((call) async => switch (call.method) {
+            "applyLock" => {"status": ++locks == 1 ? "locked" : status},
+            "readCaptureSettings" => {
+                "status": "ok",
+                "exposureTimeNs": 30000000
+              },
+            "release" => {"status": "released"},
+            _ => null,
+          });
+      final exposure = session(ExposurePreset.shutter1_120);
+      await exposure.lockBeforeStart();
+      exposure.afterStart();
+      await exposure.readBeforeStop();
+      final metadata = await exposure.finish();
+      await exposure.abort();
+      expect(metadata.lockStatus, status);
+      expect(metadata.isLocked, isFalse);
+      expect(exposure.isLocked, isFalse);
+      expect(metadata.lock, containsPair("relockAfterStartStatus", status));
+      expect(calls.where((call) => call.method == "release"), hasLength(1));
+    });
+  }
+
+  test("failed release is recorded and remains eligible for explicit retry",
+      () async {
+    var releases = 0;
+    handle((call) async => switch (call.method) {
+          "applyLock" => {"status": "locked"},
+          "readCaptureSettings" => {"status": "ok"},
+          "release" => {"status": ++releases == 1 ? "error" : "released"},
+          _ => null,
+        });
+    final exposure = session(ExposurePreset.shutter1_60);
+    await exposure.lockBeforeStart();
+    exposure.afterStart();
+    await exposure.readBeforeStop();
+    final metadata = await exposure.finish();
+    expect(metadata.isLocked, isTrue,
+        reason: "Recording and restoration differ");
+    expect(metadata.lock, containsPair("releaseStatus", "error"));
+    await exposure.abort();
+    await exposure.abort();
+    expect(calls.where((call) => call.method == "release"), hasLength(2));
+  });
+
+  test("concurrent abort calls share one in-flight release", () async {
+    final released = Completer<Object?>();
+    handle((call) => call.method == "release"
+        ? released.future
+        : Future.value({"status": "locked"}));
+    final exposure = session(ExposurePreset.shutter1_60);
+    await exposure.lockBeforeStart();
+    final first = exposure.abort();
+    final second = exposure.abort();
+    await Future<void>.delayed(Duration.zero);
+    expect(calls.where((call) => call.method == "release"), hasLength(1));
+    released.complete({"status": "released"});
+    await Future.wait([first, second]);
+    expect(calls.where((call) => call.method == "release"), hasLength(1));
   });
 
   test("unsupported camera records the status and never releases", () async {
