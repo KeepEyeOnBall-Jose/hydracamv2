@@ -70,6 +70,35 @@ void main() {
     }
 
     group("Session lifecycle", () {
+      test("retained human capture cannot resume under anonymous identity",
+          () async {
+        final sessionDir = Directory(
+            "${testPathProvider.documentsDir.path}/session_owner-policy");
+        await sessionDir.create(recursive: true);
+        final metadata = File("${sessionDir.path}/metadata.json");
+        final original = jsonEncode({
+          "sessionId": "owner-policy",
+          "sessionGuid": "owner-policy",
+          "humanOwnerIdentity": "issuer|original-subject",
+          "startTime": DateTime.utc(2026).toIso8601String(),
+          "deviceType": "Master",
+          "photos": [],
+          "videos": [],
+        });
+        await metadata.writeAsString(original);
+        final snapshot =
+            await sessionManager.loadSessionMetadataSnapshot("owner-policy");
+        expect(snapshot?.humanOwnerIdentity, "issuer|original-subject");
+        await expectLater(
+          sessionManager.restoreSessionFromMetadata("owner-policy",
+              deviceType: "Master"),
+          throwsA(isA<StateError>()),
+        );
+        expect(sessionManager.isSessionActive, false);
+        expect(uploaderService.queueLength, 0);
+        expect(await metadata.readAsString(), original);
+      });
+
       test("starts with no active session", () {
         expect(sessionManager.isSessionActive, false);
         expect(sessionManager.sessionGuid, null);

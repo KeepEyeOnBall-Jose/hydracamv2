@@ -3,6 +3,7 @@ import "dart:io";
 
 import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/services/gallery_session_candidate_source.dart";
+import "package:hydracam/services/log_service.dart";
 import "package:hydracam/services/session_manager.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
@@ -36,6 +37,10 @@ void main() {
     if (SessionManager.instance.isSessionActive) {
       await SessionManager.instance.endSession();
     }
+    // Session/candidate logging persists asynchronously. Drain it before this
+    // fixture deletes its directory, then invalidate the cached trace handle.
+    await LogService.instance.readPersistedLogLines();
+    LogService.instance.clearLogs();
   });
 
   tearDownAll(() {

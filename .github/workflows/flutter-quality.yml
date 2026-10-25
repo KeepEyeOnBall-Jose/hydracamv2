@@ -1,13 +1,19 @@
 name: Flutter Quality
 
 on:
+  workflow_dispatch:
+    inputs:
+      runner_label:
+        description: Optional admitted repository runner label
+        type: string
+        required: false
   pull_request:
   push:
     branches: [master-jose-2025]
 
 jobs:
   flutter-quality:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository == 'KeepEyeOnBall-Jose/hydracamv2' && github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name != 'pull_request' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && (inputs.runner_label || fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]')) || 'ubuntu-latest' }}
     timeout-minutes: 20
 
     steps:
