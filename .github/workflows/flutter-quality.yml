@@ -70,9 +70,6 @@ jobs:
       SOURCE_SHA: 4d4977c5b9c140e75dfaa890d475cc241cc16810
       SOURCE_TREE: 3e60b98a9046211425d7373eefbe72de3fdac39f
       NATIVE_BASELINE_SHA: 9b1fea4c3ff8e25be21438b4cf123d0118610b46
-      GRADLE_USER_HOME: ${{ runner.temp }}/pr25-native-gradle
-      PUB_CACHE: ${{ runner.temp }}/pr25-native-pub
-      TASK_OUTPUT: ${{ runner.temp }}/pr25-native-identity-red
     steps:
       - uses: actions/checkout@v4
         timeout-minutes: 1
@@ -92,7 +89,14 @@ jobs:
           import hashlib, json, os, pathlib, shutil, subprocess
           G = 1024**3
           root = pathlib.Path.cwd()
-          out = pathlib.Path(os.environ['TASK_OUTPUT']); out.mkdir(mode=0o700)
+          task_paths = {
+              'GRADLE_USER_HOME': str(pathlib.Path(os.environ['RUNNER_TEMP'])/'pr25-native-gradle'),
+              'PUB_CACHE': str(pathlib.Path(os.environ['RUNNER_TEMP'])/'pr25-native-pub'),
+              'TASK_OUTPUT': str(pathlib.Path(os.environ['RUNNER_TEMP'])/'pr25-native-identity-red')}
+          os.environ.update(task_paths)
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              for key, value in task_paths.items(): env.write(f'{key}={value}\n')
+          out = pathlib.Path(task_paths['TASK_OUTPUT']); out.mkdir(mode=0o700)
           sdk = pathlib.Path(os.environ['ANDROID_HOME']).resolve(strict=True)
           java = pathlib.Path(os.environ['JAVA_HOME_17_X64']).resolve(strict=True)
           def props(path):
