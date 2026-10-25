@@ -17,6 +17,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(_Listener((_, __) {}));
     registerFallbackValue(_VideoCapture());
+    registerFallbackValue(_Selector());
     registerFallbackValue(<UseCase>[]);
   });
 
@@ -177,6 +178,73 @@ void main() {
     expect(attempt.persistentCalls, 1);
     expect(attempt.closeCalls, 1);
   });
+
+  test("dispose during isBound cannot dispatch a late recording-use-case bind",
+      () async {
+    final checking = Completer<void>();
+    final boundReply = Completer<bool>();
+    var bindCalls = 0;
+    when(() => rig.provider.isBound(rig.capture)).thenAnswer((_) {
+      checking.complete();
+      return boundReply.future;
+    });
+    when(() => rig.provider.bindToLifecycle(any(), any()))
+        .thenAnswer((_) async {
+      bindCalls++;
+      throw StateError(
+          "A recording-use-case bind was dispatched after dispose");
+    });
+    final attempt = rig.plan("/sdk-output/cancel-before-bind.mp4");
+    final starting = rig.start(attempt);
+    await checking.future.timeout(const Duration(seconds: 1));
+    expect(await rig.bounded(rig.watch(rig.camera.dispose(7))), isNull);
+
+    boundReply.complete(false);
+    final result = await rig.bounded(starting);
+
+    expect(bindCalls, 0);
+    expect(result, isA<CameraException>());
+    expect(attempt.dispatched.isCompleted, isFalse);
+    final terminal =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    expect(
+        terminal,
+        isA<CameraException>()
+            .having((error) => error.code, "code", "RECORDING_NOT_STARTED"));
+  });
+
+  test("a use-case bind completing after dispose is explicitly undone",
+      () async {
+    final binding = Completer<void>();
+    final boundCamera = Completer<Camera>();
+    final camera = _Camera();
+    var lateCaptureBound = false;
+    when(() => rig.provider.isBound(rig.capture))
+        .thenAnswer((_) async => false);
+    when(() => rig.provider.bindToLifecycle(any(), any())).thenAnswer((_) {
+      binding.complete();
+      return boundCamera.future;
+    });
+    when(() => rig.provider.unbind(any())).thenAnswer((invocation) async {
+      final cases = invocation.positionalArguments.single as List<UseCase>;
+      if (cases.contains(rig.capture)) lateCaptureBound = false;
+    });
+    when(() => camera.getCameraInfo()).thenAnswer((_) async {
+      throw StateError("A disposed bind must not update current camera info");
+    });
+    final attempt = rig.plan("/sdk-output/cancel-during-bind.mp4");
+    final starting = rig.start(attempt);
+    await binding.future.timeout(const Duration(seconds: 1));
+    expect(await rig.bounded(rig.watch(rig.camera.dispose(7))), isNull);
+
+    lateCaptureBound = true;
+    boundCamera.complete(camera);
+    final result = await rig.bounded(starting);
+
+    expect(lateCaptureBound, isFalse);
+    expect(result, isA<CameraException>());
+    expect(attempt.dispatched.isCompleted, isFalse);
+  });
 }
 
 class _Pending {}
@@ -196,6 +264,10 @@ class _PendingRecording extends Mock implements PendingRecording {}
 class _Recording extends Mock implements Recording {}
 
 class _Orientation extends Mock implements DeviceOrientationManager {}
+
+class _Selector extends Mock implements CameraSelector {}
+
+class _Camera extends Mock implements Camera {}
 
 class _Listener extends VideoRecordEventListener {
   _Listener(void Function(VideoRecordEventListener, VideoRecordEvent) callback)
@@ -241,6 +313,7 @@ class _Rig {
     camera.imageAnalysis = analysis;
     camera.videoCapture = capture;
     camera.recorder = recorder;
+    camera.cameraSelector = _Selector();
     camera.enableRecordingAudio = false;
     camera.captureOrientationLocked = true;
     when(() => provider.isBound(any())).thenAnswer((_) async => true);
