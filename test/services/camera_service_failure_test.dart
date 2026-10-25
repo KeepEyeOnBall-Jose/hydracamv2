@@ -495,7 +495,8 @@ void main() {
       CameraPlatform.instance = platform;
       final service = CameraService(storageService: storageService);
       await service.startRecordingVideo();
-      await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(
+          service.stopRecordingVideo(), throwsA(isA<Exception>()));
       platform.stopRecordingError = null;
       await service.startRecordingVideo();
       expect(platform.recordingStarts, 2);

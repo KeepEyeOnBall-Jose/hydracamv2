@@ -661,10 +661,18 @@ class CameraService {
       try {
         await attempt.rawStart;
       } catch (_) {}
-    } on PlatformException catch (error) {
-      if (error.code == "RECORDING_NOT_STARTED" ||
-          error.code == "RECORDING_FINALIZED_WITHOUT_PATH") {
+    } catch (error) {
+      final code = error is CameraException
+          ? error.code
+          : error is PlatformException
+              ? error.code
+              : null;
+      if (code == "RECORDING_NOT_STARTED" ||
+          code == "RECORDING_FINALIZED_WITHOUT_PATH") {
         attempt.terminal = true;
+        try {
+          await attempt.rawStart;
+        } catch (_) {}
         await _completeVideoExposure(attempt, sensor);
         _clearTerminalVideoAttempt(attempt);
       }
