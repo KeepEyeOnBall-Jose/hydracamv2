@@ -1259,7 +1259,9 @@ class AndroidCameraCameraX extends CameraPlatform {
       StackTrace stack,
     ) {
       // Failed cleanup does not consume an uncertain recording; permit retry.
-      attempt.stopping = null;
+      if (!attempt.terminalConsumed) {
+        attempt.stopping = null;
+      }
       Error.throwWithStackTrace(error, stack);
     });
   }
