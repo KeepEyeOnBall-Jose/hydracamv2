@@ -1,5 +1,6 @@
 import AVFoundation
 import CoreMedia
+import Foundation
 
 /// Values needed from the native format, without retaining an SDK format object.
 struct ManualExposureFormat {
@@ -49,9 +50,28 @@ final class ManualExposureController {
     let focus: AVCaptureDevice.FocusMode
   }
 
-  private var lockedUniqueID: String?
-  private var previousModes: PreviousModes?
-  private var lockedRequest: [String: Any?]?
+  /// A recording owns its original device and modes until restoration succeeds.
+  private final class Lease {
+    let ownerId: String
+    let device: ManualExposureDevice
+    let previousModes: PreviousModes
+    var request: [String: Any?]
+    var pendingApplies = 0
+    var restorationRequested = false
+
+    init(ownerId: String, device: ManualExposureDevice, request: [String: Any?]) {
+      self.ownerId = ownerId
+      self.device = device
+      self.request = request
+      previousModes = PreviousModes(
+        exposure: device.exposureMode,
+        whiteBalance: device.whiteBalanceMode,
+        focus: device.focusMode
+      )
+    }
+  }
+
+  private var lease: Lease?
 
   func applyLock(
     ownerId: String,
@@ -60,20 +80,36 @@ final class ManualExposureController {
     frameDurationNs: Int64,
     completion: @escaping ([String: Any?]) -> Void
   ) {
-    guard let device = resolveDevice(cameraName) else {
-      completion(["status": "no_camera"])
-      return
+    let device: ManualExposureDevice
+    if let active = lease {
+      guard active.ownerId == ownerId, active.device.uniqueID == cameraName else {
+        completion(["status": "busy", "cleanupRequired": false])
+        return
+      }
+      guard !active.restorationRequested, active.pendingApplies == 0 else {
+        completion(["status": "busy", "cleanupRequired": true])
+        return
+      }
+      device = active.device
+    } else {
+      guard let resolved = resolveDevice(cameraName) else {
+        completion(["status": "no_camera", "cleanupRequired": false])
+        return
+      }
+      device = resolved
     }
     guard device.isExposureModeSupported(.custom) else {
-      completion(["status": "unsupported", "cameraId": device.uniqueID])
+      completion([
+        "status": "unsupported", "cameraId": device.uniqueID,
+        "cleanupRequired": lease != nil
+      ])
       return
     }
     let format = device.activeFormat
-    var request: [String: Any?]
-    if lockedUniqueID == device.uniqueID,
-       let locked = lockedRequest,
-       (locked["requestedExposureTimeNs"] as? Int64) == exposureTimeNs {
-      request = locked
+    let request: [String: Any?]
+    if let active = lease,
+       (active.request["requestedExposureTimeNs"] as? Int64) == exposureTimeNs {
+      request = active.request
     } else {
       request = meterLockRequest(
         device: device,
@@ -86,19 +122,17 @@ final class ManualExposureController {
       try device.lockForConfiguration()
     } catch {
       completion([
-        "status": "error",
-        "cameraId": device.uniqueID,
-        "error": error.localizedDescription
+        "status": "error", "cameraId": device.uniqueID,
+        "error": error.localizedDescription, "cleanupRequired": lease != nil
       ])
       return
     }
-    if lockedUniqueID != device.uniqueID {
-      previousModes = PreviousModes(
-        exposure: device.exposureMode,
-        whiteBalance: device.whiteBalanceMode,
-        focus: device.focusMode
-      )
-    }
+    defer { device.unlockForConfiguration() }
+    // Reserve ownership before any mutation or asynchronous SDK acknowledgement.
+    let active = lease ?? Lease(ownerId: ownerId, device: device, request: request)
+    lease = active
+    active.request = request
+    active.pendingApplies += 1
     if device.isWhiteBalanceModeSupported(.locked) {
       device.whiteBalanceMode = .locked
     }
@@ -111,51 +145,61 @@ final class ManualExposureController {
     )
     let iso = request["iso"] as? Float ?? format.maxISO
     device.setExposureModeCustom(duration: exposure, iso: iso) { _ in
-      completion(request.merging([
-        "status": "locked",
-        "cameraId": device.uniqueID
-      ]) { _, new in new })
+      let acknowledge = {
+        active.pendingApplies -= 1
+        guard self.lease === active else {
+          completion(["status": "error", "cleanupRequired": false])
+          return
+        }
+        completion(request.merging([
+          "status": active.restorationRequested ? "busy" : "locked",
+          "cameraId": device.uniqueID, "cleanupRequired": true
+        ]) { _, new in new })
+      }
+      // Flutter channel calls are on main; native completion can use another queue.
+      if Thread.isMainThread {
+        acknowledge()
+      } else {
+        DispatchQueue.main.async(execute: acknowledge)
+      }
     }
-    device.unlockForConfiguration()
-    lockedUniqueID = device.uniqueID
-    lockedRequest = request
   }
 
   func release(ownerId: String, cameraName: String?) -> [String: Any?] {
-    defer {
-      lockedUniqueID = nil
-      lockedRequest = nil
-      previousModes = nil
+    guard let active = lease else {
+      return ["status": "released", "cleanupRequired": false]
     }
-    guard
-      let device = resolveDevice(cameraName),
-      device.uniqueID == lockedUniqueID
-    else {
-      return ["status": "not_locked"]
+    guard active.ownerId == ownerId, active.device.uniqueID == cameraName else {
+      return ["status": "not_locked", "cleanupRequired": false]
     }
+    active.restorationRequested = true
+    guard active.pendingApplies == 0 else {
+      return ["status": "busy", "cleanupRequired": true]
+    }
+    let device = active.device
     do {
       try device.lockForConfiguration()
     } catch {
       return [
-        "status": "error",
-        "cameraId": device.uniqueID,
-        "error": error.localizedDescription
+        "status": "error", "cameraId": device.uniqueID,
+        "error": error.localizedDescription, "cleanupRequired": true
       ]
     }
-    let exposureMode = previousModes?.exposure ?? .continuousAutoExposure
-    let whiteBalanceMode = previousModes?.whiteBalance ?? .continuousAutoWhiteBalance
-    let focusMode = previousModes?.focus ?? .continuousAutoFocus
-    if device.isExposureModeSupported(exposureMode) {
-      device.exposureMode = exposureMode
+    defer { device.unlockForConfiguration() }
+    let modes = active.previousModes
+    guard device.isExposureModeSupported(modes.exposure),
+          device.isWhiteBalanceModeSupported(modes.whiteBalance),
+          device.isFocusModeSupported(modes.focus) else {
+      return [
+        "status": "error", "cameraId": device.uniqueID,
+        "error": "Original camera modes are unavailable", "cleanupRequired": true
+      ]
     }
-    if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
-      device.whiteBalanceMode = whiteBalanceMode
-    }
-    if device.isFocusModeSupported(focusMode) {
-      device.focusMode = focusMode
-    }
-    device.unlockForConfiguration()
-    return ["status": "released", "cameraId": device.uniqueID]
+    device.exposureMode = modes.exposure
+    device.whiteBalanceMode = modes.whiteBalance
+    device.focusMode = modes.focus
+    lease = nil
+    return ["status": "released", "cameraId": device.uniqueID, "cleanupRequired": false]
   }
 
   /// Live values of the device; AVFoundation has no per-frame result here.
@@ -182,7 +226,7 @@ final class ManualExposureController {
       "awbLocked": device.whiteBalanceMode == .locked,
       "focusMode": focusModeName(device.focusMode),
       "lensPosition": Double(device.lensPosition),
-      "manualLockActive": lockedUniqueID == device.uniqueID
+      "manualLockActive": lease?.device.uniqueID == device.uniqueID
     ]
   }
 
