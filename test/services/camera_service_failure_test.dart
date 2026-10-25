@@ -505,6 +505,31 @@ void main() {
     });
   }
 
+  test("receipt failure retains the original native file for a metadata retry",
+      () async {
+    final directory = await Directory.systemTemp.createTemp("receipt-fault-");
+    final store = _FailingReceiptStore(directory);
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService, recordedVideoSnapshots: store);
+    try {
+      await service.startRecordingVideo();
+      await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(service.startRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      expect(platform.recordingStops, 1,
+          reason: "Metadata retry must not stop another native recording");
+      expect((await store.forPath("unused-video.mp4"))?.sourcePath,
+          "unused-video.mp4");
+      await service.startRecordingVideo();
+      expect(platform.recordingStarts, 2);
+      await service.stopCamera();
+    } finally {
+      await directory.delete(recursive: true);
+    }
+  });
+
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
       setFlashModeError: PlatformException(
@@ -980,6 +1005,21 @@ class _StoppedMetadataCamera extends CameraService {
   @override
   Future<void> acknowledgeRecordedVideo(RecordedVideoSnapshot snapshot) async {
     acknowledged = true;
+  }
+}
+
+class _FailingReceiptStore extends RecordedVideoSnapshots {
+  _FailingReceiptStore(Directory directory)
+      : super(directory: () async => directory);
+
+  int calls = 0;
+
+  @override
+  Future<void> remember(RecordedVideoSnapshot snapshot) async {
+    if (++calls == 1) {
+      throw const FileSystemException("Injected metadata write failure");
+    }
+    await super.remember(snapshot);
   }
 }
 
