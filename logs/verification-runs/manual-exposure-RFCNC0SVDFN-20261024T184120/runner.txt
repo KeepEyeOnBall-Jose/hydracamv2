@@ -1,0 +1,119 @@
++ adb -s RFCNC0SVDFN install -r /Users/jose/src/work/hydracamv2/.worktrees/claude-manual-exposure-20261024/build/app/outputs/flutter-apk/app-debug.apk
+Performing Streamed Install
+Success
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.CAMERA
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.RECORD_AUDIO
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.ACCESS_FINE_LOCATION
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.ACCESS_COARSE_LOCATION
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.WRITE_EXTERNAL_STORAGE
+
+Exception occurred while executing 'grant':
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.WRITE_EXTERNAL_STORAGE
+	at com.android.server.pm.permission.PermissionManagerServiceImpl.grantRuntimePermissionInternal(PermissionManagerServiceImpl.java:1450)
+	at com.android.server.pm.permission.PermissionManagerServiceImpl.grantRuntimePermission(PermissionManagerServiceImpl.java:1365)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:551)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:599)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2624)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:309)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7090)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7074)
+	at android.os.Binder.execTransactInternal(Binder.java:1321)
+	at android.os.Binder.execTransact(Binder.java:1280)
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.READ_EXTERNAL_STORAGE
+
+Exception occurred while executing 'grant':
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.READ_EXTERNAL_STORAGE
+	at com.android.server.pm.permission.PermissionManagerServiceImpl.grantRuntimePermissionInternal(PermissionManagerServiceImpl.java:1450)
+	at com.android.server.pm.permission.PermissionManagerServiceImpl.grantRuntimePermission(PermissionManagerServiceImpl.java:1365)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:551)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:599)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2624)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:309)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7090)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7074)
+	at android.os.Binder.execTransactInternal(Binder.java:1321)
+	at android.os.Binder.execTransact(Binder.java:1280)
++ adb -s RFCNC0SVDFN shell pm grant com.amaia23.hydracam android.permission.ACCESS_MEDIA_LOCATION
+
+Exception occurred while executing 'grant':
+java.lang.SecurityException: Package com.amaia23.hydracam has not requested permission android.permission.ACCESS_MEDIA_LOCATION
+	at com.android.server.pm.permission.PermissionManagerServiceImpl.grantRuntimePermissionInternal(PermissionManagerServiceImpl.java:1450)
+	at com.android.server.pm.permission.PermissionManagerServiceImpl.grantRuntimePermission(PermissionManagerServiceImpl.java:1365)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:551)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:599)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2624)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:309)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7090)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7074)
+	at android.os.Binder.execTransactInternal(Binder.java:1321)
+	at android.os.Binder.execTransact(Binder.java:1280)
++ adb -s RFCNC0SVDFN shell am force-stop com.amaia23.hydracam
++ adb -s RFCNC0SVDFN shell am start -n com.amaia23.hydracam/.MainActivity --es role master
+Starting: Intent { cmp=com.amaia23.hydracam/.MainActivity (has extras) }
++ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /Users/jose/src/work/hydracamv2/.worktrees/claude-manual-exposure-20261024/scripts/multi_device_orchestrator.py --serials RFCNC0SVDFN:master --manifest automation_scenarios/single_device_exposure_presets.json --scenario exposure-presets-RFCNC0SVDFN --output-dir logs/verification-runs/manual-exposure-RFCNC0SVDFN-20261024T184120 --port-base 6100 --context cameraLensPreference=ultraWide --context videoCaptureProfile=detail4k30
+[orchestrator] Artifacts will be stored under logs/verification-runs/manual-exposure-RFCNC0SVDFN-20261024T184120/20261024_184137-exposure-presets-RFCNC0SVDFN
+[orchestrator] Preparing 1 device(s) for scenario 'exposure-presets-RFCNC0SVDFN'
+[orchestrator] Forwarding RFCNC0SVDFN => localhost:6100
+[orchestrator] Awaiting automation health for RFCNC0SVDFN
+[orchestrator] Device RFCNC0SVDFN automation ready
+[orchestrator] Executing manifest step apply-capture-settings (settings)
+[orchestrator] Executing manifest step start-debug-session (command)
+[orchestrator] Executing manifest step session-live (await)
+[orchestrator] Executing manifest step preset-auto (settings)
+[orchestrator] Executing manifest step snapshot-settings-auto (get)
+[orchestrator] Executing manifest step step_6 (sleep)
+[orchestrator] Sleeping for 2.00 second(s)
+[orchestrator] Executing manifest step start-recording-auto (command)
+[orchestrator] Executing manifest step recording-started-auto (await)
+[orchestrator] Executing manifest step step_9 (sleep)
+[orchestrator] Sleeping for 5.00 second(s)
+[orchestrator] Executing manifest step stop-recording-auto (command)
+[orchestrator] Executing manifest step video-saved-auto (await)
+[orchestrator] Executing manifest step preset-shutter1_30 (settings)
+[orchestrator] Executing manifest step snapshot-settings-shutter1_30 (get)
+[orchestrator] Executing manifest step step_14 (sleep)
+[orchestrator] Sleeping for 2.00 second(s)
+[orchestrator] Executing manifest step start-recording-shutter1_30 (command)
+[orchestrator] Executing manifest step recording-started-shutter1_30 (await)
+[orchestrator] Executing manifest step step_17 (sleep)
+[orchestrator] Sleeping for 5.00 second(s)
+[orchestrator] Executing manifest step stop-recording-shutter1_30 (command)
+[orchestrator] Executing manifest step video-saved-shutter1_30 (await)
+[orchestrator] Executing manifest step preset-shutter1_60 (settings)
+[orchestrator] Executing manifest step snapshot-settings-shutter1_60 (get)
+[orchestrator] Executing manifest step step_22 (sleep)
+[orchestrator] Sleeping for 2.00 second(s)
+[orchestrator] Executing manifest step start-recording-shutter1_60 (command)
+[orchestrator] Executing manifest step recording-started-shutter1_60 (await)
+[orchestrator] Executing manifest step step_25 (sleep)
+[orchestrator] Sleeping for 5.00 second(s)
+[orchestrator] Executing manifest step stop-recording-shutter1_60 (command)
+[orchestrator] Executing manifest step video-saved-shutter1_60 (await)
+[orchestrator] Executing manifest step preset-shutter1_120 (settings)
+[orchestrator] Executing manifest step snapshot-settings-shutter1_120 (get)
+[orchestrator] Executing manifest step step_30 (sleep)
+[orchestrator] Sleeping for 2.00 second(s)
+[orchestrator] Executing manifest step start-recording-shutter1_120 (command)
+[orchestrator] Executing manifest step recording-started-shutter1_120 (await)
+[orchestrator] Executing manifest step step_33 (sleep)
+[orchestrator] Sleeping for 5.00 second(s)
+[orchestrator] Executing manifest step stop-recording-shutter1_120 (command)
+[orchestrator] Executing manifest step video-saved-shutter1_120 (await)
+[orchestrator] Executing manifest step end-session (command)
+[orchestrator] Executing manifest step session-complete (await)
+[orchestrator] Skipping backend verification (backend base URL/token not provided)

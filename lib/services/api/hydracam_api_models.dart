@@ -13,6 +13,10 @@ class HydraCamUploadMediaContract {
   static const String fieldDurationMs = "durationMs";
   static const String fieldAppVersion = "appVersion";
   static const String fieldAppBuildNumber = "appBuildNumber";
+
+  /// JSON-encoded per-clip capture settings (exposure preset, exposure time,
+  /// ISO, frame duration, rolling-shutter readout time, fps).
+  static const String fieldCaptureSettings = "captureSettings";
   static const String fileField = "files";
 }
 

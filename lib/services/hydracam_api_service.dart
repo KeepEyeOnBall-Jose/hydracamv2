@@ -148,6 +148,7 @@ class HydraCamApiService {
     String? mediaTimelineUploadToken,
     Function(String)? onFailureReason,
     Function(HydraCamUploadResult)? onUploadResult,
+    Map<String, dynamic>? captureSettings,
   }) =>
       _media.uploadMedia(
         sessionGuid,
@@ -162,6 +163,7 @@ class HydraCamApiService {
         mediaTimelineUploadToken: mediaTimelineUploadToken,
         onFailureReason: onFailureReason,
         onUploadResult: onUploadResult,
+        captureSettings: captureSettings,
       );
 
   Future<String?> getUserGuidByEmail(String email) =>

@@ -8,7 +8,10 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/camera_capture_settings.dart";
 import "package:hydracam/services/camera_service.dart";
 import "package:hydracam/services/log_service.dart";
+import "package:hydracam/services/manual_exposure_service.dart";
+import "package:hydracam/services/recorded_video_snapshots.dart";
 import "package:hydracam/services/session_manager.dart";
+import "package:hydracam/services/settings_service.dart";
 import "package:mocktail/mocktail.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
@@ -67,11 +70,21 @@ void main() {
 
   test("startRecordingVideo stays inactive when the camera platform fails",
       () async {
+    final closed = Completer<void>();
+    var disposals = 0;
     CameraPlatform.instance = _FakeCameraPlatform(
       startRecordingError: PlatformException(
         code: "ios_camera_start_failed",
         message: "Simulated iPad recording start failure",
       ),
+      stopRecordingError: PlatformException(
+          code: "RECORDING_STOP_UNCONFIRMED", message: "Unknown retry"),
+      stopErrorAfterStarts: 2,
+      onEvent: (event) {
+        if (event == "dispose" && ++disposals == 2) {
+          closed.complete();
+        }
+      },
     );
     final cameraService = CameraService(
       storageService: storageService,
@@ -90,6 +103,18 @@ void main() {
     );
 
     expect(cameraService.isRecording, isFalse);
+    final platform = CameraPlatform.instance as _FakeCameraPlatform;
+    final dispatched = platform.recordingStarts;
+    await expectLater(
+        cameraService.startRecordingVideo(),
+        throwsA(isA<StateError>().having((error) => error.message, "message",
+            contains("Original recording"))));
+    expect(platform.recordingStarts, dispatched,
+        reason: "Unconfirmed start must retain its original native owner");
+    await closed.future.timeout(const Duration(seconds: 1));
+    expect(platform.recordingStops, 2,
+        reason: "Failed FPS retry must request original STOP automatically");
+    await cameraService.stopCamera();
   });
 
   test("startRecordingVideo works when the iPad has no flash capability",
@@ -113,6 +138,531 @@ void main() {
           entry["message"].toString().contains("Flash is unavailable")),
       isTrue,
     );
+  });
+
+  for (final nextPreset in [ExposurePreset.auto, ExposurePreset.shutter1_60]) {
+    test(
+        "failed exposure cleanup blocks ${nextPreset.storageValue} before camera replacement",
+        () async {
+      const channel = MethodChannel("hydracam-retained-exposure-test");
+      var releaseFails = true;
+      var releases = 0;
+      final appliedOwners = <Object?>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+        if (call.method == "release") {
+          releases++;
+          return {"status": releaseFails ? "error" : "released"};
+        }
+        if (call.method == "applyLock") {
+          appliedOwners.add((call.arguments as Map)["ownerId"]);
+        }
+        return {"status": call.method == "applyLock" ? "locked" : "ok"};
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null));
+      final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_start_failure", message: "forced start failure"),
+      );
+      CameraPlatform.instance = platform;
+      final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel),
+      );
+      await expectLater(service.startRecordingVideo(), throwsException);
+      expect(releases, greaterThan(0));
+      await service.stopCamera();
+      final createsBeforeRetry = platform.createdCameras;
+      final startsBeforeRetry = platform.recordingStarts;
+      final disposalsBeforeRetry = platform.disposedCameras;
+      final originalCamera = platform.lastCreatedCamera;
+      final originalSettings = platform.lastMediaSettings;
+      final locksBeforeRetry = appliedOwners.length;
+      platform.startRecordingError = null;
+      await SettingsService.setExposurePreset(nextPreset);
+
+      await expectLater(
+          service.startRecordingVideo(),
+          throwsA(isA<Exception>().having((error) => error.toString(),
+              "message", contains("Exposure cleanup"))));
+      expect(service.isRecording, isFalse);
+      expect(platform.createdCameras, createsBeforeRetry + 1,
+          reason: "Only the saved original preview may reactivate for restore");
+      expect(platform.lastCreatedCamera, originalCamera);
+      expect(platform.lastMediaSettings?.resolutionPreset,
+          originalSettings?.resolutionPreset);
+      expect(platform.lastMediaSettings?.fps, originalSettings?.fps);
+      expect(appliedOwners.length, locksBeforeRetry,
+          reason: "Recovery cannot create another exposure lease");
+      expect(platform.disposedCameras, disposalsBeforeRetry + 1,
+          reason: "Failed recovery must close the saved preview again");
+      expect(platform.recordingStarts, startsBeforeRetry);
+
+      releaseFails = false;
+      await service.startRecordingVideo();
+      expect(service.isRecording, isTrue);
+      expect(platform.recordingStarts, startsBeforeRetry + 1);
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      await service.stopCamera();
+    });
+  }
+
+  for (final restoreSucceeds in [true, false]) {
+    test(
+        "FPS fallback restores old exposure before replacement ($restoreSucceeds)",
+        () async {
+      const channel = MethodChannel("hydracam-fps-owner-test");
+      final events = <String>[];
+      final owners = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+        final owner = (call.arguments as Map)["ownerId"].toString();
+        if (call.method == "applyLock") {
+          owners.add(owner);
+          events.add("lock:$owner");
+          return {"status": "locked"};
+        }
+        if (call.method == "release") {
+          events.add("release:$owner");
+          return {"status": restoreSucceeds ? "released" : "error"};
+        }
+        return {"status": "ok"};
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null));
+      final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_fps_failure", message: "forced FPS failure"),
+        startRecordingFailures: 1,
+        onEvent: events.add,
+      );
+      CameraPlatform.instance = platform;
+      final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel),
+      );
+      if (!restoreSucceeds) {
+        await expectLater(service.startRecordingVideo(), throwsException);
+        expect(platform.createdCameras, 1);
+        expect(platform.recordingStarts, 1);
+        expect(events, isNot(contains("dispose")));
+        return;
+      }
+      await service.startRecordingVideo();
+      expect(owners.length, greaterThanOrEqualTo(2));
+      expect(owners.first, isNot(owners[1]));
+      final release = events.indexOf("release:${owners.first}");
+      final dispose = events.indexOf("dispose");
+      final secondLock = events.indexOf("lock:${owners[1]}");
+      final retryStart = events.lastIndexOf("start");
+      expect(release, greaterThanOrEqualTo(0));
+      expect(dispose, greaterThan(release));
+      expect(secondLock, greaterThan(dispose));
+      expect(retryStart, greaterThan(secondLock));
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      await service.stopCamera();
+    });
+  }
+
+  test("concurrent starts share the same pending exposure owner", () async {
+    const channel = MethodChannel("hydracam-concurrent-start-test");
+    final applied = Completer<Object?>();
+    var locks = 0;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+      if (call.method == "applyLock") {
+        locks++;
+        return applied.future;
+      }
+      return {"status": "released"};
+    });
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    final first = service.startRecordingVideo();
+    final second = service.startRecordingVideo();
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    try {
+      expect(locks, 1);
+      expect(platform.createdCameras, 1);
+    } finally {
+      applied.complete({"status": "locked"});
+      await Future.wait([first, second]);
+    }
+    expect(platform.recordingStarts, 1);
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    await service.stopCamera();
+  });
+
+  test("start waits for concurrent stop cleanup instead of replacing its owner",
+      () async {
+    const channel = MethodChannel("hydracam-concurrent-stop-test");
+    final released = Completer<Object?>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+            channel,
+            (call) async => call.method == "release"
+                ? await released.future
+                : {"status": call.method == "applyLock" ? "locked" : "ok"});
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    await service.startRecordingVideo();
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    var stopDone = false;
+    final stopping = service
+        .stopRecordingVideo()
+        .then<Object?>((v) => v, onError: (Object error) => error)
+        .whenComplete(() => stopDone = true);
+    var nextStartDone = false;
+    final starting = service
+        .startRecordingVideo()
+        .then<Object?>((_) => null, onError: (Object error) => error)
+        .whenComplete(() => nextStartDone = true);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    try {
+      expect(nextStartDone, isFalse);
+      expect(stopDone, isFalse);
+      expect(platform.recordingStarts, 1);
+    } finally {
+      released.complete({"status": "released"});
+      await Future.wait([stopping, starting]);
+    }
+    // The platform double intentionally returns no media file. This verifies
+    // ordering/ownership only, not a saved-video or physical-camera witness.
+    expect(await stopping, isA<Exception>());
+    expect(await starting, same(await stopping),
+        reason:
+            "The next start must consume the same acknowledged stop result");
+    expect(stopDone, isTrue);
+    expect(nextStartDone, isTrue);
+    expect(platform.recordingStarts, 1);
+  });
+
+  for (final operation in ["settings", "recover", "pending"]) {
+    test("retained exposure keeps hardware stop distinct from $operation",
+        () async {
+      const channel = MethodChannel("hydracam-stopped-owner-test");
+      final released = Completer<Object?>();
+      final events = <String>[];
+      final owners = <String>[];
+      final releaseInvocations = <({Object? owner, bool retry})>[];
+      var retryCleanup = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+        if (call.method == "release") {
+          final owner = (call.arguments as Map)["ownerId"];
+          releaseInvocations.add((owner: owner, retry: retryCleanup));
+          LogService.instance.registerLog(
+              "Recovery fixture release owner=$owner retry=$retryCleanup "
+              "ackCompleted=${released.isCompleted}");
+          if (retryCleanup) {
+            unawaited(released.future.then<void>((value) {
+              LogService.instance.registerLog(
+                  "Recovery fixture native ACK owner=$owner value=$value");
+            }));
+          }
+          return retryCleanup ? await released.future : {"status": "error"};
+        }
+        if (call.method == "applyLock") {
+          owners.add((call.arguments as Map)["ownerId"] as String);
+          return {"status": "locked"};
+        }
+        return {"status": "ok"};
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null));
+      final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_start_failure", message: "forced start failure"),
+        onEvent: events.add,
+      );
+      CameraPlatform.instance = platform;
+      final service = CameraService(
+          storageService: storageService,
+          manualExposureService: ManualExposureService(channel: channel));
+      await expectLater(service.startRecordingVideo(), throwsException);
+      platform.startRecordingError = null;
+      if (operation == "settings") {
+        await expectLater(
+            service.applyCaptureSettings(
+                videoProfile: VideoCaptureProfile.compat720p30),
+            throwsA(isA<StateError>().having((error) => error.message,
+                "message", contains("Exposure cleanup"))));
+        expect(events.where((event) => event == "dispose"), isEmpty);
+        return;
+      }
+      await service.stopCamera();
+      expect(events.where((event) => event == "dispose"), hasLength(1),
+          reason: "Explicit hardware stop must not wait forever for restore");
+      final oldOwner = owners.single;
+      final startsBeforeRecovery = platform.recordingStarts;
+      retryCleanup = true;
+      final starting = service
+          .startRecordingVideo()
+          .then<Object?>((_) => null, onError: (Object error) => error);
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      try {
+        expect(platform.createdCameras, 2,
+            reason: "Reactivate original control without starting an encoder");
+        expect(platform.lastCreatedCamera?.name, "fake-back-camera");
+        expect(platform.recordingStarts, startsBeforeRecovery);
+        expect(owners, [oldOwner], reason: "No new lease before restore ACK");
+        expect(
+            releaseInvocations.any((invocation) =>
+                invocation.retry && invocation.owner == oldOwner),
+            isTrue,
+            reason:
+                "Recovery must dispatch restoration for the original owner");
+        if (operation == "pending") {
+          expect(await starting, isA<Exception>());
+          expect(events.where((event) => event == "dispose"), hasLength(2),
+              reason: "Unsettled recovery must close hardware again");
+          expect(platform.recordingStarts, startsBeforeRecovery);
+        } else {
+          released.complete({"status": "released"});
+          expect(await starting, isNull);
+          expect(service.isRecording, isTrue);
+          expect(owners.last, isNot(oldOwner));
+        }
+      } finally {
+        if (!released.isCompleted) {
+          released.complete({"status": "released"});
+        }
+        await starting;
+        await Future<void>.delayed(const Duration(milliseconds: 600));
+        await service.stopCamera();
+      }
+    });
+  }
+
+  test("explicit stop invalidates a start before it can reopen the camera",
+      () async {
+    const channel = MethodChannel("hydracam-stop-pending-start-test");
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+            channel,
+            (call) async =>
+                {"status": call.method == "applyLock" ? "locked" : "released"});
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    final starting = service
+        .startRecordingVideo()
+        .then<Object?>((_) => null, onError: (Object error) => error);
+    await service.stopCamera();
+    expect(await starting, isA<Exception>());
+    expect(platform.createdCameras, 0);
+    expect(platform.recordingStarts, 0);
+  });
+
+  test("a hung exposure read cannot delay the native recording stop", () async {
+    const channel = MethodChannel("hydracam-stop-read-test");
+    final sensor = Completer<Object?>();
+    var readReturned = false;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+      if (call.method == "readCaptureSettings") {
+        final value = await sensor.future;
+        readReturned = true;
+        return value;
+      }
+      return {"status": call.method == "applyLock" ? "locked" : "released"};
+    });
+    addTearDown(() => TestDefaultBinaryMessengerBinding
+        .instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null));
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel));
+    await service.startRecordingVideo();
+    final stopping = service
+        .stopRecordingVideo()
+        .then<Object?>((value) => value, onError: (Object error) => error);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    try {
+      expect(platform.recordingStops, 1,
+          reason: "A sensor timeout must not keep the encoder running");
+      expect(readReturned, isFalse,
+          reason: "Native STOP must precede the actual sensor reply");
+    } finally {
+      sensor.complete({"status": "ok"});
+      await stopping;
+      await service.stopCamera();
+    }
+  });
+
+  test("hardware stop finalizes the original start that replies late",
+      () async {
+    final started = Completer<void>();
+    final events = <String>[];
+    final platform = _FakeCameraPlatform(
+        startRecordingReply: started.future, onEvent: events.add);
+    CameraPlatform.instance = platform;
+    final service = CameraService(storageService: storageService);
+    final starting = service
+        .startRecordingVideo()
+        .then<Object?>((_) => null, onError: (Object error) => error);
+    while (platform.recordingStarts == 0) {
+      await Future<void>.delayed(Duration.zero);
+    }
+    final stopping = service.stopCamera();
+    await Future<void>.delayed(Duration.zero);
+    expect(events, isNot(contains("dispose")),
+        reason: "An unpatched platform must stop before native disposal");
+    started.complete();
+    await stopping;
+    await starting;
+    expect(platform.recordingStops, 1);
+    expect(events.indexOf("stop"), lessThan(events.indexOf("dispose")));
+    expect(service.isRecording, isFalse);
+  });
+
+  test("failed start automatically closes hardware without a reachable UI STOP",
+      () async {
+    final rawStart = Completer<void>();
+    final closed = Completer<void>();
+    final platform = _FakeCameraPlatform(
+        startRecordingReply: rawStart.future,
+        onEvent: (event) {
+          if (event == "dispose" && !closed.isCompleted) {
+            closed.complete();
+          }
+        });
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService,
+        cameraOperationTimeout: const Duration(milliseconds: 50));
+    try {
+      await expectLater(service.startRecordingVideo(), throwsException);
+      expect(service.isRecording, isFalse);
+      await closed.future.timeout(const Duration(seconds: 1));
+      expect(platform.recordingStarts, 1);
+      rawStart.complete();
+      await Future<void>.delayed(Duration.zero);
+      expect(platform.recordingStops, 0,
+          reason: "Never send a global generic/iOS STOP after disposal");
+      await expectLater(
+          service.startRecordingVideo(),
+          throwsA(isA<StateError>().having((error) => error.message, "message",
+              contains("Original recording"))));
+    } finally {
+      if (!rawStart.isCompleted) {
+        rawStart.complete();
+      }
+      await service.stopCamera();
+    }
+  });
+
+  test("an unconfirmed native stop retains ownership before another capture",
+      () async {
+    final platform = _FakeCameraPlatform(
+        stopRecordingError: PlatformException(
+            code: "RECORDING_STOP_UNCONFIRMED", message: "Still owned"));
+    CameraPlatform.instance = platform;
+    final service = CameraService(storageService: storageService);
+    await service.startRecordingVideo();
+    await expectLater(service.stopRecordingVideo(), throwsA(isA<Exception>()));
+    final starts = platform.recordingStarts;
+    await expectLater(
+        service.startRecordingVideo(),
+        throwsA(isA<StateError>().having((error) => error.message, "message",
+            contains("Original recording"))));
+    expect(platform.recordingStarts, starts);
+    platform.stopRecordingError = null;
+    await service.stopCamera();
+  });
+
+  for (final code in [
+    "RECORDING_NOT_STARTED",
+    "RECORDING_FINALIZED_WITHOUT_PATH"
+  ]) {
+    test("typed CameraX terminal $code permits the next owner", () async {
+      final platform = _FakeCameraPlatform(
+          stopRecordingError: CameraException(code, "Terminal acknowledged"));
+      CameraPlatform.instance = platform;
+      final service = CameraService(storageService: storageService);
+      await service.startRecordingVideo();
+      await expectLater(
+          service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      platform.stopRecordingError = null;
+      await service.startRecordingVideo();
+      expect(platform.recordingStarts, 2);
+      await service.stopCamera();
+    });
+  }
+
+  test("receipt failure retains the original native file for a metadata retry",
+      () async {
+    final directory = await Directory.systemTemp.createTemp("receipt-fault-");
+    final store = _FailingReceiptStore(directory);
+    final platform = _FakeCameraPlatform();
+    CameraPlatform.instance = platform;
+    final service = CameraService(
+        storageService: storageService, recordedVideoSnapshots: store);
+    try {
+      await service.startRecordingVideo();
+      await expectLater(
+          service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      await expectLater(
+          service.startRecordingVideo(),
+          throwsA(isA<StateError>().having((error) => error.message, "message",
+              contains("Original recording"))));
+      await expectLater(
+          service.stopRecordingVideo(), throwsA(isA<Exception>()));
+      expect(platform.recordingStops, 1,
+          reason: "Metadata retry must not stop another native recording");
+      expect((await store.forPath("unused-video.mp4"))?.sourcePath,
+          "unused-video.mp4");
+      await service.startRecordingVideo();
+      expect(platform.recordingStarts, 2);
+      await service.stopCamera();
+    } finally {
+      await directory.delete(recursive: true);
+    }
+  });
+
+  test("STOP during FPS recovery prevents the replacement encoder dispatch",
+      () async {
+    var creates = 0;
+    Future<void>? stopping;
+    late CameraService service;
+    final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_fps_failure", message: "FPS failed"),
+        startRecordingFailures: 1,
+        onEvent: (event) {
+          if (event == "create" && ++creates == 2) {
+            stopping = service.stopCamera();
+          }
+        });
+    CameraPlatform.instance = platform;
+    service = CameraService(storageService: storageService);
+    await expectLater(service.startRecordingVideo(), throwsA(isA<Exception>()));
+    await stopping;
+    expect(platform.recordingStarts, 1);
+    expect(service.isRecording, isFalse);
   });
 
   test("non-flash initialization failures still surface", () async {
@@ -276,6 +826,37 @@ void main() {
       if (SessionManager.instance.isSessionActive) {
         await SessionManager.instance.endSession();
       }
+    }
+  });
+
+  test("forced stop rechecks original session after device identity resolves",
+      () async {
+    if (SessionManager.instance.isSessionActive) {
+      await SessionManager.instance.endSession();
+    }
+    SessionManager.instance
+        .startSession("original", "original", deviceType: "Master");
+    final requested = Completer<void>();
+    final identity = Completer<String>();
+    final service = _StoppedMetadataCamera(
+        storageService: storageService,
+        deviceIdProvider: () {
+          requested.complete();
+          return identity.future;
+        });
+    await service.startRecordingVideo();
+    final stopping = service.forceStopRecordingDueToBattery();
+    await requested.future;
+    await SessionManager.instance.endSession();
+    SessionManager.instance
+        .startSession("replacement", "replacement", deviceType: "Master");
+    identity.complete("existing-device");
+    try {
+      await stopping;
+      expect(SessionManager.instance.currentSession?.capturedVideos, isEmpty);
+      expect(service.acknowledged, isFalse);
+    } finally {
+      await SessionManager.instance.endSession();
     }
   });
 
@@ -536,11 +1117,57 @@ void main() {
   });
 }
 
+class _StoppedMetadataCamera extends CameraService {
+  _StoppedMetadataCamera(
+      {required super.storageService, required super.deviceIdProvider})
+      : super(useMockCamera: true);
+
+  bool acknowledged = false;
+
+  @override
+  Future<String> stopRecordingVideo() async => "opaque-sdk-return-path";
+
+  @override
+  Future<RecordedVideoSnapshot> snapshotForRecordedVideo(String path) async =>
+      RecordedVideoSnapshot.capture(
+          captureId: "original-capture",
+          path: path,
+          startedAt: DateTime.utc(2026, 10, 25),
+          stoppedAt: DateTime.utc(2026, 10, 25, 0, 0, 1),
+          context: null,
+          sessionGuid: "original");
+
+  @override
+  Future<void> acknowledgeRecordedVideo(RecordedVideoSnapshot snapshot) async {
+    acknowledged = true;
+  }
+}
+
+class _FailingReceiptStore extends RecordedVideoSnapshots {
+  _FailingReceiptStore(Directory directory)
+      : super(directory: () async => directory);
+
+  int calls = 0;
+
+  @override
+  Future<void> remember(RecordedVideoSnapshot snapshot) async {
+    if (++calls == 1) {
+      throw const FileSystemException("Injected metadata write failure");
+    }
+    await super.remember(snapshot);
+  }
+}
+
 class _FakeCameraPlatform extends CameraPlatform {
   _FakeCameraPlatform({
     List<CameraDescription>? cameras,
     this.startRecordingError,
+    this.startRecordingFailures,
+    this.onEvent,
     this.setFlashModeError,
+    this.startRecordingReply,
+    this.stopRecordingError,
+    this.stopErrorAfterStarts,
   }) : cameras = cameras ??
             const [
               CameraDescription(
@@ -551,8 +1178,13 @@ class _FakeCameraPlatform extends CameraPlatform {
             ];
 
   final List<CameraDescription> cameras;
-  final PlatformException? startRecordingError;
+  PlatformException? startRecordingError;
+  int? startRecordingFailures;
+  final void Function(String)? onEvent;
   final PlatformException? setFlashModeError;
+  final Future<void>? startRecordingReply;
+  Exception? stopRecordingError;
+  final int? stopErrorAfterStarts;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
   CameraDescription? lastCreatedCamera;
@@ -560,6 +1192,10 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   bool _isRecording = false;
   int _nextCameraId = 1;
+  int createdCameras = 0;
+  int recordingStarts = 0;
+  int recordingStops = 0;
+  int disposedCameras = 0;
 
   @override
   Future<List<CameraDescription>> availableCameras() async => cameras;
@@ -569,6 +1205,8 @@ class _FakeCameraPlatform extends CameraPlatform {
     CameraDescription cameraDescription,
     MediaSettings mediaSettings,
   ) async {
+    createdCameras++;
+    onEvent?.call("create");
     lastCreatedCamera = cameraDescription;
     lastMediaSettings = mediaSettings;
     return _nextCameraId++;
@@ -625,8 +1263,15 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   @override
   Future<void> startVideoCapturing(VideoCaptureOptions options) async {
+    recordingStarts++;
+    onEvent?.call("start");
+    await startRecordingReply;
     final error = startRecordingError;
-    if (error != null) {
+    if (error != null &&
+        (startRecordingFailures == null || startRecordingFailures! > 0)) {
+      if (startRecordingFailures != null) {
+        startRecordingFailures = startRecordingFailures! - 1;
+      }
       throw error;
     }
     _isRecording = true;
@@ -634,9 +1279,17 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   @override
   Future<XFile> stopVideoRecording(int cameraId) async {
+    recordingStops++;
+    onEvent?.call("stop");
+    final error = stopRecordingError;
+    if (error != null &&
+        (stopErrorAfterStarts == null ||
+            recordingStarts >= stopErrorAfterStarts!)) {
+      throw error;
+    }
     if (!_isRecording) {
       throw PlatformException(
-        code: "No video is recording",
+        code: "RECORDING_NOT_STARTED",
         message: "stopVideoRecording was called when no video is recording.",
       );
     }
@@ -648,7 +1301,10 @@ class _FakeCameraPlatform extends CameraPlatform {
   Future<XFile> takePicture(int cameraId) async => XFile("unused-photo.jpg");
 
   @override
-  Future<void> dispose(int cameraId) async {}
+  Future<void> dispose(int cameraId) async {
+    disposedCameras++;
+    onEvent?.call("dispose");
+  }
 }
 
 class _TestPathProviderPlatform extends PathProviderPlatform {

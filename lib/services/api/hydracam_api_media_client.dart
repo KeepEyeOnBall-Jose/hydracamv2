@@ -125,6 +125,7 @@ class HydraCamMediaUploadClient {
     required DateTime receivedDate,
     required int fileLength,
     required Duration? effectiveVideoDuration,
+    required Map<String, dynamic>? captureSettings,
     required Function(double)? onProgress,
     required Function(HydraCamUploadResult)? onUploadResult,
   }) async {
@@ -193,6 +194,7 @@ class HydraCamMediaUploadClient {
         fileLength: fileLength,
         effectiveVideoDuration: effectiveVideoDuration,
         mimeType: contentType.toString(),
+        captureSettings: captureSettings,
       );
       if (bridgeComplete == null) {
         return false;
@@ -344,6 +346,7 @@ class HydraCamMediaUploadClient {
     required int fileLength,
     required Duration? effectiveVideoDuration,
     required String mimeType,
+    required Map<String, dynamic>? captureSettings,
   }) async {
     final response = await _core._postMediaTimelineJson(
       _core._mediaTimelineApiPathUri(path),
@@ -361,6 +364,8 @@ class HydraCamMediaUploadClient {
           "receivedAt": receivedDate.toUtc().toIso8601String(),
           if (effectiveVideoDuration != null)
             "durationSeconds": effectiveVideoDuration.inMilliseconds / 1000,
+          if (captureSettings?["fps"] is num) "fps": captureSettings!["fps"],
+          if (captureSettings != null) "captureSettings": captureSettings,
         },
       },
       headers: {
@@ -387,6 +392,7 @@ class HydraCamMediaUploadClient {
     String? mediaTimelineUploadToken,
     Function(String)? onFailureReason,
     Function(HydraCamUploadResult)? onUploadResult,
+    Map<String, dynamic>? captureSettings,
   }) async {
     try {
       final normalizedSessionGuid = _normalizedUploadSessionGuid(sessionGuid);
@@ -462,6 +468,7 @@ class HydraCamMediaUploadClient {
           receivedDate: receivedDate,
           fileLength: fileLength,
           effectiveVideoDuration: effectiveVideoDuration,
+          captureSettings: captureSettings,
           onProgress: onProgress,
           onUploadResult: onUploadResult,
         );
@@ -510,6 +517,10 @@ class HydraCamMediaUploadClient {
           if (effectiveVideoDuration != null) {
             request.fields[HydraCamUploadMediaContract.fieldDurationMs] =
                 effectiveVideoDuration.inMilliseconds.toString();
+          }
+          if (captureSettings != null) {
+            request.fields[HydraCamUploadMediaContract.fieldCaptureSettings] =
+                jsonEncode(captureSettings);
           }
         }
 

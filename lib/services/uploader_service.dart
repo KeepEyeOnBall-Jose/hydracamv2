@@ -336,6 +336,7 @@ class UploaderService {
         onUploadResult: (result) {
           bridgeUploadResult = result;
         },
+        captureSettings: media.captureContext?.exposure?.toJson(),
       );
     }
 

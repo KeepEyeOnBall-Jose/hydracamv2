@@ -87,6 +87,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'Los perfiles son objetivos; el teléfono puede usar una alternativa si no los admite.';
 
   @override
+  String get settingsExposurePresetTitle => 'Exposición';
+
+  @override
+  String get settingsExposurePresetDescription =>
+      'Obturador, ISO, balance de blancos y enfoque fijos al grabar. Un obturador más rápido da estelas de bola más cortas pero una imagen más oscura.';
+
+  @override
   String settingsVideoTarget(String target) {
     return 'Objetivo: $target';
   }

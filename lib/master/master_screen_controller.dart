@@ -589,13 +589,15 @@ class MasterScreenController extends ChangeNotifier {
     _server.sendCommand("stopRecordingVideo");
 
     final String videoPath = await _server.cameraService.stopRecordingVideo();
+    final snapshot =
+        await _server.cameraService.snapshotForRecordedVideo(videoPath);
 
     // Get the device ID
     final String deviceId = await DeviceIdService.getOrCreateDeviceId();
 
     // Add video to current session
-    final startRecordingDate = _server.cameraService.videoStartRecordingDate;
-    final endRecordingDate = _server.cameraService.videoEndRecordingDate;
+    final startRecordingDate = snapshot.startedAt;
+    final endRecordingDate = snapshot.stoppedAt;
     if (startRecordingDate == null || endRecordingDate == null) {
       throw StateError("Master recording timestamps are missing after stop. "
           "start=$startRecordingDate end=$endRecordingDate");
@@ -609,12 +611,18 @@ class MasterScreenController extends ChangeNotifier {
       startRecordingDate: startRecordingDate,
       endRecordingDate: endRecordingDate,
       receivedDate: receivedDate,
-      captureContext: _server.cameraService.recordingCaptureContext,
+      captureContext: snapshot.context,
       // The master defines the shared clock, so its captures are the anchor.
       syncMetadata: SyncMetadata.masterAnchor(at: startRecordingDate),
     );
 
+    if (snapshot.sessionGuid == null ||
+        snapshot.sessionGuid != _sessionManager.sessionGuid) {
+      throw StateError("The original recording session is no longer active; "
+          "capture metadata remains pending recovery.");
+    }
     await _sessionManager.addVideo(capturedVideo);
+    await _server.cameraService.acknowledgeRecordedVideo(snapshot);
 
     if (_alive) {
       _setRecording(false);

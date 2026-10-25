@@ -1,0 +1,301 @@
+{
+  "name": "single_device_exposure_presets",
+  "description": "Records one short clip per exposure preset (auto, 1/30, 1/60, 1/120) in a debug session on one device. Auto upload off.",
+  "context": {
+    "cameraLensPreference": "ultraWide",
+    "videoCaptureProfile": "detail4k30"
+  },
+  "steps": [
+    {
+      "action": "settings",
+      "name": "apply-capture-settings",
+      "targets": "all",
+      "payload": {
+        "autoUploadMaterials": false,
+        "masterShouldRecord": true,
+        "timerDuration": 0,
+        "autoplayVideoOnMaster": false,
+        "flashForVideoAnnounce": false,
+        "cameraLensPreference": "{{cameraLensPreference}}",
+        "videoCaptureProfile": "{{videoCaptureProfile}}"
+      }
+    },
+    {
+      "action": "command",
+      "name": "start-debug-session",
+      "role": "master",
+      "command": "start_session",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "session-live",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "intervalSec": 1,
+      "expect": {
+        "path": "isActive",
+        "equals": true
+      }
+    },
+    {
+      "action": "settings",
+      "name": "preset-auto",
+      "targets": "all",
+      "payload": {
+        "exposurePreset": "auto"
+      }
+    },
+    {
+      "action": "get",
+      "name": "snapshot-settings-auto",
+      "role": "master",
+      "path": "/settings"
+    },
+    {
+      "action": "sleep",
+      "seconds": 2
+    },
+    {
+      "action": "command",
+      "name": "start-recording-auto",
+      "role": "master",
+      "command": "start_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "recording-started-auto",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 40,
+      "intervalSec": 1,
+      "expect": {
+        "path": "isRecording",
+        "equals": true
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 5
+    },
+    {
+      "action": "command",
+      "name": "stop-recording-auto",
+      "role": "master",
+      "command": "stop_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "video-saved-auto",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "intervalSec": 1,
+      "expect": {
+        "path": "videoCount",
+        "gte": 1
+      }
+    },
+    {
+      "action": "settings",
+      "name": "preset-shutter1_30",
+      "targets": "all",
+      "payload": {
+        "exposurePreset": "shutter1_30"
+      }
+    },
+    {
+      "action": "get",
+      "name": "snapshot-settings-shutter1_30",
+      "role": "master",
+      "path": "/settings"
+    },
+    {
+      "action": "sleep",
+      "seconds": 2
+    },
+    {
+      "action": "command",
+      "name": "start-recording-shutter1_30",
+      "role": "master",
+      "command": "start_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "recording-started-shutter1_30",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 40,
+      "intervalSec": 1,
+      "expect": {
+        "path": "isRecording",
+        "equals": true
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 5
+    },
+    {
+      "action": "command",
+      "name": "stop-recording-shutter1_30",
+      "role": "master",
+      "command": "stop_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "video-saved-shutter1_30",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "intervalSec": 1,
+      "expect": {
+        "path": "videoCount",
+        "gte": 2
+      }
+    },
+    {
+      "action": "settings",
+      "name": "preset-shutter1_60",
+      "targets": "all",
+      "payload": {
+        "exposurePreset": "shutter1_60"
+      }
+    },
+    {
+      "action": "get",
+      "name": "snapshot-settings-shutter1_60",
+      "role": "master",
+      "path": "/settings"
+    },
+    {
+      "action": "sleep",
+      "seconds": 2
+    },
+    {
+      "action": "command",
+      "name": "start-recording-shutter1_60",
+      "role": "master",
+      "command": "start_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "recording-started-shutter1_60",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 40,
+      "intervalSec": 1,
+      "expect": {
+        "path": "isRecording",
+        "equals": true
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 5
+    },
+    {
+      "action": "command",
+      "name": "stop-recording-shutter1_60",
+      "role": "master",
+      "command": "stop_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "video-saved-shutter1_60",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "intervalSec": 1,
+      "expect": {
+        "path": "videoCount",
+        "gte": 3
+      }
+    },
+    {
+      "action": "settings",
+      "name": "preset-shutter1_120",
+      "targets": "all",
+      "payload": {
+        "exposurePreset": "shutter1_120"
+      }
+    },
+    {
+      "action": "get",
+      "name": "snapshot-settings-shutter1_120",
+      "role": "master",
+      "path": "/settings"
+    },
+    {
+      "action": "sleep",
+      "seconds": 2
+    },
+    {
+      "action": "command",
+      "name": "start-recording-shutter1_120",
+      "role": "master",
+      "command": "start_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "recording-started-shutter1_120",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 40,
+      "intervalSec": 1,
+      "expect": {
+        "path": "isRecording",
+        "equals": true
+      }
+    },
+    {
+      "action": "sleep",
+      "seconds": 5
+    },
+    {
+      "action": "command",
+      "name": "stop-recording-shutter1_120",
+      "role": "master",
+      "command": "stop_recording",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "video-saved-shutter1_120",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 30,
+      "intervalSec": 1,
+      "expect": {
+        "path": "videoCount",
+        "gte": 4
+      }
+    },
+    {
+      "action": "command",
+      "name": "end-session",
+      "role": "master",
+      "command": "end_session",
+      "payload": {}
+    },
+    {
+      "action": "await",
+      "name": "session-complete",
+      "role": "master",
+      "path": "/session",
+      "timeoutSec": 20,
+      "expect": {
+        "path": "isActive",
+        "equals": false
+      }
+    }
+  ]
+}

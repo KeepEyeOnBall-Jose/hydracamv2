@@ -56,6 +56,22 @@ android {
         buildConfig = true
     }
 
+    // Match the vendored CameraX plugin's native test environment.
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+            all {
+                outputs.upToDateWhen { false }
+                testLogging {
+                    events("passed", "skipped", "failed", "standardOut", "standardError")
+                    showStandardStreams = true
+                }
+                jvmArgs("-Xmx1G")
+            }
+        }
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         // Exactly one of these source sets is compiled. Both define
@@ -118,7 +134,25 @@ flutter {
 }
 
 dependencies {
+    // Same CameraX version as packages/camera_android_camerax (manual exposure).
+    def cameraxVersion = "1.6.2"
+    implementation "androidx.camera:camera-core:${cameraxVersion}"
+    implementation "androidx.camera:camera-camera2:${cameraxVersion}"
+    // ListenableFuture for Camera2CameraControl; same version as the plugin.
+    implementation "com.google.guava:guava:33.5.0-android"
     testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito:mockito-core:5.23.0"
+    testImplementation "org.mockito:mockito-inline:5.2.0"
+    testImplementation "androidx.test:core:1.7.0"
+    testImplementation "org.robolectric:robolectric:4.16"
+}
+
+// Resource-backed unit tests package Flutter's debug assets. Declare their
+// producer explicitly for Gradle 9's task output dependency validation.
+tasks.configureEach { task ->
+    if (task.name == "packageDebugUnitTestForUnitTest") {
+        task.dependsOn("copyFlutterAssetsDebug")
+    }
 }
 
 tasks.withType(JavaCompile).configureEach { task ->

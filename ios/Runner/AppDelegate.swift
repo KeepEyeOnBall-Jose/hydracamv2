@@ -5,6 +5,10 @@ import UIKit
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   private var wearablePovCaptures: [String: [String: Any]] = [:]
+  private let manualExposure = ManualExposureController(resolveDevice: { cameraName in
+    guard let device = AVCaptureDevice(uniqueID: cameraName) else { return nil }
+    return AVManualExposureDevice(device)
+  })
 
   override func application(
     _ application: UIApplication,
@@ -19,6 +23,7 @@ import UIKit
     registerLaunchConfigChannel(binaryMessenger: messenger)
     registerVideoMetadataChannel(binaryMessenger: messenger)
     registerWearableReplayChannel(binaryMessenger: messenger)
+    registerManualExposureChannel(binaryMessenger: messenger)
   }
 
   private func registerLaunchConfigChannel(binaryMessenger: FlutterBinaryMessenger) {
@@ -241,6 +246,54 @@ import UIKit
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
     return formatter.string(from: date)
+  }
+}
+
+extension AppDelegate {
+  fileprivate func registerManualExposureChannel(binaryMessenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(
+      name: "hydracamv2/manual_exposure",
+      binaryMessenger: binaryMessenger
+    )
+    channel.setMethodCallHandler { call, result in
+      let args = call.arguments as? [String: Any] ?? [:]
+      let cameraName = args["cameraName"] as? String
+      switch call.method {
+      case "applyLock":
+        guard
+          let ownerId = args["ownerId"] as? String, !ownerId.isEmpty,
+          let exposureTimeNs = (args["exposureTimeNs"] as? NSNumber)?.int64Value,
+          let frameDurationNs = (args["frameDurationNs"] as? NSNumber)?.int64Value
+        else {
+          result(FlutterError(
+            code: "missing_arguments",
+            message: "ownerId, exposureTimeNs and frameDurationNs are required",
+            details: nil
+          ))
+          return
+        }
+        self.manualExposure.applyLock(
+          ownerId: ownerId,
+          cameraName: cameraName,
+          exposureTimeNs: exposureTimeNs,
+          frameDurationNs: frameDurationNs
+        ) { payload in
+          DispatchQueue.main.async { result(payload) }
+        }
+      case "release":
+        guard let ownerId = args["ownerId"] as? String, !ownerId.isEmpty else {
+          result(FlutterError(
+            code: "missing_arguments", message: "ownerId is required", details: nil
+          ))
+          return
+        }
+        result(self.manualExposure.release(ownerId: ownerId, cameraName: cameraName))
+      case "readCaptureSettings":
+        result(self.manualExposure.readCaptureSettings(cameraName: cameraName))
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
   }
 }
 

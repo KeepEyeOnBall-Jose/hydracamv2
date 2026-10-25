@@ -151,6 +151,53 @@ void main() {
     );
     expect(capturedFields, containsPair("durationMs", "42000"));
     expect(capturedFiles?.single.contentType.mimeType, "video/mp4");
+    expect(capturedFields?.containsKey("captureSettings"), isFalse);
+  });
+
+  test("uploadMedia sends per-clip capture settings as a JSON field", () async {
+    final mediaFile = File("${tempDir.path}/exposure-video.mp4")
+      ..writeAsBytesSync(_validMp4Bytes);
+    Map<String, String>? capturedFields;
+
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        capturedFields = (request as http.MultipartRequest).fields;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    final recordingStart = DateTime.utc(2026, 10, 24, 18);
+    final captureSettings = {
+      "preset": "shutter1_120",
+      "lockStatus": "locked",
+      "exposureTimeNs": 8333333,
+      "iso": 640,
+      "frameDurationNs": 33333333,
+      "fps": 30.0,
+      "rollingShutterSkewNs": 21000000,
+    };
+
+    final result = await HydraCamApiService().uploadMedia(
+      "session-guid",
+      mediaFile,
+      false,
+      "slave-device",
+      recordingStart,
+      recordingStart.add(const Duration(seconds: 11)),
+      null,
+      recordingEndDate: recordingStart.add(const Duration(seconds: 10)),
+      captureSettings: captureSettings,
+    );
+
+    expect(result, isTrue);
+    final field =
+        capturedFields?[HydraCamUploadMediaContract.fieldCaptureSettings];
+    expect(field, isNotNull);
+    expect(jsonDecode(field!), captureSettings);
   });
 
   test("uploadMedia derives duration from recording timestamps when mismatched",
@@ -932,6 +979,11 @@ void main() {
           expect(metadata, containsPair("kind", "video"));
           expect(metadata, containsPair("sourceBytes", mediaFile.lengthSync()));
           expect(metadata, containsPair("durationSeconds", 5.0));
+          expect(metadata, containsPair("fps", 30.0));
+          expect(
+            metadata["captureSettings"],
+            containsPair("preset", "shutter1_60"),
+          );
           return http.StreamedResponse(
             Stream<List<int>>.fromIterable([
               utf8.encode(jsonEncode({
@@ -961,6 +1013,7 @@ void main() {
       onUploadResult: (result) {
         uploadResult = result;
       },
+      captureSettings: {"preset": "shutter1_60", "fps": 30.0},
     );
 
     expect(result, isTrue);
