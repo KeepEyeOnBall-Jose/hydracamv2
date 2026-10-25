@@ -8,7 +8,9 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/models/camera_capture_settings.dart";
 import "package:hydracam/services/camera_service.dart";
 import "package:hydracam/services/log_service.dart";
+import "package:hydracam/services/manual_exposure_service.dart";
 import "package:hydracam/services/session_manager.dart";
+import "package:hydracam/services/settings_service.dart";
 import "package:mocktail/mocktail.dart";
 // ignore: depend_on_referenced_packages
 import "package:path_provider_platform_interface/path_provider_platform_interface.dart";
@@ -114,6 +116,59 @@ void main() {
       isTrue,
     );
   });
+
+  for (final nextPreset in [ExposurePreset.auto, ExposurePreset.shutter1_60]) {
+    test(
+        "failed exposure cleanup blocks ${nextPreset.storageValue} before camera replacement",
+        () async {
+      const channel = MethodChannel("hydracam-retained-exposure-test");
+      var releaseFails = true;
+      var releases = 0;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+        if (call.method == "release") {
+          releases++;
+          return {"status": releaseFails ? "error" : "released"};
+        }
+        return {"status": call.method == "applyLock" ? "locked" : "ok"};
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null));
+      final platform = _FakeCameraPlatform(
+        startRecordingError: PlatformException(
+            code: "forced_start_failure", message: "forced start failure"),
+      );
+      CameraPlatform.instance = platform;
+      final service = CameraService(
+        storageService: storageService,
+        manualExposureService: ManualExposureService(channel: channel),
+      );
+      await expectLater(service.startRecordingVideo(), throwsException);
+      expect(releases, greaterThan(0));
+      await service.stopCamera();
+      final createsBeforeRetry = platform.createdCameras;
+      final startsBeforeRetry = platform.recordingStarts;
+      platform.startRecordingError = null;
+      await SettingsService.setExposurePreset(nextPreset);
+
+      await expectLater(
+          service.startRecordingVideo(),
+          throwsA(isA<Exception>().having((error) => error.toString(),
+              "message", contains("Exposure cleanup"))));
+      expect(service.isRecording, isFalse);
+      expect(platform.createdCameras, createsBeforeRetry,
+          reason: "Unresolved restoration must precede camera replacement");
+      expect(platform.recordingStarts, startsBeforeRetry);
+
+      releaseFails = false;
+      await service.startRecordingVideo();
+      expect(service.isRecording, isTrue);
+      expect(platform.recordingStarts, startsBeforeRetry + 1);
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      await service.stopCamera();
+    });
+  }
 
   test("non-flash initialization failures still surface", () async {
     CameraPlatform.instance = _FakeCameraPlatform(
@@ -551,7 +606,7 @@ class _FakeCameraPlatform extends CameraPlatform {
             ];
 
   final List<CameraDescription> cameras;
-  final PlatformException? startRecordingError;
+  PlatformException? startRecordingError;
   final PlatformException? setFlashModeError;
   final StreamController<CameraErrorEvent> _errorController =
       StreamController<CameraErrorEvent>.broadcast();
@@ -560,6 +615,8 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   bool _isRecording = false;
   int _nextCameraId = 1;
+  int createdCameras = 0;
+  int recordingStarts = 0;
 
   @override
   Future<List<CameraDescription>> availableCameras() async => cameras;
@@ -569,6 +626,7 @@ class _FakeCameraPlatform extends CameraPlatform {
     CameraDescription cameraDescription,
     MediaSettings mediaSettings,
   ) async {
+    createdCameras++;
     lastCreatedCamera = cameraDescription;
     lastMediaSettings = mediaSettings;
     return _nextCameraId++;
@@ -625,6 +683,7 @@ class _FakeCameraPlatform extends CameraPlatform {
 
   @override
   Future<void> startVideoCapturing(VideoCaptureOptions options) async {
+    recordingStarts++;
     final error = startRecordingError;
     if (error != null) {
       throw error;
