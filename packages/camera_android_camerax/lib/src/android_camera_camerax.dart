@@ -87,9 +87,9 @@ class AndroidCameraCameraX extends CameraPlatform {
     },
   );
 
-  /// Stream that emits an event when the corresponding video recording is finalized.
-  static final StreamController<VideoRecordEvent> videoRecordingEventStreamController =
-      StreamController<VideoRecordEvent>.broadcast();
+  final Map<int, _VideoRecordingAttempt> _videoRecordingAttempts = <int, _VideoRecordingAttempt>{};
+  _VideoRecordingAttempt? _activeVideoRecordingAttempt;
+  int? _currentCameraId;
 
   /// Stream that emits the errors caused by camera usage on the native side.
   static final StreamController<String> cameraErrorStreamController =
@@ -102,17 +102,6 @@ class AndroidCameraCameraX extends CameraPlatform {
   static final StreamController<DeviceOrientationChangedEvent>
   deviceOrientationChangedStreamController =
       StreamController<DeviceOrientationChangedEvent>.broadcast();
-
-  /// Stream queue to pick up finalized viceo recording events in
-  /// [stopVideoRecording].
-  final StreamQueue<VideoRecordEvent> videoRecordingEventStreamQueue =
-      StreamQueue<VideoRecordEvent>(videoRecordingEventStreamController.stream);
-
-  late final VideoRecordEventListener _videoRecordingEventListener = VideoRecordEventListener(
-    onEvent: (_, VideoRecordEvent event) {
-      videoRecordingEventStreamController.add(event);
-    },
-  );
 
   /// Whether or not [preview] has been bound to the lifecycle of the camera by
   /// [createCamera].
@@ -409,6 +398,7 @@ class AndroidCameraCameraX extends CameraPlatform {
       targetFpsRange: _targetFpsRange,
     );
     _flutterSurfaceTextureId = await preview!.setSurfaceProvider(systemServicesManager);
+    _currentCameraId = _flutterSurfaceTextureId;
 
     // Configure ImageCapture instance.
     imageCapture = ImageCapture(
@@ -514,17 +504,38 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// Releases the resources of the accessed camera with ID [cameraId].
   @override
   Future<void> dispose(int cameraId) async {
-    await preview?.releaseSurfaceProvider();
-    await liveCameraState?.removeObservers();
-    await processCameraProvider?.unbindAll();
-    await imageAnalysis?.clearAnalyzer();
-    await deviceOrientationManager.stopListeningForDeviceOrientationChange();
-
-    // `processCameraProvider.unbindAll()` implicitly finalizes active recordings natively.
-    // Clear the Dart state here to prevent an exception on resume.
-    recording = null;
-    pendingRecording = null;
-    videoOutputPath = null;
+    final attempt = _videoRecordingAttempts[cameraId];
+    final activeAtEntry = _activeVideoRecordingAttempt;
+    attempt?.disposed = true;
+    attempt?.disposalPending = true;
+    attempt?.requestStop();
+    if (_currentCameraId != null && _currentCameraId != cameraId) {
+      attempt?.disposalPending = false;
+      return;
+    }
+    // Dispatch hardware unbinding without waiting for recording finalization.
+    final unbinding = processCameraProvider?.unbindAll();
+    final oldPreview = preview;
+    final oldState = liveCameraState;
+    final oldAnalysis = imageAnalysis;
+    await unbinding;
+    await oldPreview?.releaseSurfaceProvider();
+    await oldState?.removeObservers();
+    await oldAnalysis?.clearAnalyzer();
+    if ((_currentCameraId == cameraId || _currentCameraId == null) &&
+        identical(_activeVideoRecordingAttempt, activeAtEntry)) {
+      await deviceOrientationManager.stopListeningForDeviceOrientationChange();
+      if ((_currentCameraId == cameraId || _currentCameraId == null) &&
+          identical(_activeVideoRecordingAttempt, activeAtEntry)) {
+        recording = null;
+        pendingRecording = null;
+        videoOutputPath = null;
+        _currentCameraId = null;
+      }
+    }
+    attempt?.disposalPending = false;
+    // The owned attempt retains its listener, late handle and path until its
+    // terminal result can be retrieved through stopVideoRecording(cameraId).
   }
 
   /// The camera with ID [cameraId] has been initialized.
@@ -1143,96 +1154,158 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// limitations of the platform interface.
   @override
   Future<void> startVideoCapturing(VideoCaptureOptions options) async {
-    if (recording != null) {
-      // There is currently an active recording, so do not start a new one.
-      return;
+    if (_videoRecordingAttempts.values.any(
+      (attempt) => !attempt.terminalConsumed || attempt.disposalPending,
+    )) {
+      throw CameraException('RECORDING_BUSY', 'The previous recording result is not consumed.');
     }
-    final dynamic Function(CameraImageData)? streamCallback = options.streamCallback;
-    if (streamCallback == null) {
-      // For potential performance improvements, unbind imageAnalysis if not in use.
-      // See https://developer.android.com/media/camera/camerax/architecture#combine-use-cases
-      // for details.
-      await _unbindUseCaseFromLifecycle(imageAnalysis!);
-    }
-
-    await _bindUseCaseToLifecycle(videoCapture!, options.cameraId);
-
-    // Set target rotation to default CameraX rotation only if capture
-    // orientation not locked.
-    if (!captureOrientationLocked && shouldSetDefaultRotation) {
-      await videoCapture!.setTargetRotation(
-        await deviceOrientationManager.getDefaultDisplayRotation(),
+    _videoRecordingAttempts.removeWhere((_, attempt) => attempt.terminalConsumed);
+    final capture = videoCapture!;
+    final output = recorder!;
+    final attempt = _VideoRecordingAttempt(options.cameraId, processCameraProvider!, capture);
+    _videoRecordingAttempts[options.cameraId] = attempt;
+    _activeVideoRecordingAttempt = attempt;
+    _currentCameraId = options.cameraId;
+    try {
+      final dynamic Function(CameraImageData)? streamCallback = options.streamCallback;
+      if (streamCallback == null) {
+        await _unbindUseCaseFromLifecycle(imageAnalysis!);
+      }
+      _checkRecordingStartAllowed(attempt);
+      await _bindUseCaseToLifecycle(capture, options.cameraId);
+      _checkRecordingStartAllowed(attempt);
+      if (!captureOrientationLocked && shouldSetDefaultRotation) {
+        await capture.setTargetRotation(await deviceOrientationManager.getDefaultDisplayRotation());
+      }
+      _checkRecordingStartAllowed(attempt);
+      attempt.path =
+          options.videoOutputPath ??
+          await systemServicesManager.getTempFilePath(videoPrefix, '.mp4');
+      _checkRecordingStartAllowed(attempt);
+      var pending = await output.prepareRecording(attempt.path!);
+      _checkRecordingStartAllowed(attempt);
+      if (options.enablePersistentRecording) {
+        pending = await pending.asPersistentRecording();
+      }
+      _checkRecordingStartAllowed(attempt);
+      pending = await pending.withAudioEnabled(!enableRecordingAudio);
+      _checkRecordingStartAllowed(attempt);
+      pendingRecording = pending;
+      videoOutputPath = attempt.path;
+      // Keep the exact listener alive until Finalize, including after dispose.
+      // Its callback only updates this captured attempt, never a later one.
+      final owned = WeakReference<_VideoRecordingAttempt>(attempt);
+      attempt.listener = VideoRecordEventListener(
+        onEvent: (_, event) {
+          owned.target?.onEvent(event);
+        },
       );
-    }
-
-    videoOutputPath =
-        options.videoOutputPath ?? await systemServicesManager.getTempFilePath(videoPrefix, '.mp4');
-    pendingRecording = await recorder!.prepareRecording(videoOutputPath!);
-
-    if (options.enablePersistentRecording) {
-      pendingRecording = await pendingRecording?.asPersistentRecording();
-    }
-
-    // Enable/disable recording audio as requested. If enabling audio is requested
-    // and permission was not granted when the camera was created, then recording
-    // audio will be disabled to respect the denied permission.
-    pendingRecording = await pendingRecording!.withAudioEnabled(
-      /* initialMuted */
-      !enableRecordingAudio,
-    );
-
-    recording = await pendingRecording!.start(_videoRecordingEventListener);
-
-    if (streamCallback != null) {
-      onStreamedFrameAvailable(options.cameraId).listen(streamCallback);
-    }
-
-    // Wait for video recording to start.
-    VideoRecordEvent event = await videoRecordingEventStreamQueue.next;
-    while (event is! VideoRecordEventStart) {
-      event = await videoRecordingEventStreamQueue.next;
+      attempt.nativeStartInvoked = true;
+      attempt.rawStart = pending.start(attempt.listener!);
+      final handle = await attempt.rawStart!;
+      attempt.recording = handle;
+      attempt.handleReady.complete(handle);
+      if (attempt.stopRequested) {
+        attempt.requestStop();
+      } else if (identical(_activeVideoRecordingAttempt, attempt)) {
+        recording = handle;
+      }
+      if (streamCallback != null && !attempt.stopRequested) {
+        onStreamedFrameAvailable(options.cameraId).listen(streamCallback);
+      }
+      final first = await attempt.firstEvent.future;
+      if (first is VideoRecordEventFinalize) {
+        throw CameraException(
+          'RECORDING_FINALIZED_BEFORE_START',
+          'The original output is retained.',
+        );
+      }
+      _checkRecordingStartAllowed(attempt);
+    } catch (_) {
+      if (!attempt.handleReady.isCompleted) {
+        attempt.handleReady.complete(null);
+      }
+      if (!attempt.nativeStartInvoked) {
+        attempt.neverStarted = true;
+        attempt.completeWithoutNativeRecording();
+      }
+      rethrow;
     }
   }
 
-  /// Stops the video recording and returns the file where it was saved.
-  /// Throws a CameraException if the recording is currently null, or if the
-  /// videoOutputPath is null.
-  ///
-  /// If the videoOutputPath is null the recording objects are cleaned up
-  /// so starting a new recording is possible.
+  void _checkRecordingStartAllowed(_VideoRecordingAttempt attempt) {
+    if (attempt.stopRequested) {
+      throw CameraException(
+        'RECORDING_STOP_REQUESTED',
+        'Recording cancellation is not finalization.',
+      );
+    }
+  }
+
+  /// Stops the captured camera's recording, including after controller disposal.
+  /// Duplicate cleanup joins the same terminal result. A cached path does not
+  /// establish that the file contains playable video.
   @override
-  Future<XFile> stopVideoRecording(int cameraId) async {
-    if (recording == null) {
-      throw CameraException(
-        'videoRecordingFailed',
-        'Attempting to stop a '
-            'video recording while no recording is in progress.',
+  Future<XFile> stopVideoRecording(int cameraId) {
+    final attempt = _videoRecordingAttempts[cameraId];
+    if (attempt == null) {
+      return Future<XFile>.error(
+        CameraException('RECORDING_NOT_OWNED', 'No owned recording for this camera.'),
       );
     }
+    attempt.requestStop();
+    return attempt.stopping ??= _stopOwnedRecording(attempt).onError((
+      Object error,
+      StackTrace stack,
+    ) {
+      // Failed cleanup does not consume an uncertain recording; permit retry.
+      attempt.stopping = null;
+      Error.throwWithStackTrace(error, stack);
+    });
+  }
 
-    /// Stop the active recording and wait for the video recording to be finalized.
-    await recording!.close();
-    VideoRecordEvent event = await videoRecordingEventStreamQueue.next;
-    while (event is! VideoRecordEventFinalize) {
-      event = await videoRecordingEventStreamQueue.next;
+  Future<XFile> _stopOwnedRecording(_VideoRecordingAttempt attempt) async {
+    final handle = await attempt.handleReady.future;
+    if (attempt.neverStarted) {
+      attempt.terminalConsumed = true;
+      throw CameraException('RECORDING_NOT_STARTED', 'PendingRecording.start was never invoked.');
     }
-    recording = null;
-    pendingRecording = null;
-
-    if (videoOutputPath == null) {
-      // Handle any errors with finalizing video recording.
+    if (!attempt.finalized.isCompleted) {
+      if (handle == null) {
+        throw CameraException(
+          'RECORDING_STOP_UNCONFIRMED',
+          'The original native handle is unresolved.',
+        );
+      }
+      try {
+        await Future.any<void>(<Future<void>>[attempt.finalized.future, attempt.closeOnce()]);
+      } catch (_) {
+        if (!attempt.finalized.isCompleted) {
+          throw CameraException('RECORDING_STOP_UNCONFIRMED', 'No native Finalize was observed.');
+        }
+      }
+      await attempt.finalized.future;
+    }
+    final path = attempt.path;
+    if (path == null) {
+      attempt.terminalConsumed = true;
       throw CameraException(
-        'INVALID_PATH',
-        'The platform did not return a path '
-            'while reporting success. The platform should always '
-            'return a valid path or report an error.',
+        'RECORDING_FINALIZED_WITHOUT_PATH',
+        'Native Finalize supplied no output path.',
       );
     }
-
-    await _unbindUseCaseFromLifecycle(videoCapture!);
-    final videoFile = XFile(videoOutputPath!);
-    cameraEventStreamController.add(VideoRecordedEvent(cameraId, videoFile, /* duration */ null));
-    return videoFile;
+    if (!attempt.disposed && await attempt.provider.isBound(attempt.capture)) {
+      await attempt.provider.unbind(<UseCase>[attempt.capture]);
+    }
+    attempt.terminalConsumed = true;
+    if (identical(_activeVideoRecordingAttempt, attempt)) {
+      recording = null;
+      pendingRecording = null;
+      videoOutputPath = null;
+    }
+    final file = XFile(path);
+    cameraEventStreamController.add(VideoRecordedEvent(attempt.cameraId, file, null));
+    return file;
   }
 
   /// Pause the current video recording of the camera with ID [cameraId] if it is not null.
@@ -1824,5 +1897,63 @@ class AndroidCameraCameraX extends CameraPlatform {
       default:
         throw ArgumentError('"$orientation" is not a valid DeviceOrientation value');
     }
+  }
+}
+
+/// Native state for one immutable camera/recording attempt. Terminal events are
+/// values, so an early Finalize cannot become an unhandled future error.
+class _VideoRecordingAttempt {
+  _VideoRecordingAttempt(this.cameraId, this.provider, this.capture);
+  final int cameraId;
+  final ProcessCameraProvider provider;
+  final VideoCapture capture;
+  final handleReady = Completer<Recording?>();
+  final firstEvent = Completer<VideoRecordEvent?>();
+  final finalized = Completer<void>();
+  VideoRecordEventListener? listener;
+  Future<Recording>? rawStart;
+  Recording? recording;
+  String? path;
+  Future<void>? closing;
+  Future<XFile>? stopping;
+  bool nativeStartInvoked = false;
+  bool neverStarted = false;
+  bool disposed = false;
+  bool disposalPending = false;
+  bool stopRequested = false;
+  bool terminalConsumed = false;
+
+  void onEvent(VideoRecordEvent event) {
+    if (finalized.isCompleted) return;
+    if (event is VideoRecordEventStart && !firstEvent.isCompleted) {
+      firstEvent.complete(event);
+    } else if (event is VideoRecordEventFinalize) {
+      if (!firstEvent.isCompleted) firstEvent.complete(event);
+      finalized.complete();
+      listener = null;
+    }
+  }
+
+  void requestStop() {
+    stopRequested = true;
+    if (!firstEvent.isCompleted) firstEvent.complete(null);
+    if (recording != null) {
+      // Disposal must not wait for close/finalization before unbinding hardware.
+      // The shared close future remains observable by stopVideoRecording.
+      unawaited(closeOnce().catchError((Object _) {}));
+    }
+  }
+
+  Future<void> closeOnce() {
+    return closing ??= recording!.close().onError((Object error, StackTrace stack) {
+      closing = null;
+      Error.throwWithStackTrace(error, stack);
+    });
+  }
+
+  void completeWithoutNativeRecording() {
+    if (!firstEvent.isCompleted) firstEvent.complete(null);
+    if (!finalized.isCompleted) finalized.complete();
+    listener = null;
   }
 }
