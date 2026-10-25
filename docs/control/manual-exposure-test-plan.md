@@ -11,7 +11,8 @@ do not prove the first encoded frame or every frame in the clip.
   `auto`, `shutter1_30`, `shutter1_60` (default), `shutter1_120`.
 - For a manual preset, recording start locks shutter, ISO, white balance and
   focus. ISO is metered once from auto exposure (shutter priority) and held.
-  Original camera settings are restored after native recording finalization.
+  Restoration is requested after native finalization and is complete only
+  after the original native owner acknowledges it.
 - Android: Camera2 interop on the camera CameraX actually bound. Lens selection
   and the 0.5x camera require separate verification.
   Needs the `MANUAL_SENSOR` capability, else `lockStatus: unsupported`.

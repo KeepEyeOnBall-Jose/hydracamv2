@@ -308,4 +308,3 @@ final class ManualExposureController {
     }
   }
 }
-
