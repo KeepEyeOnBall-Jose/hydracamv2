@@ -261,17 +261,19 @@ extension AppDelegate {
       switch call.method {
       case "applyLock":
         guard
+          let ownerId = args["ownerId"] as? String, !ownerId.isEmpty,
           let exposureTimeNs = (args["exposureTimeNs"] as? NSNumber)?.int64Value,
           let frameDurationNs = (args["frameDurationNs"] as? NSNumber)?.int64Value
         else {
           result(FlutterError(
             code: "missing_arguments",
-            message: "exposureTimeNs and frameDurationNs are required",
+            message: "ownerId, exposureTimeNs and frameDurationNs are required",
             details: nil
           ))
           return
         }
         self.manualExposure.applyLock(
+          ownerId: ownerId,
           cameraName: cameraName,
           exposureTimeNs: exposureTimeNs,
           frameDurationNs: frameDurationNs
@@ -279,7 +281,13 @@ extension AppDelegate {
           DispatchQueue.main.async { result(payload) }
         }
       case "release":
-        result(self.manualExposure.release(cameraName: cameraName))
+        guard let ownerId = args["ownerId"] as? String, !ownerId.isEmpty else {
+          result(FlutterError(
+            code: "missing_arguments", message: "ownerId is required", details: nil
+          ))
+          return
+        }
+        result(self.manualExposure.release(ownerId: ownerId, cameraName: cameraName))
       case "readCaptureSettings":
         result(self.manualExposure.readCaptureSettings(cameraName: cameraName))
       default:

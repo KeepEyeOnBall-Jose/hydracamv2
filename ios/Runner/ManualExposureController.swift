@@ -54,6 +54,7 @@ final class ManualExposureController {
   private var lockedRequest: [String: Any?]?
 
   func applyLock(
+    ownerId: String,
     cameraName: String?,
     exposureTimeNs: Int64,
     frameDurationNs: Int64,
@@ -120,7 +121,7 @@ final class ManualExposureController {
     lockedRequest = request
   }
 
-  func release(cameraName: String?) -> [String: Any?] {
+  func release(ownerId: String, cameraName: String?) -> [String: Any?] {
     defer {
       lockedUniqueID = nil
       lockedRequest = nil
