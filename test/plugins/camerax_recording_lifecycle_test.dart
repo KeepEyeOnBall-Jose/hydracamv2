@@ -25,7 +25,8 @@ void main() {
     PigeonOverrides.pigeon_reset();
   });
 
-  test("dispose unbinds immediately and closes a late persistent handle", () async {
+  test("dispose unbinds immediately and closes a late persistent handle",
+      () async {
     final attempt = rig.plan("/sdk-output/late.mp4", delayHandle: true);
     final starting = rig.start(attempt);
     await attempt.dispatched.future;
@@ -35,26 +36,31 @@ void main() {
     attempt.returnHandle();
 
     expect(await rig.bounded(starting), isA<CameraException>());
-    final stopped = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final stopped =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(stopped, isA<XFile>());
     expect((stopped as XFile).path, attempt.path);
     expect(attempt.closeCalls, 1);
   });
 
-  test("Finalize before Start settles failure and retains the terminal path", () async {
+  test("Finalize before Start settles failure and retains the terminal path",
+      () async {
     final attempt = rig.plan("/sdk-output/finalize-first.mp4");
     final starting = rig.start(attempt);
     await attempt.dispatched.future;
     attempt.emit(_Finalize());
 
     expect(await rig.bounded(starting), isA<CameraException>());
-    final stopped = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final stopped =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(stopped, isA<XFile>());
     expect((stopped as XFile).path, attempt.path);
   });
 
-  test("terminal events before the start reply do not lose the original path", () async {
-    final attempt = rig.plan("/sdk-output/early-terminal.mp4", delayHandle: true);
+  test("terminal events before the start reply do not lose the original path",
+      () async {
+    final attempt =
+        rig.plan("/sdk-output/early-terminal.mp4", delayHandle: true);
     final starting = rig.start(attempt);
     await attempt.dispatched.future;
     attempt.emit(_Start());
@@ -62,16 +68,19 @@ void main() {
     attempt.returnHandle();
 
     expect(await rig.bounded(starting), isNot(isA<_Pending>()));
-    final stopped = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final stopped =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(stopped, isA<XFile>());
     expect((stopped as XFile).path, attempt.path);
   });
 
-  test("dispose and duplicate stops share one close and terminal result", () async {
+  test("dispose and duplicate stops share one close and terminal result",
+      () async {
     final attempt = rig.plan("/sdk-output/shared.mp4", finalizeOnClose: false);
     await rig.startSuccessfully(attempt);
     final recorded = <VideoRecordedEvent>[];
-    final subscription = rig.camera.onVideoRecordedEvent(7).listen(recorded.add);
+    final subscription =
+        rig.camera.onVideoRecordedEvent(7).listen(recorded.add);
     addTearDown(subscription.cancel);
 
     final disposing = rig.watch(rig.camera.dispose(7));
@@ -94,7 +103,8 @@ void main() {
     expect(recorded, hasLength(1));
   });
 
-  test("same camera cannot encode again before the old result is consumed", () async {
+  test("same camera cannot encode again before the old result is consumed",
+      () async {
     final old = rig.plan("/sdk-output/unconsumed.mp4");
     final starting = rig.start(old);
     await old.dispatched.future;
@@ -104,20 +114,24 @@ void main() {
 
     expect(await rig.bounded(rig.start(next)), isA<CameraException>());
     expect(next.dispatched.isCompleted, isFalse);
-    final original = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final original =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(original, isA<XFile>());
     expect((original as XFile).path, old.path);
 
     await rig.startSuccessfully(next);
-    final stopped = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final stopped =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(stopped, isA<XFile>());
     expect((stopped as XFile).path, next.path);
   });
 
-  test("old late events cannot finalize or clear a later camera recorder", () async {
+  test("old late events cannot finalize or clear a later camera recorder",
+      () async {
     final old = rig.plan("/sdk-output/old.mp4");
     await rig.startSuccessfully(old);
-    expect(await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7))), isA<XFile>());
+    expect(await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7))),
+        isA<XFile>());
     final next = rig.plan("/sdk-output/new-camera.mp4", finalizeOnClose: false);
     await rig.startSuccessfully(next, cameraId: 8);
     final stopping = rig.watch(rig.camera.stopVideoRecording(8));
@@ -139,18 +153,22 @@ void main() {
     final attempt = rig.plan("/sdk-output/owned.mp4");
     await rig.startSuccessfully(attempt);
 
-    expect(await rig.bounded(rig.watch(rig.camera.stopVideoRecording(99))), isA<CameraException>());
+    expect(await rig.bounded(rig.watch(rig.camera.stopVideoRecording(99))),
+        isA<CameraException>());
     expect(attempt.closeCalls, 0);
     expect(rig.camera.recording, same(attempt.recording));
-    final stopped = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final stopped =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
     expect(stopped, isA<XFile>());
   });
 
-  test("normal persistent recording closes explicitly and returns its path", () async {
+  test("normal persistent recording closes explicitly and returns its path",
+      () async {
     final attempt = rig.plan("/sdk-output/normal.mp4");
     await rig.startSuccessfully(attempt);
 
-    final stopped = await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
+    final stopped =
+        await rig.bounded(rig.watch(rig.camera.stopVideoRecording(7)));
 
     expect(stopped, isA<XFile>());
     expect((stopped as XFile).path, attempt.path);
@@ -160,22 +178,32 @@ void main() {
 }
 
 class _Pending {}
+
 class _Provider extends Mock implements ProcessCameraProvider {}
+
 class _Preview extends Mock implements Preview {}
+
 class _Analysis extends Mock implements ImageAnalysis {}
+
 class _VideoCapture extends Mock implements VideoCapture {}
+
 class _Recorder extends Mock implements Recorder {}
+
 class _PendingRecording extends Mock implements PendingRecording {}
+
 class _Recording extends Mock implements Recording {}
+
 class _Orientation extends Mock implements DeviceOrientationManager {}
 
 class _Listener extends VideoRecordEventListener {
   _Listener(void Function(VideoRecordEventListener, VideoRecordEvent) callback)
       : super.pigeon_detached(onEvent: callback);
 }
+
 class _Start extends VideoRecordEventStart {
   _Start() : super.pigeon_detached();
 }
+
 class _Finalize extends VideoRecordEventFinalize {
   _Finalize() : super.pigeon_detached();
 }
@@ -215,12 +243,17 @@ class _Rig {
     camera.captureOrientationLocked = true;
     when(() => provider.isBound(any())).thenAnswer((_) async => true);
     when(() => provider.unbind(any())).thenAnswer((_) async {});
-    when(() => provider.unbindAll()).thenAnswer((_) async { hardwareUnbound = true; });
+    when(() => provider.unbindAll()).thenAnswer((_) async {
+      hardwareUnbound = true;
+    });
     when(() => preview.releaseSurfaceProvider()).thenAnswer((_) async {});
     when(() => analysis.clearAnalyzer()).thenAnswer((_) async {});
-    when(() => orientation.stopListeningForDeviceOrientationChange()).thenAnswer((_) async {});
-    PigeonOverrides.deviceOrientationManager_new = ({required onDeviceOrientationChanged}) => orientation;
-    PigeonOverrides.videoRecordEventListener_new = ({required onEvent}) => _Listener(onEvent);
+    when(() => orientation.stopListeningForDeviceOrientationChange())
+        .thenAnswer((_) async {});
+    PigeonOverrides.deviceOrientationManager_new =
+        ({required onDeviceOrientationChanged}) => orientation;
+    PigeonOverrides.videoRecordEventListener_new =
+        ({required onEvent}) => _Listener(onEvent);
   }
 
   final camera = AndroidCameraCameraX();
@@ -234,42 +267,50 @@ class _Rig {
   final operations = <Future<Object?>>[];
   bool hardwareUnbound = false;
 
-  _NativeAttempt plan(String path, {bool delayHandle = false, bool finalizeOnClose = true}) {
+  _NativeAttempt plan(String path,
+      {bool delayHandle = false, bool finalizeOnClose = true}) {
     final attempt = _NativeAttempt(path, finalizeOnClose: finalizeOnClose);
     attempts.add(attempt);
-    when(() => recorder.prepareRecording(path)).thenAnswer((_) async => attempt.pending);
+    when(() => recorder.prepareRecording(path))
+        .thenAnswer((_) async => attempt.pending);
     when(() => attempt.pending.asPersistentRecording()).thenAnswer((_) async {
       attempt.persistentCalls++;
       return attempt.pending;
     });
-    when(() => attempt.pending.withAudioEnabled(true)).thenAnswer((_) async => attempt.pending);
+    when(() => attempt.pending.withAudioEnabled(true))
+        .thenAnswer((_) async => attempt.pending);
     when(() => attempt.pending.start(any())).thenAnswer((invocation) {
-      attempt.listener = invocation.positionalArguments.single as VideoRecordEventListener;
+      attempt.listener =
+          invocation.positionalArguments.single as VideoRecordEventListener;
       if (!attempt.dispatched.isCompleted) attempt.dispatched.complete();
       return attempt.handle.future;
     });
     when(() => attempt.recording.close()).thenAnswer((_) async {
       attempt.closeCalls++;
       if (!attempt.closed.isCompleted) attempt.closed.complete();
-      if (attempt.finalizeOnClose) scheduleMicrotask(() => attempt.emit(_Finalize()));
+      if (attempt.finalizeOnClose)
+        scheduleMicrotask(() => attempt.emit(_Finalize()));
     });
     if (!delayHandle) attempt.returnHandle();
     return attempt;
   }
 
   Future<Object?> watch<T>(Future<T> operation) {
-    final observed = operation.then<Object?>((value) => value, onError: (Object error) => error);
+    final observed = operation.then<Object?>((value) => value,
+        onError: (Object error) => error);
     operations.add(observed);
     return observed;
   }
 
-  Future<Object?> bounded(Future<Object?> operation) => operation.timeout(
-      const Duration(milliseconds: 300), onTimeout: () => _Pending());
+  Future<Object?> bounded(Future<Object?> operation) => operation
+      .timeout(const Duration(milliseconds: 300), onTimeout: () => _Pending());
 
-  Future<Object?> start(_NativeAttempt attempt, {int cameraId = 7}) => watch(camera.startVideoCapturing(
-      VideoCaptureOptions(cameraId, videoOutputPath: attempt.path)));
+  Future<Object?> start(_NativeAttempt attempt, {int cameraId = 7}) =>
+      watch(camera.startVideoCapturing(
+          VideoCaptureOptions(cameraId, videoOutputPath: attempt.path)));
 
-  Future<void> startSuccessfully(_NativeAttempt attempt, {int cameraId = 7}) async {
+  Future<void> startSuccessfully(_NativeAttempt attempt,
+      {int cameraId = 7}) async {
     final starting = start(attempt, cameraId: cameraId);
     await attempt.dispatched.future.timeout(const Duration(seconds: 1));
     attempt.emit(_Start());
@@ -277,7 +318,9 @@ class _Rig {
   }
 
   Future<void> settleTestDoubles() async {
-    for (final attempt in attempts) { attempt.returnHandle(); }
+    for (final attempt in attempts) {
+      attempt.returnHandle();
+    }
     // Let unchanged legacy starts/stops finish even when their missing terminal
     // handling caused the assertion to fail. These are proxy events, not media.
     for (var i = 0; i < 3; i++) {
@@ -287,6 +330,7 @@ class _Rig {
       }
       await Future<void>.delayed(Duration.zero);
     }
-    await Future.wait(operations).timeout(const Duration(seconds: 1), onTimeout: () => <Object?>[]);
+    await Future.wait(operations)
+        .timeout(const Duration(seconds: 1), onTimeout: () => <Object?>[]);
   }
 }
