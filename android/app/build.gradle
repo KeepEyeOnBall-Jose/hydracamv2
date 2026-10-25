@@ -147,6 +147,14 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.16"
 }
 
+// Resource-backed unit tests package Flutter's debug assets. Declare their
+// producer explicitly for Gradle 9's task output dependency validation.
+tasks.configureEach { task ->
+    if (task.name == "packageDebugUnitTestForUnitTest") {
+        task.dependsOn("copyFlutterAssetsDebug")
+    }
+}
+
 tasks.withType(JavaCompile).configureEach { task ->
     if (task.name == "compileReleaseJavaWithJavac") {
         task.doFirst {
