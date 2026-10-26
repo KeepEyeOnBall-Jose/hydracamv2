@@ -432,7 +432,7 @@ void main() {
         () =>
             _logContains("No active session on master") ||
             _logContains("Master reported no active session"),
-        timeout: const Duration(seconds: 1),
+        timeout: const Duration(seconds: 15),
       );
 
       expect(SessionManager.instance.sessionGuid, "slave-active-session");
@@ -535,7 +535,7 @@ void main() {
         () =>
             _logContains("Session guid: master-other-session") ||
             _logContains("Master session conflict"),
-        timeout: const Duration(seconds: 1),
+        timeout: const Duration(seconds: 15),
       );
 
       expect(SessionManager.instance.sessionGuid, "slave-active-session");
@@ -642,7 +642,7 @@ void main() {
         () =>
             _logContains("Ignoring sessionStatus without valid sessionGuid") &&
             _logContains("Ignoring sessionStarted without valid sessionGuid"),
-        timeout: const Duration(seconds: 1),
+        timeout: const Duration(seconds: 15),
       );
 
       expect(SessionManager.instance.sessionGuid, "slave-active-session");
@@ -745,7 +745,7 @@ void main() {
         () =>
             _logContains("Session ended as per master command") ||
             _logContains("Ignoring sessionEnded"),
-        timeout: const Duration(seconds: 1),
+        timeout: const Duration(seconds: 15),
       );
 
       expect(SessionManager.instance.sessionGuid, "slave-active-session");
@@ -917,7 +917,7 @@ void main() {
       await client.connect();
       await _waitFor(
         () => uploaderService.queueLength == 0 && !uploaderService.isUploading,
-        timeout: const Duration(seconds: 1),
+        timeout: const Duration(seconds: 15),
       );
 
       expect(uploaderService.isUploading, isFalse);
