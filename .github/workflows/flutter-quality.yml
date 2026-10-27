@@ -25,7 +25,9 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.47.7
-          cache: true
+          # Self-hosted runners keep the SDK in their persistent tool cache, which the action reuses;
+          # restoring the 1.7 GB cache entry every job stalled past the timeout on the HDD hosts.
+          cache: ${{ runner.environment == 'github-hosted' }}
 
       - name: flutter pub get
         run: flutter pub get
