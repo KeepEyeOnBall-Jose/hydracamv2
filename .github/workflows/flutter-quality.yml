@@ -13,6 +13,12 @@ on:
 
 jobs:
   flutter-quality:
+    # A runner_label dispatch qualifies one fleet host (allKEOB tools/ci-fleet reads the job
+    # conclusion). Its check run lands on the branch head, so name it advisory and keep host
+    # noise (admission refusals, slow disks) from reading as a PR failure. PRs, pushes and
+    # unlabelled dispatches keep the blocking "flutter-quality" check.
+    name: ${{ inputs.runner_label && format('flutter-quality (host qualification {0}, advisory)', inputs.runner_label) || 'flutter-quality' }}
+    continue-on-error: ${{ inputs.runner_label && true || false }}
     runs-on: ${{ github.repository == 'KeepEyeOnBall-Jose/hydracamv2' && github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name != 'pull_request' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && (inputs.runner_label || fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]')) || 'ubuntu-latest' }}
     timeout-minutes: 20
 
