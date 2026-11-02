@@ -43,7 +43,8 @@ void main() {
 
     expect(deletedCount, 1);
     expect(await registry.list(), isEmpty);
-    expect(requestedUris.single.path, "/api/sessions/debug/delete");
+    expect(requestedUris.single.path,
+        "/_hydracam_service/api/sessions/debug/delete");
     expect(
       requestedUris.single.queryParameters,
       containsPair("sessionGuid", "debug-guid"),
