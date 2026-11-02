@@ -7,8 +7,9 @@ on:
 
 jobs:
   python-tests:
+    # Same routed pool as flutter-quality: Madrid and the owned Macs may be busy, asleep or away.
     runs-on: >-
-      ${{ github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.base.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && fromJSON('["owned-madrid","owned-arm64","trusted-owner"]') || 'ubuntu-latest' }}
+      ${{ github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.base.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]') || 'ubuntu-latest' }}
     timeout-minutes: 40
 
     steps:
