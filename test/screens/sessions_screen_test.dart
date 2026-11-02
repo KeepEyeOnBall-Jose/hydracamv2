@@ -46,7 +46,7 @@ void main() {
     HydraCamApiService.configureHttpClient(
       MockClient((request) async {
         expect(request.method, "GET");
-        expect(request.url.path, "/api/sessions");
+        expect(request.url.path, "/_hydracam_service/api/sessions");
         expect(request.url.queryParameters["courtGuid"], "court-guid");
         return http.Response(
           jsonEncode([
@@ -148,7 +148,7 @@ class _SessionsPathProvider extends PathProviderPlatform {
 MockClient _backendSessionListClient() {
   return MockClient((request) async {
     expect(request.method, "GET");
-    expect(request.url.path, "/api/sessions");
+    expect(request.url.path, "/_hydracam_service/api/sessions");
     expect(request.url.queryParameters["courtGuid"], "court-guid");
     return http.Response(
       jsonEncode([

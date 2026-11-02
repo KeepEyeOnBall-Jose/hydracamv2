@@ -12,9 +12,12 @@ class HydraCamApiHttpCore {
 
   static const int _uploadFailureResponseBodyLogLimit = 300;
 
+  /// Contabo-hosted HydraCam API (Apache `/_hydracam_service/` on the MoBo
+  /// host). The old `hydracam.azurewebsites.net` app is only a forwarding
+  /// bridge to this service.
   static const String _defaultLegacyBaseUrl = String.fromEnvironment(
     "HYDRACAM_API_BASE_URL",
-    defaultValue: "https://hydracam.azurewebsites.net/api",
+    defaultValue: "https://mobo.keepeyeonball.com/_hydracam_service/api",
   );
   static const String _defaultMediaTimelineBaseUrl = String.fromEnvironment(
     "HYDRACAM_MEDIA_TIMELINE_API_BASE_URL",

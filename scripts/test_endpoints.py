@@ -49,7 +49,7 @@ def try_endpoint(base_url, path, verify_ssl=False):
 
 
 def main():
-    base_url = "https://hydracam.azurewebsites.net"
+    base_url = "https://mobo.keepeyeonball.com/_hydracam_service"
 
     endpoints = [
         "/api/sessions",

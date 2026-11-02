@@ -214,7 +214,8 @@ Important current behavior:
 - Upload is blocked if the session was not created or joined as a backend
   session.
 - Local file and metadata writes happen before the upload queue is drained.
-- The mobile app still targets `https://hydracam.azurewebsites.net/api`.
+- The mobile app targets the Contabo-hosted legacy API
+  `https://mobo.keepeyeonball.com/_hydracam_service/api`.
 
 ## Current Mobile To HydraCam Service FSM
 
