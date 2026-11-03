@@ -77,9 +77,9 @@ class CourtCommandTable(
         val future = worker.submit<CommandResult> { handler.handle(envelope) }
         return try {
             future.get(deadlineMs, TimeUnit.MILLISECONDS)
-        } catch (error: TimeoutException) {
+        } catch (ignored: TimeoutException) {
             future.cancel(true)
-            CommandResult.Nack(C1NackCode.TIMEOUT, "Handler exceeded ${deadlineMs} ms.")
+            CommandResult.Nack(C1NackCode.TIMEOUT, "Handler exceeded $deadlineMs ms.")
         } catch (error: ExecutionException) {
             when (val cause = error.cause) {
                 is C1ProtocolException -> CommandResult.Nack(C1NackCode.BAD_REQUEST, cause.message)

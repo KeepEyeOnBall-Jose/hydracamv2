@@ -68,7 +68,17 @@ class CourtEnrollReceiver : BroadcastReceiver() {
                     }
                     else -> "unknown action"
                 }
-                pending.setResult(if (error == null) Activity.RESULT_OK else Activity.RESULT_CANCELED, error ?: "ok", null)
+                pending.setResult(
+                    if (error ==
+                        null
+                    ) {
+                        Activity.RESULT_OK
+                    } else {
+                        Activity.RESULT_CANCELED
+                    },
+                    error ?: "ok",
+                    null,
+                )
             } catch (error: RuntimeException) {
                 pending.setResult(Activity.RESULT_CANCELED, error.javaClass.simpleName, null)
             } finally {

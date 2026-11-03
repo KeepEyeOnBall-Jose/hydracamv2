@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.ByteString.Companion.decodeBase64
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -32,39 +33,36 @@ data class CourtEnrollment(
     private val k2Base: String
         get() = k2Url.trim().trimEnd('/')
 
-    fun toJson(): JSONObject =
-        JSONObject()
-            .put("k2Url", k2Url)
-            .put("deviceId", deviceId)
-            .put("secret", secret)
-            .put("courtId", courtId)
-            .put("slot", slot)
-            .put("mountRev", mountRev)
+    fun toJson(): JSONObject = JSONObject()
+        .put("k2Url", k2Url)
+        .put("deviceId", deviceId)
+        .put("secret", secret)
+        .put("courtId", courtId)
+        .put("slot", slot)
+        .put("mountRev", mountRev)
 
     /** Never prints the secret. */
     override fun toString(): String =
         "CourtEnrollment(k2Url=$k2Url, deviceId=$deviceId, courtId=$courtId, slot=$slot, mountRev=$mountRev)"
 
     companion object {
-        fun fromJson(json: JSONObject): CourtEnrollment =
-            CourtEnrollment(
-                k2Url = json.getString("k2Url"),
-                deviceId = json.getString("deviceId"),
-                secret = json.getString("secret"),
-                courtId = json.getString("courtId"),
-                slot = json.getString("slot"),
-                mountRev = json.optInt("mountRev", 0),
-            )
+        fun fromJson(json: JSONObject): CourtEnrollment = CourtEnrollment(
+            k2Url = json.getString("k2Url"),
+            deviceId = json.getString("deviceId"),
+            secret = json.getString("secret"),
+            courtId = json.getString("courtId"),
+            slot = json.getString("slot"),
+            mountRev = json.optInt("mountRev", 0),
+        )
 
-        fun validate(enrollment: CourtEnrollment): String? =
-            when {
-                !Regex("^https?://[^\\s/]+.*").matches(enrollment.k2Url.trim()) -> "k2Url must be http(s)://host"
-                enrollment.deviceId.isBlank() -> "deviceId is required"
-                enrollment.secret.isBlank() -> "secret is required"
-                enrollment.courtId.isBlank() -> "courtId is required"
-                enrollment.slot.isBlank() -> "slot is required"
-                else -> null
-            }
+        fun validate(enrollment: CourtEnrollment): String? = when {
+            !Regex("^https?://[^\\s/]+.*").matches(enrollment.k2Url.trim()) -> "k2Url must be http(s)://host"
+            enrollment.deviceId.isBlank() -> "deviceId is required"
+            enrollment.secret.isBlank() -> "secret is required"
+            enrollment.courtId.isBlank() -> "courtId is required"
+            enrollment.slot.isBlank() -> "slot is required"
+            else -> null
+        }
     }
 }
 
@@ -92,7 +90,7 @@ class InMemoryCredentialStore(private var value: CourtEnrollment? = null) : Cred
     }
 }
 
-class CourtAuthException(message: String, val rejected: Boolean) : IOException(message)
+class CourtAuthException(message: String, val rejected: Boolean, cause: Throwable? = null) : IOException(message, cause)
 
 interface AccessTokenProvider {
     /** Blocking; call off the main thread. */
@@ -127,7 +125,7 @@ class DeviceTokenClient(
             .toRequestBody(JSON_MEDIA_TYPE)
         val request = Request.Builder().url(enrollment.tokenUrl).post(body).build()
         http.newCall(request).execute().use { response ->
-            if (response.code == 401 || response.code == 403) {
+            if (response.code == HttpStatus.UNAUTHORIZED || response.code == HttpStatus.FORBIDDEN) {
                 throw CourtAuthException("Device credential rejected (${response.code}).", rejected = true)
             }
             if (!response.isSuccessful) {
@@ -136,7 +134,7 @@ class DeviceTokenClient(
             val json = try {
                 JSONObject(response.body?.string().orEmpty())
             } catch (error: JSONException) {
-                throw CourtAuthException("Token response is not JSON.", rejected = false)
+                throw CourtAuthException("Token response is not JSON.", rejected = false, error)
             }
             val token = json.optStringOrNull("accessToken")
                 ?: throw CourtAuthException("Token response has no accessToken.", rejected = false)
@@ -156,6 +154,9 @@ class DeviceTokenClient(
         private val JSON_MEDIA_TYPE = "application/json".toMediaType()
         private const val DEFAULT_LIFETIME_MS = 55 * 60_000L
 
+        /** Epoch values below this are seconds (it is year 5138 in seconds, 1973 in ms). */
+        private const val EPOCH_MS_FLOOR = 100_000_000_000L
+
         /** C0 leaves `expiresAt`'s type open: epoch s, epoch ms, or an ISO-8601 string. */
         fun parseExpiresAtMs(value: Any?, nowMs: Long): Long {
             val number = when (value) {
@@ -163,13 +164,11 @@ class DeviceTokenClient(
                 is String -> value.toLongOrNull()
                 else -> null
             }
-            if (number != null) {
-                return if (number < 100_000_000_000L) number * 1_000 else number
-            }
-            if (value is String) {
-                parseIsoMs(value)?.let { return it }
-            }
-            return nowMs + DEFAULT_LIFETIME_MS
+            return when {
+                number != null -> if (number < EPOCH_MS_FLOOR) number * 1_000 else number
+                value is String -> parseIsoMs(value)
+                else -> null
+            } ?: (nowMs + DEFAULT_LIFETIME_MS)
         }
 
         private fun parseIsoMs(value: String): Long? {
@@ -197,32 +196,22 @@ class DeviceTokenClient(
  * C0 upload grant (JWT, aud court-ingest). The device only reads `tiers` and `exp` to decide what to
  * upload and until when; K3 verifies the signature.
  */
-data class UploadGrantClaims(
-    val sessionId: String?,
-    val slot: String?,
-    val tiers: List<String>,
-    val expMs: Long,
-) {
+data class UploadGrantClaims(val sessionId: String?, val slot: String?, val tiers: List<String>, val expMs: Long) {
     companion object {
         fun decode(token: String): UploadGrantClaims? {
-            val parts = token.split('.')
-            if (parts.size < 2) {
-                return null
+            val payload = token.split('.').getOrNull(1)?.decodeBase64()?.utf8() ?: return null
+            return try {
+                val json = JSONObject(payload)
+                val tiersJson = json.optJSONArray("tiers") ?: JSONArray()
+                UploadGrantClaims(
+                    sessionId = json.optStringOrNull("sid"),
+                    slot = json.optStringOrNull("slot"),
+                    tiers = (0 until tiersJson.length()).map { tiersJson.getString(it) },
+                    expMs = json.optLong("exp", 0) * 1_000,
+                )
+            } catch (ignored: JSONException) {
+                null
             }
-            val payload = parts[1].decodeBase64()?.utf8() ?: return null
-            val json = try {
-                JSONObject(payload)
-            } catch (error: JSONException) {
-                return null
-            }
-            val tiersJson = json.optJSONArray("tiers")
-            val tiers = (0 until (tiersJson?.length() ?: 0)).map { tiersJson!!.getString(it) }
-            return UploadGrantClaims(
-                sessionId = json.optStringOrNull("sid"),
-                slot = json.optStringOrNull("slot"),
-                tiers = tiers,
-                expMs = json.optLong("exp", 0) * 1_000,
-            )
         }
     }
 }

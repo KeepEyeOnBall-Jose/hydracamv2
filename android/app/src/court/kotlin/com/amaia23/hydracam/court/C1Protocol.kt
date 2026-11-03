@@ -53,29 +53,22 @@ object C1NackCode {
     const val GONE = "gone"
 }
 
-class C1ProtocolException(message: String) : Exception(message)
+class C1ProtocolException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
-data class C1Envelope(
-    val id: String,
-    val type: String,
-    val ts: Long,
-    val body: JSONObject,
-) {
-    fun encode(): String =
-        JSONObject()
-            .put("v", C1.VERSION)
-            .put("id", id)
-            .put("type", type)
-            .put("ts", ts)
-            .put("body", body)
-            .toString()
+data class C1Envelope(val id: String, val type: String, val ts: Long, val body: JSONObject) {
+    fun encode(): String = JSONObject()
+        .put("v", C1.VERSION)
+        .put("id", id)
+        .put("type", type)
+        .put("ts", ts)
+        .put("body", body)
+        .toString()
 
     companion object {
         fun create(type: String, body: JSONObject, nowMs: Long): C1Envelope =
             C1Envelope(id = UUID.randomUUID().toString(), type = type, ts = nowMs, body = body)
 
-        fun ack(ref: String, nowMs: Long): C1Envelope =
-            create(C1.ACK, JSONObject().put("ref", ref), nowMs)
+        fun ack(ref: String, nowMs: Long): C1Envelope = create(C1.ACK, JSONObject().put("ref", ref), nowMs)
 
         fun nack(ref: String, code: String, reason: String?, nowMs: Long): C1Envelope {
             val body = JSONObject().put("ref", ref).put("code", code)
@@ -89,16 +82,18 @@ data class C1Envelope(
             val json = try {
                 JSONObject(text)
             } catch (error: JSONException) {
-                throw C1ProtocolException("Envelope is not a JSON object.")
+                throw C1ProtocolException("Envelope is not a JSON object.", error)
             }
             val version = json.optInt("v", -1)
-            if (version != C1.VERSION) {
-                throw C1ProtocolException("Unsupported envelope v=$version.")
-            }
             val id = json.optString("id")
             val type = json.optString("type")
-            if (id.isEmpty() || type.isEmpty()) {
-                throw C1ProtocolException("Envelope needs id and type.")
+            val problem = when {
+                version != C1.VERSION -> "Unsupported envelope v=$version."
+                id.isEmpty() || type.isEmpty() -> "Envelope needs id and type."
+                else -> null
+            }
+            if (problem != null) {
+                throw C1ProtocolException(problem)
             }
             return C1Envelope(
                 id = id,
@@ -129,14 +124,13 @@ data class CourtCaps(
     val torch: Boolean,
     val speaker: Boolean,
 ) {
-    fun toJson(): JSONObject =
-        JSONObject()
-            .put("maxRes", maxRes)
-            .put("fps", JSONArray(fps))
-            .put("hevc", hevc)
-            .put("encoders", encoders)
-            .put("torch", torch)
-            .put("speaker", speaker)
+    fun toJson(): JSONObject = JSONObject()
+        .put("maxRes", maxRes)
+        .put("fps", JSONArray(fps))
+        .put("hevc", hevc)
+        .put("encoders", encoders)
+        .put("torch", torch)
+        .put("speaker", speaker)
 }
 
 data class HelloBody(
@@ -152,19 +146,18 @@ data class HelloBody(
     val caps: CourtCaps,
     val activeSessionId: String?,
 ) {
-    fun toJson(): JSONObject =
-        JSONObject()
-            .put("deviceId", deviceId)
-            .put("appVersion", appVersion)
-            .put("versionCode", versionCode)
-            .put("model", model)
-            .put("androidSdk", androidSdk)
-            .put("rooted", rooted)
-            .put("courtId", courtId)
-            .put("slot", slot)
-            .put("mountRev", mountRev)
-            .put("caps", caps.toJson())
-            .put("activeSessionId", activeSessionId ?: JSONObject.NULL)
+    fun toJson(): JSONObject = JSONObject()
+        .put("deviceId", deviceId)
+        .put("appVersion", appVersion)
+        .put("versionCode", versionCode)
+        .put("model", model)
+        .put("androidSdk", androidSdk)
+        .put("rooted", rooted)
+        .put("courtId", courtId)
+        .put("slot", slot)
+        .put("mountRev", mountRev)
+        .put("caps", caps.toJson())
+        .put("activeSessionId", activeSessionId ?: JSONObject.NULL)
 }
 
 data class StateBody(
@@ -205,14 +198,13 @@ data class RecordProfile(
     val proxyKbps: Int = 2_000,
     val segmentS: Int = 6,
 ) {
-    fun toJson(): JSONObject =
-        JSONObject()
-            .put("masterRes", masterRes)
-            .put("fps", fps)
-            .put("masterKbps", masterKbps)
-            .put("proxyRes", proxyRes)
-            .put("proxyKbps", proxyKbps)
-            .put("segmentS", segmentS)
+    fun toJson(): JSONObject = JSONObject()
+        .put("masterRes", masterRes)
+        .put("fps", fps)
+        .put("masterKbps", masterKbps)
+        .put("proxyRes", proxyRes)
+        .put("proxyKbps", proxyKbps)
+        .put("segmentS", segmentS)
 
     companion object {
         val DEFAULT = RecordProfile()
@@ -232,22 +224,27 @@ data class RecordProfile(
         }
 
         /** `1080p` -> 1920x1080 landscape; unknown values fall back to 720p. */
-        fun sizeFor(res: String): Pair<Int, Int> =
-            when (res) {
-                "2160p" -> 3840 to 2160
-                "1080p" -> 1920 to 1080
-                else -> 1280 to 720
-            }
+        fun sizeFor(res: String): Pair<Int, Int> = SIZES[res] ?: SIZES.getValue(RES_720P)
+
+        /** Widest first. */
+        private val SIZES = linkedMapOf(
+            "2160p" to (3840 to 2160),
+            "1080p" to (1920 to 1080),
+            RES_720P to (1280 to 720),
+        )
+        private const val RES_720P = "720p"
+
+        /** The largest resolution whose width fits in [width]; 720p when none does. */
+        fun resFor(width: Int): String = SIZES.entries.firstOrNull { width >= it.value.first }?.key ?: RES_720P
     }
 }
 
 data class RecordPrepare(val sessionId: String, val profile: RecordProfile) {
     companion object {
-        fun fromJson(body: JSONObject): RecordPrepare =
-            RecordPrepare(
-                sessionId = body.requireString("sessionId"),
-                profile = RecordProfile.fromJson(body.optJSONObject("profile")),
-            )
+        fun fromJson(body: JSONObject): RecordPrepare = RecordPrepare(
+            sessionId = body.requireString("sessionId"),
+            profile = RecordProfile.fromJson(body.optJSONObject("profile")),
+        )
     }
 }
 
@@ -286,22 +283,20 @@ data class RecordStart(
 
 data class RecordStop(val sessionId: String, val stopAtServerMs: Long) {
     companion object {
-        fun fromJson(body: JSONObject): RecordStop =
-            RecordStop(
-                sessionId = body.requireString("sessionId"),
-                stopAtServerMs = body.optLong("stopAtServerMs", 0),
-            )
+        fun fromJson(body: JSONObject): RecordStop = RecordStop(
+            sessionId = body.requireString("sessionId"),
+            stopAtServerMs = body.optLong("stopAtServerMs", 0),
+        )
     }
 }
 
 data class SignalEmit(val signal: String, val atServerMs: Long, val sessionId: String?) {
     companion object {
-        fun fromJson(body: JSONObject): SignalEmit =
-            SignalEmit(
-                signal = body.requireString("signal"),
-                atServerMs = body.requireLong("atServerMs"),
-                sessionId = body.optStringOrNull("sessionId"),
-            )
+        fun fromJson(body: JSONObject): SignalEmit = SignalEmit(
+            signal = body.requireString("signal"),
+            atServerMs = body.requireLong("atServerMs"),
+            sessionId = body.optStringOrNull("sessionId"),
+        )
     }
 }
 
@@ -347,12 +342,11 @@ data class UploadPolicy(
     val maxKbps: Int = 2_500,
     val keepDays: Int = 7,
 ) {
-    fun toJson(): JSONObject =
-        JSONObject()
-            .put("masterMode", masterMode)
-            .put("windows", JSONArray(windows))
-            .put("maxKbps", maxKbps)
-            .put("keepDays", keepDays)
+    fun toJson(): JSONObject = JSONObject()
+        .put("masterMode", masterMode)
+        .put("windows", JSONArray(windows))
+        .put("maxKbps", maxKbps)
+        .put("keepDays", keepDays)
 
     companion object {
         const val MODE_NEVER = "never"
@@ -364,27 +358,23 @@ data class UploadPolicy(
 
         fun fromJson(body: JSONObject): UploadPolicy {
             val masterMode = body.requireString("masterMode")
-            if (masterMode !in MODES) {
-                throw C1ProtocolException("Unknown masterMode $masterMode.")
+            val windowsJson = body.optJSONArray("windows") ?: JSONArray()
+            val windows = (0 until windowsJson.length()).mapNotNull { index ->
+                (windowsJson.get(index) as? String)?.takeIf { it.isNotBlank() }
             }
-            val windows = body.optJSONArray("windows") ?: JSONArray()
             val maxKbps = body.requireLong("maxKbps")
             val keepDays = body.requireLong("keepDays")
-            if (maxKbps !in 0..Int.MAX_VALUE.toLong()) {
-                throw C1ProtocolException("maxKbps must be >= 0.")
+            val problem = when {
+                masterMode !in MODES -> "Unknown masterMode $masterMode."
+                windows.size != windowsJson.length() -> "windows must be non-empty strings."
+                maxKbps !in 0..Int.MAX_VALUE.toLong() -> "maxKbps must be >= 0."
+                keepDays !in 1..MAX_KEEP_DAYS -> "keepDays must be 1..$MAX_KEEP_DAYS."
+                else -> null
             }
-            if (keepDays !in 1..MAX_KEEP_DAYS) {
-                throw C1ProtocolException("keepDays must be 1..$MAX_KEEP_DAYS.")
+            if (problem != null) {
+                throw C1ProtocolException(problem)
             }
-            return UploadPolicy(
-                masterMode = masterMode,
-                windows = (0 until windows.length()).map { index ->
-                    (windows.get(index) as? String)?.takeIf { it.isNotBlank() }
-                        ?: throw C1ProtocolException("windows must be non-empty strings.")
-                },
-                maxKbps = maxKbps.toInt(),
-                keepDays = keepDays.toInt(),
-            )
+            return UploadPolicy(masterMode, windows, maxKbps.toInt(), keepDays.toInt())
         }
 
         private const val MAX_KEEP_DAYS = 365L
@@ -397,30 +387,23 @@ object C1Events {
         firstFrameServerMs: Long,
         offsetMs: Long,
         profile: RecordProfile,
-    ): JSONObject =
-        JSONObject()
-            .put("sessionId", sessionId)
-            .put("firstFrameServerMs", firstFrameServerMs)
-            .put("offsetMs", offsetMs)
-            .put("profile", profile.toJson())
+    ): JSONObject = JSONObject()
+        .put("sessionId", sessionId)
+        .put("firstFrameServerMs", firstFrameServerMs)
+        .put("offsetMs", offsetMs)
+        .put("profile", profile.toJson())
 
-    fun recordingSegment(segment: SegmentRecord): JSONObject =
-        JSONObject()
-            .put("sessionId", segment.sessionId)
-            .put("tier", segment.tier)
-            .put("seq", segment.seq)
-            .put("bytes", segment.bytes)
-            .put("sha256", segment.sha256)
-            .put("mediaStartServerMs", segment.mediaStartServerMs)
-            .put("durationMs", segment.durationMs)
-            .put("frames", segment.frames)
+    fun recordingSegment(segment: SegmentRecord): JSONObject = JSONObject()
+        .put("sessionId", segment.sessionId)
+        .put("tier", segment.tier)
+        .put("seq", segment.seq)
+        .put("bytes", segment.bytes)
+        .put("sha256", segment.sha256)
+        .put("mediaStartServerMs", segment.mediaStartServerMs)
+        .put("durationMs", segment.durationMs)
+        .put("frames", segment.frames)
 
-    fun recordingStopped(
-        sessionId: String,
-        lastSeqProxy: Long,
-        lastSeqMaster: Long,
-        reason: String,
-    ): JSONObject =
+    fun recordingStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long, reason: String): JSONObject =
         JSONObject()
             .put("sessionId", sessionId)
             .put(

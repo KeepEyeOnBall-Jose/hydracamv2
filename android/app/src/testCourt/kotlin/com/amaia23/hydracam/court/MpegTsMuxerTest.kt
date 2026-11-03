@@ -58,7 +58,8 @@ class MpegTsMuxerTest {
 
     @Test
     fun keyframeStartsWithPatAndPmtWithValidCrc() {
-        val packets = mux(hasAudio = false) { it.writeVideo(0, ByteArray(100) { 7 }, isKeyframe = true, videoConfig = null) }
+        val packets =
+            mux(hasAudio = false) { it.writeVideo(0, ByteArray(100) { 7 }, isKeyframe = true, videoConfig = null) }
 
         assertEquals(MpegTsMuxer.PAT_PID, packets[0].pid)
         assertEquals(MpegTsMuxer.PMT_PID, packets[1].pid)

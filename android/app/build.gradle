@@ -47,6 +47,10 @@ def hydracamCourt =
             .contains("lib/court/")
 if (hydracamCourt) {
     apply plugin: "com.google.devtools.ksp"
+    // Court quality gate (scripts/court_quality_gate.sh). Hand-held builds never apply these.
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "io.gitlab.arturbosch.detekt"
+    apply plugin: "org.jetbrains.kotlinx.kover"
 }
 def generatedPluginRegistrantFile = file(
     "src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java"
@@ -162,6 +166,75 @@ dependencies {
 if (hydracamCourt) {
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
+    }
+
+    ktlint {
+        version = "1.7.1"
+        // Court sources only: the hand-held Kotlin keeps its current style.
+        filter {
+            exclude { element -> !element.directory && !element.file.path.contains("/hydracam/court/") }
+        }
+    }
+
+    detekt {
+        source.setFrom(files("src/court/kotlin", "src/testCourt/kotlin"))
+        config.setFrom(files("$rootDir/config/detekt/court.yml"))
+        buildUponDefaultConfig = true
+        parallel = true
+    }
+
+    // detekt 1.23.8 is built against Kotlin 2.0.21 and refuses to run on the app's 2.2 compiler.
+    configurations.matching { it.name == "detekt" }.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == "org.jetbrains.kotlin") {
+                details.useVersion("2.0.21")
+            }
+        }
+    }
+
+    kover {
+        reports {
+            filters {
+                includes {
+                    classes("com.amaia23.hydracam.court.*")
+                }
+                // These need a phone (Camera2, MediaCodec, Room, Keystore, su, services) and are verified
+                // on device (logs/verification-runs/). Keep logic out of them so it stays JVM-tested.
+                // Room's *_Impl classes are generated.
+                excludes {
+                    def deviceOnly = [
+                        "AndroidCourtLogger",
+                        "CourtActivity",
+                        "CourtBootReceiver",
+                        "CourtCameraRecorder",
+                        "CourtCameraService",
+                        "CourtDatabase",
+                        "CourtEnrollReceiver",
+                        "CourtRuntime",
+                        "DeviceStatusProbe",
+                        "KeystoreCredentialStore",
+                        "PrefsActiveSessionStore",
+                        "PrefsUploadPolicyStore",
+                        "RoomUploadQueueStore",
+                        "RootShell",
+                        "ToneGeneratorPlayer",
+                        "*_Impl",
+                    ]
+                    deviceOnly.each { name ->
+                        classes("com.amaia23.hydracam.court.${name}", "com.amaia23.hydracam.court.${name}\$*")
+                    }
+                }
+            }
+            variant("courtDebug") {
+                verify {
+                    rule("court line and branch coverage") {
+                        def percent = kotlinx.kover.gradle.plugin.dsl.AggregationType.COVERED_PERCENTAGE
+                        minBound(90, kotlinx.kover.gradle.plugin.dsl.CoverageUnit.LINE, percent)
+                        minBound(90, kotlinx.kover.gradle.plugin.dsl.CoverageUnit.BRANCH, percent)
+                    }
+                }
+            }
+        }
     }
 }
 

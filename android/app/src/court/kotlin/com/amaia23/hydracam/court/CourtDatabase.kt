@@ -133,6 +133,5 @@ class RoomUploadQueueStore(database: CourtDatabase) : UploadQueueStore {
 
     override fun lastSeq(sessionId: String, tier: String): Long = dao.lastSeq(sessionId, tier) ?: -1
 
-    override fun commitSeq(sessionId: String, tier: String, seq: Long) =
-        dao.upsertSeq(SeqCounter(sessionId, tier, seq))
+    override fun commitSeq(sessionId: String, tier: String, seq: Long) = dao.upsertSeq(SeqCounter(sessionId, tier, seq))
 }

@@ -48,8 +48,10 @@ class UploadThrottle(
     }
 
     private companion object {
-        /** bits / (kbps * 1000 bit/s) in ns = bytes * 8 * 1e9 / (kbps * 1e3). */
-        fun nanosFor(bytes: Long, kbps: Int): Long = bytes * 8_000_000L / kbps
+        /** One byte (8 bits) at 1 kbps (1000 bit/s) takes 8 ms. */
+        const val NANOS_PER_BYTE_AT_1_KBPS = 8_000_000L
+
+        fun nanosFor(bytes: Long, kbps: Int): Long = bytes * NANOS_PER_BYTE_AT_1_KBPS / kbps
 
         fun sleepNanos(nanos: Long) {
             try {

@@ -1,5 +1,6 @@
 package com.amaia23.hydracam.court
 
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedOutputStream
 import java.io.File
@@ -7,6 +8,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.security.DigestOutputStream
 import java.security.MessageDigest
+import kotlin.math.abs
 
 /** One closed segment file (`sessions/<sid>/<tier>/<seq>.ts`). */
 data class SegmentRecord(
@@ -24,21 +26,20 @@ data class SegmentRecord(
     val rttMs: Long,
 ) {
     /** `segments.jsonl` line. H10: the clock offset in use is logged per segment. */
-    fun toSidecarJson(closedAtMs: Long): JSONObject =
-        JSONObject()
-            .put("sessionId", sessionId)
-            .put("slot", slot)
-            .put("tier", tier)
-            .put("seq", seq)
-            .put("file", "$tier/${file.name}")
-            .put("bytes", bytes)
-            .put("sha256", sha256)
-            .put("mediaStartServerMs", mediaStartServerMs)
-            .put("durationMs", durationMs)
-            .put("frames", frames)
-            .put("offsetMs", offsetMs)
-            .put("rttMs", rttMs)
-            .put("closedAtMs", closedAtMs)
+    fun toSidecarJson(closedAtMs: Long): JSONObject = JSONObject()
+        .put("sessionId", sessionId)
+        .put("slot", slot)
+        .put("tier", tier)
+        .put("seq", seq)
+        .put("file", "$tier/${file.name}")
+        .put("bytes", bytes)
+        .put("sha256", sha256)
+        .put("mediaStartServerMs", mediaStartServerMs)
+        .put("durationMs", durationMs)
+        .put("frames", frames)
+        .put("offsetMs", offsetMs)
+        .put("rttMs", rttMs)
+        .put("closedAtMs", closedAtMs)
 }
 
 /** C1 `seq` starts at 0 per (session, slot, tier) and survives restarts. −1 = none written. */
@@ -66,11 +67,80 @@ class CourtStorage(val root: File) {
 
     fun tierDir(sessionId: String, tier: String): File = File(sessionDir(sessionId), tier)
 
-    fun sidecar(sessionId: String): File = File(sessionDir(sessionId), "segments.jsonl")
+    fun sidecar(sessionId: String): File = File(sessionDir(sessionId), SegmentSidecarReader.SIDECAR)
 
     fun signalsLog(): File = File(root, "signals.jsonl")
 
+    fun sessionDirs(): List<File> = File(root, "sessions").listFiles()?.filter { it.isDirectory }.orEmpty()
+
     private fun safeName(value: String): String = value.replace(Regex("[^A-Za-z0-9._-]"), "_")
+}
+
+/**
+ * Reads `segments.jsonl` back after a crash (the process died between the sidecar and queue writes).
+ * Every field is validated; a line that names another session, a path outside its tier directory, or
+ * a malformed hash is skipped.
+ */
+class SegmentSidecarReader(private val storage: CourtStorage, private val logger: CourtLogger) {
+    fun readAll(): List<SegmentRecord> = storage.sessionDirs().flatMap(::read)
+
+    private fun read(sessionDir: File): List<SegmentRecord> {
+        val sidecar = File(sessionDir, SIDECAR)
+        if (!sidecar.isFile) {
+            return emptyList()
+        }
+        var skipped = 0
+        val records = sidecar.readLines().mapNotNull { line ->
+            parse(sessionDir, line).also { if (it == null && line.isNotBlank()) skipped += 1 }
+        }
+        if (skipped > 0) {
+            logger.warn(TAG, "Skipped $skipped invalid line(s) in ${sessionDir.name}/$SIDECAR.")
+        }
+        return records
+    }
+
+    internal fun parse(sessionDir: File, line: String): SegmentRecord? {
+        val json = try {
+            JSONObject(line)
+        } catch (ignored: JSONException) {
+            return null
+        }
+        val sessionId = json.optString("sessionId")
+        val tier = json.optString("tier")
+        val seq = json.optLong("seq", -1)
+        val record = SegmentRecord(
+            sessionId = sessionId,
+            slot = json.optString("slot"),
+            tier = tier,
+            seq = seq,
+            file = File(storage.tierDir(sessionId, tier), "%06d.ts".format(seq)),
+            bytes = json.optLong("bytes", -1),
+            sha256 = json.optString("sha256"),
+            mediaStartServerMs = json.optLong("mediaStartServerMs", -1),
+            durationMs = json.optLong("durationMs", -1),
+            frames = json.optInt("frames"),
+            offsetMs = json.optLong("offsetMs"),
+            rttMs = json.optLong("rttMs", -1),
+        )
+        val valid = sessionId.isNotBlank() &&
+            storage.sessionDir(sessionId) == sessionDir &&
+            record.slot.isNotBlank() &&
+            tier in TIERS &&
+            seq >= 0 &&
+            json.optString("file") == "$tier/${record.file.name}" &&
+            record.bytes > 0 &&
+            SHA256.matches(record.sha256) &&
+            record.mediaStartServerMs >= 0 &&
+            record.durationMs >= 0
+        return record.takeIf { valid }
+    }
+
+    companion object {
+        const val SIDECAR = "segments.jsonl"
+        private const val TAG = "CourtSidecar"
+        private val TIERS = setOf(C1.TIER_PROXY, C1.TIER_MASTER)
+        private val SHA256 = Regex("[0-9a-f]{64}")
+    }
 }
 
 /** Append-only JSONL file, fsynced per line. Shared by both tiers of a session. */
@@ -108,6 +178,38 @@ class SessionTimebase(private val toServerMs: (ptsUs: Long) -> Long) {
 }
 
 /**
+ * Encoder pts → device wall clock. Surface-input encoders carry the camera sensor timestamp, which is
+ * `elapsedRealtimeNanos` (SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME) or, on some devices, `nanoTime`.
+ * The first frame picks whichever clock it is closer to. [realtimeUs] is `elapsedRealtimeNanos / 1000`.
+ */
+internal class PtsClock(
+    private var useRealtime: Boolean,
+    private val realtimeUs: () -> Long,
+    private val monotonicUs: () -> Long = { System.nanoTime() / 1_000 },
+    private val wallMs: () -> Long = { System.currentTimeMillis() },
+) {
+    private var checked = false
+
+    @Synchronized
+    fun nowUs(): Long = if (useRealtime) realtimeUs() else monotonicUs()
+
+    /** Returns true when the first frame switched the clock. */
+    @Synchronized
+    fun check(ptsUs: Long): Boolean {
+        if (checked) {
+            return false
+        }
+        checked = true
+        val realtime = abs(realtimeUs() - ptsUs) <= abs(monotonicUs() - ptsUs)
+        val switched = realtime != useRealtime
+        useRealtime = realtime
+        return switched
+    }
+
+    fun wallMsFor(ptsUs: Long): Long = wallMs() - (nowUs() - ptsUs) / 1_000
+}
+
+/**
  * H6: cuts one tier's H.264 (+ optional AAC) stream into ~[segmentDurationUs] MPEG-TS files.
  *
  * - Frames before the first IDR are dropped; each segment starts on an IDR.
@@ -117,6 +219,8 @@ class SessionTimebase(private val toServerMs: (ptsUs: Long) -> Long) {
  *
  * Thread-safe: the video drain and audio threads call in concurrently.
  */
+// Each parameter is the session identity, a port, or a C1 timing the recorder wires per tier.
+@Suppress("LongParameterList")
 class TsSegmenter(
     private val sessionId: String,
     private val slot: String,
@@ -221,15 +325,10 @@ class TsSegmenter(
 
     private fun openSegment(startPtsUs: Long): OpenSegment {
         val seq = lastSeq + 1
-        val partFile = File(directory, "%06d.ts%s".format(seq, PART_SUFFIX))
-        val fileStream = FileOutputStream(partFile)
-        val digest = MessageDigest.getInstance("SHA-256")
-        val stream = BufferedOutputStream(DigestOutputStream(fileStream, digest), BUFFER_BYTES)
-        val muxer = MpegTsMuxer(hasAudio)
-        muxer.attach(stream)
+        val open = OpenSegment(seq, startPtsUs, File(directory, "%06d.ts%s".format(seq, PART_SUFFIX)), hasAudio)
         syncRequested = false
         timebase.anchor(startPtsUs)
-        return OpenSegment(seq, startPtsUs, partFile, fileStream, stream, digest, muxer)
+        return open
     }
 
     private fun closeSegment(open: OpenSegment, endPtsUs: Long) {
@@ -262,15 +361,12 @@ class TsSegmenter(
         onSegment(record)
     }
 
-    private class OpenSegment(
-        val seq: Long,
-        val startPtsUs: Long,
-        val partFile: File,
-        val fileStream: FileOutputStream,
-        val stream: BufferedOutputStream,
-        val digest: MessageDigest,
-        val muxer: MpegTsMuxer,
-    ) {
+    /** `<seq>.ts.part` open for writing: bytes go through the SHA-256 digest into the muxer's file. */
+    private class OpenSegment(val seq: Long, val startPtsUs: Long, val partFile: File, hasAudio: Boolean) {
+        val fileStream = FileOutputStream(partFile)
+        val digest: MessageDigest = MessageDigest.getInstance("SHA-256")
+        val stream = BufferedOutputStream(DigestOutputStream(fileStream, digest), BUFFER_BYTES)
+        val muxer = MpegTsMuxer(hasAudio).also { it.attach(stream) }
         var frames = 0
         var lastPtsUs = startPtsUs
     }
@@ -282,14 +378,4 @@ class TsSegmenter(
     }
 }
 
-internal fun ByteArray.toHex(): String {
-    val chars = CharArray(size * 2)
-    forEachIndexed { index, byte ->
-        val value = byte.toInt() and 0xFF
-        chars[index * 2] = HEX[value ushr 4]
-        chars[index * 2 + 1] = HEX[value and 0x0F]
-    }
-    return String(chars)
-}
-
-private val HEX = "0123456789abcdef".toCharArray()
+internal fun ByteArray.toHex(): String = joinToString("") { "%02x".format(it) }

@@ -60,21 +60,20 @@ data class UploadItem(
     companion object {
         fun keyOf(sessionId: String, tier: String, seq: Long): String = "$sessionId/$tier/$seq"
 
-        fun from(segment: SegmentRecord, nowMs: Long): UploadItem =
-            UploadItem(
-                key = keyOf(segment.sessionId, segment.tier, segment.seq),
-                sessionId = segment.sessionId,
-                slot = segment.slot,
-                tier = segment.tier,
-                seq = segment.seq,
-                filePath = segment.file.absolutePath,
-                bytes = segment.bytes,
-                sha256 = segment.sha256,
-                mediaStartServerMs = segment.mediaStartServerMs,
-                durationMs = segment.durationMs,
-                createdAtMs = nowMs,
-                updatedAtMs = nowMs,
-            )
+        fun from(segment: SegmentRecord, nowMs: Long): UploadItem = UploadItem(
+            key = keyOf(segment.sessionId, segment.tier, segment.seq),
+            sessionId = segment.sessionId,
+            slot = segment.slot,
+            tier = segment.tier,
+            seq = segment.seq,
+            filePath = segment.file.absolutePath,
+            bytes = segment.bytes,
+            sha256 = segment.sha256,
+            mediaStartServerMs = segment.mediaStartServerMs,
+            durationMs = segment.durationMs,
+            createdAtMs = nowMs,
+            updatedAtMs = nowMs,
+        )
     }
 }
 
@@ -248,11 +247,13 @@ class InMemoryUploadQueueStore : UploadQueueStore {
         items.values.filter { it.sessionId == sessionId }.sortedWith(compareBy({ it.tier }, { it.seq }))
 
     @Synchronized
-    override fun nextDue(nowMs: Long, includeMasters: Boolean): UploadItem? =
-        items.values
-            .filter { it.uploadState.active && it.nextAttemptAtMs <= nowMs && (includeMasters || it.tier == C1.TIER_PROXY) }
-            .sortedWith(compareBy({ if (it.tier == C1.TIER_PROXY) 0 else 1 }, { it.createdAtMs }, { it.seq }))
-            .firstOrNull()
+    override fun nextDue(nowMs: Long, includeMasters: Boolean): UploadItem? = items.values
+        .filter {
+            it.uploadState.active && it.nextAttemptAtMs <= nowMs &&
+                (includeMasters || it.tier == C1.TIER_PROXY)
+        }
+        .sortedWith(compareBy({ if (it.tier == C1.TIER_PROXY) 0 else 1 }, { it.createdAtMs }, { it.seq }))
+        .firstOrNull()
 
     @Synchronized
     override fun nextWakeAtMs(includeMasters: Boolean): Long? {
@@ -274,17 +275,15 @@ class InMemoryUploadQueueStore : UploadQueueStore {
     override fun masterRequest(id: String): MasterRequest? = masterRequests[id]
 
     @Synchronized
-    override fun dueMasterRequest(nowMs: Long): MasterRequest? =
-        masterRequests.values
-            .filter { it.state == MasterRequest.STATE_PENDING && it.nextAttemptAtMs <= nowMs }
-            .minByOrNull { it.createdAtMs }
+    override fun dueMasterRequest(nowMs: Long): MasterRequest? = masterRequests.values
+        .filter { it.state == MasterRequest.STATE_PENDING && it.nextAttemptAtMs <= nowMs }
+        .minByOrNull { it.createdAtMs }
 
     @Synchronized
-    override fun idleMastersBefore(cutoffMs: Long): List<UploadItem> =
-        items.values.filter {
-            it.tier == C1.TIER_MASTER && it.createdAtMs < cutoffMs &&
-                (it.uploadState == UploadState.HELD || it.uploadState == UploadState.FAILED)
-        }
+    override fun idleMastersBefore(cutoffMs: Long): List<UploadItem> = items.values.filter {
+        it.tier == C1.TIER_MASTER && it.createdAtMs < cutoffMs &&
+            (it.uploadState == UploadState.HELD || it.uploadState == UploadState.FAILED)
+    }
 
     @Synchronized
     override fun activeBytes(): Long = items.values.filter { it.uploadState.active }.sumOf { it.bytes }

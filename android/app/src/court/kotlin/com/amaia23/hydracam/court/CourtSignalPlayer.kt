@@ -42,42 +42,44 @@ object SignalPatterns {
 
     private const val BEEP_MS = 150
     private const val FLASH_MS = 150L
+    private const val COUNTDOWN_BEEPS = 3
 
-    fun forSignal(signal: String): List<SignalStep>? =
-        when (signal) {
-            COUNTDOWN -> (0 until 3).flatMap { index ->
-                val at = index * 1_000L
-                listOf(
-                    SignalStep(at, SignalTone.MID, BEEP_MS, torchOn = true),
-                    SignalStep(at + FLASH_MS, torchOn = false),
-                )
-            }
-            REC_START -> listOf(
-                SignalStep(0, SignalTone.HIGH, 700, torchOn = true),
-                SignalStep(200, torchOn = false),
+    // Each literal is a C6 timing in ms; naming them would only restate the table.
+    @Suppress("MagicNumber")
+    fun forSignal(signal: String): List<SignalStep>? = when (signal) {
+        COUNTDOWN -> (0 until COUNTDOWN_BEEPS).flatMap { index ->
+            val at = index * 1_000L
+            listOf(
+                SignalStep(at, SignalTone.MID, BEEP_MS, torchOn = true),
+                SignalStep(at + FLASH_MS, torchOn = false),
             )
-            REC_STOP -> listOf(
-                SignalStep(0, SignalTone.HIGH, 250, torchOn = false),
-                SignalStep(550, SignalTone.MID, 250),
-            )
-            MARKER_ACK -> listOf(
-                SignalStep(0, SignalTone.MID, 100, torchOn = true),
-                SignalStep(100, torchOn = false),
-                SignalStep(400, SignalTone.HIGH, 100, torchOn = true),
-                SignalStep(500, torchOn = false),
-            )
-            // K2 repeats lease.warn every 30 s; one emit plays one beep and one slow blink.
-            LEASE_WARN -> listOf(
-                SignalStep(0, SignalTone.MID, BEEP_MS, torchOn = true),
-                SignalStep(600, torchOn = false),
-            )
-            ERROR -> listOf(SignalStep(0, SignalTone.LOW, 500))
-            SYNC_FLASH -> listOf(
-                SignalStep(0, torchOn = true),
-                SignalStep(100, torchOn = false),
-            )
-            else -> null
         }
+        REC_START -> listOf(
+            SignalStep(0, SignalTone.HIGH, 700, torchOn = true),
+            SignalStep(200, torchOn = false),
+        )
+        REC_STOP -> listOf(
+            SignalStep(0, SignalTone.HIGH, 250, torchOn = false),
+            SignalStep(550, SignalTone.MID, 250),
+        )
+        MARKER_ACK -> listOf(
+            SignalStep(0, SignalTone.MID, 100, torchOn = true),
+            SignalStep(100, torchOn = false),
+            SignalStep(400, SignalTone.HIGH, 100, torchOn = true),
+            SignalStep(500, torchOn = false),
+        )
+        // K2 repeats lease.warn every 30 s; one emit plays one beep and one slow blink.
+        LEASE_WARN -> listOf(
+            SignalStep(0, SignalTone.MID, BEEP_MS, torchOn = true),
+            SignalStep(600, torchOn = false),
+        )
+        ERROR -> listOf(SignalStep(0, SignalTone.LOW, 500))
+        SYNC_FLASH -> listOf(
+            SignalStep(0, torchOn = true),
+            SignalStep(100, torchOn = false),
+        )
+        else -> null
+    }
 }
 
 /**
@@ -129,6 +131,9 @@ class CourtSignalPlayer(
         return CommandResult.Ack
     }
 
+    // The ports wrap ToneGenerator and the Camera2 torch, which throw undocumented runtime
+    // exceptions; a failed signal must never reach the command or recording path.
+    @Suppress("TooGenericExceptionCaught")
     private fun play(step: SignalStep) {
         try {
             step.tone?.let { tones.play(it, step.toneMs) }

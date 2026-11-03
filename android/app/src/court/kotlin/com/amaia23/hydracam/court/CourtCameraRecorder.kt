@@ -27,6 +27,7 @@ import android.util.Size
 import android.view.Surface
 import androidx.core.content.ContextCompat
 import java.io.IOException
+import java.nio.ByteBuffer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -56,38 +57,6 @@ interface CourtRecorderListener {
 }
 
 /**
- * Encoder pts → device wall clock. Surface-input encoders carry the camera sensor timestamp, which is
- * `elapsedRealtimeNanos` (SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME) or, on some devices, `nanoTime`.
- * The first frame picks whichever clock it is closer to.
- */
-internal class PtsClock(
-    private var useRealtime: Boolean,
-    private val realtimeUs: () -> Long = { SystemClock.elapsedRealtimeNanos() / 1_000 },
-    private val monotonicUs: () -> Long = { System.nanoTime() / 1_000 },
-    private val wallMs: () -> Long = { System.currentTimeMillis() },
-) {
-    private var checked = false
-
-    @Synchronized
-    fun nowUs(): Long = if (useRealtime) realtimeUs() else monotonicUs()
-
-    /** Returns true when the first frame switched the clock. */
-    @Synchronized
-    fun check(ptsUs: Long): Boolean {
-        if (checked) {
-            return false
-        }
-        checked = true
-        val realtime = abs(realtimeUs() - ptsUs) <= abs(monotonicUs() - ptsUs)
-        val switched = realtime != useRealtime
-        useRealtime = realtime
-        return switched
-    }
-
-    fun wallMsFor(ptsUs: Long): Long = wallMs() - (nowUs() - ptsUs) / 1_000
-}
-
-/**
  * H5/H6/H15/H17: one Camera2 session feeding a master and a proxy (low) H.264 encoder, each cut into
  * 6 s MPEG-TS segments. AE/AF/AWB lock after warm-up; OIS/EIS off; torch through `FLASH_MODE_TORCH`
  * in the repeating request. Audio only when `record.start.audio`. The camera is closed when idle.
@@ -102,7 +71,8 @@ class CourtCameraRecorder(
     private val slot: () -> String,
     private val listener: CourtRecorderListener,
     private val logger: CourtLogger = NoopCourtLogger,
-) : CourtRecorderPort, TorchControl {
+) : CourtRecorderPort,
+    TorchControl {
     @Volatile
     var lowEncoderListener: LowEncoderListener? = null
 
@@ -231,7 +201,10 @@ class CourtCameraRecorder(
                 delayMs,
                 TimeUnit.MILLISECONDS,
             )
-            logger.info(TAG, "Recording $sessionId armed for server ${command.startAtServerMs} (in $delayMs ms), audio=$withAudio.")
+            logger.info(
+                TAG,
+                "Recording $sessionId armed for server ${command.startAtServerMs} (in $delayMs ms), audio=$withAudio.",
+            )
         } catch (error: Exception) {
             fail(sessionId, "record_start: ${error.message}", error)
         }
@@ -306,17 +279,7 @@ class CourtCameraRecorder(
             }
         }
         val active = recording ?: return
-        val serverMs = active.timebase.serverMs(ptsUs)
-        if (serverMs < active.startAtServerMs || serverMs >= active.stopAtServerMs) {
-            return
-        }
-        try {
-            active.segmenters.getValue(tier).onVideoFrame(ptsUs, annexB, isKeyframe)
-        } catch (error: IOException) {
-            if (!active.failed) {
-                active.failed = true
-                fail(active.sessionId, "segment_io: ${error.message}", error)
-            }
+        if (!active.inWindow(ptsUs) || !writeFrame(active, tier, ptsUs, annexB, isKeyframe)) {
             return
         }
         if (!active.announced && active.timebase.baseUs >= 0) {
@@ -324,6 +287,24 @@ class CourtCameraRecorder(
             val firstFrameServerMs = active.timebase.serverMs(active.timebase.baseUs)
             listener.onRecordingStarted(active.sessionId, firstFrameServerMs, active.profile)
         }
+    }
+
+    /** False after a write error, which fails the session (once). */
+    private fun writeFrame(
+        active: Recording,
+        tier: String,
+        ptsUs: Long,
+        annexB: ByteArray,
+        isKeyframe: Boolean,
+    ): Boolean = try {
+        active.segmenters.getValue(tier).onVideoFrame(ptsUs, annexB, isKeyframe)
+        true
+    } catch (error: IOException) {
+        if (!active.failed) {
+            active.failed = true
+            fail(active.sessionId, "segment_io: ${error.message}", error)
+        }
+        false
     }
 
     private fun onEncoderConfig(tier: String, config: ByteArray) {
@@ -342,6 +323,10 @@ class CourtCameraRecorder(
     ) {
         @Volatile
         var stopAtServerMs: Long = Long.MAX_VALUE
+
+        /** Inside `[startAtServerMs, stopAtServerMs)` on the server clock. */
+        fun inWindow(ptsUs: Long): Boolean =
+            timebase.serverMs(ptsUs).let { it >= startAtServerMs && it < stopAtServerMs }
 
         @Volatile
         var announced = false
@@ -370,6 +355,7 @@ class CourtCameraRecorder(
         val ptsClock = PtsClock(
             characteristics.get(CameraCharacteristics.SENSOR_INFO_TIMESTAMP_SOURCE) ==
                 CameraCharacteristics.SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME,
+            realtimeUs = { SystemClock.elapsedRealtimeNanos() / 1_000 },
         )
         val hasFlash: Boolean = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
 
@@ -426,8 +412,8 @@ class CourtCameraRecorder(
                 },
                 handler,
             )
-            if (!opened.await(OPEN_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                throw IllegalStateException("Camera $cameraId did not open in $OPEN_TIMEOUT_MS ms.")
+            check(opened.await(OPEN_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+                "Camera $cameraId did not open in $OPEN_TIMEOUT_MS ms."
             }
             openError?.let { throw it }
             logger.info(TAG, "Camera $cameraId open: master $masterSize, proxy $proxySize @ ${profile.fps} fps.")
@@ -492,7 +478,10 @@ class CourtCameraRecorder(
         /** Must run on [handler]. */
         private fun submit() {
             val request = builder ?: return
-            request.set(CaptureRequest.FLASH_MODE, if (torchOn) CaptureRequest.FLASH_MODE_TORCH else CaptureRequest.FLASH_MODE_OFF)
+            request.set(
+                CaptureRequest.FLASH_MODE,
+                if (torchOn) CaptureRequest.FLASH_MODE_TORCH else CaptureRequest.FLASH_MODE_OFF,
+            )
             session?.setRepeatingRequest(request.build(), if (locked) null else warmupCallback, handler)
         }
 
@@ -512,9 +501,10 @@ class CourtCameraRecorder(
                     ae == CaptureResult.CONTROL_AE_STATE_CONVERGED ||
                     ae == CaptureResult.CONTROL_AE_STATE_FLASH_REQUIRED
                 val awbReady = awb == null || awb == CaptureResult.CONTROL_AWB_STATE_CONVERGED
+                val converged = aeReady && awbReady
                 val elapsed = SystemClock.elapsedRealtime() - openedAtMs
-                if ((elapsed >= WARMUP_MIN_MS && aeReady && awbReady) || elapsed >= WARMUP_MAX_MS) {
-                    lock(elapsed, aeReady && awbReady)
+                if ((elapsed >= WARMUP_MIN_MS && converged) || elapsed >= WARMUP_MAX_MS) {
+                    lock(elapsed, converged)
                 }
             }
         }
@@ -576,7 +566,7 @@ class CourtCameraRecorder(
             val (width, height) = wanted
             sizes.firstOrNull { it.width == width && it.height == height }?.let { return it }
             return sizes
-                .filter { it.width * 9 == it.height * 16 && it.width <= width }
+                .filter { it.width * ASPECT_H == it.height * ASPECT_W && it.width <= width }
                 .maxByOrNull { it.width }
                 ?: sizes.minByOrNull { abs(it.width - width) }
                 ?: Size(width, height)
@@ -622,44 +612,58 @@ class CourtCameraRecorder(
                 }
             }
 
+            private var first = true
+
             private fun drain() {
-                var first = true
-                while (running) {
-                    val index = try {
-                        codec.dequeueOutputBuffer(info, DRAIN_TIMEOUT_US)
-                    } catch (error: IllegalStateException) {
-                        break
-                    }
+                var endOfStream = false
+                while (running && !endOfStream) {
+                    // null: the codec was released under us, so the session is stopping.
+                    val index = dequeueOrNull() ?: break
                     if (index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                         configFromFormat(codec.outputFormat)?.let { publishConfig(it) }
-                        continue
-                    }
-                    if (index < 0) {
-                        continue
-                    }
-                    val buffer = codec.getOutputBuffer(index)
-                    if (buffer != null && info.size > 0) {
-                        val bytes = ByteArray(info.size)
-                        buffer.position(info.offset)
-                        buffer.limit(info.offset + info.size)
-                        buffer.get(bytes)
-                        if (info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0) {
-                            publishConfig(bytes)
-                        } else {
-                            if (first) {
-                                first = false
-                                if (ptsClock.check(info.presentationTimeUs)) {
-                                    logger.info(TAG, "Sensor timestamps follow the other clock; switched pts timebase.")
-                                }
-                            }
-                            onEncodedFrame(tier, info.presentationTimeUs, bytes, info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0)
-                        }
-                    }
-                    codec.releaseOutputBuffer(index, false)
-                    if (info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) {
-                        break
+                    } else if (index >= 0) {
+                        endOfStream = handleOutput(index)
                     }
                 }
+            }
+
+            private fun dequeueOrNull(): Int? = try {
+                codec.dequeueOutputBuffer(info, DRAIN_TIMEOUT_US)
+            } catch (ignored: IllegalStateException) {
+                null
+            }
+
+            /** Publishes one output buffer; true at end of stream. */
+            private fun handleOutput(index: Int): Boolean {
+                val buffer = codec.getOutputBuffer(index)
+                if (buffer != null && info.size > 0) {
+                    val bytes = ByteArray(info.size)
+                    buffer.position(info.offset)
+                    buffer.limit(info.offset + info.size)
+                    buffer.get(bytes)
+                    if (info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0) {
+                        publishConfig(bytes)
+                    } else {
+                        publishFrame(bytes)
+                    }
+                }
+                codec.releaseOutputBuffer(index, false)
+                return info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0
+            }
+
+            private fun publishFrame(bytes: ByteArray) {
+                if (first) {
+                    first = false
+                    if (ptsClock.check(info.presentationTimeUs)) {
+                        logger.info(TAG, "Sensor timestamps follow the other clock; switched pts timebase.")
+                    }
+                }
+                onEncodedFrame(
+                    tier,
+                    info.presentationTimeUs,
+                    bytes,
+                    info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0,
+                )
             }
 
             private fun publishConfig(config: ByteArray) {
@@ -695,10 +699,17 @@ class CourtCameraRecorder(
             thread.join(RELEASE_JOIN_MS)
         }
 
+        private var baseUs = -1L
+        private var samples = 0L
+
         @SuppressLint("MissingPermission")
-        private fun loop() {
-            val minBuffer = AudioRecord.getMinBufferSize(AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
-            val bufferBytes = max(minBuffer * 2, AUDIO_CHUNK_BYTES * 4)
+        private fun openRecord(): AudioRecord? {
+            val minBuffer = AudioRecord.getMinBufferSize(
+                AUDIO_SAMPLE_RATE,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+            )
+            val bufferBytes = max(minBuffer * 2, AUDIO_CHUNK_BYTES * AUDIO_BUFFER_CHUNKS)
             val record = AudioRecord(
                 MediaRecorder.AudioSource.CAMCORDER,
                 AUDIO_SAMPLE_RATE,
@@ -709,8 +720,13 @@ class CourtCameraRecorder(
             if (record.state != AudioRecord.STATE_INITIALIZED) {
                 logger.warn(TAG, "AudioRecord did not initialize; continuing video only.")
                 record.release()
-                return
+                return null
             }
+            return record
+        }
+
+        private fun loop() {
+            val record = openRecord() ?: return
             val format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, AUDIO_SAMPLE_RATE, 1).apply {
                 setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC)
                 setInteger(MediaFormat.KEY_BIT_RATE, AUDIO_BIT_RATE)
@@ -721,42 +737,10 @@ class CourtCameraRecorder(
             encoder.start()
             record.startRecording()
             val info = MediaCodec.BufferInfo()
-            var baseUs = -1L
-            var samples = 0L
             try {
                 while (running) {
-                    val inputIndex = encoder.dequeueInputBuffer(DRAIN_TIMEOUT_US)
-                    if (inputIndex >= 0) {
-                        val input = encoder.getInputBuffer(inputIndex)
-                        val read = if (input == null) 0 else record.read(input, min(input.remaining(), AUDIO_CHUNK_BYTES))
-                        if (read > 0) {
-                            val readSamples = read / 2L
-                            if (baseUs < 0) {
-                                baseUs = ptsClock.nowUs() - readSamples * 1_000_000L / AUDIO_SAMPLE_RATE
-                            }
-                            encoder.queueInputBuffer(inputIndex, 0, read, baseUs + samples * 1_000_000L / AUDIO_SAMPLE_RATE, 0)
-                            samples += readSamples
-                        } else {
-                            encoder.queueInputBuffer(inputIndex, 0, 0, 0, 0)
-                        }
-                    }
-                    var outputIndex = encoder.dequeueOutputBuffer(info, 0)
-                    while (outputIndex >= 0) {
-                        val output = encoder.getOutputBuffer(outputIndex)
-                        if (output != null && info.size > 0 && info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0) {
-                            val bytes = ByteArray(info.size)
-                            output.position(info.offset)
-                            output.limit(info.offset + info.size)
-                            output.get(bytes)
-                            try {
-                                sink(info.presentationTimeUs, bytes)
-                            } catch (error: IOException) {
-                                logger.warn(TAG, "Audio write failed.", error)
-                            }
-                        }
-                        encoder.releaseOutputBuffer(outputIndex, false)
-                        outputIndex = encoder.dequeueOutputBuffer(info, 0)
-                    }
+                    feedInput(encoder, record)
+                    drainOutput(encoder, info)
                 }
             } catch (error: IllegalStateException) {
                 logger.warn(TAG, "Audio pipeline stopped.", error)
@@ -765,6 +749,50 @@ class CourtCameraRecorder(
                 record.release()
                 runCatching { encoder.stop() }
                 encoder.release()
+            }
+        }
+
+        /** Moves one chunk of PCM into the encoder, stamped from the first read on the shared pts clock. */
+        private fun feedInput(encoder: MediaCodec, record: AudioRecord) {
+            val inputIndex = encoder.dequeueInputBuffer(DRAIN_TIMEOUT_US)
+            if (inputIndex < 0) {
+                return
+            }
+            val input = encoder.getInputBuffer(inputIndex)
+            val read = if (input == null) 0 else record.read(input, min(input.remaining(), AUDIO_CHUNK_BYTES))
+            if (read > 0) {
+                val readSamples = read / 2L
+                if (baseUs < 0) {
+                    baseUs = ptsClock.nowUs() - readSamples * 1_000_000L / AUDIO_SAMPLE_RATE
+                }
+                encoder.queueInputBuffer(inputIndex, 0, read, baseUs + samples * 1_000_000L / AUDIO_SAMPLE_RATE, 0)
+                samples += readSamples
+            } else {
+                encoder.queueInputBuffer(inputIndex, 0, 0, 0, 0)
+            }
+        }
+
+        private fun drainOutput(encoder: MediaCodec, info: MediaCodec.BufferInfo) {
+            var outputIndex = encoder.dequeueOutputBuffer(info, 0)
+            while (outputIndex >= 0) {
+                val output = encoder.getOutputBuffer(outputIndex)
+                if (output != null && info.size > 0 && info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0) {
+                    emit(output, info)
+                }
+                encoder.releaseOutputBuffer(outputIndex, false)
+                outputIndex = encoder.dequeueOutputBuffer(info, 0)
+            }
+        }
+
+        private fun emit(output: ByteBuffer, info: MediaCodec.BufferInfo) {
+            val bytes = ByteArray(info.size)
+            output.position(info.offset)
+            output.limit(info.offset + info.size)
+            output.get(bytes)
+            try {
+                sink(info.presentationTimeUs, bytes)
+            } catch (error: IOException) {
+                logger.warn(TAG, "Audio write failed.", error)
             }
         }
     }
@@ -783,12 +811,14 @@ class CourtCameraRecorder(
         private const val AUDIO_SAMPLE_RATE = 48_000
         private const val AUDIO_BIT_RATE = 96_000
         private const val AUDIO_CHUNK_BYTES = 4_096
+        private const val AUDIO_BUFFER_CHUNKS = 4
+        private const val ASPECT_W = 16
+        private const val ASPECT_H = 9
 
-        fun backCameraId(manager: CameraManager): String =
-            manager.cameraIdList.firstOrNull { id ->
-                manager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) ==
-                    CameraCharacteristics.LENS_FACING_BACK
-            } ?: manager.cameraIdList.firstOrNull() ?: throw IllegalStateException("No camera.")
+        fun backCameraId(manager: CameraManager): String = manager.cameraIdList.firstOrNull { id ->
+            manager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) ==
+                CameraCharacteristics.LENS_FACING_BACK
+        } ?: manager.cameraIdList.firstOrNull() ?: error("No camera.")
 
         private fun videoFormat(size: Size, fps: Int, kbps: Int, withProfile: Boolean): MediaFormat =
             MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, size.width, size.height).apply {

@@ -188,12 +188,11 @@ class C1ProtocolTest {
         }
     }
 
-    private fun policyBody(): JSONObject =
-        JSONObject()
-            .put("masterMode", "on-request")
-            .put("windows", JSONArray(listOf("sat 09:00-13:00")))
-            .put("maxKbps", 1_500)
-            .put("keepDays", 3)
+    private fun policyBody(): JSONObject = JSONObject()
+        .put("masterMode", "on-request")
+        .put("windows", JSONArray(listOf("sat 09:00-13:00")))
+        .put("maxKbps", 1_500)
+        .put("keepDays", 3)
 
     @Test
     fun uploadPolicyParsesAndRoundTrips() {
@@ -223,13 +222,12 @@ class C1ProtocolTest {
         rejects { UploadPolicy.fromJson(policyBody().put("windows", JSONArray(listOf(" ")))) }
     }
 
-    private fun mastersBody(): JSONObject =
-        JSONObject()
-            .put("sessionId", "s1")
-            .put("fromServerMs", 1_000)
-            .put("toServerMs", 2_000)
-            .put("uploadGrant", "secret-grant")
-            .put("ingestUrl", "https://k3.example")
+    private fun mastersBody(): JSONObject = JSONObject()
+        .put("sessionId", "s1")
+        .put("fromServerMs", 1_000)
+        .put("toServerMs", 2_000)
+        .put("uploadGrant", "secret-grant")
+        .put("ingestUrl", "https://k3.example")
 
     @Test
     fun mastersUploadParsesRangeAndHidesTheGrant() {
@@ -237,7 +235,12 @@ class C1ProtocolTest {
 
         assertEquals(MastersUpload("s1", 1_000, 2_000, "secret-grant", "https://k3.example"), request)
         assertFalse(request.toString().contains("secret-grant"))
-        val whole = MastersUpload.fromJson(mastersBody().apply { remove("fromServerMs"); remove("toServerMs") })
+        val whole = MastersUpload.fromJson(
+            mastersBody().apply {
+                remove("fromServerMs")
+                remove("toServerMs")
+            },
+        )
         assertNull(whole.fromServerMs)
         assertTrue(whole.covers(0, 6_000))
     }

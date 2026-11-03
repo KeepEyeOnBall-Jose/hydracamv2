@@ -12,8 +12,7 @@ class EventOutboxTest {
     @get:Rule
     val temp = TemporaryFolder()
 
-    private fun event(seq: Int) =
-        C1Envelope.create(C1.RECORDING_SEGMENT, JSONObject().put("seq", seq), 1_000L + seq)
+    private fun event(seq: Int) = C1Envelope.create(C1.RECORDING_SEGMENT, JSONObject().put("seq", seq), 1_000L + seq)
 
     @Test
     fun pendingEventsSurviveRestartInOrder() {

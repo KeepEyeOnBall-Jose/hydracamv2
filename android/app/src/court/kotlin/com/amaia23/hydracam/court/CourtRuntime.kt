@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import okhttp3.OkHttpClient
-import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
@@ -36,7 +35,7 @@ class CourtRuntime private constructor(context: Context) {
     private val scheduler = Executors.newSingleThreadScheduledExecutor { Thread(it, "CourtRuntime") }
     private val uploadExecutor = Executors.newSingleThreadScheduledExecutor { Thread(it, "CourtUploads") }
     private val probe = DeviceStatusProbe(appContext)
-    private val root = RootStatus(logger)
+    private val root = RootStatus(logger, RootShell::isRooted)
     private val storage = CourtStorage(File(appContext.filesDir, "court"))
     private val database = CourtDatabase.open(appContext)
     private val queue = RoomUploadQueueStore(database)
@@ -153,18 +152,14 @@ class CourtRuntime private constructor(context: Context) {
 
     /** Blocking (Keystore + Room); call off the main thread. Returns an error message or null. */
     fun enroll(values: Map<String, Any?>): String? {
-        val candidate = try {
-            CourtEnrollment(
-                k2Url = values["k2Url"]?.toString().orEmpty().trim(),
-                deviceId = values["deviceId"]?.toString().orEmpty().trim(),
-                secret = values["secret"]?.toString().orEmpty(),
-                courtId = values["courtId"]?.toString().orEmpty().trim(),
-                slot = values["slot"]?.toString().orEmpty().trim(),
-                mountRev = values["mountRev"]?.toString()?.trim()?.toIntOrNull() ?: 0,
-            )
-        } catch (error: Exception) {
-            return "invalid enrollment"
-        }
+        val candidate = CourtEnrollment(
+            k2Url = values["k2Url"]?.toString().orEmpty().trim(),
+            deviceId = values["deviceId"]?.toString().orEmpty().trim(),
+            secret = values["secret"]?.toString().orEmpty(),
+            courtId = values["courtId"]?.toString().orEmpty().trim(),
+            slot = values["slot"]?.toString().orEmpty().trim(),
+            mountRev = values["mountRev"]?.toString()?.trim()?.toIntOrNull() ?: 0,
+        )
         CourtEnrollment.validate(candidate)?.let { return it }
         credentials.save(candidate)
         logger.info(TAG, "Enrolled $candidate.")
@@ -378,47 +373,17 @@ class CourtRuntime private constructor(context: Context) {
 
     /** Re-enqueues sidecar segments missing from the queue (process died between the two writes). */
     private fun recoverSidecars() {
-        val sessionsDir = File(storage.root, "sessions")
-        val dirs = sessionsDir.listFiles()?.filter { it.isDirectory }.orEmpty()
         var recovered = 0
-        for (dir in dirs) {
-            val sidecar = File(dir, "segments.jsonl")
-            if (!sidecar.isFile) {
-                continue
-            }
-            sidecar.forEachLine { line ->
-                val segment = parseSidecarLine(dir, line) ?: return@forEachLine
-                if (queue.item(UploadItem.keyOf(segment.sessionId, segment.tier, segment.seq)) == null) {
-                    uploader.enqueue(segment)
-                    recovered += 1
-                }
+        for (segment in SegmentSidecarReader(storage, logger).readAll()) {
+            if (queue.item(UploadItem.keyOf(segment.sessionId, segment.tier, segment.seq)) == null) {
+                uploader.enqueue(segment)
+                recovered += 1
             }
         }
         if (recovered > 0) {
             logger.info(TAG, "Recovered $recovered segment(s) from sidecars.")
         }
     }
-
-    private fun parseSidecarLine(sessionDir: File, line: String): SegmentRecord? =
-        try {
-            val json = JSONObject(line)
-            SegmentRecord(
-                sessionId = json.getString("sessionId"),
-                slot = json.getString("slot"),
-                tier = json.getString("tier"),
-                seq = json.getLong("seq"),
-                file = File(sessionDir, json.getString("file")),
-                bytes = json.getLong("bytes"),
-                sha256 = json.getString("sha256"),
-                mediaStartServerMs = json.getLong("mediaStartServerMs"),
-                durationMs = json.getLong("durationMs"),
-                frames = json.optInt("frames"),
-                offsetMs = json.optLong("offsetMs"),
-                rttMs = json.optLong("rttMs"),
-            )
-        } catch (error: Exception) {
-            null
-        }
 
     /** Stores the upload grant before the first segment can be enqueued (both on the upload thread). */
     private fun rememberGrant(command: RecordStart, restart: Boolean) {
@@ -534,9 +499,8 @@ class CourtRuntime private constructor(context: Context) {
         @Volatile
         private var instance: CourtRuntime? = null
 
-        fun get(context: Context): CourtRuntime =
-            instance ?: synchronized(this) {
-                instance ?: CourtRuntime(context).also { instance = it }
-            }
+        fun get(context: Context): CourtRuntime = instance ?: synchronized(this) {
+            instance ?: CourtRuntime(context).also { instance = it }
+        }
     }
 }

@@ -23,6 +23,7 @@ import android.util.Base64
 import android.util.Log
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.security.KeyStore
 import java.text.SimpleDateFormat
@@ -65,24 +66,32 @@ object RootShell {
     data class Result(val exitCode: Int, val output: String)
 
     fun run(command: String, timeoutMs: Long = 8_000): Result? {
-        val process = try {
-            Runtime.getRuntime().exec(arrayOf("su", "-c", command))
-        } catch (error: Exception) {
-            return null
-        }
+        val process = start(command) ?: return null
         val deadline = System.currentTimeMillis() + timeoutMs
         while (true) {
-            try {
-                val exit = process.exitValue()
-                return Result(exit, readAll(process.inputStream))
-            } catch (running: IllegalThreadStateException) {
-                if (System.currentTimeMillis() >= deadline) {
-                    process.destroy()
-                    return null
-                }
-                Thread.sleep(POLL_MS)
+            exitCodeOrNull(process)?.let { return Result(it, readAll(process.inputStream)) }
+            if (System.currentTimeMillis() >= deadline) {
+                break
             }
+            Thread.sleep(POLL_MS)
         }
+        process.destroy()
+        return null
+    }
+
+    private fun start(command: String): Process? = try {
+        Runtime.getRuntime().exec(arrayOf("su", "-c", command))
+    } catch (ignored: IOException) {
+        null
+    } catch (ignored: SecurityException) {
+        null
+    }
+
+    /** null while [process] is still running. */
+    private fun exitCodeOrNull(process: Process): Int? = try {
+        process.exitValue()
+    } catch (ignored: IllegalThreadStateException) {
+        null
     }
 
     fun isRooted(): Boolean = run("id")?.let { it.exitCode == 0 && it.output.contains("uid=0") } == true
@@ -95,7 +104,7 @@ object RootShell {
     private fun readAll(stream: InputStream): String {
         val out = ByteArrayOutputStream()
         stream.use { input ->
-            val buffer = ByteArray(4_096)
+            val buffer = ByteArray(READ_BUFFER_BYTES)
             while (true) {
                 val read = input.read(buffer)
                 if (read < 0) {
@@ -108,46 +117,7 @@ object RootShell {
     }
 
     private const val POLL_MS = 50L
-}
-
-/**
- * Cached root status: [rooted] never blocks. A negative answer is re-checked every [retryMs]
- * (the Magisk prompt may be approved later); [onChange] fires when the answer flips.
- */
-class RootStatus(
-    private val logger: CourtLogger,
-    private val retryMs: Long = 60_000,
-    private val probe: () -> Boolean = RootShell::isRooted,
-) {
-    @Volatile
-    var rooted: Boolean = false
-        private set
-
-    @Volatile
-    var checkedAtMs: Long = 0
-        private set
-
-    /** Blocking; call off the main thread. */
-    fun check(onChange: (Boolean) -> Unit = {}): Boolean {
-        val now = System.currentTimeMillis()
-        if (checkedAtMs > 0 && (rooted || now - checkedAtMs < retryMs)) {
-            return rooted
-        }
-        val result = probe()
-        checkedAtMs = now
-        if (result != rooted || checkedAtMs == now && !result) {
-            logger.info(TAG, "Root available: $result.")
-        }
-        if (result != rooted) {
-            rooted = result
-            onChange(result)
-        }
-        return result
-    }
-
-    private companion object {
-        const val TAG = "CourtRoot"
-    }
+    private const val READ_BUFFER_BYTES = 4_096
 }
 
 /** Battery, thermal, storage and Wi-Fi for C1 `state`; caps for `hello`. */
@@ -158,11 +128,11 @@ class DeviceStatusProbe(private val context: Context) {
         val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
             ?: return Battery(-1, false, 0.0)
         val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-        val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100)
+        val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, PERCENT)
         val plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)
         val temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
-        val pct = if (level >= 0 && scale > 0) level * 100 / scale else -1
-        return Battery(pct, plugged != 0, temp / 10.0)
+        val pct = if (level >= 0 && scale > 0) level * PERCENT / scale else -1
+        return Battery(pct, plugged != 0, temp / TENTHS_PER_DEGREE)
     }
 
     /** PowerManager thermal status (0 = none … 6 = shutdown); 0 below API 29. */
@@ -181,7 +151,7 @@ class DeviceStatusProbe(private val context: Context) {
         val wifi = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager ?: return 0
         return try {
             wifi.connectionInfo?.rssi ?: 0
-        } catch (error: SecurityException) {
+        } catch (ignored: SecurityException) {
             0
         }
     }
@@ -193,12 +163,12 @@ class DeviceStatusProbe(private val context: Context) {
             { Settings.Global.getInt(resolver, SAMSUNG_PROTECT_BATTERY, 0) },
             { Settings.System.getInt(resolver, SAMSUNG_PROTECT_BATTERY, 0) },
         ).any { read -> runCatching(read).getOrDefault(0) == 1 }
-        return if (protect) 85 else 100
+        return if (protect) SAMSUNG_PROTECT_CAP_PCT else PERCENT
     }
 
     fun caps(): CourtCaps {
         var maxRes = "720p"
-        var fps = listOf(30)
+        var fps = listOf(BASE_FPS)
         var torch = false
         try {
             val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -207,14 +177,10 @@ class DeviceStatusProbe(private val context: Context) {
                 ?.getOutputSizes(MediaCodec::class.java)
                 .orEmpty()
             val widest = sizes.maxOfOrNull { it.width } ?: 0
-            maxRes = when {
-                widest >= 3_840 -> "2160p"
-                widest >= 1_920 -> "1080p"
-                else -> "720p"
-            }
+            maxRes = RecordProfile.resFor(widest)
             val ranges = characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES).orEmpty()
-            if (ranges.any { it.upper >= 60 }) {
-                fps = listOf(30, 60)
+            if (ranges.any { it.upper >= HIGH_FPS }) {
+                fps = listOf(BASE_FPS, HIGH_FPS)
             }
             torch = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
         } catch (error: Exception) {
@@ -230,6 +196,13 @@ class DeviceStatusProbe(private val context: Context) {
     private companion object {
         const val TAG = "CourtProbe"
         const val SAMSUNG_PROTECT_BATTERY = "protect_battery"
+
+        /** Samsung "Protect battery" stops charging at 85 %. */
+        const val SAMSUNG_PROTECT_CAP_PCT = 85
+        const val PERCENT = 100
+        const val TENTHS_PER_DEGREE = 10.0
+        const val BASE_FPS = 30
+        const val HIGH_FPS = 60
     }
 }
 
@@ -277,7 +250,7 @@ class KeystoreCredentialStore(context: Context, private val logger: CourtLogger)
             KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .setKeySize(256)
+                .setKeySize(AES_KEY_BITS)
                 .build(),
         )
         return generator.generateKey()
@@ -289,6 +262,7 @@ class KeystoreCredentialStore(context: Context, private val logger: CourtLogger)
         const val KEY_IV = "iv"
         const val KEY_CIPHERTEXT = "ciphertext"
         const val KEY_ALIAS = "hydracam_court_enrollment"
+        const val AES_KEY_BITS = 256
         const val ANDROID_KEYSTORE = "AndroidKeyStore"
         const val TRANSFORMATION = "AES/GCM/NoPadding"
         const val GCM_TAG_BITS = 128

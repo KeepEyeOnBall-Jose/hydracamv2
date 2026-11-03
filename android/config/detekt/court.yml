@@ -1,0 +1,35 @@
+# detekt for the court (K1) runtime: defaults plus these overrides. Every override says why.
+
+complexity:
+  TooManyFunctions:
+    # Stores and ports have one function per C1/C2 operation; splitting them would scatter the contract.
+    thresholdInFiles: 30
+    thresholdInClasses: 30
+    thresholdInInterfaces: 20
+    ignorePrivate: true
+  LongParameterList:
+    # Constructor parameters with defaults are test seams (clocks, sleepers, fakes), not real inputs.
+    ignoreDefaultParameters: true
+
+exceptions:
+  TooGenericExceptionCaught:
+    # Android framework boundaries (Camera2, MediaCodec, Keystore, services, receivers) throw
+    # undocumented runtime exceptions; there the catch keeps the service alive and logs the cause.
+    excludes:
+      - '**/CourtActivity.kt'
+      - '**/CourtAndroid.kt'
+      - '**/CourtCameraRecorder.kt'
+      - '**/CourtCameraService.kt'
+      - '**/CourtReceivers.kt'
+      - '**/CourtRuntime.kt'
+
+style:
+  MagicNumber:
+    # Tests use literal fixtures on purpose. MpegTsMuxer is a bit-for-bit ISO 13818-1 layout.
+    excludes: ['**/testCourt/**', '**/MpegTsMuxer.kt']
+    ignorePropertyDeclaration: true
+    # 1000 and 1000000 are s/ms/us/ns conversions.
+    ignoreNumbers: ['-1', '0', '1', '2', '1000', '1000000']
+  ReturnCount:
+    # Early returns on invalid input are how edge validation reads best.
+    excludeGuardClauses: true

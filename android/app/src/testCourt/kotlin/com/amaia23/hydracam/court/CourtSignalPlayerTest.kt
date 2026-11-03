@@ -47,16 +47,15 @@ class CourtSignalPlayerTest {
         logFile = File(temp.root, "signals.jsonl")
     }
 
-    private fun player(torch: TorchControl) =
-        CourtSignalPlayer(
-            scheduler = scheduler,
-            clockEstimator = ClockOffsetEstimator(),
-            torch = torch,
-            tones = tones,
-            log = JsonlAppender(logFile),
-            slot = { "A" },
-            clock = clock,
-        )
+    private fun player(torch: TorchControl) = CourtSignalPlayer(
+        scheduler = scheduler,
+        clockEstimator = ClockOffsetEstimator(),
+        torch = torch,
+        tones = tones,
+        log = JsonlAppender(logFile),
+        slot = { "A" },
+        clock = clock,
+    )
 
     /** Lets every scheduled step run, then reads the log. */
     private fun drainLog(): List<JSONObject> {

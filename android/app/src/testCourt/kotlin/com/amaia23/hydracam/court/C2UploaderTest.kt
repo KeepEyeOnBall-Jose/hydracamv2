@@ -66,16 +66,19 @@ class C2UploaderTest {
     private fun json(code: Int, body: JSONObject) =
         MockResponse().setResponseCode(code).setHeader("Content-Type", "application/json").setBody(body.toString())
 
-    private fun initCreated(uploadId: String, partCount: Int) =
-        json(
-            201,
-            JSONObject()
-                .put("uploadId", uploadId)
-                .put(
-                    "parts",
-                    JSONArray((1..partCount).map { JSONObject().put("n", it).put("url", server.url("/part/$it").toString()) }),
+    private fun initCreated(uploadId: String, partCount: Int) = json(
+        201,
+        JSONObject()
+            .put("uploadId", uploadId)
+            .put(
+                "parts",
+                JSONArray(
+                    (1..partCount).map {
+                        JSONObject().put("n", it).put("url", server.url("/part/$it").toString())
+                    },
                 ),
-        )
+            ),
+    )
 
     private fun partOk(etag: String) = MockResponse().setResponseCode(200).setHeader("ETag", etag)
 
@@ -222,7 +225,12 @@ class C2UploaderTest {
         assertEquals("/part/3", third.path)
         assertArrayEquals(bytes.copyOfRange(20, 25), third.body.readByteArray())
         val parts = JSONObject(take().body.readUtf8()).getJSONArray("parts")
-        assertEquals(listOf("e1", "e2", "e3"), (0 until parts.length()).map { parts.getJSONObject(it).getString("etag") })
+        assertEquals(
+            listOf("e1", "e2", "e3"),
+            (0 until parts.length()).map {
+                parts.getJSONObject(it).getString("etag")
+            },
+        )
         assertEquals(UploadState.VERIFYING, item(C1.TIER_PROXY, 0).uploadState)
     }
 

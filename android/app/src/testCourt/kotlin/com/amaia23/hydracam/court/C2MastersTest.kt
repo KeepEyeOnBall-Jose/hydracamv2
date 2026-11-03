@@ -1,8 +1,8 @@
 package com.amaia23.hydracam.court
 
 import okhttp3.OkHttpClient
-import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.Dispatcher
+import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import okhttp3.mockwebserver.SocketPolicy
@@ -68,7 +68,9 @@ class C2MastersTest {
 
     private fun parts(count: Int): JSONObject {
         val parts = JSONArray()
-        (1..count).forEach { parts.put(JSONObject().put("n", it).put("url", server.url("/part/$it").toString())) }
+        for (n in 1..count) {
+            parts.put(JSONObject().put("n", n).put("url", server.url("/part/$n").toString()))
+        }
         return JSONObject().put("uploadId", "u1").put("parts", parts)
     }
 
@@ -189,7 +191,10 @@ class C2MastersTest {
             upload.requestMasters("cmd-2", request(grant = testGrant("s2", listOf(C1.TIER_MASTER), 4_000_000_000L)))
         }
         expectProtocolError {
-            upload.requestMasters("cmd-3", request(grant = testGrant("s1", listOf(C1.TIER_MASTER), clock.now / 1_000 - 1)))
+            upload.requestMasters(
+                "cmd-3",
+                request(grant = testGrant("s1", listOf(C1.TIER_MASTER), clock.now / 1_000 - 1)),
+            )
         }
         assertNull(store.masterRequest("cmd-1"))
     }
@@ -371,7 +376,10 @@ class C2MastersTest {
         startSession()
         var nowNs = 0L
         var sleptNs = 0L
-        val throttle = UploadThrottle(maxKbps = 1_000, nanoClock = { nowNs }, sleeper = { nowNs += it; sleptNs += it })
+        val throttle = UploadThrottle(maxKbps = 1_000, nanoClock = { nowNs }, sleeper = {
+            nowNs += it
+            sleptNs += it
+        })
         val upload = uploader(throttle)
         val size = 4 * 64 * 1024
         upload.enqueue(segment(C1.TIER_PROXY, 0, size = size))
@@ -379,7 +387,10 @@ class C2MastersTest {
             json(
                 201,
                 JSONObject().put("uploadId", "u1")
-                    .put("parts", JSONArray().put(JSONObject().put("n", 1).put("url", server.url("/part/1").toString()))),
+                    .put(
+                        "parts",
+                        JSONArray().put(JSONObject().put("n", 1).put("url", server.url("/part/1").toString())),
+                    ),
             ),
         )
         server.enqueue(MockResponse().setResponseCode(200).setHeader("ETag", "e1"))
@@ -408,13 +419,12 @@ class C2MastersTest {
         upload.enqueue(segment(C1.TIER_MASTER, 0, size = 4 * 64 * 1024))
         var inits = 0
         server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse =
-                when (request.path) {
-                    "/v2/uploads" ->
-                        if (++inits == 1) json(201, parts(1)) else json(200, JSONObject().put("state", "verified"))
-                    "/part/1" -> MockResponse().setResponseCode(200).setHeader("ETag", "e1")
-                    else -> json(200, JSONObject())
-                }
+            override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
+                "/v2/uploads" ->
+                    if (++inits == 1) json(201, parts(1)) else json(200, JSONObject().put("state", "verified"))
+                "/part/1" -> MockResponse().setResponseCode(200).setHeader("ETag", "e1")
+                else -> json(200, JSONObject())
+            }
         }
 
         assertTrue(upload.runOnce())
@@ -448,14 +458,13 @@ class C2MastersTest {
         val upload = uploader(partSizeBytes = 10)
         upload.enqueue(segment(C1.TIER_MASTER, 0, size = 25))
         server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse =
-                if (request.path == "/v2/uploads") {
-                    json(201, parts(3))
-                } else {
-                    // record.start lands while part 1 is answered.
-                    allowed.set(false)
-                    MockResponse().setResponseCode(200).setHeader("ETag", "e1")
-                }
+            override fun dispatch(request: RecordedRequest): MockResponse = if (request.path == "/v2/uploads") {
+                json(201, parts(3))
+            } else {
+                // record.start lands while part 1 is answered.
+                allowed.set(false)
+                MockResponse().setResponseCode(200).setHeader("ETag", "e1")
+            }
         }
 
         assertTrue(upload.runOnce())

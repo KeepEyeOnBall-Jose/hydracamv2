@@ -39,7 +39,7 @@ class C2Uploader(
     private val partSizeBytes: Long = DEFAULT_PART_SIZE_BYTES,
     private val statusPollMs: Long = 2_000,
     private val baseBackoffMs: Long = 2_000,
-    private val maxBackoffMs: Long = 5 * 60_000L,
+    private val maxBackoffMs: Long = 300_000L,
     private val throttle: UploadThrottle = UploadThrottle(maxKbps = 0),
     /** Problems K2 should see in `state.lastError` (conflicts, rejected master manifests). */
     private val onAlert: (String) -> Unit = {},
@@ -57,16 +57,13 @@ class C2Uploader(
     fun runOnce(includeMasters: Boolean = mastersAllowed()): Boolean {
         val now = clock.nowMs()
         val request = store.dueMasterRequest(now)
-        if (request != null) {
-            sendMasterManifest(request, now)
-            return true
+        val item = if (request == null) store.nextDue(now, includeMasters) else null
+        when {
+            request != null -> sendMasterManifest(request, now)
+            item != null -> step(item, now)
+            else -> return sendDueManifest(now)
         }
-        val item = store.nextDue(now, includeMasters)
-        if (item != null) {
-            step(item, now)
-            return true
-        }
-        return sendDueManifest(now)
+        return true
     }
 
     /**
@@ -86,42 +83,48 @@ class C2Uploader(
     fun requestMasters(commandId: String, request: MastersUpload): Int {
         val now = clock.nowMs()
         val claims = UploadGrantClaims.decode(request.uploadGrant)
-        if (claims != null && claims.tiers.isNotEmpty() && C1.TIER_MASTER !in claims.tiers) {
-            throw C1ProtocolException("uploadGrant does not list master.")
-        }
-        if (claims?.sessionId != null && claims.sessionId != request.sessionId) {
-            throw C1ProtocolException("uploadGrant is for another session.")
-        }
         val grantExpMs = claims?.expMs?.takeIf { it > 0 } ?: Long.MAX_VALUE
-        if (now >= grantExpMs) {
-            throw C1ProtocolException("uploadGrant expired.")
-        }
+        masterGrantProblem(claims, request.sessionId, grantExpMs, now)?.let { throw C1ProtocolException(it) }
         store.masterRequest(commandId)?.let { return JSONArray(it.seqsJson).length() }
         val held = store.items(request.sessionId).filter {
             it.tier == C1.TIER_MASTER && it.isHeldOnPhone() && request.covers(it.mediaStartServerMs, it.durationMs)
         }
-        if (held.isEmpty()) {
-            logger.info(TAG, "masters.upload for ${request.sessionId}: no masters held in range.")
-            return 0
-        }
-        val slot = held.first().slot
-        if (claims?.slot != null && claims.slot != slot) {
+        val slot = held.firstOrNull()?.slot
+        if (slot != null && claims?.slot != null && claims.slot != slot) {
             throw C1ProtocolException("uploadGrant is for slot ${claims.slot}, not $slot.")
         }
-        store.upsertMasterRequest(
-            MasterRequest(
-                id = commandId,
-                sessionId = request.sessionId,
-                slot = slot,
-                uploadGrant = request.uploadGrant,
-                ingestUrl = request.ingestUrl,
-                grantExpMs = grantExpMs,
-                seqsJson = JSONArray(held.map { it.seq }).toString(),
-                createdAtMs = now,
-            ),
-        )
-        logger.info(TAG, "masters.upload for ${request.sessionId}: ${held.size} master(s) to list.")
+        if (slot == null) {
+            logger.info(TAG, "masters.upload for ${request.sessionId}: no masters held in range.")
+        } else {
+            store.upsertMasterRequest(
+                MasterRequest(
+                    id = commandId,
+                    sessionId = request.sessionId,
+                    slot = slot,
+                    uploadGrant = request.uploadGrant,
+                    ingestUrl = request.ingestUrl,
+                    grantExpMs = grantExpMs,
+                    seqsJson = JSONArray(held.map { it.seq }).toString(),
+                    createdAtMs = now,
+                ),
+            )
+            logger.info(TAG, "masters.upload for ${request.sessionId}: ${held.size} master(s) to list.")
+        }
         return held.size
+    }
+
+    /** Why a grant with [claims] cannot cover a `masters.upload` for [sessionId], or null when it can. */
+    private fun masterGrantProblem(
+        claims: UploadGrantClaims?,
+        sessionId: String,
+        grantExpMs: Long,
+        now: Long,
+    ): String? = when {
+        claims != null && claims.tiers.isNotEmpty() && C1.TIER_MASTER !in claims.tiers ->
+            "uploadGrant does not list master."
+        claims?.sessionId != null && claims.sessionId != sessionId -> "uploadGrant is for another session."
+        now >= grantExpMs -> "uploadGrant expired."
+        else -> null
     }
 
     /** keepDays: deletes HELD or FAILED masters older than [keepDays]. Returns how many were deleted. */
@@ -130,15 +133,12 @@ class C2Uploader(
         var pruned = 0
         for (item in store.idleMastersBefore(cutoff)) {
             val file = File(item.filePath)
-            if (!file.isFile) {
-                continue
-            }
-            if (!file.delete()) {
+            if (file.isFile && file.delete()) {
+                finish(item, UploadState.FAILED, KEEP_DAYS_EXPIRED)
+                pruned += 1
+            } else if (file.isFile) {
                 logger.warn(TAG, "Could not delete expired master ${item.key}.")
-                continue
             }
-            finish(item, UploadState.FAILED, KEEP_DAYS_EXPIRED)
-            pruned += 1
         }
         if (pruned > 0) {
             logger.info(TAG, "Deleted $pruned master(s) older than $keepDays day(s).")
@@ -167,26 +167,8 @@ class C2Uploader(
     }
 
     private fun step(item: UploadItem, now: Long) {
-        val session = store.session(item.sessionId)
-        if (session == null) {
-            finish(item, UploadState.FAILED, "no_grant")
-            return
-        }
-        val grants = grantsFor(item.tier, session)
-        if (grants.isEmpty()) {
-            finish(item, UploadState.HELD, null)
-            return
-        }
-        val grant = grants.firstOrNull { now < it.expMs }
-        if (grant == null) {
-            finish(item, UploadState.FAILED, "grant_expired")
-            return
-        }
+        val grant = readyGrant(item, now) ?: return
         val file = File(item.filePath)
-        if (item.uploadState != UploadState.VERIFYING && !file.isFile) {
-            finish(item, UploadState.FAILED, "file_missing")
-            return
-        }
         try {
             when (item.uploadState) {
                 UploadState.PENDING -> initUpload(item, grant, file)
@@ -198,12 +180,29 @@ class C2Uploader(
             if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
                 // Preempted, not failed: the stored item keeps its parts and its attempt count.
                 logger.info(TAG, "${item.key} paused for recording.")
-                return
+            } else {
+                retryLater(item, error.message ?: error.javaClass.simpleName)
             }
-            retryLater(item, error.message ?: error.javaClass.simpleName)
-        } catch (error: JSONException) {
+        } catch (ignored: JSONException) {
             retryLater(item, "bad_response")
         }
+    }
+
+    /** The grant [item] uploads under now, or null after settling an item that cannot upload. */
+    private fun readyGrant(item: UploadItem, now: Long): Grant? {
+        val session = store.session(item.sessionId)
+        val grants = session?.let { grantsFor(item.tier, it) }.orEmpty()
+        val grant = grants.firstOrNull { now < it.expMs }
+        val problem: Pair<UploadState, String?>? = when {
+            session == null -> UploadState.FAILED to "no_grant"
+            grants.isEmpty() -> UploadState.HELD to null
+            grant == null -> UploadState.FAILED to "grant_expired"
+            item.uploadState != UploadState.VERIFYING && !File(item.filePath).isFile ->
+                UploadState.FAILED to "file_missing"
+            else -> null
+        }
+        problem?.let { (state, error) -> finish(item, state, error) }
+        return if (problem == null) grant else null
     }
 
     /** Grants that may upload [tier], preferred first: a `masters.upload` grant, then `record.start`'s. */
@@ -238,7 +237,7 @@ class C2Uploader(
         http.newCall(request).execute().use { response ->
             val json = response.jsonBody()
             when (response.code) {
-                201 -> {
+                HttpStatus.CREATED -> {
                     val parts = json.getJSONArray("parts")
                     val started = item.copy(
                         state = UploadState.UPLOADING.name,
@@ -251,9 +250,10 @@ class C2Uploader(
                     store.update(started)
                     uploadParts(started, grant, file)
                 }
-                200 -> verified(item.copy(uploadId = json.optStringOrNull("uploadId")), file)
-                409 -> initConflict(item, json.optStringOrNull("reason"))
-                401, 403 -> finish(item, UploadState.FAILED, "grant_rejected_${response.code}")
+                HttpStatus.OK -> verified(item.copy(uploadId = json.optStringOrNull("uploadId")), file)
+                HttpStatus.CONFLICT -> initConflict(item, json.optStringOrNull("reason"))
+                HttpStatus.UNAUTHORIZED, HttpStatus.FORBIDDEN ->
+                    finish(item, UploadState.FAILED, "grant_rejected_${response.code}")
                 else -> retryLater(item, "init_http_${response.code}")
             }
         }
@@ -278,51 +278,58 @@ class C2Uploader(
         for (index in 0 until parts.length()) {
             val part = parts.getJSONObject(index)
             val number = part.getInt("n")
-            if (etags.has(number.toString())) {
-                continue
-            }
-            if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
-                logger.info(TAG, "${item.key} paused for recording after part ${number - 1}.")
-                return
-            }
-            val offset = (number - 1) * partSizeBytes
-            val length = min(partSizeBytes, file.length() - offset)
-            if (length <= 0) {
-                retryLater(current, "part_${number}_out_of_range")
-                return
-            }
-            val request = Request.Builder()
-                .url(part.getString("url"))
-                .put(FileRangeBody(file, offset, length, CONTENT_TYPE_TS.toMediaType(), throttle))
-                .build()
-            val call = http.newCall(request)
-            // A low maxKbps stretches a part beyond the client's call timeout.
-            call.timeout().timeout(PART_TIMEOUT_BASE_NS + 2 * throttle.expectedNanos(length), TimeUnit.NANOSECONDS)
-            executePart(item, call).use { response ->
-                when {
-                    response.isSuccessful -> {
-                        val etag = response.header("ETag")
-                            ?: run {
-                                retryLater(current, "part_${number}_no_etag")
-                                return
-                            }
-                        etags.put(number.toString(), etag)
-                        current = current.copy(etagsJson = etags.toString(), updatedAtMs = clock.nowMs())
-                        store.update(current)
-                    }
-                    response.code == 403 -> {
-                        // Presigned URL expired: start over with a fresh init.
-                        restart(current, "part_url_expired")
-                        return
-                    }
-                    else -> {
-                        retryLater(current, "part_${number}_http_${response.code}")
-                        return
-                    }
-                }
+            if (!etags.has(number.toString())) {
+                current = uploadPart(current, file, number, part.getString("url"), etags) ?: return
             }
         }
         complete(current, grant, parts, etags)
+    }
+
+    /** PUTs part [number]; returns the item with its ETag recorded, or null once the item is settled for now. */
+    private fun uploadPart(item: UploadItem, file: File, number: Int, url: String, etags: JSONObject): UploadItem? {
+        if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
+            logger.info(TAG, "${item.key} paused for recording after part ${number - 1}.")
+            return null
+        }
+        val offset = (number - 1) * partSizeBytes
+        val length = min(partSizeBytes, file.length() - offset)
+        if (length <= 0) {
+            retryLater(item, "part_${number}_out_of_range")
+            return null
+        }
+        return executePart(item, partCall(file, url, offset, length)).use { response ->
+            val etag = response.header("ETag")
+            when {
+                response.isSuccessful && etag != null -> {
+                    etags.put(number.toString(), etag)
+                    item.copy(etagsJson = etags.toString(), updatedAtMs = clock.nowMs()).also { store.update(it) }
+                }
+                response.isSuccessful -> {
+                    retryLater(item, "part_${number}_no_etag")
+                    null
+                }
+                response.code == HttpStatus.FORBIDDEN -> {
+                    // Presigned URL expired: start over with a fresh init.
+                    restart(item, "part_url_expired")
+                    null
+                }
+                else -> {
+                    retryLater(item, "part_${number}_http_${response.code}")
+                    null
+                }
+            }
+        }
+    }
+
+    private fun partCall(file: File, url: String, offset: Long, length: Long): Call {
+        val request = Request.Builder()
+            .url(url)
+            .put(FileRangeBody(file, offset, length, CONTENT_TYPE_TS.toMediaType(), throttle))
+            .build()
+        return http.newCall(request).apply {
+            // A low maxKbps stretches a part beyond the client's call timeout.
+            timeout().timeout(PART_TIMEOUT_BASE_NS + 2 * throttle.expectedNanos(length), TimeUnit.NANOSECONDS)
+        }
     }
 
     /** Registers a master part for [preemptMasters]; re-checks the gate to close the race with it. */
@@ -362,7 +369,7 @@ class C2Uploader(
                         updatedAtMs = clock.nowMs(),
                     ),
                 )
-                response.code == 404 -> restart(item, "upload_unknown")
+                response.code == HttpStatus.NOT_FOUND -> restart(item, "upload_unknown")
                 else -> retryLater(item, "complete_http_${response.code}")
             }
         }
@@ -375,7 +382,7 @@ class C2Uploader(
             .get()
             .build()
         http.newCall(request).execute().use { response ->
-            if (response.code == 404) {
+            if (response.code == HttpStatus.NOT_FOUND) {
                 restart(item, "upload_unknown")
                 return
             }
@@ -387,30 +394,29 @@ class C2Uploader(
             when (json.optStringOrNull("state")) {
                 "verified" -> verified(item, file)
                 "failed" -> restart(item, "verify_failed: ${json.optStringOrNull("reason") ?: "unknown"}")
-                else -> store.update(item.copy(nextAttemptAtMs = clock.nowMs() + statusPollMs, updatedAtMs = clock.nowMs()))
+                else -> store.update(
+                    item.copy(nextAttemptAtMs = clock.nowMs() + statusPollMs, updatedAtMs = clock.nowMs()),
+                )
             }
         }
     }
 
     private fun sendDueManifest(now: Long): Boolean {
-        for (session in store.sessions()) {
-            if (session.stoppedAtMs <= 0 ||
-                session.manifestState == UploadSession.MANIFEST_COMPLETE ||
-                session.nextManifestAtMs > now ||
-                now >= session.grantExpMs
-            ) {
-                continue
-            }
-            val items = store.items(session.sessionId)
+        val (session, items) = store.sessions().asSequence()
+            .filter { manifestDue(it, now) }
+            .map { it to store.items(it.sessionId) }
             // Requested masters upload under their own manifest; they never delay this one.
-            if (items.any { it.uploadState.active && it.tier in session.tiers }) {
-                continue
-            }
-            sendManifest(session, items)
-            return true
-        }
-        return false
+            .firstOrNull { (session, items) -> items.none { it.uploadState.active && it.tier in session.tiers } }
+            ?: return false
+        sendManifest(session, items)
+        return true
     }
+
+    /** Stopped, not yet complete, past its retry time, and still under its grant. */
+    private fun manifestDue(session: UploadSession, now: Long): Boolean = session.stoppedAtMs > 0 &&
+        session.manifestState != UploadSession.MANIFEST_COMPLETE &&
+        session.nextManifestAtMs <= now &&
+        now < session.grantExpMs
 
     private fun sendManifest(session: UploadSession, items: List<UploadItem>) {
         val segments = JSONArray()
@@ -422,7 +428,10 @@ class C2Uploader(
         }
         val body = JSONObject()
             .put("slot", session.slot)
-            .put("lastSeq", JSONObject().put(C1.TIER_PROXY, session.lastSeqProxy).put(C1.TIER_MASTER, session.lastSeqMaster))
+            .put(
+                "lastSeq",
+                JSONObject().put(C1.TIER_PROXY, session.lastSeqProxy).put(C1.TIER_MASTER, session.lastSeqMaster),
+            )
             .put("segments", segments)
         val request = Request.Builder()
             .url(session.ingestUrl.trimEnd('/') + "/v2/sessions/${session.sessionId}/manifest")
@@ -431,36 +440,43 @@ class C2Uploader(
             .build()
         try {
             http.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
+                if (response.isSuccessful) {
+                    onManifestAnswer(session, response.jsonBody())
+                } else {
                     manifestRetry(session, null, "manifest_http_${response.code}")
-                    return
                 }
-                val json = response.jsonBody()
-                val state = json.optStringOrNull("state")
-                if (state == UploadSession.MANIFEST_COMPLETE) {
-                    logger.info(TAG, "Manifest complete for ${session.sessionId}.")
-                    store.upsertSession(session.copy(manifestState = state, manifestAttempts = session.manifestAttempts + 1))
-                    return
-                }
-                val requeued = requeueMissing(session, json.optJSONArray("missing") ?: JSONArray())
-                logger.info(TAG, "Manifest partial for ${session.sessionId}; re-queued $requeued segment(s).")
-                if (requeued == 0) {
-                    // Nothing left on the phone can fill the gap; re-sending would only loop until the grant expires.
-                    store.upsertSession(
-                        session.copy(
-                            manifestState = UploadSession.MANIFEST_PARTIAL,
-                            manifestAttempts = session.manifestAttempts + 1,
-                            nextManifestAtMs = Long.MAX_VALUE,
-                        ),
-                    )
-                    return
-                }
-                manifestRetry(session, UploadSession.MANIFEST_PARTIAL, null)
             }
         } catch (error: IOException) {
             manifestRetry(session, null, error.message ?: "manifest_io")
-        } catch (error: JSONException) {
+        } catch (ignored: JSONException) {
             manifestRetry(session, null, "manifest_bad_response")
+        }
+    }
+
+    private fun onManifestAnswer(session: UploadSession, json: JSONObject) {
+        if (json.optStringOrNull("state") == UploadSession.MANIFEST_COMPLETE) {
+            logger.info(TAG, "Manifest complete for ${session.sessionId}.")
+            store.upsertSession(
+                session.copy(
+                    manifestState = UploadSession.MANIFEST_COMPLETE,
+                    manifestAttempts = session.manifestAttempts + 1,
+                ),
+            )
+            return
+        }
+        val requeued = requeueMissing(session, json.optJSONArray("missing") ?: JSONArray())
+        logger.info(TAG, "Manifest partial for ${session.sessionId}; re-queued $requeued segment(s).")
+        if (requeued == 0) {
+            // Nothing left on the phone can fill the gap; re-sending would only loop until the grant expires.
+            store.upsertSession(
+                session.copy(
+                    manifestState = UploadSession.MANIFEST_PARTIAL,
+                    manifestAttempts = session.manifestAttempts + 1,
+                    nextManifestAtMs = Long.MAX_VALUE,
+                ),
+            )
+        } else {
+            manifestRetry(session, UploadSession.MANIFEST_PARTIAL, null)
         }
     }
 
@@ -490,7 +506,7 @@ class C2Uploader(
             http.newCall(call).execute().use { response ->
                 when {
                     response.isSuccessful -> acceptMasters(request, held)
-                    response.code in 400..499 && response.code != 408 && response.code != 429 ->
+                    HttpStatus.isPermanentClientError(response.code) ->
                         settleRequest(request, MasterRequest.STATE_REJECTED, "master_manifest_http_${response.code}")
                     else -> retryRequest(request, "master_manifest_http_${response.code}")
                 }
@@ -567,7 +583,15 @@ class C2Uploader(
             val key = UploadItem.keyOf(session.sessionId, entry.getString("tier"), entry.getLong("seq"))
             val item = store.item(key) ?: continue
             if (File(item.filePath).isFile && item.uploadState != UploadState.HELD) {
-                store.update(item.copy(state = UploadState.PENDING.name, uploadId = null, partsJson = null, etagsJson = null, nextAttemptAtMs = 0))
+                store.update(
+                    item.copy(
+                        state = UploadState.PENDING.name,
+                        uploadId = null,
+                        partsJson = null,
+                        etagsJson = null,
+                        nextAttemptAtMs = 0,
+                    ),
+                )
                 count += 1
             } else {
                 logger.warn(TAG, "K3 reports $key missing but the file is gone (state ${item.state}).")
@@ -635,7 +659,8 @@ class C2Uploader(
         store.update(item.copy(state = state.name, lastError = error, updatedAtMs = clock.nowMs()))
     }
 
-    private fun backoffMs(attempts: Int): Long = min(maxBackoffMs, baseBackoffMs shl min(attempts - 1, 16))
+    private fun backoffMs(attempts: Int): Long =
+        min(maxBackoffMs, baseBackoffMs shl min(attempts - 1, MAX_BACKOFF_SHIFT))
 
     /** On the phone and not yet accepted by K3 under different bytes. */
     private fun UploadItem.isHeldOnPhone(): Boolean =
@@ -689,6 +714,7 @@ class C2Uploader(
         private const val DAY_MS = 24 * 60 * 60 * 1000L
         private const val PART_TIMEOUT_BASE_NS = 120_000_000_000L
         private const val COPY_BUFFER_BYTES = 64 * 1024
+        private const val MAX_BACKOFF_SHIFT = 16
         private val JSON_MEDIA_TYPE = "application/json".toMediaType()
         private const val TAG = "CourtUploader"
     }

@@ -154,10 +154,12 @@ class CourtStateMachine(
 
     @Synchronized
     fun onRecorderStopped(sessionId: String) {
-        val current = phase
-        if ((current is Phase.Stopping && current.sessionId == sessionId) ||
-            (current is Phase.Recording && current.sessionId == sessionId)
-        ) {
+        val stoppedSession = when (val current = phase) {
+            is Phase.Stopping -> current.sessionId
+            is Phase.Recording -> current.sessionId
+            else -> null
+        }
+        if (stoppedSession == sessionId) {
             phase = Phase.Idle
         }
         if (activeSessionId == sessionId) {
@@ -179,16 +181,15 @@ class CourtStateMachine(
     }
 
     @Synchronized
-    fun mode(pendingUploads: Boolean): CourtMode =
-        when (phase) {
-            is Phase.Recording, is Phase.Stopping -> CourtMode.RECORDING
-            is Phase.Armed -> CourtMode.ARMED
-            Phase.Idle -> when {
-                pendingUploads -> CourtMode.UPLOADING
-                !rooted() -> CourtMode.DEGRADED
-                else -> CourtMode.IDLE
-            }
+    fun mode(pendingUploads: Boolean): CourtMode = when (phase) {
+        is Phase.Recording, is Phase.Stopping -> CourtMode.RECORDING
+        is Phase.Armed -> CourtMode.ARMED
+        Phase.Idle -> when {
+            pendingUploads -> CourtMode.UPLOADING
+            !rooted() -> CourtMode.DEGRADED
+            else -> CourtMode.IDLE
         }
+    }
 
     private fun arm(command: RecordPrepare): CommandResult {
         phase = Phase.Armed(command.sessionId, command.profile)

@@ -1,0 +1,6 @@
+# ktlint for the court (K1) runtime (scripts/court_quality_gate.sh). Hand-held Kotlin is not linted.
+root = true
+
+[app/src/{court,testCourt}/**.{kt,kts}]
+ktlint_code_style = intellij_idea
+max_line_length = 120

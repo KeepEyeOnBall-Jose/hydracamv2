@@ -1,9 +1,9 @@
 package com.amaia23.hydracam.court
 
 import okhttp3.OkHttpClient
-import okio.ByteString.Companion.encodeUtf8
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okio.ByteString.Companion.encodeUtf8
 import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertEquals

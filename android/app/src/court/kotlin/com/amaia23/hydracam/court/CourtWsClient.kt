@@ -5,6 +5,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
@@ -96,15 +97,20 @@ class EventOutbox(
         val dir = directory ?: return
         val files = dir.listFiles { file -> file.name.endsWith(".json") } ?: return
         val loaded = files.mapNotNull { file ->
-            try {
+            val failure: Exception = try {
                 val json = JSONObject(file.readText())
                 val envelope = C1Envelope.decode(json.getJSONObject("envelope").toString())
-                Entry(envelope, json.getLong("order"), lastSentAtMs = 0)
-            } catch (error: Exception) {
-                logger.warn(TAG, "Dropping unreadable outbox file ${file.name}.", error)
-                file.delete()
-                null
+                return@mapNotNull Entry(envelope, json.getLong("order"), lastSentAtMs = 0)
+            } catch (error: IOException) {
+                error
+            } catch (error: JSONException) {
+                error
+            } catch (error: C1ProtocolException) {
+                error
             }
+            logger.warn(TAG, "Dropping unreadable outbox file ${file.name}.", failure)
+            file.delete()
+            null
         }
         loaded.sortedBy { it.order }.forEach { entries[it.envelope.id] = it }
         nextOrder = (loaded.maxOfOrNull { it.order } ?: -1) + 1
@@ -125,6 +131,8 @@ class EventOutbox(
  * - Cloud commands go to [onCommand], which must answer through [reply] within 5 s.
  * - Reconnects with [ReconnectBackoff] (jittered, ≤ 30 s). A 401 drops the cached token.
  */
+// Each parameter is a port or a C1 timing the runtime wires; this constructor is the only DI seam.
+@Suppress("LongParameterList")
 class CourtWsClient(
     private val http: OkHttpClient,
     private val webSocketUrl: () -> String?,
@@ -143,7 +151,7 @@ class CourtWsClient(
     private val resendCheckMs: Long = 2_000,
     private val clockBurstSize: Int = 8,
     private val clockPingSpacingMs: Long = 250,
-    private val clockIntervalMs: Long = 5 * 60_000,
+    private val clockIntervalMs: Long = 300_000,
     private val onConnectionChanged: (Boolean, String?) -> Unit = { _, _ -> },
 ) {
     private var socket: WebSocket? = null
@@ -205,37 +213,36 @@ class CourtWsClient(
     }
 
     private fun connect() {
-        val currentGeneration = synchronized(this) {
-            if (!running) {
-                return
-            }
-            generation
-        }
+        val currentGeneration = synchronized(this) { generation.takeIf { running } } ?: return
         val url = webSocketUrl()
         if (url == null) {
             failAndRetry(currentGeneration, "not_enrolled")
             return
         }
-        val token = try {
-            tokens.accessToken()
-        } catch (error: CourtAuthException) {
-            failAndRetry(currentGeneration, if (error.rejected) "auth_rejected" else "auth_unavailable")
-            return
-        } catch (error: IOException) {
-            failAndRetry(currentGeneration, "auth_unreachable")
-            return
-        }
+        val token = accessTokenOrRetry(currentGeneration) ?: return
         val request = Request.Builder()
             .url(url)
             .header("Authorization", "Bearer $token")
             .build()
         val listener = Listener(currentGeneration)
         synchronized(this) {
-            if (!running || generation != currentGeneration) {
-                return
+            if (running && generation == currentGeneration) {
+                socket = http.newWebSocket(request, listener)
             }
-            socket = http.newWebSocket(request, listener)
         }
+    }
+
+    /** The access token, or null after scheduling a reconnect that says why there is none. */
+    private fun accessTokenOrRetry(currentGeneration: Int): String? {
+        val failure = try {
+            return tokens.accessToken()
+        } catch (error: CourtAuthException) {
+            if (error.rejected) "auth_rejected" else "auth_unavailable"
+        } catch (ignored: IOException) {
+            "auth_unreachable"
+        }
+        failAndRetry(currentGeneration, failure)
+        return null
     }
 
     private inner class Listener(private val listenerGeneration: Int) : WebSocketListener() {
@@ -271,7 +278,7 @@ class CourtWsClient(
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-            if (response?.code == 401) {
+            if (response?.code == HttpStatus.UNAUTHORIZED) {
                 tokens.invalidate()
             }
             val reason = response?.let { "http_${it.code}" } ?: (t.javaClass.simpleName)

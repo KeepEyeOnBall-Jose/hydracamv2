@@ -48,12 +48,16 @@ class TsSegmenterTest {
     /** 30 fps, IDR every 30 frames (first IDR at frame 30), frames [from, until). */
     private fun feed(target: TsSegmenter, from: Int, until: Int) {
         for (index in from until until) {
-            target.onVideoFrame(index * frameUs, ByteArray(200) { index.toByte() }, isKeyframe = index % 30 == 0 && index > 0)
+            target.onVideoFrame(
+                index * frameUs,
+                ByteArray(200) { index.toByte() },
+                isKeyframe =
+                index % 30 == 0 && index > 0,
+            )
         }
     }
 
-    private fun sha256(file: File): String =
-        MessageDigest.getInstance("SHA-256").digest(file.readBytes()).toHex()
+    private fun sha256(file: File): String = MessageDigest.getInstance("SHA-256").digest(file.readBytes()).toHex()
 
     @Test
     fun cutsOnIdrNearSixSecondsAndWritesSidecar() {

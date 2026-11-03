@@ -71,65 +71,53 @@ class MpegTsMuxer(private val hasAudio: Boolean) {
 
     private fun writePes(pid: Int, pes: ByteArray, pcr90k: Long?, randomAccess: Boolean) {
         var offset = 0
-        var first = true
         while (offset < pes.size) {
+            val first = offset == 0
             val packet = ByteArray(PACKET_SIZE)
             packet[0] = SYNC_BYTE
             packet[1] = ((if (first) 0x40 else 0) or ((pid shr 8) and 0x1F)).toByte()
             packet[2] = (pid and 0xFF).toByte()
-
-            // Adaptation field body (flags + PCR), before stuffing.
-            val wantsAdaptation = first && (pcr90k != null || randomAccess)
-            var adaptationBody = if (wantsAdaptation) 1 + (if (pcr90k != null) 6 else 0) else 0
-            var adaptationTotal = if (wantsAdaptation) 1 + adaptationBody else 0
-            val remaining = pes.size - offset
-            val capacity = PAYLOAD_SIZE - adaptationTotal
-            if (remaining < capacity) {
-                val stuffing = capacity - remaining
-                if (adaptationTotal == 0) {
-                    // New adaptation field: length byte, then flags + 0xFF fill when stuffing >= 2.
-                    adaptationTotal = stuffing
-                    adaptationBody = stuffing - 1
-                } else {
-                    adaptationTotal += stuffing
-                    adaptationBody += stuffing
-                }
-            }
-            val payloadLength = PAYLOAD_SIZE - adaptationTotal
-            val control = if (adaptationTotal > 0) 0x30 else 0x10
-            packet[3] = (control or nextContinuity(pid)).toByte()
-
-            var cursor = 4
-            if (adaptationTotal > 0) {
-                packet[cursor++] = adaptationBody.toByte()
-                if (adaptationBody > 0) {
-                    var flags = 0
-                    if (first && randomAccess) {
-                        flags = flags or 0x40
-                    }
-                    if (first && pcr90k != null) {
-                        flags = flags or 0x10
-                    }
-                    packet[cursor++] = flags.toByte()
-                    if (first && pcr90k != null) {
-                        writePcr(packet, cursor, pcr90k)
-                        cursor += 6
-                    }
-                    val stuffEnd = 4 + adaptationTotal
-                    while (cursor < stuffEnd) {
-                        packet[cursor++] = 0xFF.toByte()
-                    }
-                }
-            }
+            // PCR and random_access ride only on the packet that starts the PES.
+            val pcr = if (first) pcr90k else null
+            val ra = first && randomAccess
+            val adaptation = adaptationLength(pes.size - offset, pcr, ra)
+            packet[3] = ((if (adaptation > 0) 0x30 else 0x10) or nextContinuity(pid)).toByte()
+            val cursor = if (adaptation > 0) writeAdaptation(packet, adaptation, pcr, ra) else 4
+            val payloadLength = PAYLOAD_SIZE - adaptation
             System.arraycopy(pes, offset, packet, cursor, payloadLength)
             offset += payloadLength
-            first = false
             emit(packet)
         }
     }
 
+    /** Adaptation field bytes (length byte included): flags + PCR when wanted, grown to stuff a short tail. */
+    private fun adaptationLength(remaining: Int, pcr90k: Long?, randomAccess: Boolean): Int {
+        val wanted = if (pcr90k != null || randomAccess) 2 + (if (pcr90k != null) 6 else 0) else 0
+        val capacity = PAYLOAD_SIZE - wanted
+        return if (remaining < capacity) wanted + capacity - remaining else wanted
+    }
+
+    /** Writes a [total]-byte adaptation field at offset 4; returns where the payload starts. */
+    private fun writeAdaptation(packet: ByteArray, total: Int, pcr90k: Long?, randomAccess: Boolean): Int {
+        val body = total - 1
+        packet[4] = body.toByte()
+        if (body > 0) {
+            var flags = 0
+            if (randomAccess) {
+                flags = flags or 0x40
+            }
+            if (pcr90k != null) {
+                flags = flags or 0x10
+                writePcr(packet, 6, pcr90k)
+            }
+            packet[5] = flags.toByte()
+            packet.fill(0xFF.toByte(), if (pcr90k != null) 12 else 6, 4 + total)
+        }
+        return 4 + total
+    }
+
     private fun emit(packet: ByteArray) {
-        val stream = out ?: throw IllegalStateException("No output attached.")
+        val stream = out ?: error("No output attached.")
         stream.write(packet)
         packetsWritten += 1
     }
