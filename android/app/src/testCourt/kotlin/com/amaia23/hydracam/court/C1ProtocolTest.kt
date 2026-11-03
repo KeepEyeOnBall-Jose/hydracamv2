@@ -1,5 +1,6 @@
 package com.amaia23.hydracam.court
 
+import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -176,5 +177,89 @@ class C1ProtocolTest {
         } catch (expected: C1ProtocolException) {
             // expected
         }
+    }
+
+    private fun rejects(block: () -> Unit) {
+        try {
+            block()
+            fail("Expected C1ProtocolException")
+        } catch (expected: C1ProtocolException) {
+            // expected
+        }
+    }
+
+    private fun policyBody(): JSONObject =
+        JSONObject()
+            .put("masterMode", "on-request")
+            .put("windows", JSONArray(listOf("sat 09:00-13:00")))
+            .put("maxKbps", 1_500)
+            .put("keepDays", 3)
+
+    @Test
+    fun uploadPolicyParsesAndRoundTrips() {
+        val policy = UploadPolicy.fromJson(policyBody())
+
+        assertEquals(UploadPolicy(UploadPolicy.MODE_ON_REQUEST, listOf("sat 09:00-13:00"), 1_500, 3), policy)
+        assertEquals(policy, UploadPolicy.fromJson(policy.toJson()))
+        assertEquals(emptyList<String>(), UploadPolicy.fromJson(policyBody().apply { remove("windows") }).windows)
+        assertEquals(0, UploadPolicy.fromJson(policyBody().put("maxKbps", 0)).maxKbps)
+        assertEquals(UploadPolicy.MODE_ON_REQUEST, UploadPolicy.DEFAULT.masterMode)
+        assertEquals(2_500, UploadPolicy.DEFAULT.maxKbps)
+        assertEquals(7, UploadPolicy.DEFAULT.keepDays)
+    }
+
+    @Test
+    fun uploadPolicyRejectsBadValues() {
+        rejects { UploadPolicy.fromJson(policyBody().put("masterMode", "always")) }
+        rejects { UploadPolicy.fromJson(policyBody().apply { remove("masterMode") }) }
+        rejects { UploadPolicy.fromJson(policyBody().put("maxKbps", -1)) }
+        rejects { UploadPolicy.fromJson(policyBody().put("maxKbps", 1.5)) }
+        rejects { UploadPolicy.fromJson(policyBody().put("maxKbps", "fast")) }
+        rejects { UploadPolicy.fromJson(policyBody().put("maxKbps", 3_000_000_000L)) }
+        rejects { UploadPolicy.fromJson(policyBody().apply { remove("maxKbps") }) }
+        rejects { UploadPolicy.fromJson(policyBody().put("keepDays", 0)) }
+        rejects { UploadPolicy.fromJson(policyBody().put("keepDays", 366)) }
+        rejects { UploadPolicy.fromJson(policyBody().put("windows", JSONArray(listOf(5)))) }
+        rejects { UploadPolicy.fromJson(policyBody().put("windows", JSONArray(listOf(" ")))) }
+    }
+
+    private fun mastersBody(): JSONObject =
+        JSONObject()
+            .put("sessionId", "s1")
+            .put("fromServerMs", 1_000)
+            .put("toServerMs", 2_000)
+            .put("uploadGrant", "secret-grant")
+            .put("ingestUrl", "https://k3.example")
+
+    @Test
+    fun mastersUploadParsesRangeAndHidesTheGrant() {
+        val request = MastersUpload.fromJson(mastersBody())
+
+        assertEquals(MastersUpload("s1", 1_000, 2_000, "secret-grant", "https://k3.example"), request)
+        assertFalse(request.toString().contains("secret-grant"))
+        val whole = MastersUpload.fromJson(mastersBody().apply { remove("fromServerMs"); remove("toServerMs") })
+        assertNull(whole.fromServerMs)
+        assertTrue(whole.covers(0, 6_000))
+    }
+
+    @Test
+    fun mastersUploadRangeIsHalfOpenOverlap() {
+        val request = MastersUpload("s1", 1_000, 2_000, "g", "u")
+
+        assertFalse(request.covers(0, 1_000))
+        assertTrue(request.covers(0, 1_001))
+        assertTrue(request.covers(1_999, 6_000))
+        assertFalse(request.covers(2_000, 6_000))
+        assertTrue(MastersUpload("s1", null, 2_000, "g", "u").covers(-10_000, 1))
+        assertTrue(MastersUpload("s1", 1_000, null, "g", "u").covers(9_000_000, 1))
+    }
+
+    @Test
+    fun mastersUploadRejectsBadValues() {
+        rejects { MastersUpload.fromJson(mastersBody().put("toServerMs", 1_000)) }
+        rejects { MastersUpload.fromJson(mastersBody().put("fromServerMs", "early")) }
+        rejects { MastersUpload.fromJson(mastersBody().apply { remove("uploadGrant") }) }
+        rejects { MastersUpload.fromJson(mastersBody().apply { remove("ingestUrl") }) }
+        rejects { MastersUpload.fromJson(mastersBody().apply { remove("sessionId") }) }
     }
 }

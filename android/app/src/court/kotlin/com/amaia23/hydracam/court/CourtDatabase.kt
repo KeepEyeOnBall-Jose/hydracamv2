@@ -1,6 +1,7 @@
 package com.amaia23.hydracam.court
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Insert
@@ -35,13 +36,37 @@ interface CourtUploadDao {
 
     @Query(
         "SELECT * FROM upload_items WHERE state IN ('PENDING', 'UPLOADING', 'VERIFYING') " +
-            "AND nextAttemptAtMs <= :nowMs " +
+            "AND nextAttemptAtMs <= :nowMs AND (:includeMasters OR tier = 'proxy') " +
             "ORDER BY CASE tier WHEN 'proxy' THEN 0 ELSE 1 END, createdAtMs, seq LIMIT 1",
     )
-    fun nextDue(nowMs: Long): UploadItem?
+    fun nextDue(nowMs: Long, includeMasters: Boolean): UploadItem?
 
-    @Query("SELECT MIN(nextAttemptAtMs) FROM upload_items WHERE state IN ('PENDING', 'UPLOADING', 'VERIFYING')")
-    fun nextWakeAtMs(): Long?
+    @Query(
+        "SELECT MIN(nextAttemptAtMs) FROM upload_items WHERE state IN ('PENDING', 'UPLOADING', 'VERIFYING') " +
+            "AND (:includeMasters OR tier = 'proxy')",
+    )
+    fun nextItemWakeAtMs(includeMasters: Boolean): Long?
+
+    @Query("SELECT MIN(nextAttemptAtMs) FROM master_requests WHERE state = 'pending'")
+    fun nextRequestWakeAtMs(): Long?
+
+    @Upsert
+    fun upsertMasterRequest(request: MasterRequest)
+
+    @Query("SELECT * FROM master_requests WHERE id = :id")
+    fun masterRequest(id: String): MasterRequest?
+
+    @Query(
+        "SELECT * FROM master_requests WHERE state = 'pending' AND nextAttemptAtMs <= :nowMs " +
+            "ORDER BY createdAtMs LIMIT 1",
+    )
+    fun dueMasterRequest(nowMs: Long): MasterRequest?
+
+    @Query(
+        "SELECT * FROM upload_items WHERE tier = 'master' AND state IN ('HELD', 'FAILED') " +
+            "AND createdAtMs < :cutoffMs",
+    )
+    fun idleMastersBefore(cutoffMs: Long): List<UploadItem>
 
     @Query("SELECT COALESCE(SUM(bytes), 0) FROM upload_items WHERE state IN ('PENDING', 'UPLOADING', 'VERIFYING')")
     fun activeBytes(): Long
@@ -56,7 +81,12 @@ interface CourtUploadDao {
     fun upsertSeq(counter: SeqCounter)
 }
 
-@Database(entities = [UploadItem::class, UploadSession::class, SeqCounter::class], version = 1, exportSchema = true)
+@Database(
+    entities = [UploadItem::class, UploadSession::class, SeqCounter::class, MasterRequest::class],
+    version = 2,
+    exportSchema = true,
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
+)
 abstract class CourtDatabase : RoomDatabase() {
     abstract fun uploads(): CourtUploadDao
 
@@ -84,9 +114,18 @@ class RoomUploadQueueStore(database: CourtDatabase) : UploadQueueStore {
 
     override fun items(sessionId: String): List<UploadItem> = dao.items(sessionId)
 
-    override fun nextDue(nowMs: Long): UploadItem? = dao.nextDue(nowMs)
+    override fun nextDue(nowMs: Long, includeMasters: Boolean): UploadItem? = dao.nextDue(nowMs, includeMasters)
 
-    override fun nextWakeAtMs(): Long? = dao.nextWakeAtMs()
+    override fun nextWakeAtMs(includeMasters: Boolean): Long? =
+        listOfNotNull(dao.nextItemWakeAtMs(includeMasters), dao.nextRequestWakeAtMs()).minOrNull()
+
+    override fun upsertMasterRequest(request: MasterRequest) = dao.upsertMasterRequest(request)
+
+    override fun masterRequest(id: String): MasterRequest? = dao.masterRequest(id)
+
+    override fun dueMasterRequest(nowMs: Long): MasterRequest? = dao.dueMasterRequest(nowMs)
+
+    override fun idleMastersBefore(cutoffMs: Long): List<UploadItem> = dao.idleMastersBefore(cutoffMs)
 
     override fun activeBytes(): Long = dao.activeBytes()
 

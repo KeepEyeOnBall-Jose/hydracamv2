@@ -42,7 +42,16 @@ class CourtRuntime private constructor(context: Context) {
     private val queue = RoomUploadQueueStore(database)
     private val clockEstimator = ClockOffsetEstimator()
     private val tokens = DeviceTokenClient(http, { enrollment })
-    private val uploader = C2Uploader(http, queue, logger = logger)
+    private val policies = PrefsUploadPolicyStore(appContext, logger)
+    private val throttle = UploadThrottle(maxKbps = 0)
+    private val uploader = C2Uploader(http, queue, logger = logger, throttle = throttle, onAlert = ::onUploadAlert)
+
+    @Volatile
+    private var policy = UploadPolicy.DEFAULT
+
+    /** Latest uploader problem (conflict, rejected master manifest), reported as `state.lastError`. */
+    @Volatile
+    private var uploadAlert: String? = null
 
     private val recorder = CourtCameraRecorder(
         appContext,
@@ -77,6 +86,8 @@ class CourtRuntime private constructor(context: Context) {
             C1.RECORD_START to CommandHandler { stateMachine.onStart(RecordStart.fromJson(it.body)) },
             C1.RECORD_STOP to CommandHandler { stateMachine.onStop(RecordStop.fromJson(it.body)) },
             C1.SIGNAL_EMIT to CommandHandler { signals.emit(SignalEmit.fromJson(it.body)) },
+            C1.UPLOAD_POLICY to CommandHandler { onUploadPolicy(UploadPolicy.fromJson(it.body)) },
+            C1.MASTERS_UPLOAD to CommandHandler { onMastersUpload(it.id, MastersUpload.fromJson(it.body)) },
         ),
         reply = { ws.reply(it) },
         logger = logger,
@@ -96,7 +107,9 @@ class CourtRuntime private constructor(context: Context) {
 
     private val started = AtomicBoolean(false)
     private val uploadKickPending = AtomicBoolean(false)
+    private val countRefreshPending = AtomicBoolean(false)
     private var uploadWake: ScheduledFuture<*>? = null
+    private var lastPruneAtMs = 0L
     private var maxDurationStop: ScheduledFuture<*>? = null
     private var caps: CourtCaps? = null
 
@@ -119,6 +132,7 @@ class CourtRuntime private constructor(context: Context) {
             ws.start()
         }
         uploadExecutor.execute {
+            applyPolicy(policies.load())
             recoverSidecars()
             drainUploads()
         }
@@ -178,12 +192,13 @@ class CourtRuntime private constructor(context: Context) {
             "phase" to phase.javaClass.simpleName,
             "mode" to stateMachine.mode(pendingCount > 0).wire,
             "activeSessionId" to stateMachine.activeSessionId,
-            "lastError" to stateMachine.lastError,
+            "lastError" to (stateMachine.lastError ?: uploadAlert),
             "camera" to recorder.cameraState,
             "clockOffsetMs" to estimate?.offsetMs,
             "clockRttMs" to estimate?.rttMs,
             "pendingUploads" to pendingCount,
             "pendingUploadBytes" to pendingBytes,
+            "maxKbps" to policy.maxKbps,
             "batteryPct" to battery.pct,
             "charging" to battery.charging,
             "tempC" to battery.tempC,
@@ -249,7 +264,12 @@ class CourtRuntime private constructor(context: Context) {
     }
 
     private fun stateBody(): StateBody {
-        uploadExecutor.execute { refreshPendingCounts() }
+        if (countRefreshPending.compareAndSet(false, true)) {
+            uploadExecutor.execute {
+                countRefreshPending.set(false)
+                refreshPendingCounts()
+            }
+        }
         val battery = probe.battery()
         return StateBody(
             mode = stateMachine.mode(pendingCount > 0),
@@ -261,8 +281,41 @@ class CourtRuntime private constructor(context: Context) {
             freeBytes = probe.freeBytes(),
             pendingUploadBytes = pendingBytes,
             wifiRssi = probe.wifiRssi(),
-            lastError = stateMachine.lastError,
+            lastError = stateMachine.lastError ?: uploadAlert,
         )
+    }
+
+    /** R10: persisted first, so an ack means the policy survives a restart. */
+    private fun onUploadPolicy(next: UploadPolicy): CommandResult {
+        policies.save(next)
+        uploadExecutor.execute {
+            applyPolicy(next)
+            lastPruneAtMs = 0
+        }
+        kickUploads()
+        return CommandResult.Ack
+    }
+
+    /** Upload thread only. */
+    private fun applyPolicy(next: UploadPolicy) {
+        policy = next
+        throttle.maxKbps = next.maxKbps
+        logger.info(TAG, "Upload policy: $next.")
+    }
+
+    /** 1.4: runs on the command worker; the queue store is thread-safe. */
+    private fun onMastersUpload(commandId: String, request: MastersUpload): CommandResult {
+        val count = uploader.requestMasters(commandId, request)
+        if (count == 0) {
+            return CommandResult.Nack(C1NackCode.GONE, "No masters held for ${request.sessionId} in that range.")
+        }
+        kickUploads()
+        return CommandResult.Ack
+    }
+
+    private fun onUploadAlert(message: String) {
+        uploadAlert = message
+        ws.sendStateNow()
     }
 
     private fun kickUploads() {
@@ -271,22 +324,24 @@ class CourtRuntime private constructor(context: Context) {
         }
     }
 
-    /** Upload thread only. */
+    /**
+     * Upload thread only. One step per task, so enqueues and grants queued behind it run between
+     * steps. Masters wait while a session is armed or recording: proxies must stay prompt (K4), and
+     * the uplink never blocks the recorder, which only appends to the queue.
+     */
     private fun drainUploads() {
         uploadKickPending.set(false)
         var delayMs = UPLOAD_IDLE_MS
+        val includeMasters = stateMachine.phase is CourtStateMachine.Phase.Idle
         try {
-            var rounds = 0
-            while (rounds < UPLOAD_BATCH && uploader.runOnce()) {
-                rounds += 1
+            pruneMastersHourly()
+            if (uploader.runOnce(includeMasters)) {
+                kickUploads()
+                return
             }
             refreshPendingCounts()
-            delayMs = if (rounds >= UPLOAD_BATCH) {
-                0
-            } else {
-                val wakeAt = queue.nextWakeAtMs()
-                if (wakeAt == null) UPLOAD_IDLE_MS else wakeAt - System.currentTimeMillis()
-            }
+            val wakeAt = queue.nextWakeAtMs(includeMasters)
+            delayMs = if (wakeAt == null) UPLOAD_IDLE_MS else wakeAt - System.currentTimeMillis()
         } catch (error: Exception) {
             logger.warn(TAG, "Upload loop failed.", error)
         }
@@ -296,6 +351,16 @@ class CourtRuntime private constructor(context: Context) {
             delayMs.coerceIn(UPLOAD_MIN_DELAY_MS, UPLOAD_IDLE_MS),
             TimeUnit.MILLISECONDS,
         )
+    }
+
+    /** Upload thread only. */
+    private fun pruneMastersHourly() {
+        val now = System.currentTimeMillis()
+        if (now - lastPruneAtMs < PRUNE_INTERVAL_MS) {
+            return
+        }
+        lastPruneAtMs = now
+        uploader.pruneMasters(policy.keepDays)
     }
 
     /** Upload thread only. */
@@ -450,7 +515,7 @@ class CourtRuntime private constructor(context: Context) {
     companion object {
         private const val TAG = "CourtRuntime"
         private const val ROOT_RECHECK_MS = 60_000L
-        private const val UPLOAD_BATCH = 50
+        private const val PRUNE_INTERVAL_MS = 60 * 60_000L
         private const val UPLOAD_MIN_DELAY_MS = 250L
         private const val UPLOAD_IDLE_MS = 30_000L
 

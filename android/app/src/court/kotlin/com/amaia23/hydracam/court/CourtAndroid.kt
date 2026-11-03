@@ -312,6 +312,30 @@ class PrefsActiveSessionStore(context: Context) : ActiveSessionStore {
     }
 }
 
+/** Last `upload.policy` (R10), so maxKbps and keepDays survive a restart before K2 re-sends it. */
+class PrefsUploadPolicyStore(context: Context, private val logger: CourtLogger) : UploadPolicyStore {
+    private val prefs = context.applicationContext.getSharedPreferences("court_runtime", Context.MODE_PRIVATE)
+
+    override fun load(): UploadPolicy {
+        val text = prefs.getString(KEY, null) ?: return UploadPolicy.DEFAULT
+        return try {
+            UploadPolicy.fromJson(JSONObject(text))
+        } catch (error: Exception) {
+            logger.warn(TAG, "Stored upload policy is invalid; using the default.", error)
+            UploadPolicy.DEFAULT
+        }
+    }
+
+    override fun save(policy: UploadPolicy) {
+        prefs.edit().putString(KEY, policy.toJson().toString()).commit()
+    }
+
+    private companion object {
+        const val KEY = "uploadPolicy"
+        const val TAG = "CourtPolicy"
+    }
+}
+
 /** C6 tones through ToneGenerator on the alarm stream (audible even with media muted). */
 class ToneGeneratorPlayer(private val logger: CourtLogger) : TonePlayer {
     private var generator: ToneGenerator? = null

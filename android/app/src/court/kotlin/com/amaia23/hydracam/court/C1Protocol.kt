@@ -30,6 +30,7 @@ object C1 {
     const val SIGNAL_EMIT = "signal.emit"
     const val SNAPSHOT = "snapshot"
     const val UPLOAD_POLICY = "upload.policy"
+    const val MASTERS_UPLOAD = "masters.upload"
     const val CONFIG_SET = "config.set"
     const val APP_UPDATE = "app.update"
     const val LOGS_UPLOAD = "logs.upload"
@@ -47,6 +48,9 @@ object C1NackCode {
     const val NOT_ENROLLED = "not_enrolled"
     const val INTERNAL = "internal"
     const val TIMEOUT = "timeout"
+
+    /** 1.4: `masters.upload` for a range where the phone holds no masters. */
+    const val GONE = "gone"
 }
 
 class C1ProtocolException(message: String) : Exception(message)
@@ -301,6 +305,92 @@ data class SignalEmit(val signal: String, val atServerMs: Long, val sessionId: S
     }
 }
 
+/** C1 `masters.upload` (1.4); no range means the whole session. */
+data class MastersUpload(
+    val sessionId: String,
+    val fromServerMs: Long?,
+    val toServerMs: Long?,
+    val uploadGrant: String,
+    val ingestUrl: String,
+) {
+    /** A segment is in range when it overlaps `[fromServerMs, toServerMs)`. */
+    fun covers(mediaStartServerMs: Long, durationMs: Long): Boolean =
+        (fromServerMs == null || mediaStartServerMs + durationMs > fromServerMs) &&
+            (toServerMs == null || mediaStartServerMs < toServerMs)
+
+    override fun toString(): String =
+        "MastersUpload(sessionId=$sessionId, fromServerMs=$fromServerMs, toServerMs=$toServerMs, ingestUrl=$ingestUrl)"
+
+    companion object {
+        fun fromJson(body: JSONObject): MastersUpload {
+            val request = MastersUpload(
+                sessionId = body.requireString("sessionId"),
+                fromServerMs = body.optLongOrNull("fromServerMs"),
+                toServerMs = body.optLongOrNull("toServerMs"),
+                uploadGrant = body.requireString("uploadGrant"),
+                ingestUrl = body.requireString("ingestUrl"),
+            )
+            if (request.fromServerMs != null && request.toServerMs != null &&
+                request.fromServerMs >= request.toServerMs
+            ) {
+                throw C1ProtocolException("fromServerMs must be before toServerMs.")
+            }
+            return request
+        }
+    }
+}
+
+/** C1 `upload.policy` (R10). `maxKbps` 0 means unlimited. */
+data class UploadPolicy(
+    val masterMode: String = MODE_ON_REQUEST,
+    val windows: List<String> = emptyList(),
+    val maxKbps: Int = 2_500,
+    val keepDays: Int = 7,
+) {
+    fun toJson(): JSONObject =
+        JSONObject()
+            .put("masterMode", masterMode)
+            .put("windows", JSONArray(windows))
+            .put("maxKbps", maxKbps)
+            .put("keepDays", keepDays)
+
+    companion object {
+        const val MODE_NEVER = "never"
+        const val MODE_ON_REQUEST = "on-request"
+        const val MODE_WINDOW = "window"
+        private val MODES = setOf(MODE_NEVER, MODE_ON_REQUEST, MODE_WINDOW)
+
+        val DEFAULT = UploadPolicy()
+
+        fun fromJson(body: JSONObject): UploadPolicy {
+            val masterMode = body.requireString("masterMode")
+            if (masterMode !in MODES) {
+                throw C1ProtocolException("Unknown masterMode $masterMode.")
+            }
+            val windows = body.optJSONArray("windows") ?: JSONArray()
+            val maxKbps = body.requireLong("maxKbps")
+            val keepDays = body.requireLong("keepDays")
+            if (maxKbps !in 0..Int.MAX_VALUE.toLong()) {
+                throw C1ProtocolException("maxKbps must be >= 0.")
+            }
+            if (keepDays !in 1..MAX_KEEP_DAYS) {
+                throw C1ProtocolException("keepDays must be 1..$MAX_KEEP_DAYS.")
+            }
+            return UploadPolicy(
+                masterMode = masterMode,
+                windows = (0 until windows.length()).map { index ->
+                    (windows.get(index) as? String)?.takeIf { it.isNotBlank() }
+                        ?: throw C1ProtocolException("windows must be non-empty strings.")
+                },
+                maxKbps = maxKbps.toInt(),
+                keepDays = keepDays.toInt(),
+            )
+        }
+
+        private const val MAX_KEEP_DAYS = 365L
+    }
+}
+
 object C1Events {
     fun recordingStarted(
         sessionId: String,
@@ -348,16 +438,19 @@ internal fun JSONObject.optStringOrNull(name: String): String? {
     return optString(name).ifEmpty { null }
 }
 
+internal fun JSONObject.optLongOrNull(name: String): Long? {
+    if (!has(name) || isNull(name)) {
+        return null
+    }
+    val value = get(name)
+    if (value !is Number || value.toDouble() != value.toLong().toDouble()) {
+        throw C1ProtocolException("$name must be an integer number.")
+    }
+    return value.toLong()
+}
+
 private fun JSONObject.requireString(name: String): String =
     optStringOrNull(name) ?: throw C1ProtocolException("Missing $name.")
 
-private fun JSONObject.requireLong(name: String): Long {
-    if (!has(name) || isNull(name)) {
-        throw C1ProtocolException("Missing $name.")
-    }
-    return try {
-        getLong(name)
-    } catch (error: JSONException) {
-        throw C1ProtocolException("$name must be a number.")
-    }
-}
+private fun JSONObject.requireLong(name: String): Long =
+    optLongOrNull(name) ?: throw C1ProtocolException("Missing $name.")

@@ -14,16 +14,20 @@ import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.io.RandomAccessFile
+import java.util.concurrent.TimeUnit
 import kotlin.math.min
 
 /**
  * H7: C2 v2 uploader. One [runOnce] call advances one due item by one step (or sends one manifest).
  *
- * - Proxy before master; a tier the grant does not list is [UploadState.HELD] and stays on disk.
+ * - Proxy before master; a tier no grant lists is [UploadState.HELD] and stays on disk.
+ * - Masters on request (1.4): [requestMasters] stores a `masters.upload`; its master-tier manifest
+ *   is sent first, then the listed masters upload with that command's grant.
  * - Resumable: uploadId, presigned parts and per-part ETags are persisted after every step.
+ * - Part bytes go through [throttle] (`upload.policy.maxKbps`).
  * - The local file is deleted only when K3 reports `verified`.
- * - After `recording.stopped`, once every item of the session is settled, the manifest is sent and
- *   any `missing` segment still on disk is re-queued.
+ * - After `recording.stopped`, once every granted item of the session is settled, the manifest is
+ *   sent and any `missing` segment still on disk is re-queued.
  */
 class C2Uploader(
     private val http: OkHttpClient,
@@ -34,16 +38,97 @@ class C2Uploader(
     private val statusPollMs: Long = 2_000,
     private val baseBackoffMs: Long = 2_000,
     private val maxBackoffMs: Long = 5 * 60_000L,
+    private val throttle: UploadThrottle = UploadThrottle(maxKbps = 0),
+    /** Problems K2 should see in `state.lastError` (conflicts, rejected master manifests). */
+    private val onAlert: (String) -> Unit = {},
 ) {
-    /** Returns true when it did any work (call again), false when nothing is due. */
-    fun runOnce(): Boolean {
+    /**
+     * Advances one step: a due master manifest, else one item, else a session manifest. Returns
+     * true when it did any work (call again). [includeMasters] false keeps master bytes off the
+     * uplink (while recording, so proxies stay prompt).
+     */
+    fun runOnce(includeMasters: Boolean = true): Boolean {
         val now = clock.nowMs()
-        val item = store.nextDue(now)
+        val request = store.dueMasterRequest(now)
+        if (request != null) {
+            sendMasterManifest(request, now)
+            return true
+        }
+        val item = store.nextDue(now, includeMasters)
         if (item != null) {
             step(item, now)
             return true
         }
         return sendDueManifest(now)
+    }
+
+    /**
+     * Stores a `masters.upload` (1.4) and returns how many held masters it covers; 0 means the
+     * caller nacks `gone` and nothing is stored. Idempotent per [commandId].
+     *
+     * @throws C1ProtocolException when the grant cannot cover this request.
+     */
+    fun requestMasters(commandId: String, request: MastersUpload): Int {
+        val now = clock.nowMs()
+        val claims = UploadGrantClaims.decode(request.uploadGrant)
+        if (claims != null && claims.tiers.isNotEmpty() && C1.TIER_MASTER !in claims.tiers) {
+            throw C1ProtocolException("uploadGrant does not list master.")
+        }
+        if (claims?.sessionId != null && claims.sessionId != request.sessionId) {
+            throw C1ProtocolException("uploadGrant is for another session.")
+        }
+        val grantExpMs = claims?.expMs?.takeIf { it > 0 } ?: Long.MAX_VALUE
+        if (now >= grantExpMs) {
+            throw C1ProtocolException("uploadGrant expired.")
+        }
+        store.masterRequest(commandId)?.let { return JSONArray(it.seqsJson).length() }
+        val held = store.items(request.sessionId).filter {
+            it.tier == C1.TIER_MASTER && it.isHeldOnPhone() && request.covers(it.mediaStartServerMs, it.durationMs)
+        }
+        if (held.isEmpty()) {
+            logger.info(TAG, "masters.upload for ${request.sessionId}: no masters held in range.")
+            return 0
+        }
+        val slot = held.first().slot
+        if (claims?.slot != null && claims.slot != slot) {
+            throw C1ProtocolException("uploadGrant is for slot ${claims.slot}, not $slot.")
+        }
+        store.upsertMasterRequest(
+            MasterRequest(
+                id = commandId,
+                sessionId = request.sessionId,
+                slot = slot,
+                uploadGrant = request.uploadGrant,
+                ingestUrl = request.ingestUrl,
+                grantExpMs = grantExpMs,
+                seqsJson = JSONArray(held.map { it.seq }).toString(),
+                createdAtMs = now,
+            ),
+        )
+        logger.info(TAG, "masters.upload for ${request.sessionId}: ${held.size} master(s) to list.")
+        return held.size
+    }
+
+    /** keepDays: deletes HELD or FAILED masters older than [keepDays]. Returns how many were deleted. */
+    fun pruneMasters(keepDays: Int): Int {
+        val cutoff = clock.nowMs() - keepDays * DAY_MS
+        var pruned = 0
+        for (item in store.idleMastersBefore(cutoff)) {
+            val file = File(item.filePath)
+            if (!file.isFile) {
+                continue
+            }
+            if (!file.delete()) {
+                logger.warn(TAG, "Could not delete expired master ${item.key}.")
+                continue
+            }
+            finish(item, UploadState.FAILED, KEEP_DAYS_EXPIRED)
+            pruned += 1
+        }
+        if (pruned > 0) {
+            logger.info(TAG, "Deleted $pruned master(s) older than $keepDays day(s).")
+        }
+        return pruned
     }
 
     /** Called by the runtime after `recording.stopped`. */
@@ -72,11 +157,13 @@ class C2Uploader(
             finish(item, UploadState.FAILED, "no_grant")
             return
         }
-        if (item.tier !in session.tiers) {
+        val grants = grantsFor(item.tier, session)
+        if (grants.isEmpty()) {
             finish(item, UploadState.HELD, null)
             return
         }
-        if (now >= session.grantExpMs) {
+        val grant = grants.firstOrNull { now < it.expMs }
+        if (grant == null) {
             finish(item, UploadState.FAILED, "grant_expired")
             return
         }
@@ -87,9 +174,9 @@ class C2Uploader(
         }
         try {
             when (item.uploadState) {
-                UploadState.PENDING -> initUpload(item, session, file)
-                UploadState.UPLOADING -> uploadParts(item, session, file)
-                UploadState.VERIFYING -> pollStatus(item, session, file)
+                UploadState.PENDING -> initUpload(item, grant, file)
+                UploadState.UPLOADING -> uploadParts(item, grant, file)
+                UploadState.VERIFYING -> pollStatus(item, grant, file)
                 else -> Unit
             }
         } catch (error: IOException) {
@@ -99,7 +186,20 @@ class C2Uploader(
         }
     }
 
-    private fun initUpload(item: UploadItem, session: UploadSession, file: File) {
+    /** Grants that may upload [tier], preferred first: a `masters.upload` grant, then `record.start`'s. */
+    private fun grantsFor(tier: String, session: UploadSession): List<Grant> {
+        val grants = mutableListOf<Grant>()
+        val masterGrant = session.masterGrant
+        if (tier == C1.TIER_MASTER && masterGrant != null) {
+            grants += Grant(masterGrant, session.masterIngestUrl ?: session.ingestUrl, session.masterGrantExpMs)
+        }
+        if (tier in session.tiers) {
+            grants += Grant(session.uploadGrant, session.ingestUrl, session.grantExpMs)
+        }
+        return grants
+    }
+
+    private fun initUpload(item: UploadItem, grant: Grant, file: File) {
         val body = JSONObject()
             .put("sessionId", item.sessionId)
             .put("slot", item.slot)
@@ -111,8 +211,8 @@ class C2Uploader(
             .put("mediaStartServerMs", item.mediaStartServerMs)
             .put("durationMs", item.durationMs)
         val request = Request.Builder()
-            .url(ingest(session, "/v2/uploads"))
-            .header("Authorization", "Bearer ${session.uploadGrant}")
+            .url(grant.url("/v2/uploads"))
+            .header("Authorization", "Bearer ${grant.token}")
             .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
             .build()
         http.newCall(request).execute().use { response ->
@@ -129,17 +229,29 @@ class C2Uploader(
                         updatedAtMs = clock.nowMs(),
                     )
                     store.update(started)
-                    uploadParts(started, session, file)
+                    uploadParts(started, grant, file)
                 }
                 200 -> verified(item.copy(uploadId = json.optStringOrNull("uploadId")), file)
-                409 -> finish(item, UploadState.CONFLICT, "conflict: ${json.optStringOrNull("reason") ?: "different bytes"}")
+                409 -> initConflict(item, json.optStringOrNull("reason"))
                 401, 403 -> finish(item, UploadState.FAILED, "grant_rejected_${response.code}")
                 else -> retryLater(item, "init_http_${response.code}")
             }
         }
     }
 
-    private fun uploadParts(item: UploadItem, session: UploadSession, file: File) {
+    /** 1.6: `not-requested` is not an error: no request lists this master, so keep it held. */
+    private fun initConflict(item: UploadItem, reason: String?) {
+        if (reason == REASON_NOT_REQUESTED) {
+            logger.info(TAG, "${item.key} not requested by K3; kept on the phone.")
+            finish(item, UploadState.HELD, null)
+            return
+        }
+        val error = "conflict: ${reason ?: "different bytes"}"
+        finish(item, UploadState.CONFLICT, error)
+        onAlert("${item.key} $error")
+    }
+
+    private fun uploadParts(item: UploadItem, grant: Grant, file: File) {
         val parts = JSONArray(item.partsJson ?: "[]")
         val etags = JSONObject(item.etagsJson ?: "{}")
         var current = item
@@ -157,9 +269,12 @@ class C2Uploader(
             }
             val request = Request.Builder()
                 .url(part.getString("url"))
-                .put(FileRangeBody(file, offset, length, CONTENT_TYPE_TS.toMediaType()))
+                .put(FileRangeBody(file, offset, length, CONTENT_TYPE_TS.toMediaType(), throttle))
                 .build()
-            http.newCall(request).execute().use { response ->
+            val call = http.newCall(request)
+            // A low maxKbps stretches a part beyond the client's call timeout.
+            call.timeout().timeout(PART_TIMEOUT_BASE_NS + 2 * throttle.expectedNanos(length), TimeUnit.NANOSECONDS)
+            call.execute().use { response ->
                 when {
                     response.isSuccessful -> {
                         val etag = response.header("ETag")
@@ -183,18 +298,18 @@ class C2Uploader(
                 }
             }
         }
-        complete(current, session, parts, etags)
+        complete(current, grant, parts, etags)
     }
 
-    private fun complete(item: UploadItem, session: UploadSession, parts: JSONArray, etags: JSONObject) {
+    private fun complete(item: UploadItem, grant: Grant, parts: JSONArray, etags: JSONObject) {
         val partList = JSONArray()
         for (index in 0 until parts.length()) {
             val number = parts.getJSONObject(index).getInt("n")
             partList.put(JSONObject().put("n", number).put("etag", etags.getString(number.toString())))
         }
         val request = Request.Builder()
-            .url(ingest(session, "/v2/uploads/${item.uploadId}/complete"))
-            .header("Authorization", "Bearer ${session.uploadGrant}")
+            .url(grant.url("/v2/uploads/${item.uploadId}/complete"))
+            .header("Authorization", "Bearer ${grant.token}")
             .post(JSONObject().put("parts", partList).toString().toRequestBody(JSON_MEDIA_TYPE))
             .build()
         http.newCall(request).execute().use { response ->
@@ -213,10 +328,10 @@ class C2Uploader(
         }
     }
 
-    private fun pollStatus(item: UploadItem, session: UploadSession, file: File) {
+    private fun pollStatus(item: UploadItem, grant: Grant, file: File) {
         val request = Request.Builder()
-            .url(ingest(session, "/v2/uploads/${item.uploadId}"))
-            .header("Authorization", "Bearer ${session.uploadGrant}")
+            .url(grant.url("/v2/uploads/${item.uploadId}"))
+            .header("Authorization", "Bearer ${grant.token}")
             .get()
             .build()
         http.newCall(request).execute().use { response ->
@@ -247,7 +362,8 @@ class C2Uploader(
                 continue
             }
             val items = store.items(session.sessionId)
-            if (items.any { it.uploadState.active }) {
+            // Requested masters upload under their own manifest; they never delay this one.
+            if (items.any { it.uploadState.active && it.tier in session.tiers }) {
                 continue
             }
             sendManifest(session, items)
@@ -269,7 +385,7 @@ class C2Uploader(
             .put("lastSeq", JSONObject().put(C1.TIER_PROXY, session.lastSeqProxy).put(C1.TIER_MASTER, session.lastSeqMaster))
             .put("segments", segments)
         val request = Request.Builder()
-            .url(ingest(session, "/v2/sessions/${session.sessionId}/manifest"))
+            .url(session.ingestUrl.trimEnd('/') + "/v2/sessions/${session.sessionId}/manifest")
             .header("Authorization", "Bearer ${session.uploadGrant}")
             .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
             .build()
@@ -306,6 +422,102 @@ class C2Uploader(
         } catch (error: JSONException) {
             manifestRetry(session, null, "manifest_bad_response")
         }
+    }
+
+    /** 1.4 master-tier manifest. Never sent empty (400); a 4xx is a bug: alert, no retry (1.6). */
+    private fun sendMasterManifest(request: MasterRequest, now: Long) {
+        if (now >= request.grantExpMs) {
+            settleRequest(request, MasterRequest.STATE_REJECTED, "grant_expired")
+            return
+        }
+        val seqs = JSONArray(request.seqsJson)
+        val held = (0 until seqs.length())
+            .mapNotNull { store.item(UploadItem.keyOf(request.sessionId, C1.TIER_MASTER, seqs.getLong(it))) }
+            .filter { it.isHeldOnPhone() }
+        if (held.isEmpty()) {
+            settleRequest(request, MasterRequest.STATE_GONE, "masters_gone_before_manifest")
+            return
+        }
+        val segments = JSONArray()
+        held.forEach { segments.put(JSONObject().put("seq", it.seq).put("sha256", it.sha256)) }
+        val body = JSONObject().put("slot", request.slot).put("tier", C1.TIER_MASTER).put("segments", segments)
+        val call = Request.Builder()
+            .url(request.ingestUrl.trimEnd('/') + "/v2/sessions/${request.sessionId}/manifest")
+            .header("Authorization", "Bearer ${request.uploadGrant}")
+            .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
+            .build()
+        try {
+            http.newCall(call).execute().use { response ->
+                when {
+                    response.isSuccessful -> acceptMasters(request, held)
+                    response.code in 400..499 && response.code != 408 && response.code != 429 ->
+                        settleRequest(request, MasterRequest.STATE_REJECTED, "master_manifest_http_${response.code}")
+                    else -> retryRequest(request, "master_manifest_http_${response.code}")
+                }
+            }
+        } catch (error: IOException) {
+            retryRequest(request, error.message ?: "master_manifest_io")
+        }
+    }
+
+    private fun acceptMasters(request: MasterRequest, held: List<UploadItem>) {
+        val now = clock.nowMs()
+        val session = store.session(request.sessionId)
+            ?: UploadSession(
+                sessionId = request.sessionId,
+                slot = request.slot,
+                uploadGrant = "",
+                ingestUrl = request.ingestUrl,
+                grantExpMs = 0,
+                tiersCsv = "",
+                createdAtMs = now,
+            )
+        // Keep whichever master grant lasts longer; both list this session's masters.
+        if (session.masterGrant == null || request.grantExpMs >= session.masterGrantExpMs) {
+            store.upsertSession(
+                session.copy(
+                    masterGrant = request.uploadGrant,
+                    masterIngestUrl = request.ingestUrl,
+                    masterGrantExpMs = request.grantExpMs,
+                ),
+            )
+        }
+        var queued = 0
+        for (item in held) {
+            if (item.uploadState == UploadState.HELD || item.uploadState == UploadState.FAILED) {
+                store.update(
+                    item.copy(
+                        state = UploadState.PENDING.name,
+                        uploadId = null,
+                        partsJson = null,
+                        etagsJson = null,
+                        attempts = 0,
+                        nextAttemptAtMs = 0,
+                        lastError = null,
+                        updatedAtMs = now,
+                    ),
+                )
+                queued += 1
+            }
+        }
+        store.upsertMasterRequest(
+            request.copy(state = MasterRequest.STATE_SENT, attempts = request.attempts + 1, lastError = null),
+        )
+        logger.info(TAG, "Master manifest for ${request.sessionId} accepted; queued $queued master(s).")
+    }
+
+    private fun settleRequest(request: MasterRequest, state: String, error: String) {
+        store.upsertMasterRequest(request.copy(state = state, attempts = request.attempts + 1, lastError = error))
+        logger.warn(TAG, "masters.upload ${request.id} for ${request.sessionId} -> $state: $error")
+        onAlert("masters.upload ${request.sessionId}: $error")
+    }
+
+    private fun retryRequest(request: MasterRequest, error: String) {
+        logger.warn(TAG, "Master manifest for ${request.sessionId} failed: $error")
+        val attempts = request.attempts + 1
+        store.upsertMasterRequest(
+            request.copy(attempts = attempts, nextAttemptAtMs = clock.nowMs() + backoffMs(attempts), lastError = error),
+        )
     }
 
     private fun requeueMissing(session: UploadSession, missing: JSONArray): Int {
@@ -385,7 +597,13 @@ class C2Uploader(
 
     private fun backoffMs(attempts: Int): Long = min(maxBackoffMs, baseBackoffMs shl min(attempts - 1, 16))
 
-    private fun ingest(session: UploadSession, path: String): String = session.ingestUrl.trimEnd('/') + path
+    /** On the phone and not yet accepted by K3 under different bytes. */
+    private fun UploadItem.isHeldOnPhone(): Boolean =
+        uploadState != UploadState.VERIFIED && uploadState != UploadState.CONFLICT && File(filePath).isFile
+
+    private class Grant(val token: String, val ingestUrl: String, val expMs: Long) {
+        fun url(path: String): String = ingestUrl.trimEnd('/') + path
+    }
 
     private fun Response.jsonBody(): JSONObject {
         val text = body?.string().orEmpty()
@@ -398,6 +616,7 @@ class C2Uploader(
         private val offset: Long,
         private val length: Long,
         private val mediaType: MediaType,
+        private val throttle: UploadThrottle,
     ) : RequestBody() {
         override fun contentType(): MediaType = mediaType
 
@@ -413,6 +632,7 @@ class C2Uploader(
                     if (read < 0) {
                         throw IOException("${file.name} shrank during upload.")
                     }
+                    throttle.acquire(read)
                     sink.write(buffer, 0, read)
                     remaining -= read
                 }
@@ -424,6 +644,10 @@ class C2Uploader(
         /** C2 says "16 MB parts"; read as MiB. A 6 s segment at 8 Mbps is ~6 MB, so one part. */
         const val DEFAULT_PART_SIZE_BYTES = 16L * 1024 * 1024
         const val CONTENT_TYPE_TS = "video/mp2t"
+        const val REASON_NOT_REQUESTED = "not-requested"
+        const val KEEP_DAYS_EXPIRED = "keep_days_expired"
+        private const val DAY_MS = 24 * 60 * 60 * 1000L
+        private const val PART_TIMEOUT_BASE_NS = 120_000_000_000L
         private const val COPY_BUFFER_BYTES = 64 * 1024
         private val JSON_MEDIA_TYPE = "application/json".toMediaType()
         private const val TAG = "CourtUploader"
