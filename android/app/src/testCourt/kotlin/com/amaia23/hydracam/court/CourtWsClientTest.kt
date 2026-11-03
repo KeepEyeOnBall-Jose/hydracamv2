@@ -378,6 +378,22 @@ class CourtWsClientTest {
     }
 
     @Test
+    fun restartBeforeTheQueuedConnectRunsOpensOneSocket() {
+        val k2 = FakeK2()
+        upgrade(k2)
+        upgrade(FakeK2())
+        val release = holdScheduler()
+        client.start()
+        client.restart() // re-enroll while the first connect is still queued
+        release.countDown()
+
+        k2.next(C1.HELLO)
+        drainScheduler()
+        assertEquals(1, server.requestCount)
+        assertTrue(client.isOpen)
+    }
+
+    @Test
     fun stopDuringTheTokenFetchOpensNoSocket() {
         lateinit var stopping: CourtWsClient
         val tokenThenStop = object : AccessTokenProvider {

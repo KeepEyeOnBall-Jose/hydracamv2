@@ -186,13 +186,14 @@ class CourtWsClient(
         @Synchronized get() = open
 
     fun start() {
-        synchronized(this) {
+        val startedGeneration = synchronized(this) {
             if (running) {
                 return
             }
             running = true
+            generation
         }
-        scheduler.execute { connect() }
+        scheduler.execute { connect(startedGeneration) }
     }
 
     fun stop() {
@@ -229,8 +230,9 @@ class CourtWsClient(
         scheduler.execute { sendState() }
     }
 
-    private fun connect() {
-        val currentGeneration = synchronized(this) { generation.takeIf { running } } ?: return
+    /** Opens a socket for [currentGeneration]; a connect queued before a stop/start opens nothing. */
+    private fun connect(currentGeneration: Int) {
+        if (synchronized(this) { !running || generation != currentGeneration }) return
         val url = webSocketUrl()
         if (url == null) {
             failAndRetry(currentGeneration, "not_enrolled")
@@ -476,7 +478,7 @@ class CourtWsClient(
                 return
             }
             reconnectTask?.cancel(false)
-            reconnectTask = scheduler.schedule({ connect() }, delayMs, TimeUnit.MILLISECONDS)
+            reconnectTask = scheduler.schedule({ connect(failedGeneration) }, delayMs, TimeUnit.MILLISECONDS)
         }
         logger.info(TAG, "Reconnect in $delayMs ms ($reason).")
     }
