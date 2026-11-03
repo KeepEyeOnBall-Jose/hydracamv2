@@ -164,17 +164,26 @@ class SessionTimebase(private val toServerMs: (ptsUs: Long) -> Long) {
     var baseUs: Long = -1
         private set
 
+    private var baseServerMs = 0L
+
     @Synchronized
     fun anchor(ptsUs: Long): Long {
         if (baseUs < 0) {
             baseUs = ptsUs
+            baseServerMs = toServerMs(ptsUs)
         }
         return baseUs
     }
 
     fun relative90k(ptsUs: Long): Long = MpegTsMuxer.usTo90k(ptsUs - anchor(ptsUs))
 
-    fun serverMs(ptsUs: Long): Long = toServerMs(ptsUs)
+    /**
+     * Live mapping until [anchor]; after it, the anchor's server time plus the pts delta, so a
+     * wall-clock step or a new clock burst mid-session cannot open gaps or overlaps between segments.
+     */
+    @Synchronized
+    fun serverMs(ptsUs: Long): Long =
+        if (baseUs < 0) toServerMs(ptsUs) else baseServerMs + Math.floorDiv(ptsUs - baseUs, 1_000L)
 }
 
 /**

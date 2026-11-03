@@ -47,13 +47,28 @@ class UploadThrottle(
         return if (kbps == 0) 0 else nanosFor(bytes, kbps)
     }
 
-    private companion object {
+    /**
+     * C4 v1.7: while the preview flows, uploads get [policyKbps] minus the preview rate measured on
+     * the wire, never less than [MIN_SHARED_KBPS] (0 would mean unlimited). 0 policy stays unlimited.
+     */
+    fun shareWithPreview(policyKbps: Int, measuredPreviewKbps: Int) {
+        maxKbps = budgetKbps(policyKbps, measuredPreviewKbps)
+    }
+
+    companion object {
+        const val MIN_SHARED_KBPS = 64
+
+        fun budgetKbps(policyKbps: Int, measuredPreviewKbps: Int): Int = when {
+            policyKbps <= 0 -> 0
+            else -> (policyKbps - measuredPreviewKbps.coerceAtLeast(0)).coerceAtLeast(MIN_SHARED_KBPS)
+        }
+
         /** One byte (8 bits) at 1 kbps (1000 bit/s) takes 8 ms. */
-        const val NANOS_PER_BYTE_AT_1_KBPS = 8_000_000L
+        private const val NANOS_PER_BYTE_AT_1_KBPS = 8_000_000L
 
-        fun nanosFor(bytes: Long, kbps: Int): Long = bytes * NANOS_PER_BYTE_AT_1_KBPS / kbps
+        private fun nanosFor(bytes: Long, kbps: Int): Long = bytes * NANOS_PER_BYTE_AT_1_KBPS / kbps
 
-        fun sleepNanos(nanos: Long) {
+        private fun sleepNanos(nanos: Long) {
             try {
                 Thread.sleep(nanos / 1_000_000, (nanos % 1_000_000).toInt())
             } catch (error: InterruptedException) {
