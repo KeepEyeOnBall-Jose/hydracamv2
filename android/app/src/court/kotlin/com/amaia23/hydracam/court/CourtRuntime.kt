@@ -500,6 +500,10 @@ class CourtRuntime private constructor(context: Context) {
             kickUploads()
         }
 
+        override fun onSegmentLost(gap: SegmentGap) {
+            ws.sendEvent(C1.RECORDING_GAP, C1Events.recordingGap(gap))
+        }
+
         override fun onRecordingStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long, reason: String) {
             ws.sendEvent(
                 C1.RECORDING_STOPPED,

@@ -242,6 +242,8 @@ internal class PtsClock(
  * - A segment closes at the first IDR at or after `segmentDurationUs − ½ frame`. [requestSyncFrame]
  *   is called once per segment when that point is near, so the encoder delivers the IDR on time.
  * - Files are written as `<seq>.ts.part`, fsynced, then renamed; `seq` is committed only on close.
+ * - Each frame is flushed to the part, and `<seq>.ts.part.json` records its start, so a part a killed
+ *   process left is closed by [TsPartRecovery] when the segmenter is next built.
  *
  * Thread-safe: the video drain and audio threads call in concurrently.
  */
@@ -260,6 +262,7 @@ class TsSegmenter(
     private val hasAudio: Boolean,
     private val clockEstimate: () -> ClockEstimate?,
     private val onSegment: (SegmentRecord) -> Unit,
+    onGap: (SegmentGap) -> Unit = {},
     private val requestSyncFrame: () -> Unit = {},
     private val clock: CourtClock = CourtClock.SYSTEM,
     private val logger: CourtLogger = NoopCourtLogger,
@@ -269,17 +272,14 @@ class TsSegmenter(
     private var syncRequested = false
     private var closed = false
 
+    init {
+        directory.mkdirs()
+        TsPartRecovery(sessionId, slot, tier, directory, sidecar, seqStore, clock, logger).recover(onSegment, onGap)
+    }
+
     @get:Synchronized
     var lastSeq: Long = seqStore.lastSeq(sessionId, tier)
         private set
-
-    init {
-        directory.mkdirs()
-        directory.listFiles { file -> file.name.endsWith(PART_SUFFIX) }?.forEach { part ->
-            logger.warn(TAG, "Dropping unfinished ${part.name} for $sessionId/$tier.")
-            part.delete()
-        }
-    }
 
     /** SPS/PPS from the encoder's `BUFFER_FLAG_CODEC_CONFIG` output (Annex-B). */
     @Synchronized
@@ -307,6 +307,8 @@ class TsSegmenter(
         }
         current = segment
         segment.muxer.writeVideo(timebase.relative90k(ptsUs), annexB, isKeyframe, videoConfig)
+        // A kill then loses at most the frame being written.
+        segment.stream.flush()
         segment.frames += 1
         segment.lastPtsUs = ptsUs
     }
@@ -342,6 +344,7 @@ class TsSegmenter(
         current?.let { open ->
             runCatching { open.stream.close() }
             open.partFile.delete()
+            TsPartRecovery.metaFile(open.partFile).delete()
         }
         current = null
     }
@@ -358,6 +361,9 @@ class TsSegmenter(
         val open = OpenSegment(seq, startPtsUs, File(directory, "%06d.ts%s".format(seq, PART_SUFFIX)), hasAudio)
         syncRequested = false
         timebase.anchor(startPtsUs)
+        val estimate = clockEstimate()
+        PartMeta(timebase.serverMs(startPtsUs), estimate?.offsetMs ?: 0, estimate?.rttMs ?: -1)
+            .write(TsPartRecovery.metaFile(open.partFile))
         return open
     }
 
@@ -369,6 +375,7 @@ class TsSegmenter(
         if (!open.partFile.renameTo(finalFile)) {
             throw IOException("Could not rename ${open.partFile.name}.")
         }
+        TsPartRecovery.metaFile(open.partFile).delete()
         val estimate = clockEstimate()
         val record = SegmentRecord(
             sessionId = sessionId,

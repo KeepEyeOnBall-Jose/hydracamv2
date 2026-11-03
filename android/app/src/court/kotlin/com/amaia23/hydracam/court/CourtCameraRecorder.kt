@@ -51,6 +51,9 @@ interface CourtRecorderListener {
 
     fun onSegment(segment: SegmentRecord)
 
+    /** A crash left a tier's last part with no whole frame (C1 `recording.gap`). */
+    fun onSegmentLost(gap: SegmentGap)
+
     fun onRecordingStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long, reason: String)
 
     fun onRecorderFailed(sessionId: String, error: String)
@@ -115,8 +118,9 @@ class CourtCameraRecorder(
         control.execute {
             val active = recording
             if (active == null || active.sessionId != sessionId) {
-                // Nothing running (crash recovery or failed start): report the persisted seqs.
+                // Nothing running (crash recovery or failed start): close what a kill left, report the seqs.
                 closePipeline()
+                recoverParts(sessionId)
                 listener.onRecordingStopped(
                     sessionId,
                     seqStore.lastSeq(sessionId, C1.TIER_PROXY),
@@ -183,6 +187,7 @@ class CourtCameraRecorder(
                     hasAudio = withAudio,
                     clockEstimate = { clockEstimator.current() },
                     onSegment = { listener.onSegment(it) },
+                    onGap = { listener.onSegmentLost(it) },
                     requestSyncFrame = { pipe.encoder(tier).requestSyncFrame() },
                     logger = logger,
                 ).also { segmenter -> pipe.config(tier)?.let { segmenter.onVideoConfig(it) } }
@@ -266,6 +271,21 @@ class CourtCameraRecorder(
         val pipe = pipeline ?: return
         pipeline = null
         pipe.close()
+    }
+
+    private fun recoverParts(sessionId: String) {
+        val sidecar = JsonlAppender(storage.sidecar(sessionId))
+        C1.TIERS.forEach { tier ->
+            try {
+                val directory = storage.tierDir(sessionId, tier)
+                TsPartRecovery(sessionId, slot(), tier, directory, sidecar, seqStore, logger = logger).recover(
+                    onSegment = { listener.onSegment(it) },
+                    onGap = { listener.onSegmentLost(it) },
+                )
+            } catch (error: IOException) {
+                logger.warn(TAG, "Could not recover $sessionId/$tier parts.", error)
+            }
+        }
     }
 
     private fun hasPermission(permission: String): Boolean =
