@@ -3,12 +3,14 @@ package com.amaia23.hydracam.court
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
+import java.io.IOException
 import java.security.MessageDigest
 
 class TsSegmenterTest {
@@ -162,5 +164,66 @@ class TsSegmenterTest {
             ((bytes[offset + 1].toInt() and 0x1F) shl 8) or (bytes[offset + 2].toInt() and 0xFF)
         }
         assertEquals(1, pids.count { it == MpegTsMuxer.AUDIO_PID })
+    }
+
+    private fun audioPackets(file: File): Int {
+        val bytes = file.readBytes()
+        return (0 until bytes.size / MpegTsMuxer.PACKET_SIZE).count { index ->
+            val offset = index * MpegTsMuxer.PACKET_SIZE
+            (((bytes[offset + 1].toInt() and 0x1F) shl 8) or (bytes[offset + 2].toInt() and 0xFF)) ==
+                MpegTsMuxer.AUDIO_PID
+        }
+    }
+
+    @Test
+    fun audioIsDroppedWithoutAnAudioTrackOrBeforeTheTimebase() {
+        val videoOnly = segmenter(hasAudio = false)
+        feed(videoOnly, 30, 31)
+        videoOnly.onAudioFrame(30 * frameUs + 1_000, ByteArray(100))
+        videoOnly.finish()
+        assertEquals(0, audioPackets(segments.single().file))
+
+        segments.clear()
+        val withAudio = segmenter(hasAudio = true)
+        feed(withAudio, 60, 61)
+        withAudio.onAudioFrame(60 * frameUs - 1, ByteArray(100))
+        withAudio.finish()
+        withAudio.onAudioFrame(61 * frameUs, ByteArray(100))
+        assertEquals(0, audioPackets(segments.single().file))
+    }
+
+    @Test
+    fun abortBeforeAnyFrameIsHarmless() {
+        val target = segmenter()
+        target.abort()
+
+        assertEquals(-1L, target.finish())
+        assertTrue(segments.isEmpty())
+    }
+
+    @Test
+    fun failedRenameKeepsSeqUncommitted() {
+        val dir = storage.tierDir("s1", C1.TIER_PROXY)
+        File(dir, "000000.ts").apply {
+            mkdirs()
+            File(this, "occupied").writeText("x")
+        }
+        val target = segmenter()
+        feed(target, 30, 40)
+
+        assertThrows(IOException::class.java) { target.finish() }
+        assertEquals(-1L, seqStore.lastSeq("s1", C1.TIER_PROXY))
+        assertTrue(segments.isEmpty())
+        assertFalse(storage.sidecar("s1").exists())
+    }
+
+    @Test
+    fun unwritableDirectoryFailsOnTheFirstSegment() {
+        val dir = storage.tierDir("s1", C1.TIER_PROXY)
+        dir.parentFile.mkdirs()
+        dir.writeText("a file where the tier directory should be")
+        val target = segmenter()
+
+        assertThrows(IOException::class.java) { feed(target, 30, 31) }
     }
 }

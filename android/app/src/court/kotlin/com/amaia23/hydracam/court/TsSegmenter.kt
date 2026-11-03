@@ -147,7 +147,7 @@ class SegmentSidecarReader(private val storage: CourtStorage, private val logger
 class JsonlAppender(private val file: File) {
     @Synchronized
     fun append(json: JSONObject) {
-        file.parentFile?.mkdirs()
+        file.absoluteFile.parentFile.mkdirs()
         FileOutputStream(file, true).use { stream ->
             stream.write((json.toString() + "\n").toByteArray(Charsets.UTF_8))
             stream.fd.sync()
@@ -264,26 +264,22 @@ class TsSegmenter(
     @Synchronized
     @Throws(IOException::class)
     fun onVideoFrame(ptsUs: Long, annexB: ByteArray, isKeyframe: Boolean) {
-        if (closed) {
+        val open = current
+        if (closed || (open == null && !isKeyframe)) {
             return
         }
-        val open = current
-        if (open == null) {
-            if (!isKeyframe) {
-                return
-            }
-            current = openSegment(ptsUs)
-        } else {
-            val elapsedUs = ptsUs - open.startPtsUs
-            if (isKeyframe && elapsedUs >= segmentDurationUs - frameDurationUs / 2) {
+        val segment = when {
+            open == null -> openSegment(ptsUs)
+            isKeyframe && ptsUs - open.startPtsUs >= segmentDurationUs - frameDurationUs / 2 -> {
                 closeSegment(open, endPtsUs = ptsUs)
-                current = openSegment(ptsUs)
-            } else if (!syncRequested && elapsedUs >= segmentDurationUs - 2 * frameDurationUs) {
-                syncRequested = true
-                requestSyncFrame()
+                openSegment(ptsUs)
+            }
+            else -> {
+                requestSyncIfNear(ptsUs - open.startPtsUs)
+                open
             }
         }
-        val segment = current ?: return
+        current = segment
         segment.muxer.writeVideo(timebase.relative90k(ptsUs), annexB, isKeyframe, videoConfig)
         segment.frames += 1
         segment.lastPtsUs = ptsUs
@@ -293,8 +289,9 @@ class TsSegmenter(
     @Synchronized
     @Throws(IOException::class)
     fun onAudioFrame(ptsUs: Long, aacRaw: ByteArray) {
+        // finish() and abort() clear [current], so a closed segmenter returns here too.
         val segment = current ?: return
-        if (closed || !hasAudio || ptsUs < timebase.baseUs) {
+        if (!hasAudio || ptsUs < timebase.baseUs) {
             return
         }
         segment.muxer.writeAudio(timebase.relative90k(ptsUs), aacRaw)
@@ -321,6 +318,13 @@ class TsSegmenter(
             open.partFile.delete()
         }
         current = null
+    }
+
+    private fun requestSyncIfNear(elapsedUs: Long) {
+        if (!syncRequested && elapsedUs >= segmentDurationUs - 2 * frameDurationUs) {
+            syncRequested = true
+            requestSyncFrame()
+        }
     }
 
     private fun openSegment(startPtsUs: Long): OpenSegment {

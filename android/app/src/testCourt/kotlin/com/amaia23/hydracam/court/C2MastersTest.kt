@@ -1,70 +1,21 @@
 package com.amaia23.hydracam.court
 
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import okhttp3.mockwebserver.SocketPolicy
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
-import java.io.File
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 
 /** 1.4 `masters.upload`, 1.6 `not-requested`, R10 throttle and keepDays against a fake C2 store. */
-class C2MastersTest {
-    @get:Rule
-    val temp = TemporaryFolder()
-
-    private val server = MockWebServer()
-    private val http = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
-    private val clock = FakeClock()
-    private val store = InMemoryUploadQueueStore()
-    private val alerts = mutableListOf<String>()
+class C2MastersTest : C2StoreTestBase() {
     private val masterGrant = testGrant("s1", listOf(C1.TIER_MASTER), 4_000_000_000L)
-
-    @Before
-    fun setUp() {
-        server.start()
-    }
-
-    @After
-    fun tearDown() {
-        server.shutdown()
-    }
-
-    private fun startSession(tiers: List<String> = listOf(C1.TIER_PROXY)) {
-        val grant = testGrant("s1", tiers, 4_000_000_000L)
-        val body = recordStartBody(grant = grant, ingestUrl = server.url("/").toString())
-        store.upsertSession(UploadSession.from(RecordStart.fromJson(body), "A", clock.now))
-    }
-
-    private val allowed = AtomicBoolean(true)
-
-    private fun uploader(
-        throttle: UploadThrottle = UploadThrottle(maxKbps = 0),
-        partSizeBytes: Long = C2Uploader.DEFAULT_PART_SIZE_BYTES,
-        mastersAllowed: () -> Boolean = allowed::get,
-    ) = C2Uploader(
-        http,
-        store,
-        clock,
-        partSizeBytes = partSizeBytes,
-        throttle = throttle,
-        onAlert = { alerts += it },
-        mastersAllowed = mastersAllowed,
-    )
 
     private fun parts(count: Int): JSONObject {
         val parts = JSONArray()
@@ -74,24 +25,8 @@ class C2MastersTest {
         return JSONObject().put("uploadId", "u1").put("parts", parts)
     }
 
-    private fun segment(tier: String, seq: Long, size: Int = 25): SegmentRecord {
-        val file = File(temp.root, "$tier-$seq.ts")
-        file.writeBytes(ByteArray(size) { (it + seq).toByte() })
-        return SegmentRecord(
-            "s1", "A", tier, seq, file, file.length(), "sha-$tier-$seq",
-            BASE_MS + seq * 6_000, 6_000, 180, 0, -1,
-        )
-    }
-
-    private fun item(tier: String, seq: Long): UploadItem = store.item(UploadItem.keyOf("s1", tier, seq))!!
-
     private fun request(fromServerMs: Long? = null, toServerMs: Long? = null, grant: String = masterGrant) =
         MastersUpload("s1", fromServerMs, toServerMs, grant, server.url("/m/").toString())
-
-    private fun json(code: Int, body: JSONObject) =
-        MockResponse().setResponseCode(code).setHeader("Content-Type", "application/json").setBody(body.toString())
-
-    private fun take(): RecordedRequest = server.takeRequest(3, TimeUnit.SECONDS)!!
 
     private fun enqueueMasters(upload: C2Uploader, count: Int) =
         (0 until count).map { segment(C1.TIER_MASTER, it.toLong()).also(upload::enqueue) }
@@ -107,7 +42,7 @@ class C2MastersTest {
 
     @Test
     fun nothingHeldReturnsZeroAndStoresNothing() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
 
         assertEquals(0, upload.requestMasters("cmd-1", request()))
@@ -119,7 +54,7 @@ class C2MastersTest {
 
     @Test
     fun rangeListsOverlappingHeldMastersThenUploadsWithTheCommandGrant() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 3)
 
@@ -153,7 +88,7 @@ class C2MastersTest {
 
     @Test
     fun repeatedCommandIdIsIdempotent() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 2)
 
@@ -169,7 +104,7 @@ class C2MastersTest {
 
     @Test
     fun verifiedAndConflictedMastersAreNotListed() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 3)
         store.update(item(C1.TIER_MASTER, 0).copy(state = UploadState.VERIFIED.name))
@@ -180,7 +115,7 @@ class C2MastersTest {
 
     @Test
     fun grantThatCannotCoverTheRequestIsRejected() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 1)
 
@@ -201,7 +136,7 @@ class C2MastersTest {
 
     @Test
     fun emptyMasterManifestIsNeverSent() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         val records = enqueueMasters(upload, 1)
         assertEquals(1, upload.requestMasters("cmd-1", request()))
@@ -217,7 +152,7 @@ class C2MastersTest {
 
     @Test
     fun rejectedMasterManifestAlertsWithoutRetry() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 1)
         upload.requestMasters("cmd-1", request())
@@ -237,7 +172,7 @@ class C2MastersTest {
 
     @Test
     fun masterManifestServerErrorRetriesWithBackoff() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 1)
         upload.requestMasters("cmd-1", request())
@@ -260,7 +195,7 @@ class C2MastersTest {
 
     @Test
     fun expiredRequestGrantIsRejectedBeforeAnyRequest() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         enqueueMasters(upload, 1)
         upload.requestMasters("cmd-1", request(grant = testGrant("s1", listOf(C1.TIER_MASTER), clock.now / 1_000 + 1)))
@@ -294,7 +229,7 @@ class C2MastersTest {
 
     @Test
     fun conflictRaisesAnAlert() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         upload.enqueue(segment(C1.TIER_PROXY, 0))
         server.enqueue(json(409, JSONObject().put("reason", "sha256 differs")))
@@ -325,7 +260,7 @@ class C2MastersTest {
 
     @Test
     fun sessionManifestDoesNotWaitForRequestedMasters() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         upload.enqueue(segment(C1.TIER_PROXY, 0))
         enqueueMasters(upload, 1)
@@ -352,7 +287,7 @@ class C2MastersTest {
 
     @Test
     fun pruneDeletesOnlyIdleMastersOlderThanKeepDays() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
         val old = segment(C1.TIER_MASTER, 0).also(upload::enqueue)
         val proxy = segment(C1.TIER_PROXY, 0).also(upload::enqueue)
@@ -373,7 +308,7 @@ class C2MastersTest {
 
     @Test
     fun partBytesGoThroughTheThrottle() {
-        startSession()
+        startSession(tiers = listOf(C1.TIER_PROXY))
         var nowNs = 0L
         var sleptNs = 0L
         val throttle = UploadThrottle(maxKbps = 1_000, nanoClock = { nowNs }, sleeper = {
@@ -516,7 +451,6 @@ class C2MastersTest {
     }
 
     private companion object {
-        const val BASE_MS = 1_700_000_000_000L
         const val DAY_MS = 24 * 3_600_000L
     }
 }

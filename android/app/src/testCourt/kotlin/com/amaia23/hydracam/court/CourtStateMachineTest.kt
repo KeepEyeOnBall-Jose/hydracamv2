@@ -152,6 +152,78 @@ class CourtStateMachineTest {
     }
 
     @Test
+    fun prepareForAnotherSessionDisarmsTheFirst() {
+        prepare("s0")
+        assertEquals(CommandResult.Ack, prepare("s1", fps = 25))
+        assertEquals(CommandResult.Ack, prepare("s1", fps = 50))
+
+        assertEquals(listOf("prepare:s0:60", "disarm:s0", "prepare:s1:25", "prepare:s1:50"), recorder.calls)
+        assertEquals(CourtStateMachine.Phase.Armed("s1", RecordProfile(fps = 50)), machine.phase)
+    }
+
+    @Test
+    fun whileStoppingTheSameSessionIsAckedAndOthersAreBusy() {
+        start("s1")
+        machine.onStop(RecordStop("s1", 0))
+
+        assertEquals(CommandResult.Ack, prepare("s1"))
+        assertEquals(C1NackCode.BUSY, (prepare("s2") as CommandResult.Nack).code)
+        assertEquals(CourtMode.RECORDING, machine.mode(pendingUploads = true))
+        assertEquals(listOf("start:s1:30", "stop:s1:command"), recorder.calls)
+    }
+
+    @Test
+    fun eventsForOtherSessionsLeaveTheRecordingAlone() {
+        start("s1")
+
+        machine.onStop(RecordStop("s2", 0))
+        machine.onLocalStop("s2", CourtStateMachine.REASON_MAX_DURATION)
+        machine.onRecorderFailed("s2", "camera_busy")
+        machine.onRecorderStopped("s2")
+
+        assertTrue(machine.phase is CourtStateMachine.Phase.Recording)
+        assertEquals("s1", machine.activeSessionId)
+        assertEquals("camera_busy", machine.lastError)
+        assertEquals(listOf("start:s1:30"), recorder.calls)
+    }
+
+    @Test
+    fun armedPhaseIgnoresOtherSessionsAndRecorderFailureDisarms() {
+        prepare("s1")
+
+        machine.onStop(RecordStop("s2", 0))
+        machine.onLocalStop("s1", CourtStateMachine.REASON_MAX_DURATION)
+        machine.onRecorderFailed("s2", "camera_busy")
+        machine.onRecorderStopped("s1")
+        assertTrue(machine.phase is CourtStateMachine.Phase.Armed)
+
+        machine.onRecorderFailed("s1", "camera_open_failed")
+
+        assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
+        assertEquals("camera_open_failed", machine.lastError)
+        assertEquals(listOf("prepare:s1:60"), recorder.calls)
+    }
+
+    @Test
+    fun recorderStoppingByItselfEndsTheRecording() {
+        start("s1")
+
+        machine.onRecorderStopped("s1")
+
+        assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
+        assertNull(machine.activeSessionId)
+    }
+
+    @Test
+    fun idleRecorderFailureOnlyRecordsTheError() {
+        machine.onRecorderFailed("s1", "camera_disconnected")
+
+        assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
+        assertEquals("camera_disconnected", machine.lastError)
+        assertTrue(recorder.calls.isEmpty())
+    }
+
+    @Test
     fun localStopUsesGivenReason() {
         start()
         machine.onLocalStop("s1", CourtStateMachine.REASON_MAX_DURATION)

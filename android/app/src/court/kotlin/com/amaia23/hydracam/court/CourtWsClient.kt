@@ -339,8 +339,7 @@ class CourtWsClient(
                     t3 = clock.nowMs(),
                 )
                 if (clockEstimator.add(sample)) {
-                    val estimate = clockEstimator.current()
-                    logger.info(TAG, "Clock offset ${estimate?.offsetMs} ms, rtt ${estimate?.rttMs} ms.")
+                    logger.info(TAG, "Clock burst done: ${clockEstimator.current()}.")
                 }
             }
             else -> onCommand(envelope)

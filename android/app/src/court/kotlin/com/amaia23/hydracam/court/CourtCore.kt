@@ -73,7 +73,7 @@ class ClockOffsetEstimator(private val burstSize: Int = 8) {
             return false
         }
         burst += sample
-        val best = burst.minByOrNull { it.rttMs } ?: return false
+        val best = burst.minBy { it.rttMs }
         val estimate = ClockEstimate(best.offsetMs, best.rttMs, best.t3)
         val complete = burst.size >= burstSize
         if (complete || published == null) {

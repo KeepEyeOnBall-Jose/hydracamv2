@@ -181,12 +181,15 @@ class C2Uploader(
                 // Preempted, not failed: the stored item keeps its parts and its attempt count.
                 logger.info(TAG, "${item.key} paused for recording.")
             } else {
-                retryLater(item, error.message ?: error.javaClass.simpleName)
+                retryLater(stored(item), error.message ?: error.javaClass.simpleName)
             }
         } catch (ignored: JSONException) {
-            retryLater(item, "bad_response")
+            retryLater(stored(item), "bad_response")
         }
     }
+
+    /** The stored row of [item]: init may have moved it to UPLOADING (uploadId, parts) before the failure. */
+    private fun stored(item: UploadItem): UploadItem = store.item(item.key) ?: item
 
     /** The grant [item] uploads under now, or null after settling an item that cannot upload. */
     private fun readyGrant(item: UploadItem, now: Long): Grant? {

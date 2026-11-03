@@ -10,11 +10,14 @@ import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.io.IOException
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
@@ -76,6 +79,7 @@ class CourtWsClientTest {
     private val estimator = ClockOffsetEstimator(burstSize = 2)
     private val commands = LinkedBlockingQueue<C1Envelope>()
     private val connections = LinkedBlockingQueue<Boolean>()
+    private val reasons = LinkedBlockingQueue<String>()
     private lateinit var scheduler: ScheduledExecutorService
     private lateinit var outbox: EventOutbox
     private lateinit var client: CourtWsClient
@@ -87,22 +91,29 @@ class CourtWsClientTest {
         server.start()
         scheduler = Executors.newSingleThreadScheduledExecutor()
         outbox = EventOutbox(temp.newFolder("outbox"))
-        client = CourtWsClient(
-            http = http,
-            webSocketUrl = { server.url("/device/v1").toString() },
-            tokens = tokens,
-            hello = { HelloBody("dev-1", "1.0", 1, "Pixel", 34, true, "court-1", "A", 0, caps, "s9") },
-            state = { StateBody(CourtMode.IDLE, 80, true, 85, 30.0, 0, 1_000, 0, -50, null) },
-            outbox = outbox,
-            clockEstimator = estimator,
-            onCommand = { commands.put(it) },
-            backoff = ReconnectBackoff(baseMs = 10, maxMs = 50),
-            scheduler = scheduler,
-            clockBurstSize = 2,
-            clockPingSpacingMs = 10,
-            onConnectionChanged = { connected, _ -> connections.put(connected) },
-        )
+        client = newClient()
     }
+
+    private fun newClient(
+        webSocketUrl: () -> String? = { server.url("/device/v1").toString() },
+        tokenProvider: AccessTokenProvider = tokens,
+        logger: CourtLogger = NoopCourtLogger,
+    ) = CourtWsClient(
+        http = http,
+        webSocketUrl = webSocketUrl,
+        tokens = tokenProvider,
+        hello = { HelloBody("dev-1", "1.0", 1, "Pixel", 34, true, "court-1", "A", 0, caps, "s9") },
+        state = { StateBody(CourtMode.IDLE, 80, true, 85, 30.0, 0, 1_000, 0, -50, null) },
+        outbox = outbox,
+        clockEstimator = estimator,
+        onCommand = { commands.put(it) },
+        backoff = ReconnectBackoff(baseMs = 10, maxMs = 50),
+        logger = logger,
+        scheduler = scheduler,
+        clockBurstSize = 2,
+        clockPingSpacingMs = 10,
+        onConnectionChanged = { connected, reason -> connections.put(connected).also { reasons.put(reason ?: "") } },
+    )
 
     @After
     fun tearDown() {
@@ -193,5 +204,213 @@ class CourtWsClientTest {
         k2.next(C1.HELLO)
         assertEquals(1, tokens.invalidations.get())
         assertTrue(client.isOpen)
+    }
+
+    @Test
+    fun otherHandshakeFailuresKeepTheTokenAndReconnect() {
+        val calls = AtomicInteger()
+        replaceClient(
+            newClient(
+                webSocketUrl = {
+                    if (calls.incrementAndGet() == 1) "http://127.0.0.1:1/device/v1" else server.url("/d").toString()
+                },
+            ),
+        )
+        server.enqueue(MockResponse().setResponseCode(500))
+        val k2 = FakeK2()
+        upgrade(k2)
+        client.start()
+
+        k2.next(C1.HELLO)
+        val failures = listOf(reasons.await(), reasons.await())
+        assertEquals("ConnectException", failures[0])
+        assertEquals("http_500", failures[1])
+        assertEquals(listOf(false, false, true), listOf(connections.await(), connections.await(), connections.await()))
+        assertEquals(0, tokens.invalidations.get())
+    }
+
+    @Test
+    fun notEnrolledRetriesUntilAUrlExistsAndStartIsIdempotent() {
+        val calls = AtomicInteger()
+        val logger = RecordingLogger()
+        replaceClient(
+            newClient(
+                webSocketUrl = { if (calls.incrementAndGet() <= 2) null else server.url("/device/v1").toString() },
+                logger = logger,
+            ),
+        )
+        val k2 = FakeK2()
+        upgrade(k2)
+
+        client.start()
+        client.start()
+
+        k2.next(C1.HELLO)
+        assertEquals(3, calls.get())
+        assertEquals(2, synchronized(logger) { logger.infos.count { it.endsWith("(not_enrolled).") } })
+        assertTrue(client.connectedAtMs > 0)
+        assertNull(client.lastConnectError)
+    }
+
+    @Test
+    fun tokenFailuresAreReportedAndRetriedWithoutConnecting() {
+        val failures = listOf(
+            CourtAuthException("rejected", rejected = true) to "auth_rejected",
+            CourtAuthException("later", rejected = false) to "auth_unavailable",
+            IOException("dns") to "auth_unreachable",
+        )
+        for ((error, reason) in failures) {
+            replaceClient(newClient(tokenProvider = FailingTokens(error)))
+            client.start()
+            eventually(reason) { client.lastConnectError == reason }
+        }
+
+        client.stop()
+        assertEquals(0, server.requestCount)
+    }
+
+    @Test
+    fun connectQueuedBeforeStopOpensNothing() {
+        val release = holdScheduler()
+        client.start()
+        client.stop()
+        client.sendStateNow()
+        release.countDown()
+
+        drainScheduler()
+        assertEquals(0, server.requestCount)
+        assertFalse(client.isOpen)
+    }
+
+    @Test
+    fun stopDuringTheTokenFetchOpensNoSocket() {
+        lateinit var stopping: CourtWsClient
+        val tokenThenStop = object : AccessTokenProvider {
+            override fun accessToken(): String = "tok-1".also { stopping.stop() }
+
+            override fun invalidate() = Unit
+        }
+        stopping = newClient(tokenProvider = tokenThenStop)
+        replaceClient(stopping)
+
+        client.start()
+
+        assertEquals("stopped", reasons.await())
+        drainScheduler()
+        assertEquals(0, server.requestCount)
+    }
+
+    @Test
+    fun failureAfterARestartDoesNotScheduleAStaleReconnect() {
+        val calls = AtomicInteger()
+        lateinit var flaky: CourtWsClient
+        flaky = newClient(
+            webSocketUrl = {
+                when (calls.incrementAndGet()) {
+                    1 -> null.also { flaky.stop() }
+                    2 -> null.also { flaky.restart() }
+                    else -> server.url("/device/v1").toString()
+                }
+            },
+        )
+        replaceClient(flaky)
+        val k2 = FakeK2()
+        upgrade(k2)
+
+        client.start()
+        assertEquals("stopped", reasons.await())
+        drainScheduler()
+        assertEquals(1, calls.get())
+        client.start()
+
+        k2.next(C1.HELLO)
+        assertEquals(3, calls.get())
+        assertEquals(1, server.requestCount)
+    }
+
+    @Test
+    fun handshakeThatCompletesAfterStopIsClosedAsStale() {
+        val k2 = FakeK2()
+        server.enqueue(MockResponse().withWebSocketUpgrade(k2).setHeadersDelay(300, TimeUnit.MILLISECONDS))
+        client.start()
+        server.takeRequest(3, TimeUnit.SECONDS)!!
+        client.stop()
+
+        k2.opened.await().send(C1Envelope.create(C1.RECORD_STOP, JSONObject().put("sessionId", "s1"), 1).encode())
+
+        assertEquals(1000, k2.closed.await())
+        assertFalse(client.isOpen)
+        assertEquals(listOf(false), connections.toList())
+        assertTrue(commands.isEmpty())
+    }
+
+    @Test
+    fun badFramesAndUnknownRefsAreIgnored() {
+        val logger = RecordingLogger()
+        replaceClient(newClient(logger = logger))
+        val k2 = FakeK2()
+        upgrade(k2)
+        val nacked = client.sendEvent(C1.RECORDING_STARTED, JSONObject().put("sessionId", "s1"))
+        val pending = client.sendEvent(C1.RECORDING_STOPPED, JSONObject().put("sessionId", "s1"))
+        client.sendStateNow()
+        client.start()
+        val socket = k2.opened.await()
+        k2.next(C1.STATE)
+
+        socket.send("not json")
+        socket.send(C1Envelope.ack("unknown", 0).encode())
+        socket.send(C1Envelope.nack("unknown", C1NackCode.BAD_REQUEST, null, 0).encode())
+        socket.send(C1Envelope.nack(nacked, C1NackCode.BAD_REQUEST, "no session", 0).encode())
+        socket.send(C1Envelope.create(C1.RECORD_STOP, JSONObject().put("sessionId", "s1"), 1).encode())
+        commands.await()
+        client.sendStateNow()
+
+        k2.next(C1.STATE)
+        assertEquals(listOf(pending), outbox.pendingIds())
+        val warnings = synchronized(logger) { logger.warnings.toList() }
+        assertEquals(1, warnings.count { it.startsWith("Dropping bad envelope") })
+        assertEquals(listOf("K2 nacked event $nacked: ${C1NackCode.BAD_REQUEST}"), warnings.filter { "nacked" in it })
+    }
+
+    private class FailingTokens(private val error: IOException) : AccessTokenProvider {
+        override fun accessToken(): String = throw error
+
+        override fun invalidate() = Unit
+    }
+
+    private fun CourtWsClient.restart() {
+        stop()
+        start()
+    }
+
+    /** Swaps in [next] after stopping the default client, which never started (no socket to close). */
+    private fun replaceClient(next: CourtWsClient) {
+        client.stop()
+        connections.clear()
+        reasons.clear()
+        client = next
+    }
+
+    /** Blocks the client's scheduler thread until the returned latch is counted down. */
+    private fun holdScheduler(): CountDownLatch {
+        val latch = CountDownLatch(1)
+        scheduler.execute { latch.await() }
+        return latch
+    }
+
+    private fun drainScheduler() {
+        val idle = CountDownLatch(1)
+        scheduler.execute { idle.countDown() }
+        assertTrue(idle.await(3, TimeUnit.SECONDS))
+    }
+
+    private fun eventually(what: String, condition: () -> Boolean) {
+        val deadline = System.currentTimeMillis() + 3_000
+        while (!condition()) {
+            if (System.currentTimeMillis() > deadline) {
+                throw AssertionError("Timed out waiting for $what.")
+            }
+            Thread.sleep(10)
+        }
     }
 }

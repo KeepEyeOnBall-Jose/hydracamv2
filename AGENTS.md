@@ -130,6 +130,9 @@ grammar for the sake of concision.
   changed-markdown linting on every PR and push to `master-jose-2025`.
   `.github/workflows/flutter-quality.yml` backstops `flutter analyze` and
   `flutter test` the same way.
+- `scripts/court_quality_gate.sh` is the gate for the Android `court` flavor:
+  JVM tests, ktlint, detekt and the Kover coverage floor. Run it before every
+  court-flavor commit.
 - Once a check is mechanically enforced here (gate script or CI workflow), do
   not re-expand it into prose elsewhere in this file — update the script or
   workflow and this section's pointer instead.

@@ -4,9 +4,11 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeFalse
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.io.File
 
 class EventOutboxTest {
     @get:Rule
@@ -57,6 +59,7 @@ class EventOutboxTest {
 
         outbox.markAllUnsent()
         assertEquals(1, outbox.takeDue(nowMs = 10_200, resendAfterMs = 10_000).size)
+        assertTrue(outbox.ack(outbox.pendingIds().single()))
     }
 
     @Test
@@ -71,13 +74,46 @@ class EventOutboxTest {
     }
 
     @Test
-    fun unreadableFileIsDropped() {
+    fun unreadableFilesAreDropped() {
         val dir = temp.newFolder("outbox")
-        java.io.File(dir, "000000000000-bad.json").writeText("{not json")
+        File(dir, "000000000000-bad.json").writeText("{not json")
+        File(dir, "000000000001-v9.json").writeText("""{"order":1,"envelope":{"v":9,"id":"x","type":"t"}}""")
+        File(dir, "000000000002-dir.json").mkdirs()
+        val logger = RecordingLogger()
 
-        val outbox = EventOutbox(dir)
+        val outbox = EventOutbox(dir, logger = logger)
 
         assertEquals(0, outbox.size())
         assertEquals(0, dir.listFiles()!!.size)
+        assertEquals(3, logger.warnings.count { it.startsWith("Dropping unreadable outbox file") })
+    }
+
+    @Test
+    fun missingDirectoryIsCreatedOnTheFirstEvent() {
+        val dir = File(temp.root, "later/outbox")
+        val outbox = EventOutbox(dir)
+        assertEquals(0, outbox.size())
+
+        outbox.add(event(0))
+
+        assertEquals(1, dir.listFiles()!!.size)
+    }
+
+    @Test
+    fun unwritableDirectoryKeepsEventsInMemory() {
+        val dir = temp.newFolder("outbox")
+        val logger = RecordingLogger()
+        val outbox = EventOutbox(dir, logger = logger)
+        dir.setWritable(false)
+        try {
+            assumeFalse("running as a user that ignores permissions", dir.canWrite())
+
+            outbox.add(event(0))
+
+            assertEquals(1, outbox.size())
+            assertEquals(1, logger.warnings.size)
+        } finally {
+            dir.setWritable(true)
+        }
     }
 }

@@ -1,89 +1,17 @@
 package com.amaia23.hydracam.court
 
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 /** H7 against a fake C2 store (MockWebServer). */
-class C2UploaderTest {
-    @get:Rule
-    val temp = TemporaryFolder()
-
-    private val server = MockWebServer()
-    private val http = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
-    private val clock = FakeClock()
-    private val store = InMemoryUploadQueueStore()
-    private lateinit var grant: String
-
-    @Before
-    fun setUp() {
-        server.start()
-    }
-
-    @After
-    fun tearDown() {
-        server.shutdown()
-    }
-
-    private fun startSession(
-        tiers: List<String> = listOf(C1.TIER_PROXY, C1.TIER_MASTER),
-        expSeconds: Long = 4_000_000_000L,
-    ) {
-        grant = testGrant("s1", tiers, expSeconds)
-        val body = recordStartBody(grant = grant, ingestUrl = server.url("/").toString())
-        store.upsertSession(UploadSession.from(RecordStart.fromJson(body), "A", clock.now))
-    }
-
-    private fun uploader(partSizeBytes: Long = C2Uploader.DEFAULT_PART_SIZE_BYTES) =
-        C2Uploader(http, store, clock, partSizeBytes = partSizeBytes)
-
-    private fun segment(tier: String, seq: Long, size: Int = 25): SegmentRecord {
-        val file = File(temp.root, "$tier-$seq.ts")
-        file.writeBytes(ByteArray(size) { (it + seq).toByte() })
-        return SegmentRecord(
-            "s1", "A", tier, seq, file, file.length(), "sha-$tier-$seq",
-            1_700_000_000_000L + seq * 6_000, 6_000, 180, 0, -1,
-        )
-    }
-
-    private fun item(tier: String, seq: Long): UploadItem = store.item(UploadItem.keyOf("s1", tier, seq))!!
-
-    private fun json(code: Int, body: JSONObject) =
-        MockResponse().setResponseCode(code).setHeader("Content-Type", "application/json").setBody(body.toString())
-
-    private fun initCreated(uploadId: String, partCount: Int) = json(
-        201,
-        JSONObject()
-            .put("uploadId", uploadId)
-            .put(
-                "parts",
-                JSONArray(
-                    (1..partCount).map {
-                        JSONObject().put("n", it).put("url", server.url("/part/$it").toString())
-                    },
-                ),
-            ),
-    )
-
-    private fun partOk(etag: String) = MockResponse().setResponseCode(200).setHeader("ETag", etag)
-
-    private fun take(): RecordedRequest = server.takeRequest(3, TimeUnit.SECONDS)!!
-
+class C2UploaderTest : C2StoreTestBase() {
     @Test
     fun uploadsVerifiesThenDeletesTheFile() {
         startSession()

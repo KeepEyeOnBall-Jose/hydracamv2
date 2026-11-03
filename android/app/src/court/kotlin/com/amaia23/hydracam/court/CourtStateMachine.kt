@@ -80,7 +80,8 @@ class CourtStateMachine(
             return notRooted()
         }
         return when (val current = phase) {
-            is Phase.Recording, is Phase.Stopping -> sameOrBusy(current, command.sessionId)
+            is Phase.Recording -> sameOrBusy(current.sessionId, command.sessionId)
+            is Phase.Stopping -> sameOrBusy(current.sessionId, command.sessionId)
             is Phase.Armed -> {
                 if (current.sessionId != command.sessionId) {
                     recorder.disarm(current.sessionId)
@@ -209,16 +210,10 @@ class CourtStateMachine(
         activeSessions.save(sessionId)
     }
 
-    private fun sameOrBusy(current: Phase, sessionId: String): CommandResult {
-        val currentId = when (current) {
-            is Phase.Recording -> current.sessionId
-            is Phase.Stopping -> current.sessionId
-            else -> null
-        }
-        return if (currentId == sessionId) CommandResult.Ack else busy(currentId)
-    }
+    private fun sameOrBusy(currentId: String, sessionId: String): CommandResult =
+        if (currentId == sessionId) CommandResult.Ack else busy(currentId)
 
-    private fun busy(currentSessionId: String?): CommandResult =
+    private fun busy(currentSessionId: String): CommandResult =
         CommandResult.Nack(C1NackCode.BUSY, "Recording session $currentSessionId.")
 
     private fun notRooted(): CommandResult =

@@ -99,3 +99,61 @@ class CourtCoreTest {
         assertTrue(delays.all { it in 15_000L..30_000L })
     }
 }
+
+class CourtCoreHelpersTest {
+    @Test
+    fun permanentClientErrorsExclude408And429() {
+        val permanent = listOf(399, 400, 401, 404, 408, 409, 429, 499, 500).filter(HttpStatus::isPermanentClientError)
+
+        assertEquals(listOf(400, 401, 404, 409, 499), permanent)
+    }
+
+    @Test
+    fun backoffWithOneMsBaseNeverGoesBelowOneMs() {
+        val backoff = ReconnectBackoff(baseMs = 1, maxMs = 1)
+
+        assertEquals(listOf(1L, 1L, 1L), List(3) { backoff.nextDelayMs() })
+    }
+
+    @Test
+    fun rootStatusCachesNoForRetryMsAndYesForever() {
+        val clock = FakeClock(1_000)
+        var answer = false
+        var probes = 0
+        val changes = mutableListOf<Boolean>()
+        val status = RootStatus(RecordingLogger(), {
+            probes += 1
+            answer
+        }, retryMs = 60_000, clock = clock)
+
+        assertFalse(status.check { changes += it })
+        assertEquals(1_000L, status.checkedAtMs)
+        clock.now += 59_999
+        answer = true
+        assertFalse(status.check { changes += it })
+        assertEquals(1, probes)
+
+        clock.now += 1
+        assertTrue(status.check { changes += it })
+        assertTrue(status.rooted)
+        assertEquals(listOf(true), changes)
+
+        clock.now += 600_000
+        answer = false
+        assertTrue(status.check { changes += it })
+        assertEquals(2, probes)
+    }
+
+    @Test
+    fun rootStatusReportsAFlipOnlyWhenTheAnswerChanges() {
+        val clock = FakeClock(1_000)
+        val changes = mutableListOf<Boolean>()
+        val status = RootStatus(RecordingLogger(), { false }, retryMs = 10, clock = clock)
+
+        status.check { changes += it }
+        clock.now += 10
+        status.check { changes += it }
+
+        assertTrue(changes.isEmpty())
+    }
+}
