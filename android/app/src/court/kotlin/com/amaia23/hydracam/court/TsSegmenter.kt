@@ -6,6 +6,7 @@ import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.RandomAccessFile
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 import kotlin.math.abs
@@ -143,14 +144,29 @@ class SegmentSidecarReader(private val storage: CourtStorage, private val logger
     }
 }
 
-/** Append-only JSONL file, fsynced per line. Shared by both tiers of a session. */
+/**
+ * Append-only JSONL file, fsynced per line. Shared by both tiers of a session. A line torn by a
+ * full disk is ended before the next append, so it costs only itself, never the next record.
+ */
 class JsonlAppender(private val file: File) {
     @Synchronized
     fun append(json: JSONObject) {
-        file.absoluteFile.parentFile.mkdirs()
+        file.absoluteFile.parentFile?.mkdirs()
+        val line = (json.toString() + "\n").toByteArray(Charsets.UTF_8)
+        val bytes = if (endsTorn()) byteArrayOf('\n'.code.toByte()) + line else line
         FileOutputStream(file, true).use { stream ->
-            stream.write((json.toString() + "\n").toByteArray(Charsets.UTF_8))
+            stream.write(bytes)
             stream.fd.sync()
+        }
+    }
+
+    private fun endsTorn(): Boolean {
+        if (!file.isFile || file.length() == 0L) {
+            return false
+        }
+        return RandomAccessFile(file, "r").use { raf ->
+            raf.seek(raf.length() - 1)
+            raf.read() != '\n'.code
         }
     }
 }
