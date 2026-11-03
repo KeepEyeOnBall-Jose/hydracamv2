@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H8 WHEP Viewer</title>
+<style>
+  :root { --bg: #f6f6f4; --fg: #1d1d1b; --muted: #6b6b66; --line: #d9d9d4; --accent: #1f6feb; --bad: #c62828; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #161615; --fg: #ecece8; --muted: #9a9a94; --line: #33332f; --accent: #6ea8ff; --bad: #ff8a80; }
+  }
+  :root[data-theme="dark"] { --bg: #161615; --fg: #ecece8; --muted: #9a9a94; --line: #33332f; --accent: #6ea8ff; --bad: #ff8a80; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; }
+  form { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  input { flex: 1 1 240px; min-width: 0; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; }
+  button { padding: 6px 14px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; }
+  video { width: 100%; max-width: 960px; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; display: block; }
+  #stats { font: 13px/1.5 ui-monospace, monospace; white-space: pre; overflow-x: auto; margin-top: 12px; }
+  .bad { color: var(--bad); }
+</style>
+</head>
+<body>
+<form id="form">
+  <input id="whep" placeholder="WHEP URL, e.g. http://127.0.0.1:8889/court/demo/left/whep">
+  <input id="token" placeholder="whep JWT (Bearer)">
+  <button type="submit">Watch</button>
+</form>
+<video id="video" autoplay muted playsinline></video>
+<div id="stats">idle</div>
+<script>
+// Capture-time tag written by the phone (CaptureTimeNal.kt): 16-byte "H8-CAPTURE-TIME1" + "<wallMs>:<seq>" + 0x80.
+const TAG = new TextEncoder().encode("H8-CAPTURE-TIME1");
+const params = new URLSearchParams(location.search);
+const $ = (id) => document.getElementById(id);
+$("whep").value = params.get("whep") || "";
+$("token").value = params.get("token") || "";
+
+const byRtp = new Map();            // rtpTimestamp -> {wallMs, seq, arrivalMs}
+const samples = [];                 // capture -> display (ms), current window
+const arrivals = [];                // capture -> encoded frame received (ms), current window
+let clock = { ntpOffsetMs: 0 };
+let pc, tagged = 0, untagged = 0, shown = 0, matched = 0, transformMode = "none";
+
+function findTag(bytes) {
+  outer: for (let i = 0; i + TAG.length < bytes.length; i++) {
+    for (let j = 0; j < TAG.length; j++) if (bytes[i + j] !== TAG[j]) continue outer;
+    let end = i + TAG.length;
+    while (end < bytes.length && bytes[end] !== 0x80) end++;
+    const [wallMs, seq] = new TextDecoder().decode(bytes.subarray(i + TAG.length, end)).split(":").map(Number);
+    return { wallMs, seq };
+  }
+  return null;
+}
+
+// Mac wall clock corrected to the SNTP reference the phone also uses.
+const trueNow = () => Date.now() + (clock.ntpOffsetMs || 0);
+
+function onEncoded(rtpTimestamp, tag) {
+  if (!tag) { untagged++; return; }
+  tagged++;
+  const arrivalMs = trueNow();
+  if (tag.wallMs > 0) arrivals.push(arrivalMs - tag.wallMs);
+  byRtp.set(rtpTimestamp, { ...tag, arrivalMs });
+  if (byRtp.size > 600) byRtp.delete(byRtp.keys().next().value);
+}
+
+const workerSource = `
+  const TAG = new TextEncoder().encode("H8-CAPTURE-TIME1");
+  ${findTag.toString()}
+  onrtctransform = (event) => {
+    const { readable, writable } = event.transformer;
+    readable.pipeThrough(new TransformStream({
+      transform(frame, controller) {
+        const meta = frame.getMetadata();
+        postMessage({ rtp: meta.rtpTimestamp ?? frame.timestamp, tag: findTag(new Uint8Array(frame.data)) });
+        controller.enqueue(frame);
+      },
+    })).pipeTo(writable);
+  };`;
+
+function attachTransform(receiver) {
+  if (window.RTCRtpScriptTransform) {
+    const worker = new Worker(URL.createObjectURL(new Blob([workerSource], { type: "text/javascript" })));
+    worker.onmessage = ({ data }) => onEncoded(data.rtp, data.tag);
+    receiver.transform = new RTCRtpScriptTransform(worker, {});
+    transformMode = "RTCRtpScriptTransform";
+  } else if (receiver.createEncodedStreams) {
+    const { readable, writable } = receiver.createEncodedStreams();
+    readable.pipeThrough(new TransformStream({
+      transform(frame, controller) {
+        const meta = frame.getMetadata();
+        onEncoded(meta.rtpTimestamp ?? frame.timestamp, findTag(new Uint8Array(frame.data)));
+        controller.enqueue(frame);
+      },
+    })).pipeTo(writable);
+    transformMode = "createEncodedStreams";
+  }
+}
+
+function onVideoFrame(now, meta) {
+  shown++;
+  const tag = byRtp.get(meta.rtpTimestamp);
+  if (tag && tag.wallMs > 0) {
+    matched++;
+    // expectedDisplayTime is on the performance clock; move it to the wall clock.
+    const displayMs = trueNow() + (meta.expectedDisplayTime - performance.now());
+    samples.push(displayMs - tag.wallMs);
+  }
+  $("video").requestVideoFrameCallback(onVideoFrame);
+}
+
+const pct = (values, p) => {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  return Math.round(sorted[Math.floor((sorted.length - 1) * p)]);
+};
+
+async function report() {
+  if (!pc) return;
+  const stats = await pc.getStats();
+  let inbound = {}, pair = {};
+  stats.forEach((s) => {
+    if (s.type === "inbound-rtp" && s.kind === "video") inbound = s;
+    if (s.type === "candidate-pair" && s.nominated) pair = s;
+  });
+  const row = {
+    t: Date.now(),
+    whep: $("whep").value.split("?")[0],
+    transformMode,
+    clockOffsetMs: clock.ntpOffsetMs,
+    g2gP50Ms: pct(samples, 0.5), g2gP95Ms: pct(samples, 0.95), g2gMaxMs: pct(samples, 1), g2gN: samples.length,
+    arrivalP50Ms: pct(arrivals, 0.5), arrivalP95Ms: pct(arrivals, 0.95),
+    tagged, untagged, shown, matched,
+    fps: inbound.framesPerSecond, framesDecoded: inbound.framesDecoded, framesDropped: inbound.framesDropped,
+    freezeCount: inbound.freezeCount, packetsLost: inbound.packetsLost, nackCount: inbound.nackCount,
+    jitterBufferMs: inbound.jitterBufferEmittedCount ? Math.round(1000 * inbound.jitterBufferDelay / inbound.jitterBufferEmittedCount) : null,
+    decodeMs: inbound.framesDecoded ? Math.round(1000 * inbound.totalDecodeTime / inbound.framesDecoded * 10) / 10 : null,
+    kbps: null, rttMs: pair.currentRoundTripTime != null ? Math.round(pair.currentRoundTripTime * 1000) : null,
+    size: inbound.frameWidth ? `${inbound.frameWidth}x${inbound.frameHeight}` : null,
+    decoder: inbound.decoderImplementation,
+  };
+  if (report.last && inbound.bytesReceived != null) {
+    row.kbps = Math.round((inbound.bytesReceived - report.last.bytes) * 8 / (row.t - report.last.t));
+  }
+  report.last = { t: row.t, bytes: inbound.bytesReceived };
+  samples.length = 0;
+  arrivals.length = 0;
+  $("stats").textContent = Object.entries(row).map(([k, v]) => `${k.padEnd(16)} ${v}`).join("\n");
+  fetch("/viewer-stats", { method: "POST", body: JSON.stringify(row) }).catch(() => {});
+}
+
+async function refreshClock() {
+  try { clock = await (await fetch("/clock")).json(); } catch { /* opened from file: no offset */ }
+}
+
+async function watch(event) {
+  event?.preventDefault();
+  if (pc) pc.close();
+  await refreshClock();
+  pc = new RTCPeerConnection({ encodedInsertableStreams: !window.RTCRtpScriptTransform });
+  const transceiver = pc.addTransceiver("video", { direction: "recvonly" });
+  attachTransform(transceiver.receiver);
+  pc.ontrack = (e) => { $("video").srcObject = e.streams[0] || new MediaStream([e.track]); };
+  await pc.setLocalDescription(await pc.createOffer());
+  await new Promise((resolve) => {
+    if (pc.iceGatheringState === "complete") return resolve();
+    pc.onicegatheringstatechange = () => pc.iceGatheringState === "complete" && resolve();
+    setTimeout(resolve, 2000);
+  });
+  const headers = { "Content-Type": "application/sdp" };
+  if ($("token").value) headers.Authorization = `Bearer ${$("token").value}`;
+  const response = await fetch($("whep").value, { method: "POST", headers, body: pc.localDescription.sdp });
+  if (!response.ok) {
+    $("stats").innerHTML = `<span class="bad">WHEP ${response.status}: ${await response.text()}</span>`;
+    return;
+  }
+  await pc.setRemoteDescription({ type: "answer", sdp: await response.text() });
+  $("video").requestVideoFrameCallback(onVideoFrame);
+}
+
+$("form").addEventListener("submit", watch);
+setInterval(report, 5000);
+setInterval(refreshClock, 60000);
+if (params.get("whep")) watch();
+</script>
+</body>
+</html>

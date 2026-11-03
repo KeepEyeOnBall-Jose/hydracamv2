@@ -1,0 +1,2 @@
+-keep class com.amaia23.hydracam.spike.preview.** { *; }
+-dontwarn org.slf4j.**

@@ -1,0 +1,39 @@
+# Local MediaMTX v1.21.3 for the H8 spike. Keys not set here keep MediaMTX defaults.
+# Run with scripts/relay-local.sh (generates a throwaway TLS cert for RTMPS).
+logLevel: info
+
+# C4 auth: every publish/read goes to the webhook (stands in for K2 /internal/v1/relay-auth).
+authMethod: http
+authHTTPAddress: http://127.0.0.1:8780/internal/v1/relay-auth
+# The control API and metrics are local-only here; without this they also go to the webhook.
+authHTTPExclude:
+  - action: api
+  - action: metrics
+
+api: true
+apiAddress: :9997
+
+rtsp: false
+
+rtmp: true
+rtmpEncryption: optional
+rtmpAddress: :1935
+rtmpsAddress: :1936
+rtmpServerKey: .local/server.key
+rtmpServerCert: .local/server.crt
+
+hls: true
+hlsAddress: :8898
+hlsVariant: lowLatency
+
+webrtc: true
+webrtcAddress: :8889
+webrtcLocalUDPAddress: :8189
+
+srt: true
+srtAddress: :8890
+
+moq: false
+
+paths:
+  "~^court/[^/]+/[^/]+$":
