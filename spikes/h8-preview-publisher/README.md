@@ -18,6 +18,7 @@ plugged in, local MediaMTX relay on the club LAN, headless Chrome WHEP viewers).
 | Heat / CPU | Preview adds 0–4 points of device CPU and 1–4 points of app CPU. Hottest zone +2 to +5 °C. Battery ≤ 36.1 °C after 20 min. Only the S20 FE reached thermal status 1 ("light"), at 11.6 min |
 | Recorder frame drops | **S10e, S7 edge: none** (same as without preview). **S20 FE: 0.5 % of master frames** (188 one-frame gaps in 20 min vs 22 without; max gap 67 ms). See [S20 FE drops](#s20-fe-drops) |
 | Bitrate | The C4 700 kbps target is not met on two phones: preview 961 / 839 / 699 kbps. A 530 kbps target still gives 916 / 824. Proxy 2000 kbps target gives 2455 / 2485 / 1996 |
+| Shared uplink (R10) | ≈ 3.4 Mbps per camera, recording and watched, so 1 camera per 4–5 Mbps. Unpaced proxy PUTs add 225–370 ms of preview delay and a broken GOP per TCP loss burst at L 120. Fix: pace the uploader (no effect then), or phone `srtLatency` ≈ 1000 ms. [Details](#shared-uplink-r10) |
 | Seam | Preview surface stays in the session for the camera's whole life; on/off only changes the repeating burst. Camera opens for live view before recording. [Details](#seam-needed-from-courtcameraservice) |
 
 ## Library comparison
@@ -137,7 +138,8 @@ Reading the tables:
 
 SRT latency (120 ms) is the biggest single part. Setting 60 ms on the phone changes nothing
 (S10e 275 vs 275 ms in the same hour, S7 edge 301 vs 298 ms): SRT uses the larger of both ends' values, and MediaMTX stays at its
-default of 120 ms. To go lower, set it on the relay too. Not needed for C4.
+default of 120 ms. To go lower, set it on the relay too. Not needed for C4. To go higher (shared
+uplink), set it on the phone: see [SRT tuning](#srt-tuning).
 
 ### Bitrate
 
@@ -179,6 +181,117 @@ It costs one 67 ms master gap every 5–12 s, and only while someone watches.
 Options, untested: feed proxy and preview from one camera stream through GL (two encoders on one
 SurfaceTexture, so the camera keeps two streams), or accept it on this model.
 
+## Shared uplink (R10)
+
+Question: how does the preview behave when proxy uploads share a modest club uplink (3–5 Mbps
+for the court), and do SRT latency or loss settings need tuning?
+
+### Budget
+
+R10 counts 2.0 + 0.7 = 2.7 Mbps per camera. On the wire it is ≈ 2.5 proxy (S10e, S20 FE; 2.0 on
+S7 edge) + 0.75–1.03 preview, so **≈ 3.4 Mbps per camera**, plus a few % TCP/TLS overhead on the
+proxy PUTs. Per uplink:
+
+| Uplink | Cameras recording | Cameras recording + watched |
+|---|---|---|
+| 3 Mbps | 1 | 0 (proxy falls behind while watched) |
+| 4 Mbps | 1 | 1 |
+| 5 Mbps | 1 (2 need ≈ 5.1) | 1 |
+
+### Test (host only, no phone)
+
+All on the club Mac, nothing installed and no system network settings changed:
+
+- **Bottleneck:** `scripts/uplink_shaper.py`, a userspace UDP relay with one FIFO link (4 or
+  5 Mbps, 500 ms buffer like a typical router, tail drop, 15 ms each way).
+- **Preview:** a pre-encoded 640x360/20 fps, GOP 1 s, 900 kbps CBR clip (about the phones'
+  measured rate) through `srt-live-transmit` (libsrt 1.5.4) into MediaMTX over the bottleneck.
+- **Proxy upload:** simulated Reno-style TCP in the same queue. `segments` is K1 today: one 6 s,
+  2.47 Mbps segment PUT every 6 s, idle between PUTs. `backlog` is catch-up after an outage, or
+  any uplink below the proxy rate: always data to send. `paced` is backlog capped at 2500 kbps
+  (R10 `maxKbps`).
+- **Run:** `scripts/uplink_scenarios.py` (100 s per scenario, proxy starts at 15 s), then
+  `scripts/uplink_summarize.py`. Raw data: `results/uplink/`.
+
+Caveats: the sender is libsrt, not RootEncoder (see the latency note below). TCP is simulated
+(Reno-like, not CUBIC or BBR). One 100 s run per scenario. The SRT payload is 1456 bytes; the
+phone uses 1316.
+
+### Results
+
+L is the SRT latency. "Lost" are preview packets missing at MediaMTX from 15 s to the end. "Unrecovered" are gaps
+that no retransmit filled before play-out; each one breaks up to 1 s of video (rest of the GOP).
+G2G est = 170 ms phone pipeline + 15 ms + max(L, queue delay).
+
+| Scenario | Link | L ms | Preview queue p50 / p95 ms | Lost | Unrecovered | Proxy goodput kbps | G2G est ms |
+|---|---|---|---|---|---|---|---|
+| a: preview alone | 4 Mbps | 120 | 0 / 27 | 0 | 0 | – | 305 |
+| b: + proxy, 6 s segment PUTs | 4 Mbps | 120 | 225 / 274 | 23 | **23** | 2447 (keeps up) | 428 |
+| c: + proxy, backlog | 4 Mbps | 120 | 364 / 463 | 17 | **17** | 2883 | 557 |
+| d: same, L 300 | 4 Mbps | 300 | 364 / 463 | 17 | **17** | 2883 | 558 |
+| e: same, L 1000 | 4 Mbps | 1000 | 349 / 463 | 10 | 0 | 2886 | 1185 |
+| f: backlog, 50 ms buffer | 4 Mbps | 120 | 30 / 45 | 173 | 12 | 2793 | 305 |
+| g: backlog, paced 2500 | 4 Mbps | 120 | 0 / 18 | 0 | 0 | 2413 | 305 |
+| h: 2 cameras, segment PUTs | 5 Mbps | 120 | 368 / 474 | 29 | **29** | 2956 for 2 (needs 4940) | 561 |
+| i: same, L 1000 | 5 Mbps | 1000 | 368 / 467 | 31 | 9 | 2958 | 1185 |
+| j: no proxy, 1 % random loss | 4 Mbps | 120 | 0 / 21 | 73 | 0 | – | 305 |
+| k: same, L 300 | 4 Mbps | 300 | 0 / 27 | 59 | 0 | – | 485 |
+
+Every scenario kept one SRT connection (no MediaMTX `readTimeout` drops). Full counters are in
+`results/uplink/summary.json`.
+
+What happens:
+
+1. **Proxy uploads fill the router buffer, and the preview waits behind them.** SRT live mode has no
+   congestion control, so it keeps its rate and TCP takes the rest. But TCP keeps the 500 ms buffer
+   full: preview delay rises by 225–370 ms while a PUT is running. Glass to glass goes from
+   ≈ 300 to ≈ 430–560 ms. MediaMTX delivers late packets late rather than dropping them, so the
+   picture stays up.
+2. **Loss comes in bursts when TCP overshoots.** In the sim this was at a PUT's slow start, which
+   overflows the buffer. Real CUBIC on a deep buffer overshoots again every few tens of seconds,
+   and each new upload connection starts over. A burst loses 10–30 preview packets while RTT is
+   already 300–500 ms. At L 120, and also at L 300, no retransmit gets back in time. So each burst
+   is **one broken GOP (≤ 1 s of artefacts)**.
+3. **Random loss alone is harmless.** With 1 % random loss on an empty queue (RTT ≈ 30 ms), all
+   lost packets came back at L 120.
+4. **A shallow buffer** (50 ms, like SQM) keeps delay at about 45 ms. TCP then drops more (3 %), and
+   at L 120 most of it is recovered (161 of 173). L 300 should cover the rest, as in j/k.
+5. **Pacing the proxy below the link** (g) leaves nothing to see: no queue, no loss, delay
+   unchanged. But paced at 2500 kbps on the wire, the proxy gets 2413 kbps of payload, less than its
+   measured 2470. So it never catches up. `maxKbps` 2500 is below the proxy's real rate.
+6. **Two cameras on 5 Mbps do not fit** even before anyone watches. The proxies get 2.96 of the
+   4.94 Mbps they need, so uploads fall about 2 Mbps behind (22 MB after 85 s). Meanwhile the
+   preview has the queue delay and loss bursts from 1 and 2.
+
+### SRT tuning
+
+- **Latency must be set on the phone, not only on the relay.** RootEncoder keeps sent packets for
+  retransmit only for its own `latency` (`CommandsManager.dropTooLatePackets`, default 120 ms).
+  The handshake also offers that value, and SRT uses the larger of the two ends. If only the relay
+  is raised, the phone has already dropped a packet by the time the NAK arrives over a full queue.
+  Use the URL `?latency=<ms>` or `SrtClient.setLatency`. The relay can stay at its default.
+- **Rule of thumb:** L ≥ 2–2.5 × the RTT under load.
+  - With a deep router buffer (≈ 500 ms) that means **L ≈ 1000 ms**: bursts recover (e: 0
+    unrecovered), and glass to glass is ≈ 1.2 s.
+  - L 300 does not help against a deep buffer (d = c).
+  - With pacing or SQM keeping RTT under ~100 ms, L 120–300 is enough.
+- **Other loss settings:** none to change. Keep the defaults: too-late packet drop on, so a gap is
+  skipped instead of stalling, and no FEC (RootEncoder has none). No MediaMTX setting needs to
+  change for this.
+
+### Recommendation
+
+1. **K1: pace the proxy uploader while the preview is watched.** Cap PUTs at
+   (uplink − previews − ≈ 10 %) / cameras. Better still, pause or slow catch-up uploads for the
+   watch window. With pacing, the preview keeps L 120 and ≈ 300 ms.
+2. **K2: budget against measured rates.** That is ≈ 3.4 Mbps per camera recording and watched, and
+   ≈ 2.6 Mbps per camera recording only. Allow `maxKbps` ≥ 2700 for a 2000-target proxy. So one
+   camera per 4–5 Mbps uplink, and two cameras need ≥ 6 Mbps (≥ 8 with both watched).
+3. **Site: SQM (CAKE or fq_codel) on the camera AP's uplink**, where the router supports it.
+   Fair queuing keeps the preview out of the TCP queue (not simulated: the shaper is one FIFO).
+4. **If neither 1 nor 3 is possible:** phone `srtLatency` 1000 ms, accepting ≈ 1.2 s glass to
+   glass.
+
 ## Contract findings (C1/C4)
 
 1. **SRT token.** The token must go in the streamid password slot:
@@ -199,6 +312,9 @@ SurfaceTexture, so the camera keeps two streams), or accept it on this model.
    connection, MediaMTX closes it after 10 s (`readTimeout`, "Shutdown received from server").
    `preview.stop` must disconnect, and `preview.start` must reconnect.
 7. **700 kbps is a target, not a cap.** See [Bitrate](#bitrate).
+8. **SRT latency belongs on the publisher.** If the preview shares an unpaced uplink with proxy
+   uploads, raise `latency` on the phone (≈ 1000 ms for a deep router buffer). Raising it on the
+   relay alone does not extend RootEncoder's retransmit window. See [Shared uplink](#shared-uplink-r10).
 
 ## Seam needed from CourtCameraService
 
