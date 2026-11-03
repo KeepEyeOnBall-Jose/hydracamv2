@@ -105,8 +105,8 @@ void main() {
       }
       await sink.close();
 
-      final metadata = await videoMetadataChannel
-          .invokeMethod<Map<dynamic, dynamic>>(
+      final metadata =
+          await videoMetadataChannel.invokeMethod<Map<dynamic, dynamic>>(
         "inspectVideo",
         {"path": concat.path},
       );
@@ -115,7 +115,8 @@ void main() {
       final height = metadata["height"];
       final durationMs = metadata["durationMs"];
       expect(width, 640, reason: "Decoded width should match capture width.");
-      expect(height, 480, reason: "Decoded height should match capture height.");
+      expect(height, 480,
+          reason: "Decoded height should match capture height.");
       expect(
         durationMs is int && durationMs > 0,
         isTrue,
@@ -126,8 +127,7 @@ void main() {
       final bundleFiles = <String, File>{
         "playlist.m3u8": playlistFile,
         "init.mp4": initFile,
-        for (final chunk in chunkFiles)
-          chunk.uri.pathSegments.last: chunk,
+        for (final chunk in chunkFiles) chunk.uri.pathSegments.last: chunk,
       };
       _emit("CAMERA2_EVIDENCE_BEGIN recordingId=$recordingId "
           "width=$width height=$height durationMs=$durationMs "
@@ -136,7 +136,8 @@ void main() {
         final b64 = base64Encode(file.readAsBytesSync());
         _emit("CAMERA2_FILE_BEGIN name=$name bytes=${file.lengthSync()}");
         for (var i = 0; i < b64.length; i += 480) {
-          _emit("CAMERA2_B64 ${b64.substring(i, (i + 480).clamp(0, b64.length))}");
+          _emit(
+              "CAMERA2_B64 ${b64.substring(i, (i + 480).clamp(0, b64.length))}");
         }
         _emit("CAMERA2_FILE_END name=$name");
       });

@@ -1,5 +1,6 @@
 # Baseline Functionality And Support
 
+Last reviewed: 2026-07-15 (content dated 2026-07-15).
 Last refreshed: 2026-06-15.
 
 This document is the basic ground for HydraCam support claims. It condenses

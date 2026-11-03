@@ -1,5 +1,7 @@
 # Rotating Master/Slave Matrix Runner
 
+Last reviewed: 2026-07-14 (content dated 2026-07-14).
+
 How-to guidance for `scripts/run_rotating_master_slave_matrix.py`, the
 multi-device role-switch runner. This doc captures durable flag semantics and
 operational caveats extracted from `AGENTS.md` during the 2026-07-14

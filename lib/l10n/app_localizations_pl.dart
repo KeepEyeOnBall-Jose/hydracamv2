@@ -86,6 +86,13 @@ class AppLocalizationsPl extends AppLocalizations {
       'Profile są celami; telefon może użyć opcji zapasowej, jeśli nie są obsługiwane.';
 
   @override
+  String get settingsExposurePresetTitle => 'Ekspozycja';
+
+  @override
+  String get settingsExposurePresetDescription =>
+      'Stała migawka, ISO, balans bieli i ostrość podczas nagrywania. Krótsza migawka daje krótsze smugi piłki, ale ciemniejszy obraz.';
+
+  @override
   String settingsVideoTarget(String target) {
     return 'Cel: $target';
   }

@@ -1,0 +1,142 @@
+name: Scripts Quality
+
+on:
+  pull_request:
+  push:
+    branches: [master-jose-2025]
+
+jobs:
+  python-tests:
+    # Same routed pool as flutter-quality: Madrid and the owned Macs may be busy, asleep or away.
+    runs-on: >-
+      ${{ github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.base.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]') || 'ubuntu-latest' }}
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: '0.11.32'
+
+      # scripts/test_*.py are standalone scripts, each run directly with
+      # `python3 <file>` (mirrors scripts/run_backend_regression_checks.py).
+      # They are NOT collected via `unittest discover`: several of them do a
+      # bare `import <sibling_module>` that only resolves because Python adds
+      # the script's own directory to sys.path[0] when run directly, and
+      # scripts/ has no __init__.py so discover cannot import it as a package
+      # start-dir. Running each file directly is the invocation that already
+      # works in this repo.
+      #
+      # scripts/test_endpoints.py is excluded: despite the test_*.py name it
+      # is not a unittest suite (no TestCase, no assertions) and makes live
+      # network calls to a real hosted endpoint, so it is non-deterministic
+      # and unsuitable for CI.
+
+      # scripts/multi_device_orchestrator.py imports `requests`, so the
+      # scripts/ tree is not strictly stdlib-only and its backend test cannot
+      # import without this. Installed explicitly rather than vendored so the
+      # dependency stays visible.
+      - name: Record exact admitted source
+        env:
+          EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          printf 'Runner: %s\nSource: %s\n' "$RUNNER_NAME" "$EXPECTED_SOURCE" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run scripts/test_*.py
+        run: |
+          set -e
+          failures=0
+          for f in scripts/test_*.py; do
+            if [ "$f" = "scripts/test_endpoints.py" ]; then
+              echo "skip: $f (live network probe, not a unittest suite)"
+              continue
+            fi
+            echo "=== $f ==="
+            if ! uv run --no-project --python 3.12.9 --with requests==2.34.2 python "$f"; then
+              echo "FAILED: $f"
+              failures=$((failures + 1))
+            fi
+          done
+          if [ "$failures" -ne 0 ]; then
+            echo "$failures script test file(s) failed"
+            exit 1
+          fi
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # shellcheck does not support zsh, so scripts/*.zsh (e.g.
+      # scripts/prepare_macos_dev_host.zsh, scripts/deploy_macos_dev_host.zsh,
+      # scripts/ios_build_with_user_ruby.zsh) are intentionally not linted
+      # here. The globs below only match *.sh.
+      #
+      # Severity is pinned to "error" so this gate is green on the current
+      # tree (verified locally: 0 errors, 1 warning, 15 info-level findings
+      # across scripts/*.sh and root *.sh as of this change). Ratchet plan:
+      # tighten to --severity=warning once the existing warning-level
+      # findings (e.g. SC2164 in scripts/agent_gate.sh) are cleaned up by
+      # their owning agents.
+      - name: shellcheck (severity=error)
+        run: shellcheck --severity=error scripts/*.sh *.sh
+
+  large-file-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine diff base
+        id: base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+          # On branch-creation pushes GitHub sets `before` to the all-zero
+          # SHA, which does not exist as a commit. Fall back to diffing
+          # against the empty tree in that case.
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$base" 2>/dev/null; then
+            base=$(git hash-object -t tree /dev/null)
+          fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+
+      - name: Fail on added/modified files over 1MB
+        env:
+          BASE_SHA: ${{ steps.base.outputs.base }}
+        run: |
+          set -e
+          over_limit=0
+          limit_bytes=$((1024 * 1024))
+          # --diff-filter=ACMR: added, copied, modified, renamed (skip deletes).
+          while IFS=$'\t' read -r size path; do
+            [ -z "$path" ] && continue
+            if [ "$size" -gt "$limit_bytes" ]; then
+              echo "TOO LARGE: $path is $size bytes (limit $limit_bytes)"
+              over_limit=1
+            fi
+          done < <(git diff --diff-filter=ACMR --name-only "$BASE_SHA" "${{ github.sha }}" | while read -r path; do
+            if [ -f "$path" ]; then
+              size=$(wc -c < "$path" | tr -d ' ')
+              printf '%s\t%s\n' "$size" "$path"
+            fi
+          done)
+          if [ "$over_limit" -ne 0 ]; then
+            echo "One or more changed files exceed the 1MB large-file guard limit"
+            exit 1
+          fi

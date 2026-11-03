@@ -86,6 +86,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Profiles are targets; the phone may fall back if unsupported.';
 
   @override
+  String get settingsExposurePresetTitle => 'Exposure';
+
+  @override
+  String get settingsExposurePresetDescription =>
+      'Fixed shutter, ISO, white balance and focus while recording. Faster shutter gives shorter ball streaks but a darker image.';
+
+  @override
   String settingsVideoTarget(String target) {
     return 'Target: $target';
   }

@@ -121,8 +121,7 @@ void main() {
     expect(handlerInvoked, isFalse);
   });
 
-  test(
-      "logout command invokes UserService logout and reports cleared session",
+  test("logout command invokes UserService logout and reports cleared session",
       () async {
     final reservedServer =
         await HttpServer.bind(InternetAddress.loopbackIPv4, 0);

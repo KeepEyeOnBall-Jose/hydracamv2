@@ -100,7 +100,8 @@ void main() {
 Future<void> _pumpUntilText(
   WidgetTester tester,
   String text, {
-  int maxPumps = 100,
+  // The scan does real file I/O; ~5 s covers slow shared CI hosts, and it returns on the first match.
+  int maxPumps = 500,
 }) async {
   for (var pumpCount = 0; pumpCount < maxPumps; pumpCount += 1) {
     await tester.runAsync(() async {

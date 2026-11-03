@@ -11,7 +11,8 @@ void main() {
       "${Directory.systemTemp.path}/hls-missing-${DateTime.now().microsecondsSinceEpoch}",
     );
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: HlsPlayerView(bundleDirectory: missing))),
+      MaterialApp(
+          home: Scaffold(body: HlsPlayerView(bundleDirectory: missing))),
     );
     // First synchronous frame, before the async _start() settles.
     expect(find.byKey(const Key("hlsPlayerLoading")), findsOneWidget);
@@ -23,7 +24,8 @@ void main() {
       "${Directory.systemTemp.path}/hls-missing-${DateTime.now().microsecondsSinceEpoch}",
     );
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: HlsPlayerView(bundleDirectory: missing))),
+      MaterialApp(
+          home: Scaffold(body: HlsPlayerView(bundleDirectory: missing))),
     );
     // Allow the async server start to fail and rebuild.
     await tester.pump();

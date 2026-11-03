@@ -9,6 +9,9 @@ import "package:hydracam/services/hydracam_api_service.dart";
 import "package:hydracam/services/log_service.dart";
 import "package:package_info_plus/package_info_plus.dart";
 
+const String _legacyApiOrigin = "https://mobo.keepeyeonball.com";
+const String _legacyApiPath = "/_hydracam_service/api";
+
 const List<int> _validJpegBytes = [0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10];
 const List<int> _validMp4Bytes = [
   0x00,
@@ -151,6 +154,53 @@ void main() {
     );
     expect(capturedFields, containsPair("durationMs", "42000"));
     expect(capturedFiles?.single.contentType.mimeType, "video/mp4");
+    expect(capturedFields?.containsKey("captureSettings"), isFalse);
+  });
+
+  test("uploadMedia sends per-clip capture settings as a JSON field", () async {
+    final mediaFile = File("${tempDir.path}/exposure-video.mp4")
+      ..writeAsBytesSync(_validMp4Bytes);
+    Map<String, String>? capturedFields;
+
+    HydraCamApiService.configureHttpClient(
+      MockClient.streaming((request, bodyStream) async {
+        capturedFields = (request as http.MultipartRequest).fields;
+        await bodyStream.drain<void>();
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([<int>[]]),
+          200,
+        );
+      }),
+    );
+
+    final recordingStart = DateTime.utc(2026, 10, 24, 18);
+    final captureSettings = {
+      "preset": "shutter1_120",
+      "lockStatus": "locked",
+      "exposureTimeNs": 8333333,
+      "iso": 640,
+      "frameDurationNs": 33333333,
+      "fps": 30.0,
+      "rollingShutterSkewNs": 21000000,
+    };
+
+    final result = await HydraCamApiService().uploadMedia(
+      "session-guid",
+      mediaFile,
+      false,
+      "slave-device",
+      recordingStart,
+      recordingStart.add(const Duration(seconds: 11)),
+      null,
+      recordingEndDate: recordingStart.add(const Duration(seconds: 10)),
+      captureSettings: captureSettings,
+    );
+
+    expect(result, isTrue);
+    final field =
+        capturedFields?[HydraCamUploadMediaContract.fieldCaptureSettings];
+    expect(field, isNotNull);
+    expect(jsonDecode(field!), captureSettings);
   });
 
   test("uploadMedia derives duration from recording timestamps when mismatched",
@@ -275,7 +325,7 @@ void main() {
     expect(result, isTrue);
     expect(
       capturedUri?.path,
-      "/api/${HydraCamUploadMediaContract.endpoint}",
+      "$_legacyApiPath/${HydraCamUploadMediaContract.endpoint}",
     );
     expect(
       capturedUri?.queryParameters,
@@ -383,7 +433,7 @@ void main() {
     expect(result?.guid, "backend-guid");
     expect(result?.sessionId, "friendly-session");
     expect(result?.numericId, 42);
-    expect(requestedUri?.path, "/api/sessions/create");
+    expect(requestedUri?.path, "$_legacyApiPath/sessions/create");
     expect(
       requestedUri?.queryParameters,
       containsPair("courtGuid", "court-guid"),
@@ -652,6 +702,46 @@ void main() {
     );
   });
 
+  test("legacy API defaults to the Contabo HydraCam service, not Azure",
+      () async {
+    Uri? requestedUri;
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        requestedUri = request.url;
+        return http.Response("[]", 200);
+      }),
+    );
+
+    await HydraCamApiService().warmUpBackend();
+
+    expect(
+      requestedUri.toString(),
+      "$_legacyApiOrigin$_legacyApiPath/sportscenters",
+    );
+    expect(requestedUri?.host, isNot(contains("azurewebsites")));
+  });
+
+  test("legacy API base URL can still be overridden", () async {
+    Uri? requestedUri;
+    HydraCamApiService.configureBackendForTests(
+      mode: HydraCamApiBackendMode.legacyMobo,
+      baseApiUrl: "https://override.example.test/custom/api/",
+    );
+    HydraCamApiService.configureHttpClient(
+      MockClient((request) async {
+        requestedUri = request.url;
+        return http.Response("[]", 200);
+      }),
+    );
+
+    await HydraCamApiService().warmUpBackend();
+
+    expect(
+      requestedUri.toString(),
+      "https://override.example.test/custom/api/sportscenters",
+    );
+  });
+
   test("warmUpBackend sends an authenticated lightweight startup request",
       () async {
     Uri? requestedUri;
@@ -667,7 +757,7 @@ void main() {
     final result = await HydraCamApiService().warmUpBackend();
 
     expect(result, isTrue);
-    expect(requestedUri?.path, "/api/sportscenters");
+    expect(requestedUri?.path, "$_legacyApiPath/sportscenters");
     expect(
       requestedHeaders,
       containsPair("Authorization", "Bearer test-token"),
@@ -932,6 +1022,11 @@ void main() {
           expect(metadata, containsPair("kind", "video"));
           expect(metadata, containsPair("sourceBytes", mediaFile.lengthSync()));
           expect(metadata, containsPair("durationSeconds", 5.0));
+          expect(metadata, containsPair("fps", 30.0));
+          expect(
+            metadata["captureSettings"],
+            containsPair("preset", "shutter1_60"),
+          );
           return http.StreamedResponse(
             Stream<List<int>>.fromIterable([
               utf8.encode(jsonEncode({
@@ -961,6 +1056,7 @@ void main() {
       onUploadResult: (result) {
         uploadResult = result;
       },
+      captureSettings: {"preset": "shutter1_60", "fps": 30.0},
     );
 
     expect(result, isTrue);
@@ -1682,7 +1778,7 @@ void main() {
     );
 
     expect(result, isEmpty);
-    expect(requestedUri?.path, "/api/courts");
+    expect(requestedUri?.path, "$_legacyApiPath/courts");
     expect(
       requestedUri?.queryParameters,
       containsPair("sportsCenterGuid", "sports center/guid+one"),
@@ -1702,7 +1798,7 @@ void main() {
         await HydraCamApiService().endSession("session guid/one+two");
 
     expect(result, isTrue);
-    expect(requestedUri?.path, "/api/sessions/end");
+    expect(requestedUri?.path, "$_legacyApiPath/sessions/end");
     expect(
       requestedUri?.queryParameters,
       containsPair("sessionGuid", "session guid/one+two"),
@@ -1832,7 +1928,7 @@ void main() {
     );
 
     expect(result, isTrue);
-    expect(requestedUri?.path, "/api/sessions/debug/delete");
+    expect(requestedUri?.path, "$_legacyApiPath/sessions/debug/delete");
     expect(
       requestedUri?.queryParameters,
       containsPair("sessionGuid", "debug guid/one+two"),
@@ -1886,11 +1982,11 @@ void main() {
       MockClient((request) async {
         requestedUris.add(request.url);
         if (request.url.path ==
-            "/api/${HydraCamUserContract.getByEmailEndpoint}") {
+            "$_legacyApiPath/${HydraCamUserContract.getByEmailEndpoint}") {
           return http.Response('{"guid":"user-guid"}', 200);
         }
         if (request.url.path ==
-            "/api/${hydracamUserDetailsEndpoint("user-guid")}") {
+            "$_legacyApiPath/${hydracamUserDetailsEndpoint("user-guid")}") {
           return http.Response('{"displayName":"Player One"}', 200);
         }
         return http.Response("{}", 404);

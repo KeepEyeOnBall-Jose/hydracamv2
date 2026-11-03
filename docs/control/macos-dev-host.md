@@ -1,5 +1,6 @@
 # macOS Development Host Deploy
 
+Last reviewed: 2026-06-08 (content dated 2026-06-08).
 Last refreshed: 2026-06-07.
 
 Use this when a new Mac on the tailnet needs to become a HydraCam build, run,

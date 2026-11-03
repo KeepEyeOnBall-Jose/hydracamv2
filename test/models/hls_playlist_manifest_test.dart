@@ -32,7 +32,8 @@ device-stream-00000000.m4s
 #EXTINF:2.000,
 device-stream-00000001.m4s
 #EXT-X-ENDLIST
-""".trimLeft(),
+"""
+          .trimLeft(),
     );
   });
 

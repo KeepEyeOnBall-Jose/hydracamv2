@@ -1,5 +1,7 @@
 # HydraCam Fleet Operations Plan
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
+
 This document defines the first above-HydraCam operating layer for phones that
 stay deployed, powered, remotely supervised, and ready to record. The initial
 decision is **lab-managed Android fleet**, not full MDM, for the first

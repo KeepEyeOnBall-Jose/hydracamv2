@@ -53,8 +53,9 @@ class FixedCameraHlsCameraMode {
       width: width,
       height: height,
       maxFps: value["maxFps"] is int ? value["maxFps"] as int : 30,
-      lensFacing:
-          value["lensFacing"] is String ? value["lensFacing"] as String : "unknown",
+      lensFacing: value["lensFacing"] is String
+          ? value["lensFacing"] as String
+          : "unknown",
     );
   }
 }
@@ -97,9 +98,10 @@ class FixedCameraHlsCapabilities {
 
   /// Modes for [cameraId], largest pixel count first.
   List<FixedCameraHlsCameraMode> modesForCamera(String cameraId) {
-    final modes =
-        cameraModes.where((mode) => mode.cameraId == cameraId).toList()
-          ..sort((a, b) => b.pixelCount.compareTo(a.pixelCount));
+    final modes = cameraModes
+        .where((mode) => mode.cameraId == cameraId)
+        .toList()
+      ..sort((a, b) => b.pixelCount.compareTo(a.pixelCount));
     return modes;
   }
 
@@ -119,7 +121,8 @@ class FixedCameraHlsCapabilities {
     return FixedCameraHlsCapabilities(
       platform: stringOrFallback(map["platform"], fallback: "unknown"),
       channelAvailable: boolOrFallback(map["channelAvailable"]),
-      nativeRecorderImplemented: boolOrFallback(map["nativeRecorderImplemented"]),
+      nativeRecorderImplemented:
+          boolOrFallback(map["nativeRecorderImplemented"]),
       cameraRecorderImplemented: boolOrFallback(
         map["cameraRecorderImplemented"],
       ),

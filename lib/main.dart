@@ -393,6 +393,7 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
           scaffoldMessengerKey: HydraCamApp.scaffoldMessengerKey,
           title: "HydraCam",
           theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
           locale: _localeService.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

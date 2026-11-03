@@ -1,5 +1,7 @@
 # Local IDE, Emulator, And Deploy Playbook
 
+Last reviewed: 2026-06-22 (content dated 2026-06-22).
+
 Use this playbook to run HydraCam manually from the local Mac while following
 the repository development process in `AGENTS.md`,
 `docs/control/evidence-first-loop.md`, and

@@ -69,8 +69,7 @@ void main() {
     final initBytes = await _collect(initResponse);
     expect(initBytes.length, 64);
 
-    final chunkResponse =
-        await get(base.replace(path: "/chunk-00000000.m4s"));
+    final chunkResponse = await get(base.replace(path: "/chunk-00000000.m4s"));
     expect(chunkResponse.statusCode, HttpStatus.ok);
     expect(
       chunkResponse.headers.contentType.toString(),
@@ -82,8 +81,8 @@ void main() {
 
   test("supports byte-range requests with 206 partial content", () async {
     final base = await server.start();
-    final response =
-        await get(base.replace(path: "/chunk-00000000.m4s"), range: "bytes=0-99");
+    final response = await get(base.replace(path: "/chunk-00000000.m4s"),
+        range: "bytes=0-99");
     expect(response.statusCode, HttpStatus.partialContent);
     expect(
       response.headers.value(HttpHeaders.contentRangeHeader),
@@ -111,7 +110,8 @@ void main() {
     final response = await get(
       base.replace(path: "/${Uri.encodeComponent("../secret.txt")}"),
     );
-    expect(response.statusCode, anyOf(HttpStatus.notFound, HttpStatus.forbidden));
+    expect(
+        response.statusCode, anyOf(HttpStatus.notFound, HttpStatus.forbidden));
   });
 }
 

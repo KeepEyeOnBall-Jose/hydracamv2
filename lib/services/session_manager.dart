@@ -4,6 +4,7 @@ import "dart:convert";
 import "package:flutter/foundation.dart";
 import "settings_service.dart";
 import "uploader_service.dart";
+import "user_service.dart";
 import "package:path_provider/path_provider.dart";
 import "../models/capture_context_metadata.dart";
 import "../models/capture_session.dart";
@@ -14,6 +15,7 @@ import "debug_session_policy.dart";
 import "device_service.dart";
 import "hydracam_api_service.dart" as api;
 import "log_service.dart";
+import "recorded_video_snapshots.dart";
 import "dart:io";
 
 /// A global manager to handle session-related information across Master and Slave.
@@ -49,7 +51,9 @@ class SessionManager extends ChangeNotifier {
   String get deviceType => _deviceType;
   bool get isSessionActive => _currentSession != null;
   bool get canUploadCurrentSession =>
-      _currentSession != null && isServiceSessionGuid(_sessionGuid);
+      _currentSession != null &&
+      isServiceSessionGuid(_sessionGuid) &&
+      _currentSession!.canUploadAs(UserService().identity);
   bool get isCurrentSessionDebug => _currentSession?.debugSession ?? false;
 
   static bool isServiceSessionGuid(String? sessionGuid) {
@@ -137,6 +141,7 @@ class SessionManager extends ChangeNotifier {
     _sessionGuid = normalizedSessionGuid;
     _deviceType = deviceType;
     _currentSession = CaptureSession(
+      humanOwnerIdentity: UserService().identity,
       sessionId: sessionId ?? normalizedSessionGuid,
       sessionGuid: normalizedSessionGuid,
       displayName: _optionalTrimmedString(displayName),
@@ -322,6 +327,8 @@ class SessionManager extends ChangeNotifier {
           metadataFile, metadata, sessionGuid);
       final session = CaptureSession(
         sessionId: metadata["sessionId"],
+        humanOwnerIdentity:
+            _optionalTrimmedString(metadata["humanOwnerIdentity"]),
         sessionGuid: restoredSessionGuid,
         displayName: _optionalTrimmedString(metadata["displayName"]),
         startTime: DateTime.parse(metadata["startTime"]),
@@ -347,6 +354,44 @@ class SessionManager extends ChangeNotifier {
     }
   }
 
+  /// Read-only proof before discarding a recording's recovery receipt.
+  /// Unlike the legacy loader, this never repairs identity or defaults fields.
+  Future<bool> hasPersistedRecordingSnapshot(
+      RecordedVideoSnapshot snapshot) async {
+    final guid = snapshot.sessionGuid;
+    final started = snapshot.startedAt;
+    final stopped = snapshot.stoppedAt;
+    if (guid == null ||
+        guid.isEmpty ||
+        guid != guid.trim() ||
+        RegExp(r"[/\\]").hasMatch(guid) ||
+        started == null ||
+        stopped == null) {
+      return false;
+    }
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File("${directory.path}/session_$guid/metadata.json");
+      final metadata = jsonDecode(await file.readAsString());
+      if (metadata is! Map<String, dynamic> ||
+          metadata["sessionGuid"] != guid ||
+          metadata["videos"] is! List) {
+        return false;
+      }
+      final expectedContext = jsonEncode(snapshot.toJson()["context"]);
+      return (metadata["videos"] as List).any((row) =>
+          row is Map<String, dynamic> &&
+          row["videoPath"] == snapshot.path &&
+          row["startRecordingDate"] == started.toIso8601String() &&
+          row["endRecordingDate"] == stopped.toIso8601String() &&
+          jsonEncode(row["captureContext"]) == expectedContext);
+    } catch (error) {
+      LogService.instance
+          .registerLog("Recording metadata disk verification failed: $error");
+      return false;
+    }
+  }
+
   Future<CaptureSession?> loadSessionMetadataSnapshot(
       String sessionGuid) async {
     try {
@@ -365,6 +410,8 @@ class SessionManager extends ChangeNotifier {
           metadataFile, metadata, sessionGuid);
       final session = CaptureSession(
         sessionId: metadata["sessionId"],
+        humanOwnerIdentity:
+            _optionalTrimmedString(metadata["humanOwnerIdentity"]),
         sessionGuid: restoredSessionGuid,
         displayName: _optionalTrimmedString(metadata["displayName"]),
         startTime: DateTime.parse(metadata["startTime"]),
@@ -399,6 +446,10 @@ class SessionManager extends ChangeNotifier {
     if (loadedSession == null) {
       throw Exception(
           "Failed to load session metadata for session: $sessionIdentifier");
+    }
+    if (!loadedSession.canUploadAs(UserService().identity)) {
+      throw StateError(
+          "Sign in with the capture's original account before uploading. Media is preserved.");
     }
 
     final restoredSessionGuid =
@@ -650,6 +701,7 @@ class SessionManager extends ChangeNotifier {
   Map<String, dynamic> _buildMetadataJson() {
     return {
       "sessionId": _currentSession!.sessionId,
+      "humanOwnerIdentity": _currentSession!.humanOwnerIdentity,
       "sessionGuid": _sessionGuid,
       "displayName": _currentSession!.displayName,
       "debugSession": _currentSession!.debugSession,

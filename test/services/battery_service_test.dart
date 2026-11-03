@@ -149,8 +149,8 @@ void main() {
     expect(
       LogService.instance.logs.any((entry) {
         final message = entry["message"].toString();
-        return message.contains(
-                "BatteryService: critical battery callback failed") &&
+        return message
+                .contains("BatteryService: critical battery callback failed") &&
             message.contains("forced battery stop failed at 8%");
       }),
       isTrue,

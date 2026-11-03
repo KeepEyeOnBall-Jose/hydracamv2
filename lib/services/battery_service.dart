@@ -159,18 +159,18 @@ class BatteryService {
         children: [
           Icon(
             Icons.battery_alert,
-            color: AppTheme.accent,
+            color: AppTheme.textOnAccent,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               "Battery is low ($currentLevel%). Consider plugging in.",
-              style: const TextStyle(color: AppTheme.textPrimary),
+              style: TextStyle(color: AppTheme.textOnAccent),
             ),
           ),
         ],
       ),
-      backgroundColor: AppTheme.accentSurface,
+      backgroundColor: AppTheme.accent,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 5),
     );
@@ -186,18 +186,18 @@ class BatteryService {
         children: [
           Icon(
             Icons.battery_alert,
-            color: AppTheme.danger,
+            color: AppTheme.inverseText,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               "Recording stopped due to critical battery ($currentLevel%).",
-              style: const TextStyle(color: AppTheme.danger),
+              style: TextStyle(color: AppTheme.inverseText),
             ),
           ),
         ],
       ),
-      backgroundColor: AppTheme.dangerSurface,
+      backgroundColor: AppTheme.danger,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 8),
     );

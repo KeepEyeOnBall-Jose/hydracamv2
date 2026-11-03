@@ -7,16 +7,24 @@ import argparse
 import json
 import os
 import statistics
-import subprocess
 import sys
 import time
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, NamedTuple, Sequence
+from typing import Any, Callable, Sequence
 
-DEFAULT_ADB = os.path.expanduser("~/Library/Android/sdk/platform-tools/adb")
+from hydracam_lib.adb import (
+    DEFAULT_ADB,
+    AndroidDevice,
+    adb_shell_command,
+    list_devices,
+    select_devices,
+)
+from hydracam_lib.proc import CommandResult
+from hydracam_lib.proc import run as run_command
+
 DEFAULT_PACKAGE = "com.amaia23.hydracam"
 DEFAULT_FIELDS = (
     "capacity",
@@ -47,93 +55,11 @@ DEFAULT_FIELDS = (
 )
 
 
-class CommandResult(NamedTuple):
-    returncode: int
-    stdout: str
-    stderr: str
-
-
-class AndroidDevice(NamedTuple):
-    serial: str
-    descriptor: str
-
-
 @dataclass
 class CpuSnapshot:
     total_ticks: int
     cpu_count: int
     process_ticks: int | None
-
-
-def run_command(command: list[str], *, timeout: int) -> CommandResult:
-    completed = subprocess.run(
-        command,
-        check=False,
-        text=True,
-        capture_output=True,
-        timeout=timeout,
-    )
-    return CommandResult(
-        returncode=completed.returncode,
-        stdout=completed.stdout,
-        stderr=completed.stderr,
-    )
-
-
-def checked_run(
-    command: list[str],
-    *,
-    timeout: int,
-    runner: Callable[..., CommandResult] = run_command,
-) -> CommandResult:
-    result = runner(command, timeout=timeout)
-    if result.returncode != 0:
-        printable = " ".join(command)
-        output = "\n".join(part for part in (result.stdout, result.stderr) if part)
-        raise RuntimeError(f"Command failed ({result.returncode}): {printable}\n{output}")
-    return result
-
-
-def adb_shell_command(adb: str, serial: str, shell_args: Sequence[str]) -> list[str]:
-    return [adb, "-s", serial, "shell", *shell_args]
-
-
-def list_devices(
-    adb: str,
-    *,
-    timeout: int,
-    runner: Callable[..., CommandResult] = run_command,
-) -> list[AndroidDevice]:
-    result = checked_run([adb, "devices", "-l"], timeout=timeout, runner=runner)
-    devices: list[AndroidDevice] = []
-    for line in result.stdout.splitlines()[1:]:
-        stripped = line.strip()
-        if not stripped:
-            continue
-        parts = stripped.split(maxsplit=2)
-        if len(parts) < 2 or parts[1] != "device":
-            continue
-        devices.append(
-            AndroidDevice(
-                serial=parts[0],
-                descriptor=parts[2] if len(parts) > 2 else "",
-            )
-        )
-    return devices
-
-
-def select_devices(
-    devices: Sequence[AndroidDevice],
-    requested_serials: Sequence[str],
-) -> list[AndroidDevice]:
-    if not requested_serials:
-        return list(devices)
-    requested = set(requested_serials)
-    selected = [device for device in devices if device.serial in requested]
-    missing = requested - {device.serial for device in selected}
-    if missing:
-        raise SystemExit(f"Requested devices not found: {', '.join(sorted(missing))}")
-    return selected
 
 
 def shell_text(

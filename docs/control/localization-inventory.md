@@ -1,5 +1,6 @@
 # Localization Inventory
 
+Last reviewed: 2026-06-09 (content dated 2026-06-09).
 Updated: 2026-06-09.
 
 This file tracks the first HydraCam localization slice and the remaining

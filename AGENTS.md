@@ -128,8 +128,15 @@ grammar for the sake of concision.
   remains runnable manually (`bash scripts/agent_gate.sh`).
 - `.github/workflows/docs-quality.yml` backstops `git diff --check` and
   changed-markdown linting on every PR and push to `master-jose-2025`.
-  `.github/workflows/flutter-quality.yml` backstops `flutter analyze` and
-  `flutter test` the same way.
+  `.github/workflows/flutter-quality.yml` backstops `dart format
+  --set-exit-if-changed` (scoped to `lib test tool integration_test`),
+  `flutter analyze`, and `flutter test` the same way.
+- `.github/workflows/scripts-quality.yml` backstops, on the same PR/push
+  triggers: running every `scripts/test_*.py` directly with `python3` (all
+  except `scripts/test_endpoints.py`, a live-network probe script excluded by
+  name); `shellcheck --severity=error` over `scripts/*.sh` and root `*.sh`
+  (`.zsh` scripts are not linted — shellcheck does not support zsh); and a
+  large-file guard failing on any added/modified file over 1MB in the diff.
 - `scripts/court_quality_gate.sh` is the gate for the Android `court` flavor:
   JVM tests, ktlint, detekt and the Kover coverage floor. Run it before every
   court-flavor commit.

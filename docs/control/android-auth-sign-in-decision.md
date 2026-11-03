@@ -1,5 +1,6 @@
 # Android Auth Sign-In Decision
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
 Date: 2026-06-17
 
 ## Decision

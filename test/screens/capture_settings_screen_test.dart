@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hydracam/app_theme.dart";
 import "package:hydracam/l10n/app_localizations.dart";
 import "package:hydracam/screens/settings_screen.dart";
 import "package:hydracam/services/app_locale_service.dart";
@@ -10,9 +11,17 @@ import "package:shared_preferences/shared_preferences.dart";
 Future<void> _pumpSettingsScreen(
   WidgetTester tester, {
   AppLocaleService? localeService,
+  bool dark = false,
+  double scale = 1,
 }) async {
   await tester.pumpWidget(
     MaterialApp(
+      theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(scale)),
+        child: child!,
+      ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: SettingsScreen(localeService: localeService),
@@ -22,6 +31,27 @@ Future<void> _pumpSettingsScreen(
 }
 
 void main() {
+  for (final dark in [false, true]) {
+    testWidgets("settings fit compact width at 200% text, dark=$dark",
+        (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      await tester.binding.setSurfaceSize(const Size(320, 700));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await _pumpSettingsScreen(tester, dark: dark, scale: 2);
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.byTooltip("Language"));
+      await tester.pumpAndSettle();
+      expect(find.text("Choose an app language or use your device setting."),
+          findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text("Close"));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text("Storage location"));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets(
       "settings screen shows capture settings instead of camera quality",
       (tester) async {

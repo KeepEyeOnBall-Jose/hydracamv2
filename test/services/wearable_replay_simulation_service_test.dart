@@ -223,7 +223,8 @@ void main() {
           as Map<String, dynamic>)["requirePrePublishReview"],
       isTrue,
     );
-  });
+    // The bundle writes a dozen files; on the HDD CI hosts that alone took ~32 s.
+  }, timeout: const Timeout(Duration(minutes: 2)));
 }
 
 class _TestPathProviderPlatform extends PathProviderPlatform {

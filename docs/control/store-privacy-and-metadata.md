@@ -1,6 +1,6 @@
 # Store Privacy and Metadata
 
-Last reviewed: 2026-06-09.
+Last reviewed: 2026-06-25 (content dated 2026-06-25).
 
 This file is the repo-local checklist for App Store privacy labels, Google Play
 Data Safety, support URLs, and review notes. It is not a legal policy. Publish a

@@ -54,7 +54,7 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
-    )..repeat(reverse: true);
+    );
 
     // Define the scale animation (pulsating effect)
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
@@ -63,6 +63,17 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
 
     // Start the countdown
     _startCountdown();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _controller.stop();
+      _controller.value = 0;
+    } else if (!_controller.isAnimating) {
+      _controller.repeat(reverse: true);
+    }
   }
 
   @override
@@ -118,7 +129,8 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
               value: progress,
               strokeWidth: 8,
               color: AppTheme.primaryColor,
-              backgroundColor: AppTheme.surfaceAlt,
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
           ),
 
@@ -137,10 +149,10 @@ class AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
                   displayText,
                   style: _remainingTime > 0
                       ? (widget.textStyle ??
-                          const TextStyle(
+                          TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.textPrimary,
+                            color: Theme.of(context).colorScheme.onSurface,
                             decoration: TextDecoration.none, // Remove underline
                           ))
                       : (widget.finalMessageStyle ??

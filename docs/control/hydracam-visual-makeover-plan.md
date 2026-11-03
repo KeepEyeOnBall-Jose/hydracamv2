@@ -1,5 +1,7 @@
 # HydraCam Visual Makeover Implementation Plan
 
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Make HydraCam feel like the mobile capture companion to MediaTimeline by adopting the squash club visual system, preserving capture reliability, and giving both platforms a shared operational language.
@@ -103,6 +105,7 @@ Homogeneity means shared semantics, not identical layouts.
 ### Task 1: Establish The Flutter Squash Theme Contract
 
 **Files:**
+
 - Modify: `lib/app_theme.dart`
 - Create: `test/theme/hydracam_theme_test.dart`
 - Create: `test/theme/no_ad_hoc_color_test.dart`
@@ -135,6 +138,7 @@ void main() {
 ### Task 2: Add MediaTimeline-Like Flutter Primitives
 
 **Files:**
+
 - Create: `lib/widgets/hydracam_surface.dart`
 - Create: `test/widgets/hydracam_surface_test.dart`
 
@@ -152,6 +156,7 @@ void main() {
 ### Task 3: Make Role Selection The Operational Entry Surface
 
 **Files:**
+
 - Modify: `lib/screens/role_selection_screen.dart`
 - Create: `test/screens/role_selection_screen_test.dart`
 
@@ -165,6 +170,7 @@ void main() {
 ### Task 4: Migrate Low-Risk Setup And Standby Screens First
 
 **Files:**
+
 - Modify: `lib/screens/camera_setup_preview_screen.dart`
 - Modify: `lib/automation/automation_standby_screen.dart`
 - Modify: `test/widgets/camera_setup_preview_screen_test.dart`
@@ -191,6 +197,7 @@ interrupted.
 ### Task 5: Refresh The Shared App Chrome
 
 **Files:**
+
 - Modify: `lib/widgets/hydra_cam_app_bar.dart`
 - Modify: `test/widgets/hydra_cam_app_bar_test.dart`
 
@@ -203,6 +210,7 @@ interrupted.
 ### Task 6: Bring Master And Slave Capture Screens Into The Same System
 
 **Files:**
+
 - Modify: `lib/master/master_screen.dart`
 - Modify: `lib/slave/slave_screen.dart`
 - Modify: existing master/slave widget tests or create focused tests around status/control builders
@@ -221,6 +229,7 @@ no attached devices.
 ### Task 7: Align Secondary Screens Without Expanding Scope
 
 **Files:**
+
 - Modify: `lib/screens/settings_screen.dart`
 - Modify: `lib/screens/login_screen.dart`
 - Modify: `lib/screens/courts_screen.dart`
@@ -237,6 +246,7 @@ no attached devices.
 ### Task 8: Add A Visual Compliance Gate
 
 **Files:**
+
 - Modify: `test/theme/no_ad_hoc_color_test.dart`
 - Modify: `docs/control/hydracam-visual-makeover-plan.md`
 - Optionally modify: `AGENTS.md` only if the team wants the guard to become a permanent repo rule

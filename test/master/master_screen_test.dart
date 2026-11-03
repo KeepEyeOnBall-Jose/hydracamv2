@@ -179,7 +179,7 @@ void main() {
       SessionManager.instance.currentSession?.displayName,
       startsWith("Squash match - Airport Squash"),
     );
-    expect(requestedUri?.path, "/api/sessions/create");
+    expect(requestedUri?.path, "/_hydracam_service/api/sessions/create");
     expect(requestedUri?.queryParameters["courtGuid"],
         "16de47b8-535a-4950-b275-b8b6982c7b8d");
     expect(requestBody?["SessionId"], startsWith("debug-"));

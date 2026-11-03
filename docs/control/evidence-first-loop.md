@@ -1,5 +1,7 @@
 # HydraCam Evidence-First Advancement Loop
 
+Last reviewed: 2026-08-26 (content dated 2026-08-26).
+
 This is the required verification loop for recurring HydraCam project work.
 It consumes only existing control-plane work from `docs/control/` and requires
 run-specific evidence before an item can be called complete.
@@ -124,6 +126,15 @@ python3 scripts/evidence_pack.py finalize logs/verification-runs/<run> \
 
 python3 scripts/evidence_pack.py check logs/verification-runs/<run>
 ```
+
+## Evidence Storage Policy (2026-08-26)
+
+Raw device artifacts (logcat `.txt` dumps `>= 200 KB`, screenshots, screen
+recordings, media files) are no longer committed to git. Evidence packs under
+`logs/verification-runs/` keep `summary.md`, `commands.log`, and small
+structured logs (for example `artifacts.json`). Raw artifacts stay on the
+capture host or external storage and are referenced by path/hash from
+`summary.md`.
 
 ## Default Priority Queue
 

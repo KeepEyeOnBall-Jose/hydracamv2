@@ -1,7 +1,6 @@
 import "dart:async";
 import "package:camera/camera.dart";
 import "package:connectivity_plus/connectivity_plus.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "../app_theme.dart";
 import "../constants.dart" as constants;
@@ -13,13 +12,9 @@ import "../models/captured_video.dart";
 import "../models/sync_metadata.dart";
 import "../services/alert_utils.dart";
 import "../services/device_service.dart";
-import "../services/log_service.dart";
-import "../services/network_info_service.dart";
-import "../services/session_manager.dart";
 import "../services/settings_service.dart";
 import "../services/time_sync_service.dart";
-import "slave_client.dart";
-import "master_discovery.dart";
+import "slave_screen_controller.dart";
 import "../widgets/add_gallery_media_button.dart";
 import "../widgets/animated_countdown_timer.dart";
 import "../widgets/camera_preview_widget.dart";
@@ -27,21 +22,8 @@ import "../widgets/hydra_cam_app_bar.dart";
 import "../widgets/hydracam_surface.dart";
 import "../widgets/media_list_widget.dart";
 import "../widgets/session_info_widget.dart";
+import "../services/session_manager.dart";
 import "../master/master_screen.dart";
-
-typedef NetworkReadinessLoader = Future<NetworkReadinessResult> Function();
-
-typedef SlaveConnectionClientFactory = SlaveConnectionClient Function(
-  String serverAddress, {
-  Function(String command, DateTime scheduledTime)? onScheduledCommand,
-  Function(String path)? onPhotoTaken,
-  VoidCallback? onRecordingStarted,
-  VoidCallback? onRecordingStopped,
-});
-
-typedef MasterDiscoveryFactory = MasterDiscovery Function(
-  void Function(String masterIp) onMasterDiscovered,
-);
 
 class SlaveScreen extends StatefulWidget {
   // Mode that controls if we entered here manually or on app init.
@@ -54,6 +36,7 @@ class SlaveScreen extends StatefulWidget {
   final MasterDiscoveryFactory? masterDiscoveryFactory;
   final Stream<List<ConnectivityResult>>? connectivityChanges;
   final DateTime Function()? syncStatusNow;
+  final SlaveScreenController? controller;
 
   const SlaveScreen({
     super.key,
@@ -65,6 +48,7 @@ class SlaveScreen extends StatefulWidget {
     @visibleForTesting this.masterDiscoveryFactory,
     @visibleForTesting this.connectivityChanges,
     @visibleForTesting this.syncStatusNow,
+    @visibleForTesting this.controller,
   }); // Default is manual mode
 
   @override
@@ -72,21 +56,10 @@ class SlaveScreen extends StatefulWidget {
 }
 
 class SlaveScreenState extends State<SlaveScreen> {
-  static const String _identifyAcknowledgedStatus =
-      "Identify acknowledged to master.";
   static const Duration _identifyFrameDuration = Duration(seconds: 2);
 
-  SlaveConnectionClient? _client;
-  StreamSubscription<String>?
-      _statusSubscription; // Subscription to listen to status updates
-  StreamSubscription<bool>?
-      _connectionStatusSubscription; // Subscription to listen to connection status
-  StreamSubscription<List<ConnectivityResult>>? _networkSubscription;
-  String statusMessage = "Waiting for camera commands...";
-  Timer? autoModeTimer; // Timer for auto mode logic
-  bool isRecording = false;
-
-  bool _isConnected = false; // Local variable for connection status
+  late final SlaveScreenController _controller;
+  late final bool _ownsController;
 
   Timer? dimTimer; // Timer for screen dimming
   Timer? _identifyFrameTimer;
@@ -94,63 +67,36 @@ class SlaveScreenState extends State<SlaveScreen> {
   int dimTime = 10; // Number of seconds before turning screen black
   bool isScreenDimmed = false; // To control the dimmed screen state
   bool _isIdentifyFrameVisible = false;
-  bool _isCheckingNetwork = false;
-  bool _isPreparingPreview = false;
-  bool _isStoppingRecording = false;
-  bool _isConnectingToMaster = false;
-  String? _connectingMasterIp;
-  String? _connectedMasterIp;
-  NetworkReadinessResult? _networkReadiness;
-
-  // Getters for SessionManager photos and videos
-  List<CapturedPhoto> get photos =>
-      SessionManager.instance.currentSession?.capturedPhotos ?? [];
-  List<CapturedVideo> get videos =>
-      SessionManager.instance.currentSession?.capturedVideos ?? [];
-
-  MasterDiscovery?
-      _masterDiscovery; // So we can store instance of master_discovery and properly dispose it on screen change
 
   @override
   void initState() {
     super.initState();
 
-    // Master discovery and other initializations
-    final masterDiscoveryFactory = widget.masterDiscoveryFactory ??
-        (onMasterDiscovered) => MasterDiscovery(
-              onMasterDiscovered: onMasterDiscovered,
-            );
-    _masterDiscovery = masterDiscoveryFactory(
-      (masterIp) => unawaited(_connectToMaster(masterIp)),
-    );
+    _ownsController = widget.controller == null;
+    _controller = widget.controller ??
+        SlaveScreenController(
+          isAutoMode: widget.isAutoMode,
+          preferredMasterIp: widget.preferredMasterIp,
+          forceSlaveMode: widget.forceSlaveMode,
+          networkReadinessLoader: widget.networkReadinessLoader,
+          slaveClientFactory: widget.slaveClientFactory,
+          masterDiscoveryFactory: widget.masterDiscoveryFactory,
+          connectivityChanges: widget.connectivityChanges,
+        );
 
-    final connectivityChanges = widget.connectivityChanges;
-    if (connectivityChanges != null ||
-        defaultTargetPlatform != TargetPlatform.linux) {
-      _networkSubscription =
-          (connectivityChanges ?? NetworkInfoService.connectivityChanges)
-              .listen(
-        (_) async {
-          await _startNetworkAwareDiscovery();
-        },
-        onError: (Object error, StackTrace stackTrace) {
-          LogService.instance.registerError(
-            "Connectivity change listener failed",
-            error,
-            stackTrace,
-          );
-        },
-      );
-    } else {
-      LogService.instance.registerLog(
-        "Skipping connectivity change listener on linux; "
-        "network readiness will be checked on demand.",
-      );
+    // Wire presentation hooks that require BuildContext / screen-local UI state.
+    _controller.onScheduledCommand = _showCountdownTimer;
+    _controller.onPhotoTaken = _handlePhotoTaken;
+    _controller.onRecordingStarted = _handleRecordingStarted;
+    _controller.onRecordingStopped = _handleRecordingStopped;
+    _controller.onIdentifyAcknowledged = _handleIdentifyAcknowledged;
+    _controller.onAutoPromote = _transitionToMasterScreen;
+    _controller.addListener(_onControllerChanged);
+
+    if (_ownsController) {
+      _controller.start();
     }
-    _startNetworkAwareDiscovery();
 
-    // Add listener
-    SessionManager.instance.addListener(_onSessionChanged);
     _syncStatusRefreshTimer = Timer.periodic(
       const Duration(seconds: constants.timeSyncStatusRefreshSeconds),
       (_) {
@@ -161,346 +107,52 @@ class SlaveScreenState extends State<SlaveScreen> {
     );
   }
 
-  void _onSessionChanged() {
-    setState(() {});
+  void _onControllerChanged() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
-  Future<void> _startNetworkAwareDiscovery() async {
+  Future<void> _handlePhotoTaken(String path) async {
+    final String deviceId = await DeviceIdService.getOrCreateDeviceId();
+
+    if (!mounted) return;
+
+    AlertUtils.showMediaDialog(
+        context: context,
+        media: CapturedPhoto(
+          photoPath: path,
+          photoData: null,
+          captureDate: DateTime.now(),
+          receivedDate: DateTime.now(),
+          slaveDeviceId: deviceId,
+        ),
+        isAutoCloseEnabled: true,
+        autoCloseSeconds: constants.secondsToClosePhoto);
+  }
+
+  void _handleIdentifyAcknowledged() {
     if (!mounted) {
       return;
     }
-    if (_isCheckingNetwork) {
-      return;
-    }
-
-    _isCheckingNetwork = true;
-    if (_shouldFastConnectToPreferredMaster) {
-      try {
-        await _connectToMaster(
-          widget.preferredMasterIp!,
-          skipNetworkReadiness: true,
-        );
-      } finally {
-        _isCheckingNetwork = false;
-      }
-      return;
-    }
-
-    if (mounted && !_isConnected) {
-      setState(() {
-        statusMessage = "Checking Wi-Fi and local network...";
-      });
-    }
-
-    try {
-      final readiness = await _loadNetworkReadiness();
-      _networkReadiness = readiness;
-
-      if (!readiness.canUseLocalControl) {
-        autoModeTimer?.cancel();
-        autoModeTimer = null;
-        _client?.disconnect();
-        _client = null;
-        await _masterDiscovery?.stopListening();
-        if (mounted) {
-          setState(() {
-            _isConnected = false;
-            statusMessage = readiness.message;
-          });
-        }
-        LogService.instance.registerLog(
-            "Slave network readiness blocked: ${readiness.message}");
-        return;
-      }
-
-      if (mounted && !_isConnected) {
-        setState(() {
-          statusMessage = "Network ready. Searching for master...";
-        });
-      }
-
-      if (_isConnected) {
-        return;
-      }
-
-      if (widget.preferredMasterIp != null) {
-        await _connectToMaster(widget.preferredMasterIp!);
-      } else {
-        await _masterDiscovery?.startListening();
-        _scheduleAutoPromoteIfNeeded();
-      }
-    } catch (e) {
-      LogService.instance.registerLog("Network readiness check failed: $e");
-      if (mounted && !_isConnected) {
-        setState(() {
-          statusMessage = "Unable to check Wi-Fi readiness: $e";
-        });
-      }
-    } finally {
-      _isCheckingNetwork = false;
-    }
-  }
-
-  bool get _shouldFastConnectToPreferredMaster =>
-      widget.forceSlaveMode && widget.preferredMasterIp != null;
-
-  Future<NetworkReadinessResult> _loadNetworkReadiness() async {
-    final loader = widget.networkReadinessLoader;
-    if (loader != null) {
-      return loader();
-    }
-    final snapshot = await NetworkInfoService.getCurrentSnapshot();
-    return NetworkInfoService.evaluateLocalControlReadiness(
-      snapshot,
-    );
-  }
-
-  SlaveConnectionClient _createSlaveClient(
-    String serverAddress, {
-    Function(String command, DateTime scheduledTime)? onScheduledCommand,
-    Function(String path)? onPhotoTaken,
-    VoidCallback? onRecordingStarted,
-    VoidCallback? onRecordingStopped,
-  }) {
-    return SlaveClient(
-      serverAddress,
-      onScheduledCommand: onScheduledCommand,
-      onPhotoTaken: onPhotoTaken,
-      onRecordingStarted: onRecordingStarted,
-      onRecordingStopped: onRecordingStopped,
-    );
-  }
-
-  void _scheduleAutoPromoteIfNeeded() {
-    final bool shouldAutoPromote = widget.isAutoMode &&
-        !widget.forceSlaveMode &&
-        widget.preferredMasterIp == null;
-    if (!shouldAutoPromote || autoModeTimer != null) {
-      return;
-    }
-
-    final activeSessionGuid = SessionManager.instance.sessionGuid?.trim();
-    if (SessionManager.instance.isSessionActive &&
-        activeSessionGuid != null &&
-        activeSessionGuid.isNotEmpty) {
-      if (mounted && !_isConnected) {
-        setState(() {
-          statusMessage =
-              "Master unavailable; preserving active session $activeSessionGuid.";
-        });
-      }
-      LogService.instance.registerLog(
-        "Auto-promotion blocked while slave session $activeSessionGuid is active.",
-      );
-      return;
-    }
-
-    autoModeTimer = Timer(Duration(seconds: constants.timeToStopSearching), () {
-      if (!_isConnected && _networkReadiness?.canUseLocalControl == true) {
-        LogService.instance
-            .registerLog("No master found, switching to Master mode.");
-        _transitionToMasterScreen();
-      }
-    });
-  }
-
-  Future<void> _connectToMaster(
-    String masterIp, {
-    bool skipNetworkReadiness = false,
-  }) async {
-    if (!mounted) {
-      return;
-    }
-    if (_isConnectingToMaster && _connectingMasterIp == masterIp) {
-      LogService.instance.registerLog(
-        "Ignoring duplicate connection attempt to master at IP: $masterIp",
-      );
-      return;
-    }
-    if (_isConnected && _connectedMasterIp == masterIp) {
-      LogService.instance.registerLog(
-        "Already connected to master at IP: $masterIp",
-      );
-      return;
-    }
-
-    _isConnectingToMaster = true;
-    _connectingMasterIp = masterIp;
-    if (!skipNetworkReadiness) {
-      late final NetworkReadinessResult readiness;
-      try {
-        readiness = await _loadNetworkReadiness();
-      } catch (error, stackTrace) {
-        _isConnectingToMaster = false;
-        _connectingMasterIp = null;
-        LogService.instance.registerError(
-          "Connection to master at IP $masterIp failed during network readiness",
-          error,
-          stackTrace,
-        );
-        if (mounted && !_isConnected) {
-          setState(() {
-            statusMessage = "Unable to check Wi-Fi readiness: $error";
-          });
-        }
-        return;
-      }
-      _networkReadiness = readiness;
-      if (!readiness.canUseLocalControl) {
-        _isConnectingToMaster = false;
-        _connectingMasterIp = null;
-        if (mounted) {
-          setState(() {
-            statusMessage = readiness.message;
-          });
-        }
-        LogService.instance.registerLog(
-            "Connection to master blocked by network readiness: ${readiness.message}");
-        return;
-      }
-    } else {
-      LogService.instance.registerLog(
-          "Skipping slave network readiness for forced preferred master $masterIp.");
-    }
-
-    if (!mounted) {
-      _isConnectingToMaster = false;
-      _connectingMasterIp = null;
-      return;
-    }
-
-    LogService.instance.registerLog("Connecting to master at IP: $masterIp");
-
-    _statusSubscription?.cancel();
-    _connectionStatusSubscription?.cancel();
-    _client?.disconnect();
-
-    final clientFactory = widget.slaveClientFactory ?? _createSlaveClient;
-    _client = clientFactory(
-      "ws://$masterIp:4040/ws",
-      onScheduledCommand: _showCountdownTimer, // Handle scheduled commands
-      onPhotoTaken: (path) async {
-        if (!mounted) return;
-        setState(() {
-          statusMessage = "Photo taken!";
-        });
-        LogService.instance.registerLog("Photo taken!!!");
-
-        final String deviceId = await DeviceIdService.getOrCreateDeviceId();
-
-        if (!mounted) return;
-
-        AlertUtils.showMediaDialog(
-            context: context,
-            media: CapturedPhoto(
-              photoPath: path,
-              photoData: null,
-              captureDate: DateTime.now(),
-              receivedDate: DateTime.now(),
-              slaveDeviceId: deviceId,
-            ),
-            isAutoCloseEnabled: true,
-            autoCloseSeconds: constants.secondsToClosePhoto);
-      },
-      onRecordingStarted: _handleRecordingStarted,
-      onRecordingStopped: _handleRecordingStopped,
-    );
-
-    _statusSubscription = _client?.statusStream.listen(_handleStatusMessage);
-
-    _connectionStatusSubscription =
-        _client?.connectionStatusStream.listen((isConnected) {
-      if (mounted) {
-        setState(() {
-          _isConnected = isConnected;
-        });
-      }
-
-      if (isConnected) {
-        _connectedMasterIp = masterIp;
-        _isConnectingToMaster = false;
-        _connectingMasterIp = null;
-      }
-
-      if (isConnected && !isRecording) {
-        unawaited(_prepareCameraPreview());
-      }
-
-      if (!isConnected) {
-        if (!mounted) {
-          return;
-        }
-        LogService.instance
-            .registerLog("Connection lost. Restarting discovery.");
-        _isConnectingToMaster = false;
-        _connectingMasterIp = null;
-        _connectedMasterIp = null;
-        _client?.disconnect();
-        _client = null;
-        _startNetworkAwareDiscovery();
-      }
-    });
-
-    _client?.connect();
-    _masterDiscovery?.stopListening();
-
-    if (widget.isAutoMode) {
-      autoModeTimer?.cancel();
-    }
-  }
-
-  void _handleStatusMessage(String message) {
-    if (!mounted) {
-      return;
-    }
-
-    final isIdentifyAcknowledgement = message == _identifyAcknowledgedStatus;
     setState(() {
-      statusMessage = message;
-      if (isIdentifyAcknowledgement) {
-        isScreenDimmed = false;
-        _isIdentifyFrameVisible = true;
-      }
+      isScreenDimmed = false;
+      _isIdentifyFrameVisible = true;
     });
 
-    if (isIdentifyAcknowledgement) {
-      _identifyFrameTimer?.cancel();
-      _identifyFrameTimer = Timer(_identifyFrameDuration, () {
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _isIdentifyFrameVisible = false;
-        });
-      });
-    }
-  }
-
-  Future<void> _prepareCameraPreview() async {
-    if (_isPreparingPreview) {
-      return;
-    }
-    final client = _client;
-    if (client == null) {
-      return;
-    }
-
-    _isPreparingPreview = true;
-    try {
-      await client.prepareCameraPreview();
-      if (mounted) {
-        setState(() {});
+    _identifyFrameTimer?.cancel();
+    _identifyFrameTimer = Timer(_identifyFrameDuration, () {
+      if (!mounted) {
+        return;
       }
-    } finally {
-      _isPreparingPreview = false;
-    }
+      setState(() {
+        _isIdentifyFrameVisible = false;
+      });
+    });
   }
 
   void _handleRecordingStarted() {
     if (mounted) {
-      setState(() {
-        isRecording = true; // Update recording flag
-      });
       unawaited(_startDimTimer());
     }
   }
@@ -508,41 +160,9 @@ class SlaveScreenState extends State<SlaveScreen> {
   void _handleRecordingStopped() {
     if (mounted) {
       setState(() {
-        isRecording = false;
         isScreenDimmed = false;
-        _isStoppingRecording = false;
-        statusMessage = "Recording stopped.";
       });
       dimTimer?.cancel();
-      unawaited(_prepareCameraPreview());
-    }
-  }
-
-  Future<void> _stopRecordingSafely() async {
-    final client = _client;
-    if (client == null || !isRecording || _isStoppingRecording) {
-      return;
-    }
-
-    setState(() {
-      _isStoppingRecording = true;
-      statusMessage = "Stopping recording...";
-    });
-
-    try {
-      await client.stopRecordingLocally();
-    } catch (error, stackTrace) {
-      LogService.instance.registerError(
-        "Slave stop recording control failed",
-        error,
-        stackTrace,
-      );
-      if (mounted) {
-        setState(() {
-          _isStoppingRecording = false;
-          statusMessage = "Recording stop failed: $error";
-        });
-      }
     }
   }
 
@@ -552,7 +172,7 @@ class SlaveScreenState extends State<SlaveScreen> {
       return;
     }
     dimTimer = Timer(Duration(seconds: dimTime), () {
-      if (mounted && isRecording) {
+      if (mounted && _controller.isRecording) {
         setState(() {
           isScreenDimmed = true;
         });
@@ -574,8 +194,13 @@ class SlaveScreenState extends State<SlaveScreen> {
   }
 
   void _transitionToMasterScreen() {
-    // Stop any activity related to Slave
-    _cleanUpSlaveMode();
+    if (!mounted) {
+      return;
+    }
+    // The controller has already torn down slave-side activity; cancel the
+    // screen-local identify overlay timer before navigating.
+    _identifyFrameTimer?.cancel();
+    _identifyFrameTimer = null;
 
     // Move to master screen
     Navigator.pushReplacement(
@@ -584,22 +209,15 @@ class SlaveScreenState extends State<SlaveScreen> {
     );
   }
 
-  void _cleanUpSlaveMode() {
-    _statusSubscription?.cancel(); // Cancel the stream subscription
-    _networkSubscription?.cancel();
-    _client?.disconnect();
-    _client = null;
-    _isConnectingToMaster = false;
-    _connectingMasterIp = null;
-    _connectedMasterIp = null;
-    autoModeTimer?.cancel();
-    autoModeTimer = null;
+  void _onBack() {
+    // Stop any activity related to Slave, then return to role selection.
     _identifyFrameTimer?.cancel();
     _identifyFrameTimer = null;
-    _masterDiscovery?.stopListening();
-    _masterDiscovery = null;
-
-    LogService.instance.registerLog("Cleaned up Slave mode.");
+    _controller.cleanUpSlaveMode();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+    );
   }
 
   /// Displays a countdown timer and executes the command after completion.
@@ -620,29 +238,14 @@ class SlaveScreenState extends State<SlaveScreen> {
 
   @override
   void dispose() {
-    try {
-      dimTimer?.cancel();
-      _identifyFrameTimer?.cancel();
-      _syncStatusRefreshTimer?.cancel();
-      _statusSubscription
-          ?.cancel(); // Cancel the subscription to avoid memory leaks
-      _connectionStatusSubscription?.cancel();
-      _networkSubscription?.cancel();
-      _client?.disconnect();
-      _client = null;
-      _isConnectingToMaster = false;
-      _connectingMasterIp = null;
-      _connectedMasterIp = null;
-      autoModeTimer?.cancel();
-      autoModeTimer = null;
-      _masterDiscovery?.stopListening();
-      _masterDiscovery = null;
-    } catch (e) {
-      LogService.instance.registerLog("Exception: $e");
-    }
+    dimTimer?.cancel();
+    _identifyFrameTimer?.cancel();
+    _syncStatusRefreshTimer?.cancel();
 
-    // Remove listener
-    SessionManager.instance.removeListener(_onSessionChanged);
+    _controller.removeListener(_onControllerChanged);
+    if (_ownsController) {
+      _controller.dispose();
+    }
 
     super.dispose();
   }
@@ -690,6 +293,7 @@ class SlaveScreenState extends State<SlaveScreen> {
   }
 
   Widget _buildStatusMessage() {
+    final statusMessage = _controller.statusMessage;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -712,10 +316,12 @@ class SlaveScreenState extends State<SlaveScreen> {
   }
 
   Widget _buildCameraPreviewArea() {
-    final controller = _client?.cameraController;
+    final controller = _controller.cameraController;
+    final isConnected = _controller.isConnected;
+    final isRecording = _controller.isRecording;
 
     if (controller == null) {
-      if (_isConnected && !isRecording) {
+      if (isConnected && !isRecording) {
         return const CameraSetupPreviewPanel(
           title: "Prepare Camera",
         );
@@ -731,7 +337,7 @@ class SlaveScreenState extends State<SlaveScreen> {
     return ValueListenableBuilder<CameraValue>(
       valueListenable: controller,
       builder: (context, cameraValue, child) {
-        if (_isConnected && !isRecording) {
+        if (isConnected && !isRecording) {
           return CameraSetupPreviewPanel(
             title: "Prepare Camera",
             preview: cameraValue.isInitialized
@@ -756,6 +362,7 @@ class SlaveScreenState extends State<SlaveScreen> {
   }
 
   Widget _recordingControls() {
+    final isStoppingRecording = _controller.isStoppingRecording;
     return Positioned(
       bottom: 20,
       left: 0,
@@ -775,9 +382,11 @@ class SlaveScreenState extends State<SlaveScreen> {
               child: ElevatedButton.icon(
                 key: const ValueKey("slaveStopRecordingButton"),
                 icon: const Icon(Icons.stop_circle_outlined),
-                label: Text(_isStoppingRecording ? "Stopping..." : "Stop"),
+                label: Text(isStoppingRecording ? "Stopping..." : "Stop"),
                 style: AppTheme.dangerButtonStyle(),
-                onPressed: _isStoppingRecording ? null : _stopRecordingSafely,
+                onPressed: isStoppingRecording
+                    ? null
+                    : _controller.stopRecordingSafely,
               ),
             ),
           ],
@@ -846,11 +455,13 @@ class SlaveScreenState extends State<SlaveScreen> {
         ? const EdgeInsets.all(8)
         : const EdgeInsets.all(12);
     final previewGap = isCompactLandscapePhone ? 6.0 : 10.0;
+    final isConnected = _controller.isConnected;
+    final isRecording = _controller.isRecording;
 
     // Media list widget with placeholder enabled
     final Widget mediaList = MediaListWidget(
-      photos: photos,
-      videos: videos,
+      photos: _controller.photos,
+      videos: _controller.videos,
       onPhotoTap: _showPhotoDialog,
       onVideoTap: _showVideoDialog,
       showPlaceholder: true, // Enable placeholder
@@ -879,13 +490,13 @@ class SlaveScreenState extends State<SlaveScreen> {
                 runSpacing: isCompactLandscapePhone ? 6 : 8,
                 children: [
                   HydraCamStatusChip(
-                    status: _isConnected
+                    status: isConnected
                         ? HydraCamStatusTone.active
                         : HydraCamStatusTone.neutral,
-                    icon: _isConnected
+                    icon: isConnected
                         ? Icons.link_outlined
                         : Icons.link_off_outlined,
-                    label: _isConnected ? "Master connected" : "Searching",
+                    label: isConnected ? "Master connected" : "Searching",
                   ),
                   _buildSyncStatusChip(compact: isCompactLandscapePhone),
                 ],
@@ -915,14 +526,7 @@ class SlaveScreenState extends State<SlaveScreen> {
               Scaffold(
                 appBar: HydraCamAppBar(
                   title: "HydraCam - Slave Device",
-                  onBack: () {
-                    _cleanUpSlaveMode();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RoleSelectionScreen()),
-                    );
-                  },
+                  onBack: _onBack,
                   additionalActions: [_buildUploaderInfoAction()],
                 ),
                 body: Column(
@@ -971,14 +575,7 @@ class SlaveScreenState extends State<SlaveScreen> {
             Scaffold(
               appBar: HydraCamAppBar(
                 title: "HydraCam - Slave Device",
-                onBack: () {
-                  _cleanUpSlaveMode();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RoleSelectionScreen()),
-                  );
-                },
+                onBack: _onBack,
                 additionalActions: [_buildUploaderInfoAction()],
               ),
               body: Row(

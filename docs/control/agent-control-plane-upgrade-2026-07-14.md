@@ -11,6 +11,8 @@ update_triggers:
 
 # Agent Control Plane Upgrade Plan (2026-07-14)
 
+Last reviewed: 2026-07-14 (content dated 2026-07-14).
+
 This plan applies the media-timeline agent-harness cleanup pattern
 (`media-timeline/docs/plans/AGENT_HARNESS_IMPROVEMENTS_2026-07-10.md`) to the
 HydraCam mobile repo. The unifying theme is the same: **keep the always-loaded

@@ -1,5 +1,7 @@
 # Fixed-Camera HLS Implementation Plan
 
+Last reviewed: 2026-06-26 (content dated 2026-06-26).
+
 **Goal:** Add a fixed-camera HLS path that can be exercised from real Android cameras later and from local squash HLS example bundles now.
 
 **Architecture:** Keep the existing MP4/JPEG capture and upload path intact. Add an HLS stream-manifest lane that uploads or registers `init.mp4`, `playlist.m3u8`, and `.m4s` chunks, then links the playlist as the event video asset in media-timeline with HLS metadata that points to the part file IDs.

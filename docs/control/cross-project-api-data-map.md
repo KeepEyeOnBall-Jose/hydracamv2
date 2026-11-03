@@ -1,6 +1,6 @@
 # Cross-Project API And Data Map
 
-Last reviewed: 2026-06-12.
+Last reviewed: 2026-06-18 (content dated 2026-06-18).
 
 This document visualizes how HydraCam mobile, the MoBo HydraCam webservice, and
 media-timeline relate at the API, endpoint, storage, and ownership layers.
@@ -30,7 +30,7 @@ flowchart LR
   ObjectStorage[("Object storage<br/>s3-compatible locators<br/>target new uploads")]
   CV["CV/AI services<br/>pose, racket, ball, sync, timeline"]
 
-  Mobile -->|"current API base<br/>https://hydracam.azurewebsites.net/api"| MoBo
+  Mobile -->|"current API base (Contabo)<br/>https://mobo.keepeyeonball.com/_hydracam_service/api"| MoBo
   Mobile -->|"records first"| LocalStore
   MoBo -->|"EF writes"| MoBoDb
   MoBo -->|"media blobs"| AzureBlob
@@ -48,7 +48,9 @@ flowchart LR
 ## Current Mobile To MoBo API Flow
 
 This is the live mobile path today. The Flutter app records locally first, then
-uses the legacy API base `https://hydracam.azurewebsites.net/api`.
+uses the legacy API base `https://mobo.keepeyeonball.com/_hydracam_service/api`
+(Contabo; override with `--dart-define=HYDRACAM_API_BASE_URL=...`). The old
+`hydracam.azurewebsites.net` app is now only a forwarding bridge to it.
 
 ```mermaid
 sequenceDiagram
@@ -316,7 +318,7 @@ flowchart LR
 
 ## Known Gaps
 
-- HydraCam mobile still targets the legacy Azure API base.
+- HydraCam mobile still targets the legacy HydraCam API (now on Contabo).
 - MoBo has no media-timeline bridge integration and should remain legacy.
 - The media-timeline bridge branch has in-progress work and must be validated
   before mobile cutover.

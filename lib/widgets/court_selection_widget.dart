@@ -146,7 +146,8 @@ class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
       children: [
         Row(
           children: [
-            const Icon(Icons.location_on_outlined, color: AppTheme.textPrimary),
+            Icon(Icons.location_on_outlined,
+                color: Theme.of(context).colorScheme.onSurface),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -193,9 +194,9 @@ class CourtSelectionWidgetState extends State<CourtSelectionWidget> {
           ),
           const SizedBox(height: 10),
           if (filteredCourts.isEmpty)
-            const Text(
+            Text(
               "No courts match this search.",
-              style: AppTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall!,
             )
           else
             Wrap(

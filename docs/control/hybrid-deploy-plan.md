@@ -1,5 +1,6 @@
 # Hybrid Build & Deploy Plan
 
+> Last reviewed: 2026-08-07 (content dated 2026-08-07)
 > Created: 2026-06-24
 
 Durable plan for building and deploying HydraCam across a fleet of devices that

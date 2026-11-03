@@ -1,0 +1,68 @@
+# Multi-surface deploy verification — 2026-08-26, commit 02421a06
+# Host: macOS 26.5.2 darwin-arm64, Flutter 3.44.1 stable
+
+## Build matrix
+flutter build web --release
+# -> Compiling lib/main.dart for the Web... 25.3s; Built build/web
+
+flutter build macos --release
+# -> Built build/macos/Build/Products/Release/HydraCam.app (53.2MB)
+
+flutter build apk --debug
+# -> Running Gradle task 'assembleDebug'... 58.8s
+# -> Built build/app/outputs/flutter-apk/app-debug.apk
+
+flutter build ios --release --no-codesign
+# -> Warning: Building for device with codesigning disabled.
+# -> Xcode build done. 71.9s; Built build/ios/iphoneos/Runner.app (22.7MB)
+
+## Runtime verification of the macOS release artifact
+open build/macos/Build/Products/Release/HydraCam.app
+pgrep -x HydraCam
+# -> LAUNCH_OK: HydraCam running (pid 40082)
+
+ps -o rss= -p <pid>
+# -> 113376 (KB RSS)
+
+lsof -nP -p <pid> | grep -i listen
+# -> HydraCam 40082 jose 16u IPv4 TCP *:4040 (LISTEN)
+
+curl -s -o /dev/null -w "HTTP %{http_code}\n" http://127.0.0.1:4040/
+# -> HTTP 403
+curl -s -o /dev/null -w "HTTP %{http_code}\n" http://127.0.0.1:4040/healthz
+# -> HTTP 403
+curl -s -o /dev/null -w "HTTP %{http_code}\n" http://127.0.0.1:4040/ws
+# -> HTTP 400
+curl -s -i -H "Connection: Upgrade" -H "Upgrade: websocket" \
+  -H "Sec-WebSocket-Version: 13" -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
+  http://127.0.0.1:4040/ws
+# -> HTTP/1.1 101 Switching Protocols
+
+osascript -e 'tell application "HydraCam" to quit'
+# -> app stopped cleanly
+
+## Gates re-run at this commit
+flutter analyze --no-pub                      # -> No issues found!
+dart format --output=none --set-exit-if-changed lib test   # -> 219 files, 0 changed
+flutter test --no-pub                         # -> +718 ~1: All other tests passed!
+for t in scripts/test_*.py; do python3 "$t"; done          # -> 18 run, 0 failed
+shellcheck --severity=error scripts/*.sh *.sh # -> clean
+npx markdownlint-cli2 README.md AGENTS.md docs/control/*.md # -> 0 issues
+bash scripts/agent_gate.sh                    # -> agent_gate: pass
+
+## Blocked / not attempted
+git push -u github claude/project-audit-tooling-17db82
+# -> denied by local safety check; branch not published, CI not yet exercised
+# Play/App Store submission: credentials absent, owner decision
+# store-site/ Vercel deploy: public content change, left to owner
+
+## Pre-deploy gate, positive and negative
+./verify.sh
+# -> EXIT=0; "VERIFICATION COMPLETE"; APK built (162M)
+
+cat > test/tmp_gate_negative_test.dart   # deliberately failing test
+./verify.sh
+# -> EXIT=1
+# -> 00:42 +718 ~1 -1: Some tests failed.
+# -> "flutter test failed"; no VERIFICATION COMPLETE / Ready to deploy
+rm test/tmp_gate_negative_test.dart      # tree clean again

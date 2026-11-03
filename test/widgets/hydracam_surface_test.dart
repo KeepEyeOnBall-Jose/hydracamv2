@@ -7,7 +7,8 @@ void main() {
   testWidgets("surface uses the default operational surface tone",
       (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
         home: Scaffold(
           body: HydraCamSurface(
             child: Text("Session status"),
@@ -34,7 +35,8 @@ void main() {
   testWidgets("danger status chip names the state and uses danger tone",
       (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
         home: Scaffold(
           body: HydraCamStatusChip(
             status: HydraCamStatusTone.danger,
@@ -49,14 +51,16 @@ void main() {
     expect(find.text("Storage critical"), findsOneWidget);
 
     final chip = tester.widget<Chip>(find.byType(Chip));
-    expect(chip.backgroundColor, AppTheme.dangerSurface);
+    expect(
+        chip.backgroundColor, AppTheme.lightTheme.colorScheme.errorContainer);
     expect(chip.side?.color, AppTheme.danger);
   });
 
   testWidgets("badge always exposes a label with optional icon",
       (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
         home: Scaffold(
           body: HydraCamBadge(
             icon: Icons.sync,
@@ -73,7 +77,8 @@ void main() {
   testWidgets("badge uses danger styling only for explicit danger tone",
       (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
         home: Scaffold(
           body: Column(
             children: [
@@ -108,9 +113,11 @@ void main() {
     final neutralDecoration = neutralBadge.decoration as BoxDecoration;
     final dangerDecoration = dangerBadge.decoration as BoxDecoration;
 
-    expect(neutralDecoration.color, isNot(AppTheme.dangerSurface));
+    expect(neutralDecoration.color,
+        isNot(AppTheme.lightTheme.colorScheme.errorContainer));
     expect(neutralDecoration.border?.top.color, isNot(AppTheme.danger));
-    expect(dangerDecoration.color, AppTheme.dangerSurface);
+    expect(
+        dangerDecoration.color, AppTheme.lightTheme.colorScheme.errorContainer);
     expect(dangerDecoration.border?.top.color, AppTheme.danger);
   });
 

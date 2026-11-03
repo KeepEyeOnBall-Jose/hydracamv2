@@ -1,13 +1,25 @@
 name: Flutter Quality
 
 on:
+  workflow_dispatch:
+    inputs:
+      runner_label:
+        description: Optional admitted repository runner label
+        type: string
+        required: false
   pull_request:
   push:
     branches: [master-jose-2025]
 
 jobs:
   flutter-quality:
-    runs-on: ubuntu-latest
+    # A runner_label dispatch qualifies one fleet host (allKEOB tools/ci-fleet reads the job
+    # conclusion). Its check run lands on the branch head, so name it advisory and keep host
+    # noise (admission refusals, slow disks) from reading as a PR failure. PRs, pushes and
+    # unlabelled dispatches keep the blocking "flutter-quality" check.
+    name: ${{ inputs.runner_label && format('flutter-quality (host qualification {0}, advisory)', inputs.runner_label) || 'flutter-quality' }}
+    continue-on-error: ${{ inputs.runner_label && true || false }}
+    runs-on: ${{ github.repository == 'KeepEyeOnBall-Jose/hydracamv2' && github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name != 'pull_request' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && (inputs.runner_label || fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]')) || 'ubuntu-latest' }}
     timeout-minutes: 20
 
     steps:
@@ -18,10 +30,21 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          cache: true
+          flutter-version: 3.47.7
+          # Self-hosted runners keep the SDK in their persistent tool cache, which the action reuses;
+          # restoring the 1.7 GB cache entry every job stalled past the timeout on the HDD hosts.
+          cache: ${{ runner.environment == 'github-hosted' }}
 
       - name: flutter pub get
         run: flutter pub get
+
+      # Scoped to lib/test/tool/integration_test (matches scripts/agent_gate.sh's
+      # changed-file dart-format check). Verified clean locally on the full tree
+      # including generated lib/l10n/*.dart at the time this gate was added, so
+      # the scope is a safety margin against future generated-file drift rather
+      # than evidence of an existing problem.
+      - name: dart format --set-exit-if-changed
+        run: dart format --output=none --set-exit-if-changed lib test tool integration_test
 
       - name: flutter analyze
         run: flutter analyze --no-pub

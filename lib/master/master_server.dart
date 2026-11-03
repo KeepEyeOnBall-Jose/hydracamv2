@@ -413,6 +413,7 @@ class MasterServer {
   late final MasterNetworkSnapshotCache _masterNetworkSnapshotCache;
   late final MasterSocketBinder _bindMasterSocket;
   Timer? _heartbeatCheckTimer; // Timer for checking inactive clients
+  Future<void>? _startInFlight; // Guards against concurrent startServer() calls
   Function(int)? onClientCountChange;
   Function(dynamic)? onMediaReceived; // Callback for media reception
   Function(String, int)?
@@ -450,7 +451,33 @@ class MasterServer {
     return HttpServer.bind(address, port, shared: true);
   }
 
-  Future<void> startServer() async {
+  /// Starts the server, ignoring the call when one is already running or a
+  /// startup is still in flight. Without this guard a second call would
+  /// overwrite [_server] and schedule a second heartbeat timer, orphaning the
+  /// previous socket and timer.
+  Future<void> startServer() {
+    final pendingStart = _startInFlight;
+    if (pendingStart != null) {
+      LogService.instance.registerLog(
+          "WebSocket Server startup already in progress; reusing it.");
+      return pendingStart;
+    }
+    if (_server != null) {
+      LogService.instance.registerLog(
+          "WebSocket Server already running; ignoring duplicate start.");
+      return Future<void>.value();
+    }
+
+    final start = _startServer();
+    _startInFlight = start;
+    return start.whenComplete(() {
+      if (identical(_startInFlight, start)) {
+        _startInFlight = null;
+      }
+    });
+  }
+
+  Future<void> _startServer() async {
     _stopRequested = false;
     try {
       final boundServer = await _bindMasterSocket();
@@ -462,7 +489,7 @@ class MasterServer {
       }
 
       _server = boundServer;
-      _serverStartedAt = DateTime.now();
+      _serverStartedAt = _now();
       LogService.instance
           .registerLog("WebSocket Server successfully started on port 4040");
 
@@ -554,39 +581,57 @@ class MasterServer {
       }
 
       final String? messageType = decodedData["type"]?.toString();
-      final messageDeviceId = (decodedData["deviceId"] ?? "Unknown").toString();
-      deviceId = messageDeviceId;
+      final String? messageDeviceId = _stringValue(decodedData["deviceId"]);
+      if (messageDeviceId != null) {
+        deviceId = messageDeviceId;
+      }
 
-      if (messageType == "deviceId") {
-        await _handleDeviceRegistrationMessage(
-          decodedData,
-          socket: socket,
-          remoteIp: remoteIp,
-          deviceId: messageDeviceId,
-        );
-      } else if (messageType == "photo" || messageType == "video") {
-        await _handleMediaMessage(
-          decodedData,
-          messageType: messageType == "photo" ? "photo" : "video",
-          deviceId: messageDeviceId,
-        );
-      } else if (messageType == "heartbeat") {
-        await _handleHeartbeatMessage(
-          decodedData,
-          socket: socket,
-          remoteIp: remoteIp,
-          deviceId: messageDeviceId,
-        );
-      } else if (messageType == "identifyAck") {
-        await _handleIdentifyAckMessage(
-          decodedData,
-          socket: socket,
-          remoteIp: remoteIp,
-          deviceId: messageDeviceId,
-        );
+      if (messageType == "deviceId" ||
+          messageType == "photo" ||
+          messageType == "video" ||
+          messageType == "heartbeat" ||
+          messageType == "identifyAck") {
+        // Frames that mutate per-slave state must carry a device id. Falling
+        // back to a shared placeholder would make every unidentified slave
+        // overwrite the same entry, stealing each other's socket, heartbeat
+        // and media.
+        if (messageDeviceId == null) {
+          LogService.instance
+              .registerLog("Rejected '$messageType' frame without a deviceId.");
+          return deviceId;
+        }
+
+        if (messageType == "deviceId") {
+          await _handleDeviceRegistrationMessage(
+            decodedData,
+            socket: socket,
+            remoteIp: remoteIp,
+            deviceId: messageDeviceId,
+          );
+        } else if (messageType == "photo" || messageType == "video") {
+          await _handleMediaMessage(
+            decodedData,
+            messageType: messageType == "photo" ? "photo" : "video",
+            deviceId: messageDeviceId,
+          );
+        } else if (messageType == "heartbeat") {
+          await _handleHeartbeatMessage(
+            decodedData,
+            socket: socket,
+            remoteIp: remoteIp,
+            deviceId: messageDeviceId,
+          );
+        } else {
+          await _handleIdentifyAckMessage(
+            decodedData,
+            socket: socket,
+            remoteIp: remoteIp,
+            deviceId: messageDeviceId,
+          );
+        }
       } else if (messageType == "getSessionStatus") {
-        LogService.instance
-            .registerLog("Received getSessionStatus from $deviceId");
+        LogService.instance.registerLog(
+            "Received getSessionStatus from ${deviceId ?? "unidentified slave"}");
         _sendSessionStatusResponse(socket, deviceId);
       } else if (messageType == "timeSyncRequest") {
         _handleTimeSyncRequest(decodedData, socket: socket, t1: t1);
@@ -649,7 +694,7 @@ class MasterServer {
         Uint8List.fromList(List<int>.from(decodedData["data"]));
     final String filePath =
         await _saveMediaLocally(binaryData, messageType == "photo");
-    final DateTime receivedDate = DateTime.now();
+    final DateTime receivedDate = _now();
 
     if (messageType == "photo") {
       final receivedPhoto = CapturedPhoto(
@@ -703,7 +748,7 @@ class MasterServer {
     required String? remoteIp,
     required String deviceId,
   }) async {
-    _lastHeartbeat[deviceId] = DateTime.now();
+    _lastHeartbeat[deviceId] = _now();
     await _registerOrUpdateClient(
       deviceId: deviceId,
       socket: socket,
@@ -730,7 +775,7 @@ class MasterServer {
     final acknowledgedAt = DateTime.tryParse(
           decodedData["timestamp"]?.toString() ?? "",
         ) ??
-        DateTime.now();
+        _now();
     await _registerOrUpdateClient(
       deviceId: deviceId,
       socket: socket,
@@ -759,8 +804,6 @@ class MasterServer {
     final reason = decodedData["reason"];
     LogService.instance
         .registerLog("Slave $deviceId forcibly stopped. Reason: $reason");
-    LogService.instance
-        .registerLog("Slave $deviceId forcibly stopped: $reason");
   }
 
   void _sendSessionStatusResponse(WebSocket socket, String? deviceId) {
@@ -823,7 +866,7 @@ class MasterServer {
     final hasReportedSession = reportedSessionGuid?.trim().isNotEmpty ?? false;
     final effectiveSessionMedia =
         hasReportedSession ? sessionMedia ?? previousInfo?.sessionMedia : null;
-    final now = DateTime.now();
+    final now = _now();
 
     _clients[deviceId] = socket;
     _lastHeartbeat[deviceId] = now;
@@ -870,7 +913,7 @@ class MasterServer {
 
     final previousInfo = _clientInfo[deviceId];
     final effectiveSnapshot = networkSnapshot ?? previousInfo?.networkSnapshot;
-    final now = DateTime.now();
+    final now = _now();
     final networkStatus = NetworkInfoService.compareDeviceNetwork(
       masterSnapshot: masterSnapshot,
       deviceSnapshot: effectiveSnapshot,
@@ -932,7 +975,7 @@ class MasterServer {
     if (previousInfo == null) {
       return;
     }
-    final now = DateTime.now();
+    final now = _now();
     _clientInfo[deviceId] = previousInfo.copyWith(
       isConnected: false,
       disconnectedAt: now,
@@ -1015,30 +1058,47 @@ class MasterServer {
   }
 
   /// Starts a periodic check for inactive clients based on heartbeat timestamps.
+  /// Cancels any previous timer first so a restart never leaves two sweeps
+  /// running against the same client maps.
   void _startHeartbeatCheck() {
-    _heartbeatCheckTimer = Timer.periodic(const Duration(seconds: 10), (_) {
-      final now = DateTime.now();
-      final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
-        final lastSeen = _lastHeartbeat[deviceId];
-        return lastSeen == null ||
-            now.difference(lastSeen).inSeconds > inactivityThreshold;
-      }).toList();
+    _stopHeartbeatCheck();
+    _heartbeatCheckTimer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _sweepInactiveClients(),
+    );
+  }
 
-      for (var deviceId in inactiveClients) {
-        _clients.remove(deviceId);
-        _lastHeartbeat.remove(deviceId);
-        _markClientDisconnected(deviceId);
-        LogService.instance
-            .registerLog("Client $deviceId removed due to inactivity.");
+  /// Drops every client whose last heartbeat is older than
+  /// [inactivityThreshold], measured against the injected clock.
+  void _sweepInactiveClients() {
+    final now = _now();
+    final inactiveClients = _lastHeartbeat.keys.where((deviceId) {
+      final lastSeen = _lastHeartbeat[deviceId];
+      return lastSeen == null ||
+          now.difference(lastSeen).inSeconds > inactivityThreshold;
+    }).toList();
 
-        // Notify disconnection to callback if defined
-        if (onClientRemoved != null) {
-          onClientRemoved!(deviceId, inactivityThreshold);
-        }
+    for (var deviceId in inactiveClients) {
+      _clients.remove(deviceId);
+      _lastHeartbeat.remove(deviceId);
+      _markClientDisconnected(deviceId);
+      LogService.instance
+          .registerLog("Client $deviceId removed due to inactivity.");
+
+      // Notify disconnection to callback if defined
+      if (onClientRemoved != null) {
+        onClientRemoved!(deviceId, inactivityThreshold);
       }
+    }
 
-      _notifyClientCount();
-    });
+    _notifyClientCount();
+  }
+
+  /// Runs one inactivity sweep synchronously, so eviction can be exercised
+  /// against an injected clock without waiting on the 10s timer.
+  @visibleForTesting
+  void sweepInactiveClientsForTest() {
+    _sweepInactiveClients();
   }
 
   void _stopHeartbeatCheck() {
@@ -1185,7 +1245,7 @@ class MasterServer {
       return false;
     }
 
-    final effectiveRequestedAt = requestedAt ?? DateTime.now().toUtc();
+    final effectiveRequestedAt = requestedAt ?? _now().toUtc();
     final effectiveRequestId =
         requestId ?? "identify-${effectiveRequestedAt.microsecondsSinceEpoch}";
     final payload = {
@@ -1220,7 +1280,7 @@ class MasterServer {
     // Convert the scheduled time to ISO 8601 format for standard communication
     final String scheduledTimeString = scheduledTime.toIso8601String();
     final String masterTimeString =
-        (masterTime ?? DateTime.now().toUtc()).toIso8601String();
+        (masterTime ?? _now().toUtc()).toIso8601String();
     final scheduledCommandPayload = {
       "type": "scheduledCommand",
       "command": command,

@@ -1,0 +1,1030 @@
+{
+  "scenario": "exposure-presets-RFCNC0SVDFN",
+  "dryRun": false,
+  "startedAt": "2026-10-24T16:41:37.633237+00:00",
+  "finishedAt": "2026-10-24T16:42:20.052952+00:00",
+  "devices": [
+    {
+      "serial": "RFCNC0SVDFN",
+      "role": "master",
+      "name": "master-0",
+      "localPort": 6100
+    }
+  ],
+  "scenarioResult": {
+    "manifest": {
+      "path": "automation_scenarios/single_device_exposure_presets.json",
+      "name": "single_device_exposure_presets",
+      "description": "Records one short clip per exposure preset (auto, 1/30, 1/60, 1/120) in a debug session on one device. Auto upload off."
+    },
+    "steps": [
+      {
+        "index": 0,
+        "name": "apply-capture-settings",
+        "action": "settings",
+        "result": {
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {
+            "autoUploadMaterials": false,
+            "masterShouldRecord": true,
+            "timerDuration": 0,
+            "autoplayVideoOnMaster": false,
+            "flashForVideoAnnounce": false,
+            "cameraLensPreference": "ultraWide",
+            "videoCaptureProfile": "detail4k30"
+          },
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "settings": {
+                  "autoUploadMaterials": false,
+                  "masterShouldRecord": true,
+                  "deleteLocalAfterUpload": false,
+                  "autoplayVideoOnMaster": false,
+                  "flashForVideoAnnounce": false,
+                  "timerDuration": 0,
+                  "cameraLensPreference": "ultraWide",
+                  "selectedCameraName": "0",
+                  "videoCaptureProfile": "detail4k30",
+                  "videoCaptureTarget": "4K at 30 fps",
+                  "exposurePreset": "auto"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 1,
+        "name": "start-debug-session",
+        "action": "command",
+        "result": {
+          "command": "start_session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "start_session",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 0,
+                  "queueLength": 0,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 2,
+        "name": "session-live",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 30.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 0,
+                "queueLength": 0,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 3,
+        "name": "preset-auto",
+        "action": "settings",
+        "result": {
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {
+            "exposurePreset": "auto"
+          },
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "settings": {
+                  "autoUploadMaterials": false,
+                  "masterShouldRecord": true,
+                  "deleteLocalAfterUpload": false,
+                  "autoplayVideoOnMaster": false,
+                  "flashForVideoAnnounce": false,
+                  "timerDuration": 0,
+                  "cameraLensPreference": "ultraWide",
+                  "selectedCameraName": "0",
+                  "videoCaptureProfile": "detail4k30",
+                  "videoCaptureTarget": "4K at 30 fps",
+                  "exposurePreset": "auto"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 4,
+        "name": "snapshot-settings-auto",
+        "action": "get",
+        "result": {
+          "path": "/settings",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payloads": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "autoUploadMaterials": false,
+                "masterShouldRecord": true,
+                "deleteLocalAfterUpload": false,
+                "autoplayVideoOnMaster": false,
+                "flashForVideoAnnounce": false,
+                "timerDuration": 0,
+                "cameraLensPreference": "ultraWide",
+                "selectedCameraName": "0",
+                "videoCaptureProfile": "detail4k30",
+                "videoCaptureTarget": "4K at 30 fps",
+                "exposurePreset": "auto"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 5,
+        "name": "step_6",
+        "action": "sleep",
+        "result": {
+          "slept": 2.0
+        }
+      },
+      {
+        "index": 6,
+        "name": "start-recording-auto",
+        "action": "command",
+        "result": {
+          "command": "start_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "start_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 0,
+                  "queueLength": 0,
+                  "isUploading": false,
+                  "isRecording": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 7,
+        "name": "recording-started-auto",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 40.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 0,
+                "queueLength": 0,
+                "isUploading": false,
+                "isRecording": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 8,
+        "name": "step_9",
+        "action": "sleep",
+        "result": {
+          "slept": 5.0
+        }
+      },
+      {
+        "index": 9,
+        "name": "stop-recording-auto",
+        "action": "command",
+        "result": {
+          "command": "stop_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "stop_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 1,
+                  "queueLength": 1,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 10,
+        "name": "video-saved-auto",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 30.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 1,
+                "queueLength": 1,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 11,
+        "name": "preset-shutter1_30",
+        "action": "settings",
+        "result": {
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {
+            "exposurePreset": "shutter1_30"
+          },
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "settings": {
+                  "autoUploadMaterials": false,
+                  "masterShouldRecord": true,
+                  "deleteLocalAfterUpload": false,
+                  "autoplayVideoOnMaster": false,
+                  "flashForVideoAnnounce": false,
+                  "timerDuration": 0,
+                  "cameraLensPreference": "ultraWide",
+                  "selectedCameraName": "0",
+                  "videoCaptureProfile": "detail4k30",
+                  "videoCaptureTarget": "4K at 30 fps",
+                  "exposurePreset": "shutter1_30"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 12,
+        "name": "snapshot-settings-shutter1_30",
+        "action": "get",
+        "result": {
+          "path": "/settings",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payloads": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "autoUploadMaterials": false,
+                "masterShouldRecord": true,
+                "deleteLocalAfterUpload": false,
+                "autoplayVideoOnMaster": false,
+                "flashForVideoAnnounce": false,
+                "timerDuration": 0,
+                "cameraLensPreference": "ultraWide",
+                "selectedCameraName": "0",
+                "videoCaptureProfile": "detail4k30",
+                "videoCaptureTarget": "4K at 30 fps",
+                "exposurePreset": "shutter1_30"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 13,
+        "name": "step_14",
+        "action": "sleep",
+        "result": {
+          "slept": 2.0
+        }
+      },
+      {
+        "index": 14,
+        "name": "start-recording-shutter1_30",
+        "action": "command",
+        "result": {
+          "command": "start_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "start_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 1,
+                  "queueLength": 1,
+                  "isUploading": false,
+                  "isRecording": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 15,
+        "name": "recording-started-shutter1_30",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 40.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 1,
+                "queueLength": 1,
+                "isUploading": false,
+                "isRecording": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 16,
+        "name": "step_17",
+        "action": "sleep",
+        "result": {
+          "slept": 5.0
+        }
+      },
+      {
+        "index": 17,
+        "name": "stop-recording-shutter1_30",
+        "action": "command",
+        "result": {
+          "command": "stop_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "stop_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 2,
+                  "queueLength": 2,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 18,
+        "name": "video-saved-shutter1_30",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 30.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 2,
+                "queueLength": 2,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 19,
+        "name": "preset-shutter1_60",
+        "action": "settings",
+        "result": {
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {
+            "exposurePreset": "shutter1_60"
+          },
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "settings": {
+                  "autoUploadMaterials": false,
+                  "masterShouldRecord": true,
+                  "deleteLocalAfterUpload": false,
+                  "autoplayVideoOnMaster": false,
+                  "flashForVideoAnnounce": false,
+                  "timerDuration": 0,
+                  "cameraLensPreference": "ultraWide",
+                  "selectedCameraName": "0",
+                  "videoCaptureProfile": "detail4k30",
+                  "videoCaptureTarget": "4K at 30 fps",
+                  "exposurePreset": "shutter1_60"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 20,
+        "name": "snapshot-settings-shutter1_60",
+        "action": "get",
+        "result": {
+          "path": "/settings",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payloads": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "autoUploadMaterials": false,
+                "masterShouldRecord": true,
+                "deleteLocalAfterUpload": false,
+                "autoplayVideoOnMaster": false,
+                "flashForVideoAnnounce": false,
+                "timerDuration": 0,
+                "cameraLensPreference": "ultraWide",
+                "selectedCameraName": "0",
+                "videoCaptureProfile": "detail4k30",
+                "videoCaptureTarget": "4K at 30 fps",
+                "exposurePreset": "shutter1_60"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 21,
+        "name": "step_22",
+        "action": "sleep",
+        "result": {
+          "slept": 2.0
+        }
+      },
+      {
+        "index": 22,
+        "name": "start-recording-shutter1_60",
+        "action": "command",
+        "result": {
+          "command": "start_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "start_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 2,
+                  "queueLength": 2,
+                  "isUploading": false,
+                  "isRecording": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 23,
+        "name": "recording-started-shutter1_60",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 40.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 2,
+                "queueLength": 2,
+                "isUploading": false,
+                "isRecording": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 24,
+        "name": "step_25",
+        "action": "sleep",
+        "result": {
+          "slept": 5.0
+        }
+      },
+      {
+        "index": 25,
+        "name": "stop-recording-shutter1_60",
+        "action": "command",
+        "result": {
+          "command": "stop_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "stop_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 3,
+                  "queueLength": 3,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 26,
+        "name": "video-saved-shutter1_60",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 30.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 3,
+                "queueLength": 3,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 27,
+        "name": "preset-shutter1_120",
+        "action": "settings",
+        "result": {
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {
+            "exposurePreset": "shutter1_120"
+          },
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "settings": {
+                  "autoUploadMaterials": false,
+                  "masterShouldRecord": true,
+                  "deleteLocalAfterUpload": false,
+                  "autoplayVideoOnMaster": false,
+                  "flashForVideoAnnounce": false,
+                  "timerDuration": 0,
+                  "cameraLensPreference": "ultraWide",
+                  "selectedCameraName": "0",
+                  "videoCaptureProfile": "detail4k30",
+                  "videoCaptureTarget": "4K at 30 fps",
+                  "exposurePreset": "shutter1_120"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 28,
+        "name": "snapshot-settings-shutter1_120",
+        "action": "get",
+        "result": {
+          "path": "/settings",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payloads": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "autoUploadMaterials": false,
+                "masterShouldRecord": true,
+                "deleteLocalAfterUpload": false,
+                "autoplayVideoOnMaster": false,
+                "flashForVideoAnnounce": false,
+                "timerDuration": 0,
+                "cameraLensPreference": "ultraWide",
+                "selectedCameraName": "0",
+                "videoCaptureProfile": "detail4k30",
+                "videoCaptureTarget": "4K at 30 fps",
+                "exposurePreset": "shutter1_120"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 29,
+        "name": "step_30",
+        "action": "sleep",
+        "result": {
+          "slept": 2.0
+        }
+      },
+      {
+        "index": 30,
+        "name": "start-recording-shutter1_120",
+        "action": "command",
+        "result": {
+          "command": "start_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "start_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 3,
+                  "queueLength": 3,
+                  "isUploading": false,
+                  "isRecording": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 31,
+        "name": "recording-started-shutter1_120",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 40.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 3,
+                "queueLength": 3,
+                "isUploading": false,
+                "isRecording": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 32,
+        "name": "step_33",
+        "action": "sleep",
+        "result": {
+          "slept": 5.0
+        }
+      },
+      {
+        "index": 33,
+        "name": "stop-recording-shutter1_120",
+        "action": "command",
+        "result": {
+          "command": "stop_recording",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "stop_recording",
+                "result": {
+                  "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                  "displayName": "Squash match - 2026-10-24 18:41",
+                  "displayTitle": "Squash match - 2026-10-24 18:41",
+                  "deviceType": "Master",
+                  "isActive": true,
+                  "photoCount": 0,
+                  "videoCount": 4,
+                  "queueLength": 4,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 34,
+        "name": "video-saved-shutter1_120",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 30.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939",
+                "displayName": "Squash match - 2026-10-24 18:41",
+                "displayTitle": "Squash match - 2026-10-24 18:41",
+                "deviceType": "Master",
+                "isActive": true,
+                "photoCount": 0,
+                "videoCount": 4,
+                "queueLength": 4,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 35,
+        "name": "end-session",
+        "action": "command",
+        "result": {
+          "command": "end_session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "payload": {},
+          "responses": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "response": {
+                "status": "ok",
+                "command": "end_session",
+                "result": {
+                  "sessionGuid": null,
+                  "displayName": null,
+                  "displayTitle": null,
+                  "deviceType": "Master",
+                  "isActive": false,
+                  "photoCount": 0,
+                  "videoCount": 0,
+                  "queueLength": 0,
+                  "isUploading": false,
+                  "isRecording": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "index": 36,
+        "name": "session-complete",
+        "action": "await",
+        "result": {
+          "path": "/session",
+          "targets": [
+            "RFCNC0SVDFN"
+          ],
+          "timeoutSec": 20.0,
+          "intervalSec": 1.0,
+          "result": [
+            {
+              "serial": "RFCNC0SVDFN",
+              "payload": {
+                "sessionGuid": null,
+                "displayName": null,
+                "displayTitle": null,
+                "deviceType": "Master",
+                "isActive": false,
+                "photoCount": 0,
+                "videoCount": 0,
+                "queueLength": 0,
+                "isUploading": false,
+                "isRecording": false
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "sessionGuid": "a3703a66-0fde-4e4b-a3df-846389de8939"
+  },
+  "deviceSnapshots": [
+    {
+      "serial": "RFCNC0SVDFN",
+      "role": "master",
+      "session": {
+        "sessionGuid": null,
+        "displayName": null,
+        "displayTitle": null,
+        "deviceType": "Master",
+        "isActive": false,
+        "photoCount": 0,
+        "videoCount": 0,
+        "queueLength": 0,
+        "isUploading": false,
+        "isRecording": false
+      },
+      "logCount": 168
+    }
+  ],
+  "backendReport": null
+}

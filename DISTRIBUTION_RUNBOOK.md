@@ -112,17 +112,17 @@ Do not submit a production build until all gates pass:
 Official references:
 
 - Apple App Store Connect workflow:
-  https://developer.apple.com/help/app-store-connect/get-started/app-store-connect-workflow/
+  <https://developer.apple.com/help/app-store-connect/get-started/app-store-connect-workflow/>
 - Apple upload builds:
-  https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/
+  <https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/>
 - Apple submit app:
-  https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app/
+  <https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app/>
 - Apple app privacy details:
-  https://developer.apple.com/app-store/app-privacy-details/
+  <https://developer.apple.com/app-store/app-privacy-details/>
 - Apple SDK minimum requirements:
-  https://developer.apple.com/news/upcoming-requirements/?id=02032026a
+  <https://developer.apple.com/news/upcoming-requirements/?id=02032026a>
 - Flutter iOS release:
-  https://docs.flutter.dev/deployment/ios
+  <https://docs.flutter.dev/deployment/ios>
 
 ## Physical iPhone Development Launch Modes
 
@@ -231,17 +231,17 @@ Current recovery evidence from 2026-06-09:
 Official references:
 
 - Google Play release rollout:
-  https://support.google.com/googleplay/android-developer/answer/9859348
+  <https://support.google.com/googleplay/android-developer/answer/9859348>
 - Google Play testing tracks:
-  https://support.google.com/googleplay/android-developer/answer/9845334
+  <https://support.google.com/googleplay/android-developer/answer/9845334>
 - Google Play personal account testing requirement:
-  https://support.google.com/googleplay/android-developer/answer/14151465
+  <https://support.google.com/googleplay/android-developer/answer/14151465>
 - Google Play Data safety:
-  https://support.google.com/googleplay/android-developer/answer/10787469
+  <https://support.google.com/googleplay/android-developer/answer/10787469>
 - Google Play target API requirements:
-  https://developer.android.com/google/play/requirements/target-sdk
+  <https://developer.android.com/google/play/requirements/target-sdk>
 - Flutter Android release:
-  https://docs.flutter.dev/deployment/android
+  <https://docs.flutter.dev/deployment/android>
 
 ## Store Privacy Inputs
 
@@ -262,24 +262,27 @@ SDK behavior:
 App Store privacy labels and Google Play Data Safety must match the app,
 backend, Auth0, and any SDKs included in the release build.
 
+The `HYDRACAM_PRIVACY_POLICY_URL`, `HYDRACAM_SUPPORT_URL`, and
+`HYDRACAM_ACCOUNT_DELETION_URL` defaults baked into
+`scripts/testflight_release_and_invite.sh` and `scripts/google_play_release.sh`
+are documented alongside the rest of the lab/store constants in
+`config/lab.env.example` (see AUTOMATION_RUNBOOK.md's "Lab configuration"
+section for how to override them).
+
 ## Build Artifacts
 
 Use the version in `pubspec.yaml` by default, or override with `BUILD_NAME` and
 `BUILD_NUMBER`.
 
-Known build warnings from Flutter 3.44:
+Known build warnings from Flutter 3.47:
 
-- Android release builds still warn that Gradle `8.10.2`, Android Gradle Plugin
-  `8.7.3`, and Kotlin `2.1.0` will be unsupported by a future Flutter release.
-  A direct bump to Gradle `8.14.5`, AGP `8.11.1`, and Kotlin `2.2.20` was
-  attempted on 2026-06-09, but `flutter build appbundle --release` did not
-  finish in the validation window and was terminated after `652.2s` with exit
-  code `143`. Keep the proven current toolchain for beta artifacts and handle
-  this as an isolated Android toolchain upgrade before it becomes a hard build
-  failure.
-- `url_launcher_android` is pinned to `6.3.23` because `6.3.29+` pulls
-  AndroidX Core `1.17.0` and Browser `1.9.0`, which require Android Gradle
-  Plugin `8.9.1+`. Keep the pin until the Android toolchain upgrade is proven.
+- The Android toolchain is Gradle `9.3.1`, Android Gradle Plugin `9.1.1`
+  (the minimum for `compileSdk = 37`), and Kotlin `2.2.20`. AGP 9 runs with
+  `android.builtInKotlin=false` and `android.newDsl=false` in
+  `android/gradle.properties` because the app and the `disk_space_plus` and
+  `photo_manager` plugins still apply the Kotlin Gradle Plugin. Flutter warns
+  that Kotlin `2.2.20` support will be dropped; plan a move to Kotlin
+  `2.3.20+` and built-in Kotlin before it becomes a hard build failure.
 - Flutter also warns that several iOS/macOS plugins do not yet support Swift
   Package Manager and that Android app/plugin builds still use the legacy
   Kotlin Gradle Plugin path. These are future-compatibility issues, not current

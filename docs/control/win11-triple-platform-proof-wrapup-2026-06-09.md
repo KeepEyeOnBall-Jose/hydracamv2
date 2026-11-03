@@ -1,5 +1,6 @@
 # Win11 Triple-Platform Proof Wrap-Up
 
+Last reviewed: 2026-06-09 (content dated 2026-06-09).
 Date: 2026-06-09
 
 Status: aborted by user request before completing the requested all-combinations

@@ -73,7 +73,8 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
                       return snapshot.data!;
                     }
 
-                    return Container(color: AppTheme.border);
+                    return Container(
+                        color: Theme.of(context).colorScheme.outlineVariant);
                   },
                 ),
                 if (candidate != null)
@@ -177,6 +178,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
   }
 
   Future<Widget> _buildThumbnail(AssetEntity asset) async {
+    final fallbackColor = Theme.of(context).colorScheme.onSurfaceVariant;
     final thumbnailData =
         await asset.thumbnailDataWithSize(const ThumbnailSize(200, 200));
     if (thumbnailData != null) {
@@ -187,7 +189,7 @@ class MediaSelectionScreenState extends State<MediaSelectionScreen> {
         height: double.infinity,
       );
     } else {
-      return Container(color: AppTheme.textTertiary);
+      return Container(color: fallbackColor);
     }
   }
 }

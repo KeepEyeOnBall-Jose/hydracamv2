@@ -357,7 +357,7 @@ class LoginScreenState extends State<LoginScreen> {
           children: [
             CircleAvatar(
               radius: 45,
-              backgroundColor: AppTheme.border,
+              backgroundColor: Theme.of(context).colorScheme.outlineVariant,
               child: const Icon(
                 Icons.person,
                 size: 60,
@@ -405,7 +405,7 @@ class LoginScreenState extends State<LoginScreen> {
               backgroundImage: profilePictureUrl != null
                   ? NetworkImage(profilePictureUrl)
                   : null,
-              backgroundColor: AppTheme.border,
+              backgroundColor: Theme.of(context).colorScheme.outlineVariant,
               child: profilePictureUrl == null
                   ? const Icon(
                       Icons.person,

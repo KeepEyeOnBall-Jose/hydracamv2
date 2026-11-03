@@ -20,24 +20,8 @@ import time
 from dataclasses import dataclass
 from typing import Sequence
 
-DEFAULT_ADB = os.path.expanduser("~/Library/Android/sdk/platform-tools/adb")
-
-
-@dataclass(frozen=True)
-class AndroidDevice:
-    serial: str
-    descriptor: str
-
-
-@dataclass(frozen=True)
-class CommandResult:
-    returncode: int
-    stdout: str
-    stderr: str
-
-    @property
-    def combined_output(self) -> str:
-        return "\n".join(part for part in (self.stdout, self.stderr) if part)
+from hydracam_lib.adb import DEFAULT_ADB, AndroidDevice, list_devices, select_devices
+from hydracam_lib.proc import CommandResult
 
 
 @dataclass(frozen=True)
@@ -101,21 +85,6 @@ def adb_shell(
         timeout=timeout,
         secret=secret,
     )
-
-
-def list_devices(adb: str, timeout: int) -> list[AndroidDevice]:
-    result = run_command([adb, "devices", "-l"], timeout=timeout, check=True)
-    devices: list[AndroidDevice] = []
-    for line in result.stdout.splitlines()[1:]:
-        stripped = line.strip()
-        if not stripped:
-            continue
-        parts = stripped.split(maxsplit=2)
-        if len(parts) < 2 or parts[1] != "device":
-            continue
-        descriptor = parts[2] if len(parts) > 2 else ""
-        devices.append(AndroidDevice(serial=parts[0], descriptor=descriptor))
-    return devices
 
 
 def read_prop(adb: str, serial: str, prop: str, timeout: int) -> str:
@@ -322,20 +291,6 @@ def wait_for_expected_subnet(
     return state
 
 
-def select_devices(
-    devices: list[AndroidDevice],
-    requested_serials: Sequence[str],
-) -> list[AndroidDevice]:
-    if not requested_serials:
-        return devices
-    requested = set(requested_serials)
-    selected = [device for device in devices if device.serial in requested]
-    missing = requested - {device.serial for device in selected}
-    if missing:
-        raise SystemExit(f"Requested devices not found: {', '.join(sorted(missing))}")
-    return selected
-
-
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Verify and optionally provision Android Wi-Fi for HydraCam.",
@@ -413,7 +368,7 @@ def main(argv: Sequence[str]) -> int:
     if not os.path.exists(adb):
         raise SystemExit(f"adb not found at {adb}")
 
-    devices = select_devices(list_devices(adb, args.timeout), args.device)
+    devices = select_devices(list_devices(adb, timeout=args.timeout), args.device)
     if not devices:
         raise SystemExit("No Android devices are attached or authorized.")
 
