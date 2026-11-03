@@ -3,6 +3,8 @@ package com.amaia23.hydracam.court
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.URI
+import java.net.URISyntaxException
 import java.util.UUID
 
 /** C1 v1 device ⇄ Court Cloud protocol (court-remote/01-contracts.md, C1). */
@@ -37,6 +39,7 @@ object C1 {
 
     const val TIER_PROXY = "proxy"
     const val TIER_MASTER = "master"
+    val TIERS = listOf(TIER_PROXY, TIER_MASTER)
 }
 
 /** Device-chosen `nack.code` values. C1 leaves codes free-form. */
@@ -215,13 +218,17 @@ data class RecordProfile(
             }
             return RecordProfile(
                 masterRes = json.optString("masterRes", DEFAULT.masterRes),
-                fps = json.optInt("fps", DEFAULT.fps),
-                masterKbps = json.optInt("masterKbps", DEFAULT.masterKbps),
+                fps = json.intIn("fps", FPS_RANGE) ?: DEFAULT.fps,
+                masterKbps = json.intIn("masterKbps", KBPS_RANGE) ?: DEFAULT.masterKbps,
                 proxyRes = json.optString("proxyRes", DEFAULT.proxyRes),
-                proxyKbps = json.optInt("proxyKbps", DEFAULT.proxyKbps),
-                segmentS = json.optInt("segmentS", DEFAULT.segmentS),
+                proxyKbps = json.intIn("proxyKbps", KBPS_RANGE) ?: DEFAULT.proxyKbps,
+                segmentS = json.intIn("segmentS", SEGMENT_S_RANGE) ?: DEFAULT.segmentS,
             )
         }
+
+        private val FPS_RANGE = 1L..120L
+        private val KBPS_RANGE = 100L..100_000L
+        private val SEGMENT_S_RANGE = 1L..60L
 
         /** `1080p` -> 1920x1080 landscape; unknown values fall back to 720p. */
         fun sizeFor(res: String): Pair<Int, Int> = SIZES[res] ?: SIZES.getValue(RES_720P)
@@ -242,7 +249,7 @@ data class RecordProfile(
 data class RecordPrepare(val sessionId: String, val profile: RecordProfile) {
     companion object {
         fun fromJson(body: JSONObject): RecordPrepare = RecordPrepare(
-            sessionId = body.requireString("sessionId"),
+            sessionId = body.requireSessionId(),
             profile = RecordProfile.fromJson(body.optJSONObject("profile")),
         )
     }
@@ -264,27 +271,27 @@ data class RecordStart(
             "maxDurationS=$maxDurationS, audio=$audio, ingestUrl=$ingestUrl)"
 
     companion object {
-        fun fromJson(body: JSONObject): RecordStart {
-            val gestures = body.optJSONArray("gestures")
-            return RecordStart(
-                sessionId = body.requireString("sessionId"),
-                leaseId = body.optString("leaseId"),
-                requestedBy = body.optString("requestedBy"),
-                startAtServerMs = body.requireLong("startAtServerMs"),
-                maxDurationS = body.optInt("maxDurationS", 0),
-                audio = body.optBoolean("audio", false),
-                uploadGrant = body.requireString("uploadGrant"),
-                ingestUrl = body.requireString("ingestUrl"),
-                gestures = (0 until (gestures?.length() ?: 0)).map { gestures!!.getString(it) },
-            )
-        }
+        fun fromJson(body: JSONObject): RecordStart = RecordStart(
+            sessionId = body.requireSessionId(),
+            leaseId = body.optString("leaseId"),
+            requestedBy = body.optString("requestedBy"),
+            startAtServerMs = body.requireLong("startAtServerMs"),
+            maxDurationS = body.intIn("maxDurationS", MAX_DURATION_RANGE) ?: 0,
+            audio = body.optBoolean("audio", false),
+            uploadGrant = body.requireString("uploadGrant"),
+            ingestUrl = body.requireIngestUrl(),
+            gestures = body.stringList("gestures"),
+        )
+
+        /** 0 means no limit; at most a day. */
+        private val MAX_DURATION_RANGE = 0L..86_400L
     }
 }
 
 data class RecordStop(val sessionId: String, val stopAtServerMs: Long) {
     companion object {
         fun fromJson(body: JSONObject): RecordStop = RecordStop(
-            sessionId = body.requireString("sessionId"),
+            sessionId = body.requireSessionId(),
             stopAtServerMs = body.optLong("stopAtServerMs", 0),
         )
     }
@@ -319,11 +326,11 @@ data class MastersUpload(
     companion object {
         fun fromJson(body: JSONObject): MastersUpload {
             val request = MastersUpload(
-                sessionId = body.requireString("sessionId"),
+                sessionId = body.requireSessionId(),
                 fromServerMs = body.optLongOrNull("fromServerMs"),
                 toServerMs = body.optLongOrNull("toServerMs"),
                 uploadGrant = body.requireString("uploadGrant"),
-                ingestUrl = body.requireString("ingestUrl"),
+                ingestUrl = body.requireIngestUrl(),
             )
             if (request.fromServerMs != null && request.toServerMs != null &&
                 request.fromServerMs >= request.toServerMs
@@ -437,3 +444,69 @@ private fun JSONObject.requireString(name: String): String =
 
 private fun JSONObject.requireLong(name: String): Long =
     optLongOrNull(name) ?: throw C1ProtocolException("Missing $name.")
+
+private fun JSONObject.requireSessionId(): String {
+    val value = requireString("sessionId")
+    if (!CourtIds.isSafe(value)) {
+        throw C1ProtocolException("sessionId must match ${CourtIds.PATTERN}.")
+    }
+    return value
+}
+
+private fun JSONObject.requireIngestUrl(): String {
+    val value = requireString("ingestUrl")
+    if (!CourtUrls.isAllowed(value)) {
+        throw C1ProtocolException("ingestUrl must be https:// (or http:// to loopback).")
+    }
+    return value
+}
+
+/** An optional integer field that must lie in [range] when present. */
+private fun JSONObject.intIn(name: String, range: LongRange): Int? {
+    val value = optLongOrNull(name) ?: return null
+    if (value !in range) {
+        throw C1ProtocolException("$name must be in $range.")
+    }
+    return value.toInt()
+}
+
+/** An optional array whose elements must all be strings. */
+private fun JSONObject.stringList(name: String): List<String> {
+    if (!has(name) || isNull(name)) {
+        return emptyList()
+    }
+    val array = opt(name) as? JSONArray ?: throw C1ProtocolException("$name must be an array.")
+    return (0 until array.length()).map { index ->
+        array.get(index) as? String ?: throw C1ProtocolException("$name must hold strings.")
+    }
+}
+
+/** K2 ids become directory names and URL path segments, so only plain names are accepted. */
+object CourtIds {
+    const val PATTERN = "[A-Za-z0-9][A-Za-z0-9._-]{0,127}"
+    private val REGEX = Regex(PATTERN)
+
+    fun isSafe(value: String): Boolean = REGEX.matches(value)
+}
+
+/**
+ * Credentials only travel over TLS; cleartext is allowed to loopback (tests, `adb reverse`), as in
+ * the network config.
+ */
+object CourtUrls {
+    private val LOOPBACK = setOf("localhost", "127.0.0.1", "[::1]", "::1")
+
+    fun isAllowed(url: String): Boolean {
+        val uri = try {
+            URI(url.trim())
+        } catch (ignored: URISyntaxException) {
+            null
+        }
+        val host = uri?.host?.lowercase() ?: return false
+        return when (uri.scheme?.lowercase()) {
+            "https" -> true
+            "http" -> host in LOOPBACK
+            else -> false
+        }
+    }
+}

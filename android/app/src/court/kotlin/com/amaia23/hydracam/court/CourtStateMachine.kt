@@ -57,7 +57,7 @@ class CourtStateMachine(
 
         data class Armed(val sessionId: String, val profile: RecordProfile) : Phase()
 
-        data class Recording(val sessionId: String, val leaseId: String, val profile: RecordProfile) : Phase()
+        data class Recording(val sessionId: String) : Phase()
 
         data class Stopping(val sessionId: String) : Phase()
     }
@@ -199,7 +199,7 @@ class CourtStateMachine(
     }
 
     private fun begin(command: RecordStart, profile: RecordProfile): CommandResult {
-        phase = Phase.Recording(command.sessionId, command.leaseId, profile)
+        phase = Phase.Recording(command.sessionId)
         setActive(command.sessionId)
         recorder.start(command, profile)
         return CommandResult.Ack

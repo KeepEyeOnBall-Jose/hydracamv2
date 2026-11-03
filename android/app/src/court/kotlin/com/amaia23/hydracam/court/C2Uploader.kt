@@ -232,11 +232,7 @@ class C2Uploader(
             .put("contentType", CONTENT_TYPE_TS)
             .put("mediaStartServerMs", item.mediaStartServerMs)
             .put("durationMs", item.durationMs)
-        val request = Request.Builder()
-            .url(grant.url("/v2/uploads"))
-            .header("Authorization", "Bearer ${grant.token}")
-            .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
-            .build()
+        val request = postJson(grant.url("/v2/uploads"), grant.token, body)
         http.newCall(request).execute().use { response ->
             val json = response.jsonBody()
             when (response.code) {
@@ -357,11 +353,11 @@ class C2Uploader(
             val number = parts.getJSONObject(index).getInt("n")
             partList.put(JSONObject().put("n", number).put("etag", etags.getString(number.toString())))
         }
-        val request = Request.Builder()
-            .url(grant.url("/v2/uploads/${item.uploadId}/complete"))
-            .header("Authorization", "Bearer ${grant.token}")
-            .post(JSONObject().put("parts", partList).toString().toRequestBody(JSON_MEDIA_TYPE))
-            .build()
+        val request = postJson(
+            grant.url("/v2/uploads/${item.uploadId}/complete"),
+            grant.token,
+            JSONObject().put("parts", partList),
+        )
         http.newCall(request).execute().use { response ->
             when {
                 response.isSuccessful -> store.update(
@@ -373,6 +369,14 @@ class C2Uploader(
                     ),
                 )
                 response.code == HttpStatus.NOT_FOUND -> restart(item, "upload_unknown")
+                // K3 R5b: 409 {state: failed, reason}; the key is re-declared with a new multipart.
+                response.code == HttpStatus.CONFLICT ->
+                    restart(
+                        item,
+                        "complete_failed: ${runCatching {
+                            response.jsonBody().optString("reason")
+                        }.getOrNull()}",
+                    )
                 else -> retryLater(item, "complete_http_${response.code}")
             }
         }
@@ -436,11 +440,7 @@ class C2Uploader(
                 JSONObject().put(C1.TIER_PROXY, session.lastSeqProxy).put(C1.TIER_MASTER, session.lastSeqMaster),
             )
             .put("segments", segments)
-        val request = Request.Builder()
-            .url(session.ingestUrl.trimEnd('/') + "/v2/sessions/${session.sessionId}/manifest")
-            .header("Authorization", "Bearer ${session.uploadGrant}")
-            .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
-            .build()
+        val request = postJson(manifestUrl(session.ingestUrl, session.sessionId), session.uploadGrant, body)
         try {
             http.newCall(request).execute().use { response ->
                 if (response.isSuccessful) {
@@ -500,11 +500,7 @@ class C2Uploader(
         val segments = JSONArray()
         held.forEach { segments.put(JSONObject().put("seq", it.seq).put("sha256", it.sha256)) }
         val body = JSONObject().put("slot", request.slot).put("tier", C1.TIER_MASTER).put("segments", segments)
-        val call = Request.Builder()
-            .url(request.ingestUrl.trimEnd('/') + "/v2/sessions/${request.sessionId}/manifest")
-            .header("Authorization", "Bearer ${request.uploadGrant}")
-            .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
-            .build()
+        val call = postJson(manifestUrl(request.ingestUrl, request.sessionId), request.uploadGrant, body)
         try {
             http.newCall(call).execute().use { response ->
                 when {
@@ -545,11 +541,7 @@ class C2Uploader(
         for (item in held) {
             if (item.uploadState == UploadState.HELD || item.uploadState == UploadState.FAILED) {
                 store.update(
-                    item.copy(
-                        state = UploadState.PENDING.name,
-                        uploadId = null,
-                        partsJson = null,
-                        etagsJson = null,
+                    item.restarted().copy(
                         attempts = 0,
                         nextAttemptAtMs = 0,
                         lastError = null,
@@ -585,19 +577,12 @@ class C2Uploader(
             val entry = missing.getJSONObject(index)
             val key = UploadItem.keyOf(session.sessionId, entry.getString("tier"), entry.getLong("seq"))
             val item = store.item(key) ?: continue
-            if (File(item.filePath).isFile && item.uploadState != UploadState.HELD) {
-                store.update(
-                    item.copy(
-                        state = UploadState.PENDING.name,
-                        uploadId = null,
-                        partsJson = null,
-                        etagsJson = null,
-                        nextAttemptAtMs = 0,
-                    ),
-                )
+            // A CONFLICT would only get the same 409 again, so it stays put.
+            if (item.isHeldOnPhone() && item.uploadState != UploadState.HELD) {
+                store.update(item.restarted().copy(nextAttemptAtMs = 0))
                 count += 1
             } else {
-                logger.warn(TAG, "K3 reports $key missing but the file is gone (state ${item.state}).")
+                logger.warn(TAG, "K3 reports $key missing; not re-queued (state ${item.state}).")
             }
         }
         return count
@@ -629,11 +614,7 @@ class C2Uploader(
         logger.warn(TAG, "Restarting ${item.key}: $reason")
         val attempts = item.attempts + 1
         store.update(
-            item.copy(
-                state = UploadState.PENDING.name,
-                uploadId = null,
-                partsJson = null,
-                etagsJson = null,
+            item.restarted().copy(
                 attempts = attempts,
                 nextAttemptAtMs = clock.nowMs() + backoffMs(attempts),
                 lastError = reason,
@@ -666,11 +647,22 @@ class C2Uploader(
         min(maxBackoffMs, baseBackoffMs shl min(attempts - 1, MAX_BACKOFF_SHIFT))
 
     /** On the phone and not yet accepted by K3 under different bytes. */
+
+    /** Back to PENDING with no multipart, so the next attempt re-declares the key. */
+    private fun UploadItem.restarted(): UploadItem =
+        copy(state = UploadState.PENDING.name, uploadId = null, partsJson = null, etagsJson = null)
+
+    private fun postJson(url: String, bearer: String, body: JSONObject): Request = Request.Builder()
+        .url(url)
+        .header("Authorization", "Bearer $bearer")
+        .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
+        .build()
+
     private fun UploadItem.isHeldOnPhone(): Boolean =
         uploadState != UploadState.VERIFIED && uploadState != UploadState.CONFLICT && File(filePath).isFile
 
     private class Grant(val token: String, val ingestUrl: String, val expMs: Long) {
-        fun url(path: String): String = ingestUrl.trimEnd('/') + path
+        fun url(path: String): String = ingestUrl(ingestUrl, path)
     }
 
     private fun Response.jsonBody(): JSONObject {
@@ -722,3 +714,7 @@ class C2Uploader(
         private const val TAG = "CourtUploader"
     }
 }
+
+private fun ingestUrl(base: String, path: String): String = base.trimEnd('/') + path
+
+private fun manifestUrl(base: String, sessionId: String): String = ingestUrl(base, "/v2/sessions/$sessionId/manifest")

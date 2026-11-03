@@ -169,7 +169,7 @@ class CourtCameraRecorder(
                 logger.warn(TAG, "record.start asked for audio but RECORD_AUDIO is not granted; video only.")
             }
             val frameUs = 1_000_000L / max(1, profile.fps)
-            val segmenters = TIERS.associateWith { tier ->
+            val segmenters = C1.TIERS.associateWith { tier ->
                 TsSegmenter(
                     sessionId = sessionId,
                     slot = slot(),
@@ -197,7 +197,7 @@ class CourtCameraRecorder(
             // Ask both encoders for an IDR at the start time so seq 0 begins promptly.
             val delayMs = max(0, clockEstimator.toDeviceMs(command.startAtServerMs) - System.currentTimeMillis())
             control.schedule(
-                { if (recording === active) TIERS.forEach { pipe.encoder(it).requestSyncFrame() } },
+                { if (recording === active) C1.TIERS.forEach { pipe.encoder(it).requestSyncFrame() } },
                 delayMs,
                 TimeUnit.MILLISECONDS,
             )
@@ -216,7 +216,7 @@ class CourtCameraRecorder(
         }
         recording = null
         active.audio?.stop()
-        val lastSeqs = TIERS.associateWith { tier ->
+        val lastSeqs = C1.TIERS.associateWith { tier ->
             val segmenter = active.segmenters.getValue(tier)
             try {
                 segmenter.finish()
@@ -798,7 +798,6 @@ class CourtCameraRecorder(
     }
 
     companion object {
-        val TIERS = listOf(C1.TIER_PROXY, C1.TIER_MASTER)
         private const val TAG = "CourtRecorder"
         private const val OPEN_TIMEOUT_MS = 5_000L
         private const val WARMUP_MIN_MS = 1_500L

@@ -4,6 +4,7 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -93,10 +94,10 @@ class SegmentSidecarReaderTest {
     }
 
     @Test
-    fun unsafeSessionIdsStayInsideTheSessionsDirectory() {
-        val dir = storage.sessionDir("../../etc/passwd")
-
-        assertEquals(File(storage.root, "sessions"), dir.parentFile)
-        assertEquals(".._.._etc_passwd", dir.name)
+    fun unsafeSessionIdsAreRefused() {
+        for (id in listOf("../../etc/passwd", "..", ".", "a/b", "")) {
+            assertThrows(IllegalArgumentException::class.java) { storage.sessionDir(id) }
+        }
+        assertEquals(File(File(storage.root, "sessions"), "s-1.a_b"), storage.sessionDir("s-1.a_b"))
     }
 }

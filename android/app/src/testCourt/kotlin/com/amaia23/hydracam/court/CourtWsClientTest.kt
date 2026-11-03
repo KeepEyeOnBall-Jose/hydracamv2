@@ -29,7 +29,7 @@ class CourtWsClientTest {
     val temp = TemporaryFolder()
 
     /** Fake K2 end of one connection: records envelopes, answers `clock.ping` 1000 ms ahead. */
-    private inner class FakeK2 : WebSocketListener() {
+    private inner class FakeK2(private val malformedPongs: Boolean = false) : WebSocketListener() {
         val received = LinkedBlockingQueue<C1Envelope>()
         val opened = LinkedBlockingQueue<WebSocket>()
         val closed = LinkedBlockingQueue<Int>()
@@ -42,6 +42,12 @@ class CourtWsClientTest {
             val envelope = C1Envelope.decode(text)
             if (envelope.type == C1.CLOCK_PING) {
                 val t0 = envelope.body.getLong("t0")
+                if (malformedPongs) {
+                    // No server times: read as 0 they would give a near-zero rtt and an offset of -t0.
+                    webSocket.send(C1Envelope.create(C1.CLOCK_PONG, JSONObject().put("t0", t0), t0).encode())
+                    val swapped = JSONObject().put("t0", t0).put("t1", t0 + 2_000).put("t2", t0 + 1_000)
+                    webSocket.send(C1Envelope.create(C1.CLOCK_PONG, swapped, t0).encode())
+                }
                 val pong = JSONObject().put("t0", t0).put("t1", t0 + 1_000).put("t2", t0 + 1_000)
                 webSocket.send(C1Envelope.create(C1.CLOCK_PONG, pong, t0 + 1_000).encode())
             }
@@ -153,6 +159,21 @@ class CourtWsClientTest {
         }
         // pong is 1000 ms ahead of t0; the local rtt shaves a few ms off.
         assertTrue("offset ${estimator.offsetMs()}", estimator.offsetMs() in 900L..1_000L)
+    }
+
+    @Test
+    fun malformedPongsAreDropped() {
+        val logger = RecordingLogger()
+        client = newClient(logger = logger)
+        upgrade(FakeK2(malformedPongs = true))
+        client.start()
+
+        val deadline = System.currentTimeMillis() + 3_000
+        while ((estimator.current() == null || logger.warnings.size < 2) && System.currentTimeMillis() < deadline) {
+            Thread.sleep(10)
+        }
+        assertTrue("offset ${estimator.offsetMs()}", estimator.offsetMs() in 900L..1_000L)
+        assertTrue(logger.warnings.any { it.contains("malformed clock.pong") })
     }
 
     @Test

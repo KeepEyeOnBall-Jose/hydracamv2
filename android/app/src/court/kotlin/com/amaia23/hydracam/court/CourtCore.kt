@@ -51,7 +51,7 @@ data class ClockSample(val t0: Long, val t1: Long, val t2: Long, val t3: Long) {
     val offsetMs: Long get() = ((t1 - t0) + (t2 - t3)) / 2
 }
 
-data class ClockEstimate(val offsetMs: Long, val rttMs: Long, val sampledAtMs: Long)
+data class ClockEstimate(val offsetMs: Long, val rttMs: Long)
 
 /**
  * H10: offset to K2 from bursts of [burstSize] pings, keeping the lowest-RTT sample.
@@ -74,7 +74,7 @@ class ClockOffsetEstimator(private val burstSize: Int = 8) {
         }
         burst += sample
         val best = burst.minBy { it.rttMs }
-        val estimate = ClockEstimate(best.offsetMs, best.rttMs, best.t3)
+        val estimate = ClockEstimate(best.offsetMs, best.rttMs)
         val complete = burst.size >= burstSize
         if (complete || published == null) {
             published = estimate

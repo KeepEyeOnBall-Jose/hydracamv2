@@ -55,7 +55,10 @@ class CourtRuntime private constructor(context: Context) {
     @Volatile
     private var policy = UploadPolicy.DEFAULT
 
-    /** Latest uploader problem (conflict, rejected master manifest), reported as `state.lastError`. */
+    /**
+     * Latest uploader problem (conflict, rejected master manifest), reported as `state.lastError`
+     * until the next session starts.
+     */
     @Volatile
     private var uploadAlert: String? = null
 
@@ -125,6 +128,9 @@ class CourtRuntime private constructor(context: Context) {
     @Volatile
     private var pendingBytes = 0L
 
+    /** Scheduler thread only. */
+    private var rootRecheck: ScheduledFuture<*>? = null
+
     /** Idempotent. Loads the enrollment, checks root, connects to K2 and starts the upload loop. */
     fun start() {
         if (!started.compareAndSet(false, true)) {
@@ -134,7 +140,11 @@ class CourtRuntime private constructor(context: Context) {
             enrollment = credentials.load()
             logger.info(TAG, "Starting; enrollment=${enrollment ?: "none"}.")
             checkRoot()
-            scheduler.scheduleWithFixedDelay({ checkRoot() }, ROOT_RECHECK_MS, ROOT_RECHECK_MS, TimeUnit.MILLISECONDS)
+            rootRecheck?.cancel(false)
+            rootRecheck =
+                scheduler.scheduleWithFixedDelay({
+                    checkRoot()
+                }, ROOT_RECHECK_MS, ROOT_RECHECK_MS, TimeUnit.MILLISECONDS)
             ws.start()
         }
         uploadExecutor.execute {
@@ -147,6 +157,7 @@ class CourtRuntime private constructor(context: Context) {
     fun onServiceDestroyed() {
         logger.info(TAG, "Service destroyed; closing the K2 connection.")
         ws.stop()
+        scheduler.execute { rootRecheck?.cancel(false) }
         started.set(false)
     }
 
@@ -434,6 +445,7 @@ class CourtRuntime private constructor(context: Context) {
 
         override fun start(command: RecordStart, profile: RecordProfile) {
             uploader.preemptMasters()
+            uploadAlert = null
             rememberGrant(command, restart = true)
             scheduleMaxDuration(command)
             recorder.start(command, profile)

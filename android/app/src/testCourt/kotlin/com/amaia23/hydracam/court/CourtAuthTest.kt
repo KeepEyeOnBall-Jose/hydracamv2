@@ -51,6 +51,8 @@ class CourtAuthTest {
         val e = CourtEnrollment("https://k2.example", "d", "s", "c", "A", 0)
         assertNull(CourtEnrollment.validate(e))
         assertNotNull(CourtEnrollment.validate(e.copy(k2Url = "k2.example")))
+        assertNotNull(CourtEnrollment.validate(e.copy(k2Url = "http://k2.lan:8080")))
+        assertNull(CourtEnrollment.validate(e.copy(k2Url = "http://127.0.0.1:8080")))
         assertNotNull(CourtEnrollment.validate(e.copy(secret = " ")))
         assertNotNull(CourtEnrollment.validate(e.copy(slot = "")))
     }

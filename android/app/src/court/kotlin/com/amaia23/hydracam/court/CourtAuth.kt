@@ -56,7 +56,7 @@ data class CourtEnrollment(
         )
 
         fun validate(enrollment: CourtEnrollment): String? = when {
-            !Regex("^https?://[^\\s/]+.*").matches(enrollment.k2Url.trim()) -> "k2Url must be http(s)://host"
+            !CourtUrls.isAllowed(enrollment.k2Url) -> "k2Url must be https://host (http:// only to loopback)"
             enrollment.deviceId.isBlank() -> "deviceId is required"
             enrollment.secret.isBlank() -> "secret is required"
             enrollment.courtId.isBlank() -> "courtId is required"
@@ -73,21 +73,6 @@ interface CredentialStore {
     fun save(enrollment: CourtEnrollment)
 
     fun clear()
-}
-
-class InMemoryCredentialStore(private var value: CourtEnrollment? = null) : CredentialStore {
-    @Synchronized
-    override fun load(): CourtEnrollment? = value
-
-    @Synchronized
-    override fun save(enrollment: CourtEnrollment) {
-        value = enrollment
-    }
-
-    @Synchronized
-    override fun clear() {
-        value = null
-    }
 }
 
 class CourtAuthException(message: String, val rejected: Boolean, cause: Throwable? = null) : IOException(message, cause)

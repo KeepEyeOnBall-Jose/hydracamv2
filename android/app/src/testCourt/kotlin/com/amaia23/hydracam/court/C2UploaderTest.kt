@@ -243,10 +243,9 @@ class C2UploaderTest : C2StoreTestBase() {
     fun partialManifestRequeuesMissingSegmentsThenCompletes() {
         startSession()
         val upload = uploader()
-        val record = segment(C1.TIER_PROXY, 0)
-        upload.enqueue(record)
-        server.enqueue(json(409, JSONObject()))
-        assertTrue(upload.runOnce())
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        // A grant problem left it FAILED with the file still on the phone.
+        store.update(item(C1.TIER_PROXY, 0).copy(state = UploadState.FAILED.name))
         upload.onSessionStopped("s1", lastSeqProxy = 0, lastSeqMaster = -1)
 
         val missing = JSONArray().put(JSONObject().put("tier", "proxy").put("seq", 0))
@@ -266,7 +265,7 @@ class C2UploaderTest : C2StoreTestBase() {
         server.enqueue(json(200, JSONObject().put("state", "complete")))
         assertTrue(upload.runOnce())
         assertEquals(UploadSession.MANIFEST_COMPLETE, store.session("s1")!!.manifestState)
-        assertEquals(4, server.requestCount)
+        assertEquals(3, server.requestCount)
     }
 
     @Test

@@ -265,4 +265,59 @@ class C1ProtocolTest {
         rejects { MastersUpload.fromJson(mastersBody().apply { remove("ingestUrl") }) }
         rejects { MastersUpload.fromJson(mastersBody().apply { remove("sessionId") }) }
     }
+
+    @Test
+    fun profileRejectsOutOfRangeValues() {
+        for ((field, value) in listOf(
+            "fps" to 0,
+            "fps" to 1_000,
+            "segmentS" to 0,
+            "segmentS" to 3_600,
+            "masterKbps" to 0,
+            "proxyKbps" to -1,
+            "fps" to "fast",
+        )) {
+            rejects { RecordProfile.fromJson(JSONObject().put(field, value)) }
+        }
+        assertEquals(1, RecordProfile.fromJson(JSONObject().put("segmentS", 1)).segmentS)
+    }
+
+    @Test
+    fun recordStartRejectsBadDurationAndGestures() {
+        rejects { RecordStart.fromJson(recordStartBody().put("maxDurationS", "long")) }
+        rejects { RecordStart.fromJson(recordStartBody().put("maxDurationS", -1)) }
+        rejects { RecordStart.fromJson(recordStartBody().put("gestures", JSONArray(listOf(1)))) }
+        rejects { RecordStart.fromJson(recordStartBody().put("gestures", "marker")) }
+    }
+
+    @Test
+    fun sessionIdsMustBeSafeNames() {
+        for (bad in listOf("..", ".", "a/b", "../x", "a b", "x".repeat(129), "-a")) {
+            rejects { RecordStart.fromJson(recordStartBody().put("sessionId", bad)) }
+            rejects { RecordStop.fromJson(JSONObject().put("sessionId", bad)) }
+            rejects { MastersUpload.fromJson(mastersBody().put("sessionId", bad)) }
+            rejects { RecordPrepare.fromJson(JSONObject().put("sessionId", bad)) }
+        }
+        val uuid = "0b9f6a3e-4c1d-4f7e-9a51-2d8c7e6f1a00"
+        assertEquals(uuid, RecordStart.fromJson(recordStartBody().put("sessionId", uuid)).sessionId)
+        assertEquals("mock-1.2_x", RecordStop.fromJson(JSONObject().put("sessionId", "mock-1.2_x")).sessionId)
+    }
+
+    @Test
+    fun ingestUrlMustBeHttpsOrLoopback() {
+        for (bad in listOf("http://k3.example", "ftp://k3.example", "k3.example", "https://", "http://10.0.0.2:8080")) {
+            rejects { RecordStart.fromJson(recordStartBody().put("ingestUrl", bad)) }
+            rejects { MastersUpload.fromJson(mastersBody().put("ingestUrl", bad)) }
+        }
+        for (good in listOf(
+            "https://k3.example/base",
+            "http://127.0.0.1:8080",
+            "http://localhost:1",
+            "http://[::1]:9",
+        )) {
+            assertEquals(good, RecordStart.fromJson(recordStartBody().put("ingestUrl", good)).ingestUrl)
+        }
+        assertTrue(CourtUrls.isAllowed("HTTPS://K3.example"))
+        assertFalse(CourtUrls.isAllowed("http://127.0.0.1.evil.example"))
+    }
 }

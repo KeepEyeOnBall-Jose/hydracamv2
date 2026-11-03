@@ -424,7 +424,7 @@ class C2UploaderEdgeTest : C2StoreTestBase() {
 
         assertEquals(Long.MAX_VALUE, store.session("s1")!!.nextManifestAtMs)
         assertEquals(UploadState.HELD, item(C1.TIER_MASTER, 0).uploadState)
-        assertEquals(2, logger.warnings.count { it.contains("missing but the file is gone") })
+        assertEquals(2, logger.warnings.count { it.contains("missing; not re-queued") })
     }
 
     @Test
@@ -532,5 +532,40 @@ class C2UploaderEdgeTest : C2StoreTestBase() {
         assertEquals(listOf("Could not delete expired master s1/master/0."), logger.warnings)
         assertEquals(UploadState.HELD, item(C1.TIER_MASTER, 0).uploadState)
         assertEquals(UploadState.HELD, item(C1.TIER_MASTER, 1).uploadState)
+    }
+
+    @Test
+    fun completeConflictRestartsWithTheReason() {
+        startSession()
+        val upload = uploader()
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        server.enqueue(initCreated("u1", 1))
+        server.enqueue(partOk("e1"))
+        server.enqueue(json(409, JSONObject().put("state", "failed").put("reason", "sha256-mismatch")))
+
+        assertTrue(upload.runOnce())
+
+        val restarted = proxy()
+        assertEquals(UploadState.PENDING, restarted.uploadState)
+        assertNull(restarted.uploadId)
+        assertEquals("complete_failed: sha256-mismatch", restarted.lastError)
+    }
+
+    @Test
+    fun partialManifestLeavesConflictsAlone() {
+        startSession(tiers = listOf(C1.TIER_PROXY))
+        val upload = uploader()
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        server.enqueue(json(409, JSONObject().put("reason", "different-bytes")))
+        assertTrue(upload.runOnce())
+        assertEquals(UploadState.CONFLICT, proxy().uploadState)
+        upload.onSessionStopped("s1", lastSeqProxy = 0, lastSeqMaster = -1)
+        val missing = JSONArray().put(JSONObject().put("tier", "proxy").put("seq", 0))
+
+        server.enqueue(json(200, JSONObject().put("state", "partial").put("missing", missing)))
+        assertTrue(upload.runOnce())
+
+        assertEquals(UploadState.CONFLICT, proxy().uploadState)
+        assertEquals(1, logger.warnings.count { it.contains("missing; not re-queued") })
     }
 }

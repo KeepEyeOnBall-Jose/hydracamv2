@@ -8,6 +8,7 @@ import okhttp3.WebSocketListener
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -84,7 +85,11 @@ class EventOutbox(
         try {
             dir.mkdirs()
             val temp = File(dir, fileName(entry) + ".tmp")
-            temp.writeText(json.toString())
+            // Synced before the rename, so a power cut cannot leave an empty file that load() drops.
+            FileOutputStream(temp).use { stream ->
+                stream.write(json.toString().toByteArray())
+                stream.fd.sync()
+            }
             if (!temp.renameTo(File(dir, fileName(entry)))) {
                 throw IOException("rename failed")
             }
@@ -330,19 +335,30 @@ class CourtWsClient(
                     logger.warn(TAG, "K2 nacked event $ref: ${envelope.body.optString("code")}")
                 }
             }
-            C1.CLOCK_PONG -> {
-                val body = envelope.body
-                val sample = ClockSample(
-                    t0 = body.optLong("t0"),
-                    t1 = body.optLong("t1"),
-                    t2 = body.optLong("t2"),
-                    t3 = clock.nowMs(),
-                )
-                if (clockEstimator.add(sample)) {
-                    logger.info(TAG, "Clock burst done: ${clockEstimator.current()}.")
-                }
-            }
+            C1.CLOCK_PONG -> onClockPong(envelope.body)
             else -> onCommand(envelope)
+        }
+    }
+
+    /** A pong missing a time, or with times out of order, would win the min-RTT pick, so it is dropped. */
+    private fun onClockPong(body: JSONObject) {
+        val t3 = clock.nowMs()
+        val sample = try {
+            ClockSample(
+                t0 = body.optLongOrNull("t0") ?: -1,
+                t1 = body.optLongOrNull("t1") ?: -1,
+                t2 = body.optLongOrNull("t2") ?: -1,
+                t3 = t3,
+            ).takeIf { it.t0 in 0..t3 && it.t1 >= 0 && it.t2 >= it.t1 }
+        } catch (ignored: C1ProtocolException) {
+            null
+        }
+        if (sample == null) {
+            logger.warn(TAG, "Dropping malformed clock.pong.")
+            return
+        }
+        if (clockEstimator.add(sample)) {
+            logger.info(TAG, "Clock burst done: ${clockEstimator.current()}.")
         }
     }
 

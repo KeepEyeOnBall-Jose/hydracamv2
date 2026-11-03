@@ -1,5 +1,6 @@
 package com.amaia23.hydracam.court
 
+import okio.ByteString.Companion.toByteString
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedOutputStream
@@ -64,7 +65,11 @@ class InMemorySegmentSeqStore : SegmentSeqStore {
 
 /** Court files live under `<root>/sessions/<sid>/`. */
 class CourtStorage(val root: File) {
-    fun sessionDir(sessionId: String): File = File(File(root, "sessions"), safeName(sessionId))
+    /** [sessionId] comes from a validated C1 command; anything else is a programming error. */
+    fun sessionDir(sessionId: String): File {
+        require(CourtIds.isSafe(sessionId)) { "Unsafe session id." }
+        return File(File(root, "sessions"), sessionId)
+    }
 
     fun tierDir(sessionId: String, tier: String): File = File(sessionDir(sessionId), tier)
 
@@ -73,8 +78,6 @@ class CourtStorage(val root: File) {
     fun signalsLog(): File = File(root, "signals.jsonl")
 
     fun sessionDirs(): List<File> = File(root, "sessions").listFiles()?.filter { it.isDirectory }.orEmpty()
-
-    private fun safeName(value: String): String = value.replace(Regex("[^A-Za-z0-9._-]"), "_")
 }
 
 /**
@@ -104,9 +107,9 @@ class SegmentSidecarReader(private val storage: CourtStorage, private val logger
         val json = try {
             JSONObject(line)
         } catch (ignored: JSONException) {
-            return null
+            null
         }
-        val sessionId = json.optString("sessionId")
+        val sessionId = json?.optString("sessionId")?.takeIf(CourtIds::isSafe) ?: return null
         val tier = json.optString("tier")
         val seq = json.optLong("seq", -1)
         val record = SegmentRecord(
@@ -123,10 +126,9 @@ class SegmentSidecarReader(private val storage: CourtStorage, private val logger
             offsetMs = json.optLong("offsetMs"),
             rttMs = json.optLong("rttMs", -1),
         )
-        val valid = sessionId.isNotBlank() &&
-            storage.sessionDir(sessionId) == sessionDir &&
+        val valid = storage.sessionDir(sessionId) == sessionDir &&
             record.slot.isNotBlank() &&
-            tier in TIERS &&
+            tier in C1.TIERS &&
             seq >= 0 &&
             json.optString("file") == "$tier/${record.file.name}" &&
             record.bytes > 0 &&
@@ -139,7 +141,6 @@ class SegmentSidecarReader(private val storage: CourtStorage, private val logger
     companion object {
         const val SIDECAR = "segments.jsonl"
         private const val TAG = "CourtSidecar"
-        private val TIERS = setOf(C1.TIER_PROXY, C1.TIER_MASTER)
         private val SHA256 = Regex("[0-9a-f]{64}")
     }
 }
@@ -407,4 +408,4 @@ class TsSegmenter(
     }
 }
 
-internal fun ByteArray.toHex(): String = joinToString("") { "%02x".format(it) }
+internal fun ByteArray.toHex(): String = toByteString().hex()

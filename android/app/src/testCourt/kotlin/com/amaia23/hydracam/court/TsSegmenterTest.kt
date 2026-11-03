@@ -29,23 +29,22 @@ class TsSegmenterTest {
         storage = CourtStorage(temp.newFolder("court"))
     }
 
-    private fun segmenter(hasAudio: Boolean = false, estimate: ClockEstimate? = ClockEstimate(1_000, 12, 0)) =
-        TsSegmenter(
-            sessionId = "s1",
-            slot = "A",
-            tier = C1.TIER_PROXY,
-            directory = storage.tierDir("s1", C1.TIER_PROXY),
-            sidecar = JsonlAppender(storage.sidecar("s1")),
-            seqStore = seqStore,
-            timebase = SessionTimebase { ptsUs -> serverBaseMs + ptsUs / 1_000 },
-            segmentDurationUs = 6_000_000,
-            frameDurationUs = frameUs,
-            hasAudio = hasAudio,
-            clockEstimate = { estimate },
-            onSegment = { segments += it },
-            requestSyncFrame = { syncRequests += 1 },
-            clock = FakeClock(),
-        )
+    private fun segmenter(hasAudio: Boolean = false, estimate: ClockEstimate? = ClockEstimate(1_000, 12)) = TsSegmenter(
+        sessionId = "s1",
+        slot = "A",
+        tier = C1.TIER_PROXY,
+        directory = storage.tierDir("s1", C1.TIER_PROXY),
+        sidecar = JsonlAppender(storage.sidecar("s1")),
+        seqStore = seqStore,
+        timebase = SessionTimebase { ptsUs -> serverBaseMs + ptsUs / 1_000 },
+        segmentDurationUs = 6_000_000,
+        frameDurationUs = frameUs,
+        hasAudio = hasAudio,
+        clockEstimate = { estimate },
+        onSegment = { segments += it },
+        requestSyncFrame = { syncRequests += 1 },
+        clock = FakeClock(),
+    )
 
     /** 30 fps, IDR every 30 frames (first IDR at frame 30), frames [from, until). */
     private fun feed(target: TsSegmenter, from: Int, until: Int) {

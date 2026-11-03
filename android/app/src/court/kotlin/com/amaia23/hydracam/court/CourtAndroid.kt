@@ -22,7 +22,6 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.security.KeyStore
@@ -101,23 +100,9 @@ object RootShell {
     fun grant(packageName: String, permission: String): Boolean =
         run("pm grant $packageName $permission")?.exitCode == 0
 
-    private fun readAll(stream: InputStream): String {
-        val out = ByteArrayOutputStream()
-        stream.use { input ->
-            val buffer = ByteArray(READ_BUFFER_BYTES)
-            while (true) {
-                val read = input.read(buffer)
-                if (read < 0) {
-                    break
-                }
-                out.write(buffer, 0, read)
-            }
-        }
-        return out.toString("UTF-8")
-    }
+    private fun readAll(stream: InputStream): String = stream.bufferedReader().use { it.readText() }
 
     private const val POLL_MS = 50L
-    private const val READ_BUFFER_BYTES = 4_096
 }
 
 /** Battery, thermal, storage and Wi-Fi for C1 `state`; caps for `hello`. */
