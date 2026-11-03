@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "record.prepare"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "masterRes": {
+              "type": "string",
+              "enum": [
+                "1080p",
+                "720p"
+              ]
+            },
+            "fps": {
+              "type": "number",
+              "enum": [
+                30,
+                60
+              ]
+            },
+            "masterKbps": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "proxyRes": {
+              "type": "string",
+              "const": "720p"
+            },
+            "proxyKbps": {
+              "type": "number",
+              "const": 2000
+            },
+            "segmentS": {
+              "type": "number",
+              "const": 6
+            }
+          },
+          "required": [
+            "masterRes",
+            "fps",
+            "masterKbps",
+            "proxyRes",
+            "proxyKbps",
+            "segmentS"
+          ]
+        }
+      },
+      "required": [
+        "sessionId",
+        "profile"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "record.start"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "leaseId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requestedBy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startAtServerMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxDurationS": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "audio": {
+          "type": "boolean"
+        },
+        "uploadGrant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ingestUrl": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gestures": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "review"
+            ]
+          }
+        }
+      },
+      "required": [
+        "sessionId",
+        "leaseId",
+        "requestedBy",
+        "startAtServerMs",
+        "maxDurationS",
+        "audio",
+        "uploadGrant",
+        "ingestUrl",
+        "gestures"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}

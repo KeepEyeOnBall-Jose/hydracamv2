@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "state"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "idle",
+            "previewing",
+            "armed",
+            "recording",
+            "uploading",
+            "updating",
+            "degraded",
+            "error"
+          ]
+        },
+        "batteryPct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "charging": {
+          "type": "boolean"
+        },
+        "chargeCapPct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "tempC": {
+          "type": "number"
+        },
+        "thermal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "freeBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "pendingUploadBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "wifiRssi": {
+          "type": "number"
+        },
+        "lastError": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "batteryPct",
+        "charging",
+        "chargeCapPct",
+        "tempC",
+        "thermal",
+        "freeBytes",
+        "pendingUploadBytes",
+        "wifiRssi"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}

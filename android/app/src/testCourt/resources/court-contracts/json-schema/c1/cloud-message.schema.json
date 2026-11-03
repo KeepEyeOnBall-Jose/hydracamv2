@@ -1,0 +1,847 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "ack"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "ref"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "nack"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "code": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "code"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "clock.pong"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "t0": {
+              "type": "number",
+              "minimum": 0
+            },
+            "t1": {
+              "type": "number",
+              "minimum": 0
+            },
+            "t2": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "t0",
+            "t1",
+            "t2"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "preview.start"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "publishUrl": {
+              "type": "string",
+              "minLength": 1
+            },
+            "token": {
+              "type": "string",
+              "minLength": 1
+            },
+            "width": {
+              "type": "number",
+              "const": 640
+            },
+            "height": {
+              "type": "number",
+              "const": 360
+            },
+            "fps": {
+              "type": "number",
+              "const": 20
+            },
+            "kbps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "ttlS": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "publishUrl",
+            "token",
+            "width",
+            "height",
+            "fps",
+            "kbps",
+            "ttlS"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "preview.stop"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "record.prepare"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "profile": {
+              "type": "object",
+              "properties": {
+                "masterRes": {
+                  "type": "string",
+                  "enum": [
+                    "1080p",
+                    "720p"
+                  ]
+                },
+                "fps": {
+                  "type": "number",
+                  "enum": [
+                    30,
+                    60
+                  ]
+                },
+                "masterKbps": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "proxyRes": {
+                  "type": "string",
+                  "const": "720p"
+                },
+                "proxyKbps": {
+                  "type": "number",
+                  "const": 2000
+                },
+                "segmentS": {
+                  "type": "number",
+                  "const": 6
+                }
+              },
+              "required": [
+                "masterRes",
+                "fps",
+                "masterKbps",
+                "proxyRes",
+                "proxyKbps",
+                "segmentS"
+              ]
+            }
+          },
+          "required": [
+            "sessionId",
+            "profile"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "record.start"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "leaseId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "requestedBy": {
+              "type": "string",
+              "minLength": 1
+            },
+            "startAtServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "maxDurationS": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "audio": {
+              "type": "boolean"
+            },
+            "uploadGrant": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ingestUrl": {
+              "type": "string",
+              "minLength": 1
+            },
+            "gestures": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "review"
+                ]
+              }
+            }
+          },
+          "required": [
+            "sessionId",
+            "leaseId",
+            "requestedBy",
+            "startAtServerMs",
+            "maxDurationS",
+            "audio",
+            "uploadGrant",
+            "ingestUrl",
+            "gestures"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "record.stop"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "stopAtServerMs": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "sessionId",
+            "stopAtServerMs"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "signal.emit"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "signal": {
+              "type": "string",
+              "enum": [
+                "countdown",
+                "rec.start",
+                "rec.stop",
+                "marker.ack",
+                "lease.warn",
+                "error",
+                "sync.flash"
+              ]
+            },
+            "atServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "signal",
+            "atServerMs"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "snapshot"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "width": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "putUrl": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "requestId",
+            "width",
+            "putUrl"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "upload.policy"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "masterMode": {
+              "type": "string",
+              "enum": [
+                "never",
+                "on-request",
+                "window"
+              ]
+            },
+            "windows": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "maxKbps": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "keepDays": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "masterMode",
+            "windows",
+            "maxKbps",
+            "keepDays"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "masters.upload"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fromServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "toServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "uploadGrant": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ingestUrl": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sessionId",
+            "uploadGrant",
+            "ingestUrl"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "config.set"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "rev": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "values": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              }
+            }
+          },
+          "required": [
+            "rev",
+            "values"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "app.update"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "versionCode": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "rolloutId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "url",
+            "sha256",
+            "versionCode",
+            "rolloutId"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "logs.upload"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "putUrl": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sinceMs": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "putUrl",
+            "sinceMs"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "hello"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "appVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "versionCode": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "androidSdk": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "rooted": {
+          "type": "boolean"
+        },
+        "courtId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mountRev": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "caps": {
+          "type": "object",
+          "properties": {
+            "maxRes": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fps": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "hevc": {
+              "type": "boolean"
+            },
+            "encoders": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "torch": {
+              "type": "boolean"
+            },
+            "speaker": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "maxRes",
+            "fps",
+            "hevc",
+            "encoders",
+            "torch",
+            "speaker"
+          ]
+        },
+        "activeSessionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "deviceId",
+        "appVersion",
+        "versionCode",
+        "model",
+        "androidSdk",
+        "rooted",
+        "courtId",
+        "slot",
+        "mountRev",
+        "caps",
+        "activeSessionId"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}
