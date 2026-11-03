@@ -4,6 +4,11 @@ This file is the canonical agent control plane for this repository. Codex, Claud
 Copilot, and any other coding agent should treat this as the source of truth for
 durable project context and working agreements.
 
+## Reporting Style
+
+When reporting information to the user, be extremely concise, and sacrifice
+grammar for the sake of concision.
+
 ## Agent Control Plane
 
 - Keep durable repository guidance in this file. Move transient debugging notes,
@@ -132,6 +137,9 @@ durable project context and working agreements.
   name); `shellcheck --severity=error` over `scripts/*.sh` and root `*.sh`
   (`.zsh` scripts are not linted — shellcheck does not support zsh); and a
   large-file guard failing on any added/modified file over 1MB in the diff.
+- `scripts/court_quality_gate.sh` is the gate for the Android `court` flavor:
+  JVM tests, ktlint, detekt and the Kover coverage floor. Run it before every
+  court-flavor commit.
 - Once a check is mechanically enforced here (gate script or CI workflow), do
   not re-expand it into prose elsewhere in this file — update the script or
   workflow and this section's pointer instead.
