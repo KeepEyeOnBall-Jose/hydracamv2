@@ -572,9 +572,10 @@ class C2Uploader(
             val entry = missing.getJSONObject(index)
             val key = UploadItem.keyOf(session.sessionId, entry.getString("tier"), entry.getLong("seq"))
             val item = store.item(key) ?: continue
-            // A CONFLICT or a capped verify failure would only fail again, so it stays put.
-            if (item.isHeldOnPhone() && item.uploadState != UploadState.HELD) {
-                store.update(item.restarted().copy(nextAttemptAtMs = 0))
+            // A CONFLICT would only fail again, so it stays put. A capped verify failure that K3 still
+            // wants gets a fresh restart budget; manifest backoff and the grant bound the loop.
+            if (item.canRefill()) {
+                store.update(item.restarted().copy(nextAttemptAtMs = 0, verifyRestarts = 0))
                 count += 1
             } else {
                 logger.warn(TAG, "K3 reports $key missing; not re-queued (state ${item.state}).")
@@ -669,6 +670,12 @@ class C2Uploader(
     private fun UploadItem.isHeldOnPhone(): Boolean = uploadState != UploadState.VERIFIED &&
         uploadState != UploadState.CONFLICT &&
         !(uploadState == UploadState.FAILED && verifyRestarts >= MAX_VERIFY_RESTARTS) &&
+        File(filePath).isFile
+
+    /** Can answer a K3 `missing` entry: on the phone, granted, and K3 has not refused these bytes. */
+    private fun UploadItem.canRefill(): Boolean = uploadState != UploadState.VERIFIED &&
+        uploadState != UploadState.CONFLICT &&
+        uploadState != UploadState.HELD &&
         File(filePath).isFile
 
     private class Grant(val token: String, val ingestUrl: String, val expMs: Long) {

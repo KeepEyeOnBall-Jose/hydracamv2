@@ -55,16 +55,27 @@ data class ClockEstimate(val offsetMs: Long, val rttMs: Long)
 
 /**
  * H10: offset to K2 from bursts of [burstSize] pings, keeping the lowest-RTT sample.
- * Until the first burst completes, the best sample so far is used.
+ * Until the first burst completes, the best sample so far is used; likewise after [markStale].
  */
 class ClockOffsetEstimator(private val burstSize: Int = 8) {
     private val burst = mutableListOf<ClockSample>()
     private var published: ClockEstimate? = null
+    private var stale = false
 
     @Synchronized
     fun beginBurst() {
         burst.clear()
     }
+
+    /** K2's clock moved: drop the open burst; the next sample replaces the (still used) estimate. */
+    @Synchronized
+    fun markStale() {
+        burst.clear()
+        stale = true
+    }
+
+    @Synchronized
+    fun isStale(): Boolean = stale
 
     /** Returns true when this sample completed a burst. */
     @Synchronized
@@ -76,8 +87,9 @@ class ClockOffsetEstimator(private val burstSize: Int = 8) {
         val best = burst.minBy { it.rttMs }
         val estimate = ClockEstimate(best.offsetMs, best.rttMs)
         val complete = burst.size >= burstSize
-        if (complete || published == null) {
+        if (complete || published == null || stale) {
             published = estimate
+            stale = false
         }
         if (complete) {
             burst.clear()

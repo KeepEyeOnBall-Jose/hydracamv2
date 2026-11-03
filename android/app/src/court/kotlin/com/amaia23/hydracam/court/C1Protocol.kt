@@ -21,6 +21,7 @@ object C1 {
     const val RECORDING_STARTED = "recording.started"
     const val RECORDING_SEGMENT = "recording.segment"
     const val RECORDING_STOPPED = "recording.stopped"
+    const val RECORDING_GAP = "recording.gap"
 
     // Cloud -> Device
     const val CLOCK_PONG = "clock.pong"
@@ -51,6 +52,9 @@ object C1NackCode {
     const val NOT_ENROLLED = "not_enrolled"
     const val INTERNAL = "internal"
     const val TIMEOUT = "timeout"
+
+    /** `record.start` for a session with no matching `record.prepare`: K2 must prepare first. */
+    const val NOT_PREPARED = "not_prepared"
 
     /** 1.4: `masters.upload` for a range where the phone holds no masters. */
     const val GONE = "gone"
@@ -409,6 +413,13 @@ object C1Events {
         .put("mediaStartServerMs", segment.mediaStartServerMs)
         .put("durationMs", segment.durationMs)
         .put("frames", segment.frames)
+
+    /** A crash lost one tier's media from `fromServerMs` up to the next `recording.segment`. */
+    fun recordingGap(gap: SegmentGap): JSONObject = JSONObject()
+        .put("sessionId", gap.sessionId)
+        .put("tier", gap.tier)
+        .put("fromServerMs", gap.fromServerMs)
+        .put("reason", gap.reason)
 
     fun recordingStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long, reason: String): JSONObject =
         JSONObject()

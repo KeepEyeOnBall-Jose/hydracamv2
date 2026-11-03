@@ -14,6 +14,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 /**
  * Durable store of device events K2 has not acked yet. C1: un-acked events are re-sent with the
@@ -132,7 +133,9 @@ class EventOutbox(
  * H4: C1 v1 WebSocket client.
  *
  * - On open: `hello`, then every un-acked event again (same ids), then `state` every [stateIntervalMs].
- * - A `clock.ping` burst runs on connect and every [clockIntervalMs] (H10).
+ * - A `clock.ping` burst runs on connect and every [clockIntervalMs] (H10). A command whose `ts` is more
+ *   than [clockResyncDriftMs] off our estimate of server time starts a burst too, and commands are held
+ *   (in order) until its first pong, at most [clockResyncHoldMs], so nothing schedules on a stale offset.
  * - Cloud commands go to [onCommand], which must answer through [reply] within 5 s.
  * - Reconnects with [ReconnectBackoff] (jittered, ≤ 30 s). A 401 drops the cached token.
  */
@@ -157,6 +160,8 @@ class CourtWsClient(
     private val clockBurstSize: Int = 8,
     private val clockPingSpacingMs: Long = 250,
     private val clockIntervalMs: Long = 300_000,
+    private val clockResyncDriftMs: Long = 1_000,
+    private val clockResyncHoldMs: Long = 2_000,
     private val onConnectionChanged: (Boolean, String?) -> Unit = { _, _ -> },
 ) {
     private var socket: WebSocket? = null
@@ -165,6 +170,9 @@ class CourtWsClient(
     private var running = false
     private var reconnectTask: ScheduledFuture<*>? = null
     private val periodicTasks = mutableListOf<ScheduledFuture<*>>()
+    private val heldCommands = ArrayDeque<C1Envelope>()
+    private var holding = false
+    private var holdTimeout: ScheduledFuture<*>? = null
 
     @get:Synchronized
     var lastConnectError: String? = null
@@ -178,13 +186,14 @@ class CourtWsClient(
         @Synchronized get() = open
 
     fun start() {
-        synchronized(this) {
+        val startedGeneration = synchronized(this) {
             if (running) {
                 return
             }
             running = true
+            generation
         }
-        scheduler.execute { connect() }
+        scheduler.execute { connect(startedGeneration) }
     }
 
     fun stop() {
@@ -193,6 +202,10 @@ class CourtWsClient(
             generation += 1
             reconnectTask?.cancel(false)
             cancelPeriodic()
+            holdTimeout?.cancel(false)
+            holdTimeout = null
+            heldCommands.clear()
+            holding = false
             socket?.close(NORMAL_CLOSURE, "stopping")
             socket = null
             open = false
@@ -217,8 +230,9 @@ class CourtWsClient(
         scheduler.execute { sendState() }
     }
 
-    private fun connect() {
-        val currentGeneration = synchronized(this) { generation.takeIf { running } } ?: return
+    /** Opens a socket for [currentGeneration]; a connect queued before a stop/start opens nothing. */
+    private fun connect(currentGeneration: Int) {
+        if (synchronized(this) { !running || generation != currentGeneration }) return
         val url = webSocketUrl()
         if (url == null) {
             failAndRetry(currentGeneration, "not_enrolled")
@@ -336,7 +350,50 @@ class CourtWsClient(
                 }
             }
             C1.CLOCK_PONG -> onClockPong(envelope.body)
-            else -> onCommand(envelope)
+            else -> onServerCommand(envelope)
+        }
+    }
+
+    private fun onServerCommand(envelope: C1Envelope) {
+        val driftMs = if (envelope.ts > 0) envelope.ts - serverNow() else 0L
+        val resync: Boolean
+        synchronized(this) {
+            if (holding) {
+                heldCommands += envelope
+                return
+            }
+            resync = abs(driftMs) > clockResyncDriftMs
+            if (resync) {
+                holding = true
+                heldCommands += envelope
+                clockEstimator.markStale()
+                holdTimeout = scheduler.schedule(
+                    { releaseHeld(timedOut = true) },
+                    clockResyncHoldMs,
+                    TimeUnit.MILLISECONDS,
+                )
+            }
+        }
+        if (!resync) {
+            onCommand(envelope)
+            return
+        }
+        logger.warn(TAG, "${envelope.type} server time is $driftMs ms off our clock; re-syncing first.")
+        startClockBurst()
+    }
+
+    /** Hands held commands on in order; only the first caller (pong or hold timeout) drains. */
+    private fun releaseHeld(timedOut: Boolean) {
+        val claimed = synchronized(this) { holdTimeout?.also { holdTimeout = null } } ?: return
+        claimed.cancel(false)
+        if (timedOut) {
+            logger.warn(TAG, "No clock.pong within $clockResyncHoldMs ms; handling held commands on the old offset.")
+        }
+        while (true) {
+            val next = synchronized(this) {
+                heldCommands.removeFirstOrNull().also { if (it == null) holding = false }
+            } ?: return
+            onCommand(next)
         }
     }
 
@@ -359,6 +416,9 @@ class CourtWsClient(
         }
         if (clockEstimator.add(sample)) {
             logger.info(TAG, "Clock burst done: ${clockEstimator.current()}.")
+        }
+        if (!clockEstimator.isStale()) {
+            releaseHeld(timedOut = false)
         }
     }
 
@@ -418,7 +478,7 @@ class CourtWsClient(
                 return
             }
             reconnectTask?.cancel(false)
-            reconnectTask = scheduler.schedule({ connect() }, delayMs, TimeUnit.MILLISECONDS)
+            reconnectTask = scheduler.schedule({ connect(failedGeneration) }, delayMs, TimeUnit.MILLISECONDS)
         }
         logger.info(TAG, "Reconnect in $delayMs ms ($reason).")
     }

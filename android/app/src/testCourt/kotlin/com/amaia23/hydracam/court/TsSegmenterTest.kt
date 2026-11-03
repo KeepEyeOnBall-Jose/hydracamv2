@@ -127,7 +127,7 @@ class TsSegmenterTest {
         feed(target, 30, 40)
         val dir = storage.tierDir("s1", C1.TIER_PROXY)
 
-        assertEquals(listOf("000000.ts.part"), dir.list()!!.toList())
+        assertEquals(listOf("000000.ts.part", "000000.ts.part.json"), dir.list()!!.sorted())
         assertEquals(-1L, target.lastSeq)
 
         target.abort()

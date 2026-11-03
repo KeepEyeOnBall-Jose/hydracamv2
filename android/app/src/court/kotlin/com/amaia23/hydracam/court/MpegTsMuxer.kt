@@ -213,6 +213,26 @@ class MpegTsMuxer(private val hasAudio: Boolean) {
 
         fun usTo90k(us: Long): Long = us * 9 / 100
 
+        fun ms(ticks90k: Long): Long = ticks90k / 90
+
+        /** True when a whole packet with the sync byte starts at [offset]. */
+        fun isPacket(bytes: ByteArray, offset: Int): Boolean =
+            offset + PACKET_SIZE <= bytes.size && bytes[offset] == SYNC_BYTE
+
+        /** PTS (90 kHz, with [PTS_DELAY_90K]) when the packet at [offset] starts a video PES, else null. */
+        fun videoPesPts(bytes: ByteArray, offset: Int): Long? {
+            val pid = ((bytes[offset + 1].toInt() and 0x1F) shl 8) or (bytes[offset + 2].toInt() and 0xFF)
+            val payloadStart = bytes[offset + 1].toInt() and 0x40 != 0
+            if (pid != VIDEO_PID || !payloadStart) {
+                return null
+            }
+            val adaptation = bytes[offset + 3].toInt() and 0x20 != 0
+            val pes = offset + 4 + if (adaptation) 1 + (bytes[offset + 4].toInt() and 0xFF) else 0
+            // PES header: start code (3), stream id, length (2), flags (2), header length, then the PTS.
+            val pts = pes + 9
+            return if (pts + 5 <= offset + PACKET_SIZE) decodeTimestamp(bytes, pts) else null
+        }
+
         fun pesPacket(streamId: Int, pts90k: Long, payload: ByteArray, boundedLength: Boolean): ByteArray {
             val headerDataLength = 5
             val pesLength = 3 + headerDataLength + payload.size
