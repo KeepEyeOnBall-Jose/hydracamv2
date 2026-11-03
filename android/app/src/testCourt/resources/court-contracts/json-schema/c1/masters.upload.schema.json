@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "masters.upload"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fromServerMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "toServerMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "uploadGrant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ingestUrl": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sessionId",
+        "uploadGrant",
+        "ingestUrl"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}

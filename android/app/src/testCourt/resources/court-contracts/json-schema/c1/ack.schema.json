@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "ack"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}

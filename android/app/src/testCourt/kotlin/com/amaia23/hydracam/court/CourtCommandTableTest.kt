@@ -24,6 +24,10 @@ class CourtCommandTableTest {
         },
         C1.RECORD_PREPARE to CommandHandler { throw C1ProtocolException("Missing sessionId.") },
         C1.SNAPSHOT to CommandHandler { throw IllegalStateException("boom") },
+        C1.MASTERS_UPLOAD to CommandHandler {
+            MastersUpload.fromJson(it.body)
+            CommandResult.Ack
+        },
     )
     private val table = CourtCommandTable(handlers, { replies.put(it) }, deadlineMs = 200)
 
@@ -32,8 +36,19 @@ class CourtCommandTableTest {
         table.shutdown()
     }
 
-    private fun command(type: String, id: String = "cmd-$type") =
-        C1Envelope(id = id, type = type, ts = 1, body = JSONObject())
+    private fun command(type: String, id: String = "cmd-$type", body: JSONObject = JSONObject()) =
+        C1Envelope(id = id, type = type, ts = 1, body = body)
+
+    private fun masters(id: String, fromServerMs: Long, toServerMs: Long?) = command(
+        C1.MASTERS_UPLOAD,
+        id,
+        JSONObject()
+            .put("sessionId", "s1")
+            .put("fromServerMs", fromServerMs)
+            .put("toServerMs", toServerMs ?: JSONObject.NULL)
+            .put("uploadGrant", "g")
+            .put("ingestUrl", "https://k3.example"),
+    )
 
     @Test
     fun ackReferencesTheCommand() {
@@ -94,6 +109,19 @@ class CourtCommandTableTest {
         assertEquals(C1NackCode.BAD_REQUEST, bad.body.getString("code"))
         assertEquals("Missing sessionId.", bad.body.getString("reason"))
         assertEquals(C1NackCode.INTERNAL, replies.await().body.getString("code"))
+    }
+
+    @Test
+    fun invertedOrEmptyMastersRangeIsBadRange() {
+        table.dispatch(masters("inverted", 2_000, 1_999))
+        table.dispatch(masters("empty", 2_000, 2_000))
+        table.dispatch(masters("open", 2_000, null))
+
+        val inverted = replies.await()
+        assertEquals("inverted", inverted.body.getString("ref"))
+        assertEquals("bad_range", inverted.body.getString("code"))
+        assertEquals(C1NackCode.BAD_RANGE, replies.await().body.getString("code"))
+        assertEquals(C1.ACK, replies.await().type)
     }
 
     @Test

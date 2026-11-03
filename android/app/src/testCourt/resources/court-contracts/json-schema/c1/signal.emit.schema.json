@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "v": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "const": "signal.emit"
+    },
+    "ts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "signal": {
+          "type": "string",
+          "enum": [
+            "countdown",
+            "rec.start",
+            "rec.stop",
+            "marker.ack",
+            "lease.warn",
+            "error",
+            "sync.flash"
+          ]
+        },
+        "atServerMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "signal",
+        "atServerMs"
+      ]
+    }
+  },
+  "required": [
+    "v",
+    "id",
+    "type",
+    "ts",
+    "body"
+  ]
+}

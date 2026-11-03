@@ -58,9 +58,14 @@ object C1NackCode {
 
     /** 1.4: `masters.upload` for a range where the phone holds no masters. */
     const val GONE = "gone"
+
+    /** 1.9: `masters.upload` whose `toServerMs` is not after `fromServerMs`. */
+    const val BAD_RANGE = "bad_range"
 }
 
-class C1ProtocolException(message: String, cause: Throwable? = null) : Exception(message, cause)
+/** A command body K1 refuses; [code] is the `nack.code` it is answered with. */
+class C1ProtocolException(message: String, cause: Throwable? = null, val code: String = C1NackCode.BAD_REQUEST) :
+    Exception(message, cause)
 
 data class C1Envelope(val id: String, val type: String, val ts: Long, val body: JSONObject) {
     fun encode(): String = JSONObject()
@@ -339,7 +344,7 @@ data class MastersUpload(
             if (request.fromServerMs != null && request.toServerMs != null &&
                 request.fromServerMs >= request.toServerMs
             ) {
-                throw C1ProtocolException("fromServerMs must be before toServerMs.")
+                throw C1ProtocolException("fromServerMs must be before toServerMs.", code = C1NackCode.BAD_RANGE)
             }
             return request
         }

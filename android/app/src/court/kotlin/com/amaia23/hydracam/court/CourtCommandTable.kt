@@ -82,7 +82,7 @@ class CourtCommandTable(
             CommandResult.Nack(C1NackCode.TIMEOUT, "Handler exceeded $deadlineMs ms.")
         } catch (error: ExecutionException) {
             when (val cause = error.cause) {
-                is C1ProtocolException -> CommandResult.Nack(C1NackCode.BAD_REQUEST, cause.message)
+                is C1ProtocolException -> CommandResult.Nack(cause.code, cause.message)
                 else -> {
                     logger.warn(TAG, "Handler for ${envelope.type} failed.", cause)
                     CommandResult.Nack(C1NackCode.INTERNAL, cause?.javaClass?.simpleName)

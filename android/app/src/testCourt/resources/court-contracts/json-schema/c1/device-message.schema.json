@@ -1,0 +1,725 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "ack"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "ref"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "nack"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "code": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "code"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "hello"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "deviceId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "appVersion": {
+              "type": "string",
+              "minLength": 1
+            },
+            "versionCode": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1
+            },
+            "androidSdk": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "rooted": {
+              "type": "boolean"
+            },
+            "courtId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "slot": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mountRev": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "caps": {
+              "type": "object",
+              "properties": {
+                "maxRes": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fps": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "hevc": {
+                  "type": "boolean"
+                },
+                "encoders": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "torch": {
+                  "type": "boolean"
+                },
+                "speaker": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "maxRes",
+                "fps",
+                "hevc",
+                "encoders",
+                "torch",
+                "speaker"
+              ]
+            },
+            "activeSessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "deviceId",
+            "appVersion",
+            "versionCode",
+            "model",
+            "androidSdk",
+            "rooted",
+            "courtId",
+            "slot",
+            "mountRev",
+            "caps",
+            "activeSessionId"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "state"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "idle",
+                "previewing",
+                "armed",
+                "recording",
+                "uploading",
+                "updating",
+                "degraded",
+                "error"
+              ]
+            },
+            "batteryPct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "charging": {
+              "type": "boolean"
+            },
+            "chargeCapPct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "tempC": {
+              "type": "number"
+            },
+            "thermal": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "freeBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "pendingUploadBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "wifiRssi": {
+              "type": "number"
+            },
+            "lastError": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "batteryPct",
+            "charging",
+            "chargeCapPct",
+            "tempC",
+            "thermal",
+            "freeBytes",
+            "pendingUploadBytes",
+            "wifiRssi"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "clock.ping"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "t0": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "t0"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "recording.started"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "firstFrameServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "offsetMs": {
+              "type": "number"
+            },
+            "profile": {
+              "type": "object",
+              "properties": {
+                "masterRes": {
+                  "type": "string",
+                  "enum": [
+                    "1080p",
+                    "720p"
+                  ]
+                },
+                "fps": {
+                  "type": "number",
+                  "enum": [
+                    30,
+                    60
+                  ]
+                },
+                "masterKbps": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "proxyRes": {
+                  "type": "string",
+                  "const": "720p"
+                },
+                "proxyKbps": {
+                  "type": "number",
+                  "const": 2000
+                },
+                "segmentS": {
+                  "type": "number",
+                  "const": 6
+                }
+              },
+              "required": [
+                "masterRes",
+                "fps",
+                "masterKbps",
+                "proxyRes",
+                "proxyKbps",
+                "segmentS"
+              ]
+            }
+          },
+          "required": [
+            "sessionId",
+            "firstFrameServerMs",
+            "offsetMs",
+            "profile"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "recording.segment"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tier": {
+              "type": "string",
+              "enum": [
+                "proxy",
+                "master"
+              ]
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "mediaStartServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "durationMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "frames": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "sessionId",
+            "tier",
+            "seq",
+            "bytes",
+            "sha256",
+            "mediaStartServerMs",
+            "durationMs",
+            "frames"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "recording.stopped"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lastSeq": {
+              "type": "object",
+              "properties": {
+                "proxy": {
+                  "type": "integer",
+                  "minimum": -1,
+                  "maximum": 9007199254740991
+                },
+                "master": {
+                  "type": "integer",
+                  "minimum": -1,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "proxy",
+                "master"
+              ]
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "sessionId",
+            "lastSeq",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "recording.gap"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tier": {
+              "type": "string",
+              "enum": [
+                "proxy",
+                "master"
+              ]
+            },
+            "fromServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "reason": {
+              "type": "string",
+              "enum": [
+                "no-complete-frame"
+              ]
+            }
+          },
+          "required": [
+            "sessionId",
+            "tier",
+            "fromServerMs",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "v": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "const": "gesture.detected"
+        },
+        "ts": {
+          "type": "number",
+          "minimum": 0
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "gesture": {
+              "type": "string",
+              "enum": [
+                "review"
+              ]
+            },
+            "tServerMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "personBox": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "sessionId",
+            "gesture",
+            "tServerMs",
+            "confidence",
+            "personBox"
+          ]
+        }
+      },
+      "required": [
+        "v",
+        "id",
+        "type",
+        "ts",
+        "body"
+      ]
+    }
+  ]
+}
