@@ -20,18 +20,28 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * Scales camera frames to the preview encoder for phones whose camera cannot output 640x360 to a
- * MediaCodec surface (S7 edge, S9). The camera writes [srcWidth]x[srcHeight] into a SurfaceTexture;
- * each frame is drawn into the encoder's input surface with the sensor timestamp as PTS.
+ * Scales camera frames to encoder surfaces. Used for phones whose camera cannot output 640x360 to
+ * a MediaCodec surface (S7 edge, S9), and to split one camera stream into proxy and preview where
+ * the camera only guarantees two streams at 4K (LIMITED). The camera writes [srcWidth]x[srcHeight]
+ * at [srcFps] into a SurfaceTexture; each frame is drawn into every output whose fps takes it
+ * (Bresenham, like the camera burst), with the sensor timestamp as PTS.
  */
 class GlScaler(
-    private val output: Surface,
-    private val outWidth: Int,
-    private val outHeight: Int,
+    private val outputs: List<Output>,
     val srcWidth: Int,
     val srcHeight: Int,
+    private val srcFps: Int,
 ) {
+    class Output(val name: String, val surface: Surface, val width: Int, val height: Int, val fps: Int) {
+        internal var egl: EGLSurface = EGL14.EGL_NO_SURFACE
+        val framesDrawn = AtomicLong()
+    }
+
     val framesDrawn = AtomicLong()
+    /** Frame-available callbacks that found no new frame (the GL thread fell behind). */
+    val framesCoalesced = AtomicLong()
+    private var frameIndex = 0L
+    private var lastTimestamp = -1L
     private val drawUsTotal = AtomicLong()
     private val drawUsMax = AtomicLong()
 
@@ -42,7 +52,6 @@ class GlScaler(
     private val handler = Handler(thread.looper)
     private var display: EGLDisplay = EGL14.EGL_NO_DISPLAY
     private var context: EGLContext = EGL14.EGL_NO_CONTEXT
-    private var surface: EGLSurface = EGL14.EGL_NO_SURFACE
     private lateinit var texture: SurfaceTexture
     private var program = 0
     private var aPosition = 0
@@ -66,8 +75,10 @@ class GlScaler(
     fun stats(): Map<String, Any?> {
         val n = framesDrawn.get()
         return mapOf(
-            "src" to "${srcWidth}x$srcHeight",
+            "src" to "${srcWidth}x$srcHeight@$srcFps",
             "framesDrawn" to n,
+            "framesCoalesced" to framesCoalesced.get(),
+            "outputs" to outputs.associate { it.name to "${it.width}x${it.height}@${it.fps} drawn ${it.framesDrawn.get()}" },
             "drawMsAvg" to if (n > 0) drawUsTotal.get() / n / 1_000.0 else null,
             "drawMsMax" to drawUsMax.get() / 1_000.0,
         )
@@ -80,7 +91,7 @@ class GlScaler(
             runCatching { inputSurface.release() }
             if (display != EGL14.EGL_NO_DISPLAY) {
                 EGL14.eglMakeCurrent(display, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_CONTEXT)
-                EGL14.eglDestroySurface(display, surface)
+                outputs.forEach { EGL14.eglDestroySurface(display, it.egl) }
                 EGL14.eglDestroyContext(display, context)
                 EGL14.eglTerminate(display)
             }
@@ -107,8 +118,11 @@ class GlScaler(
             display, configs[0], EGL14.EGL_NO_CONTEXT,
             intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 2, EGL14.EGL_NONE), 0,
         )
-        surface = EGL14.eglCreateWindowSurface(display, configs[0], output, intArrayOf(EGL14.EGL_NONE), 0)
-        check(EGL14.eglMakeCurrent(display, surface, surface, context)) { "eglMakeCurrent failed" }
+        outputs.forEach {
+            it.egl = EGL14.eglCreateWindowSurface(display, configs[0], it.surface, intArrayOf(EGL14.EGL_NONE), 0)
+        }
+        val first = outputs.first().egl
+        check(EGL14.eglMakeCurrent(display, first, first, context)) { "eglMakeCurrent failed" }
 
         program = linkProgram(VERTEX, FRAGMENT)
         aPosition = GLES20.glGetAttribLocation(program, "aPosition")
@@ -133,8 +147,28 @@ class GlScaler(
     private fun draw() {
         val startUs = SystemClock.elapsedRealtimeNanos() / 1_000
         texture.updateTexImage()
+        if (texture.timestamp == lastTimestamp) {
+            framesCoalesced.incrementAndGet()
+            return
+        }
+        lastTimestamp = texture.timestamp
         texture.getTransformMatrix(texMatrix)
-        GLES20.glViewport(0, 0, outWidth, outHeight)
+        val index = frameIndex++
+        outputs.filter { includes(it.fps, index) }.forEach { drawTo(it) }
+        val us = SystemClock.elapsedRealtimeNanos() / 1_000 - startUs
+        framesDrawn.incrementAndGet()
+        drawUsTotal.addAndGet(us)
+        if (us > drawUsMax.get()) drawUsMax.set(us)
+    }
+
+    private fun includes(fps: Int, index: Long): Boolean {
+        if (fps >= srcFps) return true
+        return ((index + 1) * fps) / srcFps > (index * fps) / srcFps
+    }
+
+    private fun drawTo(output: Output) {
+        EGL14.eglMakeCurrent(display, output.egl, output.egl, context)
+        GLES20.glViewport(0, 0, output.width, output.height)
         GLES20.glUseProgram(program)
         quad.position(0)
         GLES20.glVertexAttribPointer(aPosition, 2, GLES20.GL_FLOAT, false, 16, quad)
@@ -145,12 +179,9 @@ class GlScaler(
         GLES20.glUniformMatrix4fv(uTexMatrix, 1, false, texMatrix, 0)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
         // Camera SurfaceTexture timestamps are sensor timestamps, so encoder PTS stay sensor time.
-        EGLExt.eglPresentationTimeANDROID(display, surface, texture.timestamp)
-        EGL14.eglSwapBuffers(display, surface)
-        val us = SystemClock.elapsedRealtimeNanos() / 1_000 - startUs
-        framesDrawn.incrementAndGet()
-        drawUsTotal.addAndGet(us)
-        if (us > drawUsMax.get()) drawUsMax.set(us)
+        EGLExt.eglPresentationTimeANDROID(display, output.egl, texture.timestamp)
+        EGL14.eglSwapBuffers(display, output.egl)
+        output.framesDrawn.incrementAndGet()
     }
 
     private fun linkProgram(vertex: String, fragment: String): Int {

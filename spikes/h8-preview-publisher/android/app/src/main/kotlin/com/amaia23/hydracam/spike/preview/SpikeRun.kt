@@ -57,21 +57,8 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
         tracks.forEach { it.prepare() }
         tracks.forEach { it.start() }
 
-        val previewSurface = tracks.firstOrNull { it.name == "preview" }?.let { track ->
-            scaler = glSource()?.let { (w, h) ->
-                GlScaler(track.inputSurface, config.previewWidth, config.previewHeight, w, h).also { it.start() }
-            }
-            scaler?.inputSurface ?: track.inputSurface
-        }
-        val fpsOf = mapOf("preview" to config.previewFps)
-        camera = SharedCameraSession(
-            context,
-            config.cameraFps,
-            tracks.map {
-                val surface = if (it.name == "preview") previewSurface!! else it.inputSurface
-                SharedCameraSession.Target(it.name, surface, fpsOf[it.name] ?: config.cameraFps)
-            },
-        ).also { it.open() }
+        val targets = if (config.split) splitTargets() else directTargets()
+        camera = SharedCameraSession(context, config.cameraFps, targets, config.cameraId).also { it.open() }
         if (config.preview && config.toggle != "none") scheduleToggle()
         ticker.scheduleWithFixedDelay({ runCatching { tick() }.onFailure { Log.w(TAG, "tick", it) } }, 5, 5, TimeUnit.SECONDS)
     }
@@ -87,10 +74,45 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
         }, everyS, everyS, TimeUnit.SECONDS)
     }
 
+    /** One camera stream per track; the preview goes through GlScaler if the camera cannot output its size. */
+    private fun directTargets(): List<SharedCameraSession.Target> {
+        val previewSurface = tracks.firstOrNull { it.name == "preview" }?.let { track ->
+            scaler = glSource()?.let { (w, h) ->
+                val output = GlScaler.Output("preview", track.inputSurface, config.previewWidth, config.previewHeight, config.previewFps)
+                GlScaler(listOf(output), w, h, config.previewFps).also { it.start() }
+            }
+            scaler?.inputSurface ?: track.inputSurface
+        }
+        val fpsOf = mapOf("preview" to config.previewFps)
+        return tracks.map {
+            val surface = if (it.name == "preview") previewSurface!! else it.inputSurface
+            SharedCameraSession.Target(it.name, surface, fpsOf[it.name] ?: config.cameraFps)
+        }
+    }
+
+    /** Master plus one [SpikeConfig.splitSource] stream that GlScaler draws into proxy and preview. */
+    private fun splitTargets(): List<SharedCameraSession.Target> {
+        val (w, h) = config.splitSource.split('x').map { it.toInt() }
+        val supported = SharedCameraSession.outputSizes(context, SurfaceTexture::class.java, config.cameraId)
+            .any { it.width == w && it.height == h }
+        Log.i(TAG, "split source ${w}x$h supported=$supported")
+        val fpsOf = mapOf("preview" to config.previewFps)
+        val outputs = tracks.filter { it.name != "master" }.map {
+            GlScaler.Output(it.name, it.inputSurface, it.width, it.height, fpsOf[it.name] ?: config.cameraFps)
+        }
+        val master = tracks.first { it.name == "master" }
+        val targets = mutableListOf(SharedCameraSession.Target("master", master.inputSurface, config.cameraFps))
+        if (outputs.isNotEmpty()) {
+            scaler = GlScaler(outputs, w, h, config.cameraFps).also { it.start() }
+            targets += SharedCameraSession.Target("split", scaler!!.inputSurface, config.cameraFps)
+        }
+        return targets
+    }
+
     /** Camera size for the GlScaler, or null when the camera feeds the preview encoder directly. */
     private fun glSource(): Pair<Int, Int>? {
         val (pw, ph) = config.previewWidth to config.previewHeight
-        val direct = SharedCameraSession.outputSizes(context, MediaCodec::class.java)
+        val direct = SharedCameraSession.outputSizes(context, MediaCodec::class.java, config.cameraId)
             .any { it.width == pw && it.height == ph }
         val useGl = when (config.previewPath) {
             "gl" -> true
@@ -100,7 +122,7 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
         Log.i(TAG, "preview ${pw}x$ph directSupported=$direct path=${if (useGl) "gl" else "direct"}")
         if (!useGl) return null
         config.glSource?.split('x')?.let { return it[0].toInt() to it[1].toInt() }
-        val size = SharedCameraSession.outputSizes(context, SurfaceTexture::class.java)
+        val size = SharedCameraSession.outputSizes(context, SurfaceTexture::class.java, config.cameraId)
             .filter { it.width * ph == it.height * pw && it.width >= pw }
             .minBy { it.width }
         return size.width to size.height
@@ -141,7 +163,8 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
                 "previewSpec" to "${config.previewWidth}x${config.previewHeight}@${config.previewFps} ${config.previewKbps}kbps",
                 "protocol" to config.url?.substringBefore("://"),
                 "timeNal" to config.timeNal?.name,
-                "previewPath" to if (scaler != null) "gl" else "direct",
+                "previewPath" to if (config.split) "split" else if (scaler != null) "gl" else "direct",
+                "cameraId" to config.cameraId,
             ),
             "ntp" to ntp?.let { mapOf("offsetMs" to it.offsetMs, "rttMs" to it.rttMs, "server" to it.server) },
             "camera" to cam?.let {
@@ -165,7 +188,7 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
                     "ptsGaps" to track.ptsGaps.get(),
                     "ptsGapFrames" to track.ptsGapFrames.get(),
                     "maxGapMs" to track.maxGapUs.get() / 1_000.0,
-                    "bufferLost" to cam?.let { c -> c.targetBufferLost(track.name) },
+                    "bufferLost" to cam?.let { c -> c.targetBufferLost(track.name) ?: c.targetBufferLost("split") },
                 )
             },
             "preview" to previewSink?.let { sink ->

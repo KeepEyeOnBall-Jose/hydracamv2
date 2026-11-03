@@ -38,6 +38,14 @@ data class SpikeConfig(
     val toggle: String,
     /** Seconds between preview on/off switches in a toggle run. */
     val toggleS: Int,
+    /** Camera2 id, null = first back camera. "2" is the wide lens on S10e and S20 FE. */
+    val cameraId: String?,
+    /**
+     * Two camera streams only (master + one [splitSource] stream); GlScaler draws that stream
+     * into the proxy and preview encoders. LIMITED lenses only guarantee two streams at 4K.
+     */
+    val split: Boolean,
+    val splitSource: String,
 ) {
     fun toBundle(): Bundle = Bundle().apply {
         putString(EXTRA_RUN_ID, runId)
@@ -46,7 +54,7 @@ data class SpikeConfig(
         putBoolean(EXTRA_PROXY, proxy)
         putBoolean(EXTRA_RECORD, record)
         putBoolean(EXTRA_KEEP_FILES, keepFiles)
-        putString(EXTRA_MASTER_RES, if (masterHeight == 720) "720p" else "1080p")
+        putString(EXTRA_MASTER_RES, when (masterHeight) { 720 -> "720p"; 2160 -> "4k"; else -> "1080p" })
         putInt(EXTRA_CAMERA_FPS, cameraFps)
         putInt(EXTRA_MASTER_KBPS, masterKbps)
         putInt(EXTRA_PROXY_KBPS, proxyKbps)
@@ -61,6 +69,9 @@ data class SpikeConfig(
         putString(EXTRA_GL_SOURCE, glSource)
         putString(EXTRA_TOGGLE, toggle)
         putInt(EXTRA_TOGGLE_S, toggleS)
+        putString(EXTRA_CAMERA_ID, cameraId)
+        putBoolean(EXTRA_SPLIT, split)
+        putString(EXTRA_SPLIT_SOURCE, splitSource)
     }
 
     companion object {
@@ -85,10 +96,15 @@ data class SpikeConfig(
         const val EXTRA_GL_SOURCE = "glSource"
         const val EXTRA_TOGGLE = "toggle"
         const val EXTRA_TOGGLE_S = "toggleS"
+        const val EXTRA_CAMERA_ID = "cameraId"
+        const val EXTRA_SPLIT = "split"
+        const val EXTRA_SPLIT_SOURCE = "splitSource"
 
         fun from(intent: Intent): SpikeConfig {
             val e = intent.extras ?: Bundle()
-            val master720 = e.getString(EXTRA_MASTER_RES) == "720p"
+            val res = e.getString(EXTRA_MASTER_RES)
+            val master720 = res == "720p"
+            val master4k = res == "4k"
             return SpikeConfig(
                 runId = e.getString(EXTRA_RUN_ID) ?: "run-${System.currentTimeMillis()}",
                 url = e.getString(EXTRA_URL)?.takeIf { it.isNotBlank() },
@@ -96,10 +112,10 @@ data class SpikeConfig(
                 proxy = e.getBoolean(EXTRA_PROXY, false),
                 record = e.getBoolean(EXTRA_RECORD, true),
                 keepFiles = e.getBoolean(EXTRA_KEEP_FILES, false),
-                masterWidth = if (master720) 1280 else 1920,
-                masterHeight = if (master720) 720 else 1080,
+                masterWidth = if (master720) 1280 else if (master4k) 3840 else 1920,
+                masterHeight = if (master720) 720 else if (master4k) 2160 else 1080,
                 cameraFps = e.getInt(EXTRA_CAMERA_FPS, 30),
-                masterKbps = e.getInt(EXTRA_MASTER_KBPS, if (master720) 4_000 else 8_000),
+                masterKbps = e.getInt(EXTRA_MASTER_KBPS, if (master720) 4_000 else if (master4k) 45_000 else 8_000),
                 proxyKbps = e.getInt(EXTRA_PROXY_KBPS, 2_000),
                 // C4 preview stream: 640x360, 20 fps, 700 kbps, GOP 1 s, no audio.
                 previewWidth = 640,
@@ -119,6 +135,9 @@ data class SpikeConfig(
                 glSource = e.getString(EXTRA_GL_SOURCE)?.takeIf { it.isNotBlank() },
                 toggle = e.getString(EXTRA_TOGGLE) ?: "none",
                 toggleS = e.getInt(EXTRA_TOGGLE_S, 10),
+                cameraId = e.getString(EXTRA_CAMERA_ID)?.takeIf { it.isNotBlank() },
+                split = e.getBoolean(EXTRA_SPLIT, false),
+                splitSource = e.getString(EXTRA_SPLIT_SOURCE) ?: "1280x720",
             )
         }
     }

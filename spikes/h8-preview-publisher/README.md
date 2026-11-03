@@ -4,7 +4,8 @@ Question (court-remote plan, item H8): can a rooted fleet phone publish the C4 p
 (H.264 640x360, 20 fps, 700 kbps, GOP 1 s, no audio) over SRT, with RTMPS as fallback, from a
 second MediaCodec encoder on the recorder's Camera2 session, without hurting the recorder?
 
-Status: **yes**. Measured on S10e, S20 FE and S7 edge on 2026-11-03 (20 min per scenario, phones
+Status: **yes**, also with a 4K30 wide-lens master on S10e and S20 FE
+([details](#4k30-wide-lens-with-live-view)). Measured on S10e, S20 FE and S7 edge on 2026-11-03 (20 min per scenario, phones
 plugged in, local MediaMTX relay on the club LAN, headless Chrome WHEP viewers). S9 not tested
 (same GL path as S7 edge).
 
@@ -19,6 +20,7 @@ plugged in, local MediaMTX relay on the club LAN, headless Chrome WHEP viewers).
 | Recorder frame drops | **S10e, S7 edge: none** (same as without preview). **S20 FE: 0.5 % of master frames** (188 one-frame gaps in 20 min vs 22 without; max gap 67 ms). See [S20 FE drops](#s20-fe-drops) |
 | Bitrate | The C4 700 kbps target is not met on two phones: preview 961 / 839 / 699 kbps. A 530 kbps target still gives 916 / 824. Proxy 2000 kbps target gives 2455 / 2485 / 1996 |
 | Shared uplink (R10) | ≈ 3.4 Mbps per camera, recording and watched, so 1 camera per 4–5 Mbps. Unpaced proxy PUTs add 225–370 ms of preview delay and a broken GOP per TCP loss burst at L 120. Fix: pace the uploader (no effect then), or phone `srtLatency` ≈ 1000 ms. [Details](#shared-uplink-r10) |
+| 4K30 wide | **Works on S10e and S20 FE**: 4K30 master (44 Mbps) on the wide lens + proxy + preview from 2 camera streams, GPU-split. Master frames lost 1 / 27 of 18,300 in 10 min, G2G p50 300 / 338 ms, CPU 28 / 30 %. [Details](#4k30-wide-lens-with-live-view) |
 | Seam | Preview surface stays in the session for the camera's whole life; on/off only changes the repeating burst. Camera opens for live view before recording. [Details](#seam-needed-from-courtcameraservice) |
 
 ## Library comparison
@@ -292,6 +294,45 @@ What happens:
 4. **If neither 1 nor 3 is possible:** phone `srtLatency` 1000 ms, accepting ≈ 1.2 s glass to
    glass.
 
+## 4K30 wide lens with live view
+
+Question: can the phone record 4K30 on the ultra-wide lens and still publish the C4 preview?
+The wide lens (camera id 2 on both phones) is LIMITED, which only guarantees 2 streams at record
+size, so H8's 3-stream layout is not safe at 4K. Here the camera gives a 3840x2160 master stream
+and one 1280x720 stream; `GlScaler` draws the 720p stream into the proxy encoder (every frame) and
+the preview encoder (20 of 30 frames). 1080p60 was not tested: neither phone offers an AE range
+above 30 fps to third-party apps (Samsung keeps 60 fps for its own camera app).
+
+Run: 10 min per phone, same day, plugged in, SRT to the club MediaMTX, one headless WHEP viewer each.
+`--master 4k --extra '--es cameraId 2 --ez split true'` (master 45 Mbps target, proxy 2000, preview 700).
+
+| | S10e (API 31) | S20 FE (API 33) |
+|---|---|---|
+| Master | 3840x2160@30, 44.4 Mbps | 3840x2160@30, 44.8 Mbps |
+| Master frames lost | **1** (one 67 ms gap) | **27** (0.15 %, one-frame gaps; same frames missing from proxy) |
+| Camera buffer lost / failed captures | 0 / 0 | 0 / 0 |
+| Proxy / preview kbps | 2457 / 979 | 2475 / 835 |
+| Preview frames vs expected, publisher drops | 12186 / 12193, 0 | 12180 / 12196, 0 |
+| GL split draw ms avg / max | 11.0 / 55 | 5.0 / 53 |
+| Glass to glass p50, viewer drops | 300 ms, 0 | 338 ms, 0 |
+| Device CPU %, app % of device | 28, 6.2 | 30, 5.1 |
+| Battery °C start → max, hottest zone, thermal status | 23.1 → 29.5, 54 °C, 0 | 24.2 → 27.6, 48 °C, 0 |
+| Storage | ≈ 330 MB/min, ≈ 5 h in 104 GB free | ≈ 5 h in 101 GB |
+
+"Expected" frames from the PTS span run ≈ 11 above the frame count on both phones; the camera runs
+at ≈ 29.98 fps, so that difference is clock rate, not loss. The loss figures above are PTS gaps.
+
+- **Yes on both.** The S20 FE loses about one master frame every 22 s, against one every
+  5–12 s with H8's 3 streams at 1080p (and about one a minute at 1080p without preview). The
+  missing frames are missing from all three encoders, so the camera skips them, not an encoder.
+- `isSessionConfigurationSupported` is not implemented on either HAL; the session simply configured.
+- Not checked: the master mp4s were not kept (`keep` off) and nobody looked at the wide-lens image
+  (distortion correction, framing). 10 min is short for heat; the H8 20-min runs at 1080p stayed
+  under thermal status 1 except the S20 FE.
+- **Seam for K1:** with a LIMITED lens at 4K, use 2 camera streams and split proxy + preview on
+  the GPU. A camera id choice (or "wide") in the record profile is needed, plus a 4K profile with a
+  ≈ 45 Mbps master.
+
 ## Contract findings (C1/C4)
 
 1. **SRT token.** The token must go in the streamid password slot:
@@ -395,7 +436,8 @@ adb shell am start -n com.amaia23.hydracam.spike.preview/.SpikeActivity \
   --es url 'srt://<relay>:8890?streamid=publish:court/demo/left:device:<jwt>' --ei duration 60
 ```
 
-Extras: `master 1080p|720p`, `proxy`, `record`, `keep` (keep mp4s), `preview`, `previewPath auto|direct|gl`,
+Extras: `master 1080p|720p|4k`, `cameraId` (default first back camera), `split` + `splitSource WxH`
+(2 camera streams, proxy and preview drawn from one, default 1280x720), `proxy`, `record`, `keep` (keep mp4s), `preview`, `previewPath auto|direct|gl`,
 `glSource WxH`, `previewKbps`, `previewFps`, `srtLatency`, `insecureTls` (self-signed RTMPS only),
 `ntp host|none`, `timeNal filler|sei|none`, `toggle burst|session` + `toggleS` (preview on/off
 test), `duration` (s), `stop`. Output:

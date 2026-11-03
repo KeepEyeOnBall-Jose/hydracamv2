@@ -34,6 +34,8 @@ class SharedCameraSession(
     private val context: Context,
     private val cameraFps: Int,
     private val targets: List<Target>,
+    /** Null = first back camera. */
+    private val requestedCameraId: String? = null,
 ) {
     class Target(val name: String, val surface: Surface, val fps: Int) {
         val bufferLost = AtomicLong()
@@ -66,7 +68,7 @@ class SharedCameraSession(
     @SuppressLint("MissingPermission")
     fun open() {
         val manager = context.getSystemService(CameraManager::class.java)
-        val cameraId = backCameraId(manager)
+        val cameraId = requestedCameraId ?: backCameraId(manager)
         val chars = manager.getCameraCharacteristics(cameraId)
         info["cameraId"] = cameraId
         info["hardwareLevel"] = hardwareLevelName(chars.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL))
@@ -75,6 +77,7 @@ class SharedCameraSession(
             else -> "UNKNOWN"
         }
         info["aeFpsRanges"] = chars.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)?.joinToString()
+        info["focalMm"] = chars.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS)?.joinToString()
 
         val opened = CountDownLatch(1)
         var openError: String? = null
@@ -257,10 +260,10 @@ class SharedCameraSession(
                 CameraCharacteristics.LENS_FACING_BACK
         }
 
-        /** Output sizes the back camera supports for a consumer class (MediaCodec, SurfaceTexture). */
-        fun outputSizes(context: Context, consumer: Class<*>): List<Size> {
+        /** Output sizes a camera (null = back) supports for a consumer class (MediaCodec, SurfaceTexture). */
+        fun outputSizes(context: Context, consumer: Class<*>, cameraId: String? = null): List<Size> {
             val manager = context.getSystemService(CameraManager::class.java)
-            val map = manager.getCameraCharacteristics(backCameraId(manager))
+            val map = manager.getCameraCharacteristics(cameraId ?: backCameraId(manager))
                 .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: return emptyList()
             return map.getOutputSizes(consumer)?.toList().orEmpty()
         }

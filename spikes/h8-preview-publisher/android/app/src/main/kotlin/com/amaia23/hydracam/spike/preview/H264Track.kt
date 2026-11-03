@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class H264Track(
     val name: String,
-    private val width: Int,
-    private val height: Int,
+    val width: Int,
+    val height: Int,
     private val fps: Int,
     private val kbps: Int,
     private val baseline: Boolean,
