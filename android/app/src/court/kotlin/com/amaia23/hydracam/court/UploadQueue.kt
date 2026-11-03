@@ -47,6 +47,8 @@ data class UploadItem(
     val partsJson: String? = null,
     /** JSON object `{"<n>": "<etag>"}` of parts already PUT. */
     val etagsJson: String? = null,
+    /** Restarts after K3 failed verification; capped so bad bytes stop re-uploading. */
+    @ColumnInfo(defaultValue = "0") val verifyRestarts: Int = 0,
     val attempts: Int = 0,
     val nextAttemptAtMs: Long = 0,
     val lastError: String? = null,

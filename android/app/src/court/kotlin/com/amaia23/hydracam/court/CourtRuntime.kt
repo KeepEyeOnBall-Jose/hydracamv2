@@ -25,6 +25,9 @@ class CourtRuntime private constructor(context: Context) {
         .writeTimeout(60, TimeUnit.SECONDS)
         .callTimeout(5, TimeUnit.MINUTES)
         .pingInterval(20, TimeUnit.SECONDS)
+        // K2 and C2 endpoints are fixed; a redirect could carry the secret or a grant elsewhere.
+        .followRedirects(false)
+        .followSslRedirects(false)
         .build()
 
     private val credentials = KeystoreCredentialStore(appContext, logger)
@@ -161,8 +164,11 @@ class CourtRuntime private constructor(context: Context) {
         started.set(false)
     }
 
-    /** Blocking (Keystore + Room); call off the main thread. Returns an error message or null. */
-    fun enroll(values: Map<String, Any?>): String? {
+    /**
+     * Blocking (Keystore + Room); call off the main thread. Returns an error message or null.
+     * From the screen ([checkCurrentSecret]) an enrolled phone needs `currentSecret` first.
+     */
+    fun enroll(values: Map<String, Any?>, checkCurrentSecret: Boolean): String? {
         val candidate = CourtEnrollment(
             k2Url = values["k2Url"]?.toString().orEmpty().trim(),
             deviceId = values["deviceId"]?.toString().orEmpty().trim(),
@@ -171,17 +177,28 @@ class CourtRuntime private constructor(context: Context) {
             slot = values["slot"]?.toString().orEmpty().trim(),
             mountRev = values["mountRev"]?.toString()?.trim()?.toIntOrNull() ?: 0,
         )
-        CourtEnrollment.validate(candidate)?.let { return it }
+        val refusal = currentSecretRefusal(checkCurrentSecret, values["currentSecret"])
+            ?: CourtEnrollment.validate(candidate)
+        if (refusal != null) return refusal
         credentials.save(candidate)
         logger.info(TAG, "Enrolled $candidate.")
         applyEnrollment(candidate)
         return null
     }
 
-    fun clearEnrollment() {
+    fun clearEnrollment(currentSecret: Any?, checkCurrentSecret: Boolean): String? {
+        currentSecretRefusal(checkCurrentSecret, currentSecret)?.let { return it }
         credentials.clear()
         logger.info(TAG, "Enrollment cleared.")
         applyEnrollment(null)
+        return null
+    }
+
+    private fun currentSecretRefusal(checkCurrentSecret: Boolean, currentSecret: Any?): String? {
+        if (!checkCurrentSecret) return null
+        if (CourtEnrollment.mayReplace(enrollment ?: credentials.load(), currentSecret?.toString())) return null
+        logger.warn(TAG, "Enrollment change refused: current secret does not match.")
+        return "current secret does not match"
     }
 
     /** Cached values only: safe on the main thread. */

@@ -12,9 +12,12 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
+    <!-- No backup: the Keystore-wrapped secret and the upload queue stay on the phone. -->
     <application
         android:label="HydraCam Court"
-        tools:replace="android:label">
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        tools:replace="android:label,android:allowBackup">
         <activity
             android:name="com.amaia23.hydracam.MainActivity"
             tools:node="remove" />

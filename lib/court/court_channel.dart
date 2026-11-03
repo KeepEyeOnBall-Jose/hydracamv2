@@ -2,7 +2,8 @@ import "package:flutter/services.dart";
 
 import "../services/log_service.dart";
 
-/// Values for a manual court enrollment (H2). [secret] is never logged.
+/// Values for a manual court enrollment (H2). Secrets are never logged.
+/// [currentSecret] proves the existing enrollment when one is stored.
 class CourtEnrollmentInput {
   const CourtEnrollmentInput({
     required this.k2Url,
@@ -11,6 +12,7 @@ class CourtEnrollmentInput {
     required this.courtId,
     required this.slot,
     required this.mountRev,
+    this.currentSecret,
   });
 
   final String k2Url;
@@ -19,6 +21,7 @@ class CourtEnrollmentInput {
   final String courtId;
   final String slot;
   final int mountRev;
+  final String? currentSecret;
 
   Map<String, Object?> toMap() => {
         "k2Url": k2Url,
@@ -27,6 +30,7 @@ class CourtEnrollmentInput {
         "courtId": courtId,
         "slot": slot,
         "mountRev": mountRev,
+        "currentSecret": currentSecret,
       };
 }
 
@@ -54,12 +58,16 @@ class CourtChannel {
     return _channel.invokeMethod<String>("enroll", input.toMap());
   }
 
-  Future<void> clearEnrollment() async {
+  /// Returns null on success, otherwise why it was refused.
+  Future<String?> clearEnrollment({String? currentSecret}) async {
     LogService.instance.registerLog(
-      "Court enrollment cleared.",
+      "Court enrollment clear requested.",
       file: "court_channel.dart",
     );
-    await _channel.invokeMethod<void>("clearEnrollment");
+    return _channel.invokeMethod<String>(
+      "clearEnrollment",
+      {"currentSecret": currentSecret},
+    );
   }
 
   Future<void> startService() => _channel.invokeMethod<void>("startService");

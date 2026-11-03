@@ -9,6 +9,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.security.MessageDigest
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -63,6 +64,10 @@ data class CourtEnrollment(
             enrollment.slot.isBlank() -> "slot is required"
             else -> null
         }
+
+        /** Replacing or clearing an enrollment from the screen must prove the stored secret. */
+        fun mayReplace(current: CourtEnrollment?, currentSecret: String?): Boolean = current == null ||
+            MessageDigest.isEqual(current.secret.toByteArray(), currentSecret.orEmpty().toByteArray())
     }
 }
 
@@ -87,11 +92,13 @@ interface AccessTokenProvider {
 
 /** C0 `POST /device/v1/token {deviceId, secret}` → `{accessToken, expiresAt}`, cached until expiry − 60 s. */
 class DeviceTokenClient(
-    private val http: OkHttpClient,
+    http: OkHttpClient,
     private val credentials: () -> CourtEnrollment?,
     private val clock: CourtClock = CourtClock.SYSTEM,
     private val refreshMarginMs: Long = 60_000,
 ) : AccessTokenProvider {
+    /** A 307/308 would re-POST the secret to whatever host the response names. */
+    private val http = http.newBuilder().followRedirects(false).followSslRedirects(false).build()
     private var cachedToken: String? = null
     private var cachedExpiresAtMs: Long = 0
 

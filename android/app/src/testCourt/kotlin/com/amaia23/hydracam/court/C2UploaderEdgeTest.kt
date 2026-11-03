@@ -548,7 +548,44 @@ class C2UploaderEdgeTest : C2StoreTestBase() {
         val restarted = proxy()
         assertEquals(UploadState.PENDING, restarted.uploadState)
         assertNull(restarted.uploadId)
-        assertEquals("complete_failed: sha256-mismatch", restarted.lastError)
+        assertEquals("verify_failed: sha256-mismatch", restarted.lastError)
+        assertEquals(1, restarted.verifyRestarts)
+    }
+
+    @Test
+    fun verifyFailuresStopAfterThreeRestarts() {
+        startSession(tiers = listOf(C1.TIER_PROXY))
+        val upload = uploader()
+        val record = segment(C1.TIER_PROXY, 0)
+        upload.enqueue(record)
+        repeat(C2Uploader.MAX_VERIFY_RESTARTS + 1) { round ->
+            server.enqueue(initCreated("u$round", 1))
+            server.enqueue(partOk("e1"))
+            server.enqueue(
+                json(
+                    409,
+                    JSONObject().put("uploadId", "u$round").put("state", "failed").put("reason", "sha256-mismatch"),
+                ),
+            )
+            assertTrue(upload.runOnce())
+            clock.now += 3_600_000
+        }
+
+        val failed = proxy()
+        assertEquals(UploadState.FAILED, failed.uploadState)
+        assertEquals(C2Uploader.MAX_VERIFY_RESTARTS, failed.verifyRestarts)
+        assertTrue(failed.lastError!!.contains("gave up"))
+        assertTrue(record.file.isFile)
+        assertEquals(listOf("s1/proxy/0 verify_failed: sha256-mismatch"), alerts)
+        val requests = server.requestCount
+
+        // K3 still lists it missing: the partial manifest does not re-queue it.
+        upload.onSessionStopped("s1", lastSeqProxy = 0, lastSeqMaster = -1)
+        val missing = JSONArray().put(JSONObject().put("tier", "proxy").put("seq", 0))
+        server.enqueue(json(200, JSONObject().put("state", "partial").put("missing", missing)))
+        assertTrue(upload.runOnce())
+        assertEquals(UploadState.FAILED, proxy().uploadState)
+        assertEquals(requests + 1, server.requestCount)
     }
 
     @Test

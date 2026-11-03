@@ -43,6 +43,7 @@ class CourtBootReceiver : BroadcastReceiver() {
  *   -a com.amaia23.hydracam.court.ENROLL --es k2Url … --es deviceId … --es secret …
  *   --es courtId … --es slot … --ei mountRev 0`.
  * The secret is never logged; the result data is `ok` or the validation error.
+ * Only root can reach it, so unlike the screen it does not ask for the current secret.
  */
 class CourtEnrollReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -61,11 +62,9 @@ class CourtEnrollReceiver : BroadcastReceiver() {
                             "slot" to intent.getStringExtra("slot"),
                             "mountRev" to intent.getIntExtra("mountRev", 0),
                         ),
+                        checkCurrentSecret = false,
                     )
-                    ACTION_CLEAR -> {
-                        runtime.clearEnrollment()
-                        null
-                    }
+                    ACTION_CLEAR -> runtime.clearEnrollment(currentSecret = null, checkCurrentSecret = false)
                     else -> "unknown action"
                 }
                 pending.setResult(

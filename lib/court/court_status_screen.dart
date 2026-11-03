@@ -32,6 +32,7 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
   final _k2Url = TextEditingController();
   final _deviceId = TextEditingController();
   final _secret = TextEditingController();
+  final _currentSecret = TextEditingController();
   final _courtId = TextEditingController();
   final _slot = TextEditingController();
   final _mountRev = TextEditingController(text: "0");
@@ -50,6 +51,7 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
       _k2Url,
       _deviceId,
       _secret,
+      _currentSecret,
       _courtId,
       _slot,
       _mountRev,
@@ -91,6 +93,7 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
       courtId: _courtId.text.trim(),
       slot: _slot.text.trim(),
       mountRev: int.tryParse(_mountRev.text.trim()) ?? 0,
+      currentSecret: _enrolled ? _currentSecret.text : null,
     );
     String? error;
     try {
@@ -101,6 +104,7 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
     if (!mounted) return;
     if (error == null) {
       _secret.clear();
+      _currentSecret.clear();
       LogService.instance.registerLog(
         "Court enrollment saved.",
         file: "court_status_screen.dart",
@@ -115,15 +119,29 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
   }
 
   Future<void> _clear() async {
-    setState(() => _busy = true);
-    await widget.channel.clearEnrollment();
+    setState(() {
+      _busy = true;
+      _enrollMessage = null;
+    });
+    String? error;
+    try {
+      error = await widget.channel.clearEnrollment(
+        currentSecret: _currentSecret.text,
+      );
+    } on PlatformException catch (failure) {
+      error = failure.message ?? failure.code;
+    }
     if (!mounted) return;
+    if (error == null) _currentSecret.clear();
     setState(() {
       _busy = false;
+      _enrollMessage = error ?? "Enrollment cleared.";
       _showEnrollment = true;
     });
     await _refresh();
   }
+
+  bool get _enrolled => _status["enrolled"] == true;
 
   String _text(String key) {
     final value = _status[key];
@@ -227,6 +245,12 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Enrollment", style: theme.textTheme.titleMedium),
+            if (_enrolled)
+              _field(
+                _currentSecret,
+                "Current device secret (to change or clear)",
+                obscure: true,
+              ),
             _field(_k2Url, "K2 URL (https://…)"),
             _field(_deviceId, "Device id"),
             _field(_secret, "Device secret", obscure: true),
@@ -242,8 +266,7 @@ class _CourtStatusScreenState extends State<CourtStatusScreen> {
                 ),
                 const SizedBox(width: 8),
                 OutlinedButton(
-                  onPressed:
-                      _busy || _status["enrolled"] != true ? null : _clear,
+                  onPressed: _busy || !_enrolled ? null : _clear,
                   child: const Text("Clear"),
                 ),
               ],

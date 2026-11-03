@@ -371,12 +371,7 @@ class C2Uploader(
                 response.code == HttpStatus.NOT_FOUND -> restart(item, "upload_unknown")
                 // K3 R5b: 409 {state: failed, reason}; the key is re-declared with a new multipart.
                 response.code == HttpStatus.CONFLICT ->
-                    restart(
-                        item,
-                        "complete_failed: ${runCatching {
-                            response.jsonBody().optString("reason")
-                        }.getOrNull()}",
-                    )
+                    verifyFailed(item, runCatching { response.jsonBody().optStringOrNull("reason") }.getOrNull())
                 else -> retryLater(item, "complete_http_${response.code}")
             }
         }
@@ -400,7 +395,7 @@ class C2Uploader(
             val json = response.jsonBody()
             when (json.optStringOrNull("state")) {
                 "verified" -> verified(item, file)
-                "failed" -> restart(item, "verify_failed: ${json.optStringOrNull("reason") ?: "unknown"}")
+                "failed" -> verifyFailed(item, json.optStringOrNull("reason"))
                 else -> store.update(
                     item.copy(nextAttemptAtMs = clock.nowMs() + statusPollMs, updatedAtMs = clock.nowMs()),
                 )
@@ -577,7 +572,7 @@ class C2Uploader(
             val entry = missing.getJSONObject(index)
             val key = UploadItem.keyOf(session.sessionId, entry.getString("tier"), entry.getLong("seq"))
             val item = store.item(key) ?: continue
-            // A CONFLICT would only get the same 409 again, so it stays put.
+            // A CONFLICT or a capped verify failure would only fail again, so it stays put.
             if (item.isHeldOnPhone() && item.uploadState != UploadState.HELD) {
                 store.update(item.restarted().copy(nextAttemptAtMs = 0))
                 count += 1
@@ -623,6 +618,20 @@ class C2Uploader(
         )
     }
 
+    /**
+     * K3 rejected the bytes (C1 v1.7: size-mismatch | sha256-mismatch | upload-expired). Restarts
+     * with backoff up to [MAX_VERIFY_RESTARTS] times, then FAILED with the file kept and an alert.
+     */
+    private fun verifyFailed(item: UploadItem, reason: String?) {
+        val error = "verify_failed: ${reason ?: "unknown"}"
+        if (item.verifyRestarts >= MAX_VERIFY_RESTARTS) {
+            finish(item, UploadState.FAILED, "$error (gave up after $MAX_VERIFY_RESTARTS restarts)")
+            onAlert("${item.key} $error")
+            return
+        }
+        restart(item.copy(verifyRestarts = item.verifyRestarts + 1), error)
+    }
+
     private fun retryLater(item: UploadItem, reason: String) {
         logger.warn(TAG, "Retrying ${item.key} later: $reason")
         val attempts = item.attempts + 1
@@ -646,8 +655,6 @@ class C2Uploader(
     private fun backoffMs(attempts: Int): Long =
         min(maxBackoffMs, baseBackoffMs shl min(attempts - 1, MAX_BACKOFF_SHIFT))
 
-    /** On the phone and not yet accepted by K3 under different bytes. */
-
     /** Back to PENDING with no multipart, so the next attempt re-declares the key. */
     private fun UploadItem.restarted(): UploadItem =
         copy(state = UploadState.PENDING.name, uploadId = null, partsJson = null, etagsJson = null)
@@ -658,8 +665,11 @@ class C2Uploader(
         .post(body.toString().toRequestBody(JSON_MEDIA_TYPE))
         .build()
 
-    private fun UploadItem.isHeldOnPhone(): Boolean =
-        uploadState != UploadState.VERIFIED && uploadState != UploadState.CONFLICT && File(filePath).isFile
+    /** On the phone, not refused by K3 (different bytes, or verification failed past the cap). */
+    private fun UploadItem.isHeldOnPhone(): Boolean = uploadState != UploadState.VERIFIED &&
+        uploadState != UploadState.CONFLICT &&
+        !(uploadState == UploadState.FAILED && verifyRestarts >= MAX_VERIFY_RESTARTS) &&
+        File(filePath).isFile
 
     private class Grant(val token: String, val ingestUrl: String, val expMs: Long) {
         fun url(path: String): String = ingestUrl(ingestUrl, path)
@@ -710,6 +720,7 @@ class C2Uploader(
         private const val PART_TIMEOUT_BASE_NS = 120_000_000_000L
         private const val COPY_BUFFER_BYTES = 64 * 1024
         private const val MAX_BACKOFF_SHIFT = 16
+        const val MAX_VERIFY_RESTARTS = 3
         private val JSON_MEDIA_TYPE = "application/json".toMediaType()
         private const val TAG = "CourtUploader"
     }

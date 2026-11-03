@@ -51,16 +51,19 @@ class CourtActivity : FlutterActivity() {
                     val typed = values.entries.associate { (key, value) -> key.toString() to value }
                     background.execute {
                         val error = try {
-                            runtime.enroll(typed)
+                            runtime.enroll(typed, checkCurrentSecret = true)
                         } catch (failure: RuntimeException) {
                             failure.javaClass.simpleName
                         }
                         main.post { result.success(error) }
                     }
                 }
-                "clearEnrollment" -> background.execute {
-                    runtime.clearEnrollment()
-                    main.post { result.success(null) }
+                "clearEnrollment" -> {
+                    val currentSecret = (call.arguments as? Map<*, *>)?.get("currentSecret")
+                    background.execute {
+                        val error = runtime.clearEnrollment(currentSecret, checkCurrentSecret = true)
+                        main.post { result.success(error) }
+                    }
                 }
                 "startService" -> {
                     CourtCameraService.start(this)

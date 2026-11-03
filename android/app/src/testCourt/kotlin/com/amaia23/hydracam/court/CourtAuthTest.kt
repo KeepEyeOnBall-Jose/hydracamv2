@@ -102,6 +102,32 @@ class CourtAuthTest {
     }
 
     @Test
+    fun redirectsAreNotFollowedSoTheSecretStaysWithK2() {
+        val elsewhere = MockWebServer()
+        elsewhere.start()
+        try {
+            server.enqueue(
+                MockResponse().setResponseCode(307).setHeader("Location", elsewhere.url("/steal").toString()),
+            )
+            val client = DeviceTokenClient(http, { enrollment }, clock)
+
+            expectAuthError(rejected = false) { client.accessToken() }
+            assertEquals(0, elsewhere.requestCount)
+        } finally {
+            elsewhere.shutdown()
+        }
+    }
+
+    @Test
+    fun replacingAnEnrollmentNeedsTheCurrentSecret() {
+        assertTrue(CourtEnrollment.mayReplace(null, null))
+        assertTrue(CourtEnrollment.mayReplace(enrollment, "test-secret"))
+        assertFalse(CourtEnrollment.mayReplace(enrollment, null))
+        assertFalse(CourtEnrollment.mayReplace(enrollment, ""))
+        assertFalse(CourtEnrollment.mayReplace(enrollment, "test-secreT"))
+    }
+
+    @Test
     fun expiresAtAcceptsSecondsMillisAndIso() {
         val now = 1_700_000_000_000L
         assertEquals(1_700_000_600_000L, DeviceTokenClient.parseExpiresAtMs(1_700_000_600L, now))
