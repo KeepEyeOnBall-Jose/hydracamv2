@@ -15,6 +15,7 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
     private val dir = File(context.getExternalFilesDir(null), "h8/${config.runId}").apply { mkdirs() }
     private val statsFile = File(dir, "stats.jsonl")
     private val ticker = Executors.newSingleThreadScheduledExecutor()
+    private val toggler = Executors.newSingleThreadScheduledExecutor()
     private val device = DeviceStats(context)
     private val startedAtMs = System.currentTimeMillis()
 
@@ -71,7 +72,19 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
                 SharedCameraSession.Target(it.name, surface, fpsOf[it.name] ?: config.cameraFps)
             },
         ).also { it.open() }
+        if (config.preview && config.toggle != "none") scheduleToggle()
         ticker.scheduleWithFixedDelay({ runCatching { tick() }.onFailure { Log.w(TAG, "tick", it) } }, 5, 5, TimeUnit.SECONDS)
+    }
+
+    /** Preview on/off every toggleS seconds while the recorder runs; master PTS gaps show the cost. */
+    private fun scheduleToggle() {
+        var on = true
+        val everyS = config.toggleS.toLong()
+        toggler.scheduleWithFixedDelay({
+            on = !on
+            runCatching { camera?.setTargetEnabled("preview", on, reconfigure = config.toggle == "session") }
+                .onFailure { Log.w(TAG, "toggle", it) }
+        }, everyS, everyS, TimeUnit.SECONDS)
     }
 
     /** Camera size for the GlScaler, or null when the camera feeds the preview encoder directly. */
@@ -95,6 +108,8 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
 
     fun stop() {
         ticker.shutdownNow()
+        toggler.shutdown()
+        toggler.awaitTermination(15, TimeUnit.SECONDS)
         runCatching { camera?.close() }
         runCatching { scaler?.release() }
         tracks.forEach { track -> runCatching { track.stop() }.onFailure { Log.w(TAG, "stop ${track.name}", it) } }
@@ -154,9 +169,16 @@ class SpikeRun(private val context: Context, private val config: SpikeConfig) {
                 )
             },
             "preview" to previewSink?.let { sink ->
-                sink.drainLatency() + mapOf("ptsMatchedSensor" to "${sink.ptsMatched}/${sink.ptsChecked}")
+                sink.drainLatency() + mapOf(
+                    "ptsMatchedSensor" to "${sink.ptsMatched}/${sink.ptsChecked}",
+                    "ptsClock" to sink.ptsClock,
+                    "ptsToSensorMs" to sink.ptsToSensorUs?.let { it / 1_000.0 },
+                )
             },
-            "publisher" to publisher?.stats(),
+            "publisher" to (previewSink?.finalPublisherStats ?: publisher?.stats()),
+            "toggle" to cam?.takeIf { config.toggle != "none" }?.let {
+                mapOf("mode" to config.toggle, "everyS" to config.toggleS) + it.switchStats()
+            },
             "scaler" to scaler?.stats(),
             "deviceStats" to device.sample(),
         )

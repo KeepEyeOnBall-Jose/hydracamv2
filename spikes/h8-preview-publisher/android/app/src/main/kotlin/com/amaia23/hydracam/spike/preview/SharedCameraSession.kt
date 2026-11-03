@@ -56,6 +56,12 @@ class SharedCameraSession(
     private val executor = Executor { handler.post(it) }
     private var device: CameraDevice? = null
     private var session: CameraCaptureSession? = null
+    private val active = targets.toMutableList()
+
+    /** Preview on/off switches and how long each took (call to new repeating request), ms. */
+    val switches = AtomicLong()
+    private val switchMsTotal = AtomicLong()
+    private val switchMsMax = AtomicLong()
 
     @SuppressLint("MissingPermission")
     fun open() {
@@ -94,14 +100,57 @@ class SharedCameraSession(
         }, handler)
         check(opened.await(10, TimeUnit.SECONDS)) { "camera open timed out" }
         val camera = checkNotNull(device) { "camera open failed: $openError" }
-
-        val outputs = targets.map { OutputConfiguration(it.surface) }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             info["sessionSupported"] = runCatching {
-                camera.isSessionConfigurationSupported(sessionConfiguration(outputs, NO_OP_STATE))
+                camera.isSessionConfigurationSupported(
+                    sessionConfiguration(targets.map { OutputConfiguration(it.surface) }, NO_OP_STATE),
+                )
             }.getOrElse { "unknown: ${it.message}" }
         }
+        configure(camera, targets)
+        val s = checkNotNull(session)
+        val burst = burstRequests(camera, targets)
+        info["burst"] = burst.size
+        repeat(s, burst)
+        Log.i(TAG, "camera streaming: $info")
+    }
 
+    /**
+     * Turns [name] on or off while the recorder keeps running. With [reconfigure] the capture
+     * session is rebuilt without (or with) the target's surface; otherwise the surface stays in
+     * the session and only the repeating burst changes. Call off the camera thread.
+     */
+    fun setTargetEnabled(name: String, enabled: Boolean, reconfigure: Boolean) {
+        val camera = device ?: return
+        val target = targets.first { it.name == name }
+        if (enabled == target in active) return
+        val startNs = SystemClock.elapsedRealtimeNanos()
+        if (enabled) active += target else active -= target
+        if (reconfigure) configure(camera, targets.filter { it in active })
+        repeat(checkNotNull(session), burstRequests(camera, targets.filter { it in active }))
+        val ms = (SystemClock.elapsedRealtimeNanos() - startNs) / 1_000_000
+        switches.incrementAndGet()
+        switchMsTotal.addAndGet(ms)
+        if (ms > switchMsMax.get()) switchMsMax.set(ms)
+    }
+
+    fun switchStats(): Map<String, Any?> {
+        val n = switches.get()
+        return mapOf(
+            "switches" to n,
+            "switchMsAvg" to if (n > 0) switchMsTotal.get().toDouble() / n else null,
+            "switchMsMax" to switchMsMax.get(),
+        )
+    }
+
+    private fun repeat(s: CameraCaptureSession, burst: List<CaptureRequest>) {
+        if (burst.size == 1) s.setRepeatingRequest(burst[0], captureCallback, handler)
+        else s.setRepeatingBurst(burst, captureCallback, handler)
+    }
+
+    private fun configure(camera: CameraDevice, configuredTargets: List<Target>) {
+        val outputs = configuredTargets.map { OutputConfiguration(it.surface) }
+        session = null
         val configured = CountDownLatch(1)
         val state = object : CameraCaptureSession.StateCallback() {
             override fun onConfigured(s: CameraCaptureSession) {
@@ -110,7 +159,7 @@ class SharedCameraSession(
             }
 
             override fun onConfigureFailed(s: CameraCaptureSession) {
-                Log.e(TAG, "session configure failed for ${targets.map { it.name }}")
+                Log.e(TAG, "session configure failed for ${configuredTargets.map { it.name }}")
                 configured.countDown()
             }
         }
@@ -121,13 +170,7 @@ class SharedCameraSession(
             camera.createCaptureSessionByOutputConfigurations(outputs, state, handler)
         }
         check(configured.await(10, TimeUnit.SECONDS)) { "session configure timed out" }
-        val s = checkNotNull(session) { "session configure failed for ${targets.map { it.name }}" }
-
-        val burst = burstRequests(camera)
-        info["burst"] = burst.size
-        if (burst.size == 1) s.setRepeatingRequest(burst[0], captureCallback, handler)
-        else s.setRepeatingBurst(burst, captureCallback, handler)
-        Log.i(TAG, "camera streaming: $info")
+        checkNotNull(session) { "session configure failed for ${configuredTargets.map { it.name }}" }
     }
 
     fun targetBufferLost(name: String): Long? = targets.firstOrNull { it.name == name }?.bufferLost?.get()
@@ -146,7 +189,7 @@ class SharedCameraSession(
         state: CameraCaptureSession.StateCallback,
     ) = SessionConfiguration(SessionConfiguration.SESSION_REGULAR, outputs, executor, state)
 
-    private fun burstRequests(camera: CameraDevice): List<CaptureRequest> {
+    private fun burstRequests(camera: CameraDevice, targets: List<Target>): List<CaptureRequest> {
         val length = targets.fold(1) { acc, t -> lcm(acc, cameraFps / gcd(cameraFps, t.fps)) }
         return (0 until length).map { i ->
             camera.createCaptureRequest(CameraDevice.TEMPLATE_RECORD).apply {

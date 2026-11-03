@@ -3,6 +3,7 @@ package com.amaia23.hydracam.spike.preview
 import android.media.MediaCodec
 import android.media.MediaFormat
 import android.media.MediaMuxer
+import android.os.SystemClock
 import android.util.Log
 import java.io.File
 import java.nio.ByteBuffer
@@ -48,6 +49,19 @@ class PreviewSink(
         private set
     @Volatile var ptsChecked = 0L
         private set
+    /**
+     * Encoder PTS to sensor clock (us). 0 when PTS are sensor timestamps (GL path). On the direct
+     * path the camera service moves video-encoder streams to CLOCK_MONOTONIC (S10e, S20 FE), so
+     * PTS lag the BOOTTIME sensor clock by the phone's deep-sleep time. Null until found.
+     */
+    @Volatile var ptsToSensorUs: Long? = null
+        private set
+    @Volatile var ptsClock = "pending"
+        private set
+    /** Publisher stats taken just before disconnect, which resets RootEncoder's counters. */
+    @Volatile var finalPublisherStats: Map<String, Any?>? = null
+        private set
+    private var ptsProbes = 0
 
     override fun onFormat(format: MediaFormat) {
         val sps = format.getByteBuffer("csd-0")
@@ -62,13 +76,15 @@ class PreviewSink(
 
     override fun onSample(buffer: ByteBuffer, info: MediaCodec.BufferInfo) {
         val session = camera()
+        if (session != null && ptsToSensorUs == null) ptsToSensorUs = findPtsBase(session, info.presentationTimeUs)
+        val sensorUs = ptsToSensorUs?.let { info.presentationTimeUs + it }
         val sensorToWallNs = session?.sensorToWallNs
-        val captureWallMs = if (sensorToWallNs != null) {
-            val ms = (info.presentationTimeUs * 1_000 + sensorToWallNs) / 1_000_000.0
+        val captureWallMs = if (sensorToWallNs != null && sensorUs != null) {
+            val ms = (sensorUs * 1_000 + sensorToWallNs) / 1_000_000.0
             synchronized(window) { window += System.currentTimeMillis() - ms }
             Math.round(ms + ntpOffsetMs)
         } else 0L
-        if (session != null && ptsChecked < 200) checkPts(session, info.presentationTimeUs)
+        if (session != null && sensorUs != null && ptsChecked < 200) checkPts(session, sensorUs)
         if (publisher == null) return
 
         val tag = timeNal?.let { CaptureTimeNal.nal(it, captureWallMs, seq++) } ?: ByteArray(0)
@@ -80,6 +96,7 @@ class PreviewSink(
     }
 
     override fun onEnd() {
+        finalPublisherStats = publisher?.stats()
         runCatching { publisher?.disconnect() }
     }
 
@@ -90,14 +107,32 @@ class PreviewSink(
         return mapOf("encodeLatencyP50Ms" to pct(0.5), "encodeLatencyP95Ms" to pct(0.95))
     }
 
-    private fun checkPts(session: SharedCameraSession, ptsUs: Long) {
-        val n = minOf(session.recentSensorCount, session.recentSensorUs.size.toLong()).toInt()
+    private fun checkPts(session: SharedCameraSession, sensorUs: Long) {
         ptsChecked++
-        for (i in 0 until n) {
-            if (Math.abs(session.recentSensorUs[i] - ptsUs) <= 1) {
-                ptsMatched++
-                return
-            }
+        if (nearestSensorUs(session, sensorUs, toleranceUs = 1) != null) ptsMatched++
+    }
+
+    /** Tries sensor clock, then CLOCK_MONOTONIC; the exact offset comes from the matching frame. */
+    private fun findPtsBase(session: SharedCameraSession, ptsUs: Long): Long? {
+        val monoToRealtimeUs = (SystemClock.elapsedRealtimeNanos() - System.nanoTime()) / 1_000
+        nearestSensorUs(session, ptsUs, toleranceUs = 1)?.let { ptsClock = "sensor"; return it - ptsUs }
+        nearestSensorUs(session, ptsUs + monoToRealtimeUs, toleranceUs = 2_000)?.let {
+            ptsClock = "monotonic"
+            return it - ptsUs
         }
+        if (++ptsProbes < 30) return null
+        ptsClock = "unknown"
+        return 0
+    }
+
+    private fun nearestSensorUs(session: SharedCameraSession, targetUs: Long, toleranceUs: Long): Long? {
+        val n = minOf(session.recentSensorCount, session.recentSensorUs.size.toLong()).toInt()
+        var best: Long? = null
+        for (i in 0 until n) {
+            val sensorUs = session.recentSensorUs[i]
+            val distance = Math.abs(sensorUs - targetUs)
+            if (distance <= toleranceUs && (best == null || distance < Math.abs(best - targetUs))) best = sensorUs
+        }
+        return best
     }
 }

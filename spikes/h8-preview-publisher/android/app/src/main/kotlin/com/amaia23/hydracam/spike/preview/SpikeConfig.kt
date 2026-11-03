@@ -34,6 +34,10 @@ data class SpikeConfig(
     val previewPath: String,
     /** GlScaler camera size "WxH"; null = smallest supported 16:9 size at least the preview size. */
     val glSource: String?,
+    /** Preview on/off test: "none", "burst" (repeating request only) or "session" (reconfigure). */
+    val toggle: String,
+    /** Seconds between preview on/off switches in a toggle run. */
+    val toggleS: Int,
 ) {
     fun toBundle(): Bundle = Bundle().apply {
         putString(EXTRA_RUN_ID, runId)
@@ -55,6 +59,8 @@ data class SpikeConfig(
         putString(EXTRA_TIME_NAL, timeNal?.name?.lowercase() ?: "none")
         putString(EXTRA_PREVIEW_PATH, previewPath)
         putString(EXTRA_GL_SOURCE, glSource)
+        putString(EXTRA_TOGGLE, toggle)
+        putInt(EXTRA_TOGGLE_S, toggleS)
     }
 
     companion object {
@@ -77,6 +83,8 @@ data class SpikeConfig(
         const val EXTRA_TIME_NAL = "timeNal"
         const val EXTRA_PREVIEW_PATH = "previewPath"
         const val EXTRA_GL_SOURCE = "glSource"
+        const val EXTRA_TOGGLE = "toggle"
+        const val EXTRA_TOGGLE_S = "toggleS"
 
         fun from(intent: Intent): SpikeConfig {
             val e = intent.extras ?: Bundle()
@@ -109,6 +117,8 @@ data class SpikeConfig(
                 },
                 previewPath = e.getString(EXTRA_PREVIEW_PATH) ?: "auto",
                 glSource = e.getString(EXTRA_GL_SOURCE)?.takeIf { it.isNotBlank() },
+                toggle = e.getString(EXTRA_TOGGLE) ?: "none",
+                toggleS = e.getInt(EXTRA_TOGGLE_S, 10),
             )
         }
     }

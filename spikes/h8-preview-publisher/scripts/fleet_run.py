@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """One H8 scenario on one rooted fleet phone, sampled from the host.
 
-  python3 scripts/fleet_run.py --serial 127.0.0.1:15559 --label s10e --scenario preview \
-      --url 'srt://relay:8890?streamid=...' --minutes 20
+  python3 scripts/fleet_run.py --serial 127.0.0.1:15560 --label s10e --scenario preview \
+      --url 'srt://relay:8890?streamid=...' --minutes 20 [--tag toggle-burst --extra '--es toggle burst']
 
 Scenarios: base (master + proxy) and preview (master + proxy + C4 preview). The phone app
 writes stats.jsonl/summary.json; this script adds host.jsonl (system CPU, app CPU, thermal
@@ -54,7 +54,11 @@ def sample(serial):
 
 
 def battery_c(serial):
-    return int(su(serial, "cat /sys/class/power_supply/battery/temp").strip() or 0) / 10
+    """Battery °C, or None while adb is unreachable."""
+    try:
+        return int(su(serial, "cat /sys/class/power_supply/battery/temp").strip() or 0) / 10
+    except (subprocess.TimeoutExpired, ValueError):
+        return None
 
 
 def main():
@@ -68,16 +72,17 @@ def main():
     ap.add_argument("--proxy", default="true")
     ap.add_argument("--cool-to", type=float, default=30.0, help="wait until battery <= this (C), max 15 min")
     ap.add_argument("--extra", nargs="*", default=[], help="extra am start args, e.g. --es previewPath gl")
+    ap.add_argument("--tag", help="added to the run id, e.g. toggle-burst")
     ap.add_argument("--out", default="results")
     a = ap.parse_args()
 
     adb(a.serial, "push", str(SAMPLER), REMOTE_SAMPLER)
     deadline = time.time() + 900
-    while (b := battery_c(a.serial)) > a.cool_to and time.time() < deadline:
+    while ((b := battery_c(a.serial)) is None or b > a.cool_to) and time.time() < deadline:
         print(f"[{a.label}] cooling: battery {b} C > {a.cool_to}", flush=True)
         time.sleep(30)
 
-    run_id = f"{a.label}-{a.scenario}-{time.strftime('%Y%m%d-%H%M%S')}"
+    run_id = "-".join(filter(None, [a.label, a.scenario, a.tag, time.strftime("%Y%m%d-%H%M%S")]))
     duration_s = int(a.minutes * 60) + 10
     args = ["shell", "am", "start", "-n", ACTIVITY, "--es", "run", run_id, "--es", "master", a.master,
             "--ez", "proxy", a.proxy, "--ez", "preview", "true" if a.scenario == "preview" else "false",

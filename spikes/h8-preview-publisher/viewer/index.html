@@ -153,6 +153,8 @@ async function refreshClock() {
   try { clock = await (await fetch("/clock")).json(); } catch { /* opened from file: no offset */ }
 }
 
+const RETRY_MS = 3000;
+
 async function watch(event) {
   event?.preventDefault();
   if (pc) pc.close();
@@ -169,11 +171,18 @@ async function watch(event) {
   });
   const headers = { "Content-Type": "application/sdp" };
   if ($("token").value) headers.Authorization = `Bearer ${$("token").value}`;
-  const response = await fetch($("whep").value, { method: "POST", headers, body: pc.localDescription.sdp });
+  const response = await fetch($("whep").value, { method: "POST", headers, body: pc.localDescription.sdp })
+    .catch((error) => ({ ok: false, status: "network", text: async () => String(error) }));
   if (!response.ok) {
     $("stats").innerHTML = `<span class="bad">WHEP ${response.status}: ${await response.text()}</span>`;
+    // No publisher yet (or between runs): keep trying, so unattended viewers survive restarts.
+    setTimeout(watch, RETRY_MS);
     return;
   }
+  const current = pc;
+  pc.onconnectionstatechange = () => {
+    if (current === pc && ["failed", "closed", "disconnected"].includes(pc.connectionState)) setTimeout(watch, RETRY_MS);
+  };
   await pc.setRemoteDescription({ type: "answer", sdp: await response.text() });
   $("video").requestVideoFrameCallback(onVideoFrame);
 }

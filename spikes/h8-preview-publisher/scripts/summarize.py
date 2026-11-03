@@ -5,8 +5,8 @@
 
 Per run: recorder frames vs expected, PTS gaps, max gap, camera buffer losses; device CPU and
 app CPU (host.jsonl, /proc/stat deltas); battery and hottest-zone temperatures; thermal status;
-preview fps, publisher drops; viewer arrival / glass-to-glass latency from viewer.jsonl rows
-logged inside the run window.
+preview on/off switches (toggle runs); preview fps, publisher drops; viewer arrival / glass-to-glass latency from viewer.jsonl rows
+logged inside the run window for the phone's path (court/<label>/...).
 """
 import argparse
 import json
@@ -48,8 +48,8 @@ def temps(host):
     }
 
 
-def viewer_latency(viewer, start_ms, end_ms):
-    rows = [r for r in viewer if start_ms <= r["t"] <= end_ms]
+def viewer_latency(viewer, label, start_ms, end_ms):
+    rows = [r for r in viewer if start_ms <= r["t"] <= end_ms and f"/court/{label}/" in r.get("whep", "")]
     arrival = [r["arrivalP50Ms"] for r in rows if r.get("arrivalP50Ms") is not None]
     g2g = [r["g2gP50Ms"] for r in rows if r.get("g2gP50Ms") is not None]
     dropped = max((r.get("framesDropped") or 0 for r in rows), default=None)
@@ -82,11 +82,13 @@ def summarize(run_dir, viewer):
     device_cpu, app_cpu = cpu_pcts(host)
     start_ms = stats[0]["t"] if stats else s["t"] - s["elapsedS"] * 1_000
     publisher = s.get("publisher") or {}
+    toggle = s.get("toggle")
     return {
         "run": run_dir.name,
         "device": s["device"],
         "path": s["config"].get("previewPath") if s["config"].get("preview") else "–",
         "minutes": s["elapsedS"] / 60,
+        "toggle": f'{toggle["mode"]} x{toggle["switches"]}, {toggle["switchMsAvg"] or 0:.0f} ms avg' if toggle else "–",
         "masterFrames": f'{master.get("frames")}/{master.get("expectedFrames")}',
         "masterGaps": master.get("ptsGaps"),
         "masterMaxGapMs": master.get("maxGapMs"),
@@ -97,12 +99,12 @@ def summarize(run_dir, viewer):
         "previewFps": statistics.median(fps) if fps else None,
         "previewFrames": f'{preview.get("frames")}/{preview.get("expectedFrames")}' if preview else "–",
         "pubDropped": publisher.get("droppedFrames"),
-        **viewer_latency(viewer, start_ms, s["t"]),
+        **viewer_latency(viewer, run_dir.parent.name, start_ms, s["t"]),
     }
 
 
 COLUMNS = [
-    ("run", "run", 0), ("path", "preview path", 0), ("minutes", "min", 1),
+    ("run", "run", 0), ("path", "preview path", 0), ("minutes", "min", 1), ("toggle", "preview on/off", 0),
     ("masterFrames", "master frames/expected", 0), ("masterGaps", "master PTS gaps", 0),
     ("masterMaxGapMs", "master max gap ms", 0), ("masterBufferLost", "cam buffer lost", 0),
     ("deviceCpu", "device CPU %", 0), ("appCpu", "app CPU % of device", 1),
