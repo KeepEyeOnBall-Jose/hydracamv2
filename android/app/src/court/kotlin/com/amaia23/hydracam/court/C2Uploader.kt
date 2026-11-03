@@ -1,5 +1,6 @@
 package com.amaia23.hydracam.court
 
+import okhttp3.Call
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -25,6 +26,7 @@ import kotlin.math.min
  *   is sent first, then the listed masters upload with that command's grant.
  * - Resumable: uploadId, presigned parts and per-part ETags are persisted after every step.
  * - Part bytes go through [throttle] (`upload.policy.maxKbps`).
+ * - Masters move only while [mastersAllowed]; [preemptMasters] cancels a master part in flight.
  * - The local file is deleted only when K3 reports `verified`.
  * - After `recording.stopped`, once every granted item of the session is settled, the manifest is
  *   sent and any `missing` segment still on disk is re-queued.
@@ -41,13 +43,18 @@ class C2Uploader(
     private val throttle: UploadThrottle = UploadThrottle(maxKbps = 0),
     /** Problems K2 should see in `state.lastError` (conflicts, rejected master manifests). */
     private val onAlert: (String) -> Unit = {},
+    /** Live gate: false while a session is armed or recording, so proxies stay prompt (K4). */
+    private val mastersAllowed: () -> Boolean = { true },
 ) {
+    private val callLock = Any()
+    private var masterCall: Call? = null
+
     /**
      * Advances one step: a due master manifest, else one item, else a session manifest. Returns
      * true when it did any work (call again). [includeMasters] false keeps master bytes off the
      * uplink (while recording, so proxies stay prompt).
      */
-    fun runOnce(includeMasters: Boolean = true): Boolean {
+    fun runOnce(includeMasters: Boolean = mastersAllowed()): Boolean {
         val now = clock.nowMs()
         val request = store.dueMasterRequest(now)
         if (request != null) {
@@ -60,6 +67,14 @@ class C2Uploader(
             return true
         }
         return sendDueManifest(now)
+    }
+
+    /**
+     * Cancels the master part in flight, if any, so a new recording's proxies do not wait behind
+     * up to [partSizeBytes] on a slow uplink. Resumable: the ETags of finished parts are kept.
+     */
+    fun preemptMasters() {
+        synchronized(callLock) { masterCall }?.cancel()
     }
 
     /**
@@ -180,6 +195,11 @@ class C2Uploader(
                 else -> Unit
             }
         } catch (error: IOException) {
+            if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
+                // Preempted, not failed: the stored item keeps its parts and its attempt count.
+                logger.info(TAG, "${item.key} paused for recording.")
+                return
+            }
             retryLater(item, error.message ?: error.javaClass.simpleName)
         } catch (error: JSONException) {
             retryLater(item, "bad_response")
@@ -261,6 +281,10 @@ class C2Uploader(
             if (etags.has(number.toString())) {
                 continue
             }
+            if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
+                logger.info(TAG, "${item.key} paused for recording after part ${number - 1}.")
+                return
+            }
             val offset = (number - 1) * partSizeBytes
             val length = min(partSizeBytes, file.length() - offset)
             if (length <= 0) {
@@ -274,7 +298,7 @@ class C2Uploader(
             val call = http.newCall(request)
             // A low maxKbps stretches a part beyond the client's call timeout.
             call.timeout().timeout(PART_TIMEOUT_BASE_NS + 2 * throttle.expectedNanos(length), TimeUnit.NANOSECONDS)
-            call.execute().use { response ->
+            executePart(item, call).use { response ->
                 when {
                     response.isSuccessful -> {
                         val etag = response.header("ETag")
@@ -299,6 +323,22 @@ class C2Uploader(
             }
         }
         complete(current, grant, parts, etags)
+    }
+
+    /** Registers a master part for [preemptMasters]; re-checks the gate to close the race with it. */
+    private fun executePart(item: UploadItem, call: Call): Response {
+        if (item.tier != C1.TIER_MASTER) {
+            return call.execute()
+        }
+        synchronized(callLock) { masterCall = call }
+        try {
+            if (!mastersAllowed()) {
+                call.cancel()
+            }
+            return call.execute()
+        } finally {
+            synchronized(callLock) { masterCall = null }
+        }
     }
 
     private fun complete(item: UploadItem, grant: Grant, parts: JSONArray, etags: JSONObject) {

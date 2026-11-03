@@ -2,8 +2,10 @@ package com.amaia23.hydracam.court
 
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import okhttp3.mockwebserver.SocketPolicy
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.After
@@ -18,6 +20,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 /** 1.4 `masters.upload`, 1.6 `not-requested`, R10 throttle and keepDays against a fake C2 store. */
 class C2MastersTest {
@@ -47,8 +50,27 @@ class C2MastersTest {
         store.upsertSession(UploadSession.from(RecordStart.fromJson(body), "A", clock.now))
     }
 
-    private fun uploader(throttle: UploadThrottle = UploadThrottle(maxKbps = 0)) =
-        C2Uploader(http, store, clock, throttle = throttle, onAlert = { alerts += it })
+    private val allowed = AtomicBoolean(true)
+
+    private fun uploader(
+        throttle: UploadThrottle = UploadThrottle(maxKbps = 0),
+        partSizeBytes: Long = C2Uploader.DEFAULT_PART_SIZE_BYTES,
+        mastersAllowed: () -> Boolean = allowed::get,
+    ) = C2Uploader(
+        http,
+        store,
+        clock,
+        partSizeBytes = partSizeBytes,
+        throttle = throttle,
+        onAlert = { alerts += it },
+        mastersAllowed = mastersAllowed,
+    )
+
+    private fun parts(count: Int): JSONObject {
+        val parts = JSONArray()
+        (1..count).forEach { parts.put(JSONObject().put("n", it).put("url", server.url("/part/$it").toString())) }
+        return JSONObject().put("uploadId", "u1").put("parts", parts)
+    }
 
     private fun segment(tier: String, seq: Long, size: Int = 25): SegmentRecord {
         val file = File(temp.root, "$tier-$seq.ts")
@@ -368,6 +390,120 @@ class C2MastersTest {
         // The first 64 KiB chunk goes at once; the other three wait for their slots.
         assertEquals(throttle.expectedNanos(3 * 64 * 1024L), sleptNs)
         assertEquals(UploadState.VERIFYING, item(C1.TIER_PROXY, 0).uploadState)
+    }
+
+    @Test
+    fun recordingPreemptsAMasterPartInFlightThenItResumes() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        lateinit var upload: C2Uploader
+        var nowNs = 0L
+        // The second 64 KiB chunk waits for its slot: a record.start lands mid-part.
+        val throttle = UploadThrottle(maxKbps = 1_000, nanoClock = { nowNs }) {
+            nowNs += it
+            if (allowed.getAndSet(false)) {
+                upload.preemptMasters()
+            }
+        }
+        upload = uploader(throttle)
+        upload.enqueue(segment(C1.TIER_MASTER, 0, size = 4 * 64 * 1024))
+        var inits = 0
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse =
+                when (request.path) {
+                    "/v2/uploads" ->
+                        if (++inits == 1) json(201, parts(1)) else json(200, JSONObject().put("state", "verified"))
+                    "/part/1" -> MockResponse().setResponseCode(200).setHeader("ETag", "e1")
+                    else -> json(200, JSONObject())
+                }
+        }
+
+        assertTrue(upload.runOnce())
+
+        val paused = item(C1.TIER_MASTER, 0)
+        assertEquals(UploadState.UPLOADING, paused.uploadState)
+        assertEquals(0, paused.attempts)
+        assertNull(paused.lastError)
+        assertEquals("{}", paused.etagsJson)
+
+        // While recording the proxy goes next and the master waits.
+        throttle.maxKbps = 0
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        assertTrue(upload.runOnce())
+        assertEquals(UploadState.VERIFIED, item(C1.TIER_PROXY, 0).uploadState)
+        assertFalse(upload.runOnce())
+
+        // Idle again: the same uploadId resumes from its stored part list, with no second init.
+        allowed.set(true)
+        assertTrue(upload.runOnce())
+        val resumed = item(C1.TIER_MASTER, 0)
+        assertEquals(UploadState.VERIFYING, resumed.uploadState)
+        assertEquals("u1", resumed.uploadId)
+        assertEquals("e1", JSONObject(resumed.etagsJson!!).getString("1"))
+        assertEquals(2, inits)
+    }
+
+    @Test
+    fun masterPausesBetweenPartsWhenRecordingStarts() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        val upload = uploader(partSizeBytes = 10)
+        upload.enqueue(segment(C1.TIER_MASTER, 0, size = 25))
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse =
+                if (request.path == "/v2/uploads") {
+                    json(201, parts(3))
+                } else {
+                    // record.start lands while part 1 is answered.
+                    allowed.set(false)
+                    MockResponse().setResponseCode(200).setHeader("ETag", "e1")
+                }
+        }
+
+        assertTrue(upload.runOnce())
+
+        val paused = item(C1.TIER_MASTER, 0)
+        assertEquals(UploadState.UPLOADING, paused.uploadState)
+        assertEquals("e1", JSONObject(paused.etagsJson!!).getString("1"))
+        assertEquals(0, paused.attempts)
+        assertEquals(2, server.requestCount)
+    }
+
+    @Test
+    fun gateIsRecheckedWhenAMasterPartIsRegistered() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        // Open for the pick and the per-part check, closed by the time the PUT is registered.
+        var checks = 0
+        val upload = uploader(mastersAllowed = { ++checks <= 2 })
+        upload.enqueue(segment(C1.TIER_MASTER, 0))
+        server.enqueue(json(201, parts(1)))
+
+        assertTrue(upload.runOnce())
+
+        assertEquals(1, server.requestCount)
+        assertEquals(0, item(C1.TIER_MASTER, 0).attempts)
+        assertEquals(UploadState.UPLOADING, item(C1.TIER_MASTER, 0).uploadState)
+    }
+
+    @Test
+    fun droppedPartIsAFailureUnlessMastersArePaused() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        val upload = uploader()
+        upload.enqueue(segment(C1.TIER_MASTER, 0))
+        server.enqueue(json(201, parts(1)))
+        server.enqueue(MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START))
+
+        assertTrue(upload.runOnce())
+        assertEquals(1, item(C1.TIER_MASTER, 0).attempts)
+
+        // While recording a proxy drop still counts: only masters are paused.
+        allowed.set(false)
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        server.enqueue(json(201, parts(1)))
+        server.enqueue(MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START))
+
+        assertTrue(upload.runOnce())
+        val proxy = item(C1.TIER_PROXY, 0)
+        assertEquals(1, proxy.attempts)
+        assertTrue(proxy.lastError != null)
     }
 
     private companion object {

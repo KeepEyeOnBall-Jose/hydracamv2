@@ -44,7 +44,14 @@ class CourtRuntime private constructor(context: Context) {
     private val tokens = DeviceTokenClient(http, { enrollment })
     private val policies = PrefsUploadPolicyStore(appContext, logger)
     private val throttle = UploadThrottle(maxKbps = 0)
-    private val uploader = C2Uploader(http, queue, logger = logger, throttle = throttle, onAlert = ::onUploadAlert)
+    private val uploader = C2Uploader(
+        http,
+        queue,
+        logger = logger,
+        throttle = throttle,
+        onAlert = ::onUploadAlert,
+        mastersAllowed = { stateMachine.phase is CourtStateMachine.Phase.Idle },
+    )
 
     @Volatile
     private var policy = UploadPolicy.DEFAULT
@@ -454,9 +461,14 @@ class CourtRuntime private constructor(context: Context) {
 
     /** Adds grant bookkeeping and the max-duration timer around the camera recorder. */
     private inner class RecorderPort : CourtRecorderPort {
-        override fun prepare(sessionId: String, profile: RecordProfile) = recorder.prepare(sessionId, profile)
+        // The state machine leaves Idle before calling prepare/start, so a preempted master stays paused.
+        override fun prepare(sessionId: String, profile: RecordProfile) {
+            uploader.preemptMasters()
+            recorder.prepare(sessionId, profile)
+        }
 
         override fun start(command: RecordStart, profile: RecordProfile) {
+            uploader.preemptMasters()
             rememberGrant(command, restart = true)
             scheduleMaxDuration(command)
             recorder.start(command, profile)
